@@ -24,6 +24,7 @@
     <ProjectGuid>{c7395acc-168a-4299-84cc-31862650b63e}</ProjectGuid>
     <RootNamespace>SpaceGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>SpaceEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
