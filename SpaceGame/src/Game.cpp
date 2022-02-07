@@ -87,7 +87,9 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 void Game::render() 
 {
     //Clears
-    m_Renderer.clearScreen();
+    Renderer::clearScreen();
+
+    m_Renderer.commitPrimitive(&tri, GetElementCount(Shape::TRI), Renderer::s_Tri_I, Renderer::IND_TRI);
 
     //Bind shader program
     m_ShaderProgram.bind();

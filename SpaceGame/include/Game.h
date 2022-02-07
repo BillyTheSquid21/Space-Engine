@@ -9,11 +9,7 @@
 #include <sstream>
 #include "SGUtil.h"
 #include "GameObject.h"
-
-//callback pointer definition
-typedef void (*Key_Callback)(GLFWwindow* window, int key, int scancode, int action, int mods);
-typedef void (*Scroll_Callback)(GLFWwindow* window, double xoffset, double yoffset);
-typedef void (*Mouse_Callback)(GLFWwindow* window, int button, int action, int mods);
+#include "Callbacks.hpp"
 
 class Game 
 {
@@ -56,6 +52,9 @@ protected:
 	//render
 	Shader m_ShaderProgram;
 	Renderer m_Renderer;
+
+	//test
+	Tri tri = CreateTri(0.0f, 0.0f, 100.0f);
 	
 };
 #endif

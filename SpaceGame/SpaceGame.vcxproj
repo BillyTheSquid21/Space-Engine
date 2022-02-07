@@ -158,10 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AI.h" />
+    <ClInclude Include="include\Callbacks.hpp" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\GLClasses.h" />
     <ClInclude Include="include\Renderer.h" />
+    <ClInclude Include="include\RenderQueue.hpp" />
     <ClInclude Include="include\SGUtil.h" />
     <ClInclude Include="include\ShapeFactory.h" />
     <ClInclude Include="include\Vertex.hpp" />

@@ -9,11 +9,6 @@ const char SG_VERSION[]{ "0.2" };
 //saves space
 using namespace std::chrono;
 
-//Callback declaration
-void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void MouseCallback(GLFWwindow* window, int button, int action, int mods);
-void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-
 //Pointer to game kept outside for key callback benifit - will auto destroy
 std::shared_ptr<Game> game;
 
