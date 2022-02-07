@@ -1,5 +1,5 @@
 # SpaceGame
-Simple Primitive Rendering Engine with Space Game Demo
+Simple Primitive Rendering Engine
 
 Provides support for shape creation and coloring, layering primitives, camera movement and scaling.
 
