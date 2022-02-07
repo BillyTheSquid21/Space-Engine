@@ -51,10 +51,11 @@ protected:
 
 	//render
 	Shader m_ShaderProgram;
-	Renderer m_Renderer;
+	Renderer<Vertex> m_Renderer;
 
 	//test
 	Tri tri = CreateTri(0.0f, 0.0f, 100.0f);
+	Tri tri2 = CreateTri(0.0f, 0.0f, 120.0f);
 	
 };
 #endif

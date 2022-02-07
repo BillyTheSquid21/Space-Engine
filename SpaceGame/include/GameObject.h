@@ -7,7 +7,7 @@
 class GameObject
 {
 public:
-	void setRenderer(Renderer* ren);
+	void setRenderer(Renderer<Vertex>* ren);
 	void render();
 	void update(double deltaTime);
 
@@ -16,7 +16,7 @@ public:
 	float yPos() const { return m_YPos; }
 
 protected:
-	Renderer* m_Renderer;
+	Renderer<Vertex>* m_Renderer;
 	float m_XPos = 0.0f;
 	float m_YPos = 0.0f;
 

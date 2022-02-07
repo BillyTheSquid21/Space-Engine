@@ -66,11 +66,10 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLog(glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 
     m_Renderer.init((float)m_Width, (float)m_Height);
+    ColorShape(&tri2, 1.0f, 0, 0, Shape::TRI);
     
     //shaders
     m_ShaderProgram.create("res/shaders/Default.glsl");
-    m_ShaderProgram.bind();
-    m_ShaderProgram.unbind();
 
     //depth buffer
     glEnable(GL_DEPTH_TEST);
@@ -87,10 +86,10 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 void Game::render() 
 {
     //Clears
-    Renderer::clearScreen();
+    m_Renderer.clearScreen();
 
-    m_Renderer.commitPrimitive(&tri, GetElementCount(Shape::TRI), Renderer::s_Tri_I, Renderer::IND_TRI);
-
+    m_Renderer.commitPrimitive(tri.data(), GetElementCount(Shape::TRI), s_Tri_I, m_Renderer.IND_TRI);
+ 
     //Bind shader program
     m_ShaderProgram.bind();
 

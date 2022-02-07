@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-void GameObject::setRenderer(Renderer* ren) {
+void GameObject::setRenderer(Renderer<Vertex>* ren) {
 	m_Renderer = ren;
 }
 
