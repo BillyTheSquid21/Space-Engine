@@ -6,10 +6,6 @@
 #include "Camera.h"
 
 //ACTUAL RENDERER CLASSES
-const unsigned int s_Tri_I[]{
-		0, 1, 2
-};
-
 template<typename T>
 class Renderer
 {
