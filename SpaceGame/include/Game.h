@@ -2,7 +2,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <string>
@@ -54,8 +54,26 @@ protected:
 	Renderer<Vertex> m_Renderer;
 
 	//test
-	Tri tri = CreateTri(0.0f, 0.0f, 100.0f);
-	Tri tri2 = CreateTri(0.0f, 0.0f, 120.0f);
+	// Vertices coordinates
+	float vert[35] =
+	{ //     COORDINATES     /        COLORS		/
+		-0.5f, 0.0f,  0.5f,     0.63f, 0.10f, 0.14f, 1.0f,
+		-0.5f, 0.0f, -0.5f,     0.13f, 0.10f, 0.64f, 1.0f,
+		 0.5f, 0.0f, -0.5f,     0.13f, 0.70f, 0.14f, 1.0f,
+		 0.5f, 0.0f,  0.5f,     0.63f, 0.10f, 0.64f, 1.0f, 
+		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f, 1.0f
+	};
+
+	// Indices for vertices order
+	unsigned int indices[18] =
+	{
+		0, 1, 2,
+		0, 2, 3,
+		0, 1, 4,
+		1, 2, 4,
+		2, 3, 4,
+		3, 0, 4
+	};
 	
 };
 #endif

@@ -65,8 +65,10 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLog("OpenGl ", glGetString(GL_VERSION));
     EngineLog(glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 
-    m_Renderer.init((float)m_Width, (float)m_Height);
-    ColorShape(&tri2, 1.0f, 0, 0, Shape::TRI);
+    //Renderer setup
+    m_Renderer.setLayout<float>(3, 4);
+    m_Renderer.setDrawingMode(GL_TRIANGLES);
+    m_Renderer.generate((float)m_Width, (float)m_Height);
     
     //shaders
     m_ShaderProgram.create("res/shaders/Default.glsl");
@@ -87,8 +89,7 @@ void Game::render()
 {
     //Clears
     m_Renderer.clearScreen();
-
-    m_Renderer.commitPrimitive(tri.data(), GetElementCount(Shape::TRI), s_Tri_I, m_Renderer.IND_TRI);
+    m_Renderer.commit((Vertex*)(void*)vert, 35, indices, 18);
  
     //Bind shader program
     m_ShaderProgram.bind();
@@ -107,7 +108,30 @@ void Game::handleEvents()
 }
 
 void Game::handleInput(int key, int scancode, int action, int mods) {
-
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+        m_Renderer.camera.moveZ(m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        m_Renderer.camera.moveZ(-m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+        m_Renderer.camera.moveX(m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+        m_Renderer.camera.moveX(-m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        m_Renderer.camera.moveY(m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS) {
+        m_Renderer.camera.moveY(-m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+        m_Renderer.camera.panX(m_Renderer.camera.m_Speed);
+    }
+    if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+        m_Renderer.camera.panX(-m_Renderer.camera.m_Speed);
+    }
 }
 
 void Game::handleScrolling(double xOffset, double yOffset) {

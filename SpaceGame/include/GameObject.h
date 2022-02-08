@@ -2,7 +2,7 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 
 class GameObject
 {
