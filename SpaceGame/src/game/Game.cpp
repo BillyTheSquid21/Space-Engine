@@ -18,6 +18,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
         success = false;
     }
 
+    //Sets up monitor
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     m_Width = mode->width;
@@ -54,7 +55,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glfwSetMouseButtonCallback(window, mCallback);
     glfwSetScrollCallback(window, sCallback);
 
-    //Hide cursor
+    //Hide cursor - currently disabled
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     if (glewInit() != GLEW_OK) {
@@ -66,10 +67,10 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLog(glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 
     //Renderer setup
-    camera = Camera::Camera(m_Width, m_Height, glm::vec3(0.0f, 0.0f, 2.0f));
+    m_Camera = Camera::Camera(m_Width, m_Height, glm::vec3(0.0f, 0.0f, 2.0f));
     m_Renderer.setLayout<float>(3, 4, 2);
     m_Renderer.setDrawingMode(GL_TRIANGLES);
-    m_Renderer.generate((float)m_Width, (float)m_Height, &camera);
+    m_Renderer.generate((float)m_Width, (float)m_Height, &m_Camera);
     
     //shaders
     m_ShaderProgram.create("res/shaders/Default.glsl");
@@ -82,16 +83,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
-    //test 
-    t1.loadTexture("res/default.png");
-    t1.generateTexture(0);
-    t1.clearBuffer();
-    t1.bind();
-    plane.generatePlaneXZ(-10.0f, -10.0f, 32.00f, 32.00f, 3.20f);
-    plane.setRenderer(&m_Renderer);
-    ColorShape(plane.accessQuad(0, 0), 1.0f, 0.0f, 0.0f, Shape::QUAD);
-    ColorShape(plane.accessQuad(4, 7), 1.0f, 0.0f, 0.0f, Shape::QUAD);
-    ColorShape(plane.accessQuad(6, 2), 1.0f, 0.0f, 0.0f, Shape::QUAD);
+    //Set texture uniform
     m_ShaderProgram.setUniform("u_Texture", 0);
 
     return success;
@@ -103,15 +95,12 @@ void Game::render()
     //Clears
     m_Renderer.clearScreen();
 
-    m_Renderer.commit((Vertex*)(void*)&vert, 45, indices, 18);
-    plane.render();
-
     //Bind shader program
     m_ShaderProgram.bind();
 
     //Renders the buffered primitives
     m_ShaderProgram.setUniform("u_Texture", 0);
-    camera.sendCameraUniforms(m_ShaderProgram);
+    m_Camera.sendCameraUniforms(m_ShaderProgram);
     m_Renderer.drawPrimitives(m_ShaderProgram);
 
     /* Swap front and back buffers */
@@ -126,28 +115,28 @@ void Game::handleEvents()
 
 void Game::handleInput(int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-        camera.moveZ(camera.m_Speed);
+        m_Camera.moveZ(m_Camera.speed());
     }
     if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-        camera.moveZ(-camera.m_Speed);
+        m_Camera.moveZ(-m_Camera.speed());
     }
     if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-        camera.moveX(camera.m_Speed);
+        m_Camera.moveX(m_Camera.speed());
     }
     if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-        camera.moveX(-camera.m_Speed);
+        m_Camera.moveX(-m_Camera.speed());
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        camera.moveY(camera.m_Speed);
+        m_Camera.moveY(m_Camera.speed());
     }
     if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS) {
-        camera.moveY(-camera.m_Speed);
+        m_Camera.moveY(-m_Camera.speed());
     }
     if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-        camera.panX(camera.m_Speed);
+        m_Camera.panX(m_Camera.speed());
     }
     if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-        camera.panX(-camera.m_Speed);
+        m_Camera.panX(-m_Camera.speed());
     }
 }
 

@@ -23,7 +23,11 @@ public:
 	void moveY(float speed);
 	void panX(float speed);
 
-//private:
+	//getters and setters
+	void setNearAndFarPlane(float near, float far) { nearPlane = near; farPlane = far; }
+	float speed() const { return m_Speed; }
+
+private:
 	float m_CameraWidth; float m_CameraHeight;
 
 	//properties
