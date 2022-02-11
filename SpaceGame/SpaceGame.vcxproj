@@ -149,7 +149,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game\Game.cpp" />
-    <ClCompile Include="src\game\GameObject.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
@@ -162,7 +161,8 @@
   <ItemGroup>
     <ClInclude Include="include\game\Callbacks.hpp" />
     <ClInclude Include="include\game\Game.h" />
-    <ClInclude Include="include\game\GameObject.h" />
+    <ClInclude Include="include\game\GameObject.hpp" />
+    <ClInclude Include="include\game\State.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Plane.h" />

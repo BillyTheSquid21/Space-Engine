@@ -8,7 +8,7 @@
 #include <string>
 #include <sstream>
 #include "SGUtil.h"
-#include "GameObject.h"
+#include "game/GameObject.hpp"
 #include "Callbacks.hpp"
 #include "renderer/Texture.h"
 #include "renderer/Plane.h"
