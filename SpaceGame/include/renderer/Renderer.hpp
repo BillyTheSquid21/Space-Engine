@@ -1,4 +1,6 @@
 #pragma once
+#ifndef RENDERER_H
+#define RENDERER_H
 
 #include "ShapeFactory.h"
 #include "GLClasses.h"
@@ -12,10 +14,10 @@ class Renderer
 public:
 	Renderer() :m_VA() {};
 
-	void generate(float width, float height) 
+	void generate(float width, float height, Camera* cam) 
 	{
 		//Init camera
-		camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+		camera = cam;
 		m_VA.create();	m_VB.create(1);	m_IB.create(1);
 		m_VA.addBuffer(m_VB, m_VBL);
 		//Bind
@@ -48,7 +50,7 @@ public:
 	static const unsigned short int IND_TRI = 3;
 
 	//Camera
-	Camera camera;
+	Camera* camera = nullptr;
 
 private:
 	//Helper functions
@@ -60,8 +62,6 @@ private:
 		}
 		//Use model matrix
 		shader.setUniform("u_Model", modelMatrix);
-		//Use camera
-		camera.sendCameraUniforms(shader);
 		//Bind all objects
 		bindAll(shader);
 		//Draw Elements
@@ -137,5 +137,7 @@ private:
 	RenderQueue<T*> m_PrimitiveVertices;
 	SimpleQueue<glm::mat4*> m_ModelMatrices;
 };
+
+#endif
 
 

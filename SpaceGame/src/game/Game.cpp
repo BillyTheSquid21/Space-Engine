@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "game/Game.h"
 
 //Main constructor
 Game::Game(int width, int height) 
@@ -66,9 +66,10 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLog(glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 
     //Renderer setup
+    camera = Camera::Camera(m_Width, m_Height, glm::vec3(0.0f, 0.0f, 2.0f));
     m_Renderer.setLayout<float>(3, 4, 2);
     m_Renderer.setDrawingMode(GL_TRIANGLES);
-    m_Renderer.generate((float)m_Width, (float)m_Height);
+    m_Renderer.generate((float)m_Width, (float)m_Height, &camera);
     
     //shaders
     m_ShaderProgram.create("res/shaders/Default.glsl");
@@ -81,14 +82,16 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
-    //test
-    m_RendererModelMatrix2 = glm::translate(m_RendererModelMatrix2, glm::vec3(-1.5f, 0.0f, 0.0f));
-    m_RendererModelMatrix3 = glm::translate(m_RendererModelMatrix3, glm::vec3(1.5f, 0.0f, 0.0f));
-    
+    //test 
     t1.loadTexture("res/default.png");
     t1.generateTexture(0);
     t1.clearBuffer();
     t1.bind();
+    plane.generatePlaneXZ(-10.0f, -10.0f, 32.00f, 32.00f, 3.20f);
+    plane.setRenderer(&m_Renderer);
+    ColorShape(plane.accessQuad(0, 0), 1.0f, 0.0f, 0.0f, Shape::QUAD);
+    ColorShape(plane.accessQuad(4, 7), 1.0f, 0.0f, 0.0f, Shape::QUAD);
+    ColorShape(plane.accessQuad(6, 2), 1.0f, 0.0f, 0.0f, Shape::QUAD);
     m_ShaderProgram.setUniform("u_Texture", 0);
 
     return success;
@@ -98,19 +101,17 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 void Game::render() 
 {
     //Clears
-    m_RendererModelMatrix = glm::rotate(m_RendererModelMatrix, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_RendererModelMatrix2 = glm::rotate(m_RendererModelMatrix2, glm::radians(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-    m_RendererModelMatrix3 = glm::rotate(m_RendererModelMatrix3, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     m_Renderer.clearScreen();
-    m_Renderer.commit((Vertex*)(void*)vert, 45, indices, 18, &m_RendererModelMatrix);
-    m_Renderer.commit((Vertex*)(void*)vert, 45, indices, 18, &m_RendererModelMatrix2);
-    m_Renderer.commit((Vertex*)(void*)vert, 45, indices, 18, &m_RendererModelMatrix3);
-    
+
+    m_Renderer.commit((Vertex*)(void*)&vert, 45, indices, 18);
+    plane.render();
+
     //Bind shader program
     m_ShaderProgram.bind();
 
     //Renders the buffered primitives
     m_ShaderProgram.setUniform("u_Texture", 0);
+    camera.sendCameraUniforms(m_ShaderProgram);
     m_Renderer.drawPrimitives(m_ShaderProgram);
 
     /* Swap front and back buffers */
@@ -125,28 +126,28 @@ void Game::handleEvents()
 
 void Game::handleInput(int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-        m_Renderer.camera.moveZ(m_Renderer.camera.m_Speed);
+        camera.moveZ(camera.m_Speed);
     }
     if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-        m_Renderer.camera.moveZ(-m_Renderer.camera.m_Speed);
+        camera.moveZ(-camera.m_Speed);
     }
     if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-        m_Renderer.camera.moveX(m_Renderer.camera.m_Speed);
+        camera.moveX(camera.m_Speed);
     }
     if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-        m_Renderer.camera.moveX(-m_Renderer.camera.m_Speed);
+        camera.moveX(-camera.m_Speed);
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-        m_Renderer.camera.moveY(m_Renderer.camera.m_Speed);
+        camera.moveY(camera.m_Speed);
     }
     if (key == GLFW_KEY_LEFT_CONTROL && action == GLFW_PRESS) {
-        m_Renderer.camera.moveY(-m_Renderer.camera.m_Speed);
+        camera.moveY(-camera.m_Speed);
     }
     if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-        m_Renderer.camera.panX(m_Renderer.camera.m_Speed);
+        camera.panX(camera.m_Speed);
     }
     if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-        m_Renderer.camera.panX(-m_Renderer.camera.m_Speed);
+        camera.panX(-camera.m_Speed);
     }
 }
 

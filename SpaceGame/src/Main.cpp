@@ -1,10 +1,10 @@
-#include "Game.h"
+#include "game/Game.h"
 #include <cstdlib>
 #include <chrono>
 #include <thread>
 
 //Engine version tag
-const char SG_VERSION[]{ "0.2" };
+const char SG_VERSION[]{ "0.3" };
 
 //saves space
 using namespace std::chrono;
@@ -14,6 +14,7 @@ std::shared_ptr<Game> game;
 
 int main(void) //TODO: get delta time working perfectly
 {   
+    EngineLog("Space Engine Version", SG_VERSION);
     //Init time - start and end, with delta time being the time between each run of the loop
     system_clock::time_point startTime = system_clock::now();
     system_clock::time_point endTime = system_clock::now();

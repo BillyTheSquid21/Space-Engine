@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "game/GameObject.h"
 
 void GameObject::setRenderer(Renderer<Vertex>* ren) {
 	m_Renderer = ren;

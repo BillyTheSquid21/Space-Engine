@@ -148,10 +148,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\game\Game.cpp" />
+    <ClCompile Include="src\game\GameObject.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
+    <ClCompile Include="src\renderer\Plane.cpp" />
     <ClCompile Include="src\renderer\ShapeFactory.cpp" />
     <ClCompile Include="src\renderer\Texture.cpp" />
     <ClCompile Include="src\SGUtil.cpp" />
@@ -159,18 +160,18 @@
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Callbacks.hpp" />
-    <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\game\Callbacks.hpp" />
+    <ClInclude Include="include\game\Game.h" />
+    <ClInclude Include="include\game\GameObject.h" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
+    <ClInclude Include="include\renderer\Plane.h" />
     <ClInclude Include="include\renderer\Renderer.hpp" />
     <ClInclude Include="include\renderer\RenderQueue.hpp" />
     <ClInclude Include="include\renderer\ShapeFactory.h" />
     <ClInclude Include="include\renderer\Texture.h" />
     <ClInclude Include="include\renderer\Vertex.hpp" />
     <ClInclude Include="include\SGUtil.h" />
-    <ClInclude Include="include\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default.glsl" />

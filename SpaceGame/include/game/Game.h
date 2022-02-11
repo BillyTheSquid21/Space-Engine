@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "Callbacks.hpp"
 #include "renderer/Texture.h"
+#include "renderer/Plane.h"
 
 class Game 
 {
@@ -51,6 +52,7 @@ protected:
 	double m_SecondsPerFrameCap = (1.0 / 500.0) * 1000.0; //Init to 500, can be changed
 
 	//render
+	Camera camera;
 	Shader m_ShaderProgram;
 	Renderer<Vertex> m_Renderer;
 
@@ -81,6 +83,8 @@ protected:
 
 	Texture t1;
 	Texture t2;
+
+	Plane plane;
 	
 };
 #endif
