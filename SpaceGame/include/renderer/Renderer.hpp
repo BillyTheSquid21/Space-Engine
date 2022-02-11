@@ -24,22 +24,24 @@ public:
 	}
 	static void clearScreen() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-	//Creating layouts - with overloads
+	//Creating layouts - with overloads - currently types should be 8 byte types otherwise padding will copy
 	template<typename Type>
 	void setLayout(unsigned char stride) { m_VBL.push<Type>(stride); }
 	template<typename Type>
 	void setLayout(unsigned char stride1, unsigned char stride2) { m_VBL.push<Type>(stride1); m_VBL.push<Type>(stride2);}
+	template<typename Type>
+	void setLayout(unsigned char stride1, unsigned char stride2, unsigned char stride3) {	m_VBL.push<Type>(stride1); m_VBL.push<Type>(stride2); m_VBL.push<Type>(stride3);	}
 
 	//Set primitive draw type - defaults to triangle
 	void setDrawingMode(GLenum type) { m_PrimitiveType = type; }
 	
 	//Drawing commit system - can only have either one model matrix, or one per object
-	void commit(T* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize) { m_PrimitiveVertices.pushBack(vert, vertSize, ind, indSize); }
-	void commit(T* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize, glm::mat4* modelMatrix) { m_PrimitiveVertices.pushBack(vert, vertSize, ind, indSize); m_ModelMatrices.pushBack(modelMatrix); }
+	void commit(T* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize) { m_PrimitiveVertices.pushBack(vert, vertSize, ind, indSize); }							//only adds the vertices if no geometry exists
+	void commit(T* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize, glm::mat4* modelMatrix) { if (m_PrimitiveVertices.size() < 1) { m_PrimitiveVertices.pushBack(vert, vertSize, ind, indSize); } m_ModelMatrices.pushBack(modelMatrix); }
 	void drawPrimitives(Shader& shader) {
 		//Check if only one model matrix, if not, applies different to each instance
-		if (m_ModelMatrices.size() > 0) { while (m_ModelMatrices.itemsWaiting()) { drawCall(m_ModelMatrices.nextInQueue().object, shader); } return; }
-		drawCall(&m_RendererModelMatrix, shader);
+		if (m_ModelMatrices.size() > 0) { bool first = true; while (m_ModelMatrices.itemsWaiting()) { drawCall(m_ModelMatrices.nextInQueue(), shader, first); first = false; } }
+		else { drawCall(&m_RendererModelMatrix, shader, true); }
 	}
 	
 	//static indices - some indices are standard and will not change
@@ -51,9 +53,11 @@ public:
 private:
 	//Helper functions
 	void bindAll(Shader& shader) {	shader.bind();	m_VA.bind();	m_IB.bind();	}
-	void drawCall(glm::mat4* modelMatrix, Shader& shader) {
+	void drawCall(glm::mat4* modelMatrix, Shader& shader, bool first) {
 		//Buffer data
-		bufferVideoData(m_PrimitiveVertices);
+		if (first) {
+			bufferVideoData(m_PrimitiveVertices);
+		}
 		//Use model matrix
 		shader.setUniform("u_Model", modelMatrix);
 		//Use camera
@@ -126,12 +130,12 @@ private:
 	VertexArray m_VA;
 	VertexBufferLayout m_VBL;
 
-	//single model matrix for renderer
+	//Single model matrix for renderer
 	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
 
-	//Queue for rendering - model matrix return has wasted data due to render container struct but is insignificant
+	//Queue for rendering
 	RenderQueue<T*> m_PrimitiveVertices;
-	RenderQueue<glm::mat4*> m_ModelMatrices;
+	SimpleQueue<glm::mat4*> m_ModelMatrices;
 };
 
 

@@ -137,17 +137,18 @@ public:
 	void unbind() const;
 
 	//set uniforms - overload for each data type
+	void setUniform(const std::string& name, int uniform);
 	void setUniform(const std::string& name, float uniform);
 	void setUniform(const std::string& name, const glm::vec3* uniform);
 	void setUniform(const std::string& name, const glm::mat4* uniform);
 
 private:
 	unsigned int m_ID = 0;
-	std::unordered_map<std::string, unsigned int> m_UniformLocationCache;
+	std::unordered_map<std::string, int> m_UniformLocationCache;
 	unsigned int compileShader(const std::string& source, unsigned int type);
 	unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
 	ShaderProgramSource parseShader(const std::string& filePath);
-	unsigned int getUniformLocation(const std::string& name);
+	int getUniformLocation(const std::string& name);
 };
 
 #endif

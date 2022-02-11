@@ -1,5 +1,5 @@
-#include "GLClasses.h"
-#include "Vertex.hpp"
+#include "renderer/GLClasses.h"
+#include "renderer/Vertex.hpp"
 
 //count means number of, size is in bytes
 
@@ -181,8 +181,16 @@ void Shader::unbind() const {
 }
 
 //uniforms
+void Shader::setUniform(const std::string& name, int uniform) {
+	int location = getUniformLocation(name);
+	if (location == -1) {
+		return;
+	}
+	glUniform1i(location, uniform);
+}
+
 void Shader::setUniform(const std::string& name, float uniform) {
-	unsigned int location = getUniformLocation(name);
+	int location = getUniformLocation(name);
 	if (location == -1) {
 		return;
 	}
@@ -207,13 +215,13 @@ void Shader::setUniform(const std::string& name, const glm::vec3* uniform) {
 	glUniform3fv(location, 1, pointer);
 }
 
-unsigned int Shader::getUniformLocation(const std::string& name) {
+int Shader::getUniformLocation(const std::string& name) {
 
 	if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end()) {
 		return m_UniformLocationCache[name];
 	}
 
-	unsigned int location = glGetUniformLocation(m_ID, name.c_str());
+	int location = glGetUniformLocation(m_ID, name.c_str());
 	if (location == -1) {
 		EngineLog("Uniform doesn't exist: ", name);
 	}

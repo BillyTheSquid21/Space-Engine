@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "renderer/Camera.h"
 //Camera
 Camera::Camera(float width, float height, glm::vec3 position)
 {

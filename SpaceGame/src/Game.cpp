@@ -66,7 +66,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLog(glGetString(GL_VENDOR), glGetString(GL_RENDERER));
 
     //Renderer setup
-    m_Renderer.setLayout<float>(3, 4);
+    m_Renderer.setLayout<float>(3, 4, 2);
     m_Renderer.setDrawingMode(GL_TRIANGLES);
     m_Renderer.generate((float)m_Width, (float)m_Height);
     
@@ -81,6 +81,16 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
+    //test
+    m_RendererModelMatrix2 = glm::translate(m_RendererModelMatrix2, glm::vec3(-1.5f, 0.0f, 0.0f));
+    m_RendererModelMatrix3 = glm::translate(m_RendererModelMatrix3, glm::vec3(1.5f, 0.0f, 0.0f));
+    
+    t1.loadTexture("res/default.png");
+    t1.generateTexture(0);
+    t1.clearBuffer();
+    t1.bind();
+    m_ShaderProgram.setUniform("u_Texture", 0);
+
     return success;
 }
 
@@ -88,13 +98,19 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 void Game::render() 
 {
     //Clears
+    m_RendererModelMatrix = glm::rotate(m_RendererModelMatrix, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_RendererModelMatrix2 = glm::rotate(m_RendererModelMatrix2, glm::radians(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    m_RendererModelMatrix3 = glm::rotate(m_RendererModelMatrix3, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     m_Renderer.clearScreen();
-    m_Renderer.commit((Vertex*)(void*)vert, 35, indices, 18);
- 
+    m_Renderer.commit((Vertex*)(void*)vert, 45, indices, 18, &m_RendererModelMatrix);
+    m_Renderer.commit((Vertex*)(void*)vert, 45, indices, 18, &m_RendererModelMatrix2);
+    m_Renderer.commit((Vertex*)(void*)vert, 45, indices, 18, &m_RendererModelMatrix3);
+    
     //Bind shader program
     m_ShaderProgram.bind();
 
     //Renders the buffered primitives
+    m_ShaderProgram.setUniform("u_Texture", 0);
     m_Renderer.drawPrimitives(m_ShaderProgram);
 
     /* Swap front and back buffers */

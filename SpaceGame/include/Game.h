@@ -2,7 +2,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Renderer.hpp"
+#include "renderer/Renderer.hpp"
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <string>
@@ -10,6 +10,7 @@
 #include "SGUtil.h"
 #include "GameObject.h"
 #include "Callbacks.hpp"
+#include "renderer/Texture.h"
 
 class Game 
 {
@@ -54,14 +55,17 @@ protected:
 	Renderer<Vertex> m_Renderer;
 
 	//test
+	glm::mat4 m_RendererModelMatrix  = glm::mat4(1.0f);
+	glm::mat4 m_RendererModelMatrix2 = glm::mat4(1.0f);
+	glm::mat4 m_RendererModelMatrix3 = glm::mat4(1.0f);
 	// Vertices coordinates
-	float vert[35] =
-	{ //     COORDINATES     /        COLORS		/
-		-0.5f, 0.0f,  0.5f,     0.63f, 0.10f, 0.14f, 1.0f,
-		-0.5f, 0.0f, -0.5f,     0.13f, 0.10f, 0.64f, 1.0f,
-		 0.5f, 0.0f, -0.5f,     0.13f, 0.70f, 0.14f, 1.0f,
-		 0.5f, 0.0f,  0.5f,     0.63f, 0.10f, 0.64f, 1.0f, 
-		 0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f, 1.0f
+	float vert[45] =
+	{ //     COORDINATES         /        COLORS		/		  /	UV	/
+		-0.5f, 0.0f,  0.5f,     1.0f, 1.0f, 1.0f, 1.0f,		0.0f,	0.0f,
+		-0.5f, 0.0f, -0.5f,     1.0f, 1.0f, 1.0f, 1.0f,		1.0f,	0.0f,
+		 0.5f, 0.0f, -0.5f,     1.0f, 1.0f, 1.0f, 1.0f,		0.0f,	0.0f,
+		 0.5f, 0.0f,  0.5f,     1.0f, 1.0f, 1.0f, 1.0f,		1.0f,	0.0f,
+		 0.0f, 0.8f,  0.0f,     1.0f, 1.0f, 1.0f, 1.0f,		0.5f,	1.0f,
 	};
 
 	// Indices for vertices order
@@ -74,6 +78,9 @@ protected:
 		2, 3, 4,
 		3, 0, 4
 	};
+
+	Texture t1;
+	Texture t2;
 	
 };
 #endif
