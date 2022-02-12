@@ -6,6 +6,15 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	//Splash screen
 	m_SplashScreen.init(m_Width, m_Height);
 
+	//IMGUi
+	//Setup IMGUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
+
 	return success;
 }
 
@@ -27,7 +36,6 @@ void DemoGame::update(double deltaTime) {
 }
 
 void DemoGame::render() {
-
 	//Splash screen
 	m_SplashScreen.render();
 
