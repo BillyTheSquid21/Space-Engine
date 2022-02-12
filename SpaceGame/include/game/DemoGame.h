@@ -3,6 +3,7 @@
 #define DEMO_GAME_H
 
 #include "core/Game.h"
+#include "game/states/Splash.h"
 
 class DemoGame : public Game
 {
@@ -14,6 +15,9 @@ public:
 	void handleScrolling(double xOffset, double yOffset);
 	void update(double deltaTime);
 	void render();
+
+private:
+	Splash m_SplashScreen;
 };
 
 #endif 

@@ -34,6 +34,12 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{6992e372-097e-417a-b7b0-f904ebfd871f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\States">
+      <UniqueIdentifier>{c6905fdf-1698-4b2a-9901-da23c67ab226}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\States">
+      <UniqueIdentifier>{9785e0d0-7821-4257-bcf1-c6ad3f83161b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -68,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="src\game\DemoGame.cpp">
       <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\states\Splash.cpp">
+      <Filter>Source Files\Game\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="include\game\DemoGame.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\states\Splash.h">
+      <Filter>Header Files\Game\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
