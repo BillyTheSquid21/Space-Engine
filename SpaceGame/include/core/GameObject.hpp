@@ -53,7 +53,7 @@ protected:
 	float m_YPos = 0.0f;
 };
 
-//Example derived comp and object
+//Example derived comp and object - Gives idea how it works, don't use these classes
 class DerivedComponent : public Component
 {
 public:

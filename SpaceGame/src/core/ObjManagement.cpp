@@ -1,4 +1,4 @@
-#include "game/ObjManagement.h"
+#include "core/ObjManagement.h"
 
 void ObjectManager::loadObject(GameObject* obj) {
 	m_Objects.push_back(obj);

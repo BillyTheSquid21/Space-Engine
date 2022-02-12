@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Game Specific">
-      <UniqueIdentifier>{6992e372-097e-417a-b7b0-f904ebfd871f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game Specific">
-      <UniqueIdentifier>{5226ad15-d155-49ee-9236-071c4364f2d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vendor">
       <UniqueIdentifier>{d2098bcc-abf8-425b-a48c-1ea518d1dc5a}</UniqueIdentifier>
     </Filter>
@@ -28,11 +22,17 @@
     <Filter Include="Header Files\Renderer">
       <UniqueIdentifier>{aebf5c3a-cfd8-49d1-adf2-d78b3a61e55f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game">
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{7f045998-3f11-48da-9865-c18c2cfa9699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core">
       <UniqueIdentifier>{28d37786-b364-4deb-92f5-034cabfc9d36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{5226ad15-d155-49ee-9236-071c4364f2d7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{7f045998-3f11-48da-9865-c18c2cfa9699}</UniqueIdentifier>
+      <UniqueIdentifier>{6992e372-097e-417a-b7b0-f904ebfd871f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,10 +60,13 @@
     <ClCompile Include="src\renderer\Plane.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\Game.cpp">
-      <Filter>Source Files\Game</Filter>
+    <ClCompile Include="src\core\Game.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\ObjManagement.cpp">
+    <ClCompile Include="src\core\ObjManagement.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\DemoGame.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,19 +98,22 @@
     <ClInclude Include="include\renderer\Plane.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\Callbacks.hpp">
-      <Filter>Header Files\Game</Filter>
+    <ClInclude Include="include\core\Callbacks.hpp">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\Game.h">
-      <Filter>Header Files\Game</Filter>
+    <ClInclude Include="include\core\Game.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\GameObject.hpp">
-      <Filter>Header Files\Game</Filter>
+    <ClInclude Include="include\core\GameObject.hpp">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\State.hpp">
-      <Filter>Header Files\Game</Filter>
+    <ClInclude Include="include\core\ObjManagement.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\ObjManagement.h">
+    <ClInclude Include="include\core\State.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\DemoGame.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>

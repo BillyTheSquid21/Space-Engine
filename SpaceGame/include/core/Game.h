@@ -10,8 +10,8 @@
 #include <string>
 #include <sstream>
 #include "SGUtil.h"
-#include "game/GameObject.hpp"
-#include "game/ObjManagement.h"
+#include "core/GameObject.hpp"
+#include "core/ObjManagement.h"
 #include "Callbacks.hpp"
 
 class Game 
@@ -29,9 +29,9 @@ public:
 	//Primary functions
 	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback);
 	void handleEvents();
-	void handleInput(int key, int scancode, int action, int mods);
-	void handleMouse(int button, int action, int mods);
-	void handleScrolling(double xOffset, double yOffset);
+	virtual void handleInput(int key, int scancode, int action, int mods) {};
+	virtual void handleMouse(int button, int action, int mods) {};
+	virtual void handleScrolling(double xOffset, double yOffset) {};
 	void update(double deltaTime);
 	void setTime(double time);
 	void render();
@@ -51,11 +51,5 @@ protected:
 	double m_GlfwTime;
 
 	double m_SecondsPerFrameCap = (1.0 / 500.0) * 1000.0; //Init to 500, can be changed
-
-	//render - camera, program and renderer which can be moved into derived
-	Camera m_Camera;
-	Shader m_ShaderProgram;
-	Renderer<Vertex> m_Renderer;	
-	ObjectManager objM;
 };
 #endif
