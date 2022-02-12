@@ -21,7 +21,6 @@ public:
 	void setActive(bool set) { m_Active = set; }
 
 private:
-	ObjectManager m_ObjectManager;
 	bool m_Active = false;
 };
 

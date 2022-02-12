@@ -148,8 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\game\Game.cpp" />
-    <ClCompile Include="src\game\ObjManagement.cpp" />
+    <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\core\ObjManagement.cpp" />
+    <ClCompile Include="src\game\DemoGame.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
@@ -160,11 +161,12 @@
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\game\Callbacks.hpp" />
-    <ClInclude Include="include\game\Game.h" />
-    <ClInclude Include="include\game\GameObject.hpp" />
-    <ClInclude Include="include\game\ObjManagement.h" />
-    <ClInclude Include="include\game\State.hpp" />
+    <ClInclude Include="include\core\Callbacks.hpp" />
+    <ClInclude Include="include\core\Game.h" />
+    <ClInclude Include="include\core\GameObject.hpp" />
+    <ClInclude Include="include\core\ObjManagement.h" />
+    <ClInclude Include="include\core\State.hpp" />
+    <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Plane.h" />

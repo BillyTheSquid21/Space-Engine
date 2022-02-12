@@ -2,7 +2,7 @@
 #ifndef OBJ_MANAGEMENT_H
 #define OBJ_MANAGEMENT_H
 
-#include "game/GameObject.hpp"
+#include "core/GameObject.hpp"
 #include <vector>
 
 class ObjectManager
