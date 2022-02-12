@@ -4,7 +4,7 @@
 #include <thread>
 
 //Engine version tag
-const char SG_VERSION[]{ "0.3" };
+const char SG_VERSION[]{ "0.4" };
 
 //saves space
 using namespace std::chrono;
