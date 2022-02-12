@@ -9,7 +9,7 @@ enum class Axis
 	X, Y, Z
 };
 
-struct Vertex
+struct alignas(4) Vertex
 {
 	Component3f position;
 	Component4f color;

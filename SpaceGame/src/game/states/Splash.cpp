@@ -23,7 +23,13 @@ void Splash::init(int width, int height) {
     m_SplashTexture.clearBuffer();
 
     //Splash
-    m_Splash = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+    m_Splash = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.0f, 0.0f, 0.5f, 1.0f);
+    m_Splash2 = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.5f, 0.0f, 0.5f, 1.0f);
+    RotateShape(&m_Splash2, { 0.0f, 0.0f, 0.0f }, 90, Shape::QUAD, Axis::Y);
+    TranslateShape(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
+
+    TranslateShape(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    TranslateShape(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
 
     EngineLog("Splash Screen loaded");
 }
@@ -36,6 +42,7 @@ void Splash::render() {
 
     //Renders
     m_Renderer.commit((Vertex*)&m_Splash, GetFloatCount(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+    m_Renderer.commit((Vertex*)&m_Splash2, GetFloatCount(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
     m_Shader.setUniform("u_Texture", 0);
     m_Camera.sendCameraUniforms(m_Shader);
 
@@ -43,10 +50,22 @@ void Splash::render() {
 }
 
 void Splash::update(double deltaTime, double time) {
+    //Fade in
     m_CurrentTime += deltaTime;
     float alpha = 1.0f;
     if (m_CurrentTime < m_FadeIn) {
         alpha = (float)m_CurrentTime / (float)m_FadeIn;
+        TransparencyShape((Vertex*)&m_Splash, alpha, Shape::QUAD);
     }
-    TransparencyShape((Vertex*)&m_Splash, alpha, Shape::QUAD);
+
+    //Rotate to second half of splash
+    if (time > 5.0 && angle > -90.0f) {
+        //Rotate and update angle
+        m_Renderer.m_RendererModelMatrix = glm::rotate(m_Renderer.m_RendererModelMatrix, glm::radians(-40.0f * (float)deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
+        angle += -40.0f * (float)deltaTime;
+
+        //Fade first half out as it rotates
+        TransparencyShape((Vertex*)&m_Splash, (float)(1.0 + ((5.0 - time) / 2.0)), Shape::QUAD);
+    }
+
 }

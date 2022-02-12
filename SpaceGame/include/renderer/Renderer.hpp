@@ -52,6 +52,9 @@ public:
 	//Camera
 	Camera* camera = nullptr;
 
+	//Single model matrix for renderer
+	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
+
 private:
 	//Helper functions
 	void bindAll(Shader& shader) {	shader.bind();	m_VA.bind();	m_IB.bind();	}
@@ -129,9 +132,6 @@ private:
 	IndexBuffer m_IB;
 	VertexArray m_VA;
 	VertexBufferLayout m_VBL;
-
-	//Single model matrix for renderer
-	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
 
 	//Queue for rendering
 	RenderQueue<T*> m_PrimitiveVertices;

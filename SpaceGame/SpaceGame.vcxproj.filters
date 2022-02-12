@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Game\States">
       <UniqueIdentifier>{9785e0d0-7821-4257-bcf1-c6ad3f83161b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\imgui">
+      <UniqueIdentifier>{8bae98ba-d60f-46e5-9247-6409e3cc8382}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -76,6 +79,30 @@
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\game\states\Splash.cpp">
+      <Filter>Source Files\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui_demo.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui_draw.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui_tables.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\states\MainMenu.cpp">
       <Filter>Source Files\Game\States</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,6 +153,36 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\game\states\Splash.h">
+      <Filter>Header Files\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imconfig.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imgui.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imgui_impl_opengl3.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imgui_internal.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imstb_rectpack.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imstb_textedit.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imstb_truetype.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\states\MainMenu.h">
       <Filter>Header Files\Game\States</Filter>
     </ClInclude>
   </ItemGroup>
