@@ -3,6 +3,7 @@
 #define STATE_H
 
 #include <GLFW/glfw3.h>
+#include "ObjManagement.h"
 
 //State class - primarily virtual functions
 class State
@@ -20,6 +21,7 @@ public:
 	void setActive(bool set) { m_Active = set; }
 
 private:
+	ObjectManager m_ObjectManager;
 	bool m_Active = false;
 };
 

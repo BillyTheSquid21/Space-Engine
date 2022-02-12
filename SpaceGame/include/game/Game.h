@@ -3,15 +3,16 @@
 #define GAME_H
 
 #include "renderer/Renderer.hpp"
+#include "renderer/Texture.h"
+#include "renderer/Plane.h"
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include "SGUtil.h"
 #include "game/GameObject.hpp"
+#include "game/ObjManagement.h"
 #include "Callbacks.hpp"
-#include "renderer/Texture.h"
-#include "renderer/Plane.h"
 
 class Game 
 {
@@ -55,5 +56,6 @@ protected:
 	Camera m_Camera;
 	Shader m_ShaderProgram;
 	Renderer<Vertex> m_Renderer;	
+	ObjectManager objM;
 };
 #endif

@@ -86,6 +86,14 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     //Set texture uniform
     m_ShaderProgram.setUniform("u_Texture", 0);
 
+    DerivedObject* obj = new DerivedObject();
+    obj->generate(2.0f);
+    GameObject* ob = (GameObject*)obj;
+    ob->setRenderer(&m_Renderer);
+    objM.loadObject(ob);
+    GameObject* obj2 = new GameObject();
+    objM.loadObject(obj2);
+
     return success;
 }
 
@@ -93,6 +101,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 void Game::render() 
 {
     //Clears
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     m_Renderer.clearScreen();
 
     //Bind shader program
@@ -101,6 +110,8 @@ void Game::render()
     //Renders the buffered primitives
     m_ShaderProgram.setUniform("u_Texture", 0);
     m_Camera.sendCameraUniforms(m_ShaderProgram);
+
+    objM.render();
     m_Renderer.drawPrimitives(m_ShaderProgram);
 
     /* Swap front and back buffers */
@@ -151,7 +162,7 @@ void Game::handleMouse(int button, int action, int mods) {
 //Update
 void Game::update(double deltaTime) 
 {
-
+    objM.update(deltaTime, m_GlfwTime);
 }
 
 //Clean

@@ -3,19 +3,21 @@
 #define OBJ_MANAGEMENT_H
 
 #include "game/GameObject.hpp"
+#include <vector>
 
 class ObjectManager
 {
 public:
 	//destroys objects when unloaded
-	~ObjectManager() { if (m_Objects != NULL) { for (int i = 0; i < m_ObjectCount; i++) { if (m_Objects[i] != NULL) { delete m_Objects[i]; } } delete[] m_Objects; } }
-
+	~ObjectManager() { for (int i = 0; i < m_Objects.size(); i++) { if (m_Objects[i] != NULL) { delete m_Objects[i]; } } }
+	void loadObject(GameObject* obj);
+	void unloadObject(unsigned int objID);
+	void update(double deltaTime, double time);
+	void render();
 
 private:
 	//Objects - stores pointers to objects
-	GameObject** m_Objects;
-	unsigned char m_ObjectCount;
-	unsigned int m_ObjectBytes;
+	std::vector<GameObject*> m_Objects;
 };
 
 #endif
