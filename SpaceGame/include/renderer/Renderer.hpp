@@ -54,10 +54,7 @@ public:
 	
 	//Single model matrix for renderer
 	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
-
-	//Single model matrix for renderer
-	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
-
+	
 private:
 	//Helper functions
 	void bindAll(Shader& shader) {	shader.bind();	m_VA.bind();	m_IB.bind();	}
