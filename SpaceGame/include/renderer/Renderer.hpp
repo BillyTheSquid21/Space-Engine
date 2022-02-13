@@ -51,6 +51,9 @@ public:
 
 	//Camera
 	Camera* camera = nullptr;
+	
+	//Single model matrix for renderer
+	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
 
 	//Single model matrix for renderer
 	glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
