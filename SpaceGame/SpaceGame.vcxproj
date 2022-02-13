@@ -151,6 +151,7 @@
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\game\DemoGame.cpp" />
+    <ClCompile Include="src\game\gui\GUI.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="include\core\ObjManagement.h" />
     <ClInclude Include="include\core\State.hpp" />
     <ClInclude Include="include\game\DemoGame.h" />
+    <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Splash.h" />
     <ClInclude Include="include\renderer\Camera.h" />

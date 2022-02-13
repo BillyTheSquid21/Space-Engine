@@ -4,9 +4,8 @@
 
 #include "core/Game.h"
 #include "game/states/Splash.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "game/states/MainMenu.h"
+#include "game/gui/GUI.h"
 
 class DemoGame : public Game
 {
@@ -21,7 +20,12 @@ public:
 	void render();
 
 private:
-	Splash m_SplashScreen;
+	std::vector<std::shared_ptr<State>> m_States;
 };
+
+//Defined of which entry corresponds to what state
+#define SplashScreen m_States[0] 
+#define MainMenuScreen m_States[1] 
+
 
 #endif 

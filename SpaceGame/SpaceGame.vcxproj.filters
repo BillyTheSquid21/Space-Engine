@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Vendor\imgui">
       <UniqueIdentifier>{8bae98ba-d60f-46e5-9247-6409e3cc8382}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\GUI">
+      <UniqueIdentifier>{2c2dcccf-3ff6-46d6-8053-bbf5156bd66c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GUI">
+      <UniqueIdentifier>{b9902fff-051e-4b66-86fd-43b979d419c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -104,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="src\game\states\MainMenu.cpp">
       <Filter>Source Files\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\gui\GUI.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="include\game\states\MainMenu.h">
       <Filter>Header Files\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\gui\GUI.h">
+      <Filter>Header Files\Game\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

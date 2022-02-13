@@ -43,6 +43,9 @@ public:
 	//window
 	GLFWwindow* window = NULL;
 
+	//If this is set to true, game loop ends this cycle
+	static bool s_Close;
+
 protected:
 
 	int m_Width;
@@ -50,6 +53,6 @@ protected:
 
 	double m_GlfwTime;
 
-	double m_SecondsPerFrameCap = (1.0 / 500.0) * 1000.0; //Init to 500, can be changed
+	double m_SecondsPerFrameCap = (1.0 / 50000.0) * 1000.0; //Init to 500, can be changed
 };
 #endif

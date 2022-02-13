@@ -1,5 +1,7 @@
 #include "core/Game.h"
 
+bool Game::s_Close = false;
+
 //Main constructor
 Game::Game(int width, int height) 
 {

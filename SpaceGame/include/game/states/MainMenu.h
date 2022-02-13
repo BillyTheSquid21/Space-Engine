@@ -5,17 +5,17 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.h"
 #include "core/State.hpp"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "game/gui/GUI.h"
+#include "core/Game.h"
 
 class MainMenu : public State
 {
 public:
-	void init(int width, int height);
+	void init(int width, int height, GLFWwindow* window);
 	void update(double deltaTime, double time);
 	void render();
 private:
+	GLFWwindow* m_WindowPointer;
 	Renderer<Vertex> m_Renderer;
 	Shader m_Shader;
 	Camera m_Camera;

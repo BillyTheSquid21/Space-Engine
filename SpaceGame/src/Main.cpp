@@ -50,7 +50,7 @@ int main(void) //TODO: get delta time working perfectly
     srand((unsigned int)(previousTime * 1000000.0));
   
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(game->window))
+    while (!glfwWindowShouldClose(game->window) && !Game::s_Close)
     {  
         // Measure speed
         double currentTime = glfwGetTime();
