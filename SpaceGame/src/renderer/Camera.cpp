@@ -32,3 +32,11 @@ void Camera::moveX(float speed) {
 void Camera::panX(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
+
+void Camera::panY(float speed) {
+	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), -glm::normalize(glm::cross(m_Direction, m_Up)));
+}
+
+void Camera::panYDegrees(float angle) {
+	m_Direction = glm::rotate(m_Direction, glm::radians(angle), -glm::normalize(glm::cross(m_Direction, m_Up)));
+}

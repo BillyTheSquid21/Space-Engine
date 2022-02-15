@@ -22,6 +22,10 @@ public:
 	void moveX(float speed);
 	void moveY(float speed);
 	void panX(float speed);
+	void panY(float speed);
+
+	//set camera
+	void panYDegrees(float degrees);
 
 	//getters and setters
 	void setNearAndFarPlane(float near, float far) { nearPlane = near; farPlane = far; }
@@ -36,7 +40,7 @@ private:
 	glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
 	float m_Speed = 0.1f;
 	float sensitivity = 100.0f;
-	float nearPlane = 0.1f; float farPlane = 100.0f;
+	float nearPlane = 0.1f; float farPlane = 1000.0f;
 
 	//mvp
 	glm::mat4 view = glm::mat4(1.0f);

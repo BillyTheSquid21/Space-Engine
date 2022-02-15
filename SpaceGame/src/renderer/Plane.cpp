@@ -1,15 +1,11 @@
 #include "renderer/Plane.h"
 
 Plane::~Plane() {
-	if (m_Quads != NULL) {
-		delete[] m_Quads;
-	}
+	purgeData();
 }
 
 void Plane::genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle) {
-	if (m_Quads != NULL) {
-		delete[] m_Quads;
-	}
+	purgeData();
 	
 	//Gets how many x and y for tiles
 	m_XCount = width / tileSize;
@@ -25,6 +21,32 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 			RotateShape(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			m_Quads[x * m_YCount + y] = quad;
 		}
+	}
+	//Buffer indices to minimise counts of data sent to render queue
+	//Find total number of quads
+	unsigned int quadCount = m_XCount * m_YCount;
+
+	//Find total ints needed
+	unsigned int quadIntCount = quadCount * Primitive::Q_IND_COUNT;
+
+	//Resize vector to be able to fit and init index
+	m_Indices.resize(quadIntCount);
+	unsigned int indicesIndex = 0;
+
+	unsigned int lastLargest = -1;
+	unsigned int indicesTemp[6]{ 0,1,2,0,2,3 };
+	for (unsigned int i = 0; i < quadCount; i++) {
+		//Increment all by last largest - set temp to base
+		std::copy(&Primitive::Q_IND[0], &Primitive::Q_IND[Primitive::Q_IND_COUNT], &indicesTemp[0]);
+		for (int j = 0; j < Primitive::Q_IND_COUNT; j++) {
+			indicesTemp[j] += lastLargest + 1;
+		}
+		//Set last largest
+		lastLargest = indicesTemp[Primitive::Q_IND_COUNT - 1];
+		//Copy into vector
+		std::copy(&indicesTemp[0], &indicesTemp[Primitive::Q_IND_COUNT], m_Indices.begin() + indicesIndex);
+		//Increment index
+		indicesIndex += Primitive::Q_IND_COUNT;
 	}
 }
 
@@ -45,9 +67,7 @@ void Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, f
 
 void Plane::render() 
 {	
-	for (int i = 0; i < m_XCount * m_YCount; i++) {
-		m_Renderer->commit((Vertex*)&m_Quads[i], GetFloatCount(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
-	}
+	m_Renderer->commit((Vertex*)&m_Quads[0], GetFloatCount(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
 Quad* Plane::accessQuad(unsigned int x, unsigned int y) {
@@ -55,4 +75,10 @@ Quad* Plane::accessQuad(unsigned int x, unsigned int y) {
 		return &m_Quads[x * m_YCount + y];
 	}
 	return &m_Quads[0];
+}
+
+void Plane::purgeData() {
+	if (m_Quads != NULL) {
+		delete[] m_Quads;
+	}
 }

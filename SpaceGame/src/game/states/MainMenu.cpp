@@ -1,8 +1,15 @@
 #include "game/states/MainMenu.h"
 
-void MainMenu::init(int width, int height, GLFWwindow* window) {
+void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<Overworld> overworldPtr, FontContainer* fonts) {
     //Width and height
     m_Width = width; m_Height = height;
+
+    m_OverworldPtr = overworldPtr;
+
+    //Fonts loading
+    m_Fonts = fonts;
+    m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 50);
+    m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 25);
 
     //Renderer setup
     m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
@@ -49,25 +56,23 @@ void MainMenu::render() {
     //Side Menu
     ImGui::BeginChild("##LeftSide", ImVec2(300, ImGui::GetContentRegionAvail().y), false);
     
-    //Top Text box
-    ImFont* font = ImGui::GetFont();
-    font->Scale = 0.5f;
-    ImFont fontA = *font;
-    fontA.Scale = 1.0f;
-    
-    ImGui::PushFont(&fontA);
+    ImGui::PushFont(m_Fonts->getFont("default", 50));
     ImGui::SetCursorPosX(8.0f);
     ImGui::Text("Demo Game");
     ImGui::PopFont();
     
 
     //Buttons
+    ImGui::PushFont(m_Fonts->getFont("default", 25));
     if (ImGui::Button("Game", ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 50))) {
-        
+        m_OverworldPtr->setActive(true);
+        m_OverworldPtr->loadRequiredData();
+        setActive(false);
     }
     if (ImGui::Button("Exit", ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 50))) {
         Game::s_Close = true;
     }
+    ImGui::PopFont();
 
     ImGui::EndChild();
 

@@ -114,6 +114,9 @@
     <ClCompile Include="src\game\gui\GUI.cpp">
       <Filter>Source Files\Game\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\states\Overworld.cpp">
+      <Filter>Source Files\Game\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\SGUtil.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="include\game\gui\GUI.h">
       <Filter>Header Files\Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\states\Overworld.h">
+      <Filter>Header Files\Game\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

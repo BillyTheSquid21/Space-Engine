@@ -17,7 +17,7 @@ namespace Primitive
 {	
 	//Quads
 	const char QUAD_VERT = 4;
-	static const unsigned int Q_IND[6]
+	const unsigned int Q_IND[6]
 	{
 		0, 1, 2,
 		0, 2, 3
@@ -26,7 +26,7 @@ namespace Primitive
 
 	//Tris
 	const char TRI_VERT = 3;
-	static const unsigned int T_IND[6]
+	const unsigned int T_IND[6]
 	{
 		0, 1, 2
 	};	

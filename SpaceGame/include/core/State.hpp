@@ -16,12 +16,18 @@ public:
 	virtual void handleScrolling(double xOffset, double yOffset) {};
 	virtual void handleMouse(int button, int action, int mods) {};
 
+	//loads and unloads data that does not persist when not active
+	virtual void loadRequiredData() {};
+	virtual void purgeRequiredData() {};
+
 	//Getters and setters
 	bool active() const { return m_Active; }
 	void setActive(bool set) { m_Active = set; }
+	bool hasDataLoaded() const { return m_DataLoaded; }
 
-private:
+protected:
 	bool m_Active = false;
+	bool m_DataLoaded = false;
 };
 
 #endif

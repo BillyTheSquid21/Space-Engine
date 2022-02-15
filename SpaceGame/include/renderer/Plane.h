@@ -16,12 +16,18 @@ public:
 	void generatePlaneXZ(float xPos, float zPos, float width, float height, float tileSize);
 	void generatePlaneYZ(float yPos, float zPos, float width, float height, float tileSize);
 
+	//Load plane vertices from file - TODO: implement
+	void loadPlane();
+	
 	//Render
 	void render();
 	void setRenderer(Renderer<Vertex>* ren) { m_Renderer = ren; }
 
 	//Access specific tile
 	Quad* accessQuad(unsigned int x, unsigned int y);
+
+	//Purges data not needed without destruction of class
+	void purgeData();
 
 private:
 	//Helper
@@ -30,6 +36,9 @@ private:
 	Renderer<Vertex>* m_Renderer = nullptr;
 	Quad* m_Quads;
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
+
+	//Indices buffer for plane
+	std::vector<unsigned int> m_Indices;
 };
 
 #endif

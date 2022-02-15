@@ -5,6 +5,7 @@
 #include "core/Game.h"
 #include "game/states/Splash.h"
 #include "game/states/MainMenu.h"
+#include "game/states/Overworld.h"
 #include "game/gui/GUI.h"
 
 class DemoGame : public Game
@@ -20,12 +21,13 @@ public:
 	void render();
 
 private:
+	FontContainer m_Fonts;
 	std::vector<std::shared_ptr<State>> m_States;
 };
 
 //Defined of which entry corresponds to what state
 #define SplashScreen m_States[0] 
 #define MainMenuScreen m_States[1] 
-
+#define OverworldScreen m_States[2] 
 
 #endif 
