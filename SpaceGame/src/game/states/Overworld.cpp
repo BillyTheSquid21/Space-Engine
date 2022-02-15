@@ -1,23 +1,20 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, Level levelEntry) {
+void Overworld::init(int width, int height, World::LevelID levelEntry) {
     //Width and height
     m_Width = width; m_Height = height;
 
     //Renderer setup
-    m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
     m_Renderer.setLayout<float>(3, 4, 2);
     m_Renderer.setDrawingMode(GL_TRIANGLES);
     m_Renderer.generate((float)width, (float)height, &m_Camera);
 
     //Camera
-    m_Camera.moveY(80.0f);
+    m_Camera.moveUp(World::TILE_SIZE * 5);
     m_Camera.panYDegrees(45.0f);
 
-    //Splash
-    m_Quad = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.0f, 0.0f, 0.5f, 1.0f);
-
-    EngineLog("Overworld loaded:", (int)m_CurrentLevel);
+    EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
 
 void Overworld::loadRequiredData() {
@@ -29,7 +26,8 @@ void Overworld::loadRequiredData() {
 
     //Texture
     m_Plane.setRenderer(&m_Renderer);
-    m_Plane.generatePlaneXZ(-100.0f, -100.0f, 400.0f, 1200.0f, 40.0f);
+    m_Plane.generatePlaneXZ(0.0f, 0.0f, World::TILE_SIZE * 32, World::TILE_SIZE * 32, World::TILE_SIZE);
+    
     m_PlaneTexture.loadTexture("res/textures/default.png");
     m_PlaneTexture.generateTexture(1);
     m_PlaneTexture.bind();
@@ -46,19 +44,28 @@ void Overworld::purgeRequiredData() {
 void Overworld::update(double deltaTime, double time) {
     //Update Camera
     if (HELD_A) {
-        m_Camera.panX(1.0f * deltaTime);
+        m_Camera.moveX(100.0f * deltaTime);
     }
     if (HELD_D) {
-        m_Camera.panX(-1.0f * deltaTime);
+        m_Camera.moveX(-100.0f * deltaTime);
     }
     if (HELD_CTRL) {
-        m_Camera.panY(-1.0f * deltaTime);
+        m_Camera.panUp(-1.0f * deltaTime);
     }
     if (HELD_SHIFT) {
-        m_Camera.panY(1.0f * deltaTime);
+        m_Camera.panUp(1.0f * deltaTime);
+    }
+    if (HELD_Q) {
+        m_Camera.moveForwards(100.0f * deltaTime);
+    }
+    if (HELD_E) {
+        m_Camera.moveForwards(-100.0f * deltaTime);
     }
     if (HELD_W) {
         m_Camera.moveZ(100.0f * deltaTime);
+    }
+    if (HELD_S) {
+        m_Camera.moveZ(-100.0f * deltaTime);
     }
 }
 
@@ -110,6 +117,22 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
             HELD_SHIFT = false;
         }
     }
+    if (key == GLFW_KEY_Q) {
+        if (action == GLFW_PRESS) {
+            HELD_Q = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            HELD_Q = false;
+        }
+    }
+    if (key == GLFW_KEY_E) {
+        if (action == GLFW_PRESS) {
+            HELD_E = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            HELD_E = false;
+        }
+    }
     if (key == GLFW_KEY_W) {
         if (action == GLFW_PRESS) {
             HELD_W = true;
@@ -117,5 +140,84 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
         else if (action == GLFW_RELEASE) {
             HELD_W = false;
         }
+    }
+    if (key == GLFW_KEY_S) {
+        if (action == GLFW_PRESS) {
+            HELD_S = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            HELD_S = false;
+        }
+    }
+}
+
+//World functions
+void RotateTileCorner(Quad* quad, float angle) {
+    Vertex v0 = quad->at(0);
+    float x = v0.position.a + (World::TILE_SIZE / 2);
+    float z = v0.position.c + (World::TILE_SIZE / 2);
+    RotateShape(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
+}
+
+void World::tileLevel(Quad* quad, WorldLevel level) {
+    TranslateShape((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
+}
+
+void World::SlopeTile(Quad* quad, World::Direction direction) {
+    //Get index's to slope - 3 is max
+    unsigned int verticeIndex[3];
+    unsigned int verticesToSlope = 0;
+
+    switch (direction) 
+    {
+    case Direction::NORTH:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticesToSlope = 2;
+        break;
+    case Direction::SOUTH:
+        verticeIndex[0] = 2;
+        verticeIndex[1] = 3;
+        verticesToSlope = 2;
+        break;
+    case Direction::EAST:
+        verticeIndex[0] = 1;
+        verticeIndex[1] = 2;
+        verticesToSlope = 2;
+        break;
+    case Direction::WEST:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 3;
+        verticesToSlope = 2;
+        break;
+    //To keep slope consistency, all corners will be northwest rotated
+    //Due to how quads are formed from tri's - TODO - rotate UV coords too
+    case Direction::NORTHWEST:
+        verticeIndex[0] = 0;
+        verticesToSlope = 1;
+        break;
+    case Direction::NORTHEAST:
+        verticeIndex[0] = 0;
+        verticesToSlope = 1;
+        //Rotate
+        RotateTileCorner(quad, -90.0f);
+        break;
+    case Direction::SOUTHWEST:
+        verticeIndex[0] = 0;
+        verticesToSlope = 1;
+        RotateTileCorner(quad, -270.0f);
+        break;
+    case Direction::SOUTHEAST:
+        verticeIndex[0] = 0;
+        verticesToSlope = 1;
+        RotateTileCorner(quad, -180.0f);
+        break;
+    default:
+        verticesToSlope = 0;
+        break;
+    }
+
+    for (int i = 0; i < verticesToSlope; i++) {
+        TranslateShapeVertex((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
     }
 }

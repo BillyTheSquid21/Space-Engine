@@ -107,6 +107,16 @@ void TranslateShape(void* verticesArray, float deltaX, float deltaY, float delta
 	}
 }
 
+void TranslateShapeVertex(void* verticesArray, unsigned int index, float deltaX, float deltaY, float deltaZ)
+{
+	Vertex* vertexPointer = (Vertex*)verticesArray;
+
+	//Translate for each vertice
+	vertexPointer[index].position.a += deltaX;
+	vertexPointer[index].position.b += deltaY;
+	vertexPointer[index].position.c += deltaZ;
+}
+
 //Position
 void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type)
 {

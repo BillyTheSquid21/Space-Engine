@@ -67,6 +67,7 @@ Tri CreateTri(float x, float y, float radius);
 
 //Shape translation - all shapes are defined relative to centre
 void TranslateShape(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type);
+void TranslateShapeVertex(void* verticesArray, unsigned int index, float deltaX, float deltaY, float deltaZ);
 void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type);
 void RotateShape(void* verticesArray, Component3f rotationCentre, float angle, Shape type, Axis axis);
 void ColorShape(void* verticesArray, float r, float g, float b, Shape type);
