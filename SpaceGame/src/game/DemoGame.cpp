@@ -87,7 +87,6 @@ void DemoGame::render() {
 			m_States[i]->render();
 		}
 	}
-
 	//Inherited
 	Game::render();
 }
