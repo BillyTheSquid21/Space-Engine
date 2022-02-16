@@ -27,6 +27,28 @@ Quad CreateQuad(float x, float y, float width, float height, float uvX, float uv
 }
 
 //Creation
+TextureQuad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) {
+
+	TextureVertex v0{};
+	v0.position = { x, y , 0.0f };
+	v0.uvCoords = { uvX, uvY + uvHeight };
+
+	TextureVertex v1{};
+	v1.position = { x + width, y,  0.0f };
+	v1.uvCoords = { uvX + uvWidth, uvY + uvHeight };
+
+	TextureVertex v2{};
+	v2.position = { x + width, y - height,  0.0f };
+	v2.uvCoords = { uvX + uvWidth, uvY };
+
+	TextureVertex v3{};
+	v3.position = { x, y - height,  0.0f };
+	v3.uvCoords = { uvX, uvY };
+
+	return { v0, v1, v2, v3 };
+}
+
+//Creation
 Line CreateLine(float xStart, float yStart, float xEnd, float yEnd, float stroke) {
 
 	//Use perpendicular method
@@ -87,26 +109,6 @@ unsigned short int GetVerticesCount(Shape type) {
 	}
 }
 
-unsigned short int GetFloatCount(Shape type) {
-	return (sizeof(Vertex) / sizeof(float)) * GetVerticesCount(type);
-}
-
-//Translation
-void TranslateShape(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type) 
-{	
-	Vertex* vertexPointer = (Vertex*)verticesArray;
-
-	//Set number of vertices to translate
-	unsigned short int numberOfVertices = GetVerticesCount(type);
-
-	//Translate for each vertice
-	for (int i = 0; i < numberOfVertices; i++) {
-		vertexPointer[i].position.a += deltaX;
-		vertexPointer[i].position.b += deltaY;
-		vertexPointer[i].position.c += deltaZ;
-	}
-}
-
 //Position
 void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type)
 {
@@ -115,7 +117,7 @@ void PositionShape(void* verticesArray, Component3f currentPosition, Component3f
 	float deltaY = newPosition.b - currentPosition.b;
 	float deltaZ = newPosition.c - currentPosition.c;
 
-	TranslateShape(verticesArray, deltaX, deltaY, deltaZ, type);
+	TranslateShape<Vertex>(verticesArray, deltaX, deltaY, deltaZ, type);
 }
 
 //Rotation

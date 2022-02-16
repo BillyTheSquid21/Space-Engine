@@ -26,10 +26,10 @@ void Splash::init(int width, int height) {
     m_Splash = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.0f, 0.0f, 0.5f, 1.0f);
     m_Splash2 = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.5f, 0.0f, 0.5f, 1.0f);
     RotateShape(&m_Splash2, { 0.0f, 0.0f, 0.0f }, 90, Shape::QUAD, Axis::Y);
-    TranslateShape(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
+    TranslateShape<Vertex>(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
 
-    TranslateShape(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
-    TranslateShape(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    TranslateShape<Vertex>(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    TranslateShape<Vertex>(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
 
     EngineLog("Splash Screen loaded");
 }
@@ -41,8 +41,8 @@ void Splash::render() {
     m_Shader.bind();
 
     //Renders
-    m_Renderer.commit((Vertex*)&m_Splash, GetFloatCount(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
-    m_Renderer.commit((Vertex*)&m_Splash2, GetFloatCount(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+    m_Renderer.commit((Vertex*)&m_Splash, GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+    m_Renderer.commit((Vertex*)&m_Splash2, GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
     m_Shader.setUniform("u_Texture", 0);
     m_Camera.sendCameraUniforms(m_Shader);
 

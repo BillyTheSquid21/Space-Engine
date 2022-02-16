@@ -58,7 +58,7 @@ class DerivedComponent : public Component
 {
 public:
 	void setXY(float* xPos, float* yPos, Quad* q) { m_X = xPos; m_Y = yPos; quad = q; }
-	void function(double deltaTime, double time) { TranslateShape((Vertex*)quad, 1.0f * deltaTime, 0.0f, 0.0f, Shape::QUAD); }
+	void function(double deltaTime, double time) { TranslateShape<Vertex>((Vertex*)quad, 1.0f * deltaTime, 0.0f, 0.0f, Shape::QUAD); }
 	float* m_X; float* m_Y; Quad* quad;
 };
 
@@ -74,7 +74,7 @@ public:
 		compBase->setID(0);
 		m_Components[0] = compBase;
 	};
-	void render() { m_Renderer->commit((Vertex*)&quad, GetFloatCount(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT); }
+	void render() { m_Renderer->commit((Vertex*)&quad, GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT); }
 	void update(double deltaTime, double time) { EngineLog("Derived Update: ", m_ID); if (time > 15.0) { deactivate(); } for (int i = 0; i < m_ComponentCount; i++) { m_Components[i]->function(deltaTime, time); } }
 	Quad quad;
 };

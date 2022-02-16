@@ -67,7 +67,7 @@ void Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, f
 
 void Plane::render() 
 {	
-	m_Renderer->commit((Vertex*)&m_Quads[0], GetFloatCount(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
+	m_Renderer->commit((Vertex*)&m_Quads[0], GetFloatCount<Vertex>(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
 Quad* Plane::accessQuad(unsigned int x, unsigned int y) {

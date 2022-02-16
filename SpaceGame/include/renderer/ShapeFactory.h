@@ -34,8 +34,10 @@ namespace Primitive
 }
 
 #define Quad std::array<Vertex, 4>
+#define TextureQuad std::array<TextureVertex, 4>
 #define Line std::array<Vertex, 4>	//Line is just a quad set up to be more convinient
 #define Tri std::array<Vertex, 3>
+
 
 enum class Shape
 {	
@@ -62,11 +64,10 @@ const float GUI_LAYER_6 = 0.92f;
 
 //Shape Creation
 Quad CreateQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
+TextureQuad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 Line CreateLine(float xStart, float yStart, float xEnd, float yEnd, float stroke);
 Tri CreateTri(float x, float y, float radius);
 
-//Shape translation - all shapes are defined relative to centre
-void TranslateShape(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type);
 void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type);
 void RotateShape(void* verticesArray, Component3f rotationCentre, float angle, Shape type, Axis axis);
 void ColorShape(void* verticesArray, float r, float g, float b, Shape type);
@@ -77,6 +78,27 @@ void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alph
 
 //Utility
 unsigned short int GetVerticesCount(Shape type);
-unsigned short int GetFloatCount(Shape type);
+template<typename T>
+unsigned short int GetFloatCount(Shape type) {
+	return (sizeof(T) / sizeof(float)) * GetVerticesCount(type);
+}
+
+//Shape translation - all shapes are defined relative to centre
+template<typename T>
+void TranslateShape(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type)
+{
+	T* vertexPointer = (T*)verticesArray;
+
+	//Set number of vertices to translate
+	unsigned short int numberOfVertices = GetVerticesCount(type);
+
+	//Translate for each vertice
+	for (int i = 0; i < numberOfVertices; i++) {
+		VertexBase* vertex = (VertexBase*)(void*)&vertexPointer[i];
+		vertex->position.a += deltaX;
+		vertex->position.b += deltaY;
+		vertex->position.c += deltaZ;
+	}
+}
 
 #endif
