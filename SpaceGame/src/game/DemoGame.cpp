@@ -15,7 +15,7 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	splashScreen->init(m_Width, m_Height);
 	splashScreen->setActive(true);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, Level::LEVEL_ENTRY);
+	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
 
@@ -58,6 +58,7 @@ void DemoGame::update(double deltaTime) {
 			m_States[i]->update(deltaTime, m_GlfwTime);
 		}
 		else {
+			//Unload non cached data if not active with data loaded
 			if (m_States[i]->hasDataLoaded()) {
 				m_States[i]->purgeRequiredData();
 			}
@@ -87,7 +88,6 @@ void DemoGame::render() {
 			m_States[i]->render();
 		}
 	}
-
 	//Inherited
 	Game::render();
 }

@@ -17,26 +17,38 @@ void Camera::sendCameraUniforms(Shader& shader) {
 	shader.setUniform("u_Proj", &proj);
 }
 
-void Camera::moveZ(float speed) {
+void Camera::moveForwards(float speed) {
 	m_Position += speed * m_Direction;
 }
 
-void Camera::moveY(float speed) {
+void Camera::moveUp(float speed) {
 	m_Position += speed * m_Up;
 }
 
-void Camera::moveX(float speed) {
+void Camera::moveSideways(float speed) {
 	m_Position += speed * -glm::normalize(glm::cross(m_Direction, m_Up));
 }
 
-void Camera::panX(float speed) {
+void Camera::panSideways(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-void Camera::panY(float speed) {
+void Camera::panUp(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), -glm::normalize(glm::cross(m_Direction, m_Up)));
 }
 
 void Camera::panYDegrees(float angle) {
 	m_Direction = glm::rotate(m_Direction, glm::radians(angle), -glm::normalize(glm::cross(m_Direction, m_Up)));
+}
+
+void Camera::moveX(float speed) {
+	m_Position += speed * glm::vec3(-1.0f, 0.0f, 0.0f);
+}
+
+void Camera::moveY(float speed) {
+	m_Position += speed * glm::vec3(0.0f, -1.0f, 0.0f);
+}
+
+void Camera::moveZ(float speed) {
+	m_Position += speed * glm::vec3(0.0f, 0.0f, -1.0f);
 }

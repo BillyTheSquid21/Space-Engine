@@ -17,12 +17,17 @@ public:
 	//get data from camera
 	void sendCameraUniforms(Shader& shader);
 
-	//move camera
-	void moveZ(float speed);
+	//move camera relative to orientation
+	void moveForwards(float speed);
+	void moveSideways(float speed);
+	void moveUp(float speed);
+	void panSideways(float speed);
+	void panUp(float speed);
+
+	//move camera in absolute terms
 	void moveX(float speed);
 	void moveY(float speed);
-	void panX(float speed);
-	void panY(float speed);
+	void moveZ(float speed);
 
 	//set camera
 	void panYDegrees(float degrees);
