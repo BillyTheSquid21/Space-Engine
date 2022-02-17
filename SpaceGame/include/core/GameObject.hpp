@@ -23,18 +23,20 @@ public:
 	GameObject() { m_ID = CumulativeID; CumulativeID++; }
 
 	//Removes components and deletes whole array
-	virtual ~GameObject() { if (m_Components != NULL) { for (int i = 0; i < m_ComponentCount; i++) { delete m_Components[i]; } delete[] m_Components; } }
+	virtual ~GameObject() { for (int i = 0; i < m_Components.size(); i++) { delete m_Components[i]; }  }
 
-	void setRenderer(Renderer<Vertex>* ren) { m_Renderer = ren; };
+	void setRenderer(Renderer<TextureVertex>* ren) { m_Renderer = ren; };
 	virtual void render() { EngineLog("Render: ", m_ID); };
 	virtual void update(double deltaTime, double time) { EngineLog("Update: ", m_ID); };
+	void addComponent(Component* component) { m_Components.push_back(component); }
 
 	//Getters
-	float xPos() const { return m_XPos; }
-	float yPos() const { return m_YPos; }
 	unsigned int ID() const { return m_ID; }
 	bool active() const { return m_Active; }
 	void deactivate() { m_Active = false; }
+	float m_XPos = 0.0f;
+	float m_YPos = 0.0f;
+	float m_ZPos = 0.0f;
 
 protected:
 	//ID
@@ -43,44 +45,10 @@ protected:
 	bool m_Active = true;
 
 	//Components - stores pointers to components
-	Component** m_Components = nullptr;
-	unsigned char m_ComponentCount = 0;
-	unsigned int m_ComponentBytes = 0;
+	std::vector<Component*> m_Components;
 
 	//Rendering and pos
-	Renderer<Vertex>* m_Renderer = nullptr;
-	float m_XPos = 0.0f;
-	float m_YPos = 0.0f;
+	Renderer<TextureVertex>* m_Renderer = nullptr;
 };
-
-//Example derived comp and object - Gives idea how it works, don't use these classes
-class DerivedComponent : public Component
-{
-public:
-	void setXY(float* xPos, float* yPos, Quad* q) { m_X = xPos; m_Y = yPos; quad = q; }
-	void function(double deltaTime, double time) { TranslateShape<Vertex>((Vertex*)quad, 1.0f * deltaTime, 0.0f, 0.0f, Shape::QUAD); }
-	float* m_X; float* m_Y; Quad* quad;
-};
-
-class DerivedObject : public GameObject
-{
-public:
-	void generate(float size) { quad = CreateQuad(0.0f, 0.0f, size, size, 0.0f, 0.0f, 1.0f, 1.0f);
-		m_ComponentCount = 1;
-		m_Components = new Component*[m_ComponentCount];
-		DerivedComponent* comp = new DerivedComponent();
-		comp->setXY(&m_XPos, &m_YPos, &quad);
-		Component* compBase = (Component*)comp;
-		compBase->setID(0);
-		m_Components[0] = compBase;
-	};
-	void render() { m_Renderer->commit((Vertex*)&quad, GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT); }
-	void update(double deltaTime, double time) { EngineLog("Derived Update: ", m_ID); if (time > 15.0) { deactivate(); } for (int i = 0; i < m_ComponentCount; i++) { m_Components[i]->function(deltaTime, time); } }
-	Quad quad;
-};
-
-
-
-
 
 #endif

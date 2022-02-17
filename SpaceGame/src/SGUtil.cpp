@@ -11,3 +11,37 @@ int intFloor(float x)
 	return i - (i > x); /* convert trunc to floor */
 }
 
+int roundDownMultiple(float num, int multiple) 
+{
+	int numInt = (int)num;
+
+	// Smaller multiple
+	int a = (numInt / multiple) * multiple;
+
+	// Larger multiple
+	int b = a + multiple;
+
+	// Return of closest of two
+	if (numInt - a > b - numInt) {
+		return b;
+	}
+	return a;
+}
+
+int roundUpMultiple(float num, int multiple)
+{
+	int numInt = (int)num;
+
+	// Smaller multiple
+	int a = (numInt / multiple) * multiple;
+
+	// Larger multiple
+	int b = a + multiple;
+
+	// Return of closest of two
+	if (numInt - a > b - numInt) {
+		return a;
+	}
+	return b;
+}
+

@@ -152,6 +152,8 @@
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\game\DemoGame.cpp" />
     <ClCompile Include="src\game\gui\GUI.cpp" />
+    <ClCompile Include="src\game\level\World.cpp" />
+    <ClCompile Include="src\game\objects\OWObjects.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
@@ -179,6 +181,8 @@
     <ClInclude Include="include\core\State.hpp" />
     <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
+    <ClInclude Include="include\game\level\World.h" />
+    <ClInclude Include="include\game\objects\OWObjects.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
@@ -203,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default.glsl" />
+    <None Include="res\shaders\DefaultTexture.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

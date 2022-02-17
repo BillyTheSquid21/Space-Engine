@@ -11,14 +11,14 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 	m_XCount = width / tileSize;
     m_YCount = height / tileSize;
 
-	m_Quads = new Quad [m_XCount * m_YCount];
+	m_Quads = new TextureQuad [m_XCount * m_YCount];
 	
 	for (int y = 0; y < m_YCount; y++) {
 		for (int x = 0; x < m_XCount; x++) {
 			float tileXPos = (x * tileSize) + xPos;
 			float tileYPos = (y * tileSize) + yPos;
-			Quad quad = CreateQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.5f, 0.5f);
-			RotateShape(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
+			TextureQuad quad = CreateTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.5f, 0.5f);
+			RotateShape<TextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			m_Quads[x * m_YCount + y] = quad;
 		}
 	}
@@ -67,10 +67,10 @@ void Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, f
 
 void Plane::render() 
 {	
-	m_Renderer->commit((Vertex*)&m_Quads[0], GetFloatCount<Vertex>(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
+	m_Renderer->commit((TextureVertex*)&m_Quads[0], GetFloatCount<TextureVertex>(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
-Quad* Plane::accessQuad(unsigned int x, unsigned int y) {
+TextureQuad* Plane::accessQuad(unsigned int x, unsigned int y) {
 	if (&m_Quads[x * m_YCount + y]) {
 		return &m_Quads[x * m_YCount + y];
 	}

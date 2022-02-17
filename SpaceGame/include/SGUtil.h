@@ -36,6 +36,8 @@ void EngineLog(std::string message, T value1, T value2) {
 
 float invSqrt(float number); //Supposedly a faster inv sqrt
 int intFloor(float x); //supposedly faster floor
+int roundDownMultiple(float num, int multiple);
+int roundUpMultiple(float num, int multiple);
 
 //return structs
 struct Component2f

@@ -33,10 +33,10 @@ namespace Primitive
 	const char T_IND_COUNT = 3;
 }
 
-#define Quad std::array<Vertex, 4>
+#define Quad std::array<ColorTextureVertex, 4>
 #define TextureQuad std::array<TextureVertex, 4>
-#define Line std::array<Vertex, 4>	//Line is just a quad set up to be more convinient
-#define Tri std::array<Vertex, 3>
+#define Line std::array<ColorTextureVertex, 4>	//Line is just a quad set up to be more convinient
+#define Tri std::array<ColorTextureVertex, 3>
 
 
 enum class Shape
@@ -68,11 +68,9 @@ TextureQuad CreateTextureQuad(float x, float y, float width, float height, float
 Line CreateLine(float xStart, float yStart, float xEnd, float yEnd, float stroke);
 Tri CreateTri(float x, float y, float radius);
 
-void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type);
-void RotateShape(void* verticesArray, Component3f rotationCentre, float angle, Shape type, Axis axis);
+//Currently only applies to standard vertex - will update if another derived vertex needs to access colour
 void ColorShape(void* verticesArray, float r, float g, float b, Shape type);
 void ColorShapeVertex(void* verticesArray, unsigned int vertex, float r, float g, float b, Shape type);
-void LayerShape(void* verticesArray, float layer, Shape type);
 void TransparencyShape(void* verticesArray, float alpha, Shape type);
 void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alpha, Shape type);
 
@@ -84,6 +82,13 @@ unsigned short int GetFloatCount(Shape type) {
 }
 
 //Shape translation - all shapes are defined relative to centre
+static void TranslateShapeVertexInternal(void* vertexPointer, float deltaX, float deltaY, float deltaZ) {
+	Vertex* vertex = (Vertex*)(void*)vertexPointer;
+	vertex->position.a += deltaX;
+	vertex->position.b += deltaY;
+	vertex->position.c += deltaZ;
+}
+
 template<typename T>
 void TranslateShape(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type)
 {
@@ -94,10 +99,60 @@ void TranslateShape(void* verticesArray, float deltaX, float deltaY, float delta
 
 	//Translate for each vertice
 	for (int i = 0; i < numberOfVertices; i++) {
-		VertexBase* vertex = (VertexBase*)(void*)&vertexPointer[i];
-		vertex->position.a += deltaX;
-		vertex->position.b += deltaY;
-		vertex->position.c += deltaZ;
+		TranslateShapeVertexInternal(&vertexPointer[i], deltaX, deltaY, deltaZ);
+	}
+}
+
+template<typename T>
+void TranslateShapeVertex(void* verticesArray, unsigned int index, float deltaX, float deltaY, float deltaZ)
+{
+	T* vertexPointer = (T*)verticesArray;
+
+	//Translate for each vertice
+	TranslateShapeVertexInternal(&vertexPointer[index], deltaX, deltaY, deltaZ);
+}
+
+//Position shapes
+template<typename T>
+void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type)
+{
+	//get amount to translate by
+	float deltaX = newPosition.a - currentPosition.a;
+	float deltaY = newPosition.b - currentPosition.b;
+	float deltaZ = newPosition.c - currentPosition.c;
+
+	TranslateShape<T>(verticesArray, deltaX, deltaY, deltaZ, type);
+}
+
+//Rotation
+template<typename T>
+void RotateShape(void* verticesArray, Component3f rotationCentre, float angle, Shape type, Axis axis)
+{
+	T* vertexPointer = (T*)verticesArray;
+
+	//Set number of vertices to translate
+	unsigned short int numberOfVertices = GetVerticesCount(type);
+
+	glm::vec3 axisVector = { 1.0f, 0.0f, 0.0f };
+	switch (axis)
+	{
+	case Axis::X:
+		axisVector = { 1.0f, 0.0f, 0.0f };
+		break;
+	case Axis::Y:
+		axisVector = { 0.0f, 1.0f, 0.0f };
+		break;
+	case Axis::Z:
+		axisVector = { 0.0f, 0.0f, 1.0f };
+		break;
+	}
+
+	//Translate for each vertice
+	for (int i = 0; i < numberOfVertices; i++) {
+		Vertex* vertex = (Vertex*)(void*)&vertexPointer[i];
+		glm::vec3 position = { vertex->position.a - rotationCentre.a, vertex->position.b - rotationCentre.b, vertex->position.c - rotationCentre.c };
+		position = glm::rotate(position, glm::radians(angle), axisVector);
+		vertex->position = { position.x + rotationCentre.a, position.y + rotationCentre.b, position.z + rotationCentre.c };
 	}
 }
 

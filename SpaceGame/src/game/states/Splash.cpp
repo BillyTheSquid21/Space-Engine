@@ -25,24 +25,24 @@ void Splash::init(int width, int height) {
     //Splash
     m_Splash = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.0f, 0.0f, 0.5f, 1.0f);
     m_Splash2 = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.5f, 0.0f, 0.5f, 1.0f);
-    RotateShape(&m_Splash2, { 0.0f, 0.0f, 0.0f }, 90, Shape::QUAD, Axis::Y);
-    TranslateShape<Vertex>(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
+    RotateShape<ColorTextureVertex>(&m_Splash2, { 0.0f, 0.0f, 0.0f }, 90, Shape::QUAD, Axis::Y);
+    TranslateShape<ColorTextureVertex>(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
 
-    TranslateShape<Vertex>(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
-    TranslateShape<Vertex>(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    TranslateShape<ColorTextureVertex>(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    TranslateShape<ColorTextureVertex>(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
 
     EngineLog("Splash Screen loaded");
 }
 
 void Splash::render() {
-    Renderer<Vertex>::clearScreen();
+    Renderer<ColorTextureVertex>::clearScreen();
 
     //Bind shader program
     m_Shader.bind();
 
     //Renders
-    m_Renderer.commit((Vertex*)&m_Splash, GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
-    m_Renderer.commit((Vertex*)&m_Splash2, GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+    m_Renderer.commit((ColorTextureVertex*)&m_Splash, GetFloatCount<ColorTextureVertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+    m_Renderer.commit((ColorTextureVertex*)&m_Splash2, GetFloatCount<ColorTextureVertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
     m_Shader.setUniform("u_Texture", 0);
     m_Camera.sendCameraUniforms(m_Shader);
 
@@ -55,7 +55,7 @@ void Splash::update(double deltaTime, double time) {
     float alpha = 1.0f;
     if (m_CurrentTime < m_FadeIn) {
         alpha = (float)m_CurrentTime / (float)m_FadeIn;
-        TransparencyShape((Vertex*)&m_Splash, alpha, Shape::QUAD);
+        TransparencyShape((ColorTextureVertex*)&m_Splash, alpha, Shape::QUAD);
     }
 
     //Rotate to second half of splash
@@ -65,7 +65,7 @@ void Splash::update(double deltaTime, double time) {
         angle += -40.0f * (float)deltaTime;
 
         //Fade first half out as it rotates
-        TransparencyShape((Vertex*)&m_Splash, (float)(1.0 + ((5.0 - time) / 2.0)), Shape::QUAD);
+        TransparencyShape((ColorTextureVertex*)&m_Splash, (float)(1.0 + ((5.0 - time) / 2.0)), Shape::QUAD);
     }
 
 }

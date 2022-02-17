@@ -91,7 +91,7 @@ private:
 
 		while (verticesArray.itemsWaiting()) {
 			//Get instructions from render queue
-			RenderContainer<Vertex*> instructions = verticesArray.nextInQueue();
+			RenderContainer<T*> instructions = verticesArray.nextInQueue();
 
 			//VERTICES
 			const float* dataPointer = (const float*)instructions.object;

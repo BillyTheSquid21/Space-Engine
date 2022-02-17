@@ -21,10 +21,10 @@ public:
 	
 	//Render
 	void render();
-	void setRenderer(Renderer<Vertex>* ren) { m_Renderer = ren; }
+	void setRenderer(Renderer<TextureVertex>* ren) { m_Renderer = ren; }
 
 	//Access specific tile
-	Quad* accessQuad(unsigned int x, unsigned int y);
+	TextureQuad* accessQuad(unsigned int x, unsigned int y);
 
 	//Purges data not needed without destruction of class
 	void purgeData();
@@ -33,8 +33,8 @@ private:
 	//Helper
 	void genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle);
 
-	Renderer<Vertex>* m_Renderer = nullptr;
-	Quad* m_Quads;
+	Renderer<TextureVertex>* m_Renderer = nullptr;
+	TextureQuad* m_Quads;
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
 
 	//Indices buffer for plane

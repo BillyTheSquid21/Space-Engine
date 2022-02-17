@@ -7,7 +7,7 @@ void VertexBuffer::create(unsigned int count) {
 	glGenBuffers(1, &m_ID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 	//tells how much data to set aside - size in bytes
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * count, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ColorTextureVertex) * count, nullptr, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -24,7 +24,7 @@ void VertexBuffer::unbind() const {
 
 void VertexBuffer::bufferData(const void* data, unsigned int count) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * count, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ColorTextureVertex) * count, nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, count * sizeof(float), data);
 }
 
