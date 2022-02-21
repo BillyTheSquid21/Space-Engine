@@ -25,6 +25,7 @@ public:
 
 	//Access specific tile
 	TextureQuad* accessQuad(unsigned int x, unsigned int y);
+	void texturePlane(float u, float v, float width, float height);
 
 	//Purges data not needed without destruction of class
 	void purgeData();

@@ -80,6 +80,7 @@ protected:
 template<typename T>
 class SimpleQueue : public Queue<T, QueueNode<T>>{};
 
+//Render queue
 template<typename T>
 class RenderQueue : public Queue<T, RenderQueueNode<T>>
 {

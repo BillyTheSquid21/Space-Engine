@@ -61,6 +61,9 @@
     <Filter Include="Source Files\Game\Level">
       <UniqueIdentifier>{6ea8a11c-d8cb-49f5-9e9b-6b84cb9baeac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\rapidjson">
+      <UniqueIdentifier>{3c02482a-c0c9-4ebe-b863-ad5903f7aa0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="src\game\level\World.cpp">
       <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\objects\TileMap.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,12 +233,84 @@
     <ClInclude Include="include\game\level\World.h">
       <Filter>Header Files\Game\Level</Filter>
     </ClInclude>
+    <ClInclude Include="include\game\objects\TileMap.h">
+      <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\allocators.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\cursorstreamwrapper.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\document.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\encodedstream.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\encodings.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\filereadstream.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\filewritestream.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\fwd.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\istreamwrapper.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\memorybuffer.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\memorystream.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\ostreamwrapper.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\pointer.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\prettywriter.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\rapidjson.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\reader.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\schema.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\stream.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\stringbuffer.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\uri.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidjson\writer.h">
+      <Filter>Source Files\Vendor\rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\Message.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default.glsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\shaders\DefaultTexture.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\level\level0.json">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

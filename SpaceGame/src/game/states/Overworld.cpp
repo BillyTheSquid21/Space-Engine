@@ -6,20 +6,25 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
 
     //Renderer setup
     m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
-    m_Renderer.setLayout<float>(3, 2);
-    m_Renderer.setDrawingMode(GL_TRIANGLES);
-    m_Renderer.generate((float)width, (float)height, &m_Camera);
+
+    //World Renderer
+    m_WorldRenderer.setLayout<float>(3, 2);
+    m_WorldRenderer.setDrawingMode(GL_TRIANGLES);
+    m_WorldRenderer.generate((float)width, (float)height, &m_Camera);
+
+    //Sprite Renderer
+    m_SpriteRenderer.setLayout<float>(3, 2);
+    m_SpriteRenderer.setDrawingMode(GL_TRIANGLES);
+    m_SpriteRenderer.generate((float)width, (float)height, &m_Camera);
 
     //Camera
     m_Camera.moveUp(World::TILE_SIZE * 5);
     m_Camera.panYDegrees(45.0f);
 
-    //test object
-    Player* sprite = new Player();
-    sprite->generate(0.0f, 0.0f, HELD_W, HELD_S, HELD_A, HELD_D, levelEntry, 2);
-    sprite->setRenderer(&m_Renderer);
-    GameObject* spriteObject = (GameObject*)sprite;
-    m_Manager.loadObject(spriteObject);
+    //test level
+    level.buildLevel(10, 10, &m_WorldRenderer, &m_OverworldTileMap);
+
+    //test object system
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
@@ -31,14 +36,24 @@ void Overworld::loadRequiredData() {
     //Set texture uniform
     m_Shader.setUniform("u_Texture", 1);
 
-    //Texture
-    m_Plane.setRenderer(&m_Renderer);
+    //Plane
+    m_Plane.setRenderer(&m_WorldRenderer);
     m_Plane.generatePlaneXZ(0.0f, 0.0f, World::TILE_SIZE * 32, World::TILE_SIZE * 32, World::TILE_SIZE);
+    UVData data = m_OverworldTileMap.uvTile(0, 0);
+    m_Plane.texturePlane(data.uvX, data.uvY, data.uvWidth, data.uvHeight);
     
-    m_PlaneTexture.loadTexture("res/textures/default.png");
-    m_PlaneTexture.generateTexture(1);
+    //Load world texture
+    m_PlaneTexture.loadTexture("res/textures/OW.png");
+    m_PlaneTexture.generateTexture(0);
     m_PlaneTexture.bind();
     m_PlaneTexture.clearBuffer();
+
+    //Load sprite textures
+    m_OWSprites.loadTexture("res/textures/Sprite.png");
+    m_OWSprites.generateTexture(1);
+    m_OWSprites.bind();
+    m_OWSprites.clearBuffer();
+
     m_DataLoaded = true;
 }
 
@@ -76,7 +91,7 @@ void Overworld::update(double deltaTime, double time) {
     }
 
     //update objects
-    m_Manager.update(deltaTime, time);
+    m_ObjManager.update(deltaTime);
 }
 
 void Overworld::render() {
@@ -86,13 +101,15 @@ void Overworld::render() {
     m_Shader.bind();
 
     //Renders
-    m_Plane.render();
-    m_Manager.render();
-
-    m_Shader.setUniform("u_Texture", 1);
+    level.render();
+    m_ObjManager.render();
+    
     m_Camera.sendCameraUniforms(m_Shader);
 
-    m_Renderer.drawPrimitives(m_Shader);
+    m_Shader.setUniform("u_Texture", 0);
+    m_WorldRenderer.drawPrimitives(m_Shader);
+    m_Shader.setUniform("u_Texture", 1);
+    m_SpriteRenderer.drawPrimitives(m_Shader);
 }
 
 void Overworld::handleInput(int key, int scancode, int action, int mods) {

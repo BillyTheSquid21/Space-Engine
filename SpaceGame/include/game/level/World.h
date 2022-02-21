@@ -4,6 +4,12 @@
 
 #include "renderer/Plane.h"
 #include "renderer/Texture.h"
+#include "game/objects/TileMap.h"
+#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 //Tiles
 namespace World
@@ -20,14 +26,16 @@ namespace World
 		LEVEL_NULL
 	};
 
+	//When level data is written, use int value the respective enum value evaluates to
+
 	//Directions - north is +Z axis, south is -Z axis, west is +X axis, east is -X 
 	enum class Direction
 	{
+		DIRECTION_NULL,
 		NORTH, NORTHEAST, NORTHWEST,	//Quads are aligned with vertex 0 and 1 being north facing
 		SOUTH, SOUTHEAST, SOUTHWEST,	//Each level is TILE_SIZE / sqrt(2) up due to geometry
 		EAST,
-		WEST,
-		DIRECTION_NULL
+		WEST
 	};
 
 	enum class WorldLevel
@@ -37,7 +45,7 @@ namespace World
 		F6 = 6, F7 = 7, F8 = 8, F9 = 9, F10 = 10,
 		//Below ground
 		B1 = -1, B2 = -2, B3 = -3, B4 = -4, B5 = -5,
-		B6 = -6, B7 = -7, B8 = -8, B9 = -9, B10 = -10
+		B6 = -6, B7 = -7, B8 = -8, B9 = -9, B10 = -10,
 	};
 
 	enum class MovementPermissions
@@ -54,38 +62,48 @@ namespace World
 	void tileLevel(TextureQuad* quad, WorldLevel level);
 	void SlopeTile(TextureQuad* quad, Direction direction);
 
-	struct Tile
+	struct TileTexture
 	{
-		//location in plane
-		unsigned int xPlane;
-		unsigned int yPlane;
-
-		//Position in world
-		int xPos;
-		int yPos;
-
-		//Height
-		WorldLevel level;
-		MovementPermissions permissions;
+		unsigned int textureX;
+		unsigned int textureY;
 	};
 
 	struct LevelData
 	{
 		//DATA HERE
+		LevelID id;
+		unsigned int width;
+		unsigned int height;
+		std::vector<WorldLevel> planeHeights;
+		std::vector<Direction> planeDirections;
+		std::vector<TileTexture> planeTextures;
 	};
+
+	LevelData ParseLevel();
 
 	class Level
 	{
 	public:
-		~Level() { delete[] tiles; }
-
+		//Load level data
+		void buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		void render();
+	
 	private:
 		//ID
 		LevelID code;
 
 		//All levels have a rendered plane and a grid of tiles
 		Plane plane;
-		Tile* tiles;
+		std::vector<MovementPermissions> m_Permissions;
+		std::vector<WorldLevel> m_Heights;
+		TileMap* m_TileMapPointer;
+
+		unsigned int m_LevelTilesX = 0;
+		unsigned int m_LevelTilesY = 0;
+		unsigned int m_LevelTotalTiles = 0;
+
+
+		float m_XOffset = 0.0f; float m_YOffset = 0.0f;
 	};
 }
 

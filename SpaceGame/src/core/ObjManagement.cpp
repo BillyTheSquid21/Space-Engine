@@ -1,32 +1,21 @@
 #include "core/ObjManagement.h"
 
-void ObjectManager::loadObject(GameObject* obj) {
-	m_Objects.push_back(obj);
-}
-
-void ObjectManager::unloadObject(unsigned int objID) {
-	for (int i = 0; i < m_Objects.size(); i++) {
-		if (m_Objects[i]->ID() == objID) {
-			m_Objects.erase(m_Objects.begin() + i);
-			return;
-		}
+void ObjectManager::update(double deltaTime) {
+	for (int i = 0; i < m_UpdateGroup.size(); i++) {
+		m_UpdateGroup[i]->iterate(deltaTime);
 	}
-	EngineLog("Object was not found");
-}
-
-void ObjectManager::update(double deltaTime, double time) {
-	for (int i = 0; i < m_Objects.size(); i++) {
-		if (!m_Objects[i]->active()) {
-			m_Objects.erase(m_Objects.begin() + i);
-			i--;
-			continue;
-		}
-		m_Objects[i]->update(deltaTime, time);
+	//Line must be organised here
+	for (int i = 0; i < m_UpdateHeap.size(); i++) {
+		m_UpdateHeap[i]->update(deltaTime);
 	}
 }
 
 void ObjectManager::render() {
-	for (int i = 0; i < m_Objects.size(); i++) {
-		m_Objects[i]->render();
+	for (int i = 0; i < m_RenderGroup.size(); i++) {
+		m_RenderGroup[i]->iterate();
+	}
+	//Line must be organised here - TODO implement making active contiguous
+	for (int i = 0; i < m_RenderHeap.size(); i++) {
+		m_RenderHeap[i]->render();
 	}
 }

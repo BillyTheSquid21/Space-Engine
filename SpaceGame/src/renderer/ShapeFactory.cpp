@@ -153,3 +153,12 @@ void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alph
 	ColorTextureVertex* vertices = (ColorTextureVertex*)verticesArray;
 	vertices[index].color.d = alpha;
 }
+
+//Set uvs
+void SetQuadUV(TextureVertex* verticesArray, float u, float v, float width, float height) 
+{
+	verticesArray[0].uvCoords.a = u; verticesArray[0].uvCoords.b = v + height;
+	verticesArray[1].uvCoords.a = u + width; verticesArray[1].uvCoords.b = v + height;
+	verticesArray[2].uvCoords.a = u + width; verticesArray[2].uvCoords.b = v;
+	verticesArray[3].uvCoords.a = u; verticesArray[3].uvCoords.b = v;
+}

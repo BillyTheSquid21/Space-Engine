@@ -154,6 +154,7 @@
     <ClCompile Include="src\game\gui\GUI.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
     <ClCompile Include="src\game\objects\OWObjects.cpp" />
+    <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
@@ -177,12 +178,14 @@
     <ClInclude Include="include\core\Callbacks.hpp" />
     <ClInclude Include="include\core\Game.h" />
     <ClInclude Include="include\core\GameObject.hpp" />
+    <ClInclude Include="include\core\Message.hpp" />
     <ClInclude Include="include\core\ObjManagement.h" />
     <ClInclude Include="include\core\State.hpp" />
     <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\level\World.h" />
     <ClInclude Include="include\game\objects\OWObjects.h" />
+    <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
@@ -204,8 +207,30 @@
     <ClInclude Include="src\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\vendor\rapidjson\allocators.h" />
+    <ClInclude Include="src\vendor\rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="src\vendor\rapidjson\document.h" />
+    <ClInclude Include="src\vendor\rapidjson\encodedstream.h" />
+    <ClInclude Include="src\vendor\rapidjson\encodings.h" />
+    <ClInclude Include="src\vendor\rapidjson\filereadstream.h" />
+    <ClInclude Include="src\vendor\rapidjson\filewritestream.h" />
+    <ClInclude Include="src\vendor\rapidjson\fwd.h" />
+    <ClInclude Include="src\vendor\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="src\vendor\rapidjson\memorybuffer.h" />
+    <ClInclude Include="src\vendor\rapidjson\memorystream.h" />
+    <ClInclude Include="src\vendor\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="src\vendor\rapidjson\pointer.h" />
+    <ClInclude Include="src\vendor\rapidjson\prettywriter.h" />
+    <ClInclude Include="src\vendor\rapidjson\rapidjson.h" />
+    <ClInclude Include="src\vendor\rapidjson\reader.h" />
+    <ClInclude Include="src\vendor\rapidjson\schema.h" />
+    <ClInclude Include="src\vendor\rapidjson\stream.h" />
+    <ClInclude Include="src\vendor\rapidjson\stringbuffer.h" />
+    <ClInclude Include="src\vendor\rapidjson\uri.h" />
+    <ClInclude Include="src\vendor\rapidjson\writer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\level\level0.json" />
     <None Include="res\shaders\Default.glsl" />
     <None Include="res\shaders\DefaultTexture.glsl" />
   </ItemGroup>

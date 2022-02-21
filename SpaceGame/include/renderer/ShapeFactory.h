@@ -68,11 +68,14 @@ TextureQuad CreateTextureQuad(float x, float y, float width, float height, float
 Line CreateLine(float xStart, float yStart, float xEnd, float yEnd, float stroke);
 Tri CreateTri(float x, float y, float radius);
 
-//Currently only applies to standard vertex - will update if another derived vertex needs to access colour
+//Currently only applies to color texture vertex - will update if another derived vertex needs to access colour
 void ColorShape(void* verticesArray, float r, float g, float b, Shape type);
 void ColorShapeVertex(void* verticesArray, unsigned int vertex, float r, float g, float b, Shape type);
 void TransparencyShape(void* verticesArray, float alpha, Shape type);
 void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alpha, Shape type);
+
+//Currently only applies to texture vertex - will update if another derived vertex needs to access uvs
+void SetQuadUV(TextureVertex* verticesArray, float u, float v, float width, float height);
 
 //Utility
 unsigned short int GetVerticesCount(Shape type);

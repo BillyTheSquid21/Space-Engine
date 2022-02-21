@@ -5,6 +5,7 @@ Plane::~Plane() {
 }
 
 void Plane::genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle) {
+	//If required, purge existing data
 	purgeData();
 	
 	//Gets how many x and y for tiles
@@ -15,9 +16,9 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 	
 	for (int y = 0; y < m_YCount; y++) {
 		for (int x = 0; x < m_XCount; x++) {
-			float tileXPos = (x * tileSize) + xPos;
-			float tileYPos = (y * tileSize) + yPos;
-			TextureQuad quad = CreateTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.5f, 0.5f);
+			float tileXPos = ((float)x * tileSize) + xPos;
+			float tileYPos = ((float)y * tileSize) + yPos;
+			TextureQuad quad = CreateTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.0f, 0.0f);
 			RotateShape<TextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			m_Quads[x * m_YCount + y] = quad;
 		}
@@ -75,6 +76,12 @@ TextureQuad* Plane::accessQuad(unsigned int x, unsigned int y) {
 		return &m_Quads[x * m_YCount + y];
 	}
 	return &m_Quads[0];
+}
+
+void Plane::texturePlane(float u, float v, float width, float height) {
+	for (int i = 0; i < m_XCount * m_YCount; i++) {
+		SetQuadUV((TextureVertex*)&m_Quads[i], u, v, width, height);
+	}
 }
 
 void Plane::purgeData() {

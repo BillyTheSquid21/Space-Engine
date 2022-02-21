@@ -4,6 +4,7 @@
 
 #include "game/level/World.h"
 #include "game/objects/OWObjects.h"
+#include "game/objects/TileMap.h"
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
 
@@ -18,8 +19,9 @@ public:
 	void handleInput(int key, int scancode, int action, int mods);
 
 private:
-	Renderer<TextureVertex> m_Renderer;
-	Texture m_PlaneTexture;
+	//Rendering
+	Renderer<TextureVertex> m_WorldRenderer;
+	Renderer<TextureVertex> m_SpriteRenderer;
 	Shader m_Shader;
 	Camera m_Camera;
 	int m_Width; int m_Height;
@@ -27,12 +29,22 @@ private:
 	//Current level - defualts to the entry level
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_ENTRY;
 
-	//Test plane created
-	Plane m_Plane;
-	Texture m_PlaneTex;
+	//Textures
+	Texture m_PlaneTexture;
+	Texture m_OWSprites;
 
-	//Test obj management
-	ObjectManager m_Manager;
+	//Test plane
+	Plane m_Plane;
+
+	//Test level
+	World::Level level;
+
+	//Test obj mng
+	ObjectManager m_ObjManager;
+
+	//Test tile mapping
+	TileMap m_OverworldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
+	TileMap m_SpriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 
 	//Input
 	//Definitions for persistent input
