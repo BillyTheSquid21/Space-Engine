@@ -2,6 +2,8 @@
   "levelID": 0,
   "levelWidth": 10,
   "levelHeight": 10,
+  "levelOriginX": 0.0,
+  "levelOriginZ": 0.0,
   "planeHeightsR0": "0|0|0|0|0|0|0|0|0|0",
   "planeHeightsR1": "0|0|0|0|0|0|0|0|0|0",
   "planeHeightsR2": "0|0|1|1|1|1|0|0|0|0",

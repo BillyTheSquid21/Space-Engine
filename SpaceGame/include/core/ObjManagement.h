@@ -4,6 +4,7 @@
 
 #include "core/GameObject.hpp"
 #include <vector>
+#include <algorithm>
 
 class ObjectManager
 {
@@ -30,6 +31,8 @@ private:
 	std::vector<std::shared_ptr<RenderComponent>> m_RenderHeap;
 
 	//Storage for Game objects - object only removed after components deleted
+	//TODO - make game objects check if all components are null in other thread
+	//Then lock vector and remove
 	std::vector<std::shared_ptr<GameObject>> m_Objects;
 };
 

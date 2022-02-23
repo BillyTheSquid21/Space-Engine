@@ -74,6 +74,8 @@ namespace World
 		LevelID id;
 		unsigned int width;
 		unsigned int height;
+		float originX;
+		float originY;
 		std::vector<WorldLevel> planeHeights;
 		std::vector<Direction> planeDirections;
 		std::vector<TileTexture> planeTextures;
@@ -87,7 +89,8 @@ namespace World
 		//Load level data
 		void buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
 		void render();
-	
+		static Component2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
+		static std::unordered_map<LevelID, Component2f> s_LevelOriginCache;
 	private:
 		//ID
 		LevelID code;
@@ -105,6 +108,7 @@ namespace World
 
 		float m_XOffset = 0.0f; float m_YOffset = 0.0f;
 	};
+
 }
 
 #endif

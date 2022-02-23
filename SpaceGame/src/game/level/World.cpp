@@ -84,17 +84,17 @@ void World::Level::buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer
     //Allocate height array
     m_Heights.resize(m_LevelTotalTiles);
 
+    //For now fill permissions with clear
+    //For now load level 0
+    LevelData data = ParseLevel();
+
     //Create plane
-    plane.generatePlaneXZ(m_XOffset, m_YOffset, tilesX * World::TILE_SIZE, tilesY * World::TILE_SIZE, World::TILE_SIZE);
+    plane.generatePlaneXZ(data.originX, data.originY, tilesX * World::TILE_SIZE, tilesY * World::TILE_SIZE, World::TILE_SIZE);
     plane.setRenderer(planeRenderer);
 
     //Texture all with tex 0,0
     UVData texData = m_TileMapPointer->uvTile(0, 0);
     plane.texturePlane(texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
-   
-    //For now fill permissions with clear
-    //For now load level 0
-    LevelData data = ParseLevel();
 
     unsigned int xFirstIndex = 0;
     unsigned int yFirstIndex = 0;
@@ -132,6 +132,8 @@ void World::Level::render() {
     plane.render();
 }
 
+std::unordered_map<World::LevelID, Component2f> World::Level::s_LevelOriginCache;
+
 World::LevelData World::ParseLevel() {
     //Setup stream
     std::ifstream ifs("res/level/level0.json");
@@ -142,6 +144,7 @@ World::LevelData World::ParseLevel() {
     //Info
     LevelID id;
     unsigned int width; unsigned int height;
+    float levelOX; float levelOZ;
 
     //Vectors
     std::vector<WorldLevel> planeHeights;
@@ -152,6 +155,8 @@ World::LevelData World::ParseLevel() {
     assert(doc.HasMember("levelID"));
     assert(doc.HasMember("levelWidth"));
     assert(doc.HasMember("levelHeight"));
+    assert(doc.HasMember("levelOriginX"));
+    assert(doc.HasMember("levelOriginZ"));
     assert(doc.HasMember("planeHeightsR0"));
     assert(doc.HasMember("planeDirectionsR0"));
     assert(doc.HasMember("planeTexturesR0"));
@@ -160,6 +165,8 @@ World::LevelData World::ParseLevel() {
     id = (LevelID)doc["levelID"].GetInt();
     width = doc["levelWidth"].GetInt();
     height = doc["levelHeight"].GetInt();
+    levelOX = doc["levelOriginX"].GetFloat();
+    levelOZ = doc["levelOriginZ"].GetFloat();
 
     //Read in
 
@@ -217,6 +224,11 @@ World::LevelData World::ParseLevel() {
             planeTextures.push_back({(unsigned int)tileX, (unsigned int)tileY});
         }
     }
-    LevelData data = { id, width, height, planeHeights, planeDirections, planeTextures };
+    //Store level origin if not loaded before
+    if (Level::s_LevelOriginCache.find(id) == Level::s_LevelOriginCache.end()) {
+        Level::s_LevelOriginCache[id] = { levelOX, levelOZ };
+    }
+
+    LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, planeDirections, planeTextures };
     return data;
 }

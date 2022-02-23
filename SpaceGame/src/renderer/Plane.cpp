@@ -7,6 +7,9 @@ Plane::~Plane() {
 void Plane::genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle) {
 	//If required, purge existing data
 	purgeData();
+
+	//Define from bottom left so bump up one
+	yPos += tileSize;
 	
 	//Gets how many x and y for tiles
 	m_XCount = width / tileSize;

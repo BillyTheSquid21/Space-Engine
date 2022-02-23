@@ -53,6 +53,6 @@ protected:
 
 	double m_GlfwTime;
 
-	double m_SecondsPerFrameCap = (1.0 / 50000.0) * 1000.0; //Init to 500, can be changed
+	double m_SecondsPerFrameCap = (1.0 / 1000.0) * 1000.0; //Init to 1000, can be changed
 };
 #endif

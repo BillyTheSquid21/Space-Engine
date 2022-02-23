@@ -16,7 +16,8 @@
 //5.Objects will contain shared data the components can make use of and a messaging system
 //6.Objects are not accessed by object manager often
 //7.Object manager should keep active components contiguous to increase cache hits
-//8.The user is responsible for implementing sorting a given group to increase cache hits
+
+//IMPORTANT AS I AM STUPID AND DID THIS - Remember to create the group ptrs as new -_-
 
 //Declare function pointers for sending messages if needed
 //If a component wants access, pass and store the function pointer
@@ -52,7 +53,7 @@ private:
 	unsigned char m_ID = 0;
 	bool m_Active = true;
 	SimpleQueue<Message> m_MessageQueue;
-	std::vector<T*>* parentPointers;
+	std::vector<T*>* parentPointers = nullptr;
 };
 
 class RenderComponent : public Component<RenderComponent>
@@ -117,5 +118,124 @@ protected:
 	unsigned int m_ID;
 	bool m_Active = true;
 };
+
+template<typename T>
+void IterateRenderComps(std::vector<T>& renderComps) {
+	static_assert(std::is_base_of<RenderComponent, T>::value, "T must inherit from RenderComponent, did you mean to use IterateUpdateComps()?");
+	//Line must be organised here
+	//If a pair is found both will not be -1, and can be swapped
+	int inactiveInd = -1;
+	int activeInd = -1;
+
+	//Bools to start checking
+	bool inactiveFound = false;
+	bool activeAfterInactive = false;
+
+	for (unsigned int i = 0; i < renderComps.size(); i++) {
+		if (renderComps[i].isActive()) {
+			renderComps[i].render();
+			if (inactiveFound) {
+				if (!activeAfterInactive) {
+					activeAfterInactive = true;
+					activeInd = i;
+				}
+				else {
+					activeInd = i;
+				}
+			}
+		}
+		else if (!inactiveFound) {
+			inactiveInd = i;
+			inactiveFound = true;
+		}
+		else if (inactiveFound && activeAfterInactive) {
+			inactiveInd = i;
+		}
+		if (inactiveInd != -1 && activeInd != -1) {
+			std::iter_swap(renderComps.begin() + inactiveInd, renderComps.begin() + activeInd);
+			inactiveInd = -1;
+			activeInd = -1;
+		}
+	}
+}
+
+template<typename T>
+void IterateUpdateComps(std::vector<T>& updateComps, double deltaTime) {
+	static_assert(std::is_base_of<UpdateComponent, T>::value, "ERROR: T must inherit from UpdateComponent, did you mean to use IterateUpdateComps()?");
+	//Line must be organised here
+	//If a pair is found both will not be -1, and can be swapped
+	int inactiveInd = -1;
+	int activeInd = -1;
+
+	//Bools to start checking
+	bool inactiveFound = false;
+	bool activeAfterInactive = false;
+
+	for (unsigned int i = 0; i < updateComps.size(); i++) {
+		if (updateComps[i].isActive()) {
+			updateComps[i].update(deltaTime);
+			if (inactiveFound) {
+				if (!activeAfterInactive) {
+					activeAfterInactive = true;
+					activeInd = i;
+				}
+				else {
+					activeInd = i;
+				}
+			}
+		}
+		else if (!inactiveFound) {
+			inactiveInd = i;
+			inactiveFound = true;
+		}
+		else if (inactiveFound && activeAfterInactive) {
+			inactiveInd = i;
+		}
+		if (inactiveInd != -1 && activeInd != -1) {
+			std::iter_swap(updateComps.begin() + inactiveInd, updateComps.begin() + activeInd);
+			inactiveInd = -1;
+			activeInd = -1;
+		}
+	}
+}
+
+//  Example code for keeping active at front of array
+////Line must be organised here
+////If a pair is found both will not be -1, and can be swapped
+// 
+// 
+//int inactiveInd = -1;
+//int activeInd = -1;
+//
+////Bools to start checking
+//bool inactiveFound = false;
+//bool activeAfterInactive = false;
+//
+//for (unsigned int i = 0; i < m_UpdateHeap.size(); i++) {
+//	if (m_Update[i].isActive()) {
+//		m_Update[i].update(deltaTime);
+//		if (inactiveFound) {
+//			if (!activeAfterInactive) {
+//				activeAfterInactive = true;
+//				activeInd = i;
+//			}
+//			else {
+//				activeInd = i;
+//			}
+//		}
+//	}
+//	else if (!inactiveFound) {
+//		inactiveInd = i;
+//		inactiveFound = true;
+//	}
+//	else if (inactiveFound && activeAfterInactive) {
+//		inactiveInd = i;
+//	}
+//	if (inactiveInd != -1 && activeInd != -1) {
+//		std::iter_swap(m_Update.begin() + inactiveInd, m_Update.begin() + activeInd);
+//		inactiveInd = -1;
+//		activeInd = -1;
+//	}
+//}
 
 #endif

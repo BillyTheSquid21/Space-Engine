@@ -142,5 +142,24 @@ private:
 	unsigned int m_TotalIndiceInts = 0;
 };
 
+template <typename T>
+struct BulkNode
+{
+	std::vector<T> verts;
+	std::vector<unsigned int> vertFloats;
+	std::vector<unsigned int*> inds;
+	std::vector<unsigned int> indCount;
+};
+
+//Specific type of queue for batching requests together
+//Each node has space for 64 objects to draw
+//Once the node fills, then the next one is allocated
+//Balances reallocation with size
+template <typename T>
+class BulkQueue
+{
+
+};
+
 #endif
 
