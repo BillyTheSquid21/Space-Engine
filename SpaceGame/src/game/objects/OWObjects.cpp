@@ -18,6 +18,41 @@ void TilePosition::update(double deltaTime)
 	*m_TileY = (unsigned int)deltaY / World::TILE_SIZE;
 }
 
+void PlayerWalk::update(double deltaTime) 
+{
+	//Inherit update method
+	TilePosition::update(deltaTime);
+
+	//Checks to start walking
+	if (!m_Walking) 
+	{
+		if (*m_Up) 
+		{
+			*m_Direction = World::Direction::NORTH;
+			*m_Walking = true;
+			m_Timer = 0.0;
+		}
+		else if (*m_Down)
+		{
+			*m_Direction = World::Direction::SOUTH;
+			*m_Walking = true;
+			m_Timer = 0.0;
+		}
+		else if (*m_Left)
+		{
+			*m_Direction = World::Direction::WEST;
+			*m_Walking = true;
+			m_Timer = 0.0;
+		}
+		else if (*m_Right)
+		{
+			*m_Direction = World::Direction::EAST;
+			*m_Walking = true;
+			m_Timer = 0.0;
+		}
+	}
+}
+
 //Objects
 OverworldSprite::OverworldSprite(float xPos, float yPos, float zPos, float width, float height) 
 {

@@ -28,14 +28,10 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
     std::shared_ptr<SpriteRenderGroup> spriteGroup(new SpriteRenderGroup());
     std::shared_ptr<TilePositionGroup> tileGroup(new TilePositionGroup());
 
-    //TODO - Optimise rendering, rework queue system to be more memory and cycle efficient
-    //Without drawing this many objects gets 2000+ fps, with gets 55
-    for (int i = 0; i < 500; i++) {
-        std::shared_ptr<OverworldSprite> sprite(new OverworldSprite(i * 34, 0.0f, 0.0f, World::TILE_SIZE, World::TILE_SIZE));
-        spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
-        tileGroup->addComponent(&sprite->m_UpdateComps, &sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_YPos, &sprite->m_TileX, &sprite->m_TileY);
-        m_ObjManager.pushGameObject(std::static_pointer_cast<GameObject>(sprite));
-    }
+    std::shared_ptr<OverworldSprite> sprite(new OverworldSprite(0.0f, 0.0f, 0.0f, World::TILE_SIZE, World::TILE_SIZE));
+    spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
+    tileGroup->addComponent(&sprite->m_UpdateComps, &sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_YPos, &sprite->m_TileX, &sprite->m_TileY);
+    m_ObjManager.pushGameObject(std::static_pointer_cast<GameObject>(sprite));
     m_ObjManager.pushRenderGroup(spriteGroup);
     m_ObjManager.pushUpdateGroup(tileGroup);
 
