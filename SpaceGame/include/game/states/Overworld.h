@@ -48,7 +48,12 @@ private:
 
 	//Input
 	//Definitions for persistent input
-	bool m_PersistentInput[8];
+	bool m_PersistentInput[12];
+	//Time to hold any input before held state
+	double m_TimeHeld = 0.0;
+	//Time before becomes held
+	const double s_TimeToHold = 0.313;
+	bool m_HoldTimerActive = false;
 };
 
 //Definitions for inputs that persist
@@ -60,5 +65,11 @@ private:
 #define HELD_E m_PersistentInput[5]
 #define HELD_W m_PersistentInput[6]
 #define HELD_S m_PersistentInput[7]
+//For just pressed ones, reset per frame
+#define PRESSED_A m_PersistentInput[8]
+#define PRESSED_D m_PersistentInput[9]
+#define PRESSED_W m_PersistentInput[10]
+#define PRESSED_S m_PersistentInput[11]
+
 
 #endif

@@ -52,3 +52,8 @@ void Camera::moveY(float speed) {
 void Camera::moveZ(float speed) {
 	m_Position += speed * glm::vec3(0.0f, 0.0f, -1.0f);
 }
+
+void Camera::setPos(float x, float y, float z)
+{
+	m_Position = { x,y,z };
+}

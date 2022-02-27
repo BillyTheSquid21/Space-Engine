@@ -71,6 +71,8 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
     }
 }
 
+std::unordered_map<World::LevelID, std::vector<World::MovementPermissions>*> World::Level::s_MovementPermissionsCache;
+
 //Level - data is defined back to front with top left being 0,0 not bottom left
 void World::Level::buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
 {
@@ -89,12 +91,12 @@ void World::Level::buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer
     LevelData data = ParseLevel();
 
     //Create plane
-    plane.generatePlaneXZ(data.originX, data.originY, tilesX * World::TILE_SIZE, tilesY * World::TILE_SIZE, World::TILE_SIZE);
-    plane.setRenderer(planeRenderer);
+    m_Plane.generatePlaneXZ(data.originX, data.originY, tilesX * World::TILE_SIZE, tilesY * World::TILE_SIZE, World::TILE_SIZE);
+    m_Plane.setRenderer(planeRenderer);
 
     //Texture all with tex 0,0
     UVData texData = m_TileMapPointer->uvTile(0, 0);
-    plane.texturePlane(texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
+    m_Plane.texturePlane(texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
 
     unsigned int xFirstIndex = 0;
     unsigned int yFirstIndex = 0;
@@ -104,35 +106,43 @@ void World::Level::buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer
             xFirstIndex = x * m_LevelTilesY + y;
             yFirstIndex = y * m_LevelTilesX + x;
 
-            //Fill permissions with clear - TODO make take input
+            //Do heights for every tile, other things can init to 0
             if (!(xFirstIndex >= m_LevelTotalTiles)) {
-                m_Permissions[xFirstIndex] = World::MovementPermissions::CLEAR;
-
                 //Adjust heights
                 m_Heights[xFirstIndex] = data.planeHeights[yFirstIndex];
-                tileLevel(plane.accessQuad(x, y), m_Heights[xFirstIndex]);
+                tileLevel(m_Plane.accessQuad(x, y), m_Heights[xFirstIndex]);
             }
 
             //Slope tiles
             if (data.planeDirections[yFirstIndex] != World::Direction::DIRECTION_NULL) {
-                World::SlopeTile(plane.accessQuad(x, y), data.planeDirections[yFirstIndex]);
+                World::SlopeTile(m_Plane.accessQuad(x, y), data.planeDirections[yFirstIndex]);
+            }
+
+            //Permissions
+            if (data.planePermissions[yFirstIndex] != World::MovementPermissions::CLEAR) {
+                m_Permissions[xFirstIndex] = data.planePermissions[yFirstIndex];
             }
 
             //Texture tiles
             TileTexture tileTex = data.planeTextures[yFirstIndex];
             if (!(tileTex.textureX == 0 && tileTex.textureY == 0)) {
                 texData = m_TileMapPointer->uvTile(tileTex.textureX, tileTex.textureY);
-                SetQuadUV((TextureVertex*)plane.accessQuad(x, y), texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
+                SetQuadUV((TextureVertex*)m_Plane.accessQuad(x, y), texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
             }
         }
     }
+
+    //Store pointer to permissions - updates every time level loaded
+    Level::s_MovementPermissionsCache[this->m_ID] = &this->m_Permissions;
 }
 
 void World::Level::render() {
-    plane.render();
+    m_Plane.render();
 }
 
+//Declare unordered maps to cache constant level values
 std::unordered_map<World::LevelID, Component2f> World::Level::s_LevelOriginCache;
+std::unordered_map<World::LevelID, World::LevelDimensions> World::Level::s_LevelDimensionCache;
 
 World::LevelData World::ParseLevel() {
     //Setup stream
@@ -149,6 +159,7 @@ World::LevelData World::ParseLevel() {
     //Vectors
     std::vector<WorldLevel> planeHeights;
     std::vector<Direction> planeDirections;
+    std::vector<MovementPermissions> planePermissions;
     std::vector<TileTexture> planeTextures;
 
     //Assertions are to check if is a valid level file
@@ -159,6 +170,7 @@ World::LevelData World::ParseLevel() {
     assert(doc.HasMember("levelOriginZ"));
     assert(doc.HasMember("planeHeightsR0"));
     assert(doc.HasMember("planeDirectionsR0"));
+    assert(doc.HasMember("planePermissionsR0"));
     assert(doc.HasMember("planeTexturesR0"));
 
     //Get simple values
@@ -173,6 +185,7 @@ World::LevelData World::ParseLevel() {
     //const properties tags per row
     const std::string HEIGHT_ROW = "planeHeightsR";
     const std::string DIRECTIONS_ROW = "planeDirectionsR";
+    const std::string PERMISSIONS_ROW = "planePermissionsR";
     const std::string TEXTURES_ROW = "planeTexturesR";
 
     //Current row and segments
@@ -207,6 +220,20 @@ World::LevelData World::ParseLevel() {
         }
     }
 
+    //Read permissions
+    for (int y = height - 1; y >= 0; y--) {
+        //Make member name string
+        currentRow = PERMISSIONS_ROW + std::to_string(y);
+        //Check member exists
+        assert(doc.HasMember(currentRow.c_str()));
+        //Reads data
+        std::stringstream stream(doc[currentRow.c_str()].GetString());
+        while (std::getline(stream, currentSegment, '|'))
+        {
+            planePermissions.push_back((MovementPermissions)std::stoi(currentSegment));
+        }
+    }
+
     //Read textures
     for (int y = height - 1; y >= 0; y--) {
         //Make member name string
@@ -229,6 +256,11 @@ World::LevelData World::ParseLevel() {
         Level::s_LevelOriginCache[id] = { levelOX, levelOZ };
     }
 
-    LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, planeDirections, planeTextures };
+    //Store level size if not loaded before
+    if (Level::s_LevelDimensionCache.find(id) == Level::s_LevelDimensionCache.end()) {
+        Level::s_LevelDimensionCache[id] = { width, height };
+    }
+
+    LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, planeDirections, planePermissions, planeTextures };
     return data;
 }

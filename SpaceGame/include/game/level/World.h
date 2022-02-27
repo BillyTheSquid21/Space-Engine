@@ -56,6 +56,8 @@ namespace World
 		STAIRS_NORTH, STAIRS_SOUTH, STAIRS_EAST, STAIRS_WEST,
 		//Terrain
 		WATER, LEDGE_SOUTH, LEDGE_NORTH, LEDGE_EAST, LEDGE_WEST,
+		//Level bridge - lets walk into next level so don't need to check outside bounds
+		LEVEL_BRIDGE,
 	};
 
 	//Tile arranging classes
@@ -68,6 +70,12 @@ namespace World
 		unsigned int textureY;
 	};
 
+	struct LevelDimensions
+	{
+		unsigned int levelW;
+		unsigned int levelH;
+	};
+
 	struct LevelData
 	{
 		//DATA HERE
@@ -78,6 +86,7 @@ namespace World
 		float originY;
 		std::vector<WorldLevel> planeHeights;
 		std::vector<Direction> planeDirections;
+		std::vector<MovementPermissions> planePermissions;
 		std::vector<TileTexture> planeTextures;
 	};
 
@@ -89,14 +98,22 @@ namespace World
 		//Load level data
 		void buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
 		void render();
+
+		//Static methods
 		static Component2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
+		static LevelDimensions queryDimensions(LevelID level) { if (s_LevelDimensionCache.find(level) != s_LevelDimensionCache.end()) { return s_LevelDimensionCache[level]; } return s_LevelDimensionCache.begin()->second; } //If fails, return first level dim found
+		static std::vector<MovementPermissions>* queryPermissions(LevelID level) { if (s_MovementPermissionsCache.find(level) != s_MovementPermissionsCache.end()) { return s_MovementPermissionsCache[level]; } return s_MovementPermissionsCache.begin()->second; } //If fails, return first level permis found
+		
+		//Static caches
 		static std::unordered_map<LevelID, Component2f> s_LevelOriginCache;
+		static std::unordered_map<LevelID, LevelDimensions> s_LevelDimensionCache;
+		static std::unordered_map<LevelID, std::vector<MovementPermissions>*> s_MovementPermissionsCache;
 	private:
 		//ID
-		LevelID code;
+		LevelID m_ID;
 
 		//All levels have a rendered plane and a grid of tiles
-		Plane plane;
+		Plane m_Plane;
 		std::vector<MovementPermissions> m_Permissions;
 		std::vector<WorldLevel> m_Heights;
 		TileMap* m_TileMapPointer;

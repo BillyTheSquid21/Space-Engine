@@ -30,7 +30,17 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
 
     std::shared_ptr<OverworldSprite> sprite(new OverworldSprite(0.0f, 0.0f, 0.0f, World::TILE_SIZE, World::TILE_SIZE));
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
-    tileGroup->addComponent(&sprite->m_UpdateComps, &sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_YPos, &sprite->m_TileX, &sprite->m_TileY);
+    std::shared_ptr<PlayerWalk> walk(new PlayerWalk(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
+    std::shared_ptr<SpriteMap> spMap(new SpriteMap({0,0}, &sprite->m_Direction, &m_SpriteTileMap, &sprite->m_Sprite));
+    std::shared_ptr<PlayerFace> spDir(new PlayerFace(&PRESSED_A, &PRESSED_D, &PRESSED_W, &PRESSED_S, &sprite->m_Direction, &sprite->m_Walking));
+    std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
+    walk->setInput(&sprite->m_Walking, &HELD_W, &HELD_S, &HELD_A, &HELD_D, &sprite->m_Direction);
+    walk->setSprite(&sprite->m_Sprite);
+    walk->attachToObject(&sprite->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(std::static_pointer_cast<UpdateComponent>(walk));
+    m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spMap));
+    m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spDir));
+    m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spCam));
     m_ObjManager.pushGameObject(std::static_pointer_cast<GameObject>(sprite));
     m_ObjManager.pushRenderGroup(spriteGroup);
     m_ObjManager.pushUpdateGroup(tileGroup);
@@ -74,29 +84,17 @@ void Overworld::purgeRequiredData() {
 
 void Overworld::update(double deltaTime, double time) {
     //Update Camera
-    if (HELD_A) {
-        m_Camera.moveX(100.0f * deltaTime);
-    }
-    if (HELD_D) {
-        m_Camera.moveX(-100.0f * deltaTime);
-    }
     if (HELD_CTRL) {
         m_Camera.panUp(-1.0f * deltaTime);
     }
     if (HELD_SHIFT) {
         m_Camera.panUp(1.0f * deltaTime);
     }
-    if (HELD_Q) {
-        m_Camera.moveForwards(100.0f * deltaTime);
-    }
-    if (HELD_E) {
-        m_Camera.moveForwards(-100.0f * deltaTime);
-    }
-    if (HELD_W) {
-        m_Camera.moveZ(100.0f * deltaTime);
-    }
-    if (HELD_S) {
-        m_Camera.moveZ(-100.0f * deltaTime);
+
+    //Keeps stored to allow input to use
+    if (m_HoldTimerActive)
+    {
+        m_TimeHeld += deltaTime;
     }
 
     //update objects
@@ -122,20 +120,37 @@ void Overworld::render() {
 }
 
 void Overworld::handleInput(int key, int scancode, int action, int mods) {
+    //Reset pressed
+    PRESSED_A = false; PRESSED_D = false; PRESSED_S = false; PRESSED_W = false;
+
     if (key == GLFW_KEY_A) {
         if (action == GLFW_PRESS) {
-            HELD_A = true;
+            PRESSED_A = true;
+            m_HoldTimerActive = true;
         }
         else if (action == GLFW_RELEASE) {
             HELD_A = false;
+            m_TimeHeld = 0.0;
+        }
+        if (m_TimeHeld >= s_TimeToHold)
+        {
+            HELD_A = true;
+            m_HoldTimerActive = false;
         }
     }
     if (key == GLFW_KEY_D) {
         if (action == GLFW_PRESS) {
-            HELD_D = true;
+            PRESSED_D = true;
+            m_HoldTimerActive = true;
         }
         else if (action == GLFW_RELEASE) {
             HELD_D = false;
+            m_TimeHeld = 0.0;
+        }
+        if (m_TimeHeld >= s_TimeToHold)
+        {
+            HELD_D = true;
+            m_HoldTimerActive = false;
         }
     }
     if (key == GLFW_KEY_LEFT_CONTROL) {
@@ -172,18 +187,32 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
     }
     if (key == GLFW_KEY_W) {
         if (action == GLFW_PRESS) {
-            HELD_W = true;
+            PRESSED_W = true;
+            m_HoldTimerActive = true;
         }
         else if (action == GLFW_RELEASE) {
             HELD_W = false;
+            m_TimeHeld = 0.0;
+        }
+        if (m_TimeHeld >= s_TimeToHold)
+        {
+            HELD_W = true;
+            m_HoldTimerActive = false;
         }
     }
     if (key == GLFW_KEY_S) {
         if (action == GLFW_PRESS) {
-            HELD_S = true;
+            PRESSED_S = true;
+            m_HoldTimerActive = true;
         }
         else if (action == GLFW_RELEASE) {
             HELD_S = false;
+            m_TimeHeld = 0.0;
+        }
+        if (m_TimeHeld >= s_TimeToHold)
+        {
+            HELD_S = true;
+            m_HoldTimerActive = false;
         }
     }
 }

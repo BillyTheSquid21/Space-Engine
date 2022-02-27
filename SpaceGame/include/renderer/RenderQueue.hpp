@@ -13,26 +13,6 @@ struct QueueNode
 	std::shared_ptr<QueueNode> nextNode = nullptr;
 };
 
-template<typename T>
-struct RenderQueueNode
-{
-	T object;
-	unsigned int vertFloats = 0;
-	const unsigned int* indices = nullptr;
-	unsigned int indicesCount = 0;
-	std::shared_ptr<RenderQueueNode> nextNode = nullptr;
-};
-
-//Same as queue node but doesnt point anywhere - is the format for return
-template<typename T>
-struct RenderContainer
-{
-	T object;
-	unsigned int vertFloats = 0;
-	const unsigned int* indices = nullptr;
-	unsigned int indicesCount = 0;
-};
-
 //Simplest queue system - assumes using queue node, can be overloaded (eg RenderQueueNode)
 template<typename T, class nodetype>
 class Queue
@@ -80,68 +60,6 @@ protected:
 //Implementation of base queue
 template<typename T>
 class SimpleQueue : public Queue<T, QueueNode<T>>{};
-
-//Render queue - currently mostly depreciated
-template<typename T>
-class RenderQueue : public Queue<T, RenderQueueNode<T>>
-{
-public:
-	void pushBack(T object, unsigned int floatCount, const unsigned int* indices, unsigned int indicesSize) {
-
-		//Pointer
-		std::shared_ptr<RenderQueueNode<T>> objectPointer(new RenderQueueNode<T>());
-
-		//Assign pointers to data
-		objectPointer->object = object;
-		objectPointer->indices = indices;
-		objectPointer->indicesCount = indicesSize;
-		m_TotalIndiceInts += indicesSize;
-		objectPointer->vertFloats = floatCount;
-		m_TotalVerticeFloats += floatCount;
-
-		if (this->m_FrontElement == NULL) {
-			this->m_FrontElement = objectPointer;
-			this->m_QueueSize++;
-			return;
-		}
-		std::shared_ptr<RenderQueueNode<T>> currentPointer = this->m_FrontElement;
-		for (int i = 0; i < this->m_QueueSize; i++) {
-			if (currentPointer->nextNode == NULL) {
-				currentPointer->nextNode = objectPointer;
-				this->m_QueueSize++;
-				return;
-			}
-			currentPointer = currentPointer->nextNode;
-		}
-
-	};
-	RenderContainer<T> nextInQueue() {
-
-		//Get renderer specific data
-		unsigned int vertFloats = this->m_FrontElement->vertFloats;
-		const unsigned int* indices = this->m_FrontElement->indices;
-		unsigned int indicesSize = this->m_FrontElement->indicesCount;
-
-		//Carry out queue instructions as in base class
-		T returnValue = Queue<T, RenderQueueNode<T>>::nextInQueue();
-
-		//decrement total floats and ints
-		m_TotalVerticeFloats -= vertFloats;
-		m_TotalIndiceInts -= indicesSize;
-
-		//Return required data for drawing
-		return { returnValue, vertFloats, indices, indicesSize };
-	}
-	//Renderer specific methods
-	unsigned int vertFloatCount() const { return m_TotalVerticeFloats; }
-	unsigned int indIntCount() const { return m_TotalIndiceInts; }
-
-private:
-	//makes original push back not public
-	using Queue<T, RenderQueueNode<T>>::pushBack;
-	unsigned int m_TotalVerticeFloats = 0;
-	unsigned int m_TotalIndiceInts = 0;
-};
 
 template <typename T>
 struct BulkNode

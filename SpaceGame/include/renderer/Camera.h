@@ -29,12 +29,17 @@ public:
 	void moveY(float speed);
 	void moveZ(float speed);
 
+	//set pos
+	void setPos(float x, float y, float z);
+
 	//set camera
 	void panYDegrees(float degrees);
 
 	//getters and setters
 	void setNearAndFarPlane(float near, float far) { nearPlane = near; farPlane = far; }
 	float speed() const { return m_Speed; }
+	float width() const { return m_CameraWidth; }
+	float height() const { return m_CameraHeight; }
 
 private:
 	float m_CameraWidth; float m_CameraHeight;
