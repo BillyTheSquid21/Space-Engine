@@ -132,13 +132,16 @@
     <ClCompile Include="src\game\states\Overworld.cpp">
       <Filter>Source Files\Game\States</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\objects\OWObjects.cpp">
+    <ClCompile Include="src\game\objects\PlayerObjects.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\game\level\World.cpp">
       <Filter>Source Files\Game\Level</Filter>
     </ClCompile>
     <ClCompile Include="src\game\objects\TileMap.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\objects\OverworldSprite.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -227,7 +230,7 @@
     <ClInclude Include="include\game\states\Overworld.h">
       <Filter>Header Files\Game\States</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\objects\OWObjects.h">
+    <ClInclude Include="include\game\objects\PlayerObjects.h">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="include\game\level\World.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="include\core\Message.hpp">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\objects\OverworldSprite.h">
+      <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

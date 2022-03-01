@@ -1,0 +1,54 @@
+#pragma once
+#ifndef PLAYER_OBJECTS_H
+#define PLAYER_OBJECTS_H
+
+#include "game/objects/OverworldSprite.h"
+
+
+//Player walk uses exact data of TilePosition so inherit for this
+//TODO - make walking more smooth - probably make xPos middle of sprt
+class PlayerMove : public TilePosition
+{
+public:
+	using TilePosition::TilePosition;
+	void update(double deltaTime);
+	void setPersistentInput(bool* shift, bool* up, bool* down, bool* left, bool* right) { m_Shift = shift; m_Up = up; m_Down = down, m_Left = left, m_Right = right; };
+	void setSingleInput(bool* up, bool* down, bool* left, bool* right) { m_UpSingle = up; m_DownSingle = down; m_LeftSingle = left; m_RightSingle = right; };
+	void setSpriteData(bool* walking, bool* running, World::Direction* direction, TextureQuad* sprite) { m_Walking = walking; m_Running = running; m_Direction = direction; m_Sprite = sprite; }
+private:
+	bool canWalk();
+	bool startWalk();
+	bool startRun();
+	bool checkInputs();
+
+	//Modify
+	void faceDirection();
+	void walk(double deltaTime);
+	void run(double deltaTime);
+	void cycleEnd(bool anyHeld);
+
+	bool* m_Up = nullptr; bool* m_Down = nullptr;
+	bool* m_Left = nullptr; bool* m_Right = nullptr;
+	bool* m_UpSingle = nullptr; bool* m_DownSingle = nullptr;
+	bool* m_LeftSingle = nullptr; bool* m_RightSingle = nullptr;
+	bool* m_Shift = nullptr;
+	double m_Timer = 0.0; bool* m_Walking = nullptr; bool* m_Running = nullptr;
+	World::Direction* m_Direction = nullptr;
+	//Constant to stop overshooting when backwards and being on the wrong tile
+	TextureQuad* m_Sprite;
+};
+
+class PlayerCameraLock : public RenderComponent
+{
+public:
+	PlayerCameraLock() = default;
+	PlayerCameraLock(float* x, float* y, float* z, Camera* cam) { m_XPos = x; m_YPos = y; m_ZPos = z; m_Camera = cam; }
+	void render();
+private:
+	Camera* m_Camera = nullptr;
+	float* m_XPos = nullptr;
+	float* m_YPos = nullptr;
+	float* m_ZPos = nullptr;
+};
+
+#endif

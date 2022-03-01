@@ -3,7 +3,7 @@
 #define OVERWORLD_H
 
 #include "game/level/World.h"
-#include "game/objects/OWObjects.h"
+#include "game/objects/PlayerObjects.h"
 #include "game/objects/TileMap.h"
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
