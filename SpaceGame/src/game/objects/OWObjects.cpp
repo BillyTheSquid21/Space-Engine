@@ -19,30 +19,61 @@ void TilePosition::update(double deltaTime)
 }
 
 //render
-SpriteMap::SpriteMap(World::TileTexture texOrigin, World::Direction* direction, TileMap* tileMap, TextureQuad* sprite)
+SpriteMap::SpriteMap(World::TileTexture texOrigin, World::Direction* direction, TileMap* tileMap, TextureQuad* sprite, unsigned int* animOff, bool* walk)
 { 
 	m_TextureOrigin = texOrigin; 
 	m_TileMap = tileMap; 
 	m_Direction = direction; 
 	m_Sprite = sprite; 
 	m_LastDirection = *direction; 
+	m_AnimationOffset = animOff;
+	m_Walking = walk;
 
 	//Set sprite
 	World::TileTexture textureLoc = directionRow(*m_Direction, m_TextureOrigin);
 	UVData uvDat = m_TileMap->uvTile(textureLoc.textureX, textureLoc.textureY);
 	SetQuadUV((TextureVertex*)m_Sprite, uvDat.uvX, uvDat.uvY, uvDat.uvWidth, uvDat.uvHeight);
 }
-
+//TODO - make more effective at managing
 void SpriteMap::render()
 {
 	//If isn't last direction, update sprite
-	if (*m_Direction != m_LastDirection) 
-	{
+	//if (*m_Direction != m_LastDirection || *m_Walking) 
+	//{
 		World::TileTexture textureLoc = directionRow(*m_Direction, m_TextureOrigin);
-		UVData uvDat = m_TileMap->uvTile(textureLoc.textureX, textureLoc.textureY);
+		UVData uvDat = m_TileMap->uvTile(textureLoc.textureX + *m_AnimationOffset, textureLoc.textureY);
 		SetQuadUV((TextureVertex*)m_Sprite, uvDat.uvX, uvDat.uvY, uvDat.uvWidth, uvDat.uvHeight);
 		m_LastDirection = *m_Direction;
+	//}
+}
+
+void SpriteWalkMap::update(double deltaTime)
+{
+	if (*m_IsWalking)
+	{
+		m_Timer += deltaTime;
+		if (m_Timer > 0.25f && m_Timer <= 0.5f)
+		{
+			*m_AnimationOffset = 1;
+		}
+		else if (m_Timer > 0.5f && m_Timer <= 0.75f)
+		{
+			*m_AnimationOffset = 0;
+		}
+		else if (m_Timer > 0.75f && m_Timer < 1.0f)
+		{
+			*m_AnimationOffset = 2;
+		}
+		else if (m_Timer >= 1.0f)
+		{
+			*m_AnimationOffset = 0;
+			m_Timer = 0.0f;
+		}
+
+		return;
 	}
+	*m_AnimationOffset = 0;
+	m_Timer = 0.0;
 }
 
 World::TileTexture SpriteMap::directionRow(World::Direction direction, World::TileTexture textureOrigin)
@@ -203,7 +234,10 @@ void PlayerWalk::update(double deltaTime)
 	TilePosition::update(deltaTime);
 	if (m_Timer >= 1.0) 
 	{
-		*m_Walking = false;
+		if (!anyHeld)
+		{
+			*m_Walking = false;
+		}
 		m_Timer = 0.0;
 
 		//Centre on x and y
@@ -217,7 +251,7 @@ void PlayerWalk::update(double deltaTime)
 		*m_ZPos = expectedZ;
 	}
 }
-void PlayerFace::render()
+void PlayerAnimate::render()
 {
 	if (*m_Walking) 
 	{

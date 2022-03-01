@@ -31,13 +31,15 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
     std::shared_ptr<OverworldSprite> sprite(new OverworldSprite(0.0f, 0.0f, 0.0f, World::TILE_SIZE, World::TILE_SIZE));
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
     std::shared_ptr<PlayerWalk> walk(new PlayerWalk(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
-    std::shared_ptr<SpriteMap> spMap(new SpriteMap({0,0}, &sprite->m_Direction, &m_SpriteTileMap, &sprite->m_Sprite));
-    std::shared_ptr<PlayerFace> spDir(new PlayerFace(&PRESSED_A, &PRESSED_D, &PRESSED_W, &PRESSED_S, &sprite->m_Direction, &sprite->m_Walking));
+    std::shared_ptr<SpriteWalkMap> walk2(new SpriteWalkMap(&sprite->m_Walking, &sprite->m_AnimationOffset));
+    std::shared_ptr<SpriteMap> spMap(new SpriteMap({0,0}, &sprite->m_Direction, &m_SpriteTileMap, &sprite->m_Sprite, &sprite->m_AnimationOffset, &sprite->m_Walking));
+    std::shared_ptr<PlayerAnimate> spDir(new PlayerAnimate(&PRESSED_A, &PRESSED_D, &PRESSED_W, &PRESSED_S, &sprite->m_Direction, &sprite->m_Walking));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
     walk->setInput(&sprite->m_Walking, &HELD_W, &HELD_S, &HELD_A, &HELD_D, &sprite->m_Direction);
     walk->setSprite(&sprite->m_Sprite);
     walk->attachToObject(&sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(std::static_pointer_cast<UpdateComponent>(walk));
+    m_ObjManager.pushUpdateHeap(std::static_pointer_cast<UpdateComponent>(walk2));
     m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spMap));
     m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spDir));
     m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spCam));

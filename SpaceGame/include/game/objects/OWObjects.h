@@ -23,7 +23,7 @@ class SpriteMap : public RenderComponent
 {
 public:
 	SpriteMap() = default;
-	SpriteMap(World::TileTexture texOrigin, World::Direction* direction, TileMap* tileMap, TextureQuad* sprite);
+	SpriteMap(World::TileTexture texOrigin, World::Direction* direction, TileMap* tileMap, TextureQuad* sprite, unsigned int* animOff, bool* walk);
 	void render();
 private:
 	//Texture tile origin starts from bottom left, going up goes E,W,S,N
@@ -31,10 +31,25 @@ private:
 	World::Direction* m_Direction = nullptr;
 	World::Direction m_LastDirection = World::Direction::DIRECTION_NULL;
 	TileMap* m_TileMap = nullptr;
+	unsigned int* m_AnimationOffset = nullptr;
 	TextureQuad* m_Sprite = nullptr;
+	bool* m_Walking = nullptr;
 
 	//Static methods
 	static World::TileTexture directionRow(World::Direction direction, World::TileTexture textureOrigin);
+};
+
+//Maps sprite for walking
+class SpriteWalkMap : public UpdateComponent
+{
+public:
+	SpriteWalkMap() = default;
+	SpriteWalkMap(bool* walking, unsigned int* animOff) { m_IsWalking = walking; m_AnimationOffset = animOff; }
+	void update(double deltaTime);
+private:
+	bool* m_IsWalking = nullptr;
+	unsigned int* m_AnimationOffset = nullptr;
+	float m_Timer = 0.0f;
 };
 
 class TilePosition : public UpdateComponent
@@ -71,11 +86,11 @@ private:
 };
 
 //if an input is pressed, will change direction
-class PlayerFace : public RenderComponent
+class PlayerAnimate : public RenderComponent
 {
 public:
-	PlayerFace() = default;
-	PlayerFace(bool* left, bool* right, bool* up, bool* down, World::Direction* direct, bool* walking) { m_Up = up; m_Down = down; m_Left = left; m_Right = right; m_Direction = direct; m_Walking = walking; }
+	PlayerAnimate() = default;
+	PlayerAnimate(bool* left, bool* right, bool* up, bool* down, World::Direction* direct, bool* walking) { m_Up = up; m_Down = down; m_Left = left; m_Right = right; m_Direction = direct; m_Walking = walking; }
 	void render();
 
 private:
@@ -129,6 +144,7 @@ public:
 	float m_ZPos = 0.0f;
 	unsigned int m_TileX = 0; unsigned int m_TileZ = 0;
 	bool m_Walking = false;
+	unsigned int m_AnimationOffset = 0;
 	World::Direction m_Direction = World::Direction::SOUTH;
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
 };
