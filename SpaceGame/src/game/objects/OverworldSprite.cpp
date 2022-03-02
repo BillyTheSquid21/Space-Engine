@@ -120,19 +120,19 @@ void UpdateSpriteRunning::update(double deltaTime)
 	UpdateSpriteWalking::update(deltaTime);
 	if (*m_Running)
 	{
-		if (m_Timer <= 0.1f)
+		if (m_Timer <= 0.125f)
 		{
 			*m_OffsetX = 4;
 		}
-		else if (m_Timer > 0.1f && m_Timer <= 0.2f)
+		else if (m_Timer > 0.125f && m_Timer <= 0.25f)
 		{
 			*m_OffsetX = 3;
 		}
-		else if (m_Timer > 0.2f && m_Timer <= 0.3f)
+		else if (m_Timer > 0.25f && m_Timer <= 0.375f)
 		{
 			*m_OffsetX = 5;
 		}
-		else if (m_Timer > 0.3f && m_Timer <= 0.4f)
+		else if (m_Timer > 0.375f && m_Timer <= 0.5f)
 		{
 			*m_OffsetX = 3;
 		}
@@ -143,12 +143,23 @@ void UpdateSpriteRunning::update(double deltaTime)
 		}
 		m_Timer += deltaTime;
 		m_WasRunning = true;
+		return;
 	}
-	else if (m_WasRunning)
+
+	if (m_WasRunning)
 	{
-		*m_OffsetX = 0;
+		*m_OffsetX = 3;
 		m_Timer = 0.0f;
 		m_WasRunning = false;
+		m_ResetToZero = true;
+		return;
+	}
+
+	//Final check to avoid modifying every frame
+	if (m_ResetToZero)
+	{
+		*m_OffsetX = 0;
+		m_ResetToZero = false;
 	}
 }
 

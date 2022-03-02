@@ -5,7 +5,7 @@
 //Message enum
 enum class Message
 {
-	ACTIVATE, DEACTIVATE
+	ACTIVATE, DEACTIVATE, CHANGE_INTERNAL_BOOL,
 };
 
 #endif

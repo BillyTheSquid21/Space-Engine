@@ -191,20 +191,20 @@ void PlayerMove::run(double deltaTime)
 	switch (*m_Direction)
 	{
 	case World::Direction::EAST:
-		*m_XPos += deltaTime * World::TILE_SIZE * 2.5f;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * World::TILE_SIZE * 2.5f, 0.0f, 0.0f, Shape::QUAD);
+		*m_XPos += deltaTime * World::TILE_SIZE * 2.0f;
+		TranslateShape<TextureVertex>(m_Sprite, deltaTime * World::TILE_SIZE * 2.0f, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case World::Direction::WEST:
-		*m_XPos += deltaTime * -World::TILE_SIZE * 2.5f;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * -World::TILE_SIZE * 2.5f, 0.0f, 0.0f, Shape::QUAD);
+		*m_XPos += deltaTime * -World::TILE_SIZE * 2.0f;
+		TranslateShape<TextureVertex>(m_Sprite, deltaTime * -World::TILE_SIZE * 2.0f, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case World::Direction::NORTH:
-		*m_ZPos += deltaTime * -World::TILE_SIZE * 2.5f;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * -World::TILE_SIZE * 2.5f, Shape::QUAD);
+		*m_ZPos += deltaTime * -World::TILE_SIZE * 2.0f;
+		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * -World::TILE_SIZE * 2.0f, Shape::QUAD);
 		break;
 	case World::Direction::SOUTH:
-		*m_ZPos += deltaTime * World::TILE_SIZE * 2.5f;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * World::TILE_SIZE * 2.5f, Shape::QUAD);
+		*m_ZPos += deltaTime * World::TILE_SIZE * 2.0f;
+		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * World::TILE_SIZE * 2.0f, Shape::QUAD);
 		break;
 	default:
 		break;
@@ -245,7 +245,7 @@ void PlayerMove::update(double deltaTime)
 		walk(deltaTime);
 	}
 	//Run method
-	else if (m_Timer < 0.4 && *m_Running)
+	else if (m_Timer < 0.5 && *m_Running)
 	{
 		run(deltaTime);
 	}
@@ -254,7 +254,7 @@ void PlayerMove::update(double deltaTime)
 	TilePosition::update(deltaTime);
 
 	//If at end of run or walk cycle
-	if ((m_Timer >= 1.0 && *m_Walking) || (m_Timer >= 0.4 && *m_Running))
+	if ((m_Timer >= 1.0 && *m_Walking) || (m_Timer >= 0.5 && *m_Running))
 	{
 		cycleEnd(anyHeld);
 	}

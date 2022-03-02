@@ -82,6 +82,7 @@ public:
 private:
 	bool* m_Running = nullptr;
 	bool m_WasRunning = false;
+	bool m_ResetToZero = false;
 };
 
 

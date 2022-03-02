@@ -7,6 +7,7 @@
 #include "game/objects/TileMap.h"
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
+#include "renderer/Vertex.hpp"
 
 class Overworld : public State
 {
