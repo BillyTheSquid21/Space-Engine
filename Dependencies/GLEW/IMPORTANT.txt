@@ -1,1 +1,1 @@
-Full glew files are not provided here
+Full glew files are not provided here, add lib and include folder from glew

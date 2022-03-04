@@ -5,39 +5,19 @@ bool PlayerMove::canWalk()
 {
 	std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(*m_CurrentLevel);
 	World::LevelDimensions dimensions = World::Level::queryDimensions(*m_CurrentLevel);
-	unsigned int tileLookupX = *m_TileX;
-	unsigned int tileLookupZ = *m_TileZ;
-
-	//switch current direction, say what is next tile for each
-	switch (*m_Direction)
-	{
-	case World::Direction::EAST:
-		tileLookupX++;
-		break;
-	case World::Direction::WEST:
-		tileLookupX--;
-		break;
-	case World::Direction::NORTH:
-		tileLookupZ++;
-		break;
-	case World::Direction::SOUTH:
-		tileLookupZ--;
-		break;
-	default:
-		break;
-	}
+	World::TileLoc tileLookup = World::NextTileInInputDirection(*m_Direction, { *m_TileX, *m_TileZ });
 
 	//if outside level bounds, check current tile instead
 	bool leavingLevel = false;
-	if (tileLookupX < 0 || tileLookupX >= dimensions.levelW || tileLookupZ < 0 || tileLookupZ >= dimensions.levelH)
+	if (tileLookup.x < 0 || tileLookup.x >= dimensions.levelW || tileLookup.z < 0 || tileLookup.z >= dimensions.levelH)
 	{
-		tileLookupX = *m_TileX;
-		tileLookupZ = *m_TileZ;
+		tileLookup.x = *m_TileX;
+		tileLookup.z = *m_TileZ;
 		leavingLevel = true;
 	}
 
 	//Lookup permission for next tile
-	unsigned int lookupIndex = tileLookupX * dimensions.levelH + tileLookupZ;
+	unsigned int lookupIndex = tileLookup.x * dimensions.levelH + tileLookup.z;
 	World::MovementPermissions permission = World::Level::queryPermissions(*m_CurrentLevel)->at(lookupIndex);
 
 	//Check if leaving level
@@ -53,6 +33,8 @@ bool PlayerMove::canWalk()
 	switch (permission)
 	{
 	case World::MovementPermissions::WALL:
+		return false;
+	case World::MovementPermissions::SPRITE_BLOCKING:
 		return false;
 	default:
 		return true;
@@ -75,6 +57,37 @@ bool PlayerMove::startRun()
 	return true;
 }
 
+void PlayerMove::modifyTilePerm()
+{
+	//Get level data
+	World::LevelDimensions dim = World::Level::queryDimensions(*m_CurrentLevel);
+	std::vector<World::MovementPermissions>* perm = World::Level::queryPermissions(*m_CurrentLevel);
+	
+	//Clear tile leaving
+	unsigned int index = *m_TileX * dim.levelH + *m_TileZ;
+	perm->at(index) = World::MovementPermissions::CLEAR;
+
+	//Block tile entering
+	World::TileLoc tileLookup = World::NextTileInInputDirection(*m_Direction, { *m_TileX, *m_TileZ });
+	index = tileLookup.x * dim.levelH + tileLookup.z;
+	perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
+}
+
+bool PlayerMove::walkPermHelper()
+{
+	if (canWalk())
+	{
+		//Unblock previous tile, block new tile
+		modifyTilePerm();
+		if (*m_Shift)
+		{
+			return startRun();
+		}
+		return startWalk();
+	}
+	return false;
+}
+
 bool PlayerMove::checkInputs()
 {
 	if (!*m_Walking && !*m_Running)
@@ -82,50 +95,22 @@ bool PlayerMove::checkInputs()
 		if (*m_Up)
 		{
 			*m_Direction = World::Direction::NORTH;
-			if (canWalk())
-			{
-				if (*m_Shift)
-				{
-					return startRun();
-				}
-				return startWalk();
-			}
+			return walkPermHelper();
 		}
 		else if (*m_Down)
 		{
 			*m_Direction = World::Direction::SOUTH;
-			if (canWalk())
-			{
-				if (*m_Shift)
-				{
-					return startRun();
-				}
-				return startWalk();
-			}
+			return walkPermHelper();
 		}
 		else if (*m_Left)
 		{
 			*m_Direction = World::Direction::WEST;
-			if (canWalk())
-			{
-				if (*m_Shift)
-				{
-					return startRun();
-				}
-				return startWalk();
-			}
+			return walkPermHelper();
 		}
 		else if (*m_Right)
 		{
 			*m_Direction = World::Direction::EAST;
-			if (canWalk())
-			{
-				if (*m_Shift)
-				{
-					return startRun();
-				}
-				return startWalk();
-			}
+			return walkPermHelper();
 		}
 		//Check if player changes direction with no move
 		faceDirection();

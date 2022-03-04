@@ -25,30 +25,30 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
     level.buildLevel(10, 10, &m_WorldRenderer, &m_OverworldTileMap);
 
     //test object system
-    std::shared_ptr<SpriteRenderGroup> spriteGroup(new SpriteRenderGroup());
-    std::shared_ptr<TilePositionGroup> tileGroup(new TilePositionGroup());
+    std::shared_ptr<RenderComponentGroup<SpriteRender>> spriteGroup(new RenderComponentGroup<SpriteRender>());
+    std::shared_ptr<UpdateComponentGroup<TilePosition>> tileGroup(new UpdateComponentGroup<TilePosition>());
 
-    std::shared_ptr<OverworldSprite> sprite(new OverworldSprite(0.0f, 0.0f, 0.0f, World::TILE_SIZE, World::TILE_SIZE));
+    OvSpr_SpriteData data = { {3, 0},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
+    std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, m_SpriteTileMap);
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
     
     //Sprite map test
-    std::shared_ptr<SpriteMap> spriteMap(new SpriteMap(&sprite->m_Sprite, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &m_SpriteTileMap));
-    std::shared_ptr<UpdateSpriteFacing> updateFace(new UpdateSpriteFacing(&sprite->m_AnimationOffsetY, &sprite->m_Direction));
-    std::shared_ptr<UpdateSpriteRunning> updateWalk(new UpdateSpriteRunning(&sprite->m_AnimationOffsetY, &sprite->m_AnimationOffsetX, &sprite->m_Direction, &sprite->m_Walking, &sprite->m_Running));
+    std::shared_ptr<SpriteMap> spriteMap(new SpriteMap(&sprite->m_Sprite, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &m_SpriteTileMap, { 0, 4 }));
+    std::shared_ptr<UpdateAnimationFacing> updateFace(new UpdateAnimationFacing(&sprite->m_AnimationOffsetY, &sprite->m_Direction));
+    std::shared_ptr<UpdateAnimationRunning> updateWalk(new UpdateAnimationRunning(&sprite->m_AnimationOffsetY, &sprite->m_AnimationOffsetX, &sprite->m_Direction, &sprite->m_Walking, &sprite->m_Running));
 
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
     walk->setPersistentInput(&HELD_SHIFT, &HELD_W, &HELD_S, &HELD_A, &HELD_D);
     walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
     walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Direction, &sprite->m_Sprite);
-    walk->attachToObject(&sprite->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(std::static_pointer_cast<UpdateComponent>(walk));
-    m_ObjManager.pushUpdateHeap(std::static_pointer_cast<UpdateComponent>(spriteMap));
-    m_ObjManager.pushUpdateHeap(std::static_pointer_cast<UpdateComponent>(updateWalk));
-    m_ObjManager.pushRenderHeap(std::static_pointer_cast<RenderComponent>(spCam));
-    m_ObjManager.pushGameObject(std::static_pointer_cast<GameObject>(sprite));
-    m_ObjManager.pushRenderGroup(spriteGroup);
-    m_ObjManager.pushUpdateGroup(tileGroup);
+    m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(spriteMap, &sprite->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(updateWalk, &sprite->m_UpdateComps);
+    m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
+    m_ObjManager.pushGameObject(sprite);
+    m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
+    m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }

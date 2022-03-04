@@ -27,6 +27,7 @@ typedef void (*Message_All_Update)(Message message);
 typedef void (*Message_All_Render)(Message message);
 typedef void (*Message_All)(Message message);
 
+
 template<typename T>
 class Component
 {
@@ -36,6 +37,9 @@ public:
 	void recieve(Message message) { m_MessageQueue.pushBack(message); };
 	bool isActive() const { return m_Active; }
 	void setActive(bool set) { m_Active = set; }
+	bool isDead() const { return m_Dead; }
+	//Kills component which ensures is also inactive. They will be sorted to end and before pushing the vector back, a new object will check if can replace dead comp
+	void kill() { m_Dead = true; parentPointers->at(m_ID) = nullptr; setActive(false); }
 
 	//By default only checks for deactivate and activate message - can be overidden - ACTIVATE AND DEACTIVATE MUST BE REIMPLEMENTED
 	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { Message message = m_MessageQueue.nextInQueue(); 
@@ -52,6 +56,7 @@ private:
 	void setID(unsigned char id) { m_ID = id; }
 	unsigned char m_ID = 0;
 	bool m_Active = true;
+	bool m_Dead = false;
 	SimpleQueue<Message> m_MessageQueue;
 	std::vector<T*>* parentPointers = nullptr;
 };
@@ -70,55 +75,7 @@ public:
 	virtual void update(double deltaTime) {};
 };
 
-//Base form of containers that iterates through contiguous identical-type components
-class UpdateComponentGroup
-{
-public:
-	UpdateComponentGroup() {}
-	void setID(unsigned int id) { m_ID = id; }
-	virtual void iterate(double deltaTime) {};
-private:
-	unsigned int m_ID = 0;
-};
-
-class RenderComponentGroup
-{
-public:
-	void setID(unsigned int id) { m_ID = id; }
-	virtual void iterate() {};
-private:
-	unsigned int m_ID = 0;
-};
-
-class GameObject
-{
-public:
-	void setID(unsigned int id) { m_ID = id; }
-	unsigned int id() const { return m_ID; }
-
-	//Messaging functions
-	void messageUpdateAt(Message message, unsigned int id) { m_UpdateComps[id]->recieve(message); };
-	void messageRenderAt(Message message, unsigned int id) { m_RenderComps[id]->recieve(message); };
-	void messageAllUpdate(Message message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
-	void messageAllRender(Message message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
-	
-	//If all components are deactivated, deactive object as a whole
-	void messageAll(Message message) { messageAllUpdate(message); messageAllRender(message); 
-	if (message == Message::ACTIVATE) { setActive(true); }
-	else if (message == Message::DEACTIVATE) { setActive(false); } };
-
-	//Locations in memory of all attached components - must update in component if changes
-	std::vector<UpdateComponent*> m_UpdateComps;
-	std::vector<RenderComponent*> m_RenderComps;
-
-protected:
-	//Activation
-	bool active() const { return m_Active; }
-	void setActive(bool set) { m_Active = set; }
-	unsigned int m_ID;
-	bool m_Active = true;
-};
-
+//Group iteration
 template<typename T>
 void IterateRenderComps(std::vector<T>& renderComps) {
 	static_assert(std::is_base_of<RenderComponent, T>::value, "T must inherit from RenderComponent, did you mean to use IterateUpdateComps()?");
@@ -153,6 +110,8 @@ void IterateRenderComps(std::vector<T>& renderComps) {
 		}
 		if (inactiveInd != -1 && activeInd != -1) {
 			std::iter_swap(renderComps.begin() + inactiveInd, renderComps.begin() + activeInd);
+			renderComps[inactiveInd].updatePointer();
+			renderComps[activeInd].updatePointer();
 			inactiveInd = -1;
 			activeInd = -1;
 		}
@@ -193,49 +152,155 @@ void IterateUpdateComps(std::vector<T>& updateComps, double deltaTime) {
 		}
 		if (inactiveInd != -1 && activeInd != -1) {
 			std::iter_swap(updateComps.begin() + inactiveInd, updateComps.begin() + activeInd);
+			updateComps[inactiveInd].updatePointer();
+			updateComps[activeInd].updatePointer();
 			inactiveInd = -1;
 			activeInd = -1;
 		}
 	}
 }
 
-//  Example code for keeping active at front of array
-////Line must be organised here
-////If a pair is found both will not be -1, and can be swapped
-// 
-// 
-//int inactiveInd = -1;
-//int activeInd = -1;
-//
-////Bools to start checking
-//bool inactiveFound = false;
-//bool activeAfterInactive = false;
-//
-//for (unsigned int i = 0; i < m_UpdateHeap.size(); i++) {
-//	if (m_Update[i].isActive()) {
-//		m_Update[i].update(deltaTime);
-//		if (inactiveFound) {
-//			if (!activeAfterInactive) {
-//				activeAfterInactive = true;
-//				activeInd = i;
-//			}
-//			else {
-//				activeInd = i;
-//			}
-//		}
-//	}
-//	else if (!inactiveFound) {
-//		inactiveInd = i;
-//		inactiveFound = true;
-//	}
-//	else if (inactiveFound && activeAfterInactive) {
-//		inactiveInd = i;
-//	}
-//	if (inactiveInd != -1 && activeInd != -1) {
-//		std::iter_swap(m_Update.begin() + inactiveInd, m_Update.begin() + activeInd);
-//		inactiveInd = -1;
-//		activeInd = -1;
+//Base form of containers that iterates through contiguous identical-type components
+class UpdateGroupBase
+{
+public:
+	UpdateGroupBase() {}
+	void setID(unsigned int id) { m_ID = id; }
+	virtual void iterate(double deltaTime) {};
+private:
+	unsigned int m_ID = 0;
+};
+
+template <typename T>
+class UpdateComponentGroup : public UpdateGroupBase
+{
+public:
+	using UpdateGroupBase::UpdateGroupBase;
+	void iterate(double deltaTime) { IterateUpdateComps<T>(m_Components, deltaTime); };
+	template<typename... Args>
+	void addComponent(std::vector<UpdateComponent*>* compPointers, Args... args)
+	{
+		//Check if any dead
+		for (int i = 0; i < m_Components.size(); i++)
+		{
+			if (m_Components[i].isDead())
+			{
+				m_Components.emplace(m_Components.begin() + i, args);
+				m_Components[i].updatePointer();
+				return;
+			}
+		}
+
+		//Resize components array
+		m_Components.emplace_back(args);
+		m_Components[m_Components.size() - 1].attachToObject(compPointers);
+		for (int i = 0; i < m_Components.size(); i++)
+		{
+			m_Components[i].updatePointer();
+		}
+	}
+private:
+	unsigned int m_ID = 0;
+	std::vector<T> m_Components;
+};
+
+class RenderGroupBase
+{
+public:
+	RenderGroupBase() {}
+	void setID(unsigned int id) { m_ID = id; }
+	virtual void iterate() {};
+private:
+	unsigned int m_ID = 0;
+};
+
+template <typename T>
+class RenderComponentGroup : public RenderGroupBase
+{
+public:
+	using RenderGroupBase::RenderGroupBase;
+	void iterate() { IterateRenderComps<T>(m_Components); };
+	template<typename... Args>
+	void addComponent(std::vector<RenderComponent*>* compPointers, Args... arguments)
+	{
+		//Check if any dead
+		for (int i = 0; i < m_Components.size(); i++)
+		{
+			if (m_Components[i].isDead())
+			{
+				m_Components.emplace(m_Components.begin() + i, arguments...);
+				m_Components[i].updatePointer();
+				return;
+			}
+		}
+
+		//Resize components array
+		m_Components.emplace_back(arguments...);
+		m_Components[m_Components.size() - 1].attachToObject(compPointers);
+		for (int i = 0; i < m_Components.size(); i++)
+		{
+			m_Components[i].updatePointer();
+		}
+	}
+private:
+	unsigned int m_ID = 0;
+	std::vector<T> m_Components;
+};
+
+//Example code for how to insert into dead position
+
+////Check if any dead
+//for (int i = 0; i < m_Components.size(); i++)
+//{
+//	if (m_Components[i].isDead())
+//	{
+//		m_Components.emplace(m_Components.begin() + i, sprite, ren);
+//		m_Components[i].updatePointer();
+//		return;
 //	}
 //}
+//
+////Resize components array
+//m_Components.emplace_back(sprite, ren);
+//m_Components[m_Components.size() - 1].attachToObject(compPointers);
+//for (int i = 0; i < m_Components.size(); i++)
+//{
+//	m_Components[i].updatePointer();
+//}
+
+class GameObject
+{
+public:
+	void setID(unsigned int id) { m_ID = id; }
+	unsigned int id() const { return m_ID; }
+
+	//Messaging functions
+	void messageUpdateAt(Message message, unsigned int id) { m_UpdateComps[id]->recieve(message); };
+	void messageRenderAt(Message message, unsigned int id) { m_RenderComps[id]->recieve(message); };
+	void messageAllUpdate(Message message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
+	void messageAllRender(Message message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
+	
+	//If says kill, kill all components then mark dead
+	void messageAll(Message message) { messageAllUpdate(message); messageAllRender(message); 
+	if (message == Message::KILL) { m_Dead = true; }};
+
+	//Check if all components have been decoupled (which can only be done
+	//via the kill command, if any pointers aren't null, return false
+	bool safeToDelete() {	
+	for (int i = 0; i < m_UpdateComps.size(); i++) { if (m_UpdateComps[i] != nullptr) { return false; } }
+	for (int i = 0; i < m_RenderComps.size(); i++) { if (m_RenderComps[i] != nullptr) { return false; } return true; }}
+
+	//Locations in memory of all attached components - must update in component if changes
+	std::vector<UpdateComponent*> m_UpdateComps;
+	std::vector<RenderComponent*> m_RenderComps;
+
+protected:
+	//Activation
+	bool active() const { return m_Active; }
+	void setActive(bool set) { m_Active = set; }
+	unsigned int m_ID;
+	bool m_Active = true;
+	bool m_Dead = false;
+};
 
 #endif

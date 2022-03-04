@@ -12,6 +12,28 @@ void World::tileLevel(TextureQuad* quad, WorldLevel level) {
     TranslateShape<TextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
+World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::TileLoc tile)
+{
+    switch (direct)
+    {
+    case World::Direction::EAST:
+        tile.x++;
+        break;
+    case World::Direction::WEST:
+        tile.x--;
+        break;
+    case World::Direction::NORTH:
+        tile.z++;
+        break;
+    case World::Direction::SOUTH:
+        tile.z--;
+        break;
+    default:
+        break;
+    }
+    return tile;
+}
+
 void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
     //Get index's to slope - 3 is max
     unsigned int verticeIndex[3];

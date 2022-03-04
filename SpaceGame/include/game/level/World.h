@@ -58,6 +58,8 @@ namespace World
 		WATER, LEDGE_SOUTH, LEDGE_NORTH, LEDGE_EAST, LEDGE_WEST,
 		//Level bridge - lets walk into next level so don't need to check outside bounds
 		LEVEL_BRIDGE,
+		//Sprite blocking
+		SPRITE_BLOCKING,
 	};
 
 	//Tile arranging classes
@@ -69,6 +71,14 @@ namespace World
 		unsigned int textureX;
 		unsigned int textureY;
 	};
+
+	struct TileLoc
+	{
+		unsigned int x;
+		unsigned int z;
+	};
+
+	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
 
 	struct LevelDimensions
 	{

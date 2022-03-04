@@ -1,5 +1,7 @@
 #include "core/ObjManagement.h"
 
+//Push to heap of components
+
 void ObjectManager::update(double deltaTime) {
 	for (unsigned int i = 0; i < m_UpdateGroup.size(); i++) {
 		m_UpdateGroup[i]->iterate(deltaTime);
@@ -36,6 +38,8 @@ void ObjectManager::update(double deltaTime) {
 		}
 		if (inactiveInd != -1 && activeInd != -1) {
 			std::iter_swap(m_UpdateHeap.begin() + inactiveInd, m_UpdateHeap.begin() + activeInd);
+			m_UpdateHeap[inactiveInd]->updatePointer();
+			m_UpdateHeap[activeInd]->updatePointer();
 			inactiveInd = -1;
 			activeInd = -1;
 		}
@@ -78,6 +82,8 @@ void ObjectManager::render() {
 		}
 		if (inactiveInd != -1 && activeInd != -1) {
 			std::iter_swap(m_RenderHeap.begin() + inactiveInd, m_RenderHeap.begin() + activeInd);
+			m_RenderHeap[inactiveInd]->updatePointer();
+			m_RenderHeap[activeInd]->updatePointer();
 			inactiveInd = -1;
 			activeInd = -1;
 		}

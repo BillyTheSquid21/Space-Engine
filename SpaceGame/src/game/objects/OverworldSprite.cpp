@@ -52,7 +52,7 @@ void SpriteMap::update(double deltaTime)
 	}
 }
 
-void UpdateSpriteFacing::update(double deltaTime)
+void UpdateAnimationFacing::update(double deltaTime)
 {
 	if (*m_Direction != m_LastDirection)
 	{
@@ -77,9 +77,9 @@ void UpdateSpriteFacing::update(double deltaTime)
 	}
 }
 
-void UpdateSpriteWalking::update(double deltaTime)
+void UpdateAnimationWalking::update(double deltaTime)
 {
-	UpdateSpriteFacing::update(deltaTime);
+	UpdateAnimationFacing::update(deltaTime);
 
 	if (*m_Walking)
 	{
@@ -115,9 +115,9 @@ void UpdateSpriteWalking::update(double deltaTime)
 	}
 }
 
-void UpdateSpriteRunning::update(double deltaTime)
+void UpdateAnimationRunning::update(double deltaTime)
 {
-	UpdateSpriteWalking::update(deltaTime);
+	UpdateAnimationWalking::update(deltaTime);
 	if (*m_Running)
 	{
 		if (m_Timer <= 0.125f)
@@ -164,18 +164,61 @@ void UpdateSpriteRunning::update(double deltaTime)
 }
 
 //Objects
-OverworldSprite::OverworldSprite(float xPos, float yPos, float zPos, float width, float height)
+OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 {
+	using namespace World;
+	//Set
+	m_TileX = data.tile.x; m_TileZ = data.tile.z; m_CurrentLevel = data.levelID;
+	//X Y Z
+	float x = (m_TileX * TILE_SIZE); float y = ((float)data.height / sqrt(2)) * TILE_SIZE;
+	float z = -(m_TileZ * TILE_SIZE);
 	//Set pos - x in tile middle
-	m_XPos = xPos + World::TILE_SIZE / 2; m_YPos = yPos; m_ZPos = zPos - World::TILE_SIZE / 2;
+	m_XPos = x + TILE_SIZE / 2; m_YPos = y; m_ZPos = z - TILE_SIZE / 2;
 	//Make Sprite
-	m_Sprite = CreateTextureQuad(xPos, yPos + height, width, height, 0.0f, 0.0f, 0.05f, 0.1f);
+	m_Sprite = CreateTextureQuad(x, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, 0.0f, 0.0f, 0.05f, 0.1f);
 	//Position Sprite
-	RotateShape<TextureVertex>((TextureVertex*)&m_Sprite, { xPos + width / 2, yPos, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
+	RotateShape<TextureVertex>((TextureVertex*)&m_Sprite, { x + TILE_SIZE / 2, y, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
 	TranslateShape<TextureVertex>((TextureVertex*)&m_Sprite, 0.0f, 0.0f, m_ZPos, Shape::QUAD);
+
+	//Make current tile blocked
+	std::vector<MovementPermissions>* perm = Level::queryPermissions(m_CurrentLevel);
+	World::LevelDimensions dim = Level::queryDimensions(m_CurrentLevel);
+	unsigned int tileLocation = m_TileX * dim.levelH + m_TileZ;
+	perm->at(tileLocation) = MovementPermissions::SPRITE_BLOCKING;
 }
 
-void OverworldSprite::setSprite(UVData data)
+void OvSpr_Sprite::setSprite(UVData data)
 {
 	SetQuadUV((TextureVertex*)&m_Sprite, data.uvX, data.uvY, data.uvWidth, data.uvHeight);
+}
+
+
+std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, Renderer<TextureVertex>* sprtRen)
+{
+	std::shared_ptr<OvSpr_Sprite> sprite(new OvSpr_Sprite(data));
+	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
+	//Add render group components
+	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
+	return sprite;
+}
+
+std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map)
+{
+	std::shared_ptr<OvSpr_DirectionalSprite> sprite(new OvSpr_DirectionalSprite(data));
+	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
+	return sprite;
+}
+
+std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map)
+{
+	std::shared_ptr<OvSpr_WalkingSprite> sprite(new OvSpr_WalkingSprite(data));
+	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
+	return sprite;
+}
+
+std::shared_ptr<OvSpr_RunningSprite> Ov_ObjCreation::BuildRunningSprite(OvSpr_SpriteData data, TileMap& map)
+{
+	std::shared_ptr<OvSpr_RunningSprite> sprite(new OvSpr_RunningSprite(data));
+	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
+	return sprite;
 }

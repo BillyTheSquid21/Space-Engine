@@ -5,7 +5,8 @@
 //Message enum
 enum class Message
 {
-	ACTIVATE, DEACTIVATE, CHANGE_INTERNAL_BOOL,
+	//CGE is shorthand for change
+	ACTIVATE, DEACTIVATE, KILL, CGE_BOOL
 };
 
 #endif

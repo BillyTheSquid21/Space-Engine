@@ -6,7 +6,6 @@
 
 
 //Player walk uses exact data of TilePosition so inherit for this
-//TODO - make walking more smooth - probably make xPos middle of sprt
 class PlayerMove : public TilePosition
 {
 public:
@@ -20,6 +19,8 @@ private:
 	bool startWalk();
 	bool startRun();
 	bool checkInputs();
+	void modifyTilePerm();
+	bool walkPermHelper();
 
 	//Modify
 	void faceDirection();
@@ -34,7 +35,6 @@ private:
 	bool* m_Shift = nullptr;
 	double m_Timer = 0.0; bool* m_Walking = nullptr; bool* m_Running = nullptr;
 	World::Direction* m_Direction = nullptr;
-	//Constant to stop overshooting when backwards and being on the wrong tile
 	TextureQuad* m_Sprite;
 };
 
