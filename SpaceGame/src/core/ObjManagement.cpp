@@ -17,6 +17,7 @@ void ObjectManager::update(double deltaTime) {
 	bool activeAfterInactive = false;
 
 	for (unsigned int i = 0; i < m_UpdateHeap.size(); i++) {
+		m_UpdateHeap[i]->processMessages();
 		if (m_UpdateHeap[i]->isActive()) {
 			m_UpdateHeap[i]->update(deltaTime);
 			if (inactiveFound) {
@@ -61,6 +62,7 @@ void ObjectManager::render() {
 	bool activeAfterInactive = false;
 
 	for (unsigned int i = 0; i < m_RenderHeap.size(); i++) {
+		m_RenderHeap[i]->processMessages();
 		if (m_RenderHeap[i]->isActive()) {
 			m_RenderHeap[i]->render();
 			if (inactiveFound) {

@@ -107,6 +107,7 @@ public:
 	float m_ZPos = 0.0f;
 	unsigned int m_TileX = 0; unsigned int m_TileZ = 0;
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
+	bool m_Busy = false;
 };
 
 class OvSpr_DirectionalSprite : public OvSpr_Sprite

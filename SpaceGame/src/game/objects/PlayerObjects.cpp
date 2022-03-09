@@ -3,34 +3,19 @@
 //Player
 bool PlayerMove::canWalk()
 {
-	std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(*m_CurrentLevel);
-	World::LevelDimensions dimensions = World::Level::queryDimensions(*m_CurrentLevel);
-	World::TileLoc tileLookup = World::NextTileInInputDirection(*m_Direction, { *m_TileX, *m_TileZ });
-
-	//if outside level bounds, check current tile instead
-	bool leavingLevel = false;
-	if (tileLookup.x < 0 || tileLookup.x >= dimensions.levelW || tileLookup.z < 0 || tileLookup.z >= dimensions.levelH)
-	{
-		tileLookup.x = *m_TileX;
-		tileLookup.z = *m_TileZ;
-		leavingLevel = true;
-	}
-
-	//Lookup permission for next tile
-	unsigned int lookupIndex = tileLookup.x * dimensions.levelH + tileLookup.z;
-	World::MovementPermissions permission = World::Level::queryPermissions(*m_CurrentLevel)->at(lookupIndex);
+	World::RetrievePermission permission = World::retrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
 
 	//Check if leaving level
-	if (leavingLevel)
+	if (permission.leaving)
 	{
-		if (permission == World::MovementPermissions::LEVEL_BRIDGE)
+		if (permission.perm == World::MovementPermissions::LEVEL_BRIDGE)
 		{
 			return true;
 		}
 		return false;
 	}
 	
-	switch (permission)
+	switch (permission.perm)
 	{
 	case World::MovementPermissions::WALL:
 		return false;
@@ -39,8 +24,6 @@ bool PlayerMove::canWalk()
 	default:
 		return true;
 	}
-
-	return false;
 }
 
 bool PlayerMove::startWalk()
@@ -78,7 +61,7 @@ bool PlayerMove::walkPermHelper()
 	if (canWalk())
 	{
 		//Unblock previous tile, block new tile
-		modifyTilePerm();
+		World::ModifyTilePerm(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
 		if (*m_Shift)
 		{
 			return startRun();

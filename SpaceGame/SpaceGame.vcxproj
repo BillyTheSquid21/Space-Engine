@@ -148,11 +148,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\game\objects\Script.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\game\DemoGame.cpp" />
     <ClCompile Include="src\game\gui\GUI.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
+    <ClCompile Include="src\game\objects\NPCAi.cpp" />
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
@@ -185,8 +187,10 @@
     <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\level\World.h" />
+    <ClInclude Include="include\game\objects\NPCAi.h" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
+    <ClInclude Include="include\game\objects\Script.hpp" />
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />

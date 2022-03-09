@@ -45,9 +45,6 @@ int main(void) //TODO: get delta time working perfectly
     //FPS Measure
     double previousTime = glfwGetTime();
     unsigned int framecount = 0;
-
-    //Use prev time to start random seed
-    srand((unsigned int)(previousTime * 1000000.0));
   
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(game->window) && !Game::s_Close)

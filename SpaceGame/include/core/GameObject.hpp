@@ -5,6 +5,7 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/RenderQueue.hpp"
 #include "core/Message.hpp"
+#include <random>
 
 //1.System is set up to keep similar components contiguous
 //2.Components are put in a group where they will be contiguous
@@ -21,11 +22,6 @@
 
 //Declare function pointers for sending messages if needed
 //If a component wants access, pass and store the function pointer
-typedef void (*Message_Update_At)(Message message, unsigned int id);
-typedef void (*Message_Render_At)(Message message, unsigned int id);
-typedef void (*Message_All_Update)(Message message);
-typedef void (*Message_All_Render)(Message message);
-typedef void (*Message_All)(Message message);
 
 
 template<typename T>
@@ -48,9 +44,11 @@ public:
 
 	//Attach to parent pointers - called when added to object manager and in its place
 	//During runtime will have to pass pointer all the way down
-	void attachToObject(std::vector<T*>* compPointers) { compPointers->push_back((T*)this); this->setID(compPointers->size() - 1); this->parentPointers = compPointers; };
+	void attachToObject(std::vector<T*>* compPointers) { this->setID((unsigned char)compPointers->size()); compPointers->push_back((T*)this); this->parentPointers = compPointers; };
 	//Call after moving - if resizing whole vector call for each element
 	void updatePointer() { parentPointers->at(m_ID) = (T*)this; }
+	unsigned char id() const { return m_ID; }
+
 private:
 	//Id is location inside parent array
 	void setID(unsigned char id) { m_ID = id; }
@@ -89,6 +87,8 @@ void IterateRenderComps(std::vector<T>& renderComps) {
 	bool activeAfterInactive = false;
 
 	for (unsigned int i = 0; i < renderComps.size(); i++) {
+		//Process messages
+		renderComps[i].processMessages();
 		if (renderComps[i].isActive()) {
 			renderComps[i].render();
 			if (inactiveFound) {
@@ -131,6 +131,7 @@ void IterateUpdateComps(std::vector<T>& updateComps, double deltaTime) {
 	bool activeAfterInactive = false;
 
 	for (unsigned int i = 0; i < updateComps.size(); i++) {
+		updateComps[i].processMessages();
 		if (updateComps[i].isActive()) {
 			updateComps[i].update(deltaTime);
 			if (inactiveFound) {
@@ -247,27 +248,6 @@ private:
 	std::vector<T> m_Components;
 };
 
-//Example code for how to insert into dead position
-
-////Check if any dead
-//for (int i = 0; i < m_Components.size(); i++)
-//{
-//	if (m_Components[i].isDead())
-//	{
-//		m_Components.emplace(m_Components.begin() + i, sprite, ren);
-//		m_Components[i].updatePointer();
-//		return;
-//	}
-//}
-//
-////Resize components array
-//m_Components.emplace_back(sprite, ren);
-//m_Components[m_Components.size() - 1].attachToObject(compPointers);
-//for (int i = 0; i < m_Components.size(); i++)
-//{
-//	m_Components[i].updatePointer();
-//}
-
 class GameObject
 {
 public:
@@ -279,7 +259,9 @@ public:
 	void messageRenderAt(Message message, unsigned int id) { m_RenderComps[id]->recieve(message); };
 	void messageAllUpdate(Message message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
 	void messageAllRender(Message message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
-	
+	void messageAllExceptUpdate(Message message, unsigned int id) { for (int i = 0; i < m_UpdateComps.size(); i++) { if (id != i) { messageUpdateAt(message, i); } } };
+	void messageAllExceptRender(Message message, unsigned int id) { for (int i = 0; i < m_RenderComps.size(); i++) { if (id != i) { messageRenderAt(message, i); } } };
+
 	//If says kill, kill all components then mark dead
 	void messageAll(Message message) { messageAllUpdate(message); messageAllRender(message); 
 	if (message == Message::KILL) { m_Dead = true; }};
@@ -301,6 +283,19 @@ protected:
 	unsigned int m_ID;
 	bool m_Active = true;
 	bool m_Dead = false;
+};
+
+//container for basic random
+class RandomContainer
+{
+public:
+	void seed(float a, float b) { std::random_device rd;  mt.seed(rd()); dist = std::uniform_real_distribution<float>::uniform_real_distribution(a, b); m_Seeded = true; }
+	float next() {return dist(mt);}
+	bool isSeeded() const { return m_Seeded; }
+private:
+	bool m_Seeded = false;
+	std::mt19937 mt;
+	std::uniform_real_distribution<float> dist;
 };
 
 #endif

@@ -78,7 +78,15 @@ namespace World
 		unsigned int z;
 	};
 
+	struct RetrievePermission
+	{
+		MovementPermissions perm;
+		bool leaving = false;
+	};
+
 	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
+	RetrievePermission retrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc);
+	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc);
 
 	struct LevelDimensions
 	{

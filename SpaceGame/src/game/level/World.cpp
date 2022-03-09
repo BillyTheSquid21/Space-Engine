@@ -34,6 +34,42 @@ World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::T
     return tile;
 }
 
+World::RetrievePermission World::retrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc)
+{
+    std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
+    World::LevelDimensions dimensions = World::Level::queryDimensions(level);
+    World::TileLoc tileLookup = World::NextTileInInputDirection(direction, loc);
+
+    //if outside level bounds, check current tile instead
+    bool leavingLevel = false;
+    if (tileLookup.x < 0 || tileLookup.x >= dimensions.levelW || tileLookup.z < 0 || tileLookup.z >= dimensions.levelH)
+    {
+        tileLookup.x = loc.x;
+        tileLookup.z = loc.z;
+        leavingLevel = true;
+    }
+
+    //Lookup permission for next tile
+    unsigned int lookupIndex = tileLookup.x * dimensions.levelH + tileLookup.z;
+    return { World::Level::queryPermissions(level)->at(lookupIndex), leavingLevel };
+}
+
+void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc)
+{
+    //Get level data
+    World::LevelDimensions dim = World::Level::queryDimensions(level);
+    std::vector<World::MovementPermissions>* perm = World::Level::queryPermissions(level);
+
+    //Clear tile leaving
+    unsigned int index = loc.x * dim.levelH + loc.z;
+    perm->at(index) = World::MovementPermissions::CLEAR;
+
+    //Block tile entering
+    World::TileLoc tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
+    index = tileLookup.x * dim.levelH + tileLookup.z;
+    perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
+}
+
 void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
     //Get index's to slope - 3 is max
     unsigned int verticeIndex[3];

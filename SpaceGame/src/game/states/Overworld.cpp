@@ -34,7 +34,6 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
     
     //Sprite map test
     std::shared_ptr<SpriteMap> spriteMap(new SpriteMap(&sprite->m_Sprite, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &m_SpriteTileMap, { 0, 4 }));
-    std::shared_ptr<UpdateAnimationFacing> updateFace(new UpdateAnimationFacing(&sprite->m_AnimationOffsetY, &sprite->m_Direction));
     std::shared_ptr<UpdateAnimationRunning> updateWalk(new UpdateAnimationRunning(&sprite->m_AnimationOffsetY, &sprite->m_AnimationOffsetX, &sprite->m_Direction, &sprite->m_Walking, &sprite->m_Running));
 
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
@@ -42,11 +41,40 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
     walk->setPersistentInput(&HELD_SHIFT, &HELD_W, &HELD_S, &HELD_A, &HELD_D);
     walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
     walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Direction, &sprite->m_Sprite);
+    
+    //Setup test npc
+    OvSpr_SpriteData data2 = { {3, 3},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 0} };
+    std::shared_ptr<OvSpr_WalkingSprite> npc(new OvSpr_WalkingSprite(data2));
+    spriteGroup->addComponent(&npc->m_RenderComps, &npc->m_Sprite, &m_SpriteRenderer);
+    std::shared_ptr<UpdateAnimationWalking> updateFace(new UpdateAnimationWalking(&npc->m_AnimationOffsetY, &npc->m_AnimationOffsetX, &npc->m_Direction, &npc->m_Walking));
+    std::shared_ptr<NPC_RandWalk> randWalk(new NPC_RandWalk(&npc->m_Direction, &npc->m_Busy, &npc->m_Walking, &npc->m_Sprite));
+    randWalk->setLocation(&npc->m_TileX, &npc->m_TileZ, &npc->m_XPos, &npc->m_ZPos, &npc->m_CurrentLevel);
+    std::shared_ptr<SpriteMap> npcMap(new SpriteMap(&npc->m_Sprite, &npc->m_AnimationOffsetX, &npc->m_AnimationOffsetY, &m_SpriteTileMap, { 0,0 }));
+    
+    //Script test
+    Script script(new ScriptElement[3]{});
+    script[0].instruction = ScriptInstruction::FREEZE_OBJECT;
+    MSG_INFO msg;
+    msg.listID = 'a';
+    script[0].info.msgInfo = msg;
+    script[1].instruction = ScriptInstruction::JMP;
+    JMP_INFO jmp;
+    jmp.line = 2;
+    script[1].info.jmpInfo = jmp;
+    script[2].instruction = ScriptInstruction::UNFREEZE_OBJECT;
+    std::shared_ptr<OverworldScript> scriptOW(new OverworldScript(script, 3, std::bind(&OvSpr_WalkingSprite::messageAllExceptUpdate, npc, std::placeholders::_1, std::placeholders::_2)));
+
+
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(spriteMap, &sprite->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(npcMap, &npc->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(scriptOW, &npc->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(updateWalk, &sprite->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(updateFace, &npc->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(randWalk, &npc->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite);
+    m_ObjManager.pushGameObject(npc);
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
 
@@ -226,6 +254,22 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
         {
             HELD_S = true;
             m_HoldTimerActive = false;
+        }
+    }
+
+    //Debug
+    if (key == GLFW_KEY_Y)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_WorldRenderer.setDrawingMode(GL_LINES);
+        }
+    }
+    if (key == GLFW_KEY_U)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_WorldRenderer.setDrawingMode(GL_TRIANGLES);
         }
     }
 }
