@@ -230,6 +230,6 @@ void PlayerMove::update(double deltaTime)
 
 void PlayerCameraLock::render()
 {
-	m_Camera->setPos(*m_XPos + World::TILE_SIZE / 2, *m_YPos, *m_ZPos + m_Camera->height() / 8);
+	m_Camera->setPos(*m_XPos, *m_YPos, *m_ZPos + m_Camera->height() / 8);
 	m_Camera->moveUp(World::TILE_SIZE * 5);
 }

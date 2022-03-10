@@ -10,11 +10,13 @@
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
 #include "renderer/Vertex.hpp"
+#include "game/gui/GUI.h"
+#include "game/utility/GameText.h"
 
 class Overworld : public State
 {
 public:
-	void init(int width, int height, World::LevelID levelEntry);
+	void init(int width, int height, World::LevelID levelEntry, FontContainer* fonts);
 	void update(double deltaTime, double time);
 	void render();
 	void loadRequiredData();
@@ -48,6 +50,13 @@ private:
 	//Test tile mapping
 	TileMap m_OverworldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 	TileMap m_SpriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
+
+	//Test font
+	FontContainer* m_Fonts;
+
+	//Test GUI
+	GameGUI::OvGUI_Enabled m_GUIEnabled;
+	GameGUI::TextBoxBuffer m_TextBuff;
 
 	//Input
 	//Definitions for persistent input

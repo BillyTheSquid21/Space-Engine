@@ -1,5 +1,18 @@
 #include "game/gui/GUI.h"
 
+void GameGUI::StartFrame()
+{
+	ImGui_ImplOpenGL3_NewFrame(); 
+	ImGui_ImplGlfw_NewFrame(); 
+	ImGui::NewFrame(); 
+}
+
+void GameGUI::EndFrame()
+{
+	ImGui::Render(); 
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); 
+}
+
 void GameGUI::SetColors(int r, int g, int b, ImGuiCol target) {
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Colors[target] = ImColor(r, g, b);
@@ -63,4 +76,38 @@ void FontContainer::clearFonts() {
 
 	//Clear maps
 	m_FontMap.clear();
+}
+
+//GUI
+void GameGUI::TextBox::setStyle()
+{
+	ImGuiStyle* style = &ImGui::GetStyle();
+
+	style->WindowPadding = ImVec2(15, 15);
+	style->WindowRounding = 18.0f;
+	style->FramePadding = ImVec2(5, 5);
+	style->FrameRounding = 16.0f;
+	style->ItemSpacing = ImVec2(12, 8);
+	style->ItemInnerSpacing = ImVec2(8, 6);
+	style->Colors[ImGuiCol_WindowBg] = ImVec4(0.29f, 0.29f, 0.35f, 0.95f);
+	style->Colors[ImGuiCol_ChildBg] = ImVec4(0.20f, 0.22f, 0.25f, 1.00f);
+}
+
+void GameGUI::TextBox::run(std::string& text1, std::string& text2)
+{
+	renderStart();
+
+	ImGui::Begin("Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+	ImGui::PushFont(m_Fonts->getFont("default", 70));
+	ImGui::BeginChild("##Centre", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false);
+	ImGui::SetCursorPosX(40.0f);
+	ImGui::SetCursorPosY(40.0f);
+	ImGui::Text(text1.c_str());
+	ImGui::SetCursorPosX(40.0f);
+	ImGui::SetCursorPosY(135.0f);
+	ImGui::Text(text2.c_str());
+	ImGui::PopFont();
+	ImGui::EndChild();
+	
+	renderEnd();
 }

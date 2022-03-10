@@ -1,6 +1,6 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, World::LevelID levelEntry) {
+void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts) {
     //Width and height
     m_Width = width; m_Height = height;
 
@@ -50,33 +50,32 @@ void Overworld::init(int width, int height, World::LevelID levelEntry) {
     std::shared_ptr<NPC_RandWalk> randWalk(new NPC_RandWalk(&npc->m_Direction, &npc->m_Busy, &npc->m_Walking, &npc->m_Sprite));
     randWalk->setLocation(&npc->m_TileX, &npc->m_TileZ, &npc->m_XPos, &npc->m_ZPos, &npc->m_CurrentLevel);
     std::shared_ptr<SpriteMap> npcMap(new SpriteMap(&npc->m_Sprite, &npc->m_AnimationOffsetX, &npc->m_AnimationOffsetY, &m_SpriteTileMap, { 0,0 }));
+
+    //Test script
+    Script script(new ScriptElement[2]);
+    script[0].instruction = ScriptInstruction::OPEN_MSG_BOX;
+    script[1].instruction = ScriptInstruction::MSG;
+    std::shared_ptr<NPC_Script> npcscp(new NPC_Script(script, 2));
+    npcscp->setupText(&m_TextBuff.t1, &m_TextBuff.t2, &FindMessage, &m_GUIEnabled.showTextBox);
+   
     
-    //Script test
-    Script script(new ScriptElement[3]{});
-    script[0].instruction = ScriptInstruction::FREEZE_OBJECT;
-    MSG_INFO msg;
-    msg.listID = 'a';
-    script[0].info.msgInfo = msg;
-    script[1].instruction = ScriptInstruction::JMP;
-    JMP_INFO jmp;
-    jmp.line = 2;
-    script[1].info.jmpInfo = jmp;
-    script[2].instruction = ScriptInstruction::UNFREEZE_OBJECT;
-    std::shared_ptr<OverworldScript> scriptOW(new OverworldScript(script, 3, std::bind(&OvSpr_WalkingSprite::messageAllExceptUpdate, npc, std::placeholders::_1, std::placeholders::_2)));
-
-
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(spriteMap, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(npcMap, &npc->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(scriptOW, &npc->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(updateWalk, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(updateFace, &npc->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(randWalk, &npc->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(npcscp, &npc->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite);
     m_ObjManager.pushGameObject(npc);
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
+
+    //gui shit test
+    m_Fonts = fonts;
+    m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 70);
+    m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 35);
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
@@ -106,6 +105,8 @@ void Overworld::loadRequiredData() {
     m_OWSprites.bind();
     m_OWSprites.clearBuffer();
 
+
+
     m_DataLoaded = true;
 }
 
@@ -129,6 +130,8 @@ void Overworld::update(double deltaTime, double time) {
 void Overworld::render() {
     Renderer<ColorTextureVertex>::clearScreen();
 
+    GameGUI::StartFrame();
+
     //Bind shader program
     m_Shader.bind();
 
@@ -142,6 +145,16 @@ void Overworld::render() {
     m_WorldRenderer.drawPrimitives(m_Shader);
     m_Shader.setUniform("u_Texture", 1);
     m_SpriteRenderer.drawPrimitives(m_Shader);
+
+    //IMGUI Test
+    GameGUI::TextBox gui(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f);
+    gui.setFontContainer(m_Fonts);
+    if (m_GUIEnabled.showTextBox)
+    {
+        gui.setStyle();
+        gui.run(m_TextBuff.t1, m_TextBuff.t2);
+    }
+    GameGUI::EndFrame();
 }
 
 void Overworld::handleInput(int key, int scancode, int action, int mods) {

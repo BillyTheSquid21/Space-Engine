@@ -64,6 +64,12 @@
     <Filter Include="Source Files\Vendor\rapidjson">
       <UniqueIdentifier>{3c02482a-c0c9-4ebe-b863-ad5903f7aa0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Utility">
+      <UniqueIdentifier>{57b77bc9-6da9-4f3f-8789-1a67a29f7527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Utility">
+      <UniqueIdentifier>{84f2e582-2b1f-4d90-b79f-e33409b12572}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="include\game\objects\Script.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\utility\GameText.cpp">
+      <Filter>Source Files\Game\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="include\game\objects\Script.hpp">
       <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\utility\GameText.h">
+      <Filter>Header Files\Game\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

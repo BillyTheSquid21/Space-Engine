@@ -161,6 +161,7 @@
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
+    <ClCompile Include="src\game\utility\GameText.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
+    <ClInclude Include="include\game\utility\GameText.h" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Plane.h" />

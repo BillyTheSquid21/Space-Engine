@@ -36,9 +36,7 @@ void MainMenu::update(double deltaTime, double time) {
 
 void MainMenu::render() {
     //ImGUI
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    GameGUI::StartFrame();
 
     //Bind shader program
     m_Shader.bind();
@@ -77,6 +75,5 @@ void MainMenu::render() {
     ImGui::EndChild();
 
     ImGui::End();
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    GameGUI::EndFrame();
 }

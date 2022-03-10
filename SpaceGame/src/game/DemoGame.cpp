@@ -15,7 +15,7 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	splashScreen->init(m_Width, m_Height);
 	splashScreen->setActive(true);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY);
+	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
 
