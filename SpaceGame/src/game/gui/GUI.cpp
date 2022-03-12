@@ -98,7 +98,7 @@ void GameGUI::TextBox::run(std::string& text1, std::string& text2)
 	renderStart();
 
 	ImGui::Begin("Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-	ImGui::PushFont(m_Fonts->getFont("default", 70));
+	ImGui::PushFont(m_Fonts->getFont("boxfont", 70));
 	ImGui::BeginChild("##Centre", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false);
 	ImGui::SetCursorPosX(40.0f);
 	ImGui::SetCursorPosY(40.0f);

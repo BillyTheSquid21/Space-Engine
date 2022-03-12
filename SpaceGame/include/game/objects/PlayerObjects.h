@@ -24,8 +24,6 @@ private:
 
 	//Modify
 	void faceDirection();
-	void walk(double deltaTime);
-	void run(double deltaTime);
 	void cycleEnd(bool anyHeld);
 
 	bool* m_Up = nullptr; bool* m_Down = nullptr;

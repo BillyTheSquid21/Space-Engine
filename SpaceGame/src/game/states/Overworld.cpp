@@ -42,40 +42,17 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
     walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Direction, &sprite->m_Sprite);
     
-    //Setup test npc
-    OvSpr_SpriteData data2 = { {3, 3},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 0} };
-    std::shared_ptr<OvSpr_WalkingSprite> npc(new OvSpr_WalkingSprite(data2));
-    spriteGroup->addComponent(&npc->m_RenderComps, &npc->m_Sprite, &m_SpriteRenderer);
-    std::shared_ptr<UpdateAnimationWalking> updateFace(new UpdateAnimationWalking(&npc->m_AnimationOffsetY, &npc->m_AnimationOffsetX, &npc->m_Direction, &npc->m_Walking));
-    std::shared_ptr<NPC_RandWalk> randWalk(new NPC_RandWalk(&npc->m_Direction, &npc->m_Busy, &npc->m_Walking, &npc->m_Sprite));
-    randWalk->setLocation(&npc->m_TileX, &npc->m_TileZ, &npc->m_XPos, &npc->m_ZPos, &npc->m_CurrentLevel);
-    std::shared_ptr<SpriteMap> npcMap(new SpriteMap(&npc->m_Sprite, &npc->m_AnimationOffsetX, &npc->m_AnimationOffsetY, &m_SpriteTileMap, { 0,0 }));
-
-    //Test script
-    Script script(new ScriptElement[2]);
-    script[0].instruction = ScriptInstruction::OPEN_MSG_BOX;
-    script[1].instruction = ScriptInstruction::MSG;
-    std::shared_ptr<NPC_Script> npcscp(new NPC_Script(script, 2));
-    npcscp->setupText(&m_TextBuff.t1, &m_TextBuff.t2, &FindMessage, &m_GUIEnabled.showTextBox);
-   
-    
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(spriteMap, &sprite->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(npcMap, &npc->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(updateWalk, &sprite->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(updateFace, &npc->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(randWalk, &npc->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(npcscp, &npc->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite);
-    m_ObjManager.pushGameObject(npc);
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
 
     //gui shit test
     m_Fonts = fonts;
-    m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 70);
-    m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 35);
+    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }

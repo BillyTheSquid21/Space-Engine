@@ -46,6 +46,9 @@ void NPC_RandWalk::randomWalk()
 
 void NPC_RandWalk::update(double deltaTime)
 {
+	//Inherit update method
+	TilePosition::update(deltaTime);
+
 	if (*m_Busy)
 	{
 		return;
@@ -56,17 +59,14 @@ void NPC_RandWalk::update(double deltaTime)
 		randomWalk();
 	}
 
-	//Inherit update method
-	TilePosition::update(deltaTime);
-
 	//Walk method
-	if (m_WalkTimer < 1.0 && *m_Walking)
+	if (*m_WalkTimer < 1.0 && *m_Walking)
 	{
-		walk(deltaTime);
+		Ov_Translation::Walk(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, m_WalkTimer);
 	}
 
 	//If at end of run or walk cycle
-	if (m_WalkTimer >= 1.0 && *m_Walking)
+	if (*m_WalkTimer >= 1.0 && *m_Walking)
 	{
 		cycleEnd();
 	}
@@ -81,17 +81,10 @@ void NPC_RandWalk::update(double deltaTime)
 void NPC_RandWalk::cycleEnd()
 {
 	*m_Walking = false;
-	m_WalkTimer = 0.0;
+	*m_WalkTimer = 0.0;
 
 	//Centre on x and y
-	Component2f origin = World::Level::queryOrigin(*m_CurrentLevel);
-	float expectedX = (float)(World::TILE_SIZE * *m_TileX) + origin.a + World::TILE_SIZE / 2;
-	float expectedZ = (float)(-World::TILE_SIZE * *m_TileZ) + origin.b - World::TILE_SIZE / 2;
-	float deltaX = *m_XPos - expectedX;
-	float deltaZ = *m_ZPos - expectedZ;
-	TranslateShape<TextureVertex>(m_Sprite, -deltaX, 0.0f, -deltaZ, Shape::QUAD);
-	*m_XPos = expectedX;
-	*m_ZPos = expectedZ;
+	Ov_Translation::CentreOnTile(*m_CurrentLevel, m_XPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite);
 }
 
 bool NPC_RandWalk::canWalk()
@@ -116,33 +109,6 @@ bool NPC_RandWalk::canWalk()
 void NPC_RandWalk::startWalk()
 {
 	*m_Walking = true;
-	m_WalkTimer = 0.0;
+	*m_WalkTimer = 0.0;
 	World::ModifyTilePerm(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
-}
-
-void NPC_RandWalk::walk(double deltaTime)
-{
-	switch (*m_Direction)
-	{
-	case World::Direction::EAST:
-		*m_XPos += deltaTime * World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
-		break;
-	case World::Direction::WEST:
-		*m_XPos += deltaTime * -World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * -World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
-		break;
-	case World::Direction::NORTH:
-		*m_ZPos += deltaTime * -World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * -World::TILE_SIZE, Shape::QUAD);
-		break;
-	case World::Direction::SOUTH:
-		*m_ZPos += deltaTime * World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * World::TILE_SIZE, Shape::QUAD);
-		break;
-	default:
-		break;
-	}
-
-	m_WalkTimer += deltaTime;
 }

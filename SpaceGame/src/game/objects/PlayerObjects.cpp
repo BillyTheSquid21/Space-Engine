@@ -127,60 +127,6 @@ void PlayerMove::faceDirection()
 	}
 }
 
-void PlayerMove::walk(double deltaTime)
-{
-	switch (*m_Direction)
-	{
-	case World::Direction::EAST:
-		*m_XPos += deltaTime * World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
-		break;
-	case World::Direction::WEST:
-		*m_XPos += deltaTime * -World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * -World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
-		break;
-	case World::Direction::NORTH:
-		*m_ZPos += deltaTime * -World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * -World::TILE_SIZE, Shape::QUAD);
-		break;
-	case World::Direction::SOUTH:
-		*m_ZPos += deltaTime * World::TILE_SIZE;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * World::TILE_SIZE, Shape::QUAD);
-		break;
-	default:
-		break;
-	}
-
-	m_Timer += deltaTime;
-}
-
-void PlayerMove::run(double deltaTime)
-{
-	switch (*m_Direction)
-	{
-	case World::Direction::EAST:
-		*m_XPos += deltaTime * World::TILE_SIZE * 2.0f;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * World::TILE_SIZE * 2.0f, 0.0f, 0.0f, Shape::QUAD);
-		break;
-	case World::Direction::WEST:
-		*m_XPos += deltaTime * -World::TILE_SIZE * 2.0f;
-		TranslateShape<TextureVertex>(m_Sprite, deltaTime * -World::TILE_SIZE * 2.0f, 0.0f, 0.0f, Shape::QUAD);
-		break;
-	case World::Direction::NORTH:
-		*m_ZPos += deltaTime * -World::TILE_SIZE * 2.0f;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * -World::TILE_SIZE * 2.0f, Shape::QUAD);
-		break;
-	case World::Direction::SOUTH:
-		*m_ZPos += deltaTime * World::TILE_SIZE * 2.0f;
-		TranslateShape<TextureVertex>(m_Sprite, 0.0f, 0.0f, deltaTime * World::TILE_SIZE * 2.0f, Shape::QUAD);
-		break;
-	default:
-		break;
-	}
-
-	m_Timer += deltaTime;
-}
-
 void PlayerMove::cycleEnd(bool anyHeld)
 {
 	if (!anyHeld)
@@ -191,14 +137,7 @@ void PlayerMove::cycleEnd(bool anyHeld)
 	m_Timer = 0.0;
 
 	//Centre on x and y
-	Component2f origin = World::Level::queryOrigin(*m_CurrentLevel);
-	float expectedX = (float)(World::TILE_SIZE * *m_TileX) + origin.a + World::TILE_SIZE / 2;
-	float expectedZ = (float)(-World::TILE_SIZE * *m_TileZ) + origin.b - World::TILE_SIZE / 2;
-	float deltaX = *m_XPos - expectedX;
-	float deltaZ = *m_ZPos - expectedZ;
-	TranslateShape<TextureVertex>(m_Sprite, -deltaX, 0.0f, -deltaZ, Shape::QUAD);
-	*m_XPos = expectedX;
-	*m_ZPos = expectedZ;
+	Ov_Translation::CentreOnTile(*m_CurrentLevel, m_XPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite);
 }
 
 void PlayerMove::update(double deltaTime) 
@@ -208,21 +147,21 @@ void PlayerMove::update(double deltaTime)
 	bool anyHeld = checkInputs();
 
 	//Walk method
-	if (m_Timer < 1.0 && *m_Walking) 
+	if (m_Timer < World::WALK_DURATION && *m_Walking) 
 	{
-		walk(deltaTime);
+		Ov_Translation::Walk(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, &m_Timer);
 	}
 	//Run method
-	else if (m_Timer < 0.5 && *m_Running)
+	else if (m_Timer < World::RUN_DURATION && *m_Running)
 	{
-		run(deltaTime);
+		Ov_Translation::Run(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, &m_Timer);
 	}
 
 	//Inherit update method
 	TilePosition::update(deltaTime);
 
 	//If at end of run or walk cycle
-	if ((m_Timer >= 1.0 && *m_Walking) || (m_Timer >= 0.5 && *m_Running))
+	if ((m_Timer >= World::WALK_DURATION && *m_Walking) || (m_Timer >= World::RUN_DURATION && *m_Running))
 	{
 		cycleEnd(anyHeld);
 	}

@@ -29,7 +29,7 @@ namespace World
 	//When level data is written, use int value the respective enum value evaluates to
 
 	//Directions - north is +Z axis, south is -Z axis, west is +X axis, east is -X 
-	enum class Direction
+	enum class Direction : unsigned char
 	{
 		DIRECTION_NULL,
 		NORTH, NORTHEAST, NORTHWEST,	//Quads are aligned with vertex 0 and 1 being north facing
@@ -144,6 +144,11 @@ namespace World
 		float m_XOffset = 0.0f; float m_YOffset = 0.0f;
 	};
 
+	//Constants
+	constexpr float WALK_SPEED = 1.0f;
+	constexpr float RUN_SPEED = 2.0f;
+	constexpr float WALK_DURATION = 1.0f / WALK_SPEED;
+	constexpr float RUN_DURATION = 1.0f / RUN_SPEED;
 }
 
 #endif

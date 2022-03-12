@@ -6,7 +6,7 @@
 enum class Message
 {
 	//CGE is shorthand for change
-	NO_OP, ACTIVATE, DEACTIVATE, KILL, CGE_BOOL
+	NO_OP, ACTIVATE, DEACTIVATE, KILL, CGE_BOOL, BUSY
 };
 
 #endif

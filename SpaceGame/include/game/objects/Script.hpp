@@ -19,12 +19,12 @@ struct FlagInfo
 //Instructions
 enum class ScriptInstruction
 {
-	//Core - current max = 3
-	NO_OP, SET_FLAG, JMP, JMP_IF, INSTR_MAX, //max to give return term
+	//Core
+	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, CORE_MAX, //max to give return term
 	
-	//Other
+	//Non Core
 	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, GIVE_ITEM, TAKE_ITEM,
-	FREEZE_OBJECT, UNFREEZE_OBJECT,
+	FREEZE_OBJECT, UNFREEZE_OBJECT, CGE_DIRECTION, WALK_IN_DIR, RUN_IN_DIR, SET_BUSY
 };
 
 //Message info - using std ints to guarantee bytes
@@ -65,6 +65,20 @@ struct ITEM_INFO
 	uint32_t quantity : 16;
 };
 
+//Direction info
+struct DIRECTION_INFO
+{
+	uint32_t direction : 8;	//as direction is 1 byte can just assign the byte
+	uint32_t unused : 24;
+};
+
+//Busy info
+struct BUSY_INFO
+{
+	uint32_t state : 8;
+	uint32_t unused : 24;
+};
+
 //Information on what to do with instruction
 struct InstructionInfo
 {
@@ -76,6 +90,8 @@ struct InstructionInfo
 		JMP_INFO jmpInfo;
 		JMP_IF_INFO jmpIfInfo;
 		FLAG_INFO flgInfo;
+		DIRECTION_INFO dirInfo;
+		BUSY_INFO busyInfo;
 		uint32_t clear;
 	};
 };
@@ -96,7 +112,7 @@ public:
 	OverworldScript(Script script, uint16_t size) { m_Script = script; m_Size = size; }
 	void update(double deltaTime) 
 	{
-		process(m_Index);
+		process(m_Index, deltaTime);
 
 		if (m_Index >= m_Size)
 		{
@@ -104,7 +120,7 @@ public:
 		}
 	}
 
-	virtual ScriptElement process(uint16_t index)
+	virtual ScriptElement process(uint16_t index, double deltaTime)
 	{
 		//Carries out core functionality here that all implementations use
 		//Then returns the element to derived process
@@ -124,6 +140,14 @@ public:
 			m_FlagArray[el.info.flgInfo.flagLoc] = el.info.flgInfo.state;
 			m_Index++;
 			return el;
+		case ScriptInstruction::WAIT_SEC:
+			if (m_Timer >= 1.0f)
+			{
+				m_Index++;
+				m_Timer = 0.0f;
+			}
+			m_Timer += deltaTime;
+			return el;
 		}
 		return el;
 	}
@@ -132,59 +156,8 @@ protected:
 	FlagArray m_FlagArray;
 	uint16_t m_Index = 0;
 	uint16_t m_Size;
-};
-
-//Script for NPC's with NPC specific functionality
-class NPC_Script : public OverworldScript
-{
-public:
-	//Setters
-	using OverworldScript::OverworldScript;
-	void setupText(std::string* t1, std::string* t2, std::function<std::string& (MSG_INFO info)> txt, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_TextFinder = txt; m_ShowTextBox = showBox; }
-
-	ScriptElement process(uint16_t index)
-	{
-		ScriptElement el = OverworldScript::process(index);
-		//If instruction is core, return
-		if ((int)el.instruction <= (int)ScriptInstruction::INSTR_MAX)
-		{
-			return el;
-		}
-		//Process
-		switch (el.instruction)
-		{
-		case ScriptInstruction::OPEN_MSG_BOX:
-			*m_ShowTextBox = true;
-			m_Index++;
-			break;
-		case ScriptInstruction::CLOSE_MSG_BOX:
-			*m_ShowTextBox = false;
-			m_Index++;
-			break;
-		case ScriptInstruction::MSG:
-			EngineLog(m_TextFinder(el.info.msgInfo));
-
-			if (m_OnLine_1)
-			{
-				*m_TextLine1 = m_TextFinder(el.info.msgInfo);
-				m_Index++;
-				m_OnLine_1 = false;
-				break;
-			}
-			*m_TextLine2 = m_TextFinder(el.info.msgInfo);
-			m_Index++;
-			m_OnLine_1 = true;
-			break;
-		}
-		return el;
-	}
 private:
-	bool* m_ShowTextBox = nullptr;
-	std::string* m_TextLine1 = nullptr;
-	std::string* m_TextLine2 = nullptr;
-	bool m_OnLine_1 = true;
-	std::function<void(Message message, unsigned int id)> m_MessageUpdate;
-	std::function<std::string&(MSG_INFO info)> m_TextFinder;
+	float m_Timer = 0.0;
 };
 
 #endif

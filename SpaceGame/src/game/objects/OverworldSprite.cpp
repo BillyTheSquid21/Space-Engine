@@ -192,6 +192,76 @@ void OvSpr_Sprite::setSprite(UVData data)
 	SetQuadUV((TextureVertex*)&m_Sprite, data.uvX, data.uvY, data.uvWidth, data.uvHeight);
 }
 
+//Translation
+void Ov_Translation::Walk(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer)
+{
+	using namespace World;
+	switch (*direction)
+	{
+	case Direction::EAST:
+		*x += deltaTime * TILE_SIZE * WALK_SPEED;
+		TranslateShape<TextureVertex>(sprite, deltaTime * TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		break;
+	case Direction::WEST:
+		*x += deltaTime * -TILE_SIZE * WALK_SPEED;
+		TranslateShape<TextureVertex>(sprite, deltaTime * -TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		break;
+	case Direction::NORTH:
+		*z += deltaTime * -TILE_SIZE * WALK_SPEED;
+		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * WALK_SPEED, Shape::QUAD);
+		break;
+	case Direction::SOUTH:
+		*z += deltaTime * TILE_SIZE * WALK_SPEED;
+		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * WALK_SPEED, Shape::QUAD);
+		break;
+	default:
+		break;
+	}
+
+	*walkTimer += deltaTime;
+}
+
+void Ov_Translation::Run(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer)
+{
+	using namespace World;
+	switch (*direction)
+	{
+	case Direction::EAST:
+		*x += deltaTime * TILE_SIZE * RUN_SPEED;
+		TranslateShape<TextureVertex>(sprite, deltaTime * TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		break;
+	case Direction::WEST:
+		*x += deltaTime * -TILE_SIZE * RUN_SPEED;
+		TranslateShape<TextureVertex>(sprite, deltaTime * -TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		break;
+	case Direction::NORTH:
+		*z += deltaTime * -TILE_SIZE * RUN_SPEED;
+		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * RUN_SPEED, Shape::QUAD);
+		break;
+	case Direction::SOUTH:
+		*z += deltaTime * TILE_SIZE * RUN_SPEED;
+		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * RUN_SPEED, Shape::QUAD);
+		break;
+	default:
+		break;
+	}
+
+	*walkTimer += deltaTime;
+}
+
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, float* x, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
+{
+	//Centre on x and y
+	Component2f origin = World::Level::queryOrigin(currentLevel);
+	float expectedX = (float)(World::TILE_SIZE * tileX) + origin.a + World::TILE_SIZE / 2;
+	float expectedZ = (float)(-World::TILE_SIZE * tileZ) + origin.b - World::TILE_SIZE / 2;
+	float deltaX = *x - expectedX;
+	float deltaZ = *z - expectedZ;
+	TranslateShape<TextureVertex>(sprite, -deltaX, 0.0f, -deltaZ, Shape::QUAD);
+	*x = expectedX;
+	*z = expectedZ;
+}
+
 
 std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, Renderer<TextureVertex>* sprtRen)
 {

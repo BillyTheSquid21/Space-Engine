@@ -107,7 +107,7 @@ public:
 	float m_ZPos = 0.0f;
 	unsigned int m_TileX = 0; unsigned int m_TileZ = 0;
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
-	bool m_Busy = false;
+	bool m_Busy = false; //allows to turn off behaviour when script running
 };
 
 class OvSpr_DirectionalSprite : public OvSpr_Sprite
@@ -123,6 +123,7 @@ class OvSpr_WalkingSprite : public OvSpr_DirectionalSprite
 public:
 	using OvSpr_DirectionalSprite::OvSpr_DirectionalSprite;
 	bool m_Walking = false;
+	double m_Timer = 0.0;
 	unsigned int m_AnimationOffsetX = 0;
 };
 
@@ -132,6 +133,31 @@ public:
 	using OvSpr_WalkingSprite::OvSpr_WalkingSprite;
 	bool m_Running = false;
 };
+
+namespace Ov_Translation
+{
+	void Walk(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer);
+	template<typename T>
+	void WalkSprite(T sprite, double deltaTime)
+	{
+		std::shared_ptr<OvSpr_WalkingSprite> spr = std::static_pointer_cast<OvSpr_WalkingSprite>(sprite);
+		Walk(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
+	}
+	void Run(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer);
+	template<typename T>
+	void RunSprite(T sprite, double deltaTime)
+	{
+		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<OvSpr_RunningSprite>(sprite);
+		Run(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
+	}
+	void CentreOnTile(World::LevelID currentLevel, float* x, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite);
+	template<typename T>
+	void CentreOnTileSprite(T sprite)
+	{
+		std::shared_ptr<OvSpr_Sprite> spr = std::static_pointer_cast<OvSpr_WalkingSprite>(sprite);
+		CentreOnTile(spr->m_CurrentLevel, &spr->m_XPos, &spr->m_ZPos, spr->m_TileX, spr->m_TileZ, &spr->m_Sprite);
+	}
+}
 
 //Creation methods 
 namespace Ov_ObjCreation
