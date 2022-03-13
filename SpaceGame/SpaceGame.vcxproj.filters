@@ -153,9 +153,6 @@
     <ClCompile Include="src\game\objects\NPCAi.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="include\game\objects\Script.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\utility\GameText.cpp">
       <Filter>Source Files\Game\Utility</Filter>
     </ClCompile>

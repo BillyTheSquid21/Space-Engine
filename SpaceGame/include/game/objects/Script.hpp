@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 #include <functional>
-#include "core/GameObject.hpp"
+#include "game/objects/OverworldSprite.h"
 
 //Debug Struct for use in creating flags/scripts, which then becomes bool array
 struct FlagInfo
@@ -20,11 +20,12 @@ struct FlagInfo
 enum class ScriptInstruction
 {
 	//Core
-	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, CORE_MAX, //max to give return term
+	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, LOCK_PLAYER, CORE_MAX, //max to give return term
 	
 	//Non Core
-	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, GIVE_ITEM, TAKE_ITEM,
-	FREEZE_OBJECT, UNFREEZE_OBJECT, CGE_DIRECTION, WALK_IN_DIR, RUN_IN_DIR, SET_BUSY
+	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, GIVE_ITEM, TAKE_ITEM,
+	FREEZE_OBJECT, UNFREEZE_OBJECT, CGE_DIRECTION, WALK_IN_DIR, RUN_IN_DIR, 
+	SET_BUSY,
 };
 
 //Message info - using std ints to guarantee bytes
@@ -79,6 +80,13 @@ struct BUSY_INFO
 	uint32_t unused : 24;
 };
 
+//Lock player info
+struct LOCK_PLAYER_INFO
+{
+	uint32_t state : 8;
+	uint32_t unused : 24;
+};
+
 //Information on what to do with instruction
 struct InstructionInfo
 {
@@ -92,6 +100,7 @@ struct InstructionInfo
 		FLAG_INFO flgInfo;
 		DIRECTION_INFO dirInfo;
 		BUSY_INFO busyInfo;
+		LOCK_PLAYER_INFO lockPlayInfo;
 		uint32_t clear;
 	};
 };
@@ -109,7 +118,7 @@ typedef std::shared_ptr<bool[]> FlagArray;
 class OverworldScript : public UpdateComponent
 {
 public:
-	OverworldScript(Script script, uint16_t size) { m_Script = script; m_Size = size; }
+	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player) { m_Script = script; m_Size = size; m_Player = player; }
 	void update(double deltaTime) 
 	{
 		process(m_Index, deltaTime);
@@ -148,6 +157,10 @@ public:
 			}
 			m_Timer += deltaTime;
 			return el;
+		case ScriptInstruction::LOCK_PLAYER:
+			m_Player->m_Busy = el.info.lockPlayInfo.state;
+			m_Index++;
+			return el;
 		}
 		return el;
 	}
@@ -156,6 +169,7 @@ protected:
 	FlagArray m_FlagArray;
 	uint16_t m_Index = 0;
 	uint16_t m_Size;
+	OvSpr_RunningSprite* m_Player;
 private:
 	float m_Timer = 0.0;
 };

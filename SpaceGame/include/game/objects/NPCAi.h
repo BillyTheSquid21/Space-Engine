@@ -81,6 +81,11 @@ public:
 			m_Index++;
 			m_OnLine_1 = true;
 			break;
+		case ScriptInstruction::CLEAR_TEXT:
+			*m_TextLine1 = "";
+			*m_TextLine2 = "";
+			m_Index++;
+			break;
 		case ScriptInstruction::SET_BUSY:
 			m_NPCData->m_Busy = el.info.busyInfo.state;
 			m_Index++;

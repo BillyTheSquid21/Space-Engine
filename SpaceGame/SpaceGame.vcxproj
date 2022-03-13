@@ -148,7 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\game\objects\Script.cpp" />
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\game\DemoGame.cpp" />

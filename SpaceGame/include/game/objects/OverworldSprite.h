@@ -64,7 +64,7 @@ class UpdateAnimationWalking : public UpdateAnimationFacing
 {
 public:
 	UpdateAnimationWalking() = default;
-	UpdateAnimationWalking(unsigned int* offsetY, unsigned int* offsetX, World::Direction* direction, bool* walking) { m_OffsetY = offsetY; m_OffsetX = offsetX; m_Direction = direction; m_Walking = walking; }
+	UpdateAnimationWalking(unsigned int* offsetX, unsigned int* offsetY, World::Direction* direction, bool* walking) { m_OffsetY = offsetY; m_OffsetX = offsetX; m_Direction = direction; m_Walking = walking; }
 	void update(double deltaTime);
 
 protected:
@@ -78,7 +78,7 @@ class UpdateAnimationRunning : public UpdateAnimationWalking
 {
 public:
 	UpdateAnimationRunning() = default;
-	UpdateAnimationRunning(unsigned int* offsetY, unsigned int* offsetX, World::Direction* direction, bool* walking, bool* running) { m_OffsetY = offsetY; m_OffsetX = offsetX; m_Direction = direction; m_Walking = walking; m_Running = running; }
+	UpdateAnimationRunning(unsigned int* offsetX, unsigned int* offsetY, World::Direction* direction, bool* walking, bool* running) { m_OffsetY = offsetY; m_OffsetX = offsetX; m_Direction = direction; m_Walking = walking; m_Running = running; }
 	void update(double deltaTime);
 private:
 	bool* m_Running = nullptr;
@@ -162,11 +162,15 @@ namespace Ov_Translation
 //Creation methods 
 namespace Ov_ObjCreation
 {
-	//Allows creating sprite types, and modifies references to common components
-	std::shared_ptr<OvSpr_Sprite> BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, Renderer<TextureVertex>* sprtRen);
-	std::shared_ptr<OvSpr_DirectionalSprite> BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map);
-	std::shared_ptr<OvSpr_WalkingSprite> BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map);
-	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map);
+	//Allows creating sprite types, and modifies references to common component groups
+	std::shared_ptr<OvSpr_Sprite> BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
+		Renderer<TextureVertex>* sprtRen);
+	std::shared_ptr<OvSpr_DirectionalSprite> BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Renderer<TextureVertex>* sprtRen);
+	std::shared_ptr<OvSpr_WalkingSprite> BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Renderer<TextureVertex>* sprtRen);
+	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Renderer<TextureVertex>* sprtRen);
 }
 
 #endif

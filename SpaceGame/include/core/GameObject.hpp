@@ -186,14 +186,14 @@ public:
 		{
 			if (m_Components[i].isDead())
 			{
-				m_Components.emplace(m_Components.begin() + i, args);
+				m_Components.emplace(m_Components.begin() + i, args...);
 				m_Components[i].updatePointer();
 				return;
 			}
 		}
 
 		//Resize components array
-		m_Components.emplace_back(args);
+		m_Components.emplace_back(args...);
 		m_Components[m_Components.size() - 1].attachToObject(compPointers);
 		for (int i = 0; i < m_Components.size(); i++)
 		{
