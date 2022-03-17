@@ -1,0 +1,76 @@
+\hypertarget{class_game}{}\doxysection{Game Class Reference}
+\label{class_game}\index{Game@{Game}}
+Inheritance diagram for Game\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_game}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_a5bc07cf8947858f32637943836cc6f8e}\label{class_game_a5bc07cf8947858f32637943836cc6f8e}} 
+{\bfseries Game} (int width, int height)
+\item 
+\mbox{\Hypertarget{class_game_ada9c7e3ee9f48ef5e7cb8e829103791c}\label{class_game_ada9c7e3ee9f48ef5e7cb8e829103791c}} 
+bool {\bfseries init} (const char name\mbox{[}$\,$\mbox{]}, Key\+\_\+\+Callback k\+Callback, Mouse\+\_\+\+Callback m\+Callback, Scroll\+\_\+\+Callback s\+Callback)
+\item 
+\mbox{\Hypertarget{class_game_adb5563f62c0c82e3e42ec36501aa5698}\label{class_game_adb5563f62c0c82e3e42ec36501aa5698}} 
+void {\bfseries handle\+Events} ()
+\item 
+\mbox{\Hypertarget{class_game_a6acf9e00f74084d818d59698f870db4e}\label{class_game_a6acf9e00f74084d818d59698f870db4e}} 
+virtual void {\bfseries handle\+Input} (int key, int scancode, int action, int mods)
+\item 
+\mbox{\Hypertarget{class_game_a0d96a8ecaebff3412708e3d19a34cddc}\label{class_game_a0d96a8ecaebff3412708e3d19a34cddc}} 
+virtual void {\bfseries handle\+Mouse} (int button, int action, int mods)
+\item 
+\mbox{\Hypertarget{class_game_abe908bba68dfd3da6854aef344dadf2b}\label{class_game_abe908bba68dfd3da6854aef344dadf2b}} 
+virtual void {\bfseries handle\+Scrolling} (double x\+Offset, double y\+Offset)
+\item 
+\mbox{\Hypertarget{class_game_a07535a06e0962dfdfcade57d767aae2d}\label{class_game_a07535a06e0962dfdfcade57d767aae2d}} 
+void {\bfseries update} (double delta\+Time)
+\item 
+\mbox{\Hypertarget{class_game_a7d7db80157c7612a182a807634cda96b}\label{class_game_a7d7db80157c7612a182a807634cda96b}} 
+void {\bfseries set\+Time} (double time)
+\item 
+\mbox{\Hypertarget{class_game_a15ddd769261d923827a3cdf41499c843}\label{class_game_a15ddd769261d923827a3cdf41499c843}} 
+void {\bfseries render} ()
+\item 
+\mbox{\Hypertarget{class_game_ad4f36a72a2d06696f7973788606f57fc}\label{class_game_ad4f36a72a2d06696f7973788606f57fc}} 
+void {\bfseries clean} ()
+\item 
+\mbox{\Hypertarget{class_game_a9d75d33cc48b4e7d80dbed569d3154b5}\label{class_game_a9d75d33cc48b4e7d80dbed569d3154b5}} 
+double {\bfseries seconds\+Per\+Frame\+Cap} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_ad9bc7cf39168a1ceaf77d6177116aa94}\label{class_game_ad9bc7cf39168a1ceaf77d6177116aa94}} 
+GLFWwindow $\ast$ {\bfseries window} = NULL
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_a6f85f1ffe0f7127a887fd1f2f7ce5a45}\label{class_game_a6f85f1ffe0f7127a887fd1f2f7ce5a45}} 
+static bool {\bfseries s\+\_\+\+Close}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_a88e8779f762bea6ff5b1542afb1a3048}\label{class_game_a88e8779f762bea6ff5b1542afb1a3048}} 
+int {\bfseries m\+\_\+\+Width}
+\item 
+\mbox{\Hypertarget{class_game_a98eccdcb435a33511328f318fce83e8a}\label{class_game_a98eccdcb435a33511328f318fce83e8a}} 
+int {\bfseries m\+\_\+\+Height}
+\item 
+\mbox{\Hypertarget{class_game_a1cace9901aa94437ffc526bfd9345be1}\label{class_game_a1cace9901aa94437ffc526bfd9345be1}} 
+double {\bfseries m\+\_\+\+Glfw\+Time}
+\item 
+\mbox{\Hypertarget{class_game_a21777a9cd899aa80f17ce50f23ae22a7}\label{class_game_a21777a9cd899aa80f17ce50f23ae22a7}} 
+double {\bfseries m\+\_\+\+Seconds\+Per\+Frame\+Cap} = (1.\+0 / 2000.\+0) $\ast$ 1000.\+0
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/Game.\+h\end{DoxyCompactItemize}

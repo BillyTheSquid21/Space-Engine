@@ -1,0 +1,40 @@
+\hypertarget{class_world_1_1_level}{}\doxysection{World\+::Level Class Reference}
+\label{class_world_1_1_level}\index{World::Level@{World::Level}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_ac7cbc6c957f5801cc472dc22d571aa45}\label{class_world_1_1_level_ac7cbc6c957f5801cc472dc22d571aa45}} 
+void {\bfseries build\+Level} (\mbox{\hyperlink{class_render_1_1_renderer}{Render\+::\+Renderer}}$<$ \mbox{\hyperlink{struct_texture_vertex}{Texture\+Vertex}} $>$ $\ast$plane\+Renderer, \mbox{\hyperlink{class_tile_map}{Tile\+Map}} $\ast$tile\+Map\+Pointer)
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_a660d3f9c06c94ba566e467a3b5463be0}\label{class_world_1_1_level_a660d3f9c06c94ba566e467a3b5463be0}} 
+void {\bfseries render} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_ab321732efd5a39c1fbbf76991216dae0}\label{class_world_1_1_level_ab321732efd5a39c1fbbf76991216dae0}} 
+static \mbox{\hyperlink{struct_component2f}{Component2f}} {\bfseries query\+Origin} (Level\+ID level)
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_ad0c9915e9fbf5216ca87285053805b7e}\label{class_world_1_1_level_ad0c9915e9fbf5216ca87285053805b7e}} 
+static \mbox{\hyperlink{struct_world_1_1_level_dimensions}{Level\+Dimensions}} {\bfseries query\+Dimensions} (Level\+ID level)
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_a8b9fd37cd6320cf32adabe018e4bc748}\label{class_world_1_1_level_a8b9fd37cd6320cf32adabe018e4bc748}} 
+static std\+::vector$<$ Movement\+Permissions $>$ $\ast$ {\bfseries query\+Permissions} (Level\+ID level)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_a8b36b8990e87f70939c8a7dd19f2148f}\label{class_world_1_1_level_a8b36b8990e87f70939c8a7dd19f2148f}} 
+static std\+::unordered\+\_\+map$<$ Level\+ID, \mbox{\hyperlink{struct_component2f}{Component2f}} $>$ {\bfseries s\+\_\+\+Level\+Origin\+Cache}
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_a99baff3d0ad0edce6aee290bbeb825fd}\label{class_world_1_1_level_a99baff3d0ad0edce6aee290bbeb825fd}} 
+static std\+::unordered\+\_\+map$<$ Level\+ID, \mbox{\hyperlink{struct_world_1_1_level_dimensions}{Level\+Dimensions}} $>$ {\bfseries s\+\_\+\+Level\+Dimension\+Cache}
+\item 
+\mbox{\Hypertarget{class_world_1_1_level_a7371cb5e8aa0a048da31300cb2e1e401}\label{class_world_1_1_level_a7371cb5e8aa0a048da31300cb2e1e401}} 
+static std\+::unordered\+\_\+map$<$ Level\+ID, std\+::vector$<$ Movement\+Permissions $>$ $\ast$ $>$ {\bfseries s\+\_\+\+Movement\+Permissions\+Cache}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/level/World.\+h\end{DoxyCompactItemize}

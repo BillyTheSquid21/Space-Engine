@@ -1,0 +1,51 @@
+\hypertarget{_plane_8h_source}{}\doxysection{Plane.\+h}
+\label{_plane_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Plane.h@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Plane.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef PLANE\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define PLANE\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}Vertex.hpp"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}Renderer.hpp"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_plane}{Plane}}}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{11 \textcolor{keyword}{public}:}
+\DoxyCodeLine{12     \mbox{\hyperlink{class_plane}{\string~Plane}}();}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14     \textcolor{comment}{//Generate planes}}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} generatePlaneXY(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
+\DoxyCodeLine{16     \textcolor{keywordtype}{void} generatePlaneXZ(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} zPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} generatePlaneYZ(\textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} zPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19     \textcolor{comment}{//Load plane vertices from file -\/ TODO: implement}}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} loadPlane();}
+\DoxyCodeLine{21     }
+\DoxyCodeLine{22     \textcolor{comment}{//Render}}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{24     \textcolor{keywordtype}{void} setRenderer(\mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* ren) \{ m\_Renderer = ren; \}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26     \textcolor{comment}{//Access specific tile}}
+\DoxyCodeLine{27     TextureQuad* accessQuad(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} y);}
+\DoxyCodeLine{28     \textcolor{keywordtype}{void} texturePlane(\textcolor{keywordtype}{float} u, \textcolor{keywordtype}{float} v, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height);}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     \textcolor{comment}{//Purges data not needed without destruction of class}}
+\DoxyCodeLine{31     \textcolor{keywordtype}{void} purgeData();}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34     \textcolor{comment}{//Helper}}
+\DoxyCodeLine{35     \textcolor{keywordtype}{void} genQuads(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize, Axis axis, \textcolor{keywordtype}{float} angle);}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37     \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* m\_Renderer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{38     TextureQuad* m\_Quads;}
+\DoxyCodeLine{39     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_XCount = 0; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_YCount = 0;}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \textcolor{comment}{//Indices buffer for plane}}
+\DoxyCodeLine{42     std::vector<unsigned int> m\_Indices;}
+\DoxyCodeLine{43 \};}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -92,7 +92,6 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 //Shader
 ShaderProgramSource Shader::parseShader(const std::string& filePath) {
 	std::ifstream stream(filePath);
-	EngineLog("Reading shader file at: ", filePath);
 
 	enum class ShaderType {
 		NONE = -1, VERTEX = 0, FRAGMENT = 1

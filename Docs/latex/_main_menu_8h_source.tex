@@ -1,0 +1,37 @@
+\hypertarget{_main_menu_8h_source}{}\doxysection{Main\+Menu.\+h}
+\label{_main_menu_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/states/MainMenu.h@{D:/Repositories/Space Engine/SpaceGame/include/game/states/MainMenu.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef MAIN\_MENU\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define MAIN\_MENU\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}renderer/Renderer.hpp"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}renderer/Texture.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}core/State.hpp"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}game/gui/GUI.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}game/states/Overworld.h"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}core/Game.h"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{keyword}{class }\mbox{\hyperlink{class_main_menu}{MainMenu}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_state}{State}}}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 \textcolor{keyword}{public}:}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} init(\textcolor{keywordtype}{int} width, \textcolor{keywordtype}{int} height, GLFWwindow* window, std::shared\_ptr<Overworld> overworldPtr, \mbox{\hyperlink{class_font_container}{FontContainer}}* fonts);}
+\DoxyCodeLine{16     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime, \textcolor{keywordtype}{double} time);}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{18 \textcolor{keyword}{private}:}
+\DoxyCodeLine{19     GLFWwindow* m\_WindowPointer;}
+\DoxyCodeLine{20     \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<ColorTextureVertex>}} m\_Renderer;}
+\DoxyCodeLine{21     \mbox{\hyperlink{class_shader}{Shader}} m\_Shader;}
+\DoxyCodeLine{22     \mbox{\hyperlink{class_camera}{Camera}} m\_Camera;}
+\DoxyCodeLine{23     \textcolor{keywordtype}{int} m\_Width; \textcolor{keywordtype}{int} m\_Height;}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     \mbox{\hyperlink{class_font_container}{FontContainer}}* m\_Fonts;}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \textcolor{comment}{//Pointers to states the main menu can activate}}
+\DoxyCodeLine{28     std::shared\_ptr<Overworld> m\_OverworldPtr;}
+\DoxyCodeLine{29 \};}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#endif }}
+
+\end{DoxyCode}

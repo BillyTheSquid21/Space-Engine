@@ -81,7 +81,7 @@ void DemoGame::update(double deltaTime) {
 
 void DemoGame::render() {
 	//Clear
-	Renderer<ColorTextureVertex>::clearScreen();
+	Render::Renderer<ColorTextureVertex>::clearScreen();
 
 	for (int i = 0; i < m_States.size(); i++) {
 		if (m_States[i]->active()) {

@@ -17,7 +17,7 @@ public:
 	void render();
 private:
 	GLFWwindow* m_WindowPointer;
-	Renderer<ColorTextureVertex> m_Renderer;
+	Render::Renderer<ColorTextureVertex> m_Renderer;
 	Shader m_Shader;
 	Camera m_Camera;
 	int m_Width; int m_Height;

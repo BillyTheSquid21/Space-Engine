@@ -13,6 +13,8 @@
 #include "game/gui/GUI.h"
 #include "game/utility/GameText.h"
 
+#include "renderer/Model.h"
+
 class Overworld : public State
 {
 public:
@@ -25,8 +27,10 @@ public:
 
 private:
 	//Rendering
-	Renderer<TextureVertex> m_WorldRenderer;
-	Renderer<TextureVertex> m_SpriteRenderer;
+	Render::Renderer<TextureVertex> m_WorldRenderer;
+	Render::Renderer<TextureVertex> m_SpriteRenderer;
+	Render::InstanceRenderer<TextureVertex> m_ModelRenderer;
+
 	Shader m_Shader;
 	Camera m_Camera;
 	int m_Width; int m_Height;
@@ -38,14 +42,15 @@ private:
 	Texture m_PlaneTexture;
 	Texture m_OWSprites;
 
-	//Test plane
-	Plane m_Plane;
-
 	//Test level
 	World::Level level;
 
 	//Test obj mng
 	ObjectManager m_ObjManager;
+
+	//Test model
+	Model::TextureVertexModel mod = Model::TextureVertexModel::TextureVertexModel("res/model/test.obj");
+	glm::mat4 modMat;
 
 	//Test tile mapping
 	TileMap m_OverworldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);

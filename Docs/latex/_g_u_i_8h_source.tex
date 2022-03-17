@@ -1,0 +1,98 @@
+\hypertarget{_g_u_i_8h_source}{}\doxysection{GUI.\+h}
+\label{_g_u_i_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/gui/GUI.h@{D:/Repositories/Space Engine/SpaceGame/include/game/gui/GUI.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef GAME\_GUI\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define GAME\_GUI\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}imgui/imgui.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}imgui/imgui\_impl\_glfw.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}imgui/imgui\_impl\_opengl3.h"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}renderer/RenderQueue.hpp"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <unordered\_map>}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{comment}{//Create type of map which allows searches for font size}}
+\DoxyCodeLine{13 \textcolor{keyword}{typedef} std::unordered\_map<unsigned char, unsigned int> FontSizeMap;}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{comment}{//Contains path loaded for each font style and map to allow calling unloaded sizes}}
+\DoxyCodeLine{16 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_font_s_map___font_path}{FontSMap\_FontPath}}}
+\DoxyCodeLine{17 \{}
+\DoxyCodeLine{18     FontSizeMap map;}
+\DoxyCodeLine{19     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* path;}
+\DoxyCodeLine{20 \};}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{comment}{//Creates map of map for mapping to style, and then size}}
+\DoxyCodeLine{23 \textcolor{keyword}{typedef} std::unordered\_map<std::string, FontSMap\_FontPath> FontMap;}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{comment}{//Contains a map to easily access all loaded fonts}}
+\DoxyCodeLine{26 \textcolor{keyword}{class }\mbox{\hyperlink{class_font_container}{FontContainer}}        \textcolor{comment}{//It is recommended to load any needed font for a state in the init regardless of if is loaded -\/ in case of clearing}}
+\DoxyCodeLine{27 \{}
+\DoxyCodeLine{28 \textcolor{keyword}{public}:}
+\DoxyCodeLine{29     \textcolor{comment}{//Call once per font style loaded, all other sizes are automated}}
+\DoxyCodeLine{30     \textcolor{keywordtype}{void} loadFont(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* fontName, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} ptSize);}
+\DoxyCodeLine{31     ImFont* getFont(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* fontName, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} ptSize);}
+\DoxyCodeLine{32     \textcolor{keywordtype}{void} clearFonts();}
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34     FontMap m\_FontMap;}
+\DoxyCodeLine{35 \}; }
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_font_data}{FontData}}}
+\DoxyCodeLine{38 \{}
+\DoxyCodeLine{39     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* path;}
+\DoxyCodeLine{40     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* name;}
+\DoxyCodeLine{41     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} ptSize;}
+\DoxyCodeLine{42 \};}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{comment}{//To make clear from any ImGui stuff}}
+\DoxyCodeLine{45 \textcolor{keyword}{namespace }GameGUI }
+\DoxyCodeLine{46 \{}
+\DoxyCodeLine{47     \textcolor{comment}{//functions}}
+\DoxyCodeLine{48     \textcolor{keywordtype}{void} StartFrame();}
+\DoxyCodeLine{49     \textcolor{keywordtype}{void} EndFrame();}
+\DoxyCodeLine{50     \textcolor{keywordtype}{void} SetColors(\textcolor{keywordtype}{int} r, \textcolor{keywordtype}{int} g, \textcolor{keywordtype}{int} b, ImGuiCol target);}
+\DoxyCodeLine{51     \textcolor{keywordtype}{void} SetNextWindowSize(\textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height);}
+\DoxyCodeLine{52     \textcolor{keywordtype}{void} SetNextWindowPos(\textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y);}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54     \textcolor{comment}{//Base GUI class}}
+\DoxyCodeLine{55     \textcolor{keyword}{class }\mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i}{GUI}}}
+\DoxyCodeLine{56     \{}
+\DoxyCodeLine{57     \textcolor{keyword}{public}:}
+\DoxyCodeLine{58         \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i}{GUI}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{59         \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i}{GUI}}(\textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y) \{ m\_WindowWidth = width; m\_WindowHeight = height; m\_WindowX = x; m\_WindowY = y; \}}
+\DoxyCodeLine{60     \textcolor{keyword}{protected}:}
+\DoxyCodeLine{61         \textcolor{keywordtype}{void} renderStart() \{GameGUI::SetNextWindowSize(m\_WindowWidth, m\_WindowHeight);GameGUI::SetNextWindowPos(m\_WindowX, m\_WindowY);\}}
+\DoxyCodeLine{62         \textcolor{keywordtype}{void} renderEnd() \{ ImGui::End(); \}}
+\DoxyCodeLine{63         \textcolor{keywordtype}{float} m\_WindowWidth; \textcolor{keywordtype}{float} m\_WindowHeight;}
+\DoxyCodeLine{64         \textcolor{keywordtype}{float} m\_WindowX; \textcolor{keywordtype}{float} m\_WindowY;}
+\DoxyCodeLine{65     \};}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67     \textcolor{comment}{//Text box class}}
+\DoxyCodeLine{68     \textcolor{keyword}{class }\mbox{\hyperlink{class_game_g_u_i_1_1_text_box}{TextBox}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i}{GUI}}}
+\DoxyCodeLine{69     \{}
+\DoxyCodeLine{70     \textcolor{keyword}{public}:}
+\DoxyCodeLine{71         \mbox{\hyperlink{class_game_g_u_i_1_1_text_box}{TextBox}}(\textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y) \{ m\_WindowWidth = width; m\_WindowHeight = height; m\_WindowX = x; m\_WindowY = y; \}}
+\DoxyCodeLine{72         \textcolor{keywordtype}{void} setStyle();}
+\DoxyCodeLine{73         \textcolor{keywordtype}{void} setFontContainer(\mbox{\hyperlink{class_font_container}{FontContainer}}* font) \{ m\_Fonts = font; \}}
+\DoxyCodeLine{74         \textcolor{keywordtype}{void} run(std::string\& text1, std::string\& text2);}
+\DoxyCodeLine{75     \textcolor{keyword}{private}:}
+\DoxyCodeLine{76         \mbox{\hyperlink{class_font_container}{FontContainer}}* m\_Fonts = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{77     \};}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{TextBoxBuffer}}}
+\DoxyCodeLine{80     \{}
+\DoxyCodeLine{81         std::string t1 = \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{82         std::string t2 = \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{83     \};}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85     \textcolor{comment}{//Struct for what GUI elements to show}}
+\DoxyCodeLine{86     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_game_g_u_i_1_1_ov_g_u_i___enabled}{OvGUI\_Enabled}}}
+\DoxyCodeLine{87     \{}
+\DoxyCodeLine{88         \textcolor{keywordtype}{bool} showTextBox = \textcolor{keyword}{false};}
+\DoxyCodeLine{89     \};}
+\DoxyCodeLine{90 \}}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

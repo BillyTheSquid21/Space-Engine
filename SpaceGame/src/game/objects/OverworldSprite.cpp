@@ -264,7 +264,7 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, float* x, float* 
 
 
 std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	Renderer<TextureVertex>* sprtRen)
+	Render::Renderer<TextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_Sprite> sprite(new OvSpr_Sprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
@@ -274,7 +274,7 @@ std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data,
 }
 
 std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp,
-	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Renderer<TextureVertex>* sprtRen)
+	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<TextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_DirectionalSprite> sprite(new OvSpr_DirectionalSprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
@@ -288,7 +288,7 @@ std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(
 }
 
 std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Renderer<TextureVertex>* sprtRen)
+	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<TextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_WalkingSprite> sprite(new OvSpr_WalkingSprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
@@ -302,7 +302,7 @@ std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_Sp
 }
 
 std::shared_ptr<OvSpr_RunningSprite> Ov_ObjCreation::BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Renderer<TextureVertex>* sprtRen)
+	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<TextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_RunningSprite> sprite(new OvSpr_RunningSprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));

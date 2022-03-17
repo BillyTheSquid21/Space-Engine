@@ -1,0 +1,39 @@
+\hypertarget{_demo_game_8h_source}{}\doxysection{Demo\+Game.\+h}
+\label{_demo_game_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/DemoGame.h@{D:/Repositories/Space Engine/SpaceGame/include/game/DemoGame.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef DEMO\_GAME\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define DEMO\_GAME\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}core/Game.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}game/states/Splash.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}game/states/MainMenu.h"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}game/states/Overworld.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}game/gui/GUI.h"{}}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_demo_game}{DemoGame}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_game}{Game}}}
+\DoxyCodeLine{12 \{}
+\DoxyCodeLine{13 \textcolor{keyword}{public}:}
+\DoxyCodeLine{14     \textcolor{keyword}{using} Game::Game;}
+\DoxyCodeLine{15     \mbox{\hyperlink{class_demo_game}{\string~DemoGame}}() \{ImGui\_ImplOpenGL3\_Shutdown();ImGui\_ImplGlfw\_Shutdown();ImGui::DestroyContext();\}}
+\DoxyCodeLine{16     \textcolor{keywordtype}{bool} init(\textcolor{keyword}{const} \textcolor{keywordtype}{char} name[], Key\_Callback kCallback, Mouse\_Callback mCallback, Scroll\_Callback sCallback);}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} handleInput(\textcolor{keywordtype}{int} key, \textcolor{keywordtype}{int} scancode, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods);}
+\DoxyCodeLine{18     \textcolor{keywordtype}{void} handleMouse(\textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods);}
+\DoxyCodeLine{19     \textcolor{keywordtype}{void} handleScrolling(\textcolor{keywordtype}{double} xOffset, \textcolor{keywordtype}{double} yOffset);}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{21     \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23 \textcolor{keyword}{private}:}
+\DoxyCodeLine{24     \mbox{\hyperlink{class_font_container}{FontContainer}} m\_Fonts;}
+\DoxyCodeLine{25     std::vector<std::shared\_ptr<State>> m\_States;}
+\DoxyCodeLine{26 \};}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{comment}{//Defined of which entry corresponds to what state}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#define SplashScreen m\_States[0] }}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#define MainMenuScreen m\_States[1] }}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#define OverworldScreen m\_States[2] }}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#endif }}
+
+\end{DoxyCode}

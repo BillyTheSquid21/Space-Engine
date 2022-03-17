@@ -3,6 +3,14 @@
 //Push to heap of components
 
 void ObjectManager::update(double deltaTime) {
+	//Launch async cleanup task every 10 seconds to check for dead objects
+	std::future<void> f;
+	if (m_CheckCleanupTimer > 10.0)
+	{
+		f = std::async(std::launch::async, &ObjectManager::cleanObjects, this);
+		m_CheckCleanupTimer = 0.0;
+	}
+
 	for (unsigned int i = 0; i < m_UpdateGroup.size(); i++) {
 		m_UpdateGroup[i]->iterate(deltaTime);
 	}
@@ -45,6 +53,8 @@ void ObjectManager::update(double deltaTime) {
 			activeInd = -1;
 		}
 	}
+
+	m_CheckCleanupTimer += deltaTime;
 }
 
 void ObjectManager::render() {
@@ -88,6 +98,27 @@ void ObjectManager::render() {
 			m_RenderHeap[activeInd]->updatePointer();
 			inactiveInd = -1;
 			activeInd = -1;
+		}
+	}
+}
+
+void ObjectManager::cleanObjects()
+{
+	int size = m_Objects.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (m_Objects[i]->safeToDelete())
+		{
+			EngineLog("Cleaned object at: ", i);
+			m_Objects.erase(m_Objects.begin() + i);
+			i--;
+			size--;
+
+			//adjust object id's
+			for (int i = 0; i < size; i++)
+			{
+				m_Objects[i]->setID(i);
+			}
 		}
 	}
 }

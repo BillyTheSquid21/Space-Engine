@@ -114,7 +114,7 @@ namespace World
 	{
 	public:
 		//Load level data
-		void buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		void buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
 		void render();
 
 		//Static methods

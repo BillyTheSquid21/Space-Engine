@@ -13,7 +13,7 @@ public:
 	void update(double deltaTime, double time);
 	void render();
 private:
-	Renderer<ColorTextureVertex> m_Renderer;
+	Render::Renderer<ColorTextureVertex> m_Renderer;
 	Texture m_SplashTexture;
 	Shader m_Shader;
 	Camera m_Camera;

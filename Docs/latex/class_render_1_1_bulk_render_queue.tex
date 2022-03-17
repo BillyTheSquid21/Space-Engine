@@ -1,0 +1,97 @@
+\hypertarget{class_render_1_1_bulk_render_queue}{}\doxysection{Render\+::Bulk\+Render\+Queue\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_render_1_1_bulk_render_queue}\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_render_1_1_bulk_render_queue_ae4a389b442197c8e6059aea2ed71cf98}{push\+Back}} (T object, unsigned int float\+Count, const unsigned int $\ast$indices, unsigned int indices\+Size)
+\item 
+\mbox{\hyperlink{struct_render_1_1_bulk_render_container}{Bulk\+Render\+Container}}$<$ T $>$ \mbox{\hyperlink{class_render_1_1_bulk_render_queue_adf1320906479e4e0d73c416ce194260c}{next\+In\+Queue}} ()
+\item 
+unsigned int \mbox{\hyperlink{class_render_1_1_bulk_render_queue_a675ebe4ac68c692fe5d678adcb82c142}{vert\+Float\+Count}} () const
+\item 
+unsigned int \mbox{\hyperlink{class_render_1_1_bulk_render_queue_a7b9ba6182abc446b88ef0d0ba62def5d}{ind\+Int\+Count}} () const
+\item 
+bool \mbox{\hyperlink{class_render_1_1_bulk_render_queue_a98a0ca2e7dea4c4b1f7ddba24503f9af}{items\+Waiting}} ()
+\item 
+unsigned int \mbox{\hyperlink{class_render_1_1_bulk_render_queue_a7db945f778a39dd2920d2cd893e845e2}{size}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_render_1_1_bulk_render_queue_a7b9ba6182abc446b88ef0d0ba62def5d}\label{class_render_1_1_bulk_render_queue_a7b9ba6182abc446b88ef0d0ba62def5d}} 
+\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}!indIntCount@{indIntCount}}
+\index{indIntCount@{indIntCount}!Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{indIntCount()}{indIntCount()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $>$\+::ind\+Int\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Total amount of indices submitted to queue. Used for preallocating indice buffer in rendering 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_render_1_1_bulk_render_queue_a98a0ca2e7dea4c4b1f7ddba24503f9af}\label{class_render_1_1_bulk_render_queue_a98a0ca2e7dea4c4b1f7ddba24503f9af}} 
+\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}!itemsWaiting@{itemsWaiting}}
+\index{itemsWaiting@{itemsWaiting}!Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{itemsWaiting()}{itemsWaiting()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $>$\+::items\+Waiting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Whether any nodes are waiting in the queue. False when no nodes left. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_render_1_1_bulk_render_queue_adf1320906479e4e0d73c416ce194260c}\label{class_render_1_1_bulk_render_queue_adf1320906479e4e0d73c416ce194260c}} 
+\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}!nextInQueue@{nextInQueue}}
+\index{nextInQueue@{nextInQueue}!Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{nextInQueue()}{nextInQueue()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{struct_render_1_1_bulk_render_container}{Bulk\+Render\+Container}}$<$ T $>$ \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $>$\+::next\+In\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the next node in the queue, in container form. Contains array of elements and element count. Also contains total vertice floats, indices and indices size. Once the node data has been returned, it is discarded.
+
+\begin{DoxyReturn}{Returns}
+Bulk Render Container with element array and amount of elements, as well as total vertice floats, indices and indices size.
+\end{DoxyReturn}
+Note\+: Getting the size of the array from the object itself will NOT return the number of elements. \mbox{\Hypertarget{class_render_1_1_bulk_render_queue_ae4a389b442197c8e6059aea2ed71cf98}\label{class_render_1_1_bulk_render_queue_ae4a389b442197c8e6059aea2ed71cf98}} 
+\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}!pushBack@{pushBack}}
+\index{pushBack@{pushBack}!Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{pushBack()}{pushBack()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $>$\+::push\+Back (\begin{DoxyParamCaption}\item[{T}]{object,  }\item[{unsigned int}]{float\+Count,  }\item[{const unsigned int $\ast$}]{indices,  }\item[{unsigned int}]{indices\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Add an object to the queue. If the current queue node is not full, it adds to the array. If the current node is full, it creates a new one to be filled.
+
+
+\begin{DoxyParams}{Parameters}
+{\em object} & Pointer to vertices to be rendered \\
+\hline
+{\em float\+Count} & Amount of total floats in vertices \\
+\hline
+{\em indices} & Pointer to indices for object \\
+\hline
+{\em Amount} & of indices for drawing \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_render_1_1_bulk_render_queue_a7db945f778a39dd2920d2cd893e845e2}\label{class_render_1_1_bulk_render_queue_a7db945f778a39dd2920d2cd893e845e2}} 
+\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}!size@{size}}
+\index{size@{size}!Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $>$\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Size of queue 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_render_1_1_bulk_render_queue_a675ebe4ac68c692fe5d678adcb82c142}\label{class_render_1_1_bulk_render_queue_a675ebe4ac68c692fe5d678adcb82c142}} 
+\index{Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}!vertFloatCount@{vertFloatCount}}
+\index{vertFloatCount@{vertFloatCount}!Render::BulkRenderQueue$<$ T $>$@{Render::BulkRenderQueue$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{vertFloatCount()}{vertFloatCount()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $>$\+::vert\+Float\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Total amount of vertices submitted to queue. Used for preallocating vertex buffer in rendering 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Render\+Queue.\+hpp\end{DoxyCompactItemize}

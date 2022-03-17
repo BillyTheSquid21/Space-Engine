@@ -119,13 +119,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib; opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Assimp\lib;$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,11 +163,12 @@
     <ClCompile Include="src\game\utility\GameText.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
+    <ClCompile Include="src\renderer\Model.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
     <ClCompile Include="src\renderer\ShapeFactory.cpp" />
     <ClCompile Include="src\renderer\Texture.cpp" />
-    <ClCompile Include="src\SGUtil.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\utility\SGUtil.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_draw.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="include\core\Message.hpp" />
     <ClInclude Include="include\core\ObjManagement.h" />
     <ClInclude Include="include\core\State.hpp" />
+    <ClInclude Include="include\game\data\PlayerData.hpp" />
     <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\level\World.h" />
@@ -198,13 +200,15 @@
     <ClInclude Include="include\game\utility\GameText.h" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
+    <ClInclude Include="include\renderer\Model.h" />
     <ClInclude Include="include\renderer\Plane.h" />
     <ClInclude Include="include\renderer\Renderer.hpp" />
     <ClInclude Include="include\renderer\RenderQueue.hpp" />
     <ClInclude Include="include\renderer\ShapeFactory.h" />
     <ClInclude Include="include\renderer\Texture.h" />
     <ClInclude Include="include\renderer\Vertex.hpp" />
-    <ClInclude Include="include\SGUtil.h" />
+    <ClInclude Include="include\utility\SGUtil.h" />
+    <ClInclude Include="include\utility\SimpleQueue.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />
     <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />

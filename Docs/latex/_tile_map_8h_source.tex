@@ -1,0 +1,45 @@
+\hypertarget{_tile_map_8h_source}{}\doxysection{Tile\+Map.\+h}
+\label{_tile_map_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/TileMap.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/TileMap.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef TILE\_MAP\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define TILE\_MAP\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{comment}{//|}}
+\DoxyCodeLine{8 \textcolor{comment}{//|Increasing Y}}
+\DoxyCodeLine{9 \textcolor{comment}{//|\string^}}
+\DoxyCodeLine{10 \textcolor{comment}{//||}}
+\DoxyCodeLine{11 \textcolor{comment}{//|}}
+\DoxyCodeLine{12 \textcolor{comment}{//|         -\/>Increasing X}}
+\DoxyCodeLine{13 \textcolor{comment}{//|\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{comment}{//Maps the UV coords of a texture to simple blocks of x width and x height}}
+\DoxyCodeLine{16 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_v_data}{UVData}}}
+\DoxyCodeLine{17 \{}
+\DoxyCodeLine{18     \textcolor{keywordtype}{float} uvX;}
+\DoxyCodeLine{19     \textcolor{keywordtype}{float} uvY;}
+\DoxyCodeLine{20     \textcolor{keywordtype}{float} uvWidth;}
+\DoxyCodeLine{21     \textcolor{keywordtype}{float} uvHeight;}
+\DoxyCodeLine{22 \};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{comment}{//Maps a tile to a uniform texture}}
+\DoxyCodeLine{25 \textcolor{keyword}{class }\mbox{\hyperlink{class_tile_map}{TileMap}}}
+\DoxyCodeLine{26 \{}
+\DoxyCodeLine{27 \textcolor{keyword}{public}:}
+\DoxyCodeLine{28     \mbox{\hyperlink{class_tile_map}{TileMap}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} texW, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} texH, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} selW, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} selH);}
+\DoxyCodeLine{29     \mbox{\hyperlink{struct_u_v_data}{UVData}} uvTile(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} tileX, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} tileY);}
+\DoxyCodeLine{30 \textcolor{keyword}{private}:}
+\DoxyCodeLine{31     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_TilesTotalX;}
+\DoxyCodeLine{32     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_TilesTotalY;}
+\DoxyCodeLine{33     \textcolor{keyword}{const} \textcolor{keywordtype}{float} m\_SelectWidth;}
+\DoxyCodeLine{34     \textcolor{keyword}{const} \textcolor{keywordtype}{float} m\_SelectHeight;}
+\DoxyCodeLine{35     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{float} s\_TextureSpillOffset; \textcolor{comment}{//Prevents borders on edge of quads especially in plane}}
+\DoxyCodeLine{36     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{float} s\_PreviousTileOffset; \textcolor{comment}{//Prevents slightly sampling tile before in map}}
+\DoxyCodeLine{37 \};}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

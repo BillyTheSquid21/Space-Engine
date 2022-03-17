@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <future>
 
 class ObjectManager
 {
@@ -85,6 +86,10 @@ private:
 	//Then lock vector and remove
 	std::vector<std::shared_ptr<GameObject>> m_Objects;
 	std::unordered_map<std::string, unsigned int> m_GroupIDMap;
+
+	//Check if objects can be removed - carried out async
+	void cleanObjects();
+	double m_CheckCleanupTimer = 0.0;
 };
 
 #endif

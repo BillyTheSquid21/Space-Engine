@@ -1,0 +1,46 @@
+\hypertarget{class_object_manager}{}\doxysection{Object\+Manager Class Reference}
+\label{class_object_manager}\index{ObjectManager@{ObjectManager}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_object_manager_a8e36fe7690d82c56cb171bccd56c242b}\label{class_object_manager_a8e36fe7690d82c56cb171bccd56c242b}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Update\+Group} (T ptr)
+\item 
+\mbox{\Hypertarget{class_object_manager_a93559146321da08d777400b520702bae}\label{class_object_manager_a93559146321da08d777400b520702bae}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Render\+Group} (T ptr)
+\item 
+\mbox{\Hypertarget{class_object_manager_ae4c8f83f5f0556df8307cbe98dd6561e}\label{class_object_manager_ae4c8f83f5f0556df8307cbe98dd6561e}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Update\+Group} (T ptr, std\+::string group\+Name)
+\item 
+\mbox{\Hypertarget{class_object_manager_aea55d1a9c9e34777f8906913994cdc1f}\label{class_object_manager_aea55d1a9c9e34777f8906913994cdc1f}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Render\+Group} (T ptr, std\+::string group\+Name)
+\item 
+\mbox{\Hypertarget{class_object_manager_a3873dcd37be1a72270f87cfd483da1c0}\label{class_object_manager_a3873dcd37be1a72270f87cfd483da1c0}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Update\+Heap} (T ptr, std\+::vector$<$ \mbox{\hyperlink{class_update_component}{Update\+Component}} $\ast$ $>$ $\ast$comp\+Pointers)
+\item 
+\mbox{\Hypertarget{class_object_manager_a64fb9b92e1efa64113b52b0b5e34e2d4}\label{class_object_manager_a64fb9b92e1efa64113b52b0b5e34e2d4}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Render\+Heap} (T ptr, std\+::vector$<$ \mbox{\hyperlink{class_render_component}{Render\+Component}} $\ast$ $>$ $\ast$comp\+Pointers)
+\item 
+\mbox{\Hypertarget{class_object_manager_aec7f3a519d437da9f260d78d030c6be4}\label{class_object_manager_aec7f3a519d437da9f260d78d030c6be4}} 
+{\footnotesize template$<$typename T $>$ }\\unsigned int {\bfseries push\+Game\+Object} (T ptr)
+\item 
+\mbox{\Hypertarget{class_object_manager_a5071e7d4714442ffc3f8b6a7c56d6f7f}\label{class_object_manager_a5071e7d4714442ffc3f8b6a7c56d6f7f}} 
+void {\bfseries update} (double delta\+Time)
+\item 
+\mbox{\Hypertarget{class_object_manager_a4d679ebc2d584aabf26dfa49221e3fb7}\label{class_object_manager_a4d679ebc2d584aabf26dfa49221e3fb7}} 
+void {\bfseries render} ()
+\item 
+\mbox{\Hypertarget{class_object_manager_ac4a368f60f24f2e21de5f699d0472453}\label{class_object_manager_ac4a368f60f24f2e21de5f699d0472453}} 
+{\footnotesize template$<$typename ExpectedT $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_update_component_group}{Update\+Component\+Group}}$<$ ExpectedT $>$ $>$ {\bfseries update\+Group} (unsigned int id) const
+\item 
+\mbox{\Hypertarget{class_object_manager_af6deeea9c2056b49f98f437c413706c5}\label{class_object_manager_af6deeea9c2056b49f98f437c413706c5}} 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_render_group_base}{Render\+Group\+Base}} $>$ {\bfseries render\+Group} (unsigned int id) const
+\item 
+\mbox{\Hypertarget{class_object_manager_ae2c04d97d356831306c902009e5ee158}\label{class_object_manager_ae2c04d97d356831306c902009e5ee158}} 
+unsigned int {\bfseries query\+Group\+ID} (std\+::string name)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/Obj\+Management.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,182 @@
+\hypertarget{_overworld_sprite_8h_source}{}\doxysection{Overworld\+Sprite.\+h}
+\label{_overworld_sprite_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/OverworldSprite.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/OverworldSprite.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef OVERWORLD\_SPRITE\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define OVERWORLD\_SPRITE\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}core/GameObject.hpp"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}game/level/World.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}game/objects/TileMap.h"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{comment}{//general components -\/ can be fixed in init function or added externally per object}}
+\DoxyCodeLine{10 \textcolor{keyword}{class }\mbox{\hyperlink{class_sprite_render}{SpriteRender}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_render_component}{RenderComponent}}}
+\DoxyCodeLine{11 \{}
+\DoxyCodeLine{12 \textcolor{keyword}{public}:}
+\DoxyCodeLine{13     \mbox{\hyperlink{class_sprite_render}{SpriteRender}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{14     \mbox{\hyperlink{class_sprite_render}{SpriteRender}}(TextureQuad* sprite, \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* ren) \{ m\_Sprite = sprite; m\_Renderer = ren; \}}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{16 \textcolor{keyword}{private}:}
+\DoxyCodeLine{17     TextureQuad* m\_Sprite = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{18     \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* m\_Renderer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{19 \};}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{keyword}{class }\mbox{\hyperlink{class_tile_position}{TilePosition}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_update_component}{UpdateComponent}}}
+\DoxyCodeLine{22 \{}
+\DoxyCodeLine{23 \textcolor{keyword}{public}:}
+\DoxyCodeLine{24     \mbox{\hyperlink{class_tile_position}{TilePosition}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{25     \mbox{\hyperlink{class_tile_position}{TilePosition}}(World::LevelID* levelPtr, \textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* z, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* xTile, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* zTile) \{ m\_CurrentLevel = levelPtr; m\_XPos = x; m\_ZPos = z; m\_TileX = xTile; m\_TileZ = zTile; \};}
+\DoxyCodeLine{26     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{29     World::LevelID* m\_CurrentLevel = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{30     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* m\_TileX = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* m\_TileZ = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{31     \textcolor{keywordtype}{float}* m\_XPos = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{float}* m\_ZPos = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{32 \};}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{comment}{//Maps changes to map (add origin later)}}
+\DoxyCodeLine{35 \textcolor{keyword}{class }\mbox{\hyperlink{class_sprite_map}{SpriteMap}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_update_component}{UpdateComponent}}}
+\DoxyCodeLine{36 \{}
+\DoxyCodeLine{37 \textcolor{keyword}{public}:}
+\DoxyCodeLine{38     \mbox{\hyperlink{class_sprite_map}{SpriteMap}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{39     \mbox{\hyperlink{class_sprite_map}{SpriteMap}}(TextureQuad* sprite, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* animX, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* animY, \mbox{\hyperlink{class_tile_map}{TileMap}}* map, \mbox{\hyperlink{struct_world_1_1_tile_texture}{World::TileTexture}} origin) \{ m\_Sprite = sprite; m\_OffsetX = animX; m\_OffsetY = animY; m\_Map = map; m\_TextureOrigin = origin; \};}
+\DoxyCodeLine{40     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{41 \textcolor{keyword}{private}:}
+\DoxyCodeLine{42     \textcolor{comment}{//Offset from sprite origin}}
+\DoxyCodeLine{43     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LastOffX = 0; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LastOffY = 0;}
+\DoxyCodeLine{44     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* m\_OffsetX = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* m\_OffsetY = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{45     \mbox{\hyperlink{class_tile_map}{TileMap}}* m\_Map = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{46     \mbox{\hyperlink{struct_world_1_1_tile_texture}{World::TileTexture}} m\_TextureOrigin = \{ 0,0 \};}
+\DoxyCodeLine{47     TextureQuad* m\_Sprite;}
+\DoxyCodeLine{48 \};}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50 \textcolor{keyword}{class }\mbox{\hyperlink{class_update_animation_facing}{UpdateAnimationFacing}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_update_component}{UpdateComponent}}}
+\DoxyCodeLine{51 \{}
+\DoxyCodeLine{52 \textcolor{keyword}{public}:}
+\DoxyCodeLine{53     \mbox{\hyperlink{class_update_animation_facing}{UpdateAnimationFacing}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{54     \mbox{\hyperlink{class_update_animation_facing}{UpdateAnimationFacing}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* offset, World::Direction* direction) \{ m\_OffsetY = offset; m\_Direction = direction; update(0.0); \}}
+\DoxyCodeLine{55     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{58     World::Direction* m\_Direction = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{59     World::Direction m\_LastDirection = World::Direction::DIRECTION\_NULL;}
+\DoxyCodeLine{60     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* m\_OffsetY = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{61 \};}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 \textcolor{keyword}{class }\mbox{\hyperlink{class_update_animation_walking}{UpdateAnimationWalking}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_update_animation_facing}{UpdateAnimationFacing}}}
+\DoxyCodeLine{64 \{}
+\DoxyCodeLine{65 \textcolor{keyword}{public}:}
+\DoxyCodeLine{66     \mbox{\hyperlink{class_update_animation_walking}{UpdateAnimationWalking}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{67     \mbox{\hyperlink{class_update_animation_walking}{UpdateAnimationWalking}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* offsetX, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* offsetY, World::Direction* direction, \textcolor{keywordtype}{bool}* walking) \{ m\_OffsetY = offsetY; m\_OffsetX = offsetX; m\_Direction = direction; m\_Walking = walking; \}}
+\DoxyCodeLine{68     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{71     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* m\_OffsetX = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{72     \textcolor{keywordtype}{float} m\_Timer = 0.0f;}
+\DoxyCodeLine{73     \textcolor{keywordtype}{bool}* m\_Walking = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{74     \textcolor{keywordtype}{bool} m\_WasWalking = \textcolor{keyword}{false};}
+\DoxyCodeLine{75 \};   }
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77 \textcolor{keyword}{class }\mbox{\hyperlink{class_update_animation_running}{UpdateAnimationRunning}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_update_animation_walking}{UpdateAnimationWalking}}}
+\DoxyCodeLine{78 \{}
+\DoxyCodeLine{79 \textcolor{keyword}{public}:}
+\DoxyCodeLine{80     \mbox{\hyperlink{class_update_animation_running}{UpdateAnimationRunning}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{81     \mbox{\hyperlink{class_update_animation_running}{UpdateAnimationRunning}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* offsetX, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* offsetY, World::Direction* direction, \textcolor{keywordtype}{bool}* walking, \textcolor{keywordtype}{bool}* running) \{ m\_OffsetY = offsetY; m\_OffsetX = offsetX; m\_Direction = direction; m\_Walking = walking; m\_Running = running; \}}
+\DoxyCodeLine{82     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{83 \textcolor{keyword}{private}:}
+\DoxyCodeLine{84     \textcolor{keywordtype}{bool}* m\_Running = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{85     \textcolor{keywordtype}{bool} m\_WasRunning = \textcolor{keyword}{false};}
+\DoxyCodeLine{86     \textcolor{keywordtype}{bool} m\_ResetToZero = \textcolor{keyword}{false};}
+\DoxyCodeLine{87 \};}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89 \textcolor{comment}{//Overworld sprite data -\/ each adds slightly more data for functionality}}
+\DoxyCodeLine{90 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_ov_spr___sprite_data}{OvSpr\_SpriteData}}}
+\DoxyCodeLine{91 \{}
+\DoxyCodeLine{92     \mbox{\hyperlink{struct_world_1_1_tile_loc}{World::TileLoc}} tile;}
+\DoxyCodeLine{93     World::WorldLevel height;}
+\DoxyCodeLine{94     World::LevelID levelID;}
+\DoxyCodeLine{95     \mbox{\hyperlink{struct_world_1_1_tile_texture}{World::TileTexture}} texture;}
+\DoxyCodeLine{96 \};}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \textcolor{keyword}{class }\mbox{\hyperlink{class_ov_spr___sprite}{OvSpr\_Sprite}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_game_object}{GameObject}}}
+\DoxyCodeLine{99 \{}
+\DoxyCodeLine{100 \textcolor{keyword}{public}:}
+\DoxyCodeLine{101     \mbox{\hyperlink{class_ov_spr___sprite}{OvSpr\_Sprite}}(\mbox{\hyperlink{struct_ov_spr___sprite_data}{OvSpr\_SpriteData}} data);}
+\DoxyCodeLine{102     \textcolor{comment}{//If sprite is static, simply set here, otherwise an update method is needed}}
+\DoxyCodeLine{103     \textcolor{keywordtype}{void} setSprite(\mbox{\hyperlink{struct_u_v_data}{UVData}} data);}
+\DoxyCodeLine{104     TextureQuad m\_Sprite;}
+\DoxyCodeLine{105     \textcolor{keywordtype}{float} m\_XPos = 0.0f;}
+\DoxyCodeLine{106     \textcolor{keywordtype}{float} m\_YPos = 0.0f;}
+\DoxyCodeLine{107     \textcolor{keywordtype}{float} m\_ZPos = 0.0f;}
+\DoxyCodeLine{108     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_TileX = 0; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_TileZ = 0;}
+\DoxyCodeLine{109     World::LevelID m\_CurrentLevel = World::LevelID::LEVEL\_NULL;}
+\DoxyCodeLine{110     \textcolor{keywordtype}{bool} m\_Busy = \textcolor{keyword}{false}; \textcolor{comment}{//allows to turn off behaviour when script running}}
+\DoxyCodeLine{111 \};}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113 \textcolor{keyword}{class }\mbox{\hyperlink{class_ov_spr___directional_sprite}{OvSpr\_DirectionalSprite}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_ov_spr___sprite}{OvSpr\_Sprite}}}
+\DoxyCodeLine{114 \{}
+\DoxyCodeLine{115 \textcolor{keyword}{public}:}
+\DoxyCodeLine{116     \textcolor{keyword}{using} OvSpr\_Sprite::OvSpr\_Sprite;}
+\DoxyCodeLine{117     World::Direction m\_Direction = World::Direction::SOUTH;}
+\DoxyCodeLine{118     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_AnimationOffsetY = 0;}
+\DoxyCodeLine{119 \};}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121 \textcolor{keyword}{class }\mbox{\hyperlink{class_ov_spr___walking_sprite}{OvSpr\_WalkingSprite}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_ov_spr___directional_sprite}{OvSpr\_DirectionalSprite}}}
+\DoxyCodeLine{122 \{}
+\DoxyCodeLine{123 \textcolor{keyword}{public}:}
+\DoxyCodeLine{124     \textcolor{keyword}{using} OvSpr\_DirectionalSprite::OvSpr\_DirectionalSprite;}
+\DoxyCodeLine{125     \textcolor{keywordtype}{bool} m\_Walking = \textcolor{keyword}{false};}
+\DoxyCodeLine{126     \textcolor{keywordtype}{double} m\_Timer = 0.0;}
+\DoxyCodeLine{127     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_AnimationOffsetX = 0;}
+\DoxyCodeLine{128 \};}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130 \textcolor{keyword}{class }\mbox{\hyperlink{class_ov_spr___running_sprite}{OvSpr\_RunningSprite}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_ov_spr___walking_sprite}{OvSpr\_WalkingSprite}}}
+\DoxyCodeLine{131 \{}
+\DoxyCodeLine{132 \textcolor{keyword}{public}:}
+\DoxyCodeLine{133     \textcolor{keyword}{using} OvSpr\_WalkingSprite::OvSpr\_WalkingSprite;}
+\DoxyCodeLine{134     \textcolor{keywordtype}{bool} m\_Running = \textcolor{keyword}{false};}
+\DoxyCodeLine{135 \};}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137 \textcolor{keyword}{namespace }Ov\_Translation}
+\DoxyCodeLine{138 \{}
+\DoxyCodeLine{139     \textcolor{keywordtype}{void} Walk(World::Direction* direction, \textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* z, TextureQuad* sprite, \textcolor{keywordtype}{double} deltaTime, \textcolor{keywordtype}{double}* walkTimer);}
+\DoxyCodeLine{140     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{141     \textcolor{keywordtype}{void} WalkSprite(T sprite, \textcolor{keywordtype}{double} deltaTime)}
+\DoxyCodeLine{142     \{}
+\DoxyCodeLine{143         std::shared\_ptr<OvSpr\_WalkingSprite> spr = std::static\_pointer\_cast<OvSpr\_WalkingSprite>(sprite);}
+\DoxyCodeLine{144         Walk(\&spr-\/>m\_Direction, \&spr-\/>m\_XPos, \&spr-\/>m\_ZPos, \&spr-\/>m\_Sprite, deltaTime, \&spr-\/>m\_Timer);}
+\DoxyCodeLine{145     \}}
+\DoxyCodeLine{146     \textcolor{keywordtype}{void} Run(World::Direction* direction, \textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* z, TextureQuad* sprite, \textcolor{keywordtype}{double} deltaTime, \textcolor{keywordtype}{double}* walkTimer);}
+\DoxyCodeLine{147     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{148     \textcolor{keywordtype}{void} RunSprite(T sprite, \textcolor{keywordtype}{double} deltaTime)}
+\DoxyCodeLine{149     \{}
+\DoxyCodeLine{150         std::shared\_ptr<OvSpr\_RunningSprite> spr = std::static\_pointer\_cast<OvSpr\_RunningSprite>(sprite);}
+\DoxyCodeLine{151         Run(\&spr-\/>m\_Direction, \&spr-\/>m\_XPos, \&spr-\/>m\_ZPos, \&spr-\/>m\_Sprite, deltaTime, \&spr-\/>m\_Timer);}
+\DoxyCodeLine{152     \}}
+\DoxyCodeLine{153     \textcolor{keywordtype}{void} CentreOnTile(World::LevelID currentLevel, \textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* z, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} tileX, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} tileZ, TextureQuad* sprite);}
+\DoxyCodeLine{154     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{155     \textcolor{keywordtype}{void} CentreOnTileSprite(T sprite)}
+\DoxyCodeLine{156     \{}
+\DoxyCodeLine{157         std::shared\_ptr<OvSpr\_Sprite> spr = std::static\_pointer\_cast<OvSpr\_WalkingSprite>(sprite);}
+\DoxyCodeLine{158         CentreOnTile(spr-\/>m\_CurrentLevel, \&spr-\/>m\_XPos, \&spr-\/>m\_ZPos, spr-\/>m\_TileX, spr-\/>m\_TileZ, \&spr-\/>m\_Sprite);}
+\DoxyCodeLine{159     \}}
+\DoxyCodeLine{160 \}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162 \textcolor{comment}{//Creation methods }}
+\DoxyCodeLine{163 \textcolor{keyword}{namespace }Ov\_ObjCreation}
+\DoxyCodeLine{164 \{}
+\DoxyCodeLine{165     \textcolor{comment}{//Allows creating sprite types, and modifies references to common component groups}}
+\DoxyCodeLine{166     std::shared\_ptr<OvSpr\_Sprite> BuildSprite(\mbox{\hyperlink{struct_ov_spr___sprite_data}{OvSpr\_SpriteData}} data, \mbox{\hyperlink{class_tile_map}{TileMap}}\& map, \mbox{\hyperlink{class_render_component_group}{RenderComponentGroup<SpriteRender>}}* renGrp, }
+\DoxyCodeLine{167         \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* sprtRen);}
+\DoxyCodeLine{168     std::shared\_ptr<OvSpr\_DirectionalSprite> BuildDirectionalSprite(\mbox{\hyperlink{struct_ov_spr___sprite_data}{OvSpr\_SpriteData}} data, \mbox{\hyperlink{class_tile_map}{TileMap}}\& map, \mbox{\hyperlink{class_render_component_group}{RenderComponentGroup<SpriteRender>}}* renGrp, }
+\DoxyCodeLine{169         \mbox{\hyperlink{class_update_component_group}{UpdateComponentGroup<SpriteMap>}}* sprMap, \mbox{\hyperlink{class_update_component_group}{UpdateComponentGroup<UpdateAnimationFacing>}}* faceUp, \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* sprtRen);}
+\DoxyCodeLine{170     std::shared\_ptr<OvSpr\_WalkingSprite> BuildWalkingSprite(\mbox{\hyperlink{struct_ov_spr___sprite_data}{OvSpr\_SpriteData}} data, \mbox{\hyperlink{class_tile_map}{TileMap}}\& map, \mbox{\hyperlink{class_render_component_group}{RenderComponentGroup<SpriteRender>}}* renGrp, }
+\DoxyCodeLine{171         \mbox{\hyperlink{class_update_component_group}{UpdateComponentGroup<SpriteMap>}}* sprMap, \mbox{\hyperlink{class_update_component_group}{UpdateComponentGroup<UpdateAnimationWalking>}}* walkUp, \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* sprtRen);}
+\DoxyCodeLine{172     std::shared\_ptr<OvSpr\_RunningSprite> BuildRunningSprite(\mbox{\hyperlink{struct_ov_spr___sprite_data}{OvSpr\_SpriteData}} data, \mbox{\hyperlink{class_tile_map}{TileMap}}\& map, \mbox{\hyperlink{class_render_component_group}{RenderComponentGroup<SpriteRender>}}* renGrp, }
+\DoxyCodeLine{173         \mbox{\hyperlink{class_update_component_group}{UpdateComponentGroup<SpriteMap>}}* sprMap, \mbox{\hyperlink{class_update_component_group}{UpdateComponentGroup<UpdateAnimationRunning>}}* runUp, \mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* sprtRen);}
+\DoxyCodeLine{174 \}}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

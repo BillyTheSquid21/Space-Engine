@@ -21,7 +21,7 @@ public:
 	
 	//Render
 	void render();
-	void setRenderer(Renderer<TextureVertex>* ren) { m_Renderer = ren; }
+	void setRenderer(Render::Renderer<TextureVertex>* ren) { m_Renderer = ren; }
 
 	//Access specific tile
 	TextureQuad* accessQuad(unsigned int x, unsigned int y);
@@ -34,7 +34,7 @@ private:
 	//Helper
 	void genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle);
 
-	Renderer<TextureVertex>* m_Renderer = nullptr;
+	Render::Renderer<TextureVertex>* m_Renderer = nullptr;
 	TextureQuad* m_Quads;
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
 

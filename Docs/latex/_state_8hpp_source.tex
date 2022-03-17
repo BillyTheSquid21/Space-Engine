@@ -1,0 +1,39 @@
+\hypertarget{_state_8hpp_source}{}\doxysection{State.\+hpp}
+\label{_state_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/State.hpp@{D:/Repositories/Space Engine/SpaceGame/include/core/State.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef STATE\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define STATE\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <GLFW/glfw3.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}ObjManagement.h"{}}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{comment}{//State class -\/ primarily virtual functions}}
+\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_state}{State}}}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{11 \textcolor{keyword}{public}:}
+\DoxyCodeLine{12     \textcolor{comment}{//Universal functions}}
+\DoxyCodeLine{13     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime, \textcolor{keywordtype}{double} time) \{\};}
+\DoxyCodeLine{14     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} render() \{\};}
+\DoxyCodeLine{15     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} handleInput(\textcolor{keywordtype}{int} key, \textcolor{keywordtype}{int} scancode, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
+\DoxyCodeLine{16     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} handleScrolling(\textcolor{keywordtype}{double} xOffset, \textcolor{keywordtype}{double} yOffset) \{\};}
+\DoxyCodeLine{17     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} handleMouse(\textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19     \textcolor{comment}{//loads and unloads data that does not persist when not active}}
+\DoxyCodeLine{20     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} loadRequiredData() \{\};}
+\DoxyCodeLine{21     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} purgeRequiredData() \{\};}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23     \textcolor{comment}{//Getters and setters}}
+\DoxyCodeLine{24     \textcolor{keywordtype}{bool} active()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Active; \}}
+\DoxyCodeLine{25     \textcolor{keywordtype}{void} setActive(\textcolor{keywordtype}{bool} set) \{ m\_Active = set; \}}
+\DoxyCodeLine{26     \textcolor{keywordtype}{bool} hasDataLoaded()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_DataLoaded; \}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{29     \textcolor{keywordtype}{bool} m\_Active = \textcolor{keyword}{false};}
+\DoxyCodeLine{30     \textcolor{keywordtype}{bool} m\_DataLoaded = \textcolor{keyword}{false};}
+\DoxyCodeLine{31 \};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

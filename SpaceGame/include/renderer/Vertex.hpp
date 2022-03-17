@@ -2,7 +2,7 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-#include "SGUtil.h"
+#include "utility/SGUtil.h"
 
 enum class Axis
 {

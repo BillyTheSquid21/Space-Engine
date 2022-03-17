@@ -70,12 +70,18 @@
     <Filter Include="Source Files\Game\Utility">
       <UniqueIdentifier>{84f2e582-2b1f-4d90-b79f-e33409b12572}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Data">
+      <UniqueIdentifier>{bfd7246c-6195-4be7-aeb1-63ba23acbcce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{0d9caaff-0346-4177-a8b0-f8537d9b6f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{9df65170-35b0-46a0-bec5-ca3fa9cdce4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SGUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\vendor\stb\stb_image.cpp">
@@ -156,11 +162,14 @@
     <ClCompile Include="src\game\utility\GameText.cpp">
       <Filter>Source Files\Game\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\Model.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\SGUtil.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\SGUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\Camera.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
@@ -328,6 +337,18 @@
     </ClInclude>
     <ClInclude Include="include\game\utility\GameText.h">
       <Filter>Header Files\Game\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\data\PlayerData.hpp">
+      <Filter>Header Files\Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer\Model.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\SimpleQueue.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\SGUtil.h">
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

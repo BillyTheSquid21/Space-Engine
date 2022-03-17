@@ -132,24 +132,21 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
 std::unordered_map<World::LevelID, std::vector<World::MovementPermissions>*> World::Level::s_MovementPermissionsCache;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
-void World::Level::buildLevel(unsigned int tilesX, unsigned int tilesY, Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
+void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
 {
+    LevelData data = ParseLevel();
     m_TileMapPointer = tileMapPointer;
 
     //Allocate permission array
-    m_LevelTilesX = tilesX; m_LevelTilesY = tilesY;
+    m_LevelTilesX = data.width; m_LevelTilesY = data.height;
     m_LevelTotalTiles = m_LevelTilesX * m_LevelTilesY;
     m_Permissions.resize(m_LevelTotalTiles);
 
     //Allocate height array
     m_Heights.resize(m_LevelTotalTiles);
 
-    //For now fill permissions with clear
-    //For now load level 0
-    LevelData data = ParseLevel();
-
     //Create plane
-    m_Plane.generatePlaneXZ(data.originX, data.originY, tilesX * World::TILE_SIZE, tilesY * World::TILE_SIZE, World::TILE_SIZE);
+    m_Plane.generatePlaneXZ(data.originX, data.originY, data.width * World::TILE_SIZE, data.height * World::TILE_SIZE, World::TILE_SIZE);
     m_Plane.setRenderer(planeRenderer);
 
     //Texture all with tex 0,0
@@ -303,7 +300,8 @@ World::LevelData World::ParseLevel() {
         while (std::getline(stream, currentSegment, '|'))
         {
             int pos = currentSegment.find_first_of('-');
-            int tileY = std::stoi(currentSegment.substr(pos + 1));
+            int posY = pos + 1;
+            int tileY = std::stoi(currentSegment.substr(posY));
             int tileX = std::stoi(currentSegment.substr(0, pos));
 
             planeTextures.push_back({(unsigned int)tileX, (unsigned int)tileY});

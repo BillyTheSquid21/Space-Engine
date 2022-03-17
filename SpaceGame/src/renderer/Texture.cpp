@@ -9,7 +9,6 @@ void Texture::loadTexture(const std::string& path)
         return;
     }
     m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
-    EngineLog("Texture loaded from: ", path);
 }
 
 void Texture::generateTexture(unsigned int slot) {

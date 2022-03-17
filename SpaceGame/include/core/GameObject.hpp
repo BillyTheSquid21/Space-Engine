@@ -3,7 +3,7 @@
 #define GAME_OBJECT_H
 
 #include "renderer/Renderer.hpp"
-#include "renderer/RenderQueue.hpp"
+#include "utility/SimpleQueue.hpp"
 #include "core/Message.hpp"
 #include <random>
 
@@ -40,7 +40,8 @@ public:
 	//By default only checks for deactivate and activate message - can be overidden - ACTIVATE AND DEACTIVATE MUST BE REIMPLEMENTED
 	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { Message message = m_MessageQueue.nextInQueue(); 
 	if (message == Message::ACTIVATE) { setActive(true); }
-	else if (message == Message::DEACTIVATE) { setActive(false); }};}
+	else if (message == Message::DEACTIVATE) { setActive(false); }
+	else if (message == Message::KILL) { kill(); }};}
 
 	//Attach to parent pointers - called when added to object manager and in its place
 	//During runtime will have to pass pointer all the way down
@@ -268,9 +269,11 @@ public:
 
 	//Check if all components have been decoupled (which can only be done
 	//via the kill command, if any pointers aren't null, return false
-	bool safeToDelete() {	
-	for (int i = 0; i < m_UpdateComps.size(); i++) { if (m_UpdateComps[i] != nullptr) { return false; } }
-	for (int i = 0; i < m_RenderComps.size(); i++) { if (m_RenderComps[i] != nullptr) { return false; } return true; }}
+	bool safeToDelete() {
+		for (int i = 0; i < m_UpdateComps.size(); i++) { if (m_UpdateComps[i] != nullptr) { return false; } }
+		for (int i = 0; i < m_RenderComps.size(); i++) { if (m_RenderComps[i] != nullptr) { return false; } return true; } 
+		return false;
+	}
 
 	//Locations in memory of all attached components - must update in component if changes
 	std::vector<UpdateComponent*> m_UpdateComps;

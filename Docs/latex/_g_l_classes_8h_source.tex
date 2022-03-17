@@ -1,0 +1,160 @@
+\hypertarget{_g_l_classes_8h_source}{}\doxysection{GLClasses.\+h}
+\label{_g_l_classes_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/GLClasses.h@{D:/Repositories/Space Engine/SpaceGame/include/renderer/GLClasses.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef GL\_CLASSES\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define GL\_CLASSES\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <GL/glew.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <fstream>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <sstream>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <unordered\_map>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <glm/glm.hpp>}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include <glm/gtc/type\_ptr.hpp>}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{keyword}{class }\mbox{\hyperlink{class_vertex_buffer}{VertexBuffer}}}
+\DoxyCodeLine{16 \{}
+\DoxyCodeLine{17 \textcolor{keyword}{public}:}
+\DoxyCodeLine{18     \mbox{\hyperlink{class_vertex_buffer}{VertexBuffer}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{19     \mbox{\hyperlink{class_vertex_buffer}{\string~VertexBuffer}}();}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21     \textcolor{keywordtype}{void} create(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count);}
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} bufferData(\textcolor{keyword}{const} \textcolor{keywordtype}{void}* data, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count);}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} bind() \textcolor{keyword}{const};}
+\DoxyCodeLine{24     \textcolor{keywordtype}{void} unbind() \textcolor{keyword}{const};}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{keyword}{private}:}
+\DoxyCodeLine{27     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_ID = 0;}
+\DoxyCodeLine{28 \};}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \textcolor{keyword}{class }\mbox{\hyperlink{class_index_buffer}{IndexBuffer}}}
+\DoxyCodeLine{31 \{}
+\DoxyCodeLine{32 \textcolor{keyword}{public}:}
+\DoxyCodeLine{33     \mbox{\hyperlink{class_index_buffer}{IndexBuffer}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{34     \mbox{\hyperlink{class_index_buffer}{\string~IndexBuffer}}();}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     \textcolor{keywordtype}{void} create(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count);}
+\DoxyCodeLine{37     \textcolor{keywordtype}{void} bufferData(\textcolor{keyword}{const} \textcolor{keywordtype}{void}* data, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count);}
+\DoxyCodeLine{38     \textcolor{keywordtype}{void} bind() \textcolor{keyword}{const};}
+\DoxyCodeLine{39     \textcolor{keywordtype}{void} unbind() \textcolor{keyword}{const};}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \textcolor{comment}{//return count}}
+\DoxyCodeLine{42     \textcolor{keyword}{inline} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} GetCount()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_IndicesCount; \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{keyword}{private}:}
+\DoxyCodeLine{45     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_ID = 0;}
+\DoxyCodeLine{46     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_IndicesCount = 0;}
+\DoxyCodeLine{47 \};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49 \textcolor{comment}{//Buffer layout abstraction layer}}
+\DoxyCodeLine{50 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_vertex_buffer_element}{VertexBufferElement}}}
+\DoxyCodeLine{51 \{}
+\DoxyCodeLine{52     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count;}
+\DoxyCodeLine{53     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} type;}
+\DoxyCodeLine{54     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} normalized;}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56     \textcolor{keyword}{static} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} getTypeSize(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} type) \{}
+\DoxyCodeLine{57         \textcolor{keywordflow}{switch} (type) \{}
+\DoxyCodeLine{58         \textcolor{keywordflow}{case} GL\_FLOAT: \textcolor{keywordflow}{return} 4;}
+\DoxyCodeLine{59         \textcolor{keywordflow}{case} GL\_UNSIGNED\_INT: \textcolor{keywordflow}{return} 4; \textcolor{comment}{//can extend for more data types}}
+\DoxyCodeLine{60         \textcolor{keywordflow}{case} GL\_UNSIGNED\_BYTE: \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{61         \textcolor{keywordflow}{default}: \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{62         \}}
+\DoxyCodeLine{63     \}}
+\DoxyCodeLine{64 \};}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{keyword}{class }\mbox{\hyperlink{class_vertex_buffer_layout}{VertexBufferLayout}}}
+\DoxyCodeLine{67 \{}
+\DoxyCodeLine{68 \textcolor{keyword}{public}:}
+\DoxyCodeLine{69     \mbox{\hyperlink{class_vertex_buffer_layout}{VertexBufferLayout}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{70     \mbox{\hyperlink{class_vertex_buffer_layout}{\string~VertexBufferLayout}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{73     \textcolor{keywordtype}{void} push(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count) \{ \textcolor{comment}{//default}}
+\DoxyCodeLine{74         \textcolor{keyword}{static\_assert}(\textcolor{keyword}{false}, \textcolor{stringliteral}{"{}Unknown type pushed to VBL"{}});}
+\DoxyCodeLine{75     \}}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{keyword}{template}<>}
+\DoxyCodeLine{78     \textcolor{keywordtype}{void} push<float>(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count) \{ \textcolor{comment}{//push float}}
+\DoxyCodeLine{79         m\_Elements.push\_back(\{ count, GL\_FLOAT, GL\_FALSE \});}
+\DoxyCodeLine{80         m\_Stride += count * VertexBufferElement::getTypeSize(GL\_FLOAT);}
+\DoxyCodeLine{81     \}}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83     \textcolor{keyword}{template}<>}
+\DoxyCodeLine{84     \textcolor{keywordtype}{void} push<unsigned int>(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count) \{  \textcolor{comment}{//push uint}}
+\DoxyCodeLine{85         m\_Elements.push\_back(\{ count, GL\_UNSIGNED\_INT, GL\_FALSE \});}
+\DoxyCodeLine{86         m\_Stride += count * VertexBufferElement::getTypeSize(GL\_UNSIGNED\_INT);}
+\DoxyCodeLine{87     \}}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89     \textcolor{keyword}{template}<>}
+\DoxyCodeLine{90     \textcolor{keywordtype}{void} push<unsigned char>(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} count) \{  \textcolor{comment}{//push uint}}
+\DoxyCodeLine{91         m\_Elements.push\_back(\{ count, GL\_UNSIGNED\_BYTE, GL\_TRUE \});}
+\DoxyCodeLine{92         m\_Stride += count * VertexBufferElement::getTypeSize(GL\_UNSIGNED\_BYTE);}
+\DoxyCodeLine{93     \}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95     \textcolor{keyword}{inline} \textcolor{keyword}{const} std::vector<VertexBufferElement> getElements() \textcolor{keyword}{const}\& \{}
+\DoxyCodeLine{96         \textcolor{keywordflow}{return} m\_Elements;}
+\DoxyCodeLine{97     \}}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99     \textcolor{keyword}{inline} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} getStride()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Stride; \}}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101 \textcolor{keyword}{private}:}
+\DoxyCodeLine{102     std::vector<VertexBufferElement> m\_Elements;}
+\DoxyCodeLine{103     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_Stride = 0;}
+\DoxyCodeLine{104 \};}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106 \textcolor{keyword}{class }\mbox{\hyperlink{class_vertex_array}{VertexArray}}}
+\DoxyCodeLine{107 \{}
+\DoxyCodeLine{108 \textcolor{keyword}{public}:}
+\DoxyCodeLine{109     \mbox{\hyperlink{class_vertex_array}{VertexArray}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{110     \mbox{\hyperlink{class_vertex_array}{\string~VertexArray}}();}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112     \textcolor{keywordtype}{void} create();}
+\DoxyCodeLine{113     \textcolor{keywordtype}{void} bind() \textcolor{keyword}{const};}
+\DoxyCodeLine{114     \textcolor{keywordtype}{void} unbind() \textcolor{keyword}{const};}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116     \textcolor{keywordtype}{void} addBuffer(\textcolor{keyword}{const} \mbox{\hyperlink{class_vertex_buffer}{VertexBuffer}}\& vb, \textcolor{keyword}{const} \mbox{\hyperlink{class_vertex_buffer_layout}{VertexBufferLayout}}\& layout);}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118 }
+\DoxyCodeLine{119 \textcolor{keyword}{private}:}
+\DoxyCodeLine{120     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_ID;}
+\DoxyCodeLine{121 \};}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_shader_program_source}{ShaderProgramSource}} \{}
+\DoxyCodeLine{124     std::string VertexSource;}
+\DoxyCodeLine{125     std::string FragmentSource;}
+\DoxyCodeLine{126 \};}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{128 \textcolor{keyword}{class }\mbox{\hyperlink{class_shader}{Shader}}}
+\DoxyCodeLine{129 \{}
+\DoxyCodeLine{130 \textcolor{keyword}{public}:}
+\DoxyCodeLine{131     \mbox{\hyperlink{class_shader}{Shader}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{132     \mbox{\hyperlink{class_shader}{\string~Shader}}();}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134     \textcolor{keywordtype}{void} create(\textcolor{keyword}{const} std::string\& filepath);}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136     \textcolor{keywordtype}{void} bind() \textcolor{keyword}{const};}
+\DoxyCodeLine{137     \textcolor{keywordtype}{void} unbind() \textcolor{keyword}{const};}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139     \textcolor{comment}{//set uniforms -\/ overload for each data type}}
+\DoxyCodeLine{140     \textcolor{keywordtype}{void} setUniform(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{int} uniform);}
+\DoxyCodeLine{141     \textcolor{keywordtype}{void} setUniform(\textcolor{keyword}{const} std::string\& name, \textcolor{keywordtype}{float} uniform);}
+\DoxyCodeLine{142     \textcolor{keywordtype}{void} setUniform(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::vec3* uniform);}
+\DoxyCodeLine{143     \textcolor{keywordtype}{void} setUniform(\textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} glm::mat4* uniform);}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145 \textcolor{keyword}{private}:}
+\DoxyCodeLine{146     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_ID = 0;}
+\DoxyCodeLine{147     std::unordered\_map<std::string, int> m\_UniformLocationCache;}
+\DoxyCodeLine{148     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} compileShader(\textcolor{keyword}{const} std::string\& source, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} type);}
+\DoxyCodeLine{149     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} createShader(\textcolor{keyword}{const} std::string\& vertexShader, \textcolor{keyword}{const} std::string\& fragmentShader);}
+\DoxyCodeLine{150     \mbox{\hyperlink{struct_shader_program_source}{ShaderProgramSource}} parseShader(\textcolor{keyword}{const} std::string\& filePath);}
+\DoxyCodeLine{151     \textcolor{keywordtype}{int} getUniformLocation(\textcolor{keyword}{const} std::string\& name);}
+\DoxyCodeLine{152 \};}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

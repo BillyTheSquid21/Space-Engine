@@ -1,0 +1,76 @@
+\hypertarget{class_render_1_1_instance_renderer}{}\doxysection{Render\+::Instance\+Renderer\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_render_1_1_instance_renderer}\index{Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Renderer.\+hpp$>$}
+
+Inheritance diagram for Render\+::Instance\+Renderer\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_render_1_1_instance_renderer}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_render_1_1_instance_renderer_a1a2accccda9dea13d7b2038652f2920d}{commit}} (T $\ast$vert, unsigned int vert\+Size, const unsigned int $\ast$ind, unsigned short int ind\+Size)
+\item 
+void \mbox{\hyperlink{class_render_1_1_instance_renderer_a5a87d4cf19796b0c0e2cd9435cbcd08f}{commit\+Model\+Mat}} (glm\+::mat4 matrix)
+\item 
+void \mbox{\hyperlink{class_render_1_1_instance_renderer_a727a33134b419cde3929edfdfa837725}{draw\+Primitives}} (\mbox{\hyperlink{class_shader}{Shader}} \&shader)
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class Render\+::\+Instance\+Renderer$<$ T $>$}
+\mbox{\hyperlink{class_render_1_1_renderer}{Renderer}} type for meshes where instancing is more efficient than batching. Useful for\+: Large meshes, dynamic objects 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_render_1_1_instance_renderer_a1a2accccda9dea13d7b2038652f2920d}\label{class_render_1_1_instance_renderer_a1a2accccda9dea13d7b2038652f2920d}} 
+\index{Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}!commit@{commit}}
+\index{commit@{commit}!Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{commit()}{commit()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_instance_renderer}{Render\+::\+Instance\+Renderer}}$<$ T $>$\+::commit (\begin{DoxyParamCaption}\item[{T $\ast$}]{vert,  }\item[{unsigned int}]{vert\+Size,  }\item[{const unsigned int $\ast$}]{ind,  }\item[{unsigned short int}]{ind\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the model to be drawn for this renderer
+
+
+\begin{DoxyParams}{Parameters}
+{\em vert} & Pointer to model vertices \\
+\hline
+{\em vert\+Size} & Amount of floats contained within all the vertices to be drawn \\
+\hline
+{\em ind} & Pointer to indices for drawing \\
+\hline
+{\em ind\+Size} & Amount of indices being submitted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_render_1_1_instance_renderer_a5a87d4cf19796b0c0e2cd9435cbcd08f}\label{class_render_1_1_instance_renderer_a5a87d4cf19796b0c0e2cd9435cbcd08f}} 
+\index{Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}!commitModelMat@{commitModelMat}}
+\index{commitModelMat@{commitModelMat}!Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{commitModelMat()}{commitModelMat()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_instance_renderer}{Render\+::\+Instance\+Renderer}}$<$ T $>$\+::commit\+Model\+Mat (\begin{DoxyParamCaption}\item[{glm\+::mat4}]{matrix }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Commits a model matrix for the model, to be added to the list for drawing multiple copies \mbox{\Hypertarget{class_render_1_1_instance_renderer_a727a33134b419cde3929edfdfa837725}\label{class_render_1_1_instance_renderer_a727a33134b419cde3929edfdfa837725}} 
+\index{Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}!drawPrimitives@{drawPrimitives}}
+\index{drawPrimitives@{drawPrimitives}!Render::InstanceRenderer$<$ T $>$@{Render::InstanceRenderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{drawPrimitives()}{drawPrimitives()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_instance_renderer}{Render\+::\+Instance\+Renderer}}$<$ T $>$\+::draw\+Primitives (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_shader}{Shader}} \&}]{shader }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Called when collected primitives are to be drawn
+
+
+\begin{DoxyParams}{Parameters}
+{\em shader} & \mbox{\hyperlink{class_shader}{Shader}} being bound for this draw call \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Renderer.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,148 @@
+\hypertarget{_n_p_c_ai_8h_source}{}\doxysection{NPCAi.\+h}
+\label{_n_p_c_ai_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/NPCAi.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/NPCAi.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef NPC\_AI\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define NPC\_AI\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}game/objects/OverworldSprite.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}game/objects/Script.hpp"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_n_p_c___rand_walk}{NPC\_RandWalk}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_tile_position}{TilePosition}}}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{11 \textcolor{keyword}{public}:}
+\DoxyCodeLine{12     \mbox{\hyperlink{class_n_p_c___rand_walk}{NPC\_RandWalk}}(World::Direction* direct, \textcolor{keywordtype}{bool}* busy, \textcolor{keywordtype}{bool}* walking, TextureQuad* sprite, \textcolor{keywordtype}{double}* walkTimer) \{ m\_Direction = direct; m\_Busy = busy; m\_Walking = walking; m\_Sprite = sprite; m\_WalkTimer = walkTimer;}
+\DoxyCodeLine{13     \textcolor{keywordflow}{if} (!s\_Random.isSeeded()) \{ s\_Random.seed(0.0f, MAX\_SEED); \} m\_CoolDownTimer = s\_Random.next() / 8.0f;\};}
+\DoxyCodeLine{14     }
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} linkLocation(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* tileX, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* tileZ, \textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* z, World::LevelID* level) \{ m\_TileX = tileX; m\_TileZ = tileZ; m\_XPos = x; m\_ZPos = z; m\_CurrentLevel = level; \};}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{18     \textcolor{keywordtype}{bool}* m\_Busy = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{keyword}{private}:}
+\DoxyCodeLine{21     \textcolor{comment}{//Busy status is set by other components that carry out instructions -\/ while busy the next instuction wont be read}}
+\DoxyCodeLine{22     \textcolor{comment}{//AI class must be updated first per frame}}
+\DoxyCodeLine{23     World::Direction* m\_Direction = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     \textcolor{comment}{//Applies to either walking or running, as npcs will }}
+\DoxyCodeLine{26     \textcolor{keywordtype}{bool}* m\_Walking = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{27     TextureQuad* m\_Sprite = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{28     \textcolor{keywordtype}{float} m\_CoolDownTimer = 0.0f;}
+\DoxyCodeLine{29     \textcolor{keywordtype}{double}* m\_WalkTimer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     \textcolor{comment}{//Moving helpers}}
+\DoxyCodeLine{32     \textcolor{keywordtype}{bool} canWalk();}
+\DoxyCodeLine{33     \textcolor{keywordtype}{void} startWalk();}
+\DoxyCodeLine{34     \textcolor{keywordtype}{void} cycleEnd();}
+\DoxyCodeLine{35     \textcolor{keywordtype}{void} randomWalk();}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37     \textcolor{comment}{//Static randomness for randwalk class}}
+\DoxyCodeLine{38     \textcolor{keyword}{static} \mbox{\hyperlink{class_random_container}{RandomContainer}} s\_Random;}
+\DoxyCodeLine{39     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{float} MAX\_SEED;}
+\DoxyCodeLine{40 \};}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \textcolor{comment}{//Script for NPC's with NPC specific functionality}}
+\DoxyCodeLine{43 \textcolor{keyword}{template}<\textcolor{keyword}{typename} SpriteType>}
+\DoxyCodeLine{44 \textcolor{keyword}{class }\mbox{\hyperlink{class_n_p_c___script}{NPC\_Script}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_overworld_script}{OverworldScript}}}
+\DoxyCodeLine{45 \{}
+\DoxyCodeLine{46 \textcolor{keyword}{public}:}
+\DoxyCodeLine{47     \textcolor{comment}{//Setters}}
+\DoxyCodeLine{48     \textcolor{keyword}{using} OverworldScript::OverworldScript;}
+\DoxyCodeLine{49     \textcolor{keywordtype}{void} linkText(std::string* t1, std::string* t2, std::function<std::string\& (\mbox{\hyperlink{struct_m_s_g___i_n_f_o}{MSG\_INFO}} info)> txt, \textcolor{keywordtype}{bool}* showBox) \{ m\_TextLine1 = t1; m\_TextLine2 = t2; m\_TextFinder = txt; m\_ShowTextBox = showBox; \}}
+\DoxyCodeLine{50     \textcolor{keywordtype}{void} linkNPC(std::shared\_ptr<SpriteType> npc) \{ m\_NPCData = npc; \}}
+\DoxyCodeLine{51     \textcolor{keywordtype}{void} linkUpdateMessage(std::function<\textcolor{keywordtype}{void}(Message message)> msg) \{ m\_MessageUpdate = msg; \}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \mbox{\hyperlink{struct_script_element}{ScriptElement}} process(uint16\_t index, \textcolor{keywordtype}{double} deltaTime)}
+\DoxyCodeLine{54     \{}
+\DoxyCodeLine{55         \mbox{\hyperlink{struct_script_element}{ScriptElement}} el = OverworldScript::process(index, deltaTime);}
+\DoxyCodeLine{56         \textcolor{comment}{//If instruction is core, return}}
+\DoxyCodeLine{57         \textcolor{keywordflow}{if} ((\textcolor{keywordtype}{int})el.instruction <= (\textcolor{keywordtype}{int})ScriptInstruction::CORE\_MAX)}
+\DoxyCodeLine{58         \{}
+\DoxyCodeLine{59             \textcolor{keywordflow}{return} el;}
+\DoxyCodeLine{60         \}}
+\DoxyCodeLine{61         \textcolor{comment}{//Process}}
+\DoxyCodeLine{62         \textcolor{keywordflow}{switch} (el.instruction)}
+\DoxyCodeLine{63         \{}
+\DoxyCodeLine{64         \textcolor{keywordflow}{case} ScriptInstruction::OPEN\_MSG\_BOX:}
+\DoxyCodeLine{65             *m\_ShowTextBox = \textcolor{keyword}{true};}
+\DoxyCodeLine{66             m\_Index++;}
+\DoxyCodeLine{67             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{68         \textcolor{keywordflow}{case} ScriptInstruction::CLOSE\_MSG\_BOX:}
+\DoxyCodeLine{69             *m\_ShowTextBox = \textcolor{keyword}{false};}
+\DoxyCodeLine{70             m\_Index++;}
+\DoxyCodeLine{71             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{72         \textcolor{keywordflow}{case} ScriptInstruction::MSG:}
+\DoxyCodeLine{73             \textcolor{keywordflow}{if} (m\_OnLine\_1)}
+\DoxyCodeLine{74             \{}
+\DoxyCodeLine{75                 *m\_TextLine1 = m\_TextFinder(el.info.msgInfo);}
+\DoxyCodeLine{76                 m\_Index++;}
+\DoxyCodeLine{77                 m\_OnLine\_1 = \textcolor{keyword}{false};}
+\DoxyCodeLine{78                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{79             \}}
+\DoxyCodeLine{80             *m\_TextLine2 = m\_TextFinder(el.info.msgInfo);}
+\DoxyCodeLine{81             m\_Index++;}
+\DoxyCodeLine{82             m\_OnLine\_1 = \textcolor{keyword}{true};}
+\DoxyCodeLine{83             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{84         \textcolor{keywordflow}{case} ScriptInstruction::CLEAR\_TEXT:}
+\DoxyCodeLine{85             *m\_TextLine1 = \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{86             *m\_TextLine2 = \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{87             m\_Index++;}
+\DoxyCodeLine{88             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{89         \textcolor{keywordflow}{case} ScriptInstruction::SET\_BUSY:}
+\DoxyCodeLine{90             m\_NPCData-\/>m\_Busy = el.info.busyInfo.state;}
+\DoxyCodeLine{91             m\_Index++;}
+\DoxyCodeLine{92             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{93         \textcolor{keywordflow}{case} ScriptInstruction::CGE\_DIRECTION:}
+\DoxyCodeLine{94             m\_NPCData-\/>m\_Direction = (World::Direction)el.info.dirInfo.direction;}
+\DoxyCodeLine{95             m\_Index++;}
+\DoxyCodeLine{96             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{97         \textcolor{keywordflow}{case} ScriptInstruction::WALK\_IN\_DIR:}
+\DoxyCodeLine{98             if (!m\_NPCData-\/>m\_Walking)}
+\DoxyCodeLine{99             \{}
+\DoxyCodeLine{100                 m\_NPCData-\/>m\_Walking = \textcolor{keyword}{true};}
+\DoxyCodeLine{101                 World::ModifyTilePerm(m\_NPCData-\/>m\_CurrentLevel, m\_NPCData-\/>m\_Direction, \{ m\_NPCData-\/>m\_TileX, m\_NPCData-\/>m\_TileZ \});}
+\DoxyCodeLine{102             \}}
+\DoxyCodeLine{103             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (m\_NPCData-\/>m\_Timer >= World::WALK\_DURATION)}
+\DoxyCodeLine{104             \{}
+\DoxyCodeLine{105                 m\_NPCData-\/>m\_Walking = \textcolor{keyword}{false};}
+\DoxyCodeLine{106                 m\_NPCData-\/>m\_Timer = 0.0;}
+\DoxyCodeLine{107                 Ov\_Translation::CentreOnTileSprite(m\_NPCData);}
+\DoxyCodeLine{108                 m\_Index++;}
+\DoxyCodeLine{109                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{110             \}}
+\DoxyCodeLine{111             Ov\_Translation::WalkSprite(m\_NPCData, deltaTime);}
+\DoxyCodeLine{112             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{113         \textcolor{keywordflow}{case} ScriptInstruction::RUN\_IN\_DIR:}
+\DoxyCodeLine{114             \textcolor{keywordflow}{if} (!m\_NPCData-\/>m\_Running)}
+\DoxyCodeLine{115             \{}
+\DoxyCodeLine{116                 m\_NPCData-\/>m\_Running = \textcolor{keyword}{true};}
+\DoxyCodeLine{117                 World::ModifyTilePerm(m\_NPCData-\/>m\_CurrentLevel, m\_NPCData-\/>m\_Direction, \{ m\_NPCData-\/>m\_TileX, m\_NPCData-\/>m\_TileZ \});}
+\DoxyCodeLine{118             \}}
+\DoxyCodeLine{119             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (m\_NPCData-\/>m\_Timer >= World::RUN\_DURATION)}
+\DoxyCodeLine{120             \{}
+\DoxyCodeLine{121                 m\_NPCData-\/>m\_Running = \textcolor{keyword}{false};}
+\DoxyCodeLine{122                 m\_NPCData-\/>m\_Timer = 0.0;}
+\DoxyCodeLine{123                 Ov\_Translation::CentreOnTileSprite(m\_NPCData);}
+\DoxyCodeLine{124                 m\_Index++;}
+\DoxyCodeLine{125                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{126             \}}
+\DoxyCodeLine{127             Ov\_Translation::RunSprite(m\_NPCData, deltaTime);}
+\DoxyCodeLine{128             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{129         \}}
+\DoxyCodeLine{130         \textcolor{keywordflow}{return} el;}
+\DoxyCodeLine{131     \}}
+\DoxyCodeLine{132 \textcolor{keyword}{private}:}
+\DoxyCodeLine{133     \textcolor{keywordtype}{bool}* m\_ShowTextBox = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{134     std::string* m\_TextLine1 = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{135     std::string* m\_TextLine2 = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{136     \textcolor{keywordtype}{bool} m\_OnLine\_1 = \textcolor{keyword}{true};}
+\DoxyCodeLine{137     std::function<void(Message message)> m\_MessageUpdate;}
+\DoxyCodeLine{138     std::function<std::string\& (\mbox{\hyperlink{struct_m_s_g___i_n_f_o}{MSG\_INFO}} info)> m\_TextFinder;}
+\DoxyCodeLine{139     std::shared\_ptr<SpriteType> m\_NPCData; \textcolor{comment}{//assumes most data heavy sprite}}
+\DoxyCodeLine{140 \};}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142 \textcolor{preprocessor}{\#endif }}
+
+\end{DoxyCode}

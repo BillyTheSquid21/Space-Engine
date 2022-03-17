@@ -1,0 +1,161 @@
+\hypertarget{class_render_1_1_renderer}{}\doxysection{Render\+::Renderer\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_render_1_1_renderer}\index{Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Renderer.\+hpp$>$}
+
+Inheritance diagram for Render\+::Renderer\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_render_1_1_renderer}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_render_1_1_renderer_a54e5e9e7897fdf540256baf9571470be}{generate}} (float width, float height, \mbox{\hyperlink{class_camera}{Camera}} $\ast$cam)
+\item 
+{\footnotesize template$<$typename Type $>$ }\\void \mbox{\hyperlink{class_render_1_1_renderer_af7c781fedeafec487ba85bb45858c101}{set\+Layout}} (unsigned char stride)
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a120bab5206f0e7533e35910820e842e7}\label{class_render_1_1_renderer_a120bab5206f0e7533e35910820e842e7}} 
+{\footnotesize template$<$typename Type $>$ }\\void {\bfseries set\+Layout} (unsigned char stride1, unsigned char stride2)
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_af007019fc3a51b4c07cfad1dbcf12c39}\label{class_render_1_1_renderer_af007019fc3a51b4c07cfad1dbcf12c39}} 
+{\footnotesize template$<$typename Type $>$ }\\void {\bfseries set\+Layout} (unsigned char stride1, unsigned char stride2, unsigned char stride3)
+\item 
+void \mbox{\hyperlink{class_render_1_1_renderer_a2e512b9aec04b19d466aaccff3af14e8}{set\+Drawing\+Mode}} (GLenum type)
+\item 
+void \mbox{\hyperlink{class_render_1_1_renderer_a4b6d5553a7057e38b511181536d69586}{commit}} (T $\ast$vert, unsigned int vert\+Size, const unsigned int $\ast$ind, unsigned short int ind\+Size)
+\item 
+void \mbox{\hyperlink{class_render_1_1_renderer_a7759ae9f6dc0f3fd67713bb015bf6a90}{draw\+Primitives}} (\mbox{\hyperlink{class_shader}{Shader}} \&shader)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a55f7e94cd55760ad87e7c45ded09343a}\label{class_render_1_1_renderer_a55f7e94cd55760ad87e7c45ded09343a}} 
+static void {\bfseries clear\+Screen} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a9988549983fa4d71df138cd4141fb934}\label{class_render_1_1_renderer_a9988549983fa4d71df138cd4141fb934}} 
+\mbox{\hyperlink{class_camera}{Camera}} $\ast$ {\bfseries camera} = nullptr
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_ad3b78a574e47ce610101d11c43257c60}\label{class_render_1_1_renderer_ad3b78a574e47ce610101d11c43257c60}} 
+glm\+::mat4 {\bfseries m\+\_\+\+Renderer\+Model\+Matrix} = glm\+::mat4(1.\+0f)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a66a0a96aa7159d844024d84476fc3516}\label{class_render_1_1_renderer_a66a0a96aa7159d844024d84476fc3516}} 
+static const unsigned short int {\bfseries IND\+\_\+\+TRI} = 3
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a02404fa47644b982819d5012dcaeff14}\label{class_render_1_1_renderer_a02404fa47644b982819d5012dcaeff14}} 
+void {\bfseries bind\+All} (\mbox{\hyperlink{class_shader}{Shader}} \&shader)
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a764988c7fde30a9b25ec4a6ce5d6d6b1}\label{class_render_1_1_renderer_a764988c7fde30a9b25ec4a6ce5d6d6b1}} 
+void {\bfseries draw\+Call} (glm\+::mat4 $\ast$model\+Matrix, \mbox{\hyperlink{class_shader}{Shader}} \&shader, bool first)
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_ad780dfa3ba357b88841e3009b186402e}\label{class_render_1_1_renderer_ad780dfa3ba357b88841e3009b186402e}} 
+void {\bfseries buffer\+Video\+Data} (\mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Bulk\+Render\+Queue}}$<$ T $\ast$ $>$ \&vertices\+Array)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_afe9f866c12d977d632a2eccfb4c86a71}\label{class_render_1_1_renderer_afe9f866c12d977d632a2eccfb4c86a71}} 
+GLenum {\bfseries m\+\_\+\+Primitive\+Type} = GL\+\_\+\+TRIANGLES
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_ad69b3f95443343ea923bc37eef1a8a2a}\label{class_render_1_1_renderer_ad69b3f95443343ea923bc37eef1a8a2a}} 
+\mbox{\hyperlink{class_vertex_buffer}{Vertex\+Buffer}} {\bfseries m\+\_\+\+VB}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a99838e220bbb0c935f783b1b021bfef9}\label{class_render_1_1_renderer_a99838e220bbb0c935f783b1b021bfef9}} 
+\mbox{\hyperlink{class_index_buffer}{Index\+Buffer}} {\bfseries m\+\_\+\+IB}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a723691a921b86e2f6c1c40bfd3799afc}\label{class_render_1_1_renderer_a723691a921b86e2f6c1c40bfd3799afc}} 
+\mbox{\hyperlink{class_vertex_array}{Vertex\+Array}} {\bfseries m\+\_\+\+VA}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a9c43aacb3df6f9107a35bc8d4ebaaef0}\label{class_render_1_1_renderer_a9c43aacb3df6f9107a35bc8d4ebaaef0}} 
+\mbox{\hyperlink{class_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} {\bfseries m\+\_\+\+VBL}
+\item 
+\mbox{\Hypertarget{class_render_1_1_renderer_a74ff240ee06218aeefd94f4ac3038ec7}\label{class_render_1_1_renderer_a74ff240ee06218aeefd94f4ac3038ec7}} 
+\mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render\+::\+Bulk\+Render\+Queue}}$<$ T $\ast$ $>$ {\bfseries m\+\_\+\+Primitive\+Vertices}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class Render\+::\+Renderer$<$ T $>$}
+\mbox{\hyperlink{class_render_1_1_renderer}{Renderer}} for when batching is more efficient than instancing. Useful for\+: primitives, sprites, small meshes, static geometry 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_render_1_1_renderer_a4b6d5553a7057e38b511181536d69586}\label{class_render_1_1_renderer_a4b6d5553a7057e38b511181536d69586}} 
+\index{Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}!commit@{commit}}
+\index{commit@{commit}!Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{commit()}{commit()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_renderer}{Render\+::\+Renderer}}$<$ T $>$\+::commit (\begin{DoxyParamCaption}\item[{T $\ast$}]{vert,  }\item[{unsigned int}]{vert\+Size,  }\item[{const unsigned int $\ast$}]{ind,  }\item[{unsigned short int}]{ind\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+System for commiting vertices. Uses Bulk Render \mbox{\hyperlink{class_queue}{Queue}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vert} & Pointer to vertices being drawn \\
+\hline
+{\em vert\+Size} & Amount of floats contained within all the vertices to be drawn \\
+\hline
+{\em ind} & Pointer to indices for drawing \\
+\hline
+{\em ind\+Size} & Amount of indices being submitted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_render_1_1_renderer_a7759ae9f6dc0f3fd67713bb015bf6a90}\label{class_render_1_1_renderer_a7759ae9f6dc0f3fd67713bb015bf6a90}} 
+\index{Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}!drawPrimitives@{drawPrimitives}}
+\index{drawPrimitives@{drawPrimitives}!Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{drawPrimitives()}{drawPrimitives()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_renderer}{Render\+::\+Renderer}}$<$ T $>$\+::draw\+Primitives (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_shader}{Shader}} \&}]{shader }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Called when collected primitives are to be drawn
+
+
+\begin{DoxyParams}{Parameters}
+{\em shader} & \mbox{\hyperlink{class_shader}{Shader}} being bound for this draw call \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_render_1_1_renderer_a54e5e9e7897fdf540256baf9571470be}\label{class_render_1_1_renderer_a54e5e9e7897fdf540256baf9571470be}} 
+\index{Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}!generate@{generate}}
+\index{generate@{generate}!Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{generate()}{generate()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_renderer}{Render\+::\+Renderer}}$<$ T $>$\+::generate (\begin{DoxyParamCaption}\item[{float}]{width,  }\item[{float}]{height,  }\item[{\mbox{\hyperlink{class_camera}{Camera}} $\ast$}]{cam }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Generates the parameters for the renderer, setting up the camera, buffers and binding. \mbox{\Hypertarget{class_render_1_1_renderer_a2e512b9aec04b19d466aaccff3af14e8}\label{class_render_1_1_renderer_a2e512b9aec04b19d466aaccff3af14e8}} 
+\index{Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}!setDrawingMode@{setDrawingMode}}
+\index{setDrawingMode@{setDrawingMode}!Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setDrawingMode()}{setDrawingMode()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_render_1_1_renderer}{Render\+::\+Renderer}}$<$ T $>$\+::set\+Drawing\+Mode (\begin{DoxyParamCaption}\item[{GLenum}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the drawing mode, defaulting to GLTriangles. \mbox{\Hypertarget{class_render_1_1_renderer_af7c781fedeafec487ba85bb45858c101}\label{class_render_1_1_renderer_af7c781fedeafec487ba85bb45858c101}} 
+\index{Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}!setLayout@{setLayout}}
+\index{setLayout@{setLayout}!Render::Renderer$<$ T $>$@{Render::Renderer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setLayout()}{setLayout()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+template$<$typename Type $>$ \\
+void \mbox{\hyperlink{class_render_1_1_renderer}{Render\+::\+Renderer}}$<$ T $>$\+::set\+Layout (\begin{DoxyParamCaption}\item[{unsigned char}]{stride }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets the vertex layout, pushing to the buffer layout object. Floats are recommended.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stride} & Stride (width) of attribute (Eg for position -\/ x, y, z is 3) \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Renderer.\+hpp\end{DoxyCompactItemize}

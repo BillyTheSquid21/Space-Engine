@@ -1,0 +1,43 @@
+\hypertarget{_model_8h_source}{}\doxysection{Model.\+h}
+\label{_model_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Model.h@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Model.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SG\_MODEL\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define SG\_MODEL\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <iterator>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <future>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <chrono>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <future>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}renderer/GLClasses.h"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}renderer/Vertex.hpp"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}renderer/Renderer.hpp"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include <assimp/Importer.hpp>}  }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include <assimp/scene.h>}   }
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include <assimp/postprocess.h>} }
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{keyword}{namespace }Model}
+\DoxyCodeLine{19 \{}
+\DoxyCodeLine{20     \textcolor{keywordtype}{bool} LoadTextureVertexOBJ(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path, std::vector<TextureVertex>\& verts, std::vector<unsigned int>\& inds);}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22     \textcolor{keyword}{class }\mbox{\hyperlink{class_model_1_1_texture_vertex_model}{TextureVertexModel}}}
+\DoxyCodeLine{23     \{}
+\DoxyCodeLine{24     \textcolor{keyword}{public}:}
+\DoxyCodeLine{25         \mbox{\hyperlink{class_model_1_1_texture_vertex_model}{TextureVertexModel}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path) \{ m\_DataLoadedFtr = std::async(std::launch::async, LoadTextureVertexOBJ, path, std::ref(m\_Vertices), std::ref(m\_Indices)); \}}
+\DoxyCodeLine{26         \textcolor{keywordtype}{void} setRen(\mbox{\hyperlink{class_render_1_1_instance_renderer}{Render::InstanceRenderer<TextureVertex>}}* ren) \{ m\_Ren = ren; \}}
+\DoxyCodeLine{27         \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{28     \textcolor{keyword}{private}:}
+\DoxyCodeLine{29         \mbox{\hyperlink{class_render_1_1_instance_renderer}{Render::InstanceRenderer<TextureVertex>}}* m\_Ren = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{30         std::future<bool> m\_DataLoadedFtr;}
+\DoxyCodeLine{31         \textcolor{keywordtype}{bool} m\_DataLoaded;}
+\DoxyCodeLine{32         std::vector<TextureVertex> m\_Vertices;}
+\DoxyCodeLine{33         std::vector<unsigned int> m\_Indices;}
+\DoxyCodeLine{34     \};}
+\DoxyCodeLine{35 \}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

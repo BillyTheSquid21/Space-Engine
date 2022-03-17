@@ -1,0 +1,233 @@
+\hypertarget{_renderer_8hpp_source}{}\doxysection{Renderer.\+hpp}
+\label{_renderer_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Renderer.hpp@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Renderer.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef RENDERER\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define RENDERER\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}ShapeFactory.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}GLClasses.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}RenderQueue.hpp"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}Camera.h"{}}}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{keyword}{namespace }Render}
+\DoxyCodeLine{11 \{}
+\DoxyCodeLine{16     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{17     \textcolor{keyword}{class }\mbox{\hyperlink{class_render_1_1_renderer}{Renderer}}}
+\DoxyCodeLine{18     \{}
+\DoxyCodeLine{19     \textcolor{keyword}{public}:}
+\DoxyCodeLine{20         \mbox{\hyperlink{class_render_1_1_renderer}{Renderer}}() :m\_VA() \{\};}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{25         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_a54e5e9e7897fdf540256baf9571470be}{generate}}(\textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \mbox{\hyperlink{class_camera}{Camera}}* cam)}
+\DoxyCodeLine{26         \{}
+\DoxyCodeLine{27             \textcolor{comment}{//Init camera}}
+\DoxyCodeLine{28             camera = cam;}
+\DoxyCodeLine{29             m\_VA.create();  m\_VB.create(1); m\_IB.create(1);}
+\DoxyCodeLine{30             m\_VA.addBuffer(m\_VB, m\_VBL);}
+\DoxyCodeLine{31             \textcolor{comment}{//Bind}}
+\DoxyCodeLine{32             m\_VA.bind(); m\_VB.unbind(); m\_IB.unbind();}
+\DoxyCodeLine{33         \}}
+\DoxyCodeLine{34         \textcolor{keyword}{static} \textcolor{keywordtype}{void} clearScreen() \{ glClear(GL\_COLOR\_BUFFER\_BIT | GL\_DEPTH\_BUFFER\_BIT); \}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{41         \textcolor{keyword}{template}<\textcolor{keyword}{typename} Type>}
+\DoxyCodeLine{42         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_af7c781fedeafec487ba85bb45858c101}{setLayout}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} stride) \{ m\_VBL.push<Type>(stride); \}}
+\DoxyCodeLine{43         \textcolor{keyword}{template}<\textcolor{keyword}{typename} Type>}
+\DoxyCodeLine{44         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_af7c781fedeafec487ba85bb45858c101}{setLayout}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} stride1, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} stride2) \{ m\_VBL.push<Type>(stride1); m\_VBL.push<Type>(stride2); \}}
+\DoxyCodeLine{45         \textcolor{keyword}{template}<\textcolor{keyword}{typename} Type>}
+\DoxyCodeLine{46         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_af7c781fedeafec487ba85bb45858c101}{setLayout}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} stride1, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} stride2, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} stride3) \{ m\_VBL.push<Type>(stride1); m\_VBL.push<Type>(stride2); m\_VBL.push<Type>(stride3); \}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{51         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_a2e512b9aec04b19d466aaccff3af14e8}{setDrawingMode}}(GLenum type) \{ m\_PrimitiveType = type; \}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{61         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_a4b6d5553a7057e38b511181536d69586}{commit}}(T* vert, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} vertSize, \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* ind, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{short} \textcolor{keywordtype}{int} indSize) \{ m\_PrimitiveVertices.\mbox{\hyperlink{class_render_1_1_bulk_render_queue_ae4a389b442197c8e6059aea2ed71cf98}{pushBack}}(vert, vertSize, ind, indSize); \}                          \textcolor{comment}{//only adds the vertices if no geometry exists}}
+\DoxyCodeLine{62         }
+\DoxyCodeLine{68         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_renderer_a7759ae9f6dc0f3fd67713bb015bf6a90}{drawPrimitives}}(\mbox{\hyperlink{class_shader}{Shader}}\& shader) \{}
+\DoxyCodeLine{69             drawCall(\&m\_RendererModelMatrix, shader, \textcolor{keyword}{true});}
+\DoxyCodeLine{70         \}}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72         \textcolor{comment}{//static indices -\/ some indices are standard and will not change}}
+\DoxyCodeLine{73         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{short} \textcolor{keywordtype}{int} IND\_TRI = 3;}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75         \textcolor{comment}{//Camera}}
+\DoxyCodeLine{76         \mbox{\hyperlink{class_camera}{Camera}}* camera = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78         \textcolor{comment}{//Single model matrix for renderer}}
+\DoxyCodeLine{79         glm::mat4 m\_RendererModelMatrix = glm::mat4(1.0f);}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81     \textcolor{keyword}{protected}:}
+\DoxyCodeLine{82         \textcolor{comment}{//Helper functions}}
+\DoxyCodeLine{83         \textcolor{keywordtype}{void} bindAll(\mbox{\hyperlink{class_shader}{Shader}}\& shader) \{ shader.bind(); m\_VA.bind();    m\_IB.bind(); \}}
+\DoxyCodeLine{84         \textcolor{keywordtype}{void} drawCall(glm::mat4* modelMatrix, \mbox{\hyperlink{class_shader}{Shader}}\& shader, \textcolor{keywordtype}{bool} first) \{}
+\DoxyCodeLine{85             \textcolor{comment}{//Buffer data}}
+\DoxyCodeLine{86             bufferVideoData(m\_PrimitiveVertices);}
+\DoxyCodeLine{87             \textcolor{comment}{//Use model matrix}}
+\DoxyCodeLine{88             shader.setUniform(\textcolor{stringliteral}{"{}u\_Model"{}}, modelMatrix);}
+\DoxyCodeLine{89             \textcolor{comment}{//Bind all objects}}
+\DoxyCodeLine{90             bindAll(shader);}
+\DoxyCodeLine{91             \textcolor{comment}{//Draw Elements}}
+\DoxyCodeLine{92             glDrawElements(m\_PrimitiveType, m\_IB.GetCount(), GL\_UNSIGNED\_INT, \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{93         \}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95         \textcolor{comment}{//Pass collected primitives to buffer for draw}}
+\DoxyCodeLine{96         \textcolor{keywordtype}{void} bufferVideoData(BulkRenderQueue<T*>\& verticesArray)}
+\DoxyCodeLine{97         \{}
+\DoxyCodeLine{98             \textcolor{comment}{//First get amount of data among all vertice floats}}
+\DoxyCodeLine{99             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} totalVertFloats = m\_PrimitiveVertices.\mbox{\hyperlink{class_render_1_1_bulk_render_queue_a675ebe4ac68c692fe5d678adcb82c142}{vertFloatCount}}();}
+\DoxyCodeLine{100             \textcolor{comment}{//Get amount of data among all indice ints}}
+\DoxyCodeLine{101             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} totalIndFloats = m\_PrimitiveVertices.\mbox{\hyperlink{class_render_1_1_bulk_render_queue_a7b9ba6182abc446b88ef0d0ba62def5d}{indIntCount}}();}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103             \textcolor{comment}{//Then create buffer with space for that many floats}}
+\DoxyCodeLine{104             std::vector<float> vertices; std::vector<unsigned int> indices;     \textcolor{comment}{//Buffer declaration}}
+\DoxyCodeLine{105             vertices.resize(totalVertFloats); indices.resize(totalIndFloats);   \textcolor{comment}{//Buffer resizing}}
+\DoxyCodeLine{106             \textcolor{keyword}{auto} verticesIterator = vertices.begin(); \textcolor{keyword}{auto} indicesIterator = indices.begin();}
+\DoxyCodeLine{107 }
+\DoxyCodeLine{108             \textcolor{comment}{//Indexes}}
+\DoxyCodeLine{109             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} vertIndex = 0; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} indIndex = 0;}
+\DoxyCodeLine{110             \textcolor{keywordtype}{int} vertexSizeIndex = 0; \textcolor{keywordtype}{int} indiceSizeIndex = 0;}
+\DoxyCodeLine{111             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} largestInd = 0;}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113             \textcolor{keywordflow}{while} (verticesArray.itemsWaiting()) \{}
+\DoxyCodeLine{114                 \textcolor{comment}{//Get instructions from render queue}}
+\DoxyCodeLine{115                 BulkRenderContainer<T*> instructions = verticesArray.nextInQueue();}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117                 \textcolor{comment}{//For each bulk chunk, render all}}
+\DoxyCodeLine{118                 \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < instructions.elementsCount; i++)}
+\DoxyCodeLine{119                 \{}
+\DoxyCodeLine{120                     \textcolor{comment}{//VERTICES}}
+\DoxyCodeLine{121                     \textcolor{keyword}{const} \textcolor{keywordtype}{float}* dataPointer = (\textcolor{keyword}{const} \textcolor{keywordtype}{float}*)instructions.verts[i];}
+\DoxyCodeLine{122                     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} dataSize = instructions.vertFloats[i];}
+\DoxyCodeLine{123                     vertexSizeIndex++;}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125                     \textcolor{comment}{//Copy vertices into vector     }}
+\DoxyCodeLine{126                     std::copy(\&dataPointer[0], \&dataPointer[dataSize], verticesIterator + vertIndex);}
+\DoxyCodeLine{127                     vertIndex += dataSize;}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129                     \textcolor{comment}{//INDICES}}
+\DoxyCodeLine{130                     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* indDataPointer = instructions.inds[i];}
+\DoxyCodeLine{131                     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} indDataSize = instructions.indCount[i];}
+\DoxyCodeLine{132                     \textcolor{comment}{//Add to vector one by one}}
+\DoxyCodeLine{133                     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} currentLargest = 0;}
+\DoxyCodeLine{134                     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = 0; j < indDataSize; j++) \{}
+\DoxyCodeLine{135                         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} newValue = indDataPointer[j] + largestInd;}
+\DoxyCodeLine{136                         indices[indIndex] = newValue + indiceSizeIndex;}
+\DoxyCodeLine{137                         indIndex++;}
+\DoxyCodeLine{138                         \textcolor{keywordflow}{if} (newValue > currentLargest) \{}
+\DoxyCodeLine{139                             currentLargest = newValue;}
+\DoxyCodeLine{140                         \}}
+\DoxyCodeLine{141                     \}}
+\DoxyCodeLine{142                     largestInd = currentLargest;}
+\DoxyCodeLine{143 }
+\DoxyCodeLine{144                     indiceSizeIndex++;}
+\DoxyCodeLine{145                 \}}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{147             \}}
+\DoxyCodeLine{148             m\_VB.bufferData(vertices.data(), vertices.size());}
+\DoxyCodeLine{149             m\_IB.bufferData(indices.data(), indices.size());}
+\DoxyCodeLine{150         \}}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152         \textcolor{comment}{//type of primitive being drawn}}
+\DoxyCodeLine{153         GLenum m\_PrimitiveType = GL\_TRIANGLES;}
+\DoxyCodeLine{154 }
+\DoxyCodeLine{155         \textcolor{comment}{//GL Objects for rendering -\/ used once per draw call}}
+\DoxyCodeLine{156         \mbox{\hyperlink{class_vertex_buffer}{VertexBuffer}} m\_VB;}
+\DoxyCodeLine{157         \mbox{\hyperlink{class_index_buffer}{IndexBuffer}} m\_IB;}
+\DoxyCodeLine{158         \mbox{\hyperlink{class_vertex_array}{VertexArray}} m\_VA;}
+\DoxyCodeLine{159         \mbox{\hyperlink{class_vertex_buffer_layout}{VertexBufferLayout}} m\_VBL;}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161         \textcolor{comment}{//Queue for rendering}}
+\DoxyCodeLine{162         \mbox{\hyperlink{class_render_1_1_bulk_render_queue}{Render::BulkRenderQueue<T*>}} m\_PrimitiveVertices;}
+\DoxyCodeLine{163     \};}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{169     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{170     \textcolor{keyword}{class }\mbox{\hyperlink{class_render_1_1_instance_renderer}{InstanceRenderer}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_render_1_1_renderer}{Renderer}}<T>}
+\DoxyCodeLine{171     \{}
+\DoxyCodeLine{172     \textcolor{keyword}{public}:}
+\DoxyCodeLine{173         \textcolor{keyword}{using} \mbox{\hyperlink{class_render_1_1_renderer}{Renderer<T>::m\_PrimitiveVertices}}; \textcolor{keyword}{using} \mbox{\hyperlink{class_render_1_1_renderer}{Renderer<T>::m\_IB}}; \textcolor{keyword}{using} \mbox{\hyperlink{class_render_1_1_renderer}{Renderer<T>::m\_VB}}; \textcolor{keyword}{using} \mbox{\hyperlink{class_render_1_1_renderer}{Renderer<T>::m\_PrimitiveType}}; \textcolor{keyword}{using} \mbox{\hyperlink{class_render_1_1_renderer}{Renderer<T>::bindAll}};}
+\DoxyCodeLine{174         }
+\DoxyCodeLine{183         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_instance_renderer_a1a2accccda9dea13d7b2038652f2920d}{commit}}(T* vert, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} vertSize, \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* ind, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{short} \textcolor{keywordtype}{int} indSize) \{ m\_Model = \{ vert, vertSize, ind, indSize \}; \}}
+\DoxyCodeLine{184         }
+\DoxyCodeLine{188         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_instance_renderer_a5a87d4cf19796b0c0e2cd9435cbcd08f}{commitModelMat}}(glm::mat4 matrix) \{ m\_ModelMatrixes.\mbox{\hyperlink{class_render_1_1_bulk_queue_a67e365bcd97cc1374a32b6593fd493bd}{pushBack}}(matrix); \}}
+\DoxyCodeLine{189         }
+\DoxyCodeLine{195         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_render_1_1_instance_renderer_a727a33134b419cde3929edfdfa837725}{drawPrimitives}}(\mbox{\hyperlink{class_shader}{Shader}}\& shader) \{}
+\DoxyCodeLine{196             drawCall(shader, \textcolor{keyword}{true});}
+\DoxyCodeLine{197         \}}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{199     \textcolor{keyword}{private}:}
+\DoxyCodeLine{200         \textcolor{keywordtype}{void} drawCall(\mbox{\hyperlink{class_shader}{Shader}}\& shader, \textcolor{keywordtype}{bool} first) \{}
+\DoxyCodeLine{201             \textcolor{comment}{//Buffer data}}
+\DoxyCodeLine{202             bufferVideoData();}
+\DoxyCodeLine{203             \textcolor{keywordflow}{while} (m\_ModelMatrixes.\mbox{\hyperlink{class_render_1_1_bulk_queue_afc973b0e81ac931230b7086fb54b01e9}{itemsWaiting}}())}
+\DoxyCodeLine{204             \{}
+\DoxyCodeLine{205                 \mbox{\hyperlink{struct_render_1_1_bulk_container}{BulkContainer<glm::mat4>}} cont = m\_ModelMatrixes.\mbox{\hyperlink{class_render_1_1_bulk_queue_a4de0a3c2cea46d00b908dd23c9083af4}{nextInQueue}}();}
+\DoxyCodeLine{206                 \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < cont.elementsCount; i++)}
+\DoxyCodeLine{207                 \{}
+\DoxyCodeLine{208                     \textcolor{comment}{//Use model matrix}}
+\DoxyCodeLine{209                     shader.setUniform(\textcolor{stringliteral}{"{}u\_Model"{}}, \&cont.verts[i]);}
+\DoxyCodeLine{210                     \textcolor{comment}{//Bind all objects}}
+\DoxyCodeLine{211                     bindAll(shader);}
+\DoxyCodeLine{212                     \textcolor{comment}{//Draw Elements}}
+\DoxyCodeLine{213                     glDrawElements(m\_PrimitiveType, m\_IB.GetCount(), GL\_UNSIGNED\_INT, \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{214                 \}}
+\DoxyCodeLine{215             \}}
+\DoxyCodeLine{216         \}}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{218         \textcolor{comment}{//Pass collected primitives to buffer for draw}}
+\DoxyCodeLine{219         \textcolor{keywordtype}{void} bufferVideoData()}
+\DoxyCodeLine{220         \{}
+\DoxyCodeLine{221             \textcolor{comment}{//First get amount of data among all vertice floats}}
+\DoxyCodeLine{222             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} totalVertFloats = m\_Model.vertFloats;}
+\DoxyCodeLine{223             \textcolor{comment}{//Get amount of data among all indice ints}}
+\DoxyCodeLine{224             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} totalIndFloats = m\_Model.indCount;}
+\DoxyCodeLine{225 }
+\DoxyCodeLine{226             \textcolor{comment}{//Then create buffer with space for that many floats}}
+\DoxyCodeLine{227             std::vector<float> vertices; std::vector<unsigned int> indices;     \textcolor{comment}{//Buffer declaration}}
+\DoxyCodeLine{228             vertices.resize(totalVertFloats); indices.resize(totalIndFloats);   \textcolor{comment}{//Buffer resizing}}
+\DoxyCodeLine{229             \textcolor{keyword}{auto} verticesIterator = vertices.begin(); \textcolor{keyword}{auto} indicesIterator = indices.begin();}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231             \textcolor{comment}{//Indexes}}
+\DoxyCodeLine{232             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} vertIndex = 0; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} indIndex = 0;}
+\DoxyCodeLine{233             \textcolor{keywordtype}{int} vertexSizeIndex = 0; \textcolor{keywordtype}{int} indiceSizeIndex = 0;}
+\DoxyCodeLine{234             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} largestInd = 0;}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236             \textcolor{comment}{//Get instructions from render queue}}
+\DoxyCodeLine{237             RenderContainer<T*> instructions = m\_Model;}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239             \textcolor{comment}{//For each bulk chunk, render all}}
+\DoxyCodeLine{240             \textcolor{comment}{//VERTICES}}
+\DoxyCodeLine{241             \textcolor{keyword}{const} \textcolor{keywordtype}{float}* dataPointer = (\textcolor{keyword}{const} \textcolor{keywordtype}{float}*)instructions.verts;}
+\DoxyCodeLine{242             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} dataSize = instructions.vertFloats;}
+\DoxyCodeLine{243             vertexSizeIndex++;}
+\DoxyCodeLine{244 }
+\DoxyCodeLine{245             \textcolor{comment}{//Copy vertices into vector     }}
+\DoxyCodeLine{246             std::copy(\&dataPointer[0], \&dataPointer[dataSize], verticesIterator);}
+\DoxyCodeLine{247 }
+\DoxyCodeLine{248             \textcolor{comment}{//INDICES}}
+\DoxyCodeLine{249             \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}* indDataPointer = instructions.inds;}
+\DoxyCodeLine{250             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} indDataSize = instructions.indCount;}
+\DoxyCodeLine{251             \textcolor{comment}{//Add to vector one by one}}
+\DoxyCodeLine{252             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} currentLargest = 0;}
+\DoxyCodeLine{253             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = 0; j < indDataSize; j++) \{}
+\DoxyCodeLine{254                 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} newValue = indDataPointer[j] + largestInd;}
+\DoxyCodeLine{255                 indices[indIndex] = newValue + indiceSizeIndex;}
+\DoxyCodeLine{256                 indIndex++;}
+\DoxyCodeLine{257                 \textcolor{keywordflow}{if} (newValue > currentLargest) \{}
+\DoxyCodeLine{258                     currentLargest = newValue;}
+\DoxyCodeLine{259                 \}}
+\DoxyCodeLine{260             \}}
+\DoxyCodeLine{261             largestInd = currentLargest;}
+\DoxyCodeLine{262 }
+\DoxyCodeLine{263             indiceSizeIndex++;}
+\DoxyCodeLine{264 }
+\DoxyCodeLine{265             m\_VB.bufferData(vertices.data(), vertices.size());}
+\DoxyCodeLine{266             m\_IB.bufferData(indices.data(), indices.size());}
+\DoxyCodeLine{267         \}}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269         \textcolor{keyword}{using} Renderer<T>::drawCall;}
+\DoxyCodeLine{270         \mbox{\hyperlink{class_render_1_1_bulk_queue}{Render::BulkQueue<glm::mat4>}} m\_ModelMatrixes;}
+\DoxyCodeLine{271         \mbox{\hyperlink{struct_render_1_1_render_container}{Render::RenderContainer<T*>}} m\_Model;}
+\DoxyCodeLine{272     \};}
+\DoxyCodeLine{273 \}}
+\DoxyCodeLine{274 }
+\DoxyCodeLine{275 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

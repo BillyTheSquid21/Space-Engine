@@ -35,7 +35,7 @@ void Splash::init(int width, int height) {
 }
 
 void Splash::render() {
-    Renderer<ColorTextureVertex>::clearScreen();
+    Render::Renderer<ColorTextureVertex>::clearScreen();
 
     //Bind shader program
     m_Shader.bind();

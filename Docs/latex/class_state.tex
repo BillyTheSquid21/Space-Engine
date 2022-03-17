@@ -1,0 +1,55 @@
+\hypertarget{class_state}{}\doxysection{State Class Reference}
+\label{class_state}\index{State@{State}}
+Inheritance diagram for State\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_state}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_state_af1d2da063880a4fe453478c71ac47740}\label{class_state_af1d2da063880a4fe453478c71ac47740}} 
+virtual void {\bfseries update} (double delta\+Time, double time)
+\item 
+\mbox{\Hypertarget{class_state_ac8348cae48576a819c56349ef1b3a6f7}\label{class_state_ac8348cae48576a819c56349ef1b3a6f7}} 
+virtual void {\bfseries render} ()
+\item 
+\mbox{\Hypertarget{class_state_a6c53cdd61375c940953964dc632c9ad6}\label{class_state_a6c53cdd61375c940953964dc632c9ad6}} 
+virtual void {\bfseries handle\+Input} (int key, int scancode, int action, int mods)
+\item 
+\mbox{\Hypertarget{class_state_a5c1e2dd0d82336051c8d91b35478f324}\label{class_state_a5c1e2dd0d82336051c8d91b35478f324}} 
+virtual void {\bfseries handle\+Scrolling} (double x\+Offset, double y\+Offset)
+\item 
+\mbox{\Hypertarget{class_state_affc9afa2161d24449a4b0f003b00748e}\label{class_state_affc9afa2161d24449a4b0f003b00748e}} 
+virtual void {\bfseries handle\+Mouse} (int button, int action, int mods)
+\item 
+\mbox{\Hypertarget{class_state_af58a760df2cd6912e425476705c043b3}\label{class_state_af58a760df2cd6912e425476705c043b3}} 
+virtual void {\bfseries load\+Required\+Data} ()
+\item 
+\mbox{\Hypertarget{class_state_aabd2ee771422d2708e0aefd576a762a4}\label{class_state_aabd2ee771422d2708e0aefd576a762a4}} 
+virtual void {\bfseries purge\+Required\+Data} ()
+\item 
+\mbox{\Hypertarget{class_state_ad1ea1f26b16dc5e6cf14d0c6821ef7fe}\label{class_state_ad1ea1f26b16dc5e6cf14d0c6821ef7fe}} 
+bool {\bfseries active} () const
+\item 
+\mbox{\Hypertarget{class_state_a11c5e339d142ba00b5d8329a779dd3f4}\label{class_state_a11c5e339d142ba00b5d8329a779dd3f4}} 
+void {\bfseries set\+Active} (bool set)
+\item 
+\mbox{\Hypertarget{class_state_a2fc8d891d88f709161cf07c086674d6e}\label{class_state_a2fc8d891d88f709161cf07c086674d6e}} 
+bool {\bfseries has\+Data\+Loaded} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_state_a8ea5a151bb5a015a998da1a481178313}\label{class_state_a8ea5a151bb5a015a998da1a481178313}} 
+bool {\bfseries m\+\_\+\+Active} = false
+\item 
+\mbox{\Hypertarget{class_state_a4acc7ea3c96210edf6cbdab338e0ccc1}\label{class_state_a4acc7ea3c96210edf6cbdab338e0ccc1}} 
+bool {\bfseries m\+\_\+\+Data\+Loaded} = false
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/State.\+hpp\end{DoxyCompactItemize}

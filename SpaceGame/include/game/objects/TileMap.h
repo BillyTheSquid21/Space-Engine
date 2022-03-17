@@ -2,7 +2,7 @@
 #ifndef TILE_MAP_H
 #define TILE_MAP_H
 
-#include "SGUtil.h"
+#include "utility/SGUtil.h"
 
 //|
 //|Increasing Y

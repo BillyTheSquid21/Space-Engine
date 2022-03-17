@@ -17,12 +17,17 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     m_SpriteRenderer.setDrawingMode(GL_TRIANGLES);
     m_SpriteRenderer.generate((float)width, (float)height, &m_Camera);
 
+    //Model Renderer
+    m_ModelRenderer.setLayout<float>(3, 2);
+    m_ModelRenderer.setDrawingMode(GL_TRIANGLES);
+    m_ModelRenderer.generate((float)width, (float)height, &m_Camera);
+
     //Camera
     m_Camera.moveUp(World::TILE_SIZE * 5);
     m_Camera.panYDegrees(45.0f);
 
     //test level
-    level.buildLevel(10, 10, &m_WorldRenderer, &m_OverworldTileMap);
+    level.buildLevel(&m_WorldRenderer, &m_OverworldTileMap);
 
     //gui shit test
     m_Fonts = fonts;
@@ -37,12 +42,6 @@ void Overworld::loadRequiredData() {
 
     //Set texture uniform
     m_Shader.setUniform("u_Texture", 1);
-
-    //Plane
-    m_Plane.setRenderer(&m_WorldRenderer);
-    m_Plane.generatePlaneXZ(0.0f, 0.0f, World::TILE_SIZE * 32, World::TILE_SIZE * 32, World::TILE_SIZE);
-    UVData data = m_OverworldTileMap.uvTile(0, 0);
-    m_Plane.texturePlane(data.uvX, data.uvY, data.uvWidth, data.uvHeight);
     
     //Load world texture
     m_PlaneTexture.loadTexture("res/textures/OW.png");
@@ -84,12 +83,15 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
     m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
 
+    //model test
+    mod.setRen(&m_ModelRenderer);
+    modMat = glm::mat4(1.0f);
+
     m_DataLoaded = true;
 }
 
 void Overworld::purgeRequiredData() {
     m_PlaneTexture.unbind();
-    m_Plane.purgeData();
     m_DataLoaded = false;
 }
 
@@ -105,7 +107,7 @@ void Overworld::update(double deltaTime, double time) {
 }
 
 void Overworld::render() {
-    Renderer<ColorTextureVertex>::clearScreen();
+    Render::Renderer<ColorTextureVertex>::clearScreen();
 
     GameGUI::StartFrame();
 
@@ -115,13 +117,20 @@ void Overworld::render() {
     //Renders
     level.render();
     m_ObjManager.render();
+
+    modMat = glm::rotate(modMat, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_ModelRenderer.commitModelMat(modMat);
+    m_ModelRenderer.commitModelMat(glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, -100.0f)));
+    mod.render();
     
     m_Camera.sendCameraUniforms(m_Shader);
 
     m_Shader.setUniform("u_Texture", 0);
     m_WorldRenderer.drawPrimitives(m_Shader);
+    m_ModelRenderer.drawPrimitives(m_Shader);
     m_Shader.setUniform("u_Texture", 1);
     m_SpriteRenderer.drawPrimitives(m_Shader);
+
 
     //IMGUI Test
     GameGUI::TextBox gui(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f);

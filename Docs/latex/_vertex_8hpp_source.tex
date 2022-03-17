@@ -1,0 +1,35 @@
+\hypertarget{_vertex_8hpp_source}{}\doxysection{Vertex.\+hpp}
+\label{_vertex_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Vertex.hpp@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Vertex.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef VERTEX\_HPP}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define VERTEX\_HPP}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{enum class} Axis}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{9     X, Y, Z}
+\DoxyCodeLine{10 \};}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{comment}{//alignas used to confirm all bytes are contiguous in memory -\/ will be reworked if needed}}
+\DoxyCodeLine{13 \textcolor{keyword}{struct }\textcolor{keyword}{alignas}(4) \mbox{\hyperlink{struct_vertex}{Vertex}}}
+\DoxyCodeLine{14 \{}
+\DoxyCodeLine{15     \mbox{\hyperlink{struct_component3f}{Component3f}} position;}
+\DoxyCodeLine{16 \};}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{keyword}{struct }\textcolor{keyword}{alignas}(4) \mbox{\hyperlink{struct_color_texture_vertex}{ColorTextureVertex}} : \textcolor{keyword}{public} \mbox{\hyperlink{struct_vertex}{Vertex}}}
+\DoxyCodeLine{19 \{}
+\DoxyCodeLine{20     \mbox{\hyperlink{struct_component4f}{Component4f}} color;}
+\DoxyCodeLine{21     \mbox{\hyperlink{struct_component2f}{Component2f}} uvCoords;}
+\DoxyCodeLine{22 \};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{keyword}{struct }\textcolor{keyword}{alignas}(4) \mbox{\hyperlink{struct_texture_vertex}{TextureVertex}} : \textcolor{keyword}{public} \mbox{\hyperlink{struct_vertex}{Vertex}}}
+\DoxyCodeLine{25 \{}
+\DoxyCodeLine{26     \mbox{\hyperlink{struct_component2f}{Component2f}} uvCoords;}
+\DoxyCodeLine{27 \};}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

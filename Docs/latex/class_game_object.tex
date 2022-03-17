@@ -1,0 +1,76 @@
+\hypertarget{class_game_object}{}\doxysection{Game\+Object Class Reference}
+\label{class_game_object}\index{GameObject@{GameObject}}
+Inheritance diagram for Game\+Object\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.000000cm]{class_game_object}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_object_ad0357497a8f0810341cf43710402dcc2}\label{class_game_object_ad0357497a8f0810341cf43710402dcc2}} 
+void {\bfseries set\+ID} (unsigned int id)
+\item 
+\mbox{\Hypertarget{class_game_object_ae99d0f0d2e18e0a4a28035b7d8f31436}\label{class_game_object_ae99d0f0d2e18e0a4a28035b7d8f31436}} 
+unsigned int {\bfseries id} () const
+\item 
+\mbox{\Hypertarget{class_game_object_ad3b3c4463f00897122516ae548eae8ca}\label{class_game_object_ad3b3c4463f00897122516ae548eae8ca}} 
+void {\bfseries message\+Update\+At} (Message message, unsigned int id)
+\item 
+\mbox{\Hypertarget{class_game_object_a334d9ccd23af128bdb7e62dc5040a934}\label{class_game_object_a334d9ccd23af128bdb7e62dc5040a934}} 
+void {\bfseries message\+Render\+At} (Message message, unsigned int id)
+\item 
+\mbox{\Hypertarget{class_game_object_a523fca37606244c34b8eac1880964512}\label{class_game_object_a523fca37606244c34b8eac1880964512}} 
+void {\bfseries message\+All\+Update} (Message message)
+\item 
+\mbox{\Hypertarget{class_game_object_a4f65fe9020091f3ab555f1f4155b8250}\label{class_game_object_a4f65fe9020091f3ab555f1f4155b8250}} 
+void {\bfseries message\+All\+Render} (Message message)
+\item 
+\mbox{\Hypertarget{class_game_object_a274448603b39d0aece052ccc433ebc19}\label{class_game_object_a274448603b39d0aece052ccc433ebc19}} 
+void {\bfseries message\+All\+Except\+Update} (Message message, unsigned int id)
+\item 
+\mbox{\Hypertarget{class_game_object_ac531f10a51f1aacdb33fe601083d0a1d}\label{class_game_object_ac531f10a51f1aacdb33fe601083d0a1d}} 
+void {\bfseries message\+All\+Except\+Render} (Message message, unsigned int id)
+\item 
+\mbox{\Hypertarget{class_game_object_aa0173e2a6098e5f9117dd05a5c76bb32}\label{class_game_object_aa0173e2a6098e5f9117dd05a5c76bb32}} 
+void {\bfseries message\+All} (Message message)
+\item 
+\mbox{\Hypertarget{class_game_object_a743bb72fcd6bb80c25701ea4a1126000}\label{class_game_object_a743bb72fcd6bb80c25701ea4a1126000}} 
+bool {\bfseries safe\+To\+Delete} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_object_ae4245f9c73bfeadf122f43140d122eb3}\label{class_game_object_ae4245f9c73bfeadf122f43140d122eb3}} 
+std\+::vector$<$ \mbox{\hyperlink{class_update_component}{Update\+Component}} $\ast$ $>$ {\bfseries m\+\_\+\+Update\+Comps}
+\item 
+\mbox{\Hypertarget{class_game_object_aefe901914d0232128b091fb33ce0b757}\label{class_game_object_aefe901914d0232128b091fb33ce0b757}} 
+std\+::vector$<$ \mbox{\hyperlink{class_render_component}{Render\+Component}} $\ast$ $>$ {\bfseries m\+\_\+\+Render\+Comps}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_object_a895e3fe705e09c49ac715ac18faac576}\label{class_game_object_a895e3fe705e09c49ac715ac18faac576}} 
+bool {\bfseries active} () const
+\item 
+\mbox{\Hypertarget{class_game_object_a91900d9f7969458c3c854425d1e60b66}\label{class_game_object_a91900d9f7969458c3c854425d1e60b66}} 
+void {\bfseries set\+Active} (bool set)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_game_object_a1d19b0088d89c619ae660ae9c2d7dd75}\label{class_game_object_a1d19b0088d89c619ae660ae9c2d7dd75}} 
+unsigned int {\bfseries m\+\_\+\+ID}
+\item 
+\mbox{\Hypertarget{class_game_object_a47a7f437b08181d961bf4b5ba9291ec2}\label{class_game_object_a47a7f437b08181d961bf4b5ba9291ec2}} 
+bool {\bfseries m\+\_\+\+Active} = true
+\item 
+\mbox{\Hypertarget{class_game_object_a97247c6fcea33fc7371e1baa8b9f9de3}\label{class_game_object_a97247c6fcea33fc7371e1baa8b9f9de3}} 
+bool {\bfseries m\+\_\+\+Dead} = false
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/Game\+Object.\+hpp\end{DoxyCompactItemize}

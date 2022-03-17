@@ -11,11 +11,11 @@ class SpriteRender : public RenderComponent
 {
 public:
 	SpriteRender() = default;
-	SpriteRender(TextureQuad* sprite, Renderer<TextureVertex>* ren) { m_Sprite = sprite; m_Renderer = ren; }
+	SpriteRender(TextureQuad* sprite, Render::Renderer<TextureVertex>* ren) { m_Sprite = sprite; m_Renderer = ren; }
 	void render();
 private:
 	TextureQuad* m_Sprite = nullptr;
-	Renderer<TextureVertex>* m_Renderer = nullptr;
+	Render::Renderer<TextureVertex>* m_Renderer = nullptr;
 };
 
 class TilePosition : public UpdateComponent
@@ -164,13 +164,13 @@ namespace Ov_ObjCreation
 {
 	//Allows creating sprite types, and modifies references to common component groups
 	std::shared_ptr<OvSpr_Sprite> BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		Renderer<TextureVertex>* sprtRen);
+		Render::Renderer<TextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_DirectionalSprite> BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Renderer<TextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<TextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_WalkingSprite> BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Renderer<TextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<TextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Renderer<TextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<TextureVertex>* sprtRen);
 }
 
 #endif

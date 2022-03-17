@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "SGUtil.h"
+#include "utility/SGUtil.h"
 
 class VertexBuffer
 {

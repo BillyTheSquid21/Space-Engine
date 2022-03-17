@@ -9,7 +9,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "SGUtil.h"
+#include "utility/SGUtil.h"
 #include "core/GameObject.hpp"
 #include "core/ObjManagement.h"
 #include "Callbacks.hpp"
