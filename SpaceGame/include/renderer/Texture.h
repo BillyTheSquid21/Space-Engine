@@ -2,6 +2,8 @@
 
 #include "GLClasses.h"
 #include "stb/stb_image.h"
+#include "stb/stb_image_write.h"
+#include "renderer/Vertex.hpp"
 
 class Texture
 {
@@ -19,8 +21,8 @@ public:
     //Clear buffer image data is loaded into
     void clearBuffer() const;
 
-    inline int width() const { return m_Width; }
-    inline int height() const { return m_Height; }
+    int width() const { return m_Width; }
+    int height() const { return m_Height; }
 
 private:
     unsigned int m_ID; unsigned int m_Slot = 0;
@@ -29,3 +31,71 @@ private:
     int m_Width, m_Height, m_BPP;
 
 };
+
+namespace Tex
+{
+    struct alignas(1) TexChannel_4
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
+        unsigned char a;
+    };
+
+    struct alignas(1) TexChannel_3
+    {
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
+    };
+
+    struct TexBuffer
+    {
+        int width;
+        int height;
+        int bpp;
+        TexChannel_4* buffer = nullptr;
+        std::string name;
+    };
+
+    struct UVTransform
+    {
+        float deltaV;
+        float scaleU; float scaleV;
+    };
+
+    class TextureAtlasRGBA
+    {
+    public:
+        TextureAtlasRGBA() = default;
+        ~TextureAtlasRGBA() { clearBuffers(); };
+        void loadTexture(const std::string& path, const std::string& name);
+        void generateAtlas();
+        void clearBuffers();
+        void clearTextureBuffers();
+
+        template<typename T>
+        void mapModelVerts(T* vertices, unsigned int vertCount, std::string texName)
+        {
+            static_assert(std::is_base_of<TextureVertex, T>::value, "Must be a texture vertex!");
+            
+            if (m_AtlasRequest.find(texName) == m_AtlasRequest.end())
+            {
+                EngineLog("Requested texture is not in atlas! ", texName);
+                return;
+            }
+            UVTransform trans = m_AtlasRequest.at(texName);
+            for (int i = 0; i < vertCount; i++)
+            {
+                vertices[i].uvCoords.b += trans.deltaV;
+                vertices[i].uvCoords.a *= trans.scaleU;
+                vertices[i].uvCoords.b *= trans.scaleV;
+            }
+        }
+
+    private:
+        std::vector<TexBuffer> m_LocalBuffers;
+        TexChannel_4* m_AtlasBuffer = nullptr;
+        std::unordered_map<std::string, UVTransform> m_AtlasRequest;
+    };
+}

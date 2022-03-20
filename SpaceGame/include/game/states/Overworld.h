@@ -55,6 +55,7 @@ private:
 	//Test tile mapping
 	TileMap m_OverworldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 	TileMap m_SpriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
+	Tex::TextureAtlasRGBA atlas;
 
 	//Test font
 	FontContainer* m_Fonts;

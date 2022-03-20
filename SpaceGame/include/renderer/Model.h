@@ -25,6 +25,10 @@ namespace Model
         TextureVertexModel(const char* path) { m_DataLoadedFtr = std::async(std::launch::async, LoadTextureVertexOBJ, path, std::ref(m_Vertices), std::ref(m_Indices)); }
         void setRen(Render::InstanceRenderer<TextureVertex>* ren) { m_Ren = ren; }
         void render();
+
+        TextureVertex* getVertices() const { return (TextureVertex*)&m_Vertices[0]; }
+        unsigned int getVertCount() const { return m_Vertices.size(); }
+
     private:
         Render::InstanceRenderer<TextureVertex>* m_Ren = nullptr;
         std::future<bool> m_DataLoadedFtr;

@@ -177,6 +177,7 @@
     <ClCompile Include="src\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
+    <ClCompile Include="src\vendor\stb\stb_image_write.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Callbacks.hpp" />

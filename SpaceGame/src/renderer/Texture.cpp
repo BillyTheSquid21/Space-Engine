@@ -55,3 +55,85 @@ void Texture::unbind() const
     glActiveTexture(GL_TEXTURE0 + m_Slot);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+//Texture Atlas
+void Tex::TextureAtlasRGBA::loadTexture(const std::string& path, const std::string& name)
+{
+    stbi_set_flip_vertically_on_load(1);
+    //if texture has been previously generated don't generate until buffer cleared
+    if (m_AtlasBuffer) {
+        EngineLog("Atlas already generated!");
+        return;
+    }
+
+    TexBuffer texBuff;
+    texBuff.name = name;
+    texBuff.buffer = (TexChannel_4*)stbi_load(path.c_str(), &texBuff.width, &texBuff.height, &texBuff.bpp, 4);
+    m_LocalBuffers.push_back(texBuff);
+}
+
+void Tex::TextureAtlasRGBA::clearBuffers()
+{
+    clearTextureBuffers();
+    if (m_AtlasBuffer) {
+        delete[] m_AtlasBuffer;
+        return;
+    }
+    EngineLog("Error unloading atlas buffer!");
+}
+
+void Tex::TextureAtlasRGBA::clearTextureBuffers()
+{
+    for (int i = 0; i < m_LocalBuffers.size(); i++)
+    {
+        if (m_LocalBuffers[i].buffer) {
+            stbi_image_free(m_LocalBuffers[i].buffer);
+            m_LocalBuffers[i].buffer = nullptr;
+            return;
+        }
+    }
+}
+
+void Tex::TextureAtlasRGBA::generateAtlas()
+{
+    //Find new height of atlas
+    int height = 0;
+    int largestWidth = 0;
+    for (int i = 0; i < m_LocalBuffers.size(); i++)
+    {
+        height += m_LocalBuffers[i].height;
+        if (m_LocalBuffers[i].width > largestWidth)
+        {
+            largestWidth = m_LocalBuffers[i].width;
+        }
+    }
+
+    //Allocate based on new size
+    constexpr unsigned char BPP = 4;
+    int bufferSize = height * largestWidth;
+    m_AtlasBuffer = new TexChannel_4[bufferSize];
+
+    //Copy each buffer into the new buffer
+    int currentHeight = 0;
+    for (int i = 0; i < m_LocalBuffers.size(); i++)
+    {
+        TexBuffer buffer = m_LocalBuffers[i];
+        for (int y = 0; y < buffer.height; y++)
+        {
+            for (int x = 0; x < buffer.width; x++)
+            {
+                int atlasIndex = (y + currentHeight) * largestWidth + x;
+                int bufferIndex = y * buffer.width + x;
+                m_AtlasBuffer[atlasIndex] = buffer.buffer[bufferIndex];
+            }
+        }
+        currentHeight += buffer.height;
+
+        UVTransform trans;
+        trans.deltaV = (float)  (height - currentHeight) / (float)height; //How much the texture is vertically offset by
+        trans.scaleU = (float)   buffer.width            / (float)largestWidth;
+        trans.scaleV = (float)   buffer.height           / (float)height;
+        m_AtlasRequest[buffer.name] = trans;
+    }
+    clearTextureBuffers();
+}

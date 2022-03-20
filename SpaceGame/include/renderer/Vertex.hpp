@@ -15,15 +15,14 @@ struct alignas(4) Vertex
 	Component3f position;
 };
 
-struct alignas(4) ColorTextureVertex : public Vertex
-{
-	Component4f color;
-	Component2f uvCoords;
-};
-
 struct alignas(4) TextureVertex : public Vertex
 {
 	Component2f uvCoords;
+};
+
+struct alignas(4) ColorTextureVertex : public TextureVertex
+{
+	Component4f color;
 };
 
 #endif

@@ -13,7 +13,7 @@ void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<O
 
     //Renderer setup
     m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-    m_Renderer.setLayout<float>(3, 4, 2);
+    m_Renderer.setLayout<float>(3, 2, 4);
     m_Renderer.setDrawingMode(GL_TRIANGLES);
     m_Renderer.generate((float)width, (float)height, &m_Camera);
 

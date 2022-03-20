@@ -83,6 +83,12 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
     m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
 
+    atlas.loadTexture("res/textures/OW.png", "OW");
+    atlas.loadTexture("res/textures/willow.png", "SPRITE");
+    atlas.generateAtlas();
+
+    atlas.mapModelVerts(mod.getVertices(), mod.getVertCount(), "OW");
+
     //model test
     mod.setRen(&m_ModelRenderer);
     modMat = glm::mat4(1.0f);
