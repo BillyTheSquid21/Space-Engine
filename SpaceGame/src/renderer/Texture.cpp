@@ -75,11 +75,16 @@ void Tex::TextureAtlasRGBA::loadTexture(const std::string& path, const std::stri
 void Tex::TextureAtlasRGBA::clearBuffers()
 {
     clearTextureBuffers();
+    clearAtlasBuffers();
+    EngineLog("Error unloading atlas buffer!");
+}
+
+void Tex::TextureAtlasRGBA::clearAtlasBuffers()
+{
     if (m_AtlasBuffer) {
         delete[] m_AtlasBuffer;
         return;
     }
-    EngineLog("Error unloading atlas buffer!");
 }
 
 void Tex::TextureAtlasRGBA::clearTextureBuffers()
@@ -136,4 +141,26 @@ void Tex::TextureAtlasRGBA::generateAtlas()
         m_AtlasRequest[buffer.name] = trans;
     }
     clearTextureBuffers();
+
+    m_Width = largestWidth; m_Height = height;
+}
+
+void Tex::TextureAtlasRGBA::generateTexture(unsigned int slot)
+{
+    //Generate texture
+    glGenTextures(1, &m_ID);
+
+    //Set active slot and bind
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, m_ID);
+
+    //Set params
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    //Assign to slot
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_AtlasBuffer);
+    m_Slot = slot;
 }

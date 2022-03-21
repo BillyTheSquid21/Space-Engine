@@ -71,8 +71,13 @@ namespace Tex
         ~TextureAtlasRGBA() { clearBuffers(); };
         void loadTexture(const std::string& path, const std::string& name);
         void generateAtlas();
+        void generateTexture(unsigned int slot);
         void clearBuffers();
         void clearTextureBuffers();
+        void clearAtlasBuffers();
+
+        void bind() const { glActiveTexture(GL_TEXTURE0 + m_Slot); glBindTexture(GL_TEXTURE_2D, m_ID); }
+        void unbind() const {glActiveTexture(GL_TEXTURE0 + m_Slot); glBindTexture(GL_TEXTURE_2D, 0);}
 
         template<typename T>
         void mapModelVerts(T* vertices, unsigned int vertCount, std::string texName)
@@ -97,5 +102,7 @@ namespace Tex
         std::vector<TexBuffer> m_LocalBuffers;
         TexChannel_4* m_AtlasBuffer = nullptr;
         std::unordered_map<std::string, UVTransform> m_AtlasRequest;
+        unsigned int m_Slot; unsigned int m_ID;
+        unsigned int m_Width; unsigned int m_Height;
     };
 }
