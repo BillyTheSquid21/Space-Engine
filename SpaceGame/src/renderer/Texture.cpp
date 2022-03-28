@@ -76,13 +76,13 @@ void Tex::TextureAtlasRGBA::clearBuffers()
 {
     clearTextureBuffers();
     clearAtlasBuffers();
-    EngineLog("Error unloading atlas buffer!");
 }
 
 void Tex::TextureAtlasRGBA::clearAtlasBuffers()
 {
     if (m_AtlasBuffer) {
         delete[] m_AtlasBuffer;
+        m_AtlasBuffer = nullptr;
         return;
     }
 }
@@ -103,7 +103,7 @@ void Tex::TextureAtlasRGBA::generateAtlas()
 {
     //Find new height of atlas
     int height = 0;
-    int largestWidth = 0;
+    int largestWidth = 0; //width of the largest image imported
     for (int i = 0; i < m_LocalBuffers.size(); i++)
     {
         height += m_LocalBuffers[i].height;
@@ -133,15 +133,20 @@ void Tex::TextureAtlasRGBA::generateAtlas()
             }
         }
         currentHeight += buffer.height;
-
+        
         UVTransform trans;
-        trans.deltaV = (float)  (height - currentHeight) / (float)height; //How much the texture is vertically offset by
-        trans.scaleU = (float)   buffer.width            / (float)largestWidth;
-        trans.scaleV = (float)   buffer.height           / (float)height;
-        m_AtlasRequest[buffer.name] = trans;
+        trans.deltaV = (float) (currentHeight - buffer.height) / (float)height; //How much the texture is vertically offset by
+        trans.scaleU = (float)   buffer.width  / (float)largestWidth;
+        trans.scaleV = (float)   buffer.height / (float)height;
+        
+        //Check if name already submitted
+        if (m_AtlasRequest.find(buffer.name) != m_AtlasRequest.end())
+        {
+            EngineLog("Duplicate atlas texture name - the most recent will take precedent!");
+        }
+        m_AtlasRequest[buffer.name] = trans;   
     }
     clearTextureBuffers();
-
     m_Width = largestWidth; m_Height = height;
 }
 

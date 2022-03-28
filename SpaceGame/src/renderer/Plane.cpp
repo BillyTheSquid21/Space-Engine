@@ -71,6 +71,10 @@ void Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, f
 
 void Plane::render() 
 {	
+	if (!m_Quads)
+	{
+		return;
+	}
 	m_Renderer->commit((TextureVertex*)&m_Quads[0], GetFloatCount<TextureVertex>(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
@@ -90,5 +94,6 @@ void Plane::texturePlane(float u, float v, float width, float height) {
 void Plane::purgeData() {
 	if (m_Quads != NULL) {
 		delete[] m_Quads;
+		m_Quads = nullptr;
 	}
 }

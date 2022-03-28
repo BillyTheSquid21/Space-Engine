@@ -117,7 +117,7 @@ void TranslateShapeVertex(void* verticesArray, unsigned int index, float deltaX,
 
 //Position shapes
 template<typename T>
-void PositionShape(void* verticesArray, Component3f currentPosition, Component3f newPosition, Shape type)
+void PositionShape(void* verticesArray, Struct3f currentPosition, Struct3f newPosition, Shape type)
 {
 	//get amount to translate by
 	float deltaX = newPosition.a - currentPosition.a;
@@ -129,7 +129,7 @@ void PositionShape(void* verticesArray, Component3f currentPosition, Component3f
 
 //Rotation
 template<typename T>
-void RotateShape(void* verticesArray, Component3f rotationCentre, float angle, Shape type, Axis axis)
+void RotateShape(void* verticesArray, Struct3f rotationCentre, float angle, Shape type, Axis axis)
 {
 	T* vertexPointer = (T*)verticesArray;
 

@@ -34,7 +34,7 @@ void SpriteRender::render()
 void TilePosition::update(double deltaTime)
 {
 	//Works out current tile
-	Component2f origin = World::Level::queryOrigin(*m_CurrentLevel);
+	Struct2f origin = World::Level::queryOrigin(*m_CurrentLevel);
 	float deltaX = *m_XPos - origin.a;
 	float deltaZ = *m_ZPos - origin.b;
 	*m_TileX = (unsigned int)(deltaX / World::TILE_SIZE);
@@ -252,7 +252,7 @@ void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Textur
 void Ov_Translation::CentreOnTile(World::LevelID currentLevel, float* x, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
 {
 	//Centre on x and y
-	Component2f origin = World::Level::queryOrigin(currentLevel);
+	Struct2f origin = World::Level::queryOrigin(currentLevel);
 	float expectedX = (float)(World::TILE_SIZE * tileX) + origin.a + World::TILE_SIZE / 2;
 	float expectedZ = (float)(-World::TILE_SIZE * tileZ) + origin.b - World::TILE_SIZE / 2;
 	float deltaX = *x - expectedX;

@@ -92,9 +92,9 @@ namespace Tex
             UVTransform trans = m_AtlasRequest.at(texName);
             for (int i = 0; i < vertCount; i++)
             {
-                vertices[i].uvCoords.b += trans.deltaV;
                 vertices[i].uvCoords.a *= trans.scaleU;
                 vertices[i].uvCoords.b *= trans.scaleV;
+                vertices[i].uvCoords.b += trans.deltaV;
             }
         }
 

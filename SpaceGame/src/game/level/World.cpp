@@ -62,11 +62,13 @@ void World::ModifyTilePerm(World::LevelID level, World::Direction direction, Wor
 
     //Clear tile leaving
     unsigned int index = loc.x * dim.levelH + loc.z;
+    //Check to make sure not blocking level bridge
     perm->at(index) = World::MovementPermissions::CLEAR;
 
     //Block tile entering
     World::TileLoc tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
     index = tileLookup.x * dim.levelH + tileLookup.z;
+    //Check to make sure not blocking level bridge
     perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
 }
 
@@ -134,7 +136,7 @@ std::unordered_map<World::LevelID, std::vector<World::MovementPermissions>*> Wor
 //Level - data is defined back to front with top left being 0,0 not bottom left
 void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
 {
-    LevelData data = ParseLevel();
+    LevelData data = ParseLevel(m_ID);
     m_TileMapPointer = tileMapPointer;
 
     //Allocate permission array
@@ -191,23 +193,34 @@ void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
     Level::s_MovementPermissionsCache[this->m_ID] = &this->m_Permissions;
 }
 
+void World::Level::purgeLevel()
+{
+    m_Plane.purgeData();
+    m_Permissions.clear();
+    m_Heights.clear();
+    World::Level::s_MovementPermissionsCache.erase(m_ID);
+    m_TileMapPointer = nullptr;
+}
+
 void World::Level::render() {
     m_Plane.render();
 }
 
 //Declare unordered maps to cache constant level values
-std::unordered_map<World::LevelID, Component2f> World::Level::s_LevelOriginCache;
+std::unordered_map<World::LevelID, Struct2f> World::Level::s_LevelOriginCache;
 std::unordered_map<World::LevelID, World::LevelDimensions> World::Level::s_LevelDimensionCache;
 
-World::LevelData World::ParseLevel() {
+World::LevelData World::ParseLevel(World::LevelID id) {
     //Setup stream
-    std::ifstream ifs("res/level/level0.json");
+    const std::string path = "res/level/level";
+    const std::string ext = ".json";
+
+    std::ifstream ifs(path + std::to_string((int)id) + ext);
     rapidjson::IStreamWrapper isw(ifs);
     rapidjson::Document doc;
     doc.ParseStream(isw);
 
     //Info
-    LevelID id;
     unsigned int width; unsigned int height;
     float levelOX; float levelOZ;
 
@@ -309,7 +322,7 @@ World::LevelData World::ParseLevel() {
     }
     //Store level origin if not loaded before
     if (Level::s_LevelOriginCache.find(id) == Level::s_LevelOriginCache.end()) {
-        Level::s_LevelOriginCache[id] = { levelOX, levelOZ };
+        Level::s_LevelOriginCache[id] = { levelOX, -1* levelOZ };
     }
 
     //Store level size if not loaded before
@@ -319,4 +332,31 @@ World::LevelData World::ParseLevel() {
 
     LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, planeDirections, planePermissions, planeTextures };
     return data;
+}
+
+void World::LevelContainer::InitialiseLevels()
+{
+    levels.resize((int)World::LevelID::LEVEL_NULL);
+    for (int i = 0; i < levels.size(); i++)
+    {
+        levels[i].setID((World::LevelID)i);
+    }
+}
+
+void World::LevelContainer::LoadLevel(World::LevelID id, Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
+{
+    levels[(int)id].buildLevel(planeRenderer, tileMapPointer);
+}
+
+void World::LevelContainer::UnloadLevel(World::LevelID id)
+{
+    levels[(int)id].purgeLevel();
+}
+
+void World::LevelContainer::render()
+{
+    for (int i = 0; i < levels.size(); i++)
+    {
+        levels[i].render();
+    }
 }

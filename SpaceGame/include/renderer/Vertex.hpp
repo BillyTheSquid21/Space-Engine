@@ -12,17 +12,17 @@ enum class Axis
 //alignas used to confirm all bytes are contiguous in memory - will be reworked if needed
 struct alignas(4) Vertex
 {
-	Component3f position;
+	Struct3f position;
 };
 
 struct alignas(4) TextureVertex : public Vertex
 {
-	Component2f uvCoords;
+	Struct2f uvCoords;
 };
 
 struct alignas(4) ColorTextureVertex : public TextureVertex
 {
-	Component4f color;
+	Struct4f color;
 };
 
 #endif

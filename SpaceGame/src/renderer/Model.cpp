@@ -2,7 +2,7 @@
 
 bool Model::LoadTextureVertexOBJ(const char* path, std::vector<TextureVertex>& verts, std::vector<unsigned int>& inds)
 {
-    auto start = std::chrono::system_clock::now();
+    auto start = EngineTimer::StartTimer();
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path,
@@ -17,13 +17,13 @@ bool Model::LoadTextureVertexOBJ(const char* path, std::vector<TextureVertex>& v
     }
 
     //Temp data
-    std::vector<Component3f> positionDataTemp;
-    std::vector<Component2f> uvDataTemp;
+    std::vector<Struct3f> positionDataTemp;
+    std::vector<Struct2f> uvDataTemp;
 
     auto mesh = scene->mMeshes[0];
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
-        Component3f vert;
+        Struct3f vert;
         vert.a = mesh->mVertices[i].x;
         vert.b = mesh->mVertices[i].y;
         vert.c = mesh->mVertices[i].z;
@@ -39,7 +39,7 @@ bool Model::LoadTextureVertexOBJ(const char* path, std::vector<TextureVertex>& v
     {
         for (int i = 0; i < mesh->mNumVertices; i++)
         {
-            Component2f uv;
+            Struct2f uv;
             uv.a = mesh->mTextureCoords[0][i].x;
             uv.b = mesh->mTextureCoords[0][i].y;
             uvDataTemp.push_back(uv);
@@ -62,12 +62,11 @@ bool Model::LoadTextureVertexOBJ(const char* path, std::vector<TextureVertex>& v
         }
         verts.push_back(vert);
     }
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsedSeconds = end - start;
+    auto time = EngineTimer::EndTimer(start);
 
     EngineLog("Model loaded: ", path);
-    EngineLog("Time elapsed: ", elapsedSeconds.count());
-    if (elapsedSeconds.count() > 4)
+    EngineLog("Time elapsed: ", time);
+    if (time > 4)
     {
         EngineLog("Model took a LONG time to load");
     }

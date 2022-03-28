@@ -20,9 +20,9 @@ namespace World
 	//Level data
 	enum class LevelID
 	{
-		LEVEL_ENTRY,
+		LEVEL_ENTRY, LEVEL_TEST,
 
-		//Null entry
+		//Null entry - keep at end for size purposes
 		LEVEL_NULL
 	};
 
@@ -108,27 +108,29 @@ namespace World
 		std::vector<TileTexture> planeTextures;
 	};
 
-	LevelData ParseLevel();
+	LevelData ParseLevel(World::LevelID id);
 
 	class Level
 	{
 	public:
 		//Load level data
 		void buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		void setID(World::LevelID id) { m_ID = id; }
+		void purgeLevel(); //Clears heap data
 		void render();
 
 		//Static methods
-		static Component2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
+		static Struct2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
 		static LevelDimensions queryDimensions(LevelID level) { if (s_LevelDimensionCache.find(level) != s_LevelDimensionCache.end()) { return s_LevelDimensionCache[level]; } return s_LevelDimensionCache.begin()->second; } //If fails, return first level dim found
 		static std::vector<MovementPermissions>* queryPermissions(LevelID level) { if (s_MovementPermissionsCache.find(level) != s_MovementPermissionsCache.end()) { return s_MovementPermissionsCache[level]; } return s_MovementPermissionsCache.begin()->second; } //If fails, return first level permis found
 		
 		//Static caches
-		static std::unordered_map<LevelID, Component2f> s_LevelOriginCache;
+		static std::unordered_map<LevelID, Struct2f> s_LevelOriginCache;
 		static std::unordered_map<LevelID, LevelDimensions> s_LevelDimensionCache;
 		static std::unordered_map<LevelID, std::vector<MovementPermissions>*> s_MovementPermissionsCache;
 	private:
 		//ID
-		LevelID m_ID;
+		LevelID m_ID = World::LevelID::LEVEL_NULL;
 
 		//All levels have a rendered plane and a grid of tiles
 		Plane m_Plane;
@@ -142,6 +144,17 @@ namespace World
 
 
 		float m_XOffset = 0.0f; float m_YOffset = 0.0f;
+	};
+
+	//Level storage - heads of levels to be used to load in data
+	class LevelContainer
+	{
+	public:
+		void InitialiseLevels();
+		void LoadLevel(World::LevelID id, Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		void UnloadLevel(World::LevelID id);
+		void render();
+		std::vector<Level> levels;
 	};
 
 	//Constants

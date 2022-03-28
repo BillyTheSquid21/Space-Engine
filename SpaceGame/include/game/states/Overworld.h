@@ -11,6 +11,7 @@
 #include "core/ObjManagement.h"
 #include "renderer/Vertex.hpp"
 #include "game/gui/GUI.h"
+#include "game/objects/LoadingZone.h"
 #include "game/utility/GameText.h"
 
 #include "renderer/Model.h"
@@ -43,13 +44,13 @@ private:
 	Texture m_OWSprites;
 
 	//Test level
-	World::Level level;
+	World::LevelContainer m_Levels;
 
 	//Test obj mng
 	ObjectManager m_ObjManager;
 
 	//Test model
-	Model::TextureVertexModel mod = Model::TextureVertexModel::TextureVertexModel("res/model/test.obj");
+	Model::TextureVertexModel mod = Model::TextureVertexModel::TextureVertexModel("res/model/maurice.obj");
 	glm::mat4 modMat;
 
 	//Test tile mapping

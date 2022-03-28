@@ -27,7 +27,8 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     m_Camera.panYDegrees(45.0f);
 
     //test level
-    level.buildLevel(&m_WorldRenderer, &m_OverworldTileMap);
+    m_Levels.InitialiseLevels();
+    m_Levels.LoadLevel(m_CurrentLevel, &m_WorldRenderer, &m_OverworldTileMap);
 
     //gui shit test
     m_Fonts = fonts;
@@ -42,7 +43,7 @@ void Overworld::loadRequiredData() {
 
     //Set texture uniform
     m_Shader.setUniform("u_Texture", 1);
-    
+
     //Load world texture
     m_PlaneTexture.loadTexture("res/textures/OW.png");
     m_PlaneTexture.generateTexture(0);
@@ -77,6 +78,13 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite);
 
+    std::shared_ptr<LoadingZone> lz(new LoadingZone());
+    std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST, &m_WorldRenderer, &m_OverworldTileMap));
+    load->setLoadingFuncs(std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1));
+
+    m_ObjManager.pushRenderHeap(load, &lz->m_RenderComps);
+    m_ObjManager.pushGameObject(lz);
+
     //Add component groups
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
@@ -85,13 +93,18 @@ void Overworld::loadRequiredData() {
 
     atlas.loadTexture("res/textures/OW.png", "OW");
     atlas.loadTexture("res/textures/willow.png", "SPRITE");
-    atlas.generateAtlas();
+    atlas.loadTexture("res/textures/willow2.png", "SPRITE2");
 
-    atlas.mapModelVerts(mod.getVertices(), mod.getVertCount(), "OW");
+    atlas.generateAtlas();
+    atlas.generateTexture(2);
+    atlas.bind();
+
+    atlas.mapModelVerts(mod.getVertices(), mod.getVertCount(), "SPRITE");
 
     //model test
     mod.setRen(&m_ModelRenderer);
     modMat = glm::mat4(1.0f);
+    modMat = glm::scale(modMat, {8.0f, 8.0f, 8.0f});
 
     m_DataLoaded = true;
 }
@@ -121,7 +134,7 @@ void Overworld::render() {
     m_Shader.bind();
 
     //Renders
-    level.render();
+    m_Levels.render();
     m_ObjManager.render();
 
     modMat = glm::rotate(modMat, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -133,6 +146,7 @@ void Overworld::render() {
 
     m_Shader.setUniform("u_Texture", 0);
     m_WorldRenderer.drawPrimitives(m_Shader);
+    m_Shader.setUniform("u_Texture", 2);
     m_ModelRenderer.drawPrimitives(m_Shader);
     m_Shader.setUniform("u_Texture", 1);
     m_SpriteRenderer.drawPrimitives(m_Shader);
