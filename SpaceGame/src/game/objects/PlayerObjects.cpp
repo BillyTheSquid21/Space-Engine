@@ -4,6 +4,7 @@
 bool PlayerMove::canWalk()
 {
 	World::RetrievePermission permission = World::retrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
+	m_Ascend = 0;
 
 	//Check if leaving level
 	if (permission.leaving)
@@ -15,12 +16,33 @@ bool PlayerMove::canWalk()
 		return false;
 	}
 	
+	//Check permissions in all other cases
 	switch (permission.perm)
 	{
 	case World::MovementPermissions::WALL:
 		return false;
 	case World::MovementPermissions::SPRITE_BLOCKING:
 		return false;
+	case World::MovementPermissions::STAIRS_NORTH:
+	{
+		if (*m_Direction == World::Direction::NORTH)
+		{
+			m_Ascend = 1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp++;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+			return true;
+		}
+		else if (*m_Direction == World::Direction::SOUTH)
+		{
+			m_Ascend = -1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp--;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+			return true;
+		}
+		return false;
+	}
 	default:
 		return true;
 	}
@@ -137,7 +159,7 @@ void PlayerMove::cycleEnd(bool anyHeld)
 	m_Timer = 0.0;
 
 	//Centre on x and y
-	Ov_Translation::CentreOnTile(*m_CurrentLevel, m_XPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite);
+	Ov_Translation::CentreOnTile(*m_CurrentLevel, *m_WorldLevel, m_XPos, m_YPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite, (bool)m_Ascend);
 }
 
 void PlayerMove::update(double deltaTime) 
@@ -150,11 +172,27 @@ void PlayerMove::update(double deltaTime)
 	if (m_Timer < World::WALK_DURATION && *m_Walking) 
 	{
 		Ov_Translation::Walk(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, &m_Timer);
+		if (m_Ascend == 1)
+		{
+			Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, false, m_Timer);
+		}
+		else if (m_Ascend == -1)
+		{
+			Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, false, m_Timer);
+		}
 	}
 	//Run method
 	else if (m_Timer < World::RUN_DURATION && *m_Running)
 	{
 		Ov_Translation::Run(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, &m_Timer);
+		if (m_Ascend == 1)
+		{
+			Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, true, m_Timer);
+		}
+		else if (m_Ascend == -1)
+		{
+			Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, true, m_Timer);
+		}
 	}
 
 	//Inherit update method

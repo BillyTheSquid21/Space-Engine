@@ -249,17 +249,98 @@ void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Textur
 	*walkTimer += deltaTime;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, float* x, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);
 	float expectedX = (float)(World::TILE_SIZE * tileX) + origin.a + World::TILE_SIZE / 2;
 	float expectedZ = (float)(-World::TILE_SIZE * tileZ) + origin.b - World::TILE_SIZE / 2;
+	float expectedY = ((int)worldLevel / sqrt(2)) * World::TILE_SIZE;
 	float deltaX = *x - expectedX;
 	float deltaZ = *z - expectedZ;
-	TranslateShape<TextureVertex>(sprite, -deltaX, 0.0f, -deltaZ, Shape::QUAD);
+	float deltaY = *y - expectedY;
+	TranslateShape<TextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
 	*x = expectedX;
 	*z = expectedZ;
+	*y = expectedY;
+}
+
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope)
+{
+	//Centre on x and y
+	Struct2f origin = World::Level::queryOrigin(currentLevel);
+	float expectedX = (float)(World::TILE_SIZE * tileX) + origin.a + World::TILE_SIZE / 2;
+	float expectedZ = (float)(-World::TILE_SIZE * tileZ) + origin.b - World::TILE_SIZE / 2;
+	float expectedY = ((int)worldLevel / sqrt(2)) * World::TILE_SIZE;
+	if (onSlope)
+	{
+		expectedY = ((int)worldLevel / (sqrt(2))) * World::TILE_SIZE - ((int)1 / (2 * (sqrt(2)))) * World::TILE_SIZE;
+	}
+	float deltaX = *x - expectedX;
+	float deltaZ = *z - expectedZ;
+	float deltaY = *y - expectedY;
+	TranslateShape<TextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
+	*x = expectedX;
+	*z = expectedZ;
+	*y = expectedY;
+}
+
+void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running)
+{
+	if (!running)
+	{
+		*y += (World::WALK_SPEED / sqrt(2))* World::TILE_SIZE * deltaTime;
+		TranslateShape<TextureVertex>(sprite, 0.0f, (World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+	}
+	else
+	{
+		*y += (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
+		TranslateShape<TextureVertex>(sprite, 0.0f, (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+	}
+}
+
+void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer)
+{
+	constexpr double WALK_MAX = World::WALK_DURATION / 2;
+	constexpr double RUN_MAX = World::RUN_DURATION / 2;
+	if (!running && timer < WALK_MAX)
+	{
+		return;
+	}
+	else if (running && timer > RUN_MAX)
+	{
+		return;
+	}
+	AscendSlope(y, sprite, deltaTime, running);
+}
+
+void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running)
+{
+	if (!running)
+	{
+		*y += (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
+		TranslateShape<TextureVertex>(sprite, 0.0f, (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+	}
+	else
+	{
+		*y += (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
+		TranslateShape<TextureVertex>(sprite, 0.0f, (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+	}
+}
+
+void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer)
+{
+	constexpr double WALK_MAX = World::WALK_DURATION / 2;
+	constexpr double RUN_MAX = World::RUN_DURATION / 2;
+	if (!running && timer < WALK_MAX)
+	{
+		return;
+	}
+	else if (running && timer > RUN_MAX)
+	{
+		return;
+	}
+	DescendSlope(y, sprite, deltaTime, running);
 }
 
 

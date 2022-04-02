@@ -65,14 +65,14 @@ void Overworld::loadRequiredData() {
 
     //Add player
     OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
-    std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_SpriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_SpriteRenderer);
+    sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_SpriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_SpriteRenderer);
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
 
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
     walk->setPersistentInput(&HELD_SHIFT, &HELD_W, &HELD_S, &HELD_A, &HELD_D);
     walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
-    walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Direction, &sprite->m_Sprite);
+    walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Direction, &sprite->m_WorldLevel, &sprite->m_YPos, &sprite->m_Sprite);
 
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
@@ -91,20 +91,9 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
     m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
 
-    atlas.loadTexture("res/textures/OW.png", "OW");
-    atlas.loadTexture("res/textures/willow.png", "SPRITE");
-    atlas.loadTexture("res/textures/willow2.png", "SPRITE2");
-
     atlas.generateAtlas();
     atlas.generateTexture(2);
     atlas.bind();
-
-    atlas.mapModelVerts(mod.getVertices(), mod.getVertCount(), "SPRITE");
-
-    //model test
-    mod.setRen(&m_ModelRenderer);
-    modMat = glm::mat4(1.0f);
-    modMat = glm::scale(modMat, {8.0f, 8.0f, 8.0f});
 
     m_DataLoaded = true;
 }
@@ -136,11 +125,6 @@ void Overworld::render() {
     //Renders
     m_Levels.render();
     m_ObjManager.render();
-
-    modMat = glm::rotate(modMat, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_ModelRenderer.commitModelMat(modMat);
-    m_ModelRenderer.commitModelMat(glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, -100.0f)));
-    mod.render();
     
     m_Camera.sendCameraUniforms(m_Shader);
 

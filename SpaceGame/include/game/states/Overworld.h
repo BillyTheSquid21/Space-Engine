@@ -45,13 +45,10 @@ private:
 
 	//Test level
 	World::LevelContainer m_Levels;
+	std::shared_ptr<OvSpr_RunningSprite> sprite;
 
 	//Test obj mng
 	ObjectManager m_ObjManager;
-
-	//Test model
-	Model::TextureVertexModel mod = Model::TextureVertexModel::TextureVertexModel("res/model/maurice.obj");
-	glm::mat4 modMat;
 
 	//Test tile mapping
 	TileMap m_OverworldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);

@@ -13,7 +13,7 @@ public:
 	void update(double deltaTime);
 	void setPersistentInput(bool* shift, bool* up, bool* down, bool* left, bool* right) { m_Shift = shift; m_Up = up; m_Down = down, m_Left = left, m_Right = right; };
 	void setSingleInput(bool* up, bool* down, bool* left, bool* right) { m_UpSingle = up; m_DownSingle = down; m_LeftSingle = left; m_RightSingle = right; };
-	void setSpriteData(bool* walking, bool* running, World::Direction* direction, TextureQuad* sprite) { m_Walking = walking; m_Running = running; m_Direction = direction; m_Sprite = sprite; }
+	void setSpriteData(bool* walking, bool* running, World::Direction* direction, World::WorldLevel* level, float* y, TextureQuad* sprite) { m_Walking = walking; m_YPos = y; m_Running = running; m_Direction = direction; m_WorldLevel = level; m_Sprite = sprite; }
 private:
 	bool canWalk();
 	bool startWalk();
@@ -31,8 +31,10 @@ private:
 	bool* m_UpSingle = nullptr; bool* m_DownSingle = nullptr;
 	bool* m_LeftSingle = nullptr; bool* m_RightSingle = nullptr;
 	bool* m_Shift = nullptr;
+	float* m_YPos = nullptr;
+	char m_Ascend = 0; //0 if no, 1 if up, -1 if down
 	double m_Timer = 0.0; bool* m_Walking = nullptr; bool* m_Running = nullptr;
-	World::Direction* m_Direction = nullptr;
+	World::Direction* m_Direction = nullptr; World::WorldLevel* m_WorldLevel = nullptr;
 	TextureQuad* m_Sprite;
 };
 

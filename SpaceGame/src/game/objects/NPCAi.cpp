@@ -84,7 +84,7 @@ void NPC_RandWalk::cycleEnd()
 	*m_WalkTimer = 0.0;
 
 	//Centre on x and y
-	Ov_Translation::CentreOnTile(*m_CurrentLevel, m_XPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite);
+	Ov_Translation::CentreOnTile(*m_CurrentLevel, *m_WorldLevel, m_XPos, m_YPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite);
 }
 
 bool NPC_RandWalk::canWalk()

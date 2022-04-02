@@ -114,6 +114,7 @@ class OvSpr_DirectionalSprite : public OvSpr_Sprite
 {
 public:
 	using OvSpr_Sprite::OvSpr_Sprite;
+	World::WorldLevel m_WorldLevel = World::WorldLevel::F0;
 	World::Direction m_Direction = World::Direction::SOUTH;
 	unsigned int m_AnimationOffsetY = 0;
 };
@@ -138,24 +139,43 @@ namespace Ov_Translation
 {
 	void Walk(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer);
 	template<typename T>
-	void WalkSprite(T sprite, double deltaTime)
+	void WalkSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
-		std::shared_ptr<OvSpr_WalkingSprite> spr = std::static_pointer_cast<OvSpr_WalkingSprite>(sprite);
+		std::shared_ptr<OvSpr_WalkingSprite> spr = std::static_pointer_cast<T>(sprite);
 		Walk(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
 	}
 	void Run(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer);
 	template<typename T>
-	void RunSprite(T sprite, double deltaTime)
+	void RunSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
-		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<OvSpr_RunningSprite>(sprite);
+		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
 		Run(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
 	}
-	void CentreOnTile(World::LevelID currentLevel, float* x, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope);
 	template<typename T>
-	void CentreOnTileSprite(T sprite)
+	void CentreOnTileSprite(std::shared_ptr<T> sprite)
 	{
-		std::shared_ptr<OvSpr_Sprite> spr = std::static_pointer_cast<OvSpr_WalkingSprite>(sprite);
-		CentreOnTile(spr->m_CurrentLevel, &spr->m_XPos, &spr->m_ZPos, spr->m_TileX, spr->m_TileZ, &spr->m_Sprite);
+		std::shared_ptr<OvSpr_DirectionalSprite> spr = std::static_pointer_cast<T>(sprite);
+		CentreOnTile(spr->m_CurrentLevel, &spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_TileX, spr->m_TileZ, &spr->m_Sprite);
+	}
+
+	//Slope ascending and descending - balanced for smoothness
+	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running);
+	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer);	//Allows ascending for middle of tile (won't want to ascend immediately)
+	template<typename T>
+	void AscendSlopeSprite(std::shared_ptr<T> sprite, double deltaTime)
+	{
+		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
+		AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, spr->m_Running);
+	}
+	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running);
+	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer);	//Allows descending for middle of tile (won't want to ascend immediately)
+	template<typename T>
+	void DescendSlopeSprite(std::shared_ptr<T> sprite, double deltaTime)
+	{
+		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
+		DescendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, spr->m_Running);
 	}
 }
 

@@ -9,7 +9,7 @@
 class NPC_RandWalk : public TilePosition
 {
 public:
-	NPC_RandWalk(World::Direction* direct, bool* busy, bool* walking, TextureQuad* sprite, double* walkTimer) {	m_Direction = direct; m_Busy = busy; m_Walking = walking; m_Sprite = sprite; m_WalkTimer = walkTimer;
+	NPC_RandWalk(World::Direction* direct, World::WorldLevel* level, float* y, bool* busy, bool* walking, TextureQuad* sprite, double* walkTimer) {	m_Direction = direct; m_WorldLevel = level; m_YPos = y; m_Busy = busy; m_Walking = walking; m_Sprite = sprite; m_WalkTimer = walkTimer;
 	if (!s_Random.isSeeded()) { s_Random.seed(0.0f, MAX_SEED); } m_CoolDownTimer = s_Random.next() / 8.0f;};
 	
 	void linkLocation(unsigned int* tileX, unsigned int* tileZ, float* x, float* z, World::LevelID* level) { m_TileX = tileX; m_TileZ = tileZ; m_XPos = x; m_ZPos = z; m_CurrentLevel = level; };
@@ -20,7 +20,8 @@ public:
 private:
 	//Busy status is set by other components that carry out instructions - while busy the next instuction wont be read
 	//AI class must be updated first per frame
-	World::Direction* m_Direction = nullptr;
+	World::Direction* m_Direction = nullptr; World::WorldLevel* m_WorldLevel = nullptr;
+	float* m_YPos = nullptr;
 
 	//Applies to either walking or running, as npcs will 
 	bool* m_Walking = nullptr;

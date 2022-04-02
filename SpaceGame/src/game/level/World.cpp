@@ -34,6 +34,7 @@ World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::T
     return tile;
 }
 
+//Retrive in dir
 World::RetrievePermission World::retrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc)
 {
     std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
@@ -54,6 +55,26 @@ World::RetrievePermission World::retrievePermission(World::LevelID level, World:
     return { World::Level::queryPermissions(level)->at(lookupIndex), leavingLevel };
 }
 
+//Retrive on spot
+World::RetrievePermission World::retrievePermission(World::LevelID level, World::TileLoc loc)
+{
+    std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
+    World::LevelDimensions dimensions = World::Level::queryDimensions(level);
+
+    //if outside level bounds, check current tile instead
+    bool leavingLevel = false;
+    if (loc.x < 0 || loc.x >= dimensions.levelW || loc.z < 0 || loc.z >= dimensions.levelH)
+    {
+        loc.x = loc.x;
+        loc.z = loc.z;
+        leavingLevel = true;
+    }
+
+    //Lookup permission for next tile
+    unsigned int lookupIndex = loc.x * dimensions.levelH + loc.z;
+    return { World::Level::queryPermissions(level)->at(lookupIndex), leavingLevel };
+}
+
 void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc)
 {
     //Get level data
@@ -63,13 +84,24 @@ void World::ModifyTilePerm(World::LevelID level, World::Direction direction, Wor
     //Clear tile leaving
     unsigned int index = loc.x * dim.levelH + loc.z;
     //Check to make sure not blocking level bridge
-    perm->at(index) = World::MovementPermissions::CLEAR;
+    if (index < perm->size())
+    {
+        if (perm->at(index) == World::MovementPermissions::SPRITE_BLOCKING)
+        {
+            perm->at(index) = World::MovementPermissions::CLEAR;
+        }
+    }
 
     //Block tile entering
     World::TileLoc tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
     index = tileLookup.x * dim.levelH + tileLookup.z;
-    //Check to make sure not blocking level bridge
-    perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
+    if (index < perm->size())
+    {
+        if (perm->at(index) == World::MovementPermissions::CLEAR)
+        {
+            perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
+        }
+    }
 }
 
 void World::SlopeTile(TextureQuad* quad, World::Direction direction) {

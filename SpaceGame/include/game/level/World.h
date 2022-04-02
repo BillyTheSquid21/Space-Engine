@@ -86,6 +86,7 @@ namespace World
 
 	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
 	RetrievePermission retrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc);
+	RetrievePermission retrievePermission(World::LevelID level, World::TileLoc loc);
 	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc);
 
 	struct LevelDimensions
