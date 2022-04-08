@@ -153,11 +153,13 @@
     <ClCompile Include="src\game\DemoGame.cpp" />
     <ClCompile Include="src\game\gui\GUI.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
+    <ClCompile Include="src\game\level\WorldObjectLoader.cpp" />
     <ClCompile Include="src\game\objects\LoadingZone.cpp" />
     <ClCompile Include="src\game\objects\NPCAi.cpp" />
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
+    <ClCompile Include="src\game\objects\Tree.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
@@ -191,12 +193,14 @@
     <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\level\World.h" />
+    <ClInclude Include="include\game\level\WorldObjectLoader.h" />
     <ClInclude Include="include\game\objects\LoadingZone.h" />
     <ClInclude Include="include\game\objects\NPCAi.h" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
     <ClInclude Include="include\game\objects\Script.hpp" />
     <ClInclude Include="include\game\objects\TileMap.h" />
+    <ClInclude Include="include\game\objects\Tree.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
@@ -242,6 +246,7 @@
     <ClInclude Include="src\vendor\rapidjson\stringbuffer.h" />
     <ClInclude Include="src\vendor\rapidjson\uri.h" />
     <ClInclude Include="src\vendor\rapidjson\writer.h" />
+    <ClInclude Include="src\vendor\rapidxml\rapidxml.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\level\level0.json" />

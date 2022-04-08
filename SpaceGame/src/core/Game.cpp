@@ -74,8 +74,8 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glDepthFunc(GL_LESS);
 
     //alpha blending
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     return success;
 }

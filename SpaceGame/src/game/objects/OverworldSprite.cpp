@@ -1,28 +1,5 @@
 #include "game/objects/OverworldSprite.h"
 
-//DEBUG
-static void logDir(World::Direction dir)
-{
-	switch (dir)
-	{
-	case World::Direction::NORTH:
-		EngineLog("NORTH");
-		break;
-	case World::Direction::SOUTH:
-		EngineLog("SOUTH");
-		break;
-	case World::Direction::EAST:
-		EngineLog("EAST");
-		break;
-	case World::Direction::WEST:
-		EngineLog("WEST");
-		break;
-	default:
-		EngineLog("WTF??");
-		break;
-	}
-}
-
 //components
 void SpriteRender::render()
 {
@@ -47,7 +24,7 @@ void SpriteMap::update(double deltaTime)
 	{
 		//Update sprite map
 		UVData data = m_Map->uvTile(m_TextureOrigin.textureX + *m_OffsetX, m_TextureOrigin.textureY + *m_OffsetY);
-		SetQuadUV((TextureVertex*)m_Sprite, data.uvX, data.uvY, data.uvWidth, data.uvHeight);
+		SetQuadUV((TextureVertex*)m_Sprite, data.u, data.v, data.width, data.height);
 		m_LastOffX = *m_OffsetX; m_LastOffY = *m_OffsetY;
 	}
 }
@@ -189,7 +166,7 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 
 void OvSpr_Sprite::setSprite(UVData data)
 {
-	SetQuadUV((TextureVertex*)&m_Sprite, data.uvX, data.uvY, data.uvWidth, data.uvHeight);
+	SetQuadUV((TextureVertex*)&m_Sprite, data.u, data.v, data.width, data.height);
 }
 
 //Translation
@@ -299,17 +276,32 @@ void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime
 	}
 }
 
-void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer)
+void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst
+)
 {
 	constexpr double WALK_MAX = World::WALK_DURATION / 2;
 	constexpr double RUN_MAX = World::RUN_DURATION / 2;
-	if (!running && timer < WALK_MAX)
+	if (!running)
 	{
-		return;
+		if (!verticalFirst && timer < WALK_MAX)
+		{
+			return;
+		}
+		else if (verticalFirst && timer > WALK_MAX)
+		{
+			return;
+		}
 	}
-	else if (running && timer > RUN_MAX)
+	else if (running)
 	{
-		return;
+		if (!verticalFirst && timer < RUN_MAX)
+		{
+			return;
+		}
+		else if (verticalFirst && timer > RUN_MAX)
+		{
+			return;
+		}
 	}
 	AscendSlope(y, sprite, deltaTime, running);
 }
@@ -328,17 +320,31 @@ void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTim
 	}
 }
 
-void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer)
+void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst)
 {
 	constexpr double WALK_MAX = World::WALK_DURATION / 2;
 	constexpr double RUN_MAX = World::RUN_DURATION / 2;
-	if (!running && timer < WALK_MAX)
+	if (!running)
 	{
-		return;
+		if (!verticalFirst && timer < WALK_MAX)
+		{
+			return;
+		}
+		else if (verticalFirst && timer > WALK_MAX)
+		{
+			return;
+		}
 	}
-	else if (running && timer > RUN_MAX)
+	else if (running)
 	{
-		return;
+		if (!verticalFirst && timer < RUN_MAX)
+		{
+			return;
+		}
+		else if (verticalFirst && timer > RUN_MAX)
+		{
+			return;
+		}
 	}
 	DescendSlope(y, sprite, deltaTime, running);
 }
@@ -362,7 +368,7 @@ std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(
 	//Add render group components
 	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
 	//Add sprite map components
-	sprMap->addComponent(&sprite->m_UpdateComps, &sprite->m_Sprite, &sprite->m_AnimationOffsetY, &sprite->m_AnimationOffsetY, &map, data.texture);
+	sprMap->addComponent(&sprite->m_UpdateComps, &sprite->m_Sprite, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &map, data.texture);
 	//Add facing map components
 	faceUp->addComponent(&sprite->m_UpdateComps, &sprite->m_AnimationOffsetY, &sprite->m_Direction);
 	return sprite;

@@ -117,6 +117,7 @@ public:
 	World::WorldLevel m_WorldLevel = World::WorldLevel::F0;
 	World::Direction m_Direction = World::Direction::SOUTH;
 	unsigned int m_AnimationOffsetY = 0;
+	unsigned int m_AnimationOffsetX = 0;
 };
 
 class OvSpr_WalkingSprite : public OvSpr_DirectionalSprite
@@ -125,7 +126,6 @@ public:
 	using OvSpr_DirectionalSprite::OvSpr_DirectionalSprite;
 	bool m_Walking = false;
 	double m_Timer = 0.0;
-	unsigned int m_AnimationOffsetX = 0;
 };
 
 class OvSpr_RunningSprite : public OvSpr_WalkingSprite
@@ -162,7 +162,7 @@ namespace Ov_Translation
 
 	//Slope ascending and descending - balanced for smoothness
 	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running);
-	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer);	//Allows ascending for middle of tile (won't want to ascend immediately)
+	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst);	//Allows ascending for middle of tile (won't want to ascend immediately)
 	template<typename T>
 	void AscendSlopeSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
@@ -170,7 +170,7 @@ namespace Ov_Translation
 		AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, spr->m_Running);
 	}
 	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running);
-	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer);	//Allows descending for middle of tile (won't want to ascend immediately)
+	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst);	//Allows descending for middle of tile (won't want to ascend immediately)
 	template<typename T>
 	void DescendSlopeSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{

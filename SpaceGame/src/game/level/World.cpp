@@ -12,6 +12,27 @@ void World::tileLevel(TextureQuad* quad, WorldLevel level) {
     TranslateShape<TextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
+World::Direction World::GetDirection(std::string dir) 
+{
+    if (dir == "NORTH")
+    {
+        return World::Direction::NORTH;
+    }
+    else if (dir == "SOUTH")
+    {
+        return World::Direction::SOUTH;
+    }
+    else if (dir == "EAST")
+    {
+        return World::Direction::EAST;
+    }
+    else if (dir == "WEST")
+    {
+        return World::Direction::WEST;
+    }
+    return World::Direction::SOUTH; //default
+}
+
 World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::TileLoc tile)
 {
     switch (direct)
@@ -35,7 +56,7 @@ World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::T
 }
 
 //Retrive in dir
-World::RetrievePermission World::retrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc)
+World::LevelPermission World::RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc)
 {
     std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
@@ -56,7 +77,7 @@ World::RetrievePermission World::retrievePermission(World::LevelID level, World:
 }
 
 //Retrive on spot
-World::RetrievePermission World::retrievePermission(World::LevelID level, World::TileLoc loc)
+World::LevelPermission World::RetrievePermission(World::LevelID level, World::TileLoc loc)
 {
     std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
@@ -185,7 +206,7 @@ void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
 
     //Texture all with tex 0,0
     UVData texData = m_TileMapPointer->uvTile(0, 0);
-    m_Plane.texturePlane(texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
+    m_Plane.texturePlane(texData.u, texData.v, texData.width, texData.height);
 
     unsigned int xFirstIndex = 0;
     unsigned int yFirstIndex = 0;
@@ -216,7 +237,7 @@ void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
             TileTexture tileTex = data.planeTextures[yFirstIndex];
             if (!(tileTex.textureX == 0 && tileTex.textureY == 0)) {
                 texData = m_TileMapPointer->uvTile(tileTex.textureX, tileTex.textureY);
-                SetQuadUV((TextureVertex*)m_Plane.accessQuad(x, y), texData.uvX, texData.uvY, texData.uvWidth, texData.uvHeight);
+                SetQuadUV((TextureVertex*)m_Plane.accessQuad(x, y), texData.u, texData.v, texData.width, texData.height);
             }
         }
     }
@@ -251,6 +272,7 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     rapidjson::IStreamWrapper isw(ifs);
     rapidjson::Document doc;
     doc.ParseStream(isw);
+    ifs.close();
 
     //Info
     unsigned int width; unsigned int height;

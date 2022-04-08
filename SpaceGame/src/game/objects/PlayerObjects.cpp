@@ -3,21 +3,83 @@
 //Player
 bool PlayerMove::canWalk()
 {
-	World::RetrievePermission permission = World::retrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
-	m_Ascend = 0;
+	World::LevelPermission permissionNext = World::RetrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
+	World::LevelPermission permissionCurrent = World::RetrievePermission(*m_CurrentLevel, { *m_TileX, *m_TileZ });
+	m_Ascend = 0; m_CurrentIsSlope = false; m_NextIsSlope = false;
 
 	//Check if leaving level
-	if (permission.leaving)
+	if (permissionNext.leaving)
 	{
-		if (permission.perm == World::MovementPermissions::LEVEL_BRIDGE)
+		if (permissionNext.perm == World::MovementPermissions::LEVEL_BRIDGE)
 		{
 			return true;
 		}
 		return false;
 	}
+
+	//Check current permission if relevant
+	switch (permissionCurrent.perm)
+	{
+	case World::MovementPermissions::STAIRS_NORTH:
+		m_CurrentIsSlope = true;
+		if (*m_Direction == World::Direction::NORTH)
+		{
+			m_Ascend = 1;
+		}
+		else if (*m_Direction == World::Direction::SOUTH)
+		{
+			m_Ascend = -1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp--;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+		}
+		break;
+	case World::MovementPermissions::STAIRS_SOUTH:
+		m_CurrentIsSlope = true;
+		if (*m_Direction == World::Direction::SOUTH)
+		{
+			m_Ascend = 1;
+		}
+		else if (*m_Direction == World::Direction::NORTH)
+		{
+			m_Ascend = -1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp--;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+		}
+		break;
+	case World::MovementPermissions::STAIRS_EAST:
+		m_CurrentIsSlope = true;
+		if (*m_Direction == World::Direction::EAST)
+		{
+			m_Ascend = 1;
+		}
+		else if (*m_Direction == World::Direction::WEST)
+		{
+			m_Ascend = -1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp--;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+		}
+		break;
+	case World::MovementPermissions::STAIRS_WEST:
+		m_CurrentIsSlope = true;
+		if (*m_Direction == World::Direction::WEST)
+		{
+			m_Ascend = 1;
+		}
+		else if (*m_Direction == World::Direction::EAST)
+		{
+			m_Ascend = -1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp--;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+		}
+		break;
+	}
 	
-	//Check permissions in all other cases
-	switch (permission.perm)
+	//Check next permission if relevant
+	switch (permissionNext.perm)
 	{
 	case World::MovementPermissions::WALL:
 		return false;
@@ -25,6 +87,7 @@ bool PlayerMove::canWalk()
 		return false;
 	case World::MovementPermissions::STAIRS_NORTH:
 	{
+		m_NextIsSlope = true;
 		if (*m_Direction == World::Direction::NORTH)
 		{
 			m_Ascend = 1;
@@ -36,9 +99,60 @@ bool PlayerMove::canWalk()
 		else if (*m_Direction == World::Direction::SOUTH)
 		{
 			m_Ascend = -1;
+			return true;
+		}
+		return false;
+	}
+	case World::MovementPermissions::STAIRS_SOUTH:
+	{
+		m_NextIsSlope = true;
+		if (*m_Direction == World::Direction::SOUTH)
+		{
+			m_Ascend = 1;
 			int levelTmp = (int)*m_WorldLevel;
-			levelTmp--;
+			levelTmp++;
 			*m_WorldLevel = (World::WorldLevel)levelTmp;
+			return true;
+		}
+		else if (*m_Direction == World::Direction::NORTH)
+		{
+			m_Ascend = -1;
+			return true;
+		}
+		return false;
+	}
+	case World::MovementPermissions::STAIRS_EAST:
+	{
+		m_NextIsSlope = true;
+		if (*m_Direction == World::Direction::EAST)
+		{
+			m_Ascend = 1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp++;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+			return true;
+		}
+		else if (*m_Direction == World::Direction::WEST)
+		{
+			m_Ascend = -1;
+			return true;
+		}
+		return false;
+	}
+	case World::MovementPermissions::STAIRS_WEST:
+	{
+		m_NextIsSlope = true;
+		if (*m_Direction == World::Direction::WEST)
+		{
+			m_Ascend = 1;
+			int levelTmp = (int)*m_WorldLevel;
+			levelTmp++;
+			*m_WorldLevel = (World::WorldLevel)levelTmp;
+			return true;
+		}
+		else if (*m_Direction == World::Direction::EAST)
+		{
+			m_Ascend = -1;
 			return true;
 		}
 		return false;
@@ -159,14 +273,39 @@ void PlayerMove::cycleEnd(bool anyHeld)
 	m_Timer = 0.0;
 
 	//Centre on x and y
-	Ov_Translation::CentreOnTile(*m_CurrentLevel, *m_WorldLevel, m_XPos, m_YPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite, (bool)m_Ascend);
+	if (!m_NextIsSlope)
+	{
+		//Is false as 
+		Ov_Translation::CentreOnTile(*m_CurrentLevel, *m_WorldLevel, m_XPos, m_YPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite, false);
+		return;
+	}
+	if (m_NextIsSlope)
+	{
+		//Is true as 
+		Ov_Translation::CentreOnTile(*m_CurrentLevel, *m_WorldLevel, m_XPos, m_YPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite, true);
+		return;
+	}
+	
 }
 
 void PlayerMove::update(double deltaTime) 
 {
-
 	//Checks to start walking
 	bool anyHeld = checkInputs();
+
+	//Check how to ascend
+	m_MoveVerticalFirst = false;
+	if (m_Ascend)
+	{
+		if (m_CurrentIsSlope && !m_NextIsSlope)
+		{
+			m_MoveVerticalFirst = true;
+		}
+		if (!m_CurrentIsSlope && m_NextIsSlope)
+		{
+			m_MoveVerticalFirst = false;
+		}
+	}
 
 	//Walk method
 	if (m_Timer < World::WALK_DURATION && *m_Walking) 
@@ -174,11 +313,25 @@ void PlayerMove::update(double deltaTime)
 		Ov_Translation::Walk(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, &m_Timer);
 		if (m_Ascend == 1)
 		{
-			Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, false, m_Timer);
+			if (m_CurrentIsSlope && m_NextIsSlope)
+			{
+				Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, false);
+			}
+			else
+			{
+				Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, false, m_Timer, m_MoveVerticalFirst);
+			}
 		}
 		else if (m_Ascend == -1)
 		{
-			Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, false, m_Timer);
+			if (m_CurrentIsSlope && m_NextIsSlope)
+			{
+				Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, false);
+			}
+			else
+			{
+				Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, false, m_Timer, m_MoveVerticalFirst);
+			}
 		}
 	}
 	//Run method
@@ -187,11 +340,25 @@ void PlayerMove::update(double deltaTime)
 		Ov_Translation::Run(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, &m_Timer);
 		if (m_Ascend == 1)
 		{
-			Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, true, m_Timer);
+			if (m_CurrentIsSlope && m_NextIsSlope)
+			{
+				Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, true);
+			}
+			else
+			{
+				Ov_Translation::AscendSlope(m_YPos, m_Sprite, deltaTime, true, m_Timer, m_MoveVerticalFirst);
+			}
 		}
 		else if (m_Ascend == -1)
 		{
-			Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, true, m_Timer);
+			if (m_CurrentIsSlope && m_NextIsSlope)
+			{
+				Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, true);
+			}
+			else
+			{
+				Ov_Translation::DescendSlope(m_YPos, m_Sprite, deltaTime, true, m_Timer, m_MoveVerticalFirst);
+			}
 		}
 	}
 

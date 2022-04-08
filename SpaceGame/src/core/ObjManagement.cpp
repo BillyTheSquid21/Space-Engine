@@ -7,6 +7,7 @@ void ObjectManager::update(double deltaTime) {
 	std::future<void> f;
 	if (m_CheckCleanupTimer > 10.0)
 	{
+		EngineLog("Cleaning objects...");
 		f = std::async(std::launch::async, &ObjectManager::cleanObjects, this);
 		m_CheckCleanupTimer = 0.0;
 	}
@@ -104,21 +105,32 @@ void ObjectManager::render() {
 
 void ObjectManager::cleanObjects()
 {
+	auto ts = EngineTimer::StartTimer();
 	int size = m_Objects.size();
+	int cleanedTotal = 0;
+	std::lock_guard<std::shared_mutex> lock(m_ObjMutex);
 	for (int i = 0; i < size; i++)
 	{
-		if (m_Objects[i]->safeToDelete())
+		if (!m_Objects[i].obj->dead())
 		{
-			EngineLog("Cleaned object at: ", i);
+			continue;
+		}
+		if (m_Objects[i].obj->safeToDelete())
+		{
+			m_ObjIDMap.erase(m_Objects[i].name);
 			m_Objects.erase(m_Objects.begin() + i);
 			i--;
 			size--;
+			cleanedTotal++;
 
 			//adjust object id's
 			for (int i = 0; i < size; i++)
 			{
-				m_Objects[i]->setID(i);
+				m_Objects[i].obj->setID(i);
+				m_ObjIDMap[m_Objects[i].name] = i;
 			}
 		}
 	}
+	EngineLog("Objects cleaned: ", cleanedTotal);
+	EngineLog("Time to clean objects: ", EngineTimer::EndTimer(ts));
 }

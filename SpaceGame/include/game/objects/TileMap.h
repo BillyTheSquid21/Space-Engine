@@ -15,10 +15,10 @@
 //Maps the UV coords of a texture to simple blocks of x width and x height
 struct UVData
 {
-	float uvX;
-	float uvY;
-	float uvWidth;
-	float uvHeight;
+	float u;
+	float v;
+	float width;
+	float height;
 };
 
 //Maps a tile to a uniform texture
@@ -27,9 +27,12 @@ class TileMap
 public:
 	TileMap(unsigned int texW, unsigned int texH, unsigned int selW, unsigned int selH);
 	UVData uvTile(unsigned int tileX, unsigned int tileY);
+	UVData uvTile(unsigned int tileX, unsigned int tileY, unsigned int width, unsigned int height);
 private:
 	const unsigned int m_TilesTotalX;
 	const unsigned int m_TilesTotalY;
+	const unsigned int m_TexWidth;
+	const unsigned int m_TexHeight;
 	const float m_SelectWidth;
 	const float m_SelectHeight;
 	static const float s_TextureSpillOffset; //Prevents borders on edge of quads especially in plane

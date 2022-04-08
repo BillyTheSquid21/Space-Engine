@@ -23,7 +23,7 @@ private:
 	OvSpr_RunningSprite* m_PlayerPointer = nullptr;
 
 	//Loading zone data
-	Struct2f m_Origin = {0.0f, -288.0f}; //Lower left
+	Struct2f m_Origin = {352.0f, -288.0f}; //Lower left
 	Struct2f m_Bounds = {128.0f, 128.0f}; //Width and height going out
 	World::LevelID m_L1_ID;
 	World::LevelID m_L2_ID;

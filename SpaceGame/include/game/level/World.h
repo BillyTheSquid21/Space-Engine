@@ -7,6 +7,7 @@
 #include "game/objects/TileMap.h"
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
+#include <rapidxml/rapidxml.hpp>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -28,7 +29,7 @@ namespace World
 
 	//When level data is written, use int value the respective enum value evaluates to
 
-	//Directions - north is +Z axis, south is -Z axis, west is +X axis, east is -X 
+	//Directions - north is -Z axis, south is +Z axis, west is +X axis, east is -X (taken from abs)
 	enum class Direction : unsigned char
 	{
 		DIRECTION_NULL,
@@ -38,7 +39,9 @@ namespace World
 		WEST
 	};
 
-	enum class WorldLevel
+	World::Direction GetDirection(std::string dir);
+
+	enum class WorldLevel : int
 	{
 		//Above ground
 		F0 = 0, F1 = 1, F2 = 2, F3 = 3, F4 = 4, F5 = 5,
@@ -78,15 +81,15 @@ namespace World
 		unsigned int z;
 	};
 
-	struct RetrievePermission
+	struct LevelPermission
 	{
 		MovementPermissions perm;
 		bool leaving = false;
 	};
 
 	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
-	RetrievePermission retrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc);
-	RetrievePermission retrievePermission(World::LevelID level, World::TileLoc loc);
+	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc);
+	LevelPermission RetrievePermission(World::LevelID level, World::TileLoc loc);
 	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc);
 
 	struct LevelDimensions

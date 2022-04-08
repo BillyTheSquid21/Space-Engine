@@ -3,15 +3,11 @@
 #define OVERWORLD_H
 
 #include "game/level/World.h"
-#include "game/objects/PlayerObjects.h"
-#include "game/objects/NPCAi.h"
-#include "game/objects/Script.hpp"
-#include "game/objects/TileMap.h"
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
+#include "game/level/WorldObjectLoader.h"
 #include "renderer/Vertex.hpp"
 #include "game/gui/GUI.h"
-#include "game/objects/LoadingZone.h"
 #include "game/utility/GameText.h"
 
 #include "renderer/Model.h"

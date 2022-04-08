@@ -89,7 +89,7 @@ void NPC_RandWalk::cycleEnd()
 
 bool NPC_RandWalk::canWalk()
 {
-	World::RetrievePermission perm = World::retrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
+	World::LevelPermission perm = World::RetrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
 	if (perm.leaving)
 	{
 		return false;
@@ -97,12 +97,10 @@ bool NPC_RandWalk::canWalk()
 	//if not leaving, check permissions
 	switch (perm.perm)
 	{
-	case World::MovementPermissions::WALL:
-		return false;
-	case World::MovementPermissions::SPRITE_BLOCKING:
-		return false;
-	default:
+	case World::MovementPermissions::CLEAR:
 		return true;
+	default:
+		return false;
 	}
 }
 

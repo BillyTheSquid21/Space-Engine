@@ -62,6 +62,9 @@ void Overworld::loadRequiredData() {
     std::shared_ptr<UpdateComponentGroup<TilePosition>> tileGroup(new UpdateComponentGroup<TilePosition>());
     std::shared_ptr<UpdateComponentGroup<SpriteMap>> mapGroup(new UpdateComponentGroup<SpriteMap>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationRunning>> runGroup(new UpdateComponentGroup<UpdateAnimationRunning>());
+    std::shared_ptr<UpdateComponentGroup<UpdateAnimationFacing>> faceGroup(new UpdateComponentGroup<UpdateAnimationFacing>());
+    std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
+    std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> randWGroup(new UpdateComponentGroup<NPC_RandWalk>());
 
     //Add player
     OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
@@ -76,7 +79,7 @@ void Overworld::loadRequiredData() {
 
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
-    m_ObjManager.pushGameObject(sprite);
+    m_ObjManager.pushGameObject(sprite, "Player");
 
     std::shared_ptr<LoadingZone> lz(new LoadingZone());
     std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST, &m_WorldRenderer, &m_OverworldTileMap));
@@ -90,10 +93,19 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
     m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
+    m_ObjManager.pushUpdateGroup(faceGroup, "UpdateFacing");
+    m_ObjManager.pushUpdateGroup(walkGroup, "UpdateWalking");
+    m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
+
+    //Test obj load
+    ParseLevelObjects(&m_ObjManager, &m_SpriteTileMap, &m_SpriteRenderer, World::LevelID::LEVEL_ENTRY);
+    ParseLevelTrees(&m_ObjManager, &m_OverworldTileMap, &m_WorldRenderer, World::LevelID::LEVEL_ENTRY);
 
     atlas.generateAtlas();
     atlas.generateTexture(2);
     atlas.bind();
+
+    m_ObjManager.objectAt<GameObject>(2)->messageAll(Message::KILL);
 
     m_DataLoaded = true;
 }
@@ -128,13 +140,12 @@ void Overworld::render() {
     
     m_Camera.sendCameraUniforms(m_Shader);
 
-    m_Shader.setUniform("u_Texture", 0);
-    m_WorldRenderer.drawPrimitives(m_Shader);
-    m_Shader.setUniform("u_Texture", 2);
-    m_ModelRenderer.drawPrimitives(m_Shader);
     m_Shader.setUniform("u_Texture", 1);
     m_SpriteRenderer.drawPrimitives(m_Shader);
-
+    m_Shader.setUniform("u_Texture", 2);
+    m_ModelRenderer.drawPrimitives(m_Shader);
+    m_Shader.setUniform("u_Texture", 0);
+    m_WorldRenderer.drawPrimitives(m_Shader);
 
     //IMGUI Test
     GameGUI::TextBox gui(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f);

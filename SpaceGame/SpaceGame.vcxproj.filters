@@ -79,6 +79,9 @@
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{9df65170-35b0-46a0-bec5-ca3fa9cdce4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\rapidxml">
+      <UniqueIdentifier>{f92bb3dd-d234-4035-8b4a-cd34dea795df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -173,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="src\game\objects\LoadingZone.cpp">
       <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\objects\Tree.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\level\WorldObjectLoader.cpp">
+      <Filter>Source Files\Game\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="include\game\objects\LoadingZone.h">
       <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\objects\Tree.h">
+      <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\rapidxml\rapidxml.hpp">
+      <Filter>Source Files\Vendor\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\level\WorldObjectLoader.h">
+      <Filter>Header Files\Game\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

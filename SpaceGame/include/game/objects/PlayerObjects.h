@@ -6,6 +6,7 @@
 
 
 //Player walk uses exact data of TilePosition so inherit for this
+//TODO - refined many methods etc - however is currently very fast and so should be fine
 class PlayerMove : public TilePosition
 {
 public:
@@ -32,7 +33,14 @@ private:
 	bool* m_LeftSingle = nullptr; bool* m_RightSingle = nullptr;
 	bool* m_Shift = nullptr;
 	float* m_YPos = nullptr;
+
+	//Ascend stores whether was just going up or down
+	//OnSlope stores whether is on a slope to get order of moving along and up slope right
 	char m_Ascend = 0; //0 if no, 1 if up, -1 if down
+	bool m_CurrentIsSlope = false; //Says whether currently on slope
+	bool m_NextIsSlope = false;
+	bool m_MoveVerticalFirst = false;
+
 	double m_Timer = 0.0; bool* m_Walking = nullptr; bool* m_Running = nullptr;
 	World::Direction* m_Direction = nullptr; World::WorldLevel* m_WorldLevel = nullptr;
 	TextureQuad* m_Sprite;
