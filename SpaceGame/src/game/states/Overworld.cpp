@@ -104,8 +104,11 @@ void Overworld::loadRequiredData() {
     atlas.generateAtlas();
     atlas.generateTexture(2);
     atlas.bind();
-
+    
+    m_ObjManager.objectAt<GameObject>(1)->messageAll(Message::KILL);
     m_ObjManager.objectAt<GameObject>(2)->messageAll(Message::KILL);
+    m_ObjManager.objectAt<GameObject>(3)->messageAll(Message::KILL);
+    m_ObjManager.objectAt<GameObject>(4)->messageAll(Message::KILL);
 
     m_DataLoaded = true;
 }

@@ -34,7 +34,7 @@ public:
 	void setActive(bool set) { m_Active = set; }
 	bool isDead() const { return m_Dead; }
 	//Kills component which ensures is also inactive. They will be sorted to end and before pushing the vector back, a new object will check if can replace dead comp
-	void kill() { m_Dead = true; (*m_ParentPointers)[m_ID] = nullptr; setActive(false); }
+	void kill() { m_Dead = true; setActive(false); }
 
 	//By default only checks for deactivate and activate message - can be overidden - ACTIVATE AND DEACTIVATE MUST BE REIMPLEMENTED
 	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { Message message = m_MessageQueue.nextInQueue(); 
@@ -314,11 +314,10 @@ public:
 	void messageAll(Message message) { messageAllUpdate(message); messageAllRender(message); 
 	if (message == Message::KILL) { m_Dead = true; }};
 
-	//Check if all components have been decoupled (which can only be done
-	//via the kill command, if any pointers aren't null, return false
+	//Checks all are dead
 	bool safeToDelete() {
-		for (unsigned int i = 0; i < m_UpdateComps.size(); i++) { EngineLog(i); EngineLog("ADDR", i, (unsigned int)m_UpdateComps[i]); if (m_UpdateComps[i]) { return false; } }
-		for (int i = 0; i < m_RenderComps.size(); i++) { if (m_RenderComps[i]) { return false; } }
+		for (int i = 0; i < m_UpdateComps.size(); i++) { if (!m_UpdateComps[i]->isDead()) { return false; } }
+		for (int i = 0; i < m_RenderComps.size(); i++) { if (!m_RenderComps[i]->isDead()) { return false; } }
 		return true;
 	}
 
