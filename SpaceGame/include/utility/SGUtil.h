@@ -7,43 +7,49 @@
 #include <chrono>
 #include <mutex>
 #include <vector>
+#include <syncstream>
 
 static const char ENGINE_TAG[]{ "[Space Engine] " };
 
 template<typename T>
 void EngineLog(T value) {
-	std::cout << ENGINE_TAG;
-	std::cout << value << "\n";
+	std::osyncstream bout(std::cout);
+	bout << ENGINE_TAG;
+	bout << value << "\n";
 }
 template<typename T>
 void EngineLog(std::string message,T value) {
-	std::cout << ENGINE_TAG;
-	std::cout << message;
-	std::cout << value << "\n";
+	std::osyncstream bout(std::cout);
+	bout << ENGINE_TAG;
+	bout << message;
+	bout << value << "\n";
 }
 
 template<typename T>
 void EngineLog(T value1, T value2) {
-	std::cout << ENGINE_TAG;
-	std::cout << value1 << " ";
-	std::cout << value2 << "\n";
+	std::osyncstream bout(std::cout);
+	bout << ENGINE_TAG;
+	bout << value1 << " ";
+	bout << value2 << "\n";
 }
 
 template<typename T>
 void EngineLog(std::string message, T value1, T value2) {
-	std::cout << ENGINE_TAG;
-	std::cout << message << " ";
-	std::cout << value1 << " ";
-	std::cout << value2 << "\n";
+	std::osyncstream bout(std::cout);
+	bout << ENGINE_TAG;
+	bout << message << " ";
+	bout << value1 << " ";
+	bout << value2 << "\n";
 }
 
 template<typename T>
 void EngineLog(std::string message, T value1, T value2, T value3) {
-	std::cout << ENGINE_TAG;
-	std::cout << message << " ";
-	std::cout << value1 << " ";
-	std::cout << value2 << " ";
-	std::cout << value3 << "\n";
+	std::osyncstream bout(std::cout);
+	bout << ENGINE_TAG;
+	bout << message << " ";
+	bout << value1 << " ";
+	bout << value2 << " ";
+	bout << value3 << "\n";
 }
 
 float invSqrt(float number); //Supposedly a faster inv sqrt

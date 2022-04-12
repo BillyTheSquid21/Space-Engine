@@ -147,8 +147,10 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 	//Set
 	m_TileX = data.tile.x; m_TileZ = data.tile.z; m_CurrentLevel = data.levelID;
 	//X Y Z
-	float x = (m_TileX * TILE_SIZE); float y = ((float)data.height / sqrt(2)) * TILE_SIZE;
-	float z = -(m_TileZ * TILE_SIZE);
+	//Get origin
+	Struct2f origin = World::Level::queryOrigin(data.levelID);
+	float x = origin.a + (m_TileX * TILE_SIZE); float y = ((float)data.height / sqrt(2)) * TILE_SIZE;
+	float z = origin.b -(m_TileZ * TILE_SIZE);
 	//Set pos - x in tile middle
 	m_XPos = x + TILE_SIZE / 2; m_YPos = y; m_ZPos = z - TILE_SIZE / 2;
 	//Make Sprite

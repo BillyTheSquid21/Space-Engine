@@ -27,8 +27,7 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     m_Camera.panYDegrees(45.0f);
 
     //test level
-    m_Levels.InitialiseLevels();
-    m_Levels.LoadLevel(m_CurrentLevel, &m_WorldRenderer, &m_OverworldTileMap);
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_SpriteRenderer, &m_WorldRenderer, &m_SpriteTileMap, &m_WorldTileMap);
 
     //gui shit test
     m_Fonts = fonts;
@@ -38,6 +37,7 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
 }
 
 void Overworld::loadRequiredData() {
+
     //Shader
     m_Shader.create("res/shaders/DefaultTexture.glsl");
 
@@ -66,6 +66,18 @@ void Overworld::loadRequiredData() {
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
     std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> randWGroup(new UpdateComponentGroup<NPC_RandWalk>());
 
+    //Add component groups
+    m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
+    m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
+    m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
+    m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
+    m_ObjManager.pushUpdateGroup(faceGroup, "UpdateFacing");
+    m_ObjManager.pushUpdateGroup(walkGroup, "UpdateWalking");
+    m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
+
+    //Load level data
+    m_Levels.LoadLevel(m_CurrentLevel);
+
     //Add player
     OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
     sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_SpriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_SpriteRenderer);
@@ -81,34 +93,24 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite, "Player");
 
+
     std::shared_ptr<LoadingZone> lz(new LoadingZone());
-    std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST, &m_WorldRenderer, &m_OverworldTileMap));
-    load->setLoadingFuncs(std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3), std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1));
+    std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST));
+    load->setLoadingFuncs(std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1), std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1));
 
     m_ObjManager.pushRenderHeap(load, &lz->m_RenderComps);
     m_ObjManager.pushGameObject(lz);
 
-    //Add component groups
-    m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
-    m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
-    m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
-    m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
-    m_ObjManager.pushUpdateGroup(faceGroup, "UpdateFacing");
-    m_ObjManager.pushUpdateGroup(walkGroup, "UpdateWalking");
-    m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
-
-    //Test obj load
-    ParseLevelObjects(&m_ObjManager, &m_SpriteTileMap, &m_SpriteRenderer, World::LevelID::LEVEL_ENTRY);
-    ParseLevelTrees(&m_ObjManager, &m_OverworldTileMap, &m_WorldRenderer, World::LevelID::LEVEL_ENTRY);
+    //Test obj load - TODO - Make load doc only once
+    //using namespace  WorldParse;
+    //std::future<bool> f1; std::future<bool> f2; std::shared_mutex mutex;
+    //XML_Doc_Wrapper doc = ParseLevelXML(World::LevelID::LEVEL_ENTRY);
+    //f1 = std::async(std::launch::async, &ParseLevelObjects, &m_ObjManager, &m_SpriteTileMap, &m_SpriteRenderer, World::LevelID::LEVEL_ENTRY, std::ref(mutex), doc);
+    //f2 = std::async(std::launch::async, &ParseLevelTrees, &m_ObjManager, &m_WorldTileMap, &m_WorldRenderer, World::LevelID::LEVEL_ENTRY, std::ref(mutex), doc);
 
     atlas.generateAtlas();
     atlas.generateTexture(2);
     atlas.bind();
-    
-    m_ObjManager.objectAt<GameObject>(1)->messageAll(Message::KILL);
-    m_ObjManager.objectAt<GameObject>(2)->messageAll(Message::KILL);
-    m_ObjManager.objectAt<GameObject>(3)->messageAll(Message::KILL);
-    m_ObjManager.objectAt<GameObject>(4)->messageAll(Message::KILL);
 
     m_DataLoaded = true;
 }

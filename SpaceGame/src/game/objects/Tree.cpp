@@ -10,9 +10,9 @@ void TreeRenderComponent::addTree(Struct2f levelOrigin, World::TileLoc tile, Wor
 
 	//Dimensions
 	const unsigned int TREE_HEIGHT = World::TILE_SIZE * 2; //Trees are treated as two rectangles to allow borders
-	float xPos1 = tile.x * (float)World::TILE_SIZE - (float)World::TILE_SIZE / 2.0f;
-	float xPos2 = tile.x * (float)World::TILE_SIZE + (float)World::TILE_SIZE / 2.0f;
-	float zPos = tile.z * (float)World::TILE_SIZE + (float)World::TILE_SIZE / 3.0f;
+	float xPos1 = levelOrigin.a + tile.x * (float)World::TILE_SIZE - (float)World::TILE_SIZE / 2.0f;
+	float xPos2 = levelOrigin.a + tile.x * (float)World::TILE_SIZE + (float)World::TILE_SIZE / 2.0f;
+	float zPos =  -1*levelOrigin.b + tile.z * (float)World::TILE_SIZE + (float)World::TILE_SIZE / 3.0f;
 	float yPos = ((int)level / sqrt(2)) * World::TILE_SIZE;
 
 	//Make Sprite

@@ -79,7 +79,7 @@ namespace Render
 		glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
 
 	protected:
-		//Helper functions
+		//Helper functions - TODO - use thread pooling so separate renderers collect data in parallel
 		void bindAll(Shader& shader) { shader.bind();	m_VA.bind();	m_IB.bind(); }
 		void drawCall(glm::mat4* modelMatrix, Shader& shader, bool first) {
 			//Buffer data

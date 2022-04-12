@@ -1,7 +1,7 @@
 #include "core/ObjManagement.h"
 
 //Push to heap of components
-
+//Threads are currently disabled
 void ObjectManager::update(double deltaTime) {
 	//Launch async cleanup task every 10 seconds to check for dead objects
 	std::future<void> f;
@@ -9,6 +9,7 @@ void ObjectManager::update(double deltaTime) {
 	{
 		EngineLog("Cleaning objects...");
 		f = std::async(std::launch::async, &ObjectManager::cleanObjects, this);
+		//cleanObjects();
 		m_CheckCleanupTimer = 0.0;
 	}
 
@@ -108,16 +109,15 @@ void ObjectManager::cleanObjects()
 	auto ts = EngineTimer::StartTimer();
 	int size = m_Objects.size();
 	int cleanedTotal = 0;
-	std::lock_guard<std::shared_mutex> lock(m_ObjMutex);
+	std::lock_guard<std::shared_mutex> objLock(m_ObjMutex);
 	for (int i = 0; i < size; i++)
 	{
-		if (!m_Objects[i].obj->dead())
+		if (!m_Objects[i].obj->isDead())
 		{
 			continue;
 		}
 		if (m_Objects[i].obj->safeToDelete())
 		{
-			m_ObjIDMap.erase(m_Objects[i].name);
 			m_Objects.erase(m_Objects.begin() + i);
 			i--;
 			size--;

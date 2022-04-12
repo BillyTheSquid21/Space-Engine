@@ -11,6 +11,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <atomic>
 
 //Tiles
 namespace World
@@ -118,13 +119,15 @@ namespace World
 	{
 	public:
 		//Load level data
-		void buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		bool buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
 		void setID(World::LevelID id) { m_ID = id; }
 		void purgeLevel(); //Clears heap data
 		void render();
+		bool loaded() const { return m_Loaded; }
+		void setLoaded(bool loaded) { m_Loaded = loaded; }
 
 		//Static methods
-		static Struct2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
+		static Struct2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } EngineLog("Origin not found!"); return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
 		static LevelDimensions queryDimensions(LevelID level) { if (s_LevelDimensionCache.find(level) != s_LevelDimensionCache.end()) { return s_LevelDimensionCache[level]; } return s_LevelDimensionCache.begin()->second; } //If fails, return first level dim found
 		static std::vector<MovementPermissions>* queryPermissions(LevelID level) { if (s_MovementPermissionsCache.find(level) != s_MovementPermissionsCache.end()) { return s_MovementPermissionsCache[level]; } return s_MovementPermissionsCache.begin()->second; } //If fails, return first level permis found
 		
@@ -148,17 +151,7 @@ namespace World
 
 
 		float m_XOffset = 0.0f; float m_YOffset = 0.0f;
-	};
-
-	//Level storage - heads of levels to be used to load in data
-	class LevelContainer
-	{
-	public:
-		void InitialiseLevels();
-		void LoadLevel(World::LevelID id, Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
-		void UnloadLevel(World::LevelID id);
-		void render();
-		std::vector<Level> levels;
+		bool m_Loaded = false;
 	};
 
 	//Constants

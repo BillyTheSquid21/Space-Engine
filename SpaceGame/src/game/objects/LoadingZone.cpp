@@ -9,8 +9,8 @@ void LoadingZoneComponent::render()
 			&& m_PlayerPointer->m_ZPos <= m_Origin.b && m_PlayerPointer->m_ZPos >= m_Origin.b - m_Bounds.b)
 		{
 			m_PlayerInside = true;
-			m_LoadLv(m_L1_ID, m_Renderer, m_Map);
-			m_LoadLv(m_L2_ID, m_Renderer, m_Map);
+			m_LoadLv(m_L1_ID);
+			m_LoadLv(m_L2_ID);
 			EngineLog("Player entered loading zone");
 		}
 		else

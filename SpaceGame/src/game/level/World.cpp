@@ -187,7 +187,7 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
 std::unordered_map<World::LevelID, std::vector<World::MovementPermissions>*> World::Level::s_MovementPermissionsCache;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
-void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
+bool World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
 {
     LevelData data = ParseLevel(m_ID);
     m_TileMapPointer = tileMapPointer;
@@ -244,6 +244,7 @@ void World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
 
     //Store pointer to permissions - updates every time level loaded
     Level::s_MovementPermissionsCache[this->m_ID] = &this->m_Permissions;
+    return true;
 }
 
 void World::Level::purgeLevel()
@@ -386,31 +387,4 @@ World::LevelData World::ParseLevel(World::LevelID id) {
 
     LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, planeDirections, planePermissions, planeTextures };
     return data;
-}
-
-void World::LevelContainer::InitialiseLevels()
-{
-    levels.resize((int)World::LevelID::LEVEL_NULL);
-    for (int i = 0; i < levels.size(); i++)
-    {
-        levels[i].setID((World::LevelID)i);
-    }
-}
-
-void World::LevelContainer::LoadLevel(World::LevelID id, Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
-{
-    levels[(int)id].buildLevel(planeRenderer, tileMapPointer);
-}
-
-void World::LevelContainer::UnloadLevel(World::LevelID id)
-{
-    levels[(int)id].purgeLevel();
-}
-
-void World::LevelContainer::render()
-{
-    for (int i = 0; i < levels.size(); i++)
-    {
-        levels[i].render();
-    }
 }

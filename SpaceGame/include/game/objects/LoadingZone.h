@@ -5,6 +5,7 @@
 #include "core/GameObject.hpp"
 #include "game/objects/OverworldSprite.h"
 #include <functional>
+#include <future>
 
 //Class to pin all loading zones of a region to - eg all overworld, all inside building
 //Means you can prevent loading an overworld level while in a house
@@ -14,9 +15,9 @@ class LoadingZone : public GameObject {};
 class LoadingZoneComponent : public RenderComponent
 {
 public:
-	LoadingZoneComponent(OvSpr_RunningSprite* spr, World::LevelID l1, World::LevelID l2, Render::Renderer<TextureVertex>* ren, TileMap* mp) { m_PlayerPointer = spr; m_L1_ID = l1; m_L2_ID = l2; m_Renderer = ren; m_Map = mp; };
+	LoadingZoneComponent(OvSpr_RunningSprite* spr, World::LevelID l1, World::LevelID l2) { m_PlayerPointer = spr; m_L1_ID = l1; m_L2_ID = l2; };
 	void setZoneBounds(float x, float z, float w, float h) { m_Origin.a = x; m_Origin.b = z; m_Bounds.a = w; m_Bounds.b = h; }
-	void setLoadingFuncs(std::function<void(World::LevelID, Render::Renderer<TextureVertex>*, TileMap*)> ld, std::function<void(World::LevelID)> uld) { m_LoadLv = ld; m_UnloadLv = uld; };
+	void setLoadingFuncs(std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld) { m_LoadLv = ld; m_UnloadLv = uld; };
 	void render();
 private:
 	//Player data
@@ -29,9 +30,7 @@ private:
 	World::LevelID m_L2_ID;
 	bool m_PlayerInside = false;
 
-	Render::Renderer<TextureVertex>* m_Renderer = nullptr;
-	TileMap* m_Map = nullptr;
-	std::function<void(World::LevelID, Render::Renderer<TextureVertex>*, TileMap*)> m_LoadLv;
+	std::function<void(World::LevelID)> m_LoadLv;
 	std::function<void(World::LevelID)> m_UnloadLv;
 };
 

@@ -18,10 +18,39 @@
 //6.Objects are not accessed by object manager often
 //7.Object manager should keep active components contiguous to increase cache hits
 
-//IMPORTANT AS I AM STUPID AND DID THIS - Remember to create the group ptrs as new -_-
+//IMPORTANT - Remember to create the group ptrs as new so they remain in scope
 
 //Declare function pointers for sending messages if needed
 //If a component wants access, pass and store the function pointer
+
+//Error handling
+enum class ObjectError
+{
+	VOID_POINTER, INDEX_RANGE, UNPAIRED_COMPONENT,
+};
+
+static void ObjectErrorLog(ObjectError errorcode, int additionalInfo)
+{
+	EngineLog("OBJECT ERROR:");
+	switch (errorcode)
+	{
+	case ObjectError::VOID_POINTER:
+		EngineLog("Object or component tried to access NULLPTR. Error Code: ", (int)errorcode);
+		EngineLog("Component ID: ", additionalInfo);
+		return;
+	case ObjectError::INDEX_RANGE:
+		EngineLog("Component tried to access index out of range. Error Code: ", (int)errorcode);
+		EngineLog("Component ID: ", additionalInfo);
+		return;
+	case ObjectError::UNPAIRED_COMPONENT:
+		EngineLog("Component is not paired to an object! Error Code: ", (int)errorcode);
+		return;
+	default:
+		EngineLog("An Error has ocurred. Error Code: ", (int)errorcode);
+		return;
+	}
+}
+
 
 template<typename T>
 class Component
@@ -34,29 +63,52 @@ public:
 	void setActive(bool set) { m_Active = set; }
 	bool isDead() const { return m_Dead; }
 	//Kills component which ensures is also inactive. They will be sorted to end and before pushing the vector back, a new object will check if can replace dead comp
-	void kill() { m_Dead = true; setActive(false); }
+	void kill() { m_Dead = true; m_ParentPointers = nullptr; }
 
 	//By default only checks for deactivate and activate message - can be overidden - ACTIVATE AND DEACTIVATE MUST BE REIMPLEMENTED
 	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { Message message = m_MessageQueue.nextInQueue(); 
 	if (message == Message::ACTIVATE) { setActive(true); }
 	else if (message == Message::DEACTIVATE) { setActive(false); }
-	else if (message == Message::KILL) { kill(); }};}
+	else if (message == Message::KILL) { setActive(false); }};}
 
 	//Attach to parent pointers - called when added to object manager and in its place
 	//During runtime will have to pass pointer all the way down
-	void attachToObject(std::vector<T*>* compPointers) { this->setID(compPointers->size()); compPointers->push_back((T*)this); m_ParentPointers = compPointers; };
+	void attachToObject(std::vector<T*>* compPointers) { m_ParentPointers = compPointers; this->setID(m_ParentPointers->size()); m_ParentPointers->push_back((T*)this); };
 	//Call after moving - if resizing whole vector call for each element
-	void updatePointer() { m_ParentPointers->at(m_ID) = (T*)this; }
+	void updatePointer() 
+	{ 
+		//Needs to return if dead as the object it is tied to may no longer exist in memory at all
+		if (m_Dead)
+		{
+			return;
+		}
+		if (!m_ParentPointers)
+		{
+			ObjectErrorLog(ObjectError::UNPAIRED_COMPONENT, 0);
+			return;
+		}
+		if (m_ID >= m_ParentPointers->size()) 
+		{ 
+			ObjectErrorLog(ObjectError::INDEX_RANGE, m_ID); 
+			return; 
+		} 
+		if (!(*m_ParentPointers)[m_ID]) 
+		{ 
+			ObjectErrorLog(ObjectError::VOID_POINTER, m_ID); 
+			return; 
+		} 
+		(*m_ParentPointers)[m_ID] = (T*)this; 
+	}
+	//Id is location inside parent array
+	void setID(unsigned char id) { m_ID = id; }
 	unsigned char id() const { return m_ID; }
 
 private:
-	//Id is location inside parent array
-	void setID(unsigned char id) { m_ID = id; }
 	unsigned char m_ID = 0;
 	bool m_Active = true;
 	bool m_Dead = false;
-	SimpleQueue<Message> m_MessageQueue;
 	std::vector<T*>* m_ParentPointers = nullptr;
+	SimpleQueue<Message> m_MessageQueue;
 };
 
 class RenderComponent : public Component<RenderComponent>
@@ -76,6 +128,7 @@ public:
 //Group iteration
 template<typename T>
 void IterateRenderComps(std::vector<T>& renderComps) {
+	
 	static_assert(std::is_base_of<RenderComponent, T>::value, "T must inherit from RenderComponent, did you mean to use IterateUpdateComps()?");
 	//Line must be organised here
 	//If a pair is found both will not be -1, and can be swapped
@@ -120,6 +173,7 @@ void IterateRenderComps(std::vector<T>& renderComps) {
 
 template<typename T>
 void IterateUpdateComps(std::vector<T>& updateComps, double deltaTime) {
+	
 	static_assert(std::is_base_of<UpdateComponent, T>::value, "ERROR: T must inherit from UpdateComponent, did you mean to use IterateUpdateComps()?");
 	//Line must be organised here
 	//If a pair is found both will not be -1, and can be swapped
@@ -182,12 +236,13 @@ public:
 	void addComponent(std::vector<UpdateComponent*>* compPointers, Args... args)
 	{
 		//Check if any dead
-		std::lock_guard<std::mutex> lock(m_ComponentMutex);
 		for (int i = 0; i < m_Components.size(); i++)
 		{
 			if (m_Components[i].isDead())
 			{
-				m_Components.emplace(m_Components.begin() + i, args...);
+				T obj = T(args...);
+				m_Components[i] = obj;
+				m_Components[i].attachToObject(compPointers);
 				m_Components[i].updatePointer();
 				return;
 			}
@@ -204,12 +259,12 @@ public:
 	void addExistingComponent(std::vector<UpdateComponent*>* compPointers, T obj)
 	{
 		//Check if any dead
-		std::lock_guard<std::mutex> lock(m_ComponentMutex);
 		for (int i = 0; i < m_Components.size(); i++)
 		{
 			if (m_Components[i].isDead())
 			{
-				m_Components.insert(m_Components.begin() + i, obj);
+				m_Components[i] = obj;
+				m_Components[i].attachToObject(compPointers);
 				m_Components[i].updatePointer();
 				return;
 			}
@@ -226,7 +281,6 @@ public:
 private:
 	unsigned int m_ID = 0;
 	std::vector<T> m_Components;
-	std::mutex m_ComponentMutex;
 };
 
 class RenderGroupBase
@@ -246,22 +300,23 @@ public:
 	using RenderGroupBase::RenderGroupBase;
 	void iterate() { IterateRenderComps<T>(m_Components); };
 	template<typename... Args>
-	void addComponent(std::vector<RenderComponent*>* compPointers, Args... arguments)
+	void addComponent(std::vector<RenderComponent*>* compPointers, Args... args)
 	{
 		//Check if any dead
-		std::lock_guard<std::mutex> lock(m_ComponentMutex);
 		for (int i = 0; i < m_Components.size(); i++)
 		{
 			if (m_Components[i].isDead())
 			{
-				m_Components.emplace(m_Components.begin() + i, arguments...);
+				T obj = T(args...);
+				m_Components[i] = obj;
+				m_Components[i].attachToObject(compPointers);
 				m_Components[i].updatePointer();
 				return;
 			}
 		}
 
 		//Resize components array
-		m_Components.emplace_back(arguments...);
+		m_Components.emplace_back(args...);
 		m_Components[m_Components.size() - 1].attachToObject(compPointers);
 		for (int i = 0; i < m_Components.size(); i++)
 		{
@@ -271,12 +326,12 @@ public:
 	void addExistingComponent(std::vector<RenderComponent*>* compPointers, T obj)
 	{
 		//Check if any dead
-		std::lock_guard<std::mutex> lock(m_ComponentMutex);
 		for (int i = 0; i < m_Components.size(); i++)
 		{
 			if (m_Components[i].isDead())
 			{
-				m_Components.insert(m_Components.begin() + i, obj);
+				m_Components[i] = obj;
+				m_Components[i].attachToObject(compPointers);
 				m_Components[i].updatePointer();
 				return;
 			}
@@ -293,7 +348,6 @@ public:
 private:
 	unsigned int m_ID = 0;
 	std::vector<T> m_Components;
-	std::mutex m_ComponentMutex;
 };
 
 class GameObject
@@ -303,25 +357,57 @@ public:
 	unsigned int id() const { return m_ID; }
 
 	//Messaging functions
-	void messageUpdateAt(Message message, unsigned int id) { if (!m_UpdateComps[id]) { return; } m_UpdateComps[id]->recieve(message); };
-	void messageRenderAt(Message message, unsigned int id) { if (!m_RenderComps[id]) { return; } m_RenderComps[id]->recieve(message); };
+	void messageUpdateAt(Message message, unsigned int id)
+	{
+		if (!m_UpdateComps[id]) { ObjectErrorLog(ObjectError::VOID_POINTER, id); return; }
+		m_UpdateComps[id]->recieve(message);
+	};
+	
+	void messageRenderAt(Message message, unsigned int id)
+	{
+		if (!m_RenderComps[id]) { ObjectErrorLog(ObjectError::VOID_POINTER, id); return; }
+		m_RenderComps[id]->recieve(message);
+	};
+	
 	void messageAllUpdate(Message message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
 	void messageAllRender(Message message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
 	void messageAllExceptUpdate(Message message, unsigned int id) { for (int i = 0; i < m_UpdateComps.size(); i++) { if (id != i) { messageUpdateAt(message, i); } } };
 	void messageAllExceptRender(Message message, unsigned int id) { for (int i = 0; i < m_RenderComps.size(); i++) { if (id != i) { messageRenderAt(message, i); } } };
 
 	//If says kill, kill all components then mark dead
-	void messageAll(Message message) { messageAllUpdate(message); messageAllRender(message); 
+	void messageAll(Message message) { messageAllRender(message); messageAllUpdate(message); 
 	if (message == Message::KILL) { m_Dead = true; }};
 
 	//Checks all are dead
 	bool safeToDelete() {
-		for (int i = 0; i < m_UpdateComps.size(); i++) { if (!m_UpdateComps[i]->isDead()) { return false; } }
-		for (int i = 0; i < m_RenderComps.size(); i++) { if (!m_RenderComps[i]->isDead()) { return false; } }
+		for (int i = 0; i < m_UpdateComps.size(); i++) 
+		{ 
+			if (!m_UpdateComps[i]) 
+			{ 
+				continue; 
+			} 
+			if (m_UpdateComps[i]->isActive()) 
+			{ 
+				return false;
+			} 
+			m_UpdateComps[i]->kill();
+		}
+		for (int i = 0; i < m_RenderComps.size(); i++) 
+		{ 
+			if (!m_RenderComps[i]) 
+			{ 
+				continue; 
+			} 
+			if (m_RenderComps[i]->isActive()) 
+			{
+				return false;
+			}
+			m_RenderComps[i]->kill();
+		}
 		return true;
 	}
 
-	bool dead() const { return m_Dead; }
+	bool isDead() const { return m_Dead; }
 
 	//Locations in memory of all attached components - must update in component if changes
 	std::vector<UpdateComponent*> m_UpdateComps;
