@@ -37,19 +37,20 @@ WorldParse::XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id)
 	}
 	std::shared_ptr<xml_document<>> doc(new xml_document<>());
 	std::ifstream* ifs = new std::ifstream(path);
+	std::shared_ptr<std::string> tmp(new std::string);
 	std::stringstream buffer;
 	buffer << ifs->rdbuf();
 	ifs->close();
 	delete ifs;
 
 	//Buffer and parse
-	std::string tmp(buffer.str());
-	doc->parse<0>(&tmp[0]);
+	*tmp.get() = buffer.str();
+	doc->parse<0>(&((*tmp.get())[0]));
 
 	return { tmp, doc };
 }
 
-bool WorldParse::ParseLevelObjects(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
+bool WorldParse::ParseLevelObjects(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, FlagArray* flags, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
 {
 	//Setup
 	using namespace rapidxml;
@@ -57,18 +58,13 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, TileMap* map, Render:
 	auto ts = EngineTimer::StartTimer();
 
 	//Load
-	int attempts = 0; //makes a few attemps in case
 
-	xml_node<>* objRoot = doc.doc->first_node("objects");
-	while (!objRoot && attempts <= 3)
+	//If no trees present, stop
+	xml_node<>* objRoot = doc.doc->first_node()->first_node("objects");
+	if (!objRoot)
 	{
-		xml_node<>* objRoot = doc.doc->first_node("objects");
-		attempts++;
-	}
-	if (attempts > 3)
-	{
-		EngineLog("Level contains no objects: ", (int)levelID);
-		return true;
+		EngineLog("Error loading objects: ", (int)levelID);
+		return false;
 	}
 
 	int objCount = 0;
@@ -82,11 +78,11 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, TileMap* map, Render:
 		switch (identifier)
 		{
 		case ObjectType::DirectionalSprite:
-			WorldParse::LoadDirectionalSprite(name, identifyingNode, manager, map, ren, levelID);
+			WorldParse::LoadDirectionalSprite(name, identifyingNode, manager, map, ren, flags, levelID);
 			break;
 		case ObjectType::WalkingSprite:
 		{
-			WorldParse::LoadWalkingSprite(name, identifyingNode, manager, map, ren, levelID);
+			WorldParse::LoadWalkingSprite(name, identifyingNode, manager, map, ren, flags, levelID);
 			break;
 		}
 		default:
@@ -105,12 +101,11 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, TileMap* map, Render::R
 	std::shared_lock<std::shared_mutex> fileLock(mutex);
 	auto ts = EngineTimer::StartTimer();
 
-	//If no trees present, stop
-	xml_node<>* treesRoot = doc.doc->first_node("trees");
+	xml_node<>* treesRoot = doc.doc->first_node()->first_node("trees");
 	if (!treesRoot)
 	{
-		EngineLog("Level contains no trees: ", (int)levelID);
-		return true;
+		EngineLog("Error loading trees: ", (int)levelID);
+		return false;
 	}
 
 	std::shared_ptr<TreeRenderComponent> treeComp(new TreeRenderComponent(ren));
@@ -180,7 +175,7 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID)
+void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, World::LevelID levelID)
 {
 	using rapidxml::xml_node;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
@@ -191,6 +186,16 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	std::shared_ptr<OvSpr_DirectionalSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, *map, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationFacing>(manager->queryGroupID("UpdateFacing")).get(), ren);
 	
+	//Check for script
+	if (node->first_node("npcScript"))
+	{
+		std::string filePath = node->first_node("npcScript")->value();
+		ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
+		std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
+		std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite>(manager->getObjects()[0].obj);
+		//NPC_Script<OvSpr_DirectionalSprite> npcScript(script.script, script.size, player.get(), flags);
+	}
+
 	//Optionals
 	WorldParse::DirectionalSpriteOptionals(node, sprite);
 
@@ -199,7 +204,7 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID)
+void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, World::LevelID levelID)
 {
 	using rapidxml::xml_node;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
@@ -298,41 +303,65 @@ OvSpr_SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, W
 	return data;
 }
 
-void World::LevelContainer::InitialiseLevels(ObjectManager* obj, Render::Renderer<TextureVertex>* sprRen, Render::Renderer<TextureVertex>* worRen, TileMap* sprMap, TileMap* worMap)
+void World::LevelContainer::InitialiseLevels(ObjectManager* obj, Render::Renderer<TextureVertex>* sprRen, Render::Renderer<TextureVertex>* worRen, TileMap* sprMap, TileMap* worMap, FlagArray* flags)
 {
-	m_ObjManager = obj; m_SpriteRenderer = sprRen; m_WorldRenderer = worRen; m_SpriteTileMap = sprMap; m_WorldTileMap = worMap;
-	levels.resize((int)World::LevelID::LEVEL_NULL);
-	for (int i = 0; i < levels.size(); i++)
+	m_ObjManager = obj; m_SpriteRenderer = sprRen; m_WorldRenderer = worRen; m_SpriteTileMap = sprMap; m_WorldTileMap = worMap; m_Flags = flags;
+	m_Levels.resize((int)World::LevelID::LEVEL_NULL);
+	std::vector<std::mutex> mutexes((int)World::LevelID::LEVEL_NULL);
+	m_LevelMutexes.swap(mutexes);
+	for (int i = 0; i < m_Levels.size(); i++)
 	{
-		levels[i].setID((World::LevelID)i);
+		m_Levels[i].setID((World::LevelID)i);
 	}
 }
 
 void World::LevelContainer::LoadLevel(World::LevelID id)
 {
-	//Checks if loaded already
-	if (levels[(int)id].loaded())
+	//Locks if loading somewhere else, and then checks if has been loaded
+	std::lock_guard<std::mutex> levelAccessLock(m_LevelMutexes[(int)id]);
+	if (m_Levels[(int)id].loaded())
 	{
 		return;
 	}
 
-	if (levels[(int)id].buildLevel(m_WorldRenderer, m_WorldTileMap))
+	using namespace rapidxml;
+	if (m_Levels[(int)id].buildLevel(m_WorldRenderer, m_WorldTileMap))
 	{
 		using namespace  WorldParse;
+		xml_node<>* root;
+		xml_node<>* objRoot;
+		xml_node<>* treeRoot;
 		std::future<bool> f1; std::future<bool> f2; std::shared_mutex mutex;
 		XML_Doc_Wrapper doc = ParseLevelXML(id);
-		f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_SpriteTileMap, m_SpriteRenderer, id, std::ref(mutex), doc);
-		f2 = std::async(std::launch::async, &ParseLevelTrees, m_ObjManager, m_WorldTileMap, m_WorldRenderer, id, std::ref(mutex), doc);
-		//ParseLevelObjects(m_ObjManager, m_SpriteTileMap, m_SpriteRenderer, id, std::ref(mutex), doc);
-		//ParseLevelTrees(m_ObjManager, m_WorldTileMap, m_WorldRenderer, id, std::ref(mutex), doc);
-		levels[(int)id].setLoaded(true);
+
+		root = doc.doc->first_node();
+		if (!root)
+		{
+			EngineLog("Root node not found. Error on level: ", (int)id);
+			return;
+		}
+
+		//Check for if trees or objects are meant to be present to avoid sending off a redundant thread
+		objRoot = root->first_node("objects");
+		treeRoot = root->first_node("trees");
+
+		if (objRoot)
+		{
+			f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_SpriteTileMap, m_SpriteRenderer, id, m_Flags, std::ref(mutex), doc);
+		}
+		if (treeRoot)
+		{
+			f2 = std::async(std::launch::async, &ParseLevelTrees, m_ObjManager, m_WorldTileMap, m_WorldRenderer, id, std::ref(mutex), doc);
+		}
 	}
+	m_Levels[(int)id].setLoaded(true);
 }
 
 void World::LevelContainer::UnloadLevel(World::LevelID id)
 {
-	//Checks if already unloaded
-	if (!levels[(int)id].loaded())
+	//Locks if loading somewhere else then checks if already unloaded
+	std::lock_guard<std::mutex> levelAccessLock(m_LevelMutexes[(int)id]);
+	if (!m_Levels[(int)id].loaded())
 	{
 		return;
 	}
@@ -350,14 +379,14 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 		}
 	}
 
-	levels[(int)id].purgeLevel();
-	levels[(int)id].setLoaded(false);
+	m_Levels[(int)id].purgeLevel();
+	m_Levels[(int)id].setLoaded(false);
 }
 
 void World::LevelContainer::render()
 {
-	for (int i = 0; i < levels.size(); i++)
+	for (int i = 0; i < m_Levels.size(); i++)
 	{
-		levels[i].render();
+		m_Levels[i].render();
 	}
 }

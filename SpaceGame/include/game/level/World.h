@@ -5,6 +5,7 @@
 #include "renderer/Plane.h"
 #include "renderer/Texture.h"
 #include "game/objects/TileMap.h"
+#include <stdint.h>
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidxml/rapidxml.hpp>
@@ -31,7 +32,7 @@ namespace World
 	//When level data is written, use int value the respective enum value evaluates to
 
 	//Directions - north is -Z axis, south is +Z axis, west is +X axis, east is -X (taken from abs)
-	enum class Direction : unsigned char
+	enum class Direction : uint8_t
 	{
 		DIRECTION_NULL,
 		NORTH, NORTHEAST, NORTHWEST,	//Quads are aligned with vertex 0 and 1 being north facing
@@ -156,9 +157,11 @@ namespace World
 
 	//Constants
 	constexpr float WALK_SPEED = 1.0f;
-	constexpr float RUN_SPEED = 2.0f;
+	constexpr float RUN_SPEED = 3.1f;
 	constexpr float WALK_DURATION = 1.0f / WALK_SPEED;
 	constexpr float RUN_DURATION = 1.0f / RUN_SPEED;
+	constexpr float WALK_FRAME_DURATION = WALK_DURATION / 4.0f;
+	constexpr float RUN_FRAME_DURATION = RUN_DURATION / 4.0f;
 }
 
 #endif

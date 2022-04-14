@@ -30,8 +30,10 @@ private:
 	World::LevelID m_L2_ID;
 	bool m_PlayerInside = false;
 
-	std::function<void(World::LevelID)> m_LoadLv;
+	std::function<void(World::LevelID)> m_LoadLv; 
+	std::future<void> m_Load1Future; std::future<void> m_Load2Future;
 	std::function<void(World::LevelID)> m_UnloadLv;
+	std::future<void> m_Unload1Future; std::future<void> m_Unload2Future;
 };
 
 #endif

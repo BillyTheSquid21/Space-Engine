@@ -1,0 +1,7 @@
+#Test script for the game
+[1] -CGE_DIRECTION -EAST
+[2] -WALK_IN_DIR
+#Test Comment
+[3] -SET_FLAG 0xF true
+[4] -OPEN_MSG_BOX
+[5] -MSG 0 2

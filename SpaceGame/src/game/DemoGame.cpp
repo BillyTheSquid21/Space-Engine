@@ -1,5 +1,8 @@
 #include "game/DemoGame.h"
 
+//Initialise static flag array
+FlagArray DemoGame::s_GlobalFlags = {};
+
 bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback) {
 	bool success = Game::init(name, kCallback, mCallback, sCallback);
 
@@ -15,7 +18,7 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	splashScreen->init(m_Width, m_Height);
 	splashScreen->setActive(true);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts);
+	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
 
@@ -27,6 +30,7 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	std::shared_ptr<State> stateOverworld = std::static_pointer_cast<State>(overworld);
 	m_States.push_back(overworld);
 
+	
 	return success;
 }
 

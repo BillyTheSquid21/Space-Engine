@@ -28,12 +28,13 @@ enum class ScriptInstruction
 	SET_BUSY,
 };
 
-//Message info - using std ints to guarantee bytes
+//NOTE: flags must be written in hex in files (0xFFFFFF syntax)
+
+//Message info - using std ints to guarantee bytes - all on byte borders (nothing bitwise)
 struct MSG_INFO
 {
 	//Which list of text to take from
-	uint32_t languageID : 8;
-	uint32_t listID : 8;
+	uint32_t listID : 16;
 	//Where in the list the text instance is
 	uint32_t textEntry : 16;
 };
@@ -66,7 +67,7 @@ struct ITEM_INFO
 	uint32_t quantity : 16;
 };
 
-//Direction info
+//Direction info - walk_in_dir requires changing dir here and has not got its own data
 struct DIRECTION_INFO
 {
 	uint32_t direction : 8;	//as direction is 1 byte can just assign the byte
@@ -112,13 +113,13 @@ struct ScriptElement
 };
 
 typedef std::shared_ptr<ScriptElement[]> Script;
-typedef std::shared_ptr<bool[]> FlagArray;
+typedef std::array<bool, std::numeric_limits<uint16_t>::max()> FlagArray; //known size at runtime
 
 //Script component to be applied to object
 class OverworldScript : public UpdateComponent
 {
 public:
-	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player) { m_Script = script; m_Size = size; m_Player = player; }
+	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; }
 	void update(double deltaTime) 
 	{
 		process(m_Index, deltaTime);
@@ -140,13 +141,13 @@ public:
 			m_Index = el.info.jmpInfo.line;
 			return el;
 		case ScriptInstruction::JMP_IF:
-			if (m_FlagArray[el.info.jmpIfInfo.flagLoc])
+			if ((*m_FlagArray)[el.info.jmpIfInfo.flagLoc])
 			{
 				m_Index = el.info.jmpIfInfo.line;
 			}
 			return el;
 		case ScriptInstruction::SET_FLAG:
-			m_FlagArray[el.info.flgInfo.flagLoc] = el.info.flgInfo.state;
+			(*m_FlagArray)[el.info.flgInfo.flagLoc] = el.info.flgInfo.state;
 			m_Index++;
 			return el;
 		case ScriptInstruction::WAIT_SEC:
@@ -166,7 +167,7 @@ public:
 	}
 protected:
 	Script m_Script;
-	FlagArray m_FlagArray;
+	FlagArray* m_FlagArray;
 	uint16_t m_Index = 0;
 	uint16_t m_Size;
 	OvSpr_RunningSprite* m_Player;

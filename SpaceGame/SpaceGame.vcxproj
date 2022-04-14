@@ -121,6 +121,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +140,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,6 +162,7 @@
     <ClCompile Include="src\game\objects\NPCAi.cpp" />
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
+    <ClCompile Include="src\game\objects\ScriptParse.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\objects\Tree.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
@@ -201,6 +204,7 @@
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
     <ClInclude Include="include\game\objects\Script.hpp" />
+    <ClInclude Include="include\game\objects\ScriptParse.h" />
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\objects\Tree.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />

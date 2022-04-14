@@ -23,6 +23,7 @@ public:
 private:
 	FontContainer m_Fonts;
 	std::vector<std::shared_ptr<State>> m_States;
+	static FlagArray s_GlobalFlags;
 };
 
 //Defined of which entry corresponds to what state

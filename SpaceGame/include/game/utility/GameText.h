@@ -4,8 +4,16 @@
 
 #include <string>
 #include "game/objects/Script.hpp"
+#include "rapidjson/rapidjson.h"
 
 //Function that deals with getting the string for text boxes
-std::string& FindMessage(MSG_INFO info);
+namespace GameText 
+{
+	static const std::string pathStart = "res/text/";
+	static const std::string lang = "eng/";
+	static const std::string ext = ".json";
+
+	std::string FindMessage(MSG_INFO info);
+}
 
 #endif

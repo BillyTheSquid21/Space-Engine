@@ -15,7 +15,7 @@
 class Overworld : public State
 {
 public:
-	void init(int width, int height, World::LevelID levelEntry, FontContainer* fonts);
+	void init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags);
 	void update(double deltaTime, double time);
 	void render();
 	void loadRequiredData();
@@ -53,6 +53,9 @@ private:
 
 	//Test font
 	FontContainer* m_Fonts;
+
+	//Test flags
+	FlagArray* m_Flags;
 
 	//Test GUI
 	GameGUI::OvGUI_Enabled m_GUIEnabled;

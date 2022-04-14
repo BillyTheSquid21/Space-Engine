@@ -5,6 +5,7 @@
 #include <vector>
 #include "game/objects/OverworldSprite.h"
 #include "game/objects/Script.hpp"
+#include "game/utility/GameText.h"
 
 class NPC_RandWalk : public TilePosition
 {
@@ -47,7 +48,7 @@ class NPC_Script : public OverworldScript
 public:
 	//Setters
 	using OverworldScript::OverworldScript;
-	void linkText(std::string* t1, std::string* t2, std::function<std::string& (MSG_INFO info)> txt, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_TextFinder = txt; m_ShowTextBox = showBox; }
+	void linkText(std::string* t1, std::string* t2, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_ShowTextBox = showBox; }
 	void linkNPC(std::shared_ptr<SpriteType> npc) { m_NPCData = npc; }
 	void linkUpdateMessage(std::function<void(Message message)> msg) { m_MessageUpdate = msg; }
 
@@ -73,12 +74,12 @@ public:
 		case ScriptInstruction::MSG:
 			if (m_OnLine_1)
 			{
-				*m_TextLine1 = m_TextFinder(el.info.msgInfo);
+				*m_TextLine1 = GameText::FindMessage(el.info.msgInfo);
 				m_Index++;
 				m_OnLine_1 = false;
 				break;
 			}
-			*m_TextLine2 = m_TextFinder(el.info.msgInfo);
+			*m_TextLine2 = GameText::FindMessage(el.info.msgInfo);
 			m_Index++;
 			m_OnLine_1 = true;
 			break;
@@ -136,7 +137,6 @@ private:
 	std::string* m_TextLine2 = nullptr;
 	bool m_OnLine_1 = true;
 	std::function<void(Message message)> m_MessageUpdate;
-	std::function<std::string& (MSG_INFO info)> m_TextFinder;
 	std::shared_ptr<SpriteType> m_NPCData; //assumes most data heavy sprite
 };
 

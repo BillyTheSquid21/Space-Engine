@@ -60,19 +60,20 @@ void UpdateAnimationWalking::update(double deltaTime)
 
 	if (*m_Walking)
 	{
-		if (m_Timer <= 0.25f)
+		using World::WALK_FRAME_DURATION;
+		if (m_Timer <= WALK_FRAME_DURATION)
 		{
 			*m_OffsetX = 1;
 		}
-		else if (m_Timer > 0.25f && m_Timer <= 0.5f)
+		else if (m_Timer > WALK_FRAME_DURATION && m_Timer <= 2*WALK_FRAME_DURATION)
 		{
 			*m_OffsetX = 0;
 		}
-		else if (m_Timer > 0.5f && m_Timer <= 0.75f)
+		else if (m_Timer > 2*WALK_FRAME_DURATION && m_Timer <= 3*WALK_FRAME_DURATION)
 		{
 			*m_OffsetX = 2;
 		}
-		else if (m_Timer > 0.75f && m_Timer <= 1.0f)
+		else if (m_Timer > 3*WALK_FRAME_DURATION && m_Timer <= 4*WALK_FRAME_DURATION)
 		{
 			*m_OffsetX = 0;
 		}
@@ -97,19 +98,20 @@ void UpdateAnimationRunning::update(double deltaTime)
 	UpdateAnimationWalking::update(deltaTime);
 	if (*m_Running)
 	{
-		if (m_Timer <= 0.125f)
+		using World::RUN_FRAME_DURATION;
+		if (m_Timer <= RUN_FRAME_DURATION)
 		{
 			*m_OffsetX = 4;
 		}
-		else if (m_Timer > 0.125f && m_Timer <= 0.25f)
+		else if (m_Timer > RUN_FRAME_DURATION && m_Timer <= 2 * RUN_FRAME_DURATION)
 		{
 			*m_OffsetX = 3;
 		}
-		else if (m_Timer > 0.25f && m_Timer <= 0.375f)
+		else if (m_Timer > 2 * RUN_FRAME_DURATION && m_Timer <= 3 * RUN_FRAME_DURATION)
 		{
 			*m_OffsetX = 5;
 		}
-		else if (m_Timer > 0.375f && m_Timer <= 0.5f)
+		else if (m_Timer > 3 * RUN_FRAME_DURATION && m_Timer <= 4 * RUN_FRAME_DURATION)
 		{
 			*m_OffsetX = 3;
 		}

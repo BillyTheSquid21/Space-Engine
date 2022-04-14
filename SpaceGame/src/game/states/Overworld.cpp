@@ -1,6 +1,6 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts) {
+void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags) {
     //Width and height
     m_Width = width; m_Height = height;
 
@@ -27,11 +27,13 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     m_Camera.panYDegrees(45.0f);
 
     //test level
-    m_Levels.InitialiseLevels(&m_ObjManager, &m_SpriteRenderer, &m_WorldRenderer, &m_SpriteTileMap, &m_WorldTileMap);
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_SpriteRenderer, &m_WorldRenderer, &m_SpriteTileMap, &m_WorldTileMap, m_Flags);
 
     //gui shit test
     m_Fonts = fonts;
     m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
+
+    m_Flags = flags;
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
