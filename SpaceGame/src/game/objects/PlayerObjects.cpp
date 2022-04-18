@@ -290,6 +290,12 @@ void PlayerMove::cycleEnd(bool anyHeld)
 
 void PlayerMove::update(double deltaTime) 
 {
+	if (*m_Busy && !(*m_Walking || *m_Running))
+	{
+		//If busy and not walking or running, don't update player
+		return;
+	}
+
 	//Checks to start walking
 	bool anyHeld = checkInputs();
 

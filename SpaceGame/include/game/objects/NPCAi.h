@@ -7,6 +7,161 @@
 #include "game/objects/Script.hpp"
 #include "game/utility/GameText.h"
 
+//Script component to be applied to object
+class OverworldScript : public UpdateComponent
+{
+public:
+	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; }
+	void linkText(std::string* t1, std::string* t2, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_ShowTextBox = showBox; }
+	void update(double deltaTime)
+	{
+		process(deltaTime);
+
+		if (m_Index >= m_Size)
+		{
+			m_Index = 0;
+		}
+	}
+
+	virtual bool process(double deltaTime)
+	{
+		//Carries out core functionality here that all implementations use
+		//Then returns whether index is fully processed
+		ScriptElement el = m_Script[m_Index];
+		switch (el.instruction)
+		{
+		case ScriptInstruction::JMP:
+			m_Index = el.info.jmpInfo.line;
+			return true;
+		case ScriptInstruction::JMP_IF:
+			if (m_FlagArray->at(el.info.jmpIfInfo.flagLoc))
+			{
+				m_Index = el.info.jmpIfInfo.line;
+				return true;
+			}
+			m_Index++;
+			return true;
+		case ScriptInstruction::SET_FLAG:
+			m_FlagArray->at(el.info.flgInfo.flagLoc) = el.info.flgInfo.state;
+			m_Index++;
+			return true;
+		case ScriptInstruction::WAIT_SEC:
+			if (m_Timer >= 1.0f)
+			{
+				m_Index++;
+				m_Timer = 0.0f;
+			}
+			m_Timer += deltaTime;
+			return true;
+		case ScriptInstruction::LOCK_PLAYER:
+			m_Player->m_Busy = el.info.lockInfo.state;
+			m_Index++;
+			return true;
+		case ScriptInstruction::OPEN_MSG_BOX:
+			*m_ShowTextBox = true;
+			m_Index++;
+			return true;
+		case ScriptInstruction::CLOSE_MSG_BOX:
+			*m_ShowTextBox = false;
+			m_Index++;
+			return true;
+		case ScriptInstruction::MSG:
+			if (m_OnLine_1)
+			{
+				*m_TextLine1 = GameText::FindMessage(el.info.msgInfo);
+				m_Index++;
+				m_OnLine_1 = false;
+				return true;
+			}
+			*m_TextLine2 = GameText::FindMessage(el.info.msgInfo);
+			m_Index++;
+			m_OnLine_1 = true;
+			return true;
+		case ScriptInstruction::CLEAR_TEXT:
+			*m_TextLine1 = "";
+			*m_TextLine2 = "";
+			m_OnLine_1 = true;
+			m_Index++;
+			return true;
+		}
+		return false;
+	}
+protected:
+	Script m_Script;
+	FlagArray* m_FlagArray;
+	uint16_t m_Index = 0;
+	uint16_t m_Size;
+	OvSpr_RunningSprite* m_Player;
+	bool* m_ShowTextBox = nullptr;
+	std::string* m_TextLine1 = nullptr;
+	std::string* m_TextLine2 = nullptr;
+	bool m_OnLine_1 = true;
+private:
+	float m_Timer = 0.0;
+};
+
+class NPC_OverworldScript : public OverworldScript
+{
+public:
+	using OverworldScript::OverworldScript;
+	void linkNPC(OvSpr_RunningSprite* npc) { m_NPC = npc; };
+
+	virtual bool process(double deltaTime)
+	{
+		if (OverworldScript::process(deltaTime))
+		{
+			return true;
+		}
+		ScriptElement el = m_Script[m_Index];
+		switch (el.instruction)
+		{
+		case ScriptInstruction::CGE_DIRECTION:
+			m_NPC->m_Direction = (World::Direction)el.info.dirInfo.direction;
+			m_Index++;
+			return true;
+		case ScriptInstruction::WALK_IN_DIR:
+			if (!m_NPC->m_Walking)
+			{
+				m_NPC->m_Walking = true;
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ });
+			}
+			else if (m_NPC->m_Timer >= World::WALK_DURATION)
+			{
+				m_NPC->m_Walking = false;
+				m_NPC->m_Timer = 0.0;
+				Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_TileX, m_NPC->m_TileZ, &m_NPC->m_Sprite);
+				m_Index++;
+				return true;
+			}
+			Ov_Translation::Walk(&m_NPC->m_Direction, &m_NPC->m_XPos, &m_NPC->m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
+			return true;
+		case ScriptInstruction::RUN_IN_DIR:
+			if (!m_NPC->m_Running)
+			{
+				m_NPC->m_Running = true;
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ });
+			}
+			else if (m_NPC->m_Timer >= World::RUN_DURATION)
+			{
+				m_NPC->m_Running = false;
+				m_NPC->m_Timer = 0.0;
+				Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_TileX, m_NPC->m_TileZ, &m_NPC->m_Sprite);
+				m_Index++;
+				return true;
+			}
+			Ov_Translation::Run(&m_NPC->m_Direction, &m_NPC->m_XPos, &m_NPC->m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
+			return true;
+		case ScriptInstruction::FREEZE_OBJECT:
+			m_NPC->m_Busy = (bool)el.info.lockInfo.state;
+			m_Index++;
+			return true;
+		}
+	}
+
+private:
+	OvSpr_RunningSprite* m_NPC;
+};
+
 class NPC_RandWalk : public TilePosition
 {
 public:
@@ -48,7 +203,6 @@ class NPC_Script : public OverworldScript
 public:
 	//Setters
 	using OverworldScript::OverworldScript;
-	void linkText(std::string* t1, std::string* t2, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_ShowTextBox = showBox; }
 	void linkNPC(std::shared_ptr<SpriteType> npc) { m_NPCData = npc; }
 	void linkUpdateMessage(std::function<void(Message message)> msg) { m_MessageUpdate = msg; }
 
@@ -63,31 +217,6 @@ public:
 		//Process
 		switch (el.instruction)
 		{
-		case ScriptInstruction::OPEN_MSG_BOX:
-			*m_ShowTextBox = true;
-			m_Index++;
-			break;
-		case ScriptInstruction::CLOSE_MSG_BOX:
-			*m_ShowTextBox = false;
-			m_Index++;
-			break;
-		case ScriptInstruction::MSG:
-			if (m_OnLine_1)
-			{
-				*m_TextLine1 = GameText::FindMessage(el.info.msgInfo);
-				m_Index++;
-				m_OnLine_1 = false;
-				break;
-			}
-			*m_TextLine2 = GameText::FindMessage(el.info.msgInfo);
-			m_Index++;
-			m_OnLine_1 = true;
-			break;
-		case ScriptInstruction::CLEAR_TEXT:
-			*m_TextLine1 = "";
-			*m_TextLine2 = "";
-			m_Index++;
-			break;
 		case ScriptInstruction::SET_BUSY:
 			m_NPCData->m_Busy = el.info.busyInfo.state;
 			m_Index++;
@@ -132,10 +261,6 @@ public:
 		return el;
 	}
 private:
-	bool* m_ShowTextBox = nullptr;
-	std::string* m_TextLine1 = nullptr;
-	std::string* m_TextLine2 = nullptr;
-	bool m_OnLine_1 = true;
 	std::function<void(Message message)> m_MessageUpdate;
 	std::shared_ptr<SpriteType> m_NPCData; //assumes most data heavy sprite
 };

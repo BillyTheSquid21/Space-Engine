@@ -1,184 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<level>
-	<trees name="level0_trees">
-		<count>10</count>
+<Level>
+	<Trees name="Level0_Trees">
+		<Count>10</Count>
 		<Tree>
-			<tileX>8</tileX>
-			<tileZ>6</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>1</tX1>
-			<tY1>2</tY1>
-			<tX2>4</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>8</TileX>
+			<TileZ>6</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>1</TX1>
+			<TY1>2</TY1>
+			<TX2>4</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>9</tileX>
-			<tileZ>6</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>3</tX1>
-			<tY1>2</tY1>
-			<tX2>4</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>9</TileX>
+			<TileZ>6</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>3</TX1>
+			<TY1>2</TY1>
+			<TX2>4</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>10</tileX>
-			<tileZ>6</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>3</tX1>
-			<tY1>2</tY1>
-			<tX2>4</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>10</TileX>
+			<TileZ>6</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>3</TX1>
+			<TY1>2</TY1>
+			<TX2>4</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>11</tileX>
-			<tileZ>6</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>3</tX1>
-			<tY1>2</tY1>
-			<tX2>2</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>11</TileX>
+			<TileZ>6</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>3</TX1>
+			<TY1>2</TY1>
+			<TX2>2</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>8</tileX>
-			<tileZ>7</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>1</tX1>
-			<tY1>2</tY1>
-			<tX2>4</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>8</TileX>
+			<TileZ>7</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>1</TX1>
+			<TY1>2</TY1>
+			<TX2>4</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>9</tileX>
-			<tileZ>7</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>3</tX1>
-			<tY1>2</tY1>
-			<tX2>4</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>9</TileX>
+			<TileZ>7</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>3</TX1>
+			<TY1>2</TY1>
+			<TX2>4</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>10</tileX>
-			<tileZ>7</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>3</tX1>
-			<tY1>2</tY1>
-			<tX2>4</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>10</TileX>
+			<TileZ>7</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>3</TX1>
+			<TY1>2</TY1>
+			<TX2>4</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>11</tileX>
-			<tileZ>7</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>3</tX1>
-			<tY1>2</tY1>
-			<tX2>2</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>11</TileX>
+			<TileZ>7</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>3</TX1>
+			<TY1>2</TY1>
+			<TX2>2</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>12</tileX>
-			<tileZ>9</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>1</tX1>
-			<tY1>2</tY1>
-			<tX2>2</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>12</TileX>
+			<TileZ>9</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>1</TX1>
+			<TY1>2</TY1>
+			<TX2>2</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
 		<Tree>
-			<tileX>14</tileX>
-			<tileZ>9</tileZ>
-			<wlevel>0</wlevel>
-			<tX1>1</tX1>
-			<tY1>2</tY1>
-			<tX2>2</tX2>
-			<tY2>2</tY2>
-			<tW>32</tW>
-			<tH>64</tH>
+			<TileX>14</TileX>
+			<TileZ>9</TileZ>
+			<WLevel>0</WLevel>
+			<TX1>1</TX1>
+			<TY1>2</TY1>
+			<TX2>2</TX2>
+			<TY2>2</TY2>
+			<TW>32</TW>
+			<TH>64</TH>
 		</Tree>
-	</trees>
-	<objects>
-		<object name="level0_npc1">
+	</Trees>
+	<Objects>
+		<Object name="Level0_npc1">
 			<WalkSprite>
-				<tileX>3</tileX>
-				<tileZ>3</tileZ>
-				<wlevel>0</wlevel>
-				<tX>7</tX>
-				<tY>0</tY>
-				<dir>1</dir>
-				<randWalk>1</randWalk>
-				<npcScript>"test.sgs"</npcScript>
+				<TileX>3</TileX>
+				<TileZ>3</TileZ>
+				<WLevel>0</WLevel>
+				<TX>7</TX>
+				<TY>0</TY>
+				<Dir>1</Dir>
+				<RandWalk>1</RandWalk>
+				<NPCScript>test.sgs</NPCScript>
 			</WalkSprite>
-		</object>
-		<object name="level0_npc7">
+		</Object>
+		<Object name="Level0_npc7">
 			<WalkSprite>
-				<tileX>3</tileX>
-				<tileZ>3</tileZ>
-				<wlevel>0</wlevel>
-				<tX>7</tX>
-				<tY>0</tY>
-				<dir>1</dir>
-				<randWalk>1</randWalk>
+				<TileX>3</TileX>
+				<TileZ>3</TileZ>
+				<WLevel>0</WLevel>
+				<TX>7</TX>
+				<TY>0</TY>
+				<Dir>1</Dir>
+				<RandWalk>1</RandWalk>
 			</WalkSprite>
-		</object>
-		<object name="level0_npc5">
+		</Object>
+		<Object name="Level0_npc5">
 			<WalkSprite>
-				<tileX>3</tileX>
-				<tileZ>3</tileZ>
-				<wlevel>0</wlevel>
-				<tX>7</tX>
-				<tY>0</tY>
-				<dir>1</dir>
-				<randWalk>1</randWalk>
+				<TileX>3</TileX>
+				<TileZ>3</TileZ>
+				<WLevel>0</WLevel>
+				<TX>7</TX>
+				<TY>0</TY>
+				<Dir>1</Dir>
+				<RandWalk>1</RandWalk>
 			</WalkSprite>
-		</object>
-		<object name="level0_npc2">
+		</Object>
+		<Object name="Level0_npc2">
 			<WalkSprite>
-				<tileX>3</tileX>
-				<tileZ>3</tileZ>
-				<wlevel>0</wlevel>
-				<tX>0</tX>
-				<tY>0</tY>
-				<randWalk>1</randWalk>
+				<TileX>3</TileX>
+				<TileZ>3</TileZ>
+				<WLevel>0</WLevel>
+				<TX>0</TX>
+				<TY>0</TY>
+				<RandWalk>1</RandWalk>
 			</WalkSprite>
-		</object>
-		<object name="level0_npc3">
+		</Object>
+		<Object name="Level0_npc3">
 			<WalkSprite>
-				<tileX>3</tileX>
-				<tileZ>3</tileZ>
-				<wlevel>0</wlevel>
-				<tX>0</tX>
-				<tY>0</tY>
-				<randWalk>1</randWalk>
+				<TileX>3</TileX>
+				<TileZ>3</TileZ>
+				<WLevel>0</WLevel>
+				<TX>0</TX>
+				<TY>0</TY>
+				<RandWalk>1</RandWalk>
 			</WalkSprite>
-		</object>
-		<object name="level0_npc4">
+		</Object>
+		<Object name="Level0_npc4">
 			<WalkSprite>
-				<tileX>1</tileX>
-				<tileZ>9</tileZ>
-				<wlevel>0</wlevel>
-				<tX>0</tX>
-				<tY>4</tY>
-				<dir>7</dir>
-				<randWalk>1</randWalk>
+				<TileX>1</TileX>
+				<TileZ>9</TileZ>
+				<WLevel>0</WLevel>
+				<TX>0</TX>
+				<TY>4</TY>
+				<Dir>7</Dir>
+				<RandWalk>1</RandWalk>
 			</WalkSprite>
-		</object>
-	</objects>
-</level>
+		</Object>
+	</Objects>
+</Level>
 

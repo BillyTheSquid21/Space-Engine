@@ -58,7 +58,6 @@ private:
 	FlagArray* m_Flags;
 
 	//Test GUI
-	GameGUI::OvGUI_Enabled m_GUIEnabled;
 	GameGUI::TextBoxBuffer m_TextBuff;
 
 	//Input

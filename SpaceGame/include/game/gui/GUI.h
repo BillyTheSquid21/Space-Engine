@@ -80,11 +80,6 @@ namespace GameGUI
 	{
 		std::string t1 = "";
 		std::string t2 = "";
-	};
-
-	//Struct for what GUI elements to show
-	struct OvGUI_Enabled
-	{
 		bool showTextBox = false;
 	};
 }

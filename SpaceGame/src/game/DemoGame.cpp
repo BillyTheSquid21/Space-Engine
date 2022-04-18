@@ -29,7 +29,6 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	m_States.push_back(stateMainMenuScreen);
 	std::shared_ptr<State> stateOverworld = std::static_pointer_cast<State>(overworld);
 	m_States.push_back(overworld);
-
 	
 	return success;
 }

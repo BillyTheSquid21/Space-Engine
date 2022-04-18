@@ -4,6 +4,9 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     //Width and height
     m_Width = width; m_Height = height;
 
+    //Flags
+    m_Flags = flags;
+
     //Renderer setup
     m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -27,13 +30,11 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     m_Camera.panYDegrees(45.0f);
 
     //test level
-    m_Levels.InitialiseLevels(&m_ObjManager, &m_SpriteRenderer, &m_WorldRenderer, &m_SpriteTileMap, &m_WorldTileMap, m_Flags);
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_SpriteRenderer, &m_WorldRenderer, &m_SpriteTileMap, &m_WorldTileMap, m_Flags, &m_TextBuff);
 
     //gui shit test
     m_Fonts = fonts;
     m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
-
-    m_Flags = flags;
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
@@ -78,7 +79,7 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
 
     //Load level data
-    m_Levels.LoadLevel(m_CurrentLevel);
+    m_Levels.BuildFirstLevel(m_CurrentLevel);
 
     //Add player
     OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
@@ -89,12 +90,13 @@ void Overworld::loadRequiredData() {
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
     walk->setPersistentInput(&HELD_SHIFT, &HELD_W, &HELD_S, &HELD_A, &HELD_D);
     walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
-    walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Direction, &sprite->m_WorldLevel, &sprite->m_YPos, &sprite->m_Sprite);
+    walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Busy, &sprite->m_Direction, &sprite->m_WorldLevel, &sprite->m_YPos, &sprite->m_Sprite);
 
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite, "Player");
 
+    m_Levels.LoadLevel(m_CurrentLevel);
 
     std::shared_ptr<LoadingZone> lz(new LoadingZone());
     std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST));
@@ -102,13 +104,6 @@ void Overworld::loadRequiredData() {
 
     m_ObjManager.pushRenderHeap(load, &lz->m_RenderComps);
     m_ObjManager.pushGameObject(lz);
-
-    //Test obj load - TODO - Make load doc only once
-    //using namespace  WorldParse;
-    //std::future<bool> f1; std::future<bool> f2; std::shared_mutex mutex;
-    //XML_Doc_Wrapper doc = ParseLevelXML(World::LevelID::LEVEL_ENTRY);
-    //f1 = std::async(std::launch::async, &ParseLevelObjects, &m_ObjManager, &m_SpriteTileMap, &m_SpriteRenderer, World::LevelID::LEVEL_ENTRY, std::ref(mutex), doc);
-    //f2 = std::async(std::launch::async, &ParseLevelTrees, &m_ObjManager, &m_WorldTileMap, &m_WorldRenderer, World::LevelID::LEVEL_ENTRY, std::ref(mutex), doc);
 
     atlas.generateAtlas();
     atlas.generateTexture(2);
@@ -157,7 +152,7 @@ void Overworld::render() {
     //IMGUI Test
     GameGUI::TextBox gui(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f);
     gui.setFontContainer(m_Fonts);
-    if (m_GUIEnabled.showTextBox)
+    if (m_TextBuff.showTextBox)
     {
         gui.setStyle();
         gui.run(m_TextBuff.t1, m_TextBuff.t2);

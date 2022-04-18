@@ -11,6 +11,8 @@
 #include "core/ObjManagement.h"
 #include "game/level/World.h"
 
+#include "game/GUI/GUI.h"
+
 #include "game/objects/PlayerObjects.h"
 #include "game/objects/NPCAi.h"
 #include "game/objects/Script.hpp"
@@ -31,19 +33,19 @@ namespace WorldParse
 
 	//Tree process is kept separate from objs as involves mainly reading data and packaging into only a single component
 	inline XML_Doc_Wrapper ParseLevelXML(World::LevelID id);
-	bool ParseLevelObjects(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, FlagArray* flags, std::shared_mutex& mutex, XML_Doc_Wrapper doc);
+	bool ParseLevelObjects(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc);
 	bool ParseLevelTrees(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc);
 
 	//Sprite loading
 	static void LoadSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID);
-	static void LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, World::LevelID levelID);
-	static void LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, World::LevelID levelID);
+	static void LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID);
+	static void LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID);
 
 	//Sprite help
 	inline OvSpr_SpriteData BuildSprDataFromXNode(rapidxml::xml_node<>* node, World::LevelID levelID);
+	inline void OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite);
 	inline void DirectionalSpriteOptionals(rapidxml::xml_node<>* node, std::shared_ptr<OvSpr_DirectionalSprite> sprite);
 	inline void WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, std::shared_ptr<OvSpr_WalkingSprite> sprite);
-
 }
 
 namespace World
@@ -52,7 +54,8 @@ namespace World
 	class LevelContainer
 	{
 	public:
-		void InitialiseLevels(ObjectManager* obj, Render::Renderer<TextureVertex>* sprRen, Render::Renderer<TextureVertex>* worRen, TileMap* sprMap, TileMap* worMap, FlagArray* flags);
+		void InitialiseLevels(ObjectManager* obj, Render::Renderer<TextureVertex>* sprRen, Render::Renderer<TextureVertex>* worRen, TileMap* sprMap, TileMap* worMap, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff);
+		void BuildFirstLevel(World::LevelID id); //Builds geometry and permissions first - for use when no level has been initialised
 		void LoadLevel(World::LevelID id);
 		void UnloadLevel(World::LevelID id);
 		void render();
@@ -62,6 +65,7 @@ namespace World
 		//Pointer to rendering stuff
 		ObjectManager* m_ObjManager;
 		FlagArray* m_Flags;
+		GameGUI::TextBoxBuffer* m_TextBuffer;
 		Render::Renderer<TextureVertex>* m_SpriteRenderer; Render::Renderer<TextureVertex>* m_WorldRenderer;
 		TileMap* m_SpriteTileMap; TileMap* m_WorldTileMap;
 	};
@@ -69,18 +73,18 @@ namespace World
 
 
 //Format for xml file:
-//<object name = "name here"> -> if name contains "levelx", the object will be unloaded with level
+//<Object name = "name here"> -> if name contains "levelx", the object will be unloaded with level
 //<Sprite type>
 //<!--REQ--> //builds the data structure
-//< tileX>3 < / tileX >
-//< tileZ>3 < / tileZ >
-//< wlevel>0 < / wlevel >
-//< tX>0 < / tX >
-//< tY>0 < / tY >
+//< TileX>3 < / TileX >
+//< TileZ>3 < / TileZ >
+//< WLevel>0 < / WLevel >
+//< TX>0 < / TX >
+//< TY>0 < / TY >
 //<!--Opt-->
 // insert optional here
 //< / Sprite type>
-//< / object>
+//< / Object>
 
 //Sprite type tags:
 	//Sprite
@@ -89,8 +93,8 @@ namespace World
 	//RunSprite
 
 //Sprite optional tags:
-	//dir
-	//randWalk - contains whether is active by default
-	//npcScript - path to script to run
+	//Dir
+	//RandWalk - contains whether is active by default
+	//NPCScript - path to script to run
 
 #endif

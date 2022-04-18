@@ -20,12 +20,13 @@ struct FlagInfo
 enum class ScriptInstruction
 {
 	//Core
-	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, LOCK_PLAYER, CORE_MAX, //max to give return term
+	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, LOCK_PLAYER, OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, 
+	GIVE_ITEM, TAKE_ITEM,
+	
+	CORE_MAX, //max to give return term
 	
 	//Non Core
-	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, GIVE_ITEM, TAKE_ITEM,
-	FREEZE_OBJECT, UNFREEZE_OBJECT, CGE_DIRECTION, WALK_IN_DIR, RUN_IN_DIR, 
-	SET_BUSY,
+	FREEZE_OBJECT, CGE_DIRECTION, WALK_IN_DIR, RUN_IN_DIR, 
 };
 
 //NOTE: flags must be written in hex in files (0xFFFFFF syntax)
@@ -82,7 +83,7 @@ struct BUSY_INFO
 };
 
 //Lock player info
-struct LOCK_PLAYER_INFO
+struct LOCK_INFO
 {
 	uint32_t state : 8;
 	uint32_t unused : 24;
@@ -101,7 +102,7 @@ struct InstructionInfo
 		FLAG_INFO flgInfo;
 		DIRECTION_INFO dirInfo;
 		BUSY_INFO busyInfo;
-		LOCK_PLAYER_INFO lockPlayInfo;
+		LOCK_INFO lockInfo;
 		uint32_t clear;
 	};
 };
@@ -115,64 +116,5 @@ struct ScriptElement
 typedef std::shared_ptr<ScriptElement[]> Script;
 typedef std::array<bool, std::numeric_limits<uint16_t>::max()> FlagArray; //known size at runtime
 
-//Script component to be applied to object
-class OverworldScript : public UpdateComponent
-{
-public:
-	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; }
-	void update(double deltaTime) 
-	{
-		process(m_Index, deltaTime);
-
-		if (m_Index >= m_Size)
-		{
-			m_Index = 0;
-		}
-	}
-
-	virtual ScriptElement process(uint16_t index, double deltaTime)
-	{
-		//Carries out core functionality here that all implementations use
-		//Then returns the element to derived process
-		ScriptElement el = m_Script[m_Index];
-		switch (el.instruction)
-		{
-		case ScriptInstruction::JMP:
-			m_Index = el.info.jmpInfo.line;
-			return el;
-		case ScriptInstruction::JMP_IF:
-			if ((*m_FlagArray)[el.info.jmpIfInfo.flagLoc])
-			{
-				m_Index = el.info.jmpIfInfo.line;
-			}
-			return el;
-		case ScriptInstruction::SET_FLAG:
-			(*m_FlagArray)[el.info.flgInfo.flagLoc] = el.info.flgInfo.state;
-			m_Index++;
-			return el;
-		case ScriptInstruction::WAIT_SEC:
-			if (m_Timer >= 1.0f)
-			{
-				m_Index++;
-				m_Timer = 0.0f;
-			}
-			m_Timer += deltaTime;
-			return el;
-		case ScriptInstruction::LOCK_PLAYER:
-			m_Player->m_Busy = el.info.lockPlayInfo.state;
-			m_Index++;
-			return el;
-		}
-		return el;
-	}
-protected:
-	Script m_Script;
-	FlagArray* m_FlagArray;
-	uint16_t m_Index = 0;
-	uint16_t m_Size;
-	OvSpr_RunningSprite* m_Player;
-private:
-	float m_Timer = 0.0;
-};
 
 #endif

@@ -118,10 +118,6 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::FREEZE_OBJECT;
 	}
-	else if (instr == "-UNFREEZE_OBJECT")
-	{
-		return ScriptInstruction::UNFREEZE_OBJECT;
-	}
 	else if (instr == "-CGE_DIRECTION")
 	{
 		return ScriptInstruction::CGE_DIRECTION;
@@ -133,10 +129,6 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	else if (instr == "-RUN_IN_DIR")
 	{
 		return ScriptInstruction::WALK_IN_DIR;
-	}
-	else if (instr == "-SET_BUSY")
-	{
-		return ScriptInstruction::SET_BUSY;
 	}
 	return ScriptInstruction::CORE_MAX;
 }
@@ -156,7 +148,7 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 		PSS_JMP_IF(instrArr, element);
 		return;
 	case ScriptInstruction::LOCK_PLAYER:
-		PSS_LOCK_PLAYER(instrArr, element);
+		PSS_LOCK(instrArr, element);
 		return;
 	case ScriptInstruction::MSG:
 		PSS_MSG(instrArr, element);
@@ -170,8 +162,8 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 	case ScriptInstruction::CGE_DIRECTION:
 		PSS_CGE_DIR(instrArr, element);
 		return;
-	case ScriptInstruction::SET_BUSY:
-		PSS_SET_BUSY(instrArr, element);
+	case ScriptInstruction::FREEZE_OBJECT:
+		PSS_LOCK(instrArr, element);
 		return;
 	default:
 		element.info.clear = 0;
@@ -203,23 +195,23 @@ void ScriptParse::PSS_JMP(std::string(&instrArr)[MAX_INFO], ScriptElement& eleme
 
 void ScriptParse::PSS_JMP_IF(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
 {
-	element.info.jmpIfInfo.line = (uint16_t)strtoul(instrArr[1].c_str(), nullptr, 10);
-	element.info.jmpIfInfo.flagLoc = (uint16_t)strtoul(instrArr[2].c_str(), nullptr, 16);
+	element.info.jmpIfInfo.flagLoc = (uint16_t)strtoul(instrArr[1].c_str(), nullptr, 16);
+	element.info.jmpIfInfo.line = (uint16_t)strtoul(instrArr[2].c_str(), nullptr, 10);
 }
 
-void ScriptParse::PSS_LOCK_PLAYER(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
+void ScriptParse::PSS_LOCK(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
 {
 	if (instrArr[1][0] != '-')
 	{
-		element.info.lockPlayInfo.state = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
+		element.info.lockInfo.state = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
 		return;
 	}
 	else if (instrArr[1] == "true")
 	{
-		element.info.lockPlayInfo.state = 1;
+		element.info.lockInfo.state = 1;
 		return;
 	}
-	element.info.lockPlayInfo.state = 0;
+	element.info.lockInfo.state = 0;
 }
 
 void ScriptParse::PSS_MSG(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
@@ -246,19 +238,4 @@ void ScriptParse::PSS_CGE_DIR(std::string(&instrArr)[MAX_INFO], ScriptElement& e
 		element.info.dirInfo.direction = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
 		return;
 	}
-}
-
-void ScriptParse::PSS_SET_BUSY(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
-{
-	if (instrArr[1][0] != '-')
-	{
-		element.info.busyInfo.state = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
-		return;
-	}
-	else if (instrArr[1] == "true")
-	{
-		element.info.busyInfo.state = 1;
-		return;
-	}
-	element.info.busyInfo.state = 0;
 }
