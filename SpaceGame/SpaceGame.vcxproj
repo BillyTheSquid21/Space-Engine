@@ -158,6 +158,7 @@
     <ClCompile Include="src\game\gui\GUI.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
     <ClCompile Include="src\game\level\WorldObjectLoader.cpp" />
+    <ClCompile Include="src\game\objects\Bridge.cpp" />
     <ClCompile Include="src\game\objects\LoadingZone.cpp" />
     <ClCompile Include="src\game\objects\NPCAi.cpp" />
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\level\World.h" />
     <ClInclude Include="include\game\level\WorldObjectLoader.h" />
+    <ClInclude Include="include\game\objects\Bridge.h" />
     <ClInclude Include="include\game\objects\LoadingZone.h" />
     <ClInclude Include="include\game\objects\NPCAi.h" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />

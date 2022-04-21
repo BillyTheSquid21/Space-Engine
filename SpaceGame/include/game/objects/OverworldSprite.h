@@ -157,7 +157,7 @@ namespace Ov_Translation
 	void CentreOnTileSprite(std::shared_ptr<T> sprite)
 	{
 		std::shared_ptr<OvSpr_DirectionalSprite> spr = std::static_pointer_cast<T>(sprite);
-		CentreOnTile(spr->m_CurrentLevel, &spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_TileX, spr->m_TileZ, &spr->m_Sprite);
+		CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_TileX, spr->m_TileZ, &spr->m_Sprite);
 	}
 
 	//Slope ascending and descending - balanced for smoothness

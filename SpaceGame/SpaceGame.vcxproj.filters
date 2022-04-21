@@ -186,6 +186,9 @@
     <ClCompile Include="src\game\objects\ScriptParse.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\objects\Bridge.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -381,6 +384,9 @@
       <Filter>Header Files\Game\Level</Filter>
     </ClInclude>
     <ClInclude Include="include\game\objects\ScriptParse.h">
+      <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\objects\Bridge.h">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -90,7 +90,7 @@ void Overworld::loadRequiredData() {
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
     walk->setPersistentInput(&HELD_SHIFT, &HELD_W, &HELD_S, &HELD_A, &HELD_D);
     walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
-    walk->setSpriteData(&sprite->m_Walking, &sprite->m_Running, &sprite->m_Busy, &sprite->m_Direction, &sprite->m_WorldLevel, &sprite->m_YPos, &sprite->m_Sprite);
+    walk->setSpriteData(sprite);
 
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);

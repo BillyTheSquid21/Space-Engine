@@ -104,7 +104,7 @@ class NPC_OverworldScript : public OverworldScript
 {
 public:
 	using OverworldScript::OverworldScript;
-	void linkNPC(OvSpr_RunningSprite* npc) { m_NPC = npc; };
+	void linkNPC(std::shared_ptr<OvSpr_RunningSprite> npc) { m_NPC = npc; };
 
 	virtual bool process(double deltaTime)
 	{
@@ -129,11 +129,11 @@ public:
 			{
 				m_NPC->m_Walking = false;
 				m_NPC->m_Timer = 0.0;
-				Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_TileX, m_NPC->m_TileZ, &m_NPC->m_Sprite);
+				Ov_Translation::CentreOnTileSprite(m_NPC);
 				m_Index++;
 				return true;
 			}
-			Ov_Translation::Walk(&m_NPC->m_Direction, &m_NPC->m_XPos, &m_NPC->m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
+			Ov_Translation::WalkSprite(m_NPC, deltaTime);
 			return true;
 		case ScriptInstruction::RUN_IN_DIR:
 			if (!m_NPC->m_Running)
@@ -145,11 +145,11 @@ public:
 			{
 				m_NPC->m_Running = false;
 				m_NPC->m_Timer = 0.0;
-				Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_TileX, m_NPC->m_TileZ, &m_NPC->m_Sprite);
+				Ov_Translation::CentreOnTileSprite(m_NPC);
 				m_Index++;
 				return true;
 			}
-			Ov_Translation::Run(&m_NPC->m_Direction, &m_NPC->m_XPos, &m_NPC->m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
+			Ov_Translation::RunSprite(m_NPC, deltaTime);
 			return true;
 		case ScriptInstruction::FREEZE_OBJECT:
 			m_NPC->m_Busy = (bool)el.info.lockInfo.state;
@@ -159,7 +159,7 @@ public:
 	}
 
 private:
-	OvSpr_RunningSprite* m_NPC;
+	std::shared_ptr<OvSpr_RunningSprite> m_NPC;
 };
 
 class NPC_RandWalk : public TilePosition

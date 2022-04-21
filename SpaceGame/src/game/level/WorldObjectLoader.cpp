@@ -225,7 +225,7 @@ void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectMana
 		std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite>(manager->getObjects()[0].obj);
 		std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player.get(), flags));
 		npcScript->linkText(&textBuff->t1, &textBuff->t2, &textBuff->showTextBox);
-		npcScript->linkNPC((OvSpr_RunningSprite*)(void*)sprite.get()); //if sprite type doesnt support command, undefined behaviour - TODO fix
+		npcScript->linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(sprite)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 		manager->pushUpdateHeap(npcScript, &sprite->m_UpdateComps);
 	}
 }
