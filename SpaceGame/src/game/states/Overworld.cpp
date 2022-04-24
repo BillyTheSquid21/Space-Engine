@@ -82,7 +82,7 @@ void Overworld::loadRequiredData() {
     m_Levels.BuildFirstLevel(m_CurrentLevel);
 
     //Add player
-    OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldLevel::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
+    OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
     sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_SpriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_SpriteRenderer);
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
 
@@ -96,11 +96,11 @@ void Overworld::loadRequiredData() {
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite, "Player");
 
-    m_Levels.LoadLevel(m_CurrentLevel);
+    m_Levels.LoadLevel(m_CurrentLevel, &PRESSED_E);
 
     std::shared_ptr<LoadingZone> lz(new LoadingZone());
-    std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST));
-    load->setLoadingFuncs(std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1), std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1));
+    std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST, &PRESSED_E));
+    load->setLoadingFuncs(std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1, std::placeholders::_2), std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1));
 
     m_ObjManager.pushRenderHeap(load, &lz->m_RenderComps);
     m_ObjManager.pushGameObject(lz);
@@ -162,7 +162,7 @@ void Overworld::render() {
 
 void Overworld::handleInput(int key, int scancode, int action, int mods) {
     //Reset pressed
-    PRESSED_A = false; PRESSED_D = false; PRESSED_S = false; PRESSED_W = false;
+    PRESSED_A = false; PRESSED_D = false; PRESSED_S = false; PRESSED_W = false; PRESSED_E = false;
 
     if (key == GLFW_KEY_A) {
         if (action == GLFW_PRESS) {
@@ -270,6 +270,13 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
         {
             HELD_S = true;
             m_HoldTimerActive = false;
+        }
+    }
+    if (key == GLFW_KEY_E)
+    {
+        if (action == GLFW_PRESS)
+        {
+            PRESSED_E = true;
         }
     }
 

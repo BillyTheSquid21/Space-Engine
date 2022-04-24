@@ -8,7 +8,7 @@ static void RotateTileCorner(TextureQuad* quad, float angle) {
     RotateShape<TextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
 }
 
-void World::tileLevel(TextureQuad* quad, WorldLevel level) {
+void World::tileLevel(TextureQuad* quad, WorldHeight level) {
     TranslateShape<TextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
@@ -55,10 +55,36 @@ World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::T
     return tile;
 }
 
-//Retrive in dir
-World::LevelPermission World::RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc)
+bool World::CheckPlayerInteracting(World::TileLoc player, World::TileLoc script, World::Direction playerFacing)
 {
-    std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
+    World::TileLoc nextTile = NextTileInInputDirection(playerFacing, player);
+    if (script.x == nextTile.x && script.z == nextTile.z)
+    {
+        return true;
+    }
+    return false;
+}
+
+World::Direction World::OppositeDirection(World::Direction dir)
+{
+    switch (dir)
+    {
+    case World::Direction::EAST:
+        return World::Direction::WEST;
+    case World::Direction::WEST:
+        return World::Direction::EAST;
+    case World::Direction::NORTH:
+        return World::Direction::SOUTH;
+    case World::Direction::SOUTH:
+        return World::Direction::NORTH;
+    }
+    return World::Direction::DIRECTION_NULL;
+}
+
+//Retrive in dir
+World::LevelPermission World::RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height)
+{
+    Level::PermVectorFragment permissions = World::Level::queryPermissions(level, height);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
     World::TileLoc tileLookup = World::NextTileInInputDirection(direction, loc);
 
@@ -73,13 +99,13 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Di
 
     //Lookup permission for next tile
     unsigned int lookupIndex = tileLookup.x * dimensions.levelH + tileLookup.z;
-    return { World::Level::queryPermissions(level)->at(lookupIndex), leavingLevel };
+    return { World::Level::queryPermissions(level, height).pointer[lookupIndex], leavingLevel };
 }
 
 //Retrive on spot
-World::LevelPermission World::RetrievePermission(World::LevelID level, World::TileLoc loc)
+World::LevelPermission World::RetrievePermission(World::LevelID level, World::TileLoc loc, WorldHeight height)
 {
-    std::vector<World::MovementPermissions>* permissions = World::Level::queryPermissions(level);
+    Level::PermVectorFragment permissions = World::Level::queryPermissions(level, height);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
 
     //if outside level bounds, check current tile instead
@@ -93,36 +119,55 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Ti
 
     //Lookup permission for next tile
     unsigned int lookupIndex = loc.x * dimensions.levelH + loc.z;
-    return { World::Level::queryPermissions(level)->at(lookupIndex), leavingLevel };
+    return { World::Level::queryPermissions(level, height).pointer[lookupIndex], leavingLevel };
 }
 
-void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc)
+void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height)
 {
     //Get level data
     World::LevelDimensions dim = World::Level::queryDimensions(level);
-    std::vector<World::MovementPermissions>* perm = World::Level::queryPermissions(level);
+    Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);
 
     //Clear tile leaving
     unsigned int index = loc.x * dim.levelH + loc.z;
     //Check to make sure not blocking level bridge
-    if (index < perm->size())
+    if (index < perm.size)
     {
-        if (perm->at(index) == World::MovementPermissions::SPRITE_BLOCKING)
+        if (perm.pointer[index] == World::MovementPermissions::SPRITE_BLOCKING)
         {
-            perm->at(index) = World::MovementPermissions::CLEAR;
+            perm.pointer[index] = World::MovementPermissions::CLEAR;
         }
     }
 
     //Block tile entering
     World::TileLoc tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
     index = tileLookup.x * dim.levelH + tileLookup.z;
-    if (index < perm->size())
+    if (index < perm.size)
     {
-        if (perm->at(index) == World::MovementPermissions::CLEAR)
+        if (perm.pointer[index] == World::MovementPermissions::CLEAR)
         {
-            perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
+            perm.pointer[index] = World::MovementPermissions::SPRITE_BLOCKING;
         }
     }
+}
+
+World::Level::PermVectorFragment World::Level::queryPermissions(LevelID level, WorldHeight height)
+{
+    if ((unsigned int)level < s_MovementPermissionsCache.size()) 
+    { 
+        Level::LevelPtrCache ptrCache = s_MovementPermissionsCache[((unsigned int)level)];
+        for (int i = 0; i < ptrCache.levels->size(); i++)
+        {
+            if (height == ptrCache.levels->at(i))
+            {
+                World::LevelDimensions dim = queryDimensions(level);
+                unsigned int size = dim.levelH * dim.levelW;
+                unsigned int index = size * i;
+                return { &ptrCache.perms->at(index), size };
+            }
+        }
+    } 
+    return {&s_MovementPermissionsCache[0].perms->at(0), 1};  //If fails, return first level permis found
 }
 
 void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
@@ -184,18 +229,31 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
     }
 }
 
-std::unordered_map<World::LevelID, std::vector<World::MovementPermissions>*> World::Level::s_MovementPermissionsCache;
+std::vector<World::Level::LevelPtrCache> World::Level::s_MovementPermissionsCache;
+bool World::Level::s_CacheInit = false;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
 bool World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
 {
+    //Checks if the caches are setup - should happen on first load which shouldn't need to be atomic (not loading through loading zone)
+    if (!s_CacheInit)
+    {
+        s_LevelOriginCache.resize((unsigned int)World::LevelID::LEVEL_NULL);
+        s_LevelDimensionCache.resize((unsigned int)World::LevelID::LEVEL_NULL);
+        s_MovementPermissionsCache.resize((unsigned int)World::LevelID::LEVEL_NULL);
+        s_CacheInit = true;
+    }
+
     LevelData data = ParseLevel(m_ID);
     m_TileMapPointer = tileMapPointer;
 
     //Allocate permission array
     m_LevelTilesX = data.width; m_LevelTilesY = data.height;
     m_LevelTotalTiles = m_LevelTilesX * m_LevelTilesY;
-    m_Permissions.resize(m_LevelTotalTiles);
+
+    //Permissions
+    m_Permissions.resize(m_LevelTotalTiles * data.presentWorldLevels.size());
+    m_AvailibleLevels = data.presentWorldLevels;
 
     //Allocate height array
     m_Heights.resize(m_LevelTotalTiles);
@@ -229,8 +287,14 @@ bool World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
             }
 
             //Permissions
-            if (data.planePermissions[yFirstIndex] != World::MovementPermissions::CLEAR) {
-                m_Permissions[xFirstIndex] = data.planePermissions[yFirstIndex];
+            for (int i = 0; i < data.presentWorldLevels.size(); i++)
+            {
+                WorldHeight worldLevel = data.presentWorldLevels[i];
+                unsigned int yInd = (i * m_LevelTotalTiles) + yFirstIndex;
+                unsigned int xInd = (i * m_LevelTotalTiles) + xFirstIndex;
+                if (data.planePermissions[yInd] != World::MovementPermissions::CLEAR) {
+                    m_Permissions.at(xInd) = data.planePermissions.at(yInd);
+                }
             }
 
             //Texture tiles
@@ -243,7 +307,7 @@ bool World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
     }
 
     //Store pointer to permissions - updates every time level loaded
-    Level::s_MovementPermissionsCache[this->m_ID] = &this->m_Permissions;
+    Level::s_MovementPermissionsCache[(unsigned int)m_ID] = { &m_Permissions, &m_AvailibleLevels };
     return true;
 }
 
@@ -252,7 +316,7 @@ void World::Level::purgeLevel()
     m_Plane.purgeData();
     m_Permissions.clear();
     m_Heights.clear();
-    World::Level::s_MovementPermissionsCache.erase(m_ID);
+    World::Level::s_MovementPermissionsCache[(unsigned int)m_ID] = {nullptr, nullptr};
     m_TileMapPointer = nullptr;
 }
 
@@ -261,8 +325,8 @@ void World::Level::render() {
 }
 
 //Declare unordered maps to cache constant level values
-std::unordered_map<World::LevelID, Struct2f> World::Level::s_LevelOriginCache;
-std::unordered_map<World::LevelID, World::LevelDimensions> World::Level::s_LevelDimensionCache;
+std::vector<Struct2f> World::Level::s_LevelOriginCache;
+std::vector<World::LevelDimensions> World::Level::s_LevelDimensionCache;
 
 World::LevelData World::ParseLevel(World::LevelID id) {
     //Setup stream
@@ -280,7 +344,7 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     float levelOX; float levelOZ;
 
     //Vectors
-    std::vector<WorldLevel> planeHeights;
+    std::vector<WorldHeight> planeHeights;
     std::vector<Direction> planeDirections;
     std::vector<MovementPermissions> planePermissions;
     std::vector<TileTexture> planeTextures;
@@ -291,9 +355,9 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     assert(doc.HasMember("levelHeight"));
     assert(doc.HasMember("levelOriginX"));
     assert(doc.HasMember("levelOriginZ"));
+    assert(doc.HasMember("worldLevels")); //Tells you what levels have permissions
     assert(doc.HasMember("planeHeightsR0"));
     assert(doc.HasMember("planeDirectionsR0"));
-    assert(doc.HasMember("planePermissionsR0"));
     assert(doc.HasMember("planeTexturesR0"));
 
     //Get simple values
@@ -308,7 +372,7 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     //const properties tags per row
     const std::string HEIGHT_ROW = "planeHeightsR";
     const std::string DIRECTIONS_ROW = "planeDirectionsR";
-    const std::string PERMISSIONS_ROW = "planePermissionsR";
+    const std::string PERMISSIONS_ROW = "PlanePermissionsR";
     const std::string TEXTURES_ROW = "planeTexturesR";
 
     //Current row and segments
@@ -325,7 +389,7 @@ World::LevelData World::ParseLevel(World::LevelID id) {
         std::stringstream stream(doc[currentRow.c_str()].GetString());
         while (std::getline(stream, currentSegment, '|'))
         {
-            planeHeights.push_back((WorldLevel)std::stoi(currentSegment));
+            planeHeights.push_back((WorldHeight)std::stoi(currentSegment));
         }
     }
 
@@ -343,17 +407,29 @@ World::LevelData World::ParseLevel(World::LevelID id) {
         }
     }
 
-    //Read permissions
-    for (int y = height - 1; y >= 0; y--) {
-        //Make member name string
-        currentRow = PERMISSIONS_ROW + std::to_string(y);
-        //Check member exists
-        assert(doc.HasMember(currentRow.c_str()));
-        //Reads data
-        std::stringstream stream(doc[currentRow.c_str()].GetString());
-        while (std::getline(stream, currentSegment, '|'))
-        {
-            planePermissions.push_back((MovementPermissions)std::stoi(currentSegment));
+    //Get which elevations have permissions
+    std::vector<WorldHeight> worldLevels; //Levels with permissions
+    std::stringstream worldLevelStream(doc["worldLevels"].GetString());
+    while (std::getline(worldLevelStream, currentSegment, '|'))
+    {
+        worldLevels.push_back((WorldHeight)std::stoi(currentSegment));
+    }
+
+    //For every world level present store the permissions
+    for (int i = 0; i < worldLevels.size(); i++)
+    {
+        std::string prefix = "l" + std::to_string((int)worldLevels[i]);
+        for (int y = height - 1; y >= 0; y--) {
+            //Make member name string
+            currentRow = prefix + PERMISSIONS_ROW + std::to_string(y);
+            //Check member exists
+            assert(doc.HasMember(currentRow.c_str()));
+            //Reads data
+            std::stringstream stream(doc[currentRow.c_str()].GetString());
+            while (std::getline(stream, currentSegment, '|'))
+            {
+                planePermissions.push_back((MovementPermissions)std::stoi(currentSegment));
+            }
         }
     }
 
@@ -376,15 +452,15 @@ World::LevelData World::ParseLevel(World::LevelID id) {
         }
     }
     //Store level origin if not loaded before
-    if (Level::s_LevelOriginCache.find(id) == Level::s_LevelOriginCache.end()) {
-        Level::s_LevelOriginCache[id] = { levelOX, -1* levelOZ };
+    if ((unsigned int)id < Level::s_LevelOriginCache.size()) {
+        Level::s_LevelOriginCache[(unsigned int)id] = { levelOX, -1* levelOZ };
     }
 
     //Store level size if not loaded before
-    if (Level::s_LevelDimensionCache.find(id) == Level::s_LevelDimensionCache.end()) {
-        Level::s_LevelDimensionCache[id] = { width, height };
+    if ((unsigned int)id < Level::s_LevelDimensionCache.size()) {
+        Level::s_LevelDimensionCache[(unsigned int)id] = { width, height };
     }
 
-    LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, planeDirections, planePermissions, planeTextures };
+    LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, worldLevels, planeDirections, planePermissions, planeTextures };
     return data;
 }

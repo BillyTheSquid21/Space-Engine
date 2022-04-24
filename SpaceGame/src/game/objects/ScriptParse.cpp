@@ -114,13 +114,21 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::TAKE_ITEM;
 	}
+	else if (instr == "-WAIT_INPUT")
+	{
+		return ScriptInstruction::WAIT_INPUT;
+	}
+	else if (instr == "-FACE_PLAYER")
+	{
+		return ScriptInstruction::FACE_PLAYER;
+	}
 	else if (instr == "-FREEZE_OBJECT")
 	{
 		return ScriptInstruction::FREEZE_OBJECT;
 	}
-	else if (instr == "-CGE_DIRECTION")
+	else if (instr == "-CGE_DIR")
 	{
-		return ScriptInstruction::CGE_DIRECTION;
+		return ScriptInstruction::CGE_DIR;
 	}
 	else if (instr == "-WALK_IN_DIR")
 	{
@@ -129,6 +137,10 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	else if (instr == "-RUN_IN_DIR")
 	{
 		return ScriptInstruction::WALK_IN_DIR;
+	}
+	else if (instr == "-WAIT_INTERACT")
+	{
+		return ScriptInstruction::WAIT_INTERACT;
 	}
 	return ScriptInstruction::CORE_MAX;
 }
@@ -159,7 +171,7 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 	case ScriptInstruction::TAKE_ITEM:
 		PSS_GIVE_TAKE_ITEM(instrArr, element);
 		return;
-	case ScriptInstruction::CGE_DIRECTION:
+	case ScriptInstruction::CGE_DIR:
 		PSS_CGE_DIR(instrArr, element);
 		return;
 	case ScriptInstruction::FREEZE_OBJECT:

@@ -6,6 +6,7 @@
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
 #include "game/level/WorldObjectLoader.h"
+#include "game/objects/Bridge.h"
 #include "renderer/Vertex.hpp"
 #include "game/gui/GUI.h"
 #include "game/utility/GameText.h"
@@ -62,7 +63,7 @@ private:
 
 	//Input
 	//Definitions for persistent input
-	bool m_PersistentInput[12];
+	bool m_PersistentInput[13];
 	//Time to hold any input before held state
 	double m_TimeHeld = 0.0;
 	//Time before becomes held
@@ -84,6 +85,7 @@ private:
 #define PRESSED_D m_PersistentInput[9]
 #define PRESSED_W m_PersistentInput[10]
 #define PRESSED_S m_PersistentInput[11]
+#define PRESSED_E m_PersistentInput[12]
 
 
 #endif

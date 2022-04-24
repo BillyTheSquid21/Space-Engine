@@ -9,8 +9,8 @@ void LoadingZoneComponent::render()
 			&& m_PlayerPointer->m_ZPos <= m_Origin.b && m_PlayerPointer->m_ZPos >= m_Origin.b - m_Bounds.b)
 		{
 			m_PlayerInside = true;
-			m_Load1Future = std::async(std::launch::async, m_LoadLv, m_L1_ID);
-			m_Load2Future = std::async(std::launch::async, m_LoadLv, m_L2_ID);
+			m_Load1Future = std::async(std::launch::async, m_LoadLv, m_L1_ID, m_InteractionPtr);
+			m_Load2Future = std::async(std::launch::async, m_LoadLv, m_L2_ID, m_InteractionPtr);
 			EngineLog("Player entered loading zone");
 		}
 		else

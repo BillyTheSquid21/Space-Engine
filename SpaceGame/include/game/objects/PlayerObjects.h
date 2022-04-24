@@ -20,7 +20,6 @@ private:
 	bool startWalk();
 	bool startRun();
 	bool checkInputs();
-	void modifyTilePerm();
 	bool walkPermHelper();
 
 	//Modify

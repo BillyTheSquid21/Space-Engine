@@ -11,7 +11,7 @@
 class OverworldScript : public UpdateComponent
 {
 public:
-	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; }
+	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags, bool* interaction) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; m_InteractionPtr = interaction; }
 	void linkText(std::string* t1, std::string* t2, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_ShowTextBox = showBox; }
 	void update(double deltaTime)
 	{
@@ -83,6 +83,12 @@ public:
 			m_OnLine_1 = true;
 			m_Index++;
 			return true;
+		case ScriptInstruction::WAIT_INPUT:
+			if (*m_InteractionPtr)
+			{
+				m_Index++;
+			}
+			return true;
 		}
 		return false;
 	}
@@ -93,6 +99,7 @@ protected:
 	uint16_t m_Size;
 	OvSpr_RunningSprite* m_Player;
 	bool* m_ShowTextBox = nullptr;
+	bool* m_InteractionPtr = nullptr;
 	std::string* m_TextLine1 = nullptr;
 	std::string* m_TextLine2 = nullptr;
 	bool m_OnLine_1 = true;
@@ -115,7 +122,7 @@ public:
 		ScriptElement el = m_Script[m_Index];
 		switch (el.instruction)
 		{
-		case ScriptInstruction::CGE_DIRECTION:
+		case ScriptInstruction::CGE_DIR:
 			m_NPC->m_Direction = (World::Direction)el.info.dirInfo.direction;
 			m_Index++;
 			return true;
@@ -123,7 +130,7 @@ public:
 			if (!m_NPC->m_Walking)
 			{
 				m_NPC->m_Walking = true;
-				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ });
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_NPC->m_WorldLevel);
 			}
 			else if (m_NPC->m_Timer >= World::WALK_DURATION)
 			{
@@ -139,7 +146,7 @@ public:
 			if (!m_NPC->m_Running)
 			{
 				m_NPC->m_Running = true;
-				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ });
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_NPC->m_WorldLevel);
 			}
 			else if (m_NPC->m_Timer >= World::RUN_DURATION)
 			{
@@ -155,6 +162,19 @@ public:
 			m_NPC->m_Busy = (bool)el.info.lockInfo.state;
 			m_Index++;
 			return true;
+		case ScriptInstruction::FACE_PLAYER:
+			m_NPC->m_Direction = World::OppositeDirection(m_Player->m_Direction);
+			m_Index++;
+			return true;
+		case ScriptInstruction::WAIT_INTERACT:
+			if (*m_InteractionPtr && !m_NPC->m_Busy)
+			{
+				if (World::CheckPlayerInteracting({ m_Player->m_TileX, m_Player->m_TileZ }, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_Player->m_Direction))
+				{
+					m_Index++;
+				}
+			}
+			return true;
 		}
 	}
 
@@ -165,7 +185,7 @@ private:
 class NPC_RandWalk : public TilePosition
 {
 public:
-	NPC_RandWalk(World::Direction* direct, World::WorldLevel* level, float* y, bool* busy, bool* walking, TextureQuad* sprite, double* walkTimer) {	m_Direction = direct; m_WorldLevel = level; m_YPos = y; m_Busy = busy; m_Walking = walking; m_Sprite = sprite; m_WalkTimer = walkTimer;
+	NPC_RandWalk(World::Direction* direct, World::WorldHeight* level, float* y, bool* busy, bool* walking, TextureQuad* sprite, double* walkTimer) {	m_Direction = direct; m_WorldLevel = level; m_YPos = y; m_Busy = busy; m_Walking = walking; m_Sprite = sprite; m_WalkTimer = walkTimer;
 	if (!s_Random.isSeeded()) { s_Random.seed(0.0f, MAX_SEED); } m_CoolDownTimer = s_Random.next() / 8.0f;};
 	
 	void linkLocation(unsigned int* tileX, unsigned int* tileZ, float* x, float* z, World::LevelID* level) { m_TileX = tileX; m_TileZ = tileZ; m_XPos = x; m_ZPos = z; m_CurrentLevel = level; };
@@ -176,7 +196,7 @@ public:
 private:
 	//Busy status is set by other components that carry out instructions - while busy the next instuction wont be read
 	//AI class must be updated first per frame
-	World::Direction* m_Direction = nullptr; World::WorldLevel* m_WorldLevel = nullptr;
+	World::Direction* m_Direction = nullptr; World::WorldHeight* m_WorldLevel = nullptr;
 	float* m_YPos = nullptr;
 
 	//Applies to either walking or running, as npcs will 
@@ -221,7 +241,7 @@ public:
 			m_NPCData->m_Busy = el.info.busyInfo.state;
 			m_Index++;
 			break;
-		case ScriptInstruction::CGE_DIRECTION:
+		case ScriptInstruction::CGE_DIR:
 			m_NPCData->m_Direction = (World::Direction)el.info.dirInfo.direction;
 			m_Index++;
 			break;

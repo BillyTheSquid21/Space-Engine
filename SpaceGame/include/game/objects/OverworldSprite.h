@@ -90,7 +90,7 @@ private:
 struct OvSpr_SpriteData
 {
 	World::TileLoc tile;
-	World::WorldLevel height;
+	World::WorldHeight height;
 	World::LevelID levelID;
 	World::TileTexture texture;
 };
@@ -114,7 +114,7 @@ class OvSpr_DirectionalSprite : public OvSpr_Sprite
 {
 public:
 	using OvSpr_Sprite::OvSpr_Sprite;
-	World::WorldLevel m_WorldLevel = World::WorldLevel::F0;
+	World::WorldHeight m_WorldLevel = World::WorldHeight::F0;
 	World::Direction m_Direction = World::Direction::SOUTH;
 	unsigned int m_AnimationOffsetY = 0;
 	unsigned int m_AnimationOffsetX = 0;
@@ -151,8 +151,8 @@ namespace Ov_Translation
 		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
 		Run(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
 	}
-	void CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite);
-	void CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope);
 	template<typename T>
 	void CentreOnTileSprite(std::shared_ptr<T> sprite)
 	{

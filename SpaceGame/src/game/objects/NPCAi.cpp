@@ -89,7 +89,7 @@ void NPC_RandWalk::cycleEnd()
 
 bool NPC_RandWalk::canWalk()
 {
-	World::LevelPermission perm = World::RetrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
+	World::LevelPermission perm = World::RetrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ }, *m_WorldLevel);
 	if (perm.leaving)
 	{
 		return false;
@@ -108,5 +108,5 @@ void NPC_RandWalk::startWalk()
 {
 	*m_Walking = true;
 	*m_WalkTimer = 0.0;
-	World::ModifyTilePerm(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ });
+	World::ModifyTilePerm(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ }, *m_WorldLevel);
 }

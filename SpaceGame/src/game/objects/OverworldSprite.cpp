@@ -162,10 +162,10 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 	TranslateShape<TextureVertex>((TextureVertex*)&m_Sprite, 0.0f, 0.0f, m_ZPos, Shape::QUAD);
 
 	//Make current tile blocked
-	std::vector<MovementPermissions>* perm = Level::queryPermissions(m_CurrentLevel);
+	World::Level::PermVectorFragment perm = Level::queryPermissions(m_CurrentLevel, data.height);
 	World::LevelDimensions dim = Level::queryDimensions(m_CurrentLevel);
 	unsigned int tileLocation = m_TileX * dim.levelH + m_TileZ;
-	perm->at(tileLocation) = MovementPermissions::SPRITE_BLOCKING;
+	perm.pointer[tileLocation] = MovementPermissions::SPRITE_BLOCKING;
 }
 
 void OvSpr_Sprite::setSprite(UVData data)
@@ -230,7 +230,7 @@ void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Textur
 	*walkTimer += deltaTime;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);
@@ -246,7 +246,7 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldLevel
 	*y = expectedY;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldLevel worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);

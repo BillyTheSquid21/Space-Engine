@@ -15,9 +15,9 @@ class LoadingZone : public GameObject {};
 class LoadingZoneComponent : public RenderComponent
 {
 public:
-	LoadingZoneComponent(OvSpr_RunningSprite* spr, World::LevelID l1, World::LevelID l2) { m_PlayerPointer = spr; m_L1_ID = l1; m_L2_ID = l2; };
+	LoadingZoneComponent(OvSpr_RunningSprite* spr, World::LevelID l1, World::LevelID l2, bool* interaction) { m_PlayerPointer = spr; m_L1_ID = l1; m_L2_ID = l2; m_InteractionPtr = interaction; };
 	void setZoneBounds(float x, float z, float w, float h) { m_Origin.a = x; m_Origin.b = z; m_Bounds.a = w; m_Bounds.b = h; }
-	void setLoadingFuncs(std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld) { m_LoadLv = ld; m_UnloadLv = uld; };
+	void setLoadingFuncs(std::function<void(World::LevelID, bool*)> ld, std::function<void(World::LevelID)> uld) { m_LoadLv = ld; m_UnloadLv = uld; };
 	void render();
 private:
 	//Player data
@@ -29,8 +29,9 @@ private:
 	World::LevelID m_L1_ID;
 	World::LevelID m_L2_ID;
 	bool m_PlayerInside = false;
+	bool* m_InteractionPtr = nullptr;
 
-	std::function<void(World::LevelID)> m_LoadLv; 
+	std::function<void(World::LevelID, bool*)> m_LoadLv; 
 	std::future<void> m_Load1Future; std::future<void> m_Load2Future;
 	std::function<void(World::LevelID)> m_UnloadLv;
 	std::future<void> m_Unload1Future; std::future<void> m_Unload2Future;

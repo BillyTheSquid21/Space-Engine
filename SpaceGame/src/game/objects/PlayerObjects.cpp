@@ -4,9 +4,9 @@
 bool PlayerMove::canWalk()
 {
 	World::Direction direction = m_PlayerData->m_Direction; World::LevelID levelID = m_PlayerData->m_CurrentLevel;
-	World::WorldLevel worldLevel = m_PlayerData->m_WorldLevel;
-	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, { *m_TileX, *m_TileZ });
-	World::LevelPermission permissionCurrent = World::RetrievePermission(levelID, { *m_TileX, *m_TileZ });
+	World::WorldHeight worldLevel = m_PlayerData->m_WorldLevel;
+	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
+	World::LevelPermission permissionCurrent = World::RetrievePermission(levelID, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
 	m_Ascend = 0; m_CurrentIsSlope = false; m_NextIsSlope = false;
 
 	//Check if leaving level
@@ -33,7 +33,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			int levelTmp = (int)worldLevel;
 			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 		}
 		break;
 	case World::MovementPermissions::STAIRS_SOUTH:
@@ -47,7 +47,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			int levelTmp = (int)worldLevel;
 			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 		}
 		break;
 	case World::MovementPermissions::STAIRS_EAST:
@@ -61,7 +61,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			int levelTmp = (int)worldLevel;
 			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 		}
 		break;
 	case World::MovementPermissions::STAIRS_WEST:
@@ -75,7 +75,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			int levelTmp = (int)worldLevel;
 			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 		}
 		break;
 	}
@@ -95,7 +95,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = 1;
 			int levelTmp = (int)worldLevel;
 			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 			return true;
 		}
 		else if (direction == World::Direction::SOUTH)
@@ -113,7 +113,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = 1;
 			int levelTmp = (int)worldLevel;
 			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 			return true;
 		}
 		else if (direction == World::Direction::NORTH)
@@ -131,7 +131,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = 1;
 			int levelTmp = (int)worldLevel;
 			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 			return true;
 		}
 		else if (direction == World::Direction::WEST)
@@ -149,7 +149,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = 1;
 			int levelTmp = (int)worldLevel;
 			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldLevel)levelTmp;
+			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
 			return true;
 		}
 		else if (direction == World::Direction::EAST)
@@ -178,28 +178,12 @@ bool PlayerMove::startRun()
 	return true;
 }
 
-void PlayerMove::modifyTilePerm()
-{
-	//Get level data
-	World::LevelDimensions dim = World::Level::queryDimensions(m_PlayerData->m_CurrentLevel);
-	std::vector<World::MovementPermissions>* perm = World::Level::queryPermissions(m_PlayerData->m_CurrentLevel);
-	
-	//Clear tile leaving
-	unsigned int index = *m_TileX * dim.levelH + *m_TileZ;
-	perm->at(index) = World::MovementPermissions::CLEAR;
-
-	//Block tile entering
-	World::TileLoc tileLookup = World::NextTileInInputDirection(m_PlayerData->m_Direction, { *m_TileX, *m_TileZ });
-	index = tileLookup.x * dim.levelH + tileLookup.z;
-	perm->at(index) = World::MovementPermissions::SPRITE_BLOCKING;
-}
-
 bool PlayerMove::walkPermHelper()
 {
 	if (canWalk())
 	{
 		//Unblock previous tile, block new tile
-		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, { *m_TileX, *m_TileZ });
+		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
 		if (*m_Shift)
 		{
 			return startRun();

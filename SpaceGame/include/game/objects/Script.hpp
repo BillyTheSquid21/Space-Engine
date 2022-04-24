@@ -21,12 +21,12 @@ enum class ScriptInstruction
 {
 	//Core
 	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, LOCK_PLAYER, OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, 
-	GIVE_ITEM, TAKE_ITEM,
+	GIVE_ITEM, TAKE_ITEM, WAIT_INPUT,
 	
 	CORE_MAX, //max to give return term
 	
 	//Non Core
-	FREEZE_OBJECT, CGE_DIRECTION, WALK_IN_DIR, RUN_IN_DIR, 
+	FREEZE_OBJECT, CGE_DIR, WALK_IN_DIR, RUN_IN_DIR, WAIT_INTERACT, FACE_PLAYER,
 };
 
 //NOTE: flags must be written in hex in files (0xFFFFFF syntax)

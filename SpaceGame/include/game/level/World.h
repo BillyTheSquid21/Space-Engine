@@ -21,7 +21,7 @@ namespace World
 	const float TILE_SIZE = 32.0f;
 
 	//Level data
-	enum class LevelID
+	enum class LevelID : unsigned int
 	{
 		LEVEL_ENTRY, LEVEL_TEST,
 
@@ -43,7 +43,7 @@ namespace World
 
 	World::Direction GetDirection(std::string dir);
 
-	enum class WorldLevel : int
+	enum class WorldHeight : int //Has been previously known as "WorldLevel" - changed because of confusion with levelID
 	{
 		//Above ground
 		F0 = 0, F1 = 1, F2 = 2, F3 = 3, F4 = 4, F5 = 5,
@@ -57,7 +57,7 @@ namespace World
 	{
 		//Basic permission
 		CLEAR, WALL,
-		//Slopes - changes character y pos as moves through
+		//Slopes - changes character y pos as moves through - must be on both levels
 		STAIRS_NORTH, STAIRS_SOUTH, STAIRS_EAST, STAIRS_WEST,
 		//Terrain
 		WATER, LEDGE_SOUTH, LEDGE_NORTH, LEDGE_EAST, LEDGE_WEST,
@@ -68,7 +68,7 @@ namespace World
 	};
 
 	//Tile arranging classes
-	void tileLevel(TextureQuad* quad, WorldLevel level);
+	void tileLevel(TextureQuad* quad, WorldHeight level);
 	void SlopeTile(TextureQuad* quad, Direction direction);
 
 	struct TileTexture
@@ -90,9 +90,12 @@ namespace World
 	};
 
 	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
-	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc);
-	LevelPermission RetrievePermission(World::LevelID level, World::TileLoc loc);
-	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc);
+	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height);
+	LevelPermission RetrievePermission(World::LevelID level, World::TileLoc loc, WorldHeight height);
+	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height);
+
+	bool CheckPlayerInteracting(TileLoc player, TileLoc script, Direction playerFacing);
+	Direction OppositeDirection(Direction dir);
 
 	struct LevelDimensions
 	{
@@ -108,7 +111,8 @@ namespace World
 		unsigned int height;
 		float originX;
 		float originY;
-		std::vector<WorldLevel> planeHeights;
+		std::vector<WorldHeight> planeHeights;
+		std::vector<WorldHeight> presentWorldLevels;
 		std::vector<Direction> planeDirections;
 		std::vector<MovementPermissions> planePermissions;
 		std::vector<TileTexture> planeTextures;
@@ -128,22 +132,43 @@ namespace World
 		void setLoaded(bool loaded) { m_Loaded = loaded; }
 
 		//Static methods
-		static Struct2f queryOrigin(LevelID level) { if (s_LevelOriginCache.find(level) != s_LevelOriginCache.end()) { return s_LevelOriginCache[level]; } EngineLog("Origin not found!"); return s_LevelOriginCache.begin()->second; } //If fails, return first level origin found
-		static LevelDimensions queryDimensions(LevelID level) { if (s_LevelDimensionCache.find(level) != s_LevelDimensionCache.end()) { return s_LevelDimensionCache[level]; } return s_LevelDimensionCache.begin()->second; } //If fails, return first level dim found
-		static std::vector<MovementPermissions>* queryPermissions(LevelID level) { if (s_MovementPermissionsCache.find(level) != s_MovementPermissionsCache.end()) { return s_MovementPermissionsCache[level]; } return s_MovementPermissionsCache.begin()->second; } //If fails, return first level permis found
+		static Struct2f queryOrigin(LevelID level) { if ((unsigned int)level < s_LevelOriginCache.size()) { return s_LevelOriginCache[(unsigned int)level]; } EngineLog("Origin not found!"); return s_LevelOriginCache[0]; } //If fails, return first level origin found
+		static LevelDimensions queryDimensions(LevelID level) { if ((unsigned int)level < s_LevelDimensionCache.size()) { return s_LevelDimensionCache[(unsigned int)level]; } return s_LevelDimensionCache[0]; } //If fails, return first level dim found
 		
-		//Static caches
-		static std::unordered_map<LevelID, Struct2f> s_LevelOriginCache;
-		static std::unordered_map<LevelID, LevelDimensions> s_LevelDimensionCache;
-		static std::unordered_map<LevelID, std::vector<MovementPermissions>*> s_MovementPermissionsCache;
+		//Allows returning a portion of the permission vector based on height
+		struct PermVectorFragment
+		{
+			MovementPermissions* pointer;
+			size_t size;
+		};
+		
+		static PermVectorFragment queryPermissions(LevelID level, WorldHeight height);
+		
+		//Static caches - for data that won't change at runtime
+		static std::vector<Struct2f> s_LevelOriginCache;
+		static std::vector<LevelDimensions> s_LevelDimensionCache;
+		static bool s_CacheInit;
+
+		//Stores pointers to important data within level
+		struct LevelPtrCache
+		{
+			std::vector<MovementPermissions>* perms = nullptr;
+			std::vector<WorldHeight>* levels = nullptr;
+		};
+		
+		//Static caches - for data that needs to be accessed at source as can change at runtime
+		static std::vector<LevelPtrCache> s_MovementPermissionsCache;
+
 	private:
 		//ID
 		LevelID m_ID = World::LevelID::LEVEL_NULL;
 
 		//All levels have a rendered plane and a grid of tiles
 		Plane m_Plane;
+		//TODO - make movement permissions layered
+		std::vector<WorldHeight> m_AvailibleLevels;
 		std::vector<MovementPermissions> m_Permissions;
-		std::vector<WorldLevel> m_Heights;
+		std::vector<WorldHeight> m_Heights;
 		TileMap* m_TileMapPointer;
 
 		unsigned int m_LevelTilesX = 0;

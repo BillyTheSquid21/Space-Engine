@@ -38,6 +38,41 @@ namespace Primitive
 #define Line std::array<ColorTextureVertex, 4>	//Line is just a quad set up to be more convinient
 #define Tri std::array<ColorTextureVertex, 3>
 
+template<typename T>
+struct QuadArray
+{
+	std::vector<T> quads;
+	std::vector<unsigned int> indices;
+	unsigned int quadCount = 0;
+};
+
+template<typename T>
+void GenerateQuadArrayIndices(T& quadArr)
+{
+	//Buffer indices to minimise counts of data sent to render queue
+	//Find total ints needed
+	unsigned int quadIntCount = quadArr.quadCount * Primitive::Q_IND_COUNT;
+
+	//Resize vector to be able to fit and init index
+	quadArr.indices.resize(quadIntCount);
+	unsigned int indicesIndex = 0;
+
+	unsigned int lastLargest = -1;
+	unsigned int indicesTemp[6]{ 0,1,2,0,2,3 };
+	for (unsigned int i = 0; i < quadArr.quadCount; i++) {
+		//Increment all by last largest - set temp to base
+		std::copy(&Primitive::Q_IND[0], &Primitive::Q_IND[Primitive::Q_IND_COUNT], &indicesTemp[0]);
+		for (int j = 0; j < Primitive::Q_IND_COUNT; j++) {
+			indicesTemp[j] += lastLargest + 1;
+		}
+		//Set last largest
+		lastLargest = indicesTemp[Primitive::Q_IND_COUNT - 1];
+		//Copy into vector
+		std::copy(&indicesTemp[0], &indicesTemp[Primitive::Q_IND_COUNT], quadArr.indices.begin() + indicesIndex);
+		//Increment index
+		indicesIndex += Primitive::Q_IND_COUNT;
+	}
+}
 
 enum class Shape
 {	
