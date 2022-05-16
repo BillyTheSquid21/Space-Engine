@@ -82,6 +82,9 @@
     <Filter Include="Source Files\Vendor\rapidxml">
       <UniqueIdentifier>{f92bb3dd-d234-4035-8b4a-cd34dea795df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\mtlib">
+      <UniqueIdentifier>{36438ec0-a26f-4609-a1b6-b9c6c2a20da5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -188,6 +191,12 @@
     </ClCompile>
     <ClCompile Include="src\game\objects\Bridge.cpp">
       <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\states\StateRenderers.cpp">
+      <Filter>Source Files\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\mtlib\ThreadPool.cpp">
+      <Filter>Source Files\Vendor\mtlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +397,18 @@
     </ClInclude>
     <ClInclude Include="include\game\objects\Bridge.h">
       <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\states\StateRenderers.h">
+      <Filter>Header Files\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\mtlib\FunctionBinding.h">
+      <Filter>Source Files\Vendor\mtlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\mtlib\ThreadPool.h">
+      <Filter>Source Files\Vendor\mtlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\utility\Input.hpp">
+      <Filter>Header Files\Game\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

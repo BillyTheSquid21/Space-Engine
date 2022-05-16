@@ -31,14 +31,16 @@ namespace World
 
 	//When level data is written, use int value the respective enum value evaluates to
 
-	//Directions - north is -Z axis, south is +Z axis, west is +X axis, east is -X (taken from abs)
+	//Slope Directions - north is -Z axis, south is +Z axis, west is +X axis, east is -X (taken from abs)
 	enum class Direction : uint8_t
 	{
 		DIRECTION_NULL,
 		NORTH, NORTHEAST, NORTHWEST,	//Quads are aligned with vertex 0 and 1 being north facing
 		SOUTH, SOUTHEAST, SOUTHWEST,	//Each level is TILE_SIZE / sqrt(2) up due to geometry
 		EAST,
-		WEST
+		WEST,
+		NORTHEAST_WRAPPED, NORTHWEST_WRAPPED, 
+		SOUTHEAST_WRAPPED, SOUTHWEST_WRAPPED //Wraps slope around corner
 	};
 
 	World::Direction GetDirection(std::string dir);
@@ -60,7 +62,7 @@ namespace World
 		//Slopes - changes character y pos as moves through - must be on both levels
 		STAIRS_NORTH, STAIRS_SOUTH, STAIRS_EAST, STAIRS_WEST,
 		//Terrain
-		WATER, LEDGE_SOUTH, LEDGE_NORTH, LEDGE_EAST, LEDGE_WEST,
+		WATER, LEDGE_NORTH, LEDGE_SOUTH, LEDGE_EAST, LEDGE_WEST,
 		//Level bridge - lets walk into next level so don't need to check outside bounds
 		LEVEL_BRIDGE,
 		//Sprite blocking

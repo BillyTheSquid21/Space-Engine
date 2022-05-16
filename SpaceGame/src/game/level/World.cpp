@@ -175,6 +175,8 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
     unsigned int verticeIndex[3];
     unsigned int verticesToSlope = 0;
 
+    //To keep slope consistency, all corners will be north/northwest and rotated
+    //Due to how quads are formed from tri's
     switch (direction)
     {
     case Direction::NORTH:
@@ -183,22 +185,23 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
         verticesToSlope = 2;
         break;
     case Direction::SOUTH:
-        verticeIndex[0] = 2;
-        verticeIndex[1] = 3;
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
         verticesToSlope = 2;
+        RotateTileCorner(quad, -180.0f);
         break;
     case Direction::EAST:
-        verticeIndex[0] = 1;
-        verticeIndex[1] = 2;
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
         verticesToSlope = 2;
+        RotateTileCorner(quad, -90.0f);
         break;
     case Direction::WEST:
         verticeIndex[0] = 0;
-        verticeIndex[1] = 3;
+        verticeIndex[1] = 1;
         verticesToSlope = 2;
+        RotateTileCorner(quad, -270.0f);
         break;
-    //To keep slope consistency, all corners will be northwest rotated
-    //Due to how quads are formed from tri's
     case Direction::NORTHWEST:
         verticeIndex[0] = 0;
         verticesToSlope = 1;
@@ -218,6 +221,36 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
         verticeIndex[0] = 0;
         verticesToSlope = 1;
         RotateTileCorner(quad, -180.0f);
+        break;
+    case Direction::NORTHWEST_WRAPPED:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticeIndex[2] = 3;
+        verticesToSlope = 3;
+        break;
+    case Direction::NORTHEAST_WRAPPED:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticeIndex[2] = 3;
+        verticesToSlope = 3;
+        //Rotate
+        RotateTileCorner(quad, -90.0f);
+        break;
+    case Direction::SOUTHEAST_WRAPPED:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticeIndex[2] = 3;
+        verticesToSlope = 3;
+        //Rotate
+        RotateTileCorner(quad, -180.0f);
+        break;
+    case Direction::SOUTHWEST_WRAPPED:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticeIndex[2] = 3;
+        verticesToSlope = 3;
+        //Rotate
+        RotateTileCorner(quad, -270.0f);
         break;
     default:
         verticesToSlope = 0;

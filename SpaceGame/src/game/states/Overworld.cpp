@@ -1,36 +1,19 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags) {
+void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input) {
     //Width and height
     m_Width = width; m_Height = height;
 
     //Flags
     m_Flags = flags;
 
-    //Renderer setup
-    m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
+    //Input
+    m_Input = input;
 
-    //World Renderer
-    m_WorldRenderer.setLayout<float>(3, 2);
-    m_WorldRenderer.setDrawingMode(GL_TRIANGLES);
-    m_WorldRenderer.generate((float)width, (float)height, &m_Camera);
-
-    //Sprite Renderer
-    m_SpriteRenderer.setLayout<float>(3, 2);
-    m_SpriteRenderer.setDrawingMode(GL_TRIANGLES);
-    m_SpriteRenderer.generate((float)width, (float)height, &m_Camera);
-
-    //Model Renderer
-    m_ModelRenderer.setLayout<float>(3, 2);
-    m_ModelRenderer.setDrawingMode(GL_TRIANGLES);
-    m_ModelRenderer.generate((float)width, (float)height, &m_Camera);
-
-    //Camera
-    m_Camera.moveUp(World::TILE_SIZE * 5);
-    m_Camera.panYDegrees(45.0f);
+    m_Renderer.initialiseRenderer(width, height);
 
     //test level
-    m_Levels.InitialiseLevels(&m_ObjManager, &m_SpriteRenderer, &m_WorldRenderer, &m_SpriteTileMap, &m_WorldTileMap, m_Flags, &m_TextBuff);
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Flags, &m_TextBuff, m_Input);
 
     //gui shit test
     m_Fonts = fonts;
@@ -41,23 +24,7 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
 
 void Overworld::loadRequiredData() {
 
-    //Shader
-    m_Shader.create("res/shaders/DefaultTexture.glsl");
-
-    //Set texture uniform
-    m_Shader.setUniform("u_Texture", 1);
-
-    //Load world texture
-    m_PlaneTexture.loadTexture("res/textures/OW.png");
-    m_PlaneTexture.generateTexture(0);
-    m_PlaneTexture.bind();
-    m_PlaneTexture.clearBuffer();
-
-    //Load sprite textures
-    m_OWSprites.loadTexture("res/textures/Sprite.png");
-    m_OWSprites.generateTexture(1);
-    m_OWSprites.bind();
-    m_OWSprites.clearBuffer();
+    m_Renderer.loadRendererData();
 
     //Create groups
     //Add component groups
@@ -83,46 +50,33 @@ void Overworld::loadRequiredData() {
 
     //Add player
     OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
-    sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_SpriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_SpriteRenderer);
-    spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_SpriteRenderer);
+    sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
+    spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_Renderer.spriteRenderer);
 
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
-    std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Camera));
-    walk->setPersistentInput(&HELD_SHIFT, &HELD_W, &HELD_S, &HELD_A, &HELD_D);
-    walk->setSingleInput(&PRESSED_W, &PRESSED_S, &PRESSED_A, &PRESSED_D);
+    std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Renderer.camera));
+    walk->setInput(m_Input);
     walk->setSpriteData(sprite);
 
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite, "Player");
 
-    m_Levels.LoadLevel(m_CurrentLevel, &PRESSED_E);
+    m_Levels.InitialiseGlobalObjects();
+    m_Levels.LoadLevel(m_CurrentLevel);
 
-    std::shared_ptr<LoadingZone> lz(new LoadingZone());
-    std::shared_ptr<LoadingZoneComponent> load(new LoadingZoneComponent(sprite.get(), World::LevelID::LEVEL_ENTRY, World::LevelID::LEVEL_TEST, &PRESSED_E));
-    load->setLoadingFuncs(std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1, std::placeholders::_2), std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1));
-
-    m_ObjManager.pushRenderHeap(load, &lz->m_RenderComps);
-    m_ObjManager.pushGameObject(lz);
-
-    atlas.generateAtlas();
-    atlas.generateTexture(2);
-    atlas.bind();
+    m_Renderer.generateAtlas();
 
     m_DataLoaded = true;
 }
 
 void Overworld::purgeRequiredData() {
-    m_PlaneTexture.unbind();
+    m_Renderer.purgeData();
     m_DataLoaded = false;
 }
 
 void Overworld::update(double deltaTime, double time) {
-    //Keeps stored to allow input to use
-    if (m_HoldTimerActive)
-    {
-        m_TimeHeld += deltaTime;
-    }
+    m_Input->update(deltaTime);
 
     //update objects
     m_ObjManager.update(deltaTime);
@@ -134,20 +88,15 @@ void Overworld::render() {
     GameGUI::StartFrame();
 
     //Bind shader program
-    m_Shader.bind();
+    m_Renderer.bindShader();
 
     //Renders
     m_Levels.render();
     m_ObjManager.render();
     
-    m_Camera.sendCameraUniforms(m_Shader);
-
-    m_Shader.setUniform("u_Texture", 1);
-    m_SpriteRenderer.drawPrimitives(m_Shader);
-    m_Shader.setUniform("u_Texture", 2);
-    m_ModelRenderer.drawPrimitives(m_Shader);
-    m_Shader.setUniform("u_Texture", 0);
-    m_WorldRenderer.drawPrimitives(m_Shader);
+    //Draw scene
+    m_Renderer.bufferRenderData();
+    m_Renderer.draw();
 
     //IMGUI Test
     GameGUI::TextBox gui(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f);
@@ -161,138 +110,21 @@ void Overworld::render() {
 }
 
 void Overworld::handleInput(int key, int scancode, int action, int mods) {
-    //Reset pressed
-    PRESSED_A = false; PRESSED_D = false; PRESSED_S = false; PRESSED_W = false; PRESSED_E = false;
-
-    if (key == GLFW_KEY_A) {
-        if (action == GLFW_PRESS) {
-            PRESSED_A = true;
-            m_HoldTimerActive = true;
-            if (HELD_SHIFT)
-            {
-                m_TimeHeld = s_TimeToHold;
-            }
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_A = false;
-            m_TimeHeld = 0.0;
-        }
-        if (m_TimeHeld >= s_TimeToHold)
-        {
-            HELD_A = true;
-            m_HoldTimerActive = false;
-        }
-    }
-    if (key == GLFW_KEY_D) {
-        if (action == GLFW_PRESS) {
-            PRESSED_D = true;
-            m_HoldTimerActive = true;
-            if (HELD_SHIFT)
-            {
-                m_TimeHeld = s_TimeToHold;
-            }
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_D = false;
-            m_TimeHeld = 0.0;
-        }
-        if (m_TimeHeld >= s_TimeToHold)
-        {
-            HELD_D = true;
-            m_HoldTimerActive = false;
-        }
-    }
-    if (key == GLFW_KEY_LEFT_CONTROL) {
-        if (action == GLFW_PRESS) {
-            HELD_CTRL = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_CTRL = false;
-        }
-    }
-    if (key == GLFW_KEY_LEFT_SHIFT) {
-        if (action == GLFW_PRESS) {
-            HELD_SHIFT = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_SHIFT = false;
-        }
-    }
-    if (key == GLFW_KEY_Q) {
-        if (action == GLFW_PRESS) {
-            HELD_Q = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_Q = false;
-        }
-    }
-    if (key == GLFW_KEY_E) {
-        if (action == GLFW_PRESS) {
-            HELD_E = true;
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_E = false;
-        }
-    }
-    if (key == GLFW_KEY_W) {
-        if (action == GLFW_PRESS) {
-            PRESSED_W = true;
-            m_HoldTimerActive = true;
-            if (HELD_SHIFT)
-            {
-                m_TimeHeld = s_TimeToHold;
-            }
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_W = false;
-            m_TimeHeld = 0.0;
-        }
-        if (m_TimeHeld >= s_TimeToHold)
-        {
-            HELD_W = true;
-            m_HoldTimerActive = false;
-        }
-    }
-    if (key == GLFW_KEY_S) {
-        if (action == GLFW_PRESS) {
-            PRESSED_S = true;
-            m_HoldTimerActive = true;
-            if (HELD_SHIFT)
-            {
-                m_TimeHeld = s_TimeToHold;
-            }
-        }
-        else if (action == GLFW_RELEASE) {
-            HELD_S = false;
-            m_TimeHeld = 0.0;
-        }
-        if (m_TimeHeld >= s_TimeToHold)
-        {
-            HELD_S = true;
-            m_HoldTimerActive = false;
-        }
-    }
-    if (key == GLFW_KEY_E)
-    {
-        if (action == GLFW_PRESS)
-        {
-            PRESSED_E = true;
-        }
-    }
+     m_Input->handleInput(key, scancode, action, mods);
 
     //Debug
     if (key == GLFW_KEY_Y)
     {
         if (action == GLFW_PRESS)
         {
-            m_WorldRenderer.setDrawingMode(GL_LINES);
+            m_Renderer.worldRenderer.setDrawingMode(GL_LINES);
         }
     }
     if (key == GLFW_KEY_U)
     {
         if (action == GLFW_PRESS)
         {
-            m_WorldRenderer.setDrawingMode(GL_TRIANGLES);
+            m_Renderer.worldRenderer.setDrawingMode(GL_TRIANGLES);
         }
     }
 }

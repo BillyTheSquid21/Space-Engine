@@ -78,22 +78,10 @@ namespace Render
 		//Single model matrix for renderer
 		glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
 
-	protected:
-		//Helper functions - TODO - use thread pooling so separate renderers collect data in parallel
-		void bindAll(Shader& shader) { shader.bind();	m_VA.bind();	m_IB.bind(); }
-		void drawCall(glm::mat4* modelMatrix, Shader& shader, bool first) {
-			//Buffer data
-			bufferVideoData(m_PrimitiveVertices);
-			//Use model matrix
-			shader.setUniform("u_Model", modelMatrix);
-			//Bind all objects
-			bindAll(shader);
-			//Draw Elements
-			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
-		}
-
-		//Pass collected primitives to buffer for draw
-		void bufferVideoData(BulkRenderQueue<T*>& verticesArray)
+		/**
+		* Gathers vertice data into renderer buffers
+		*/
+		void bufferVideoData()
 		{
 			//First get amount of data among all vertice floats
 			unsigned int totalVertFloats = m_PrimitiveVertices.vertFloatCount();
@@ -110,9 +98,9 @@ namespace Render
 			int vertexSizeIndex = 0; int indiceSizeIndex = 0;
 			unsigned int largestInd = 0;
 
-			while (verticesArray.itemsWaiting()) {
+			while (m_PrimitiveVertices.itemsWaiting()) {
 				//Get instructions from render queue
-				BulkRenderContainer<T*> instructions = verticesArray.nextInQueue();
+				BulkRenderContainer<T*> instructions = m_PrimitiveVertices.nextInQueue();
 
 				//For each bulk chunk, render all
 				for (int i = 0; i < instructions.elementsCount; i++)
@@ -147,6 +135,18 @@ namespace Render
 			}
 			m_VB.bufferData(vertices.data(), vertices.size());
 			m_IB.bufferData(indices.data(), indices.size());
+		}
+
+	protected:
+		//Helper functions - TODO - use thread pooling so separate renderers collect data in parallel
+		void bindAll(Shader& shader) { shader.bind();	m_VA.bind();	m_IB.bind(); }
+		void drawCall(glm::mat4* modelMatrix, Shader& shader, bool first) {
+			//Use model matrix
+			shader.setUniform("u_Model", modelMatrix);
+			//Bind all objects
+			bindAll(shader);
+			//Draw Elements
+			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
 		}
 
 		//type of primitive being drawn
@@ -196,26 +196,9 @@ namespace Render
 			drawCall(shader, true);
 		}
 
-	private:
-		void drawCall(Shader& shader, bool first) {
-			//Buffer data
-			bufferVideoData();
-			while (m_ModelMatrixes.itemsWaiting())
-			{
-				BulkContainer<glm::mat4> cont = m_ModelMatrixes.nextInQueue();
-				for (int i = 0; i < cont.elementsCount; i++)
-				{
-					//Use model matrix
-					shader.setUniform("u_Model", &cont.verts[i]);
-					//Bind all objects
-					bindAll(shader);
-					//Draw Elements
-					glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
-				}
-			}
-		}
-
-		//Pass collected primitives to buffer for draw
+		/**
+		* Gathers vertice data into renderer buffers
+		*/
 		void bufferVideoData()
 		{
 			//First get amount of data among all vertice floats
@@ -264,6 +247,24 @@ namespace Render
 
 			m_VB.bufferData(vertices.data(), vertices.size());
 			m_IB.bufferData(indices.data(), indices.size());
+		}
+
+	private:
+		void drawCall(Shader& shader, bool first) {
+			//Buffer data
+			while (m_ModelMatrixes.itemsWaiting())
+			{
+				BulkContainer<glm::mat4> cont = m_ModelMatrixes.nextInQueue();
+				for (int i = 0; i < cont.elementsCount; i++)
+				{
+					//Use model matrix
+					shader.setUniform("u_Model", &cont.verts[i]);
+					//Bind all objects
+					bindAll(shader);
+					//Draw Elements
+					glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
+				}
+			}
 		}
 
 		using Renderer<T>::drawCall;

@@ -5,6 +5,7 @@
 #include "renderer/Renderer.hpp"
 #include "utility/SimpleQueue.hpp"
 #include "core/Message.hpp"
+#include <stdint.h>
 #include <random>
 
 //1.System is set up to keep similar components contiguous
@@ -100,11 +101,11 @@ public:
 		(*m_ParentPointers)[m_ID] = (T*)this; 
 	}
 	//Id is location inside parent array
-	void setID(unsigned char id) { m_ID = id; }
-	unsigned char id() const { return m_ID; }
+	void setID(uint16_t id) { m_ID = id; }
+	uint16_t id() const { return m_ID; }
 
 private:
-	unsigned char m_ID = 0;
+	uint16_t m_ID = 0;
 	bool m_Active = true;
 	bool m_Dead = false;
 	std::vector<T*>* m_ParentPointers = nullptr;

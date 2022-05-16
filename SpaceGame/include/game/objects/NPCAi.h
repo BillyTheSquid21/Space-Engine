@@ -7,11 +7,13 @@
 #include "game/objects/Script.hpp"
 #include "game/utility/GameText.h"
 
+#include "game/utility/Input.hpp"
+
 //Script component to be applied to object
 class OverworldScript : public UpdateComponent
 {
 public:
-	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags, bool* interaction) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; m_InteractionPtr = interaction; }
+	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags, GameInput* input) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; m_Input = input; }
 	void linkText(std::string* t1, std::string* t2, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_ShowTextBox = showBox; }
 	void update(double deltaTime)
 	{
@@ -84,7 +86,7 @@ public:
 			m_Index++;
 			return true;
 		case ScriptInstruction::WAIT_INPUT:
-			if (*m_InteractionPtr)
+			if (m_Input->HELD_E || m_Input->PRESSED_X)
 			{
 				m_Index++;
 			}
@@ -99,7 +101,7 @@ protected:
 	uint16_t m_Size;
 	OvSpr_RunningSprite* m_Player;
 	bool* m_ShowTextBox = nullptr;
-	bool* m_InteractionPtr = nullptr;
+	GameInput* m_Input = nullptr;
 	std::string* m_TextLine1 = nullptr;
 	std::string* m_TextLine2 = nullptr;
 	bool m_OnLine_1 = true;
@@ -167,7 +169,7 @@ public:
 			m_Index++;
 			return true;
 		case ScriptInstruction::WAIT_INTERACT:
-			if (*m_InteractionPtr && !m_NPC->m_Busy)
+			if (m_Input->HELD_E && !m_NPC->m_Busy)
 			{
 				if (World::CheckPlayerInteracting({ m_Player->m_TileX, m_Player->m_TileZ }, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_Player->m_Direction))
 				{

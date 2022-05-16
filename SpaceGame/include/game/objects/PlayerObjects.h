@@ -3,6 +3,7 @@
 #define PLAYER_OBJECTS_H
 
 #include "game/objects/OverworldSprite.h"
+#include "game/utility/Input.hpp"
 
 
 //Player walk uses exact data of TilePosition so inherit for this
@@ -12,8 +13,7 @@ class PlayerMove : public TilePosition
 public:
 	using TilePosition::TilePosition;
 	void update(double deltaTime);
-	void setPersistentInput(bool* shift, bool* up, bool* down, bool* left, bool* right) { m_Shift = shift; m_Up = up; m_Down = down, m_Left = left, m_Right = right; };
-	void setSingleInput(bool* up, bool* down, bool* left, bool* right) { m_UpSingle = up; m_DownSingle = down; m_LeftSingle = left; m_RightSingle = right; };
+	void setInput(GameInput* input) { m_Input = input; };
 	void setSpriteData(std::shared_ptr<OvSpr_RunningSprite> player) { m_PlayerData = player; }
 private:
 	bool canWalk();
@@ -26,11 +26,7 @@ private:
 	void faceDirection();
 	void cycleEnd(bool anyHeld);
 
-	bool* m_Up = nullptr; bool* m_Down = nullptr;
-	bool* m_Left = nullptr; bool* m_Right = nullptr;
-	bool* m_UpSingle = nullptr; bool* m_DownSingle = nullptr;
-	bool* m_LeftSingle = nullptr; bool* m_RightSingle = nullptr;
-	bool* m_Shift = nullptr;
+	GameInput* m_Input = nullptr;
 
 	//Ascend stores whether was just going up or down
 	//OnSlope stores whether is on a slope to get order of moving along and up slope right

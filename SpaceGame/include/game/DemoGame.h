@@ -8,6 +8,10 @@
 #include "game/states/Overworld.h"
 #include "game/gui/GUI.h"
 
+#include "mtlib/ThreadPool.h"
+
+#define THREAD_POOL_SIZE 3
+
 class DemoGame : public Game
 {
 public:
@@ -23,6 +27,7 @@ public:
 private:
 	FontContainer m_Fonts;
 	std::vector<std::shared_ptr<State>> m_States;
+	GameInput m_GameInput;
 	static FlagArray s_GlobalFlags;
 };
 

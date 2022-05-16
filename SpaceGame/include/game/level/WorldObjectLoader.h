@@ -21,6 +21,11 @@
 #include "game/objects/Tree.h"
 #include "game/objects/LoadingZone.h"
 #include "game/objects/NPCAi.h"
+#include "game/objects/Bridge.h"
+
+#include "game/states/StateRenderers.h"
+
+#include "game/utility/Input.hpp"
 
 //Root node of all objects is "objects"
 namespace WorldParse 
@@ -32,20 +37,25 @@ namespace WorldParse
 	};
 
 	//Tree process is kept separate from objs as involves mainly reading data and packaging into only a single component
-	inline XML_Doc_Wrapper ParseLevelXML(World::LevelID id);
-	bool ParseLevelObjects(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, bool* interaction);
-	bool ParseLevelTrees(ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc);
+	inline XML_Doc_Wrapper ParseLevelXML(World::LevelID id, bool global);
+	bool ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input);
+	bool ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc);
+	bool ParseGlobalObjects(ObjectManager* manager, XML_Doc_Wrapper doc, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld);
 
 	//Sprite loading
-	static void LoadSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, World::LevelID levelID, bool* interaction);
-	static void LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, bool* interaction);
-	static void LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, TileMap* map, Render::Renderer<TextureVertex>* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, bool* interaction);
+	static void LoadSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, bool* interaction);
+	static void LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input);
+	static void LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input);
+
+	//Other loading
+	static void LoadBridge(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID);
+	static void LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld);
 
 	//Sprite help
 	inline OvSpr_SpriteData BuildSprDataFromXNode(rapidxml::xml_node<>* node, World::LevelID levelID);
-	inline void OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite, bool* interaction);
-	inline void DirectionalSpriteOptionals(rapidxml::xml_node<>* node, std::shared_ptr<OvSpr_DirectionalSprite> sprite);
-	inline void WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, std::shared_ptr<OvSpr_WalkingSprite> sprite);
+	void OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite, GameInput* input);
+	void DirectionalSpriteOptionals(rapidxml::xml_node<>* node, std::shared_ptr<OvSpr_DirectionalSprite> sprite);
+	void WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, std::shared_ptr<OvSpr_WalkingSprite> sprite);
 }
 
 namespace World
@@ -54,9 +64,10 @@ namespace World
 	class LevelContainer
 	{
 	public:
-		void InitialiseLevels(ObjectManager* obj, Render::Renderer<TextureVertex>* sprRen, Render::Renderer<TextureVertex>* worRen, TileMap* sprMap, TileMap* worMap, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff);
+		void InitialiseLevels(ObjectManager* obj, OverworldRenderer* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, GameInput* input);
+		void InitialiseGlobalObjects();
 		void BuildFirstLevel(World::LevelID id); //Builds geometry and permissions first - for use when no level has been initialised
-		void LoadLevel(World::LevelID id, bool* interaction);
+		void LoadLevel(World::LevelID id);
 		void UnloadLevel(World::LevelID id);
 		void render();
 		std::vector<Level> m_Levels;
@@ -66,8 +77,8 @@ namespace World
 		ObjectManager* m_ObjManager;
 		FlagArray* m_Flags;
 		GameGUI::TextBoxBuffer* m_TextBuffer;
-		Render::Renderer<TextureVertex>* m_SpriteRenderer; Render::Renderer<TextureVertex>* m_WorldRenderer;
-		TileMap* m_SpriteTileMap; TileMap* m_WorldTileMap;
+		OverworldRenderer* m_Renderer;
+		GameInput* m_Input;
 	};
 }
 
@@ -91,6 +102,9 @@ namespace World
 	//DirSprite
 	//WalkSprite
 	//RunSprite
+
+//Other objects
+	//Bridge
 
 //Sprite optional tags:
 	//Dir

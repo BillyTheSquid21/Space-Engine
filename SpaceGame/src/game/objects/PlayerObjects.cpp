@@ -19,6 +19,17 @@ bool PlayerMove::canWalk()
 		return false;
 	}
 
+	//Check if next tile is impassable - check is here to prevent changing data like slope
+	switch (permissionNext.perm)
+	{
+	case World::MovementPermissions::WALL:
+		return false;
+	case World::MovementPermissions::SPRITE_BLOCKING:
+		return false;
+	default:
+		break;
+	}
+
 	//Check current permission if relevant
 	switch (permissionCurrent.perm)
 	{
@@ -83,10 +94,6 @@ bool PlayerMove::canWalk()
 	//Check next permission if relevant
 	switch (permissionNext.perm)
 	{
-	case World::MovementPermissions::WALL:
-		return false;
-	case World::MovementPermissions::SPRITE_BLOCKING:
-		return false;
 	case World::MovementPermissions::STAIRS_NORTH:
 	{
 		m_NextIsSlope = true;
@@ -182,9 +189,9 @@ bool PlayerMove::walkPermHelper()
 {
 	if (canWalk())
 	{
-		//Unblock previous tile, block new tile
+		//Unblock previous tile, block new tile - fix weird bug
 		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
-		if (*m_Shift)
+		if (m_Input->HELD_SHIFT)
 		{
 			return startRun();
 		}
@@ -197,22 +204,22 @@ bool PlayerMove::checkInputs()
 {
 	if (!m_PlayerData->m_Walking && !m_PlayerData->m_Running)
 	{
-		if (*m_Up)
+		if (m_Input->HELD_W)
 		{
 			m_PlayerData->m_Direction = World::Direction::NORTH;
 			return walkPermHelper();
 		}
-		else if (*m_Down)
+		else if (m_Input->HELD_S)
 		{
 			m_PlayerData->m_Direction = World::Direction::SOUTH;
 			return walkPermHelper();
 		}
-		else if (*m_Left)
+		else if (m_Input->HELD_A)
 		{
 			m_PlayerData->m_Direction = World::Direction::WEST;
 			return walkPermHelper();
 		}
-		else if (*m_Right)
+		else if (m_Input->HELD_D)
 		{
 			m_PlayerData->m_Direction = World::Direction::EAST;
 			return walkPermHelper();
@@ -227,22 +234,22 @@ bool PlayerMove::checkInputs()
 void PlayerMove::faceDirection()
 {
 	//if isnt held, check for pressed
-	if (*m_UpSingle)
+	if (m_Input->PRESSED_W)
 	{
 		m_PlayerData->m_Direction = World::Direction::NORTH;
 		return;
 	}
-	else if (*m_DownSingle)
+	else if (m_Input->PRESSED_S)
 	{
 		m_PlayerData->m_Direction = World::Direction::SOUTH;
 		return;
 	}
-	else if (*m_LeftSingle)
+	else if (m_Input->PRESSED_A)
 	{
 		m_PlayerData->m_Direction = World::Direction::WEST;
 		return;
 	}
-	else if (*m_RightSingle)
+	else if (m_Input->PRESSED_D)
 	{
 		m_PlayerData->m_Direction = World::Direction::EAST;
 		return;

@@ -169,6 +169,7 @@
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
+    <ClCompile Include="src\game\states\StateRenderers.cpp" />
     <ClCompile Include="src\game\utility\GameText.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\vendor\mtlib\ThreadPool.cpp" />
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
     <ClCompile Include="src\vendor\stb\stb_image_write.cpp" />
   </ItemGroup>
@@ -212,7 +214,9 @@
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
+    <ClInclude Include="include\game\states\StateRenderers.h" />
     <ClInclude Include="include\game\utility\GameText.h" />
+    <ClInclude Include="include\game\utility\Input.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Model.h" />
@@ -233,6 +237,8 @@
     <ClInclude Include="src\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\vendor\mtlib\FunctionBinding.h" />
+    <ClInclude Include="src\vendor\mtlib\ThreadPool.h" />
     <ClInclude Include="src\vendor\rapidjson\allocators.h" />
     <ClInclude Include="src\vendor\rapidjson\cursorstreamwrapper.h" />
     <ClInclude Include="src\vendor\rapidjson\document.h" />

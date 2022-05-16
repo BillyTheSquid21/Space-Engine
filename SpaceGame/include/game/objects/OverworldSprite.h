@@ -101,10 +101,10 @@ public:
 	OvSpr_Sprite(OvSpr_SpriteData data);
 	//If sprite is static, simply set here, otherwise an update method is needed
 	void setSprite(UVData data);
-	TextureQuad m_Sprite;
 	float m_XPos = 0.0f;
 	float m_YPos = 0.0f;
 	float m_ZPos = 0.0f;
+	TextureQuad m_Sprite;
 	unsigned int m_TileX = 0; unsigned int m_TileZ = 0;
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
 	bool m_Busy = false; //allows to turn off behaviour when script running

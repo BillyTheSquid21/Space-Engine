@@ -18,7 +18,7 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	splashScreen->init(m_Width, m_Height);
 	splashScreen->setActive(true);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags);
+	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags, &m_GameInput);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
 
@@ -29,6 +29,9 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	m_States.push_back(stateMainMenuScreen);
 	std::shared_ptr<State> stateOverworld = std::static_pointer_cast<State>(overworld);
 	m_States.push_back(overworld);
+
+	//Init threadpool
+	MtLib::ThreadPool::Init(THREAD_POOL_SIZE);
 	
 	return success;
 }

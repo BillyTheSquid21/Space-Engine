@@ -179,6 +179,19 @@
 				<RandWalk>1</RandWalk>
 			</WalkSprite>
 		</Object>
+		<Object name="Level0_Bridge">
+			<Bridge>
+				<TileX>4</TileX>
+				<TileZ>6</TileZ>
+				<WLevel>1</WLevel>
+				<TX1>4</TX1>
+				<TY1>0</TY1>
+				<TX2>4</TX2>
+				<TY2>1</TY2>
+				<Width>2</Width>
+				<Height>6</Height>
+			</Bridge>
+		</Object>
 	</Objects>
 </Level>
 
