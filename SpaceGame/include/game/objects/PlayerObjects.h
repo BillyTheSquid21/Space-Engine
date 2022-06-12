@@ -53,4 +53,16 @@ private:
 	float* m_ZPos = nullptr;
 };
 
+//Updates level in global state
+class UpdateGlobalLevel : public UpdateComponent
+{
+public:
+	UpdateGlobalLevel(World::LevelID* global, World::LevelID* sprite) : m_GlobalPtr(global), m_SpritePtr(sprite) {}
+	void update(double deltaTime);
+
+private:
+	World::LevelID* m_GlobalPtr; 
+	World::LevelID* m_SpritePtr;
+};
+
 #endif

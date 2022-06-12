@@ -377,3 +377,11 @@ void PlayerCameraLock::render()
 	m_Camera->setPos(*m_XPos, *m_YPos, *m_ZPos + m_Camera->height() / 8);
 	m_Camera->moveUp(World::TILE_SIZE * 5);
 }
+
+void UpdateGlobalLevel::update(double deltaTime)
+{
+	if (*m_GlobalPtr != *m_SpritePtr)
+	{
+		*m_GlobalPtr = *m_SpritePtr;
+	}
+}

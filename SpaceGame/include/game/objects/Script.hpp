@@ -8,14 +8,6 @@
 #include <functional>
 #include "game/objects/OverworldSprite.h"
 
-//Debug Struct for use in creating flags/scripts, which then becomes bool array
-struct FlagInfo
-{
-	bool active;
-	uint16_t location;
-	std::string flagDescription;
-};
-
 //Instructions
 enum class ScriptInstruction
 {

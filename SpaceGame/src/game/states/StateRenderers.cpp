@@ -28,7 +28,7 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 void OverworldRenderer::loadRendererData()
 {
 	//Shader
-	shader.create("res/shaders/DefaultTexture.glsl");
+	shader.create("res/shaders/Default_T_Shader.glsl");
 
 	//Load world texture
 	worldTexture.loadTexture("res/textures/OW.png");

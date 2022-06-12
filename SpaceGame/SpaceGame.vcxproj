@@ -263,9 +263,9 @@
     <ClInclude Include="src\vendor\rapidxml\rapidxml.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\level\level0.json" />
-    <None Include="res\shaders\Default.glsl" />
-    <None Include="res\shaders\DefaultTexture.glsl" />
+    <None Include="res\shaders\Default_CT_Shader.glsl" />
+    <None Include="res\shaders\Default_T_Shader.glsl" />
+    <None Include="res\shaders\Lighting_T_Shader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

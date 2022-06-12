@@ -412,13 +412,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Default.glsl">
+    <None Include="res\shaders\Default_CT_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\shaders\DefaultTexture.glsl">
+    <None Include="res\shaders\Default_T_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\level\level0.json">
+    <None Include="res\shaders\Lighting_T_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

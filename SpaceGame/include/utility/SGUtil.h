@@ -11,46 +11,21 @@
 
 static const char ENGINE_TAG[]{ "[Space Engine] " };
 
-template<typename T>
-void EngineLog(T value) {
+template<typename... args>
+static void Log(args && ... inputs)
+{
 	std::osyncstream bout(std::cout);
 	bout << ENGINE_TAG;
-	bout << value << "\n";
-}
-template<typename T>
-void EngineLog(std::string message,T value) {
-	std::osyncstream bout(std::cout);
-	bout << ENGINE_TAG;
-	bout << message;
-	bout << value << "\n";
+	([&]()	{
+		bout << inputs;
+	} (), ...);
+
+	bout << "\n";
 }
 
-template<typename T>
-void EngineLog(T value1, T value2) {
-	std::osyncstream bout(std::cout);
-	bout << ENGINE_TAG;
-	bout << value1 << " ";
-	bout << value2 << "\n";
-}
-
-template<typename T>
-void EngineLog(std::string message, T value1, T value2) {
-	std::osyncstream bout(std::cout);
-	bout << ENGINE_TAG;
-	bout << message << " ";
-	bout << value1 << " ";
-	bout << value2 << "\n";
-}
-
-template<typename T>
-void EngineLog(std::string message, T value1, T value2, T value3) {
-	std::osyncstream bout(std::cout);
-	bout << ENGINE_TAG;
-	bout << message << " ";
-	bout << value1 << " ";
-	bout << value2 << " ";
-	bout << value3 << "\n";
-}
+#if _DEBUG
+#define EngineLog(vars, ...) Log(vars, ##__VA_ARGS__)
+#endif
 
 float invSqrt(float number); //Supposedly a faster inv sqrt
 int intFloor(float x); //supposedly faster floor

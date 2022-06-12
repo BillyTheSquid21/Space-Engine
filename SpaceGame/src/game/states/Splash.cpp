@@ -11,7 +11,7 @@ void Splash::init(int width, int height) {
     m_Renderer.generate((float)width, (float)height, &m_Camera);
 
     //Shader
-    m_Shader.create("res/shaders/Default.glsl");
+    m_Shader.create("res/shaders/Default_CT_Shader.glsl");
 
     //Set texture uniform
     m_Shader.setUniform("u_Texture", 0);

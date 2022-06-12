@@ -196,7 +196,6 @@ bool WorldParse::ParseGlobalObjects(ObjectManager* manager, XML_Doc_Wrapper doc,
 		}
 	}
 
-
 	return true;
 }
 

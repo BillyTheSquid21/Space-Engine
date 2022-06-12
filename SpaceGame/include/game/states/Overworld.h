@@ -49,6 +49,15 @@ private:
 	FlagArray* m_Flags;
 
 	//Test GUI
+	GameGUI::GUIContainer m_TextBoxGUI;
+	GameGUI::GUIContainer m_DebugGUI;
+	std::string m_RenderTime = "";
+	std::string m_UpdateTime = "";
+	std::string m_CurrentLevelStr = "";
+	std::string m_CurrentTileStr = ""; 
+	std::string m_ObjectCountStr = "";
+	unsigned int* m_LocationX = nullptr;
+	unsigned int* m_LocationZ = nullptr;
 	GameGUI::TextBoxBuffer m_TextBuff;
 
 	GameInput* m_Input;

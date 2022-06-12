@@ -17,7 +17,7 @@ public:
 	void generatePlaneYZ(float yPos, float zPos, float width, float height, float tileSize);
 
 	//Load plane vertices from file - TODO: implement
-	void loadPlane();
+	virtual void loadPlane() {};
 	
 	//Render
 	void render();
@@ -39,6 +39,7 @@ private:
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
 
 	//Indices buffer for plane
+	bool m_SafeToDraw = false;
 	std::vector<unsigned int> m_Indices;
 };
 

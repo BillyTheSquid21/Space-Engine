@@ -15,7 +15,10 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 	m_XCount = width / tileSize;
     m_YCount = height / tileSize;
 
-	m_Quads = new TextureQuad [m_XCount * m_YCount];
+	//Find total number of quads
+	unsigned int quadCount = m_XCount * m_YCount;
+
+	m_Quads = new TextureQuad[quadCount];
 	
 	for (int y = 0; y < m_YCount; y++) {
 		for (int x = 0; x < m_XCount; x++) {
@@ -23,12 +26,11 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 			float tileYPos = ((float)y * tileSize) + yPos;
 			TextureQuad quad = CreateTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.0f, 0.0f);
 			RotateShape<TextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
-			m_Quads[x * m_YCount + y] = quad;
+			unsigned int quadIndex = (x * m_YCount) + y;
+			m_Quads[quadIndex] = quad;
 		}
 	}
 	//Buffer indices to minimise counts of data sent to render queue
-	//Find total number of quads
-	unsigned int quadCount = m_XCount * m_YCount;
 
 	//Find total ints needed
 	unsigned int quadIntCount = quadCount * Primitive::Q_IND_COUNT;
@@ -52,6 +54,7 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 		//Increment index
 		indicesIndex += Primitive::Q_IND_COUNT;
 	}
+	m_SafeToDraw = true;
 }
 
 void Plane::generatePlaneXY(float xPos, float yPos, float width, float height, float tileSize) 
@@ -71,7 +74,7 @@ void Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, f
 
 void Plane::render() 
 {	
-	if (!m_Quads)
+	if (!m_Quads || !m_SafeToDraw)
 	{
 		return;
 	}
@@ -95,5 +98,6 @@ void Plane::purgeData() {
 	if (m_Quads != NULL) {
 		delete[] m_Quads;
 		m_Quads = nullptr;
+		m_SafeToDraw = false;
 	}
 }

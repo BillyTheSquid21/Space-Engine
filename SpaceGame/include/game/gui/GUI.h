@@ -50,30 +50,110 @@ namespace GameGUI
 	void SetColors(int r, int g, int b, ImGuiCol target);
 	void SetNextWindowSize(float width, float height);
 	void SetNextWindowPos(float x, float y);
+	void ResetStyle();
 
-	//Base GUI class
-	class GUI
+	//Base GUI element class
+	class GUIElement
 	{
 	public:
-		GUI() = default;
-		GUI(float width, float height, float x, float y) { m_WindowWidth = width; m_WindowHeight = height; m_WindowX = x; m_WindowY = y; }
+		GUIElement() = default;
+
+		//Opens and closes IMGUI nest
+		virtual void openNest() {};
+		virtual void closeNest() {};
+		virtual void setNest(int nest) { m_NestNumber = nest; }
+		int getNest() { return m_NestNumber; }
+
+		//Checks if contains another object within
+		bool m_SelfContained = true;
+		//Checks whether nest has been closed
+		bool m_RenderCycleComplete = false;
+		
 	protected:
-		void renderStart() {GameGUI::SetNextWindowSize(m_WindowWidth, m_WindowHeight);GameGUI::SetNextWindowPos(m_WindowX, m_WindowY);}
+		//Tracks which nest currently in - defaults to first
+		int m_NestNumber = 0;
+		float m_WindowWidth = 0; float m_WindowHeight = 0;
+		float m_WindowX = 0; float m_WindowY = 0;
+	};
+
+	class GUIElementBase : public GUIElement
+	{
+	public:
+		GUIElementBase() = default;
+		GUIElementBase(float width, float height, float x, float y) { m_WindowWidth = width; m_WindowHeight = height; m_WindowX = x; m_WindowY = y; }
+		virtual void setStyle() {};
+		void renderStart() { GameGUI::SetNextWindowSize(m_WindowWidth, m_WindowHeight); GameGUI::SetNextWindowPos(m_WindowX, m_WindowY); }
 		void renderEnd() { ImGui::End(); }
+	protected:
 		float m_WindowWidth; float m_WindowHeight;
 		float m_WindowX; float m_WindowY;
 	};
 
-	//Text box class
-	class TextBox : public GUI
+	//GUI container - contains list of elements with instructions
+	class GUIContainer
 	{
 	public:
-		TextBox(float width, float height, float x, float y) { m_WindowWidth = width; m_WindowHeight = height; m_WindowX = x; m_WindowY = y; }
-		void setStyle();
+		void setBase(std::shared_ptr<GUIElementBase> base) { m_Base = base; }
+		//Elements MUST be in nest order, with each nest being located in base element
+		//Different nests do not stack
+		//N1->(B->E1->E2->E3,E4) N2->(B->E5->E6)
+		void addElement(std::shared_ptr<GUIElement> element) { m_Elements.push_back(element); if (element->getNest() > m_NestCount) { m_NestCount = element->getNest(); } }
+		void render();
+	private:
+		//Base Element
+		std::shared_ptr<GUIElementBase> m_Base;
+		//List of nested elements in order of nesting
+		std::vector<std::shared_ptr<GUIElement>> m_Elements;
+		int m_NestCount = 0;
+	};
+
+	//Debug Panel class
+	class DebugPanel : public GUIElementBase
+	{
+	public:
+		using GUIElementBase::GUIElementBase;
+		void openNest();
+		void closeNest();
+	};
+
+	//Basic Text box class
+	class TextBox : public GUIElement
+	{
+	public:
+		TextBox(std::string& str) : m_Text(str) { }
+		void openNest();
+	private:
+		std::string& m_Text;
+	};
+
+	class Divider : public GUIElement
+	{
+	public:
+		Divider() { m_SelfContained = false; }
+
+		void openNest();
+		void closeNest();
+		void setNest(int nest) { m_NestNumber = nest; m_Name = "##Child" + std::to_string(m_NestNumber); }
+
+		float m_Width = 0.0f; float m_Height = 0.0f;
+		bool m_FillX = false;
+		bool m_FillY = false;
+	private:
+		std::string m_Name = "##Child0";
+	};
+
+	//Game Text box class
+	class GameTextBox : public GUIElementBase
+	{
+	public:
+		GameTextBox(float width, float height, float x, float y, std::string& t1, std::string& t2);
 		void setFontContainer(FontContainer* font) { m_Fonts = font; }
-		void run(std::string& text1, std::string& text2);
+		void openNest();
+		void closeNest();
 	private:
 		FontContainer* m_Fonts = nullptr;
+		std::string& m_Text1Ref;
+		std::string& m_Text2Ref;
 	};
 
 	struct TextBoxBuffer
@@ -82,6 +162,8 @@ namespace GameGUI
 		std::string t2 = "";
 		bool showTextBox = false;
 	};
+
+	
 }
 
 #endif

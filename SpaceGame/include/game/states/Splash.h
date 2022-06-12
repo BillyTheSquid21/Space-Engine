@@ -22,7 +22,7 @@ private:
 	Quad m_Splash;
 	Quad m_Splash2;
 	float angle = 0.0f;
-	double m_FadeIn = 3.0;
+	double m_FadeIn = 5.0;
 	double m_CurrentTime = 0.0;
 };
 
