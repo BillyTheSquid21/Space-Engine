@@ -68,16 +68,26 @@ void OverworldRenderer::draw()
 	camera.sendCameraUniforms(shader);
 
 	//Update player pos
-	m_LightPos = { *m_PlayerX, *m_PlayerY + 1000.0f, *m_PlayerZ + 600.0f };
+	glm::vec3 lightDir = glm::normalize(m_LightDir);
+	shader.setUniform("u_LightScene", m_LightScene);
 
-	//Draw
+	//Set universal uniforms
 	shader.setUniform("u_AmbLight", 0.5f);
-	shader.setUniform("u_LightPos", &m_LightPos);
+	shader.setUniform("u_LightDir", &lightDir);
 
+	//Sprites
 	shader.setUniform("u_Texture", SPRITE_SLOT);
+	glm::mat4 SpriteInvTranspModel = glm::mat4(glm::transpose(glm::inverse(spriteRenderer.m_RendererModelMatrix)));
+	shader.setUniform("u_InvTranspModel", &SpriteInvTranspModel);
 	spriteRenderer.drawPrimitives(shader);
+
+	//Models - Make have per model inv transp later when models are used more
 	shader.setUniform("u_Texture", ATLAS_SLOT);
 	modelRenderer.drawPrimitives(shader);
+
+	//World
 	shader.setUniform("u_Texture", WORLD_SLOT);
+	glm::mat4 WorldInvTranspModel = glm::mat4(glm::transpose(glm::inverse(worldRenderer.m_RendererModelMatrix)));
+	shader.setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	worldRenderer.drawPrimitives(shader);
 }

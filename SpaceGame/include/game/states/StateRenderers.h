@@ -51,10 +51,8 @@ public:
 	static constexpr int ATLAS_SLOT = 2;
 
 	//Player position for lighting
-	float* m_PlayerX = nullptr;
-	float* m_PlayerY = nullptr;
-	float* m_PlayerZ = nullptr;
-	glm::vec3 m_LightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 m_LightDir = glm::vec3(0.0f, 1.0f, 1.0f);
+	int m_LightScene = 0;
 };
 
 #endif

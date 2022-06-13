@@ -249,7 +249,7 @@ namespace Render
 			m_IB.bufferData(indices.data(), indices.size());
 		}
 
-	private:
+	private: //TODO invtransp model for shader
 		void drawCall(Shader& shader, bool first) {
 			//Buffer data
 			while (m_ModelMatrixes.itemsWaiting())
