@@ -15,16 +15,17 @@ public:
 	void generatePlaneXY(float xPos, float yPos, float width, float height, float tileSize);
 	void generatePlaneXZ(float xPos, float zPos, float width, float height, float tileSize);
 	void generatePlaneYZ(float yPos, float zPos, float width, float height, float tileSize);
+	void generatePlaneNormals();
 
 	//Load plane vertices from file - TODO: implement
 	virtual void loadPlane() {};
 	
 	//Render
 	void render();
-	void setRenderer(Render::Renderer<TextureVertex>* ren) { m_Renderer = ren; }
+	void setRenderer(Render::Renderer<NormalTextureVertex>* ren) { m_Renderer = ren; }
 
 	//Access specific tile
-	TextureQuad* accessQuad(unsigned int x, unsigned int y);
+	Norm_Tex_Quad* accessQuad(unsigned int x, unsigned int y);
 	void texturePlane(float u, float v, float width, float height);
 
 	//Purges data not needed without destruction of class
@@ -34,8 +35,8 @@ private:
 	//Helper
 	void genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle);
 
-	Render::Renderer<TextureVertex>* m_Renderer = nullptr;
-	TextureQuad* m_Quads;
+	Render::Renderer<NormalTextureVertex>* m_Renderer = nullptr;
+	Norm_Tex_Quad* m_Quads;
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
 
 	//Indices buffer for plane

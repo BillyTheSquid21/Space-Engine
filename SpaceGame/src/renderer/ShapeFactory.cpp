@@ -27,7 +27,7 @@ Quad CreateQuad(float x, float y, float width, float height, float uvX, float uv
 }
 
 //Creation
-TextureQuad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) {
+Tex_Quad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) {
 
 	TextureVertex v0{};
 	v0.position = { x, y , 0.0f };
@@ -44,6 +44,36 @@ TextureQuad CreateTextureQuad(float x, float y, float width, float height, float
 	TextureVertex v3{};
 	v3.position = { x, y - height,  0.0f };
 	v3.uvCoords = { uvX, uvY };
+
+	return { v0, v1, v2, v3 };
+}
+
+//Creation
+Norm_Tex_Quad CreateNormalTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) {
+
+	//Top left
+	NormalTextureVertex v0{};
+	v0.position = { x, y , 0.0f };
+	v0.uvCoords = { uvX, uvY + uvHeight };
+	v0.normals = {0.0f, 1.0f, 0.0f};
+
+	//Top right
+	NormalTextureVertex v1{};
+	v1.position = { x + width, y,  0.0f };
+	v1.uvCoords = { uvX + uvWidth, uvY + uvHeight };
+	v1.normals = { 0.0f, 1.0f, 0.0f };
+
+	//Bottom right
+	NormalTextureVertex v2{};
+	v2.position = { x + width, y - height,  0.0f };
+	v2.uvCoords = { uvX + uvWidth, uvY };
+	v2.normals = { 0.0f, 1.0f, 0.0f };
+
+	//Bottom left
+	NormalTextureVertex v3{};
+	v3.position = { x, y - height,  0.0f };
+	v3.uvCoords = { uvX, uvY };
+	v3.normals = { 0.0f, 1.0f, 0.0f };
 
 	return { v0, v1, v2, v3 };
 }
@@ -112,9 +142,9 @@ unsigned short int GetVerticesCount(Shape type) {
 //Colour
 //Set color of single vertex
 static void ColorVertex(ColorTextureVertex* vertexPointer, unsigned int vertex, float r, float g, float b) {
-	vertexPointer[vertex].color.a = r;
-	vertexPointer[vertex].color.b = g;
-	vertexPointer[vertex].color.c = b;
+	vertexPointer[vertex].color.r = r;
+	vertexPointer[vertex].color.g = g;
+	vertexPointer[vertex].color.b = b;
 }
 
 //Set color of whole shape
@@ -145,20 +175,23 @@ void TransparencyShape(void* verticesArray, float alpha, Shape type) {
 	ColorTextureVertex* vertices = (ColorTextureVertex*)verticesArray;
 
 	for (int i = 0; i < GetVerticesCount(type); i++) {
-		vertices[i].color.d = alpha;
+		vertices[i].color.a = alpha;
 	}
 }
 
 void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alpha, Shape type) {
 	ColorTextureVertex* vertices = (ColorTextureVertex*)verticesArray;
-	vertices[index].color.d = alpha;
+	vertices[index].color.a = alpha;
 }
 
-//Set uvs
-void SetQuadUV(TextureVertex* verticesArray, float u, float v, float width, float height) 
+//Generate normals
+void CalculateQuadNormals(NormalTextureVertex* verticesArray)
 {
-	verticesArray[0].uvCoords.a = u; verticesArray[0].uvCoords.b = v + height;
-	verticesArray[1].uvCoords.a = u + width; verticesArray[1].uvCoords.b = v + height;
-	verticesArray[2].uvCoords.a = u + width; verticesArray[2].uvCoords.b = v;
-	verticesArray[3].uvCoords.a = u; verticesArray[3].uvCoords.b = v;
+	glm::vec3 vec0 = verticesArray[2].position - verticesArray[0].position;
+	glm::vec3 vec1 = verticesArray[1].position - verticesArray[0].position;
+	glm::vec3 normal = glm::normalize(glm::cross(vec0,vec1));
+	for (int i = 0; i < 4; i++)
+	{
+		verticesArray[i].normals = normal;
+	}
 }

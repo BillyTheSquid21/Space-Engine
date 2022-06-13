@@ -11,11 +11,11 @@ class SpriteRender : public RenderComponent
 {
 public:
 	SpriteRender() = default;
-	SpriteRender(TextureQuad* sprite, Render::Renderer<TextureVertex>* ren) { m_Sprite = sprite; m_Renderer = ren; }
+	SpriteRender(Norm_Tex_Quad* sprite, Render::Renderer<NormalTextureVertex>* ren) { m_Sprite = sprite; m_Renderer = ren; }
 	void render();
 private:
-	TextureQuad* m_Sprite = nullptr;
-	Render::Renderer<TextureVertex>* m_Renderer = nullptr;
+	Norm_Tex_Quad* m_Sprite = nullptr;
+	Render::Renderer<NormalTextureVertex>* m_Renderer = nullptr;
 };
 
 class TilePosition : public UpdateComponent
@@ -36,7 +36,7 @@ class SpriteMap : public UpdateComponent
 {
 public:
 	SpriteMap() = default;
-	SpriteMap(TextureQuad* sprite, unsigned int* animX, unsigned int* animY, TileMap* map, World::TileTexture origin) { m_Sprite = sprite; m_OffsetX = animX; m_OffsetY = animY; m_Map = map; m_TextureOrigin = origin; };
+	SpriteMap(Norm_Tex_Quad* sprite, unsigned int* animX, unsigned int* animY, TileMap* map, World::TileTexture origin) { m_Sprite = sprite; m_OffsetX = animX; m_OffsetY = animY; m_Map = map; m_TextureOrigin = origin; };
 	void update(double deltaTime);
 private:
 	//Offset from sprite origin
@@ -44,7 +44,7 @@ private:
 	unsigned int* m_OffsetX = nullptr; unsigned int* m_OffsetY = nullptr;
 	TileMap* m_Map = nullptr;
 	World::TileTexture m_TextureOrigin = { 0,0 };
-	TextureQuad* m_Sprite;
+	Norm_Tex_Quad* m_Sprite;
 };
 
 class UpdateAnimationFacing : public UpdateComponent
@@ -104,7 +104,7 @@ public:
 	float m_XPos = 0.0f;
 	float m_YPos = 0.0f;
 	float m_ZPos = 0.0f;
-	TextureQuad m_Sprite;
+	Norm_Tex_Quad m_Sprite;
 	unsigned int m_TileX = 0; unsigned int m_TileZ = 0;
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
 	bool m_Busy = false; //allows to turn off behaviour when script running
@@ -137,22 +137,22 @@ public:
 
 namespace Ov_Translation
 {
-	void Walk(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer);
+	void Walk(World::Direction* direction, float* x, float* z, Norm_Tex_Quad* sprite, double deltaTime, double* walkTimer);
 	template<typename T>
 	void WalkSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
 		std::shared_ptr<OvSpr_WalkingSprite> spr = std::static_pointer_cast<T>(sprite);
 		Walk(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
 	}
-	void Run(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer);
+	void Run(World::Direction* direction, float* x, float* z, Norm_Tex_Quad* sprite, double deltaTime, double* walkTimer);
 	template<typename T>
 	void RunSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
 		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
 		Run(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
 	}
-	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite);
-	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite, bool onSlope);
 	template<typename T>
 	void CentreOnTileSprite(std::shared_ptr<T> sprite)
 	{
@@ -161,16 +161,16 @@ namespace Ov_Translation
 	}
 
 	//Slope ascending and descending - balanced for smoothness
-	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running);
-	void AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst);	//Allows ascending for middle of tile (won't want to ascend immediately)
+	void AscendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running);
+	void AscendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running, double timer, bool verticalFirst);	//Allows ascending for middle of tile (won't want to ascend immediately)
 	template<typename T>
 	void AscendSlopeSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
 		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
 		AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, spr->m_Running);
 	}
-	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running);
-	void DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst);	//Allows descending for middle of tile (won't want to ascend immediately)
+	void DescendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running);
+	void DescendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running, double timer, bool verticalFirst);	//Allows descending for middle of tile (won't want to ascend immediately)
 	template<typename T>
 	void DescendSlopeSprite(std::shared_ptr<T> sprite, double deltaTime)
 	{
@@ -184,13 +184,13 @@ namespace Ov_ObjCreation
 {
 	//Allows creating sprite types, and modifies references to common component groups
 	std::shared_ptr<OvSpr_Sprite> BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		Render::Renderer<TextureVertex>* sprtRen);
+		Render::Renderer<NormalTextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_DirectionalSprite> BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<TextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<NormalTextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_WalkingSprite> BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<TextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<NormalTextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<TextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<NormalTextureVertex>* sprtRen);
 }
 
 #endif

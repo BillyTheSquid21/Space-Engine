@@ -3,6 +3,10 @@
 #define VERTEX_HPP
 
 #include "utility/SGUtil.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
 
 enum class Axis
 {
@@ -12,17 +16,22 @@ enum class Axis
 //alignas used to confirm all bytes are contiguous in memory - will be reworked if needed
 struct alignas(4) Vertex
 {
-	Struct3f position;
+	glm::vec3 position;
 };
 
 struct alignas(4) TextureVertex : public Vertex
 {
-	Struct2f uvCoords;
+	glm::vec2 uvCoords;
 };
 
 struct alignas(4) ColorTextureVertex : public TextureVertex
 {
-	Struct4f color;
+	glm::vec4 color;
+};
+
+struct alignas(4) NormalTextureVertex : public TextureVertex
+{
+	glm::vec3 normals;
 };
 
 #endif

@@ -70,8 +70,8 @@ namespace World
 	};
 
 	//Tile arranging classes
-	void tileLevel(TextureQuad* quad, WorldHeight level);
-	void SlopeTile(TextureQuad* quad, Direction direction);
+	void tileLevel(Norm_Tex_Quad* quad, WorldHeight level);
+	void SlopeTile(Norm_Tex_Quad* quad, Direction direction);
 
 	struct TileTexture
 	{
@@ -126,7 +126,7 @@ namespace World
 	{
 	public:
 		//Load level data
-		bool buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		bool buildLevel(Render::Renderer<NormalTextureVertex>* planeRenderer, TileMap* tileMapPointer);
 		void setID(World::LevelID id) { m_ID = id; }
 		void purgeLevel(); //Clears heap data
 		void render();

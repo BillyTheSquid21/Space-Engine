@@ -89,10 +89,11 @@ void Overworld::loadRequiredData() {
     //Load level data
     m_Levels.BuildFirstLevel(m_CurrentLevel);
 
-    //Add player
+    //Add player and link pos to lighting
     OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
     sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_Renderer.spriteRenderer);
+    m_Renderer.m_PlayerX = &sprite->m_XPos; m_Renderer.m_PlayerY = &sprite->m_YPos; m_Renderer.m_PlayerZ = &sprite->m_ZPos;
 
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_TileX, &sprite->m_TileZ));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Renderer.camera));

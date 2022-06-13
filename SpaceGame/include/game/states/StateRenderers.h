@@ -23,9 +23,9 @@ public:
 	Shader shader;
 	Camera camera;
 
-	Render::Renderer<TextureVertex> worldRenderer;
-	Render::Renderer<TextureVertex> spriteRenderer;
-	Render::InstanceRenderer<TextureVertex> modelRenderer;
+	Render::Renderer<NormalTextureVertex> worldRenderer;
+	Render::Renderer<NormalTextureVertex> spriteRenderer;
+	Render::InstanceRenderer<NormalTextureVertex> modelRenderer;
 
 	//Textures
 	Texture worldTexture;
@@ -49,6 +49,12 @@ public:
 	static constexpr int WORLD_SLOT = 0;
 	static constexpr int SPRITE_SLOT = 1;
 	static constexpr int ATLAS_SLOT = 2;
+
+	//Player position for lighting
+	float* m_PlayerX = nullptr;
+	float* m_PlayerY = nullptr;
+	float* m_PlayerZ = nullptr;
+	glm::vec3 m_LightPos = glm::vec3(0.0f, 0.0f, 0.0f);
 };
 
 #endif

@@ -1,15 +1,15 @@
 #include "game/level/World.h"
 
 //World functions
-static void RotateTileCorner(TextureQuad* quad, float angle) {
-    TextureVertex v0 = quad->at(0);
-    float x = v0.position.a + (World::TILE_SIZE / 2);
-    float z = v0.position.c + (World::TILE_SIZE / 2);
-    RotateShape<TextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
+static void RotateTileCorner(Norm_Tex_Quad* quad, float angle) {
+    NormalTextureVertex v0 = quad->at(0);
+    float x = v0.position.x + (World::TILE_SIZE / 2);
+    float z = v0.position.z + (World::TILE_SIZE / 2);
+    RotateShape<NormalTextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
 }
 
-void World::tileLevel(TextureQuad* quad, WorldHeight level) {
-    TranslateShape<TextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
+void World::tileLevel(Norm_Tex_Quad* quad, WorldHeight level) {
+    TranslateShape<NormalTextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
 World::Direction World::GetDirection(std::string dir) 
@@ -170,7 +170,7 @@ World::Level::PermVectorFragment World::Level::queryPermissions(LevelID level, W
     return {&s_MovementPermissionsCache[0].perms->at(0), 1};  //If fails, return first level permis found
 }
 
-void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
+void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
     //Get index's to slope - 3 is max
     unsigned int verticeIndex[3];
     unsigned int verticesToSlope = 0;
@@ -258,7 +258,7 @@ void World::SlopeTile(TextureQuad* quad, World::Direction direction) {
     }
 
     for (int i = 0; i < verticesToSlope; i++) {
-        TranslateShapeVertex<TextureVertex>((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
+        TranslateShapeVertex<NormalTextureVertex>((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
     }
 }
 
@@ -266,7 +266,7 @@ std::vector<World::Level::LevelPtrCache> World::Level::s_MovementPermissionsCach
 bool World::Level::s_CacheInit = false;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
-bool World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, TileMap* tileMapPointer)
+bool World::Level::buildLevel(Render::Renderer<NormalTextureVertex>* planeRenderer, TileMap* tileMapPointer)
 {
     //Checks if the caches are setup - should happen on first load which shouldn't need to be atomic (not loading through loading zone)
     if (!s_CacheInit)
@@ -334,10 +334,11 @@ bool World::Level::buildLevel(Render::Renderer<TextureVertex>* planeRenderer, Ti
             TileTexture tileTex = data.planeTextures[yFirstIndex];
             if (!(tileTex.textureX == 0 && tileTex.textureY == 0)) {
                 texData = m_TileMapPointer->uvTile(tileTex.textureX, tileTex.textureY);
-                SetQuadUV((TextureVertex*)m_Plane.accessQuad(x, y), texData.u, texData.v, texData.width, texData.height);
+                SetQuadUV((NormalTextureVertex*)m_Plane.accessQuad(x, y), texData.u, texData.v, texData.width, texData.height);
             }
         }
     }
+    m_Plane.generatePlaneNormals();
 
     //Store pointer to permissions - updates every time level loaded
     Level::s_MovementPermissionsCache[(unsigned int)m_ID] = { &m_Permissions, &m_AvailibleLevels };

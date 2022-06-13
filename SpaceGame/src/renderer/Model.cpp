@@ -17,16 +17,16 @@ bool Model::LoadTextureVertexOBJ(const char* path, std::vector<TextureVertex>& v
     }
 
     //Temp data
-    std::vector<Struct3f> positionDataTemp;
-    std::vector<Struct2f> uvDataTemp;
+    std::vector<glm::vec3> positionDataTemp;
+    std::vector<glm::vec2> uvDataTemp;
 
     auto mesh = scene->mMeshes[0];
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
-        Struct3f vert;
-        vert.a = mesh->mVertices[i].x;
-        vert.b = mesh->mVertices[i].y;
-        vert.c = mesh->mVertices[i].z;
+        glm::vec3 vert;
+        vert.x = mesh->mVertices[i].x;
+        vert.y = mesh->mVertices[i].y;
+        vert.z = mesh->mVertices[i].z;
         positionDataTemp.push_back(vert);
     }
 
@@ -39,9 +39,9 @@ bool Model::LoadTextureVertexOBJ(const char* path, std::vector<TextureVertex>& v
     {
         for (int i = 0; i < mesh->mNumVertices; i++)
         {
-            Struct2f uv;
-            uv.a = mesh->mTextureCoords[0][i].x;
-            uv.b = mesh->mTextureCoords[0][i].y;
+            glm::vec2 uv;
+            uv.x = mesh->mTextureCoords[0][i].x;
+            uv.y = mesh->mTextureCoords[0][i].y;
             uvDataTemp.push_back(uv);
         }
     }

@@ -6,17 +6,17 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	//World Renderer
-	worldRenderer.setLayout<float>(3, 2);
+	worldRenderer.setLayout<float>(3, 2, 3);
 	worldRenderer.setDrawingMode(GL_TRIANGLES);
 	worldRenderer.generate((float)width, (float)height, &camera);
 
 	//Sprite Renderer
-	spriteRenderer.setLayout<float>(3, 2);
+	spriteRenderer.setLayout<float>(3, 2, 3);
 	spriteRenderer.setDrawingMode(GL_TRIANGLES);
 	spriteRenderer.generate((float)width, (float)height, &camera);
 
 	//Model Renderer
-	modelRenderer.setLayout<float>(3, 2);
+	modelRenderer.setLayout<float>(3, 2, 3);
 	modelRenderer.setDrawingMode(GL_TRIANGLES);
 	modelRenderer.generate((float)width, (float)height, &camera);
 
@@ -28,7 +28,7 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 void OverworldRenderer::loadRendererData()
 {
 	//Shader
-	shader.create("res/shaders/Default_T_Shader.glsl");
+	shader.create("res/shaders/Lighting_T_Shader.glsl");
 
 	//Load world texture
 	worldTexture.loadTexture("res/textures/OW.png");
@@ -67,7 +67,13 @@ void OverworldRenderer::draw()
 	//Send cam uniforms
 	camera.sendCameraUniforms(shader);
 
+	//Update player pos
+	m_LightPos = { *m_PlayerX, *m_PlayerY + 1000.0f, *m_PlayerZ + 600.0f };
+
 	//Draw
+	shader.setUniform("u_AmbLight", 0.5f);
+	shader.setUniform("u_LightPos", &m_LightPos);
+
 	shader.setUniform("u_Texture", SPRITE_SLOT);
 	spriteRenderer.drawPrimitives(shader);
 	shader.setUniform("u_Texture", ATLAS_SLOT);

@@ -12,12 +12,12 @@ class Bridge : public GameObject {};
 class BridgeRenderComponent : public RenderComponent
 {
 public:
-	BridgeRenderComponent(Struct2f pos, World::WorldHeight height, unsigned int width, unsigned int length, UVData data1, UVData data2, Render::Renderer<TextureVertex>* ren, bool horizontal);
+	BridgeRenderComponent(Struct2f pos, World::WorldHeight height, unsigned int width, unsigned int length, UVData data1, UVData data2, Render::Renderer<NormalTextureVertex>* ren, bool horizontal);
 	void generateIndices();
-	void render() { if (m_Tiles.quads.size() == 0) { return; } m_Renderer->commit((TextureVertex*)&m_Tiles.quads[0], GetFloatCount<TextureVertex>(Shape::QUAD) * m_Tiles.quadCount, (unsigned int*)&m_Tiles.indices[0], m_Tiles.indices.size()); };
+	void render() { if (m_Tiles.quads.size() == 0) { return; } m_Renderer->commit((NormalTextureVertex*)&m_Tiles.quads[0], GetFloatCount<NormalTextureVertex>(Shape::QUAD) * m_Tiles.quadCount, (unsigned int*)&m_Tiles.indices[0], m_Tiles.indices.size()); };
 private:
-	Render::Renderer<TextureVertex>* m_Renderer;
-	QuadArray<TextureQuad> m_Tiles;
+	Render::Renderer<NormalTextureVertex>* m_Renderer;
+	QuadArray<Norm_Tex_Quad> m_Tiles;
 };
 
 #endif

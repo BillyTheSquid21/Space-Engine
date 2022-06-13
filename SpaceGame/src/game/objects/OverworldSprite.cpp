@@ -4,7 +4,7 @@
 void SpriteRender::render()
 {
 	if (m_Sprite != nullptr && m_Renderer != nullptr) {
-		m_Renderer->commit((TextureVertex*)m_Sprite, GetFloatCount<TextureVertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+		m_Renderer->commit((NormalTextureVertex*)m_Sprite, GetFloatCount<NormalTextureVertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
 	}
 }
 
@@ -24,7 +24,7 @@ void SpriteMap::update(double deltaTime)
 	{
 		//Update sprite map
 		UVData data = m_Map->uvTile(m_TextureOrigin.textureX + *m_OffsetX, m_TextureOrigin.textureY + *m_OffsetY);
-		SetQuadUV((TextureVertex*)m_Sprite, data.u, data.v, data.width, data.height);
+		SetQuadUV((NormalTextureVertex*)m_Sprite, data.u, data.v, data.width, data.height);
 		m_LastOffX = *m_OffsetX; m_LastOffY = *m_OffsetY;
 	}
 }
@@ -156,10 +156,12 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 	//Set pos - x in tile middle
 	m_XPos = x + TILE_SIZE / 2; m_YPos = y; m_ZPos = z - TILE_SIZE / 2;
 	//Make Sprite
-	m_Sprite = CreateTextureQuad(x, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, 0.0f, 0.0f, 0.05f, 0.1f);
+	m_Sprite = CreateNormalTextureQuad(x, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, 0.0f, 0.0f, 0.05f, 0.1f);
 	//Position Sprite
-	RotateShape<TextureVertex>((TextureVertex*)&m_Sprite, { x + TILE_SIZE / 2, y, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
-	TranslateShape<TextureVertex>((TextureVertex*)&m_Sprite, 0.0f, 0.0f, m_ZPos, Shape::QUAD);
+	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&m_Sprite, { x + TILE_SIZE / 2, y, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
+	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&m_Sprite, 0.0f, 0.0f, m_ZPos, Shape::QUAD);
+	//Calc normal
+	CalculateQuadNormals((NormalTextureVertex*)&m_Sprite);
 
 	//Make current tile blocked
 	World::Level::PermVectorFragment perm = Level::queryPermissions(m_CurrentLevel, data.height);
@@ -170,30 +172,30 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 
 void OvSpr_Sprite::setSprite(UVData data)
 {
-	SetQuadUV((TextureVertex*)&m_Sprite, data.u, data.v, data.width, data.height);
+	SetQuadUV((NormalTextureVertex*)&m_Sprite, data.u, data.v, data.width, data.height);
 }
 
 //Translation
-void Ov_Translation::Walk(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer)
+void Ov_Translation::Walk(World::Direction* direction, float* x, float* z, Norm_Tex_Quad* sprite, double deltaTime, double* walkTimer)
 {
 	using namespace World;
 	switch (*direction)
 	{
 	case Direction::EAST:
 		*x += deltaTime * TILE_SIZE * WALK_SPEED;
-		TranslateShape<TextureVertex>(sprite, deltaTime * TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, deltaTime * TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::WEST:
 		*x += deltaTime * -TILE_SIZE * WALK_SPEED;
-		TranslateShape<TextureVertex>(sprite, deltaTime * -TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, deltaTime * -TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::NORTH:
 		*z += deltaTime * -TILE_SIZE * WALK_SPEED;
-		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * WALK_SPEED, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * WALK_SPEED, Shape::QUAD);
 		break;
 	case Direction::SOUTH:
 		*z += deltaTime * TILE_SIZE * WALK_SPEED;
-		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * WALK_SPEED, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * WALK_SPEED, Shape::QUAD);
 		break;
 	default:
 		break;
@@ -202,26 +204,26 @@ void Ov_Translation::Walk(World::Direction* direction, float* x, float* z, Textu
 	*walkTimer += deltaTime;
 }
 
-void Ov_Translation::Run(World::Direction* direction, float* x, float* z, TextureQuad* sprite, double deltaTime, double* walkTimer)
+void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Norm_Tex_Quad* sprite, double deltaTime, double* walkTimer)
 {
 	using namespace World;
 	switch (*direction)
 	{
 	case Direction::EAST:
 		*x += deltaTime * TILE_SIZE * RUN_SPEED;
-		TranslateShape<TextureVertex>(sprite, deltaTime * TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, deltaTime * TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::WEST:
 		*x += deltaTime * -TILE_SIZE * RUN_SPEED;
-		TranslateShape<TextureVertex>(sprite, deltaTime * -TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, deltaTime * -TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::NORTH:
 		*z += deltaTime * -TILE_SIZE * RUN_SPEED;
-		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * RUN_SPEED, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * RUN_SPEED, Shape::QUAD);
 		break;
 	case Direction::SOUTH:
 		*z += deltaTime * TILE_SIZE * RUN_SPEED;
-		TranslateShape<TextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * RUN_SPEED, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * RUN_SPEED, Shape::QUAD);
 		break;
 	default:
 		break;
@@ -230,7 +232,7 @@ void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Textur
 	*walkTimer += deltaTime;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);
@@ -240,13 +242,13 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeigh
 	float deltaX = *x - expectedX;
 	float deltaZ = *z - expectedZ;
 	float deltaY = *y - expectedY;
-	TranslateShape<TextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
+	TranslateShape<NormalTextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
 	*x = expectedX;
 	*z = expectedZ;
 	*y = expectedY;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, TextureQuad* sprite, bool onSlope)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite, bool onSlope)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);
@@ -260,27 +262,27 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeigh
 	float deltaX = *x - expectedX;
 	float deltaZ = *z - expectedZ;
 	float deltaY = *y - expectedY;
-	TranslateShape<TextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
+	TranslateShape<NormalTextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
 	*x = expectedX;
 	*z = expectedZ;
 	*y = expectedY;
 }
 
-void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running)
+void Ov_Translation::AscendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running)
 {
 	if (!running)
 	{
 		*y += (World::WALK_SPEED / sqrt(2))* World::TILE_SIZE * deltaTime;
-		TranslateShape<TextureVertex>(sprite, 0.0f, (World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 	else
 	{
 		*y += (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
-		TranslateShape<TextureVertex>(sprite, 0.0f, (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 }
 
-void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst
+void Ov_Translation::AscendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running, double timer, bool verticalFirst
 )
 {
 	constexpr double WALK_MAX = World::WALK_DURATION / 2;
@@ -310,21 +312,21 @@ void Ov_Translation::AscendSlope(float* y, TextureQuad* sprite, double deltaTime
 	AscendSlope(y, sprite, deltaTime, running);
 }
 
-void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running)
+void Ov_Translation::DescendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running)
 {
 	if (!running)
 	{
 		*y += (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
-		TranslateShape<TextureVertex>(sprite, 0.0f, (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 	else
 	{
 		*y += (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
-		TranslateShape<TextureVertex>(sprite, 0.0f, (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 }
 
-void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTime, bool running, double timer, bool verticalFirst)
+void Ov_Translation::DescendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTime, bool running, double timer, bool verticalFirst)
 {
 	constexpr double WALK_MAX = World::WALK_DURATION / 2;
 	constexpr double RUN_MAX = World::RUN_DURATION / 2;
@@ -355,7 +357,7 @@ void Ov_Translation::DescendSlope(float* y, TextureQuad* sprite, double deltaTim
 
 
 std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	Render::Renderer<TextureVertex>* sprtRen)
+	Render::Renderer<NormalTextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_Sprite> sprite(new OvSpr_Sprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
@@ -365,7 +367,7 @@ std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data,
 }
 
 std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp,
-	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<TextureVertex>* sprtRen)
+	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<NormalTextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_DirectionalSprite> sprite(new OvSpr_DirectionalSprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
@@ -379,7 +381,7 @@ std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(
 }
 
 std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<TextureVertex>* sprtRen)
+	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<NormalTextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_WalkingSprite> sprite(new OvSpr_WalkingSprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
@@ -393,7 +395,7 @@ std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_Sp
 }
 
 std::shared_ptr<OvSpr_RunningSprite> Ov_ObjCreation::BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<TextureVertex>* sprtRen)
+	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<NormalTextureVertex>* sprtRen)
 {
 	std::shared_ptr<OvSpr_RunningSprite> sprite(new OvSpr_RunningSprite(data));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));

@@ -187,7 +187,7 @@ private:
 class NPC_RandWalk : public TilePosition
 {
 public:
-	NPC_RandWalk(World::Direction* direct, World::WorldHeight* level, float* y, bool* busy, bool* walking, TextureQuad* sprite, double* walkTimer) {	m_Direction = direct; m_WorldLevel = level; m_YPos = y; m_Busy = busy; m_Walking = walking; m_Sprite = sprite; m_WalkTimer = walkTimer;
+	NPC_RandWalk(World::Direction* direct, World::WorldHeight* level, float* y, bool* busy, bool* walking, Norm_Tex_Quad* sprite, double* walkTimer) {	m_Direction = direct; m_WorldLevel = level; m_YPos = y; m_Busy = busy; m_Walking = walking; m_Sprite = sprite; m_WalkTimer = walkTimer;
 	if (!s_Random.isSeeded()) { s_Random.seed(0.0f, MAX_SEED); } m_CoolDownTimer = s_Random.next() / 8.0f;};
 	
 	void linkLocation(unsigned int* tileX, unsigned int* tileZ, float* x, float* z, World::LevelID* level) { m_TileX = tileX; m_TileZ = tileZ; m_XPos = x; m_ZPos = z; m_CurrentLevel = level; };
@@ -203,7 +203,7 @@ private:
 
 	//Applies to either walking or running, as npcs will 
 	bool* m_Walking = nullptr;
-	TextureQuad* m_Sprite = nullptr;
+	Norm_Tex_Quad* m_Sprite = nullptr;
 	float m_CoolDownTimer = 0.0f;
 	double* m_WalkTimer = nullptr;
 

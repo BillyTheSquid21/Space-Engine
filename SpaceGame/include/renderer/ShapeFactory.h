@@ -34,7 +34,8 @@ namespace Primitive
 }
 
 #define Quad std::array<ColorTextureVertex, 4>
-#define TextureQuad std::array<TextureVertex, 4>
+#define Tex_Quad std::array<TextureVertex, 4>
+#define Norm_Tex_Quad std::array<NormalTextureVertex, 4>
 #define Line std::array<ColorTextureVertex, 4>	//Line is just a quad set up to be more convinient
 #define Tri std::array<ColorTextureVertex, 3>
 
@@ -99,7 +100,8 @@ const float GUI_LAYER_6 = 0.92f;
 
 //Shape Creation
 Quad CreateQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
-TextureQuad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
+Tex_Quad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
+Norm_Tex_Quad CreateNormalTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 Line CreateLine(float xStart, float yStart, float xEnd, float yEnd, float stroke);
 Tri CreateTri(float x, float y, float radius);
 
@@ -110,7 +112,15 @@ void TransparencyShape(void* verticesArray, float alpha, Shape type);
 void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alpha, Shape type);
 
 //Currently only applies to texture vertex - will update if another derived vertex needs to access uvs
-void SetQuadUV(TextureVertex* verticesArray, float u, float v, float width, float height);
+template<typename T>
+void SetQuadUV(T* verticesArray, float u, float v, float width, float height)
+{
+	verticesArray[0].uvCoords.x = u; verticesArray[0].uvCoords.y = v + height;
+	verticesArray[1].uvCoords.x = u + width; verticesArray[1].uvCoords.y = v + height;
+	verticesArray[2].uvCoords.x = u + width; verticesArray[2].uvCoords.y = v;
+	verticesArray[3].uvCoords.x = u; verticesArray[3].uvCoords.y = v;
+}
+void CalculateQuadNormals(NormalTextureVertex* verticesArray);
 
 //Utility
 unsigned short int GetVerticesCount(Shape type);
@@ -122,9 +132,9 @@ unsigned short int GetFloatCount(Shape type) {
 //Shape translation - all shapes are defined relative to centre
 static void TranslateShapeVertexInternal(void* vertexPointer, float deltaX, float deltaY, float deltaZ) {
 	Vertex* vertex = (Vertex*)(void*)vertexPointer;
-	vertex->position.a += deltaX;
-	vertex->position.b += deltaY;
-	vertex->position.c += deltaZ;
+	vertex->position.x += deltaX;
+	vertex->position.y += deltaY;
+	vertex->position.z += deltaZ;
 }
 
 template<typename T>
@@ -188,7 +198,7 @@ void RotateShape(void* verticesArray, Struct3f rotationCentre, float angle, Shap
 	//Translate for each vertice
 	for (int i = 0; i < numberOfVertices; i++) {
 		Vertex* vertex = (Vertex*)(void*)&vertexPointer[i];
-		glm::vec3 position = { vertex->position.a - rotationCentre.a, vertex->position.b - rotationCentre.b, vertex->position.c - rotationCentre.c };
+		glm::vec3 position = { vertex->position.x - rotationCentre.a, vertex->position.y - rotationCentre.b, vertex->position.z - rotationCentre.c };
 		position = glm::rotate(position, glm::radians(angle), axisVector);
 		vertex->position = { position.x + rotationCentre.a, position.y + rotationCentre.b, position.z + rotationCentre.c };
 	}
