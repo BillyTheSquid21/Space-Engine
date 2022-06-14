@@ -46,22 +46,6 @@ private:
 	unsigned int m_IndicesCount = 0;
 };
 
-class DepthBuffer
-{
-public:
-	DepthBuffer() = default;
-	~DepthBuffer();
-
-	void create(unsigned int count);
-	void bind() const;
-	void unbind() const;
-	void render();
-
-private:
-	unsigned int m_ID = 0;
-	unsigned int m_Map = 0;
-};
-
 //Buffer layout abstraction layer
 struct VertexBufferElement
 {

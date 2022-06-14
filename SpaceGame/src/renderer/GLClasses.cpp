@@ -55,48 +55,6 @@ void IndexBuffer::unbind() const {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-//Depth buffer
-DepthBuffer::~DepthBuffer()
-{
-	glDeleteBuffers(1, &m_ID);
-}
-
-void DepthBuffer::create(unsigned int count)
-{
-	//Gen buffers
-	glGenFramebuffers(1, &m_ID);
-
-	//Gen map - let resolution be 1024x1024
-	constexpr int SHADOW_WIDTH = 1024;
-
-	glGenTextures(1, &m_Map);
-	glBindTexture(GL_TEXTURE_2D, m_Map);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-		SHADOW_WIDTH, SHADOW_WIDTH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-}
-
-void DepthBuffer::bind() const
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_Map, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-}
-
-void DepthBuffer::unbind() const
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void DepthBuffer::render()
-{
-
-}
-
 //Vertex Array
 VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &m_ID);
