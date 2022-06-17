@@ -140,15 +140,11 @@ void Overworld::update(double deltaTime, double time) {
 }
 
 void Overworld::render() {
-    Render::Renderer<ColorTextureVertex>::clearScreen();
 
     //Start timer
     auto ts = EngineTimer::StartTimer();
 
     GameGUI::StartFrame();
-
-    //Bind shader program
-    m_Renderer.bindShader();
 
     //Renders
     m_Levels.render();
@@ -194,13 +190,13 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
     {
         if (action == GLFW_PRESS)
         {
-            if (m_Renderer.m_LightScene == 0)
+            if (m_Renderer.lightScene == 1)
             {
-                m_Renderer.m_LightScene = 1;
+                m_Renderer.lightScene = 0;
             }
             else
             {
-                m_Renderer.m_LightScene = 0;
+                m_Renderer.lightScene = 1;
             }
         }
     }

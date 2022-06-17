@@ -46,6 +46,25 @@ private:
 	unsigned int m_IndicesCount = 0;
 };
 
+//Credit OGLDev for ShadowMapFBO layout
+class ShadowMapFBO
+{
+public:
+	ShadowMapFBO();
+
+	~ShadowMapFBO();
+
+	bool init(unsigned int width, unsigned int height);
+
+	void bindForWriting();
+	void bindForReading(unsigned int slot);
+	void unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); };
+
+private:
+	unsigned int m_fbo;
+	unsigned int m_shadowMap;
+};
+
 //Buffer layout abstraction layer
 struct VertexBufferElement
 {

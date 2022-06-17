@@ -31,6 +31,8 @@ public:
 
 	//set pos
 	void setPos(float x, float y, float z);
+	glm::vec3 getPos() const { return m_Position; }
+	glm::mat4 getVP() { return proj * view; }
 
 	//set camera
 	void panYDegrees(float degrees);

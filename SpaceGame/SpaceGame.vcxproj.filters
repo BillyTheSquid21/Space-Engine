@@ -198,6 +198,9 @@
     <ClCompile Include="src\vendor\mtlib\ThreadPool.cpp">
       <Filter>Source Files\Vendor\mtlib</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\ShadowMap.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -410,6 +413,9 @@
     <ClInclude Include="include\game\utility\Input.hpp">
       <Filter>Header Files\Game\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderer\ShadowMap.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl">
@@ -419,6 +425,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\shaders\Lighting_T_Shader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\Shadows_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

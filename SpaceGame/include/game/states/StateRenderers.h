@@ -5,12 +5,11 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.h"
 #include "renderer/Model.h"
+#include "renderer/ShadowMap.h"
 
 #include "game/level/World.h"
 
 #include "game/objects/TileMap.h"
-
-#define OV_THREAD_COUNT 3
 
 //Keeps renderer classes for each state close to easily pass around functions
 
@@ -21,6 +20,7 @@ public:
 
 	//Rendering
 	Shader shader;
+	Shader shadows;
 	Camera camera;
 
 	Render::Renderer<NormalTextureVertex> worldRenderer;
@@ -30,6 +30,7 @@ public:
 	//Textures
 	Texture worldTexture;
 	Texture spriteTexture;
+	Texture debugTexture;
 
 	//Maps
 	TileMap worldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
@@ -41,18 +42,20 @@ public:
 	void loadRendererData(); //Load data for renderer
 	void generateAtlas(); //Generate atlas from loaded model textures
 	void purgeData();
-	void bindShader(){	shader.bind();	}
 	void bufferRenderData();
 	void draw(); //Draw scene renderer
 
 	//Slot identifiers
-	static constexpr int WORLD_SLOT = 0;
-	static constexpr int SPRITE_SLOT = 1;
-	static constexpr int ATLAS_SLOT = 2;
+	static constexpr int TEXTURE_SLOT = 0;
+	static constexpr int SHADOWS_SLOT = 1;
 
 	//Player position for lighting
-	glm::vec3 m_LightDir = glm::vec3(0.0f, 1.0f, 1.0f);
-	int m_LightScene = 0;
+	glm::vec3 m_LightDir = glm::vec3(0.6f, 0.5f, 0.52f);
+
+	//Shadow map boiler plate
+	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
+	ShadowMap shadowMap = ShadowMap(2048,2048);
+	int lightScene = 1;
 };
 
 #endif

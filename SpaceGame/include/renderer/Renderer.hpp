@@ -142,11 +142,14 @@ namespace Render
 		void bindAll(Shader& shader) { shader.bind();	m_VA.bind();	m_IB.bind(); }
 		void drawCall(glm::mat4* modelMatrix, Shader& shader, bool first) {
 			//Use model matrix
-			shader.setUniform("u_Model", modelMatrix);
+			//
+			//shader.setUniform("u_Model", modelMatrix); 
+
 			//Bind all objects
 			bindAll(shader);
 			//Draw Elements
 			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
+			glBindVertexArray(0);
 		}
 
 		//type of primitive being drawn

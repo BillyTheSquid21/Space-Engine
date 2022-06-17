@@ -24,7 +24,13 @@ static void Log(args && ... inputs)
 }
 
 #if _DEBUG
+
 #define EngineLog(vars, ...) Log(vars, ##__VA_ARGS__)
+
+#else
+
+#define EngineLog(vars, ...) (0 && Log(vars, ##__VA_ARGS__))
+
 #endif
 
 float invSqrt(float number); //Supposedly a faster inv sqrt
