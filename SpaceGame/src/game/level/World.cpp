@@ -296,7 +296,7 @@ bool World::Level::buildLevel(Render::Renderer<NormalTextureVertex>* planeRender
     m_Plane.setRenderer(planeRenderer);
 
     //Texture all with tex 0,0
-    UVData texData = m_TileMapPointer->uvTile(0, 0);
+    TileUV texData = m_TileMapPointer->uvTile(0, 0);
     m_Plane.texturePlane(texData.u, texData.v, texData.width, texData.height);
 
     unsigned int xFirstIndex = 0;

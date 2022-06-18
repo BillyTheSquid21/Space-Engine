@@ -13,7 +13,7 @@
 //|________________________
 
 //Maps the UV coords of a texture to simple blocks of x width and x height
-struct UVData
+struct TileUV
 {
 	float u;
 	float v;
@@ -26,8 +26,8 @@ class TileMap
 {
 public:
 	TileMap(unsigned int texW, unsigned int texH, unsigned int selW, unsigned int selH);
-	UVData uvTile(unsigned int tileX, unsigned int tileY);
-	UVData uvTile(unsigned int tileX, unsigned int tileY, unsigned int width, unsigned int height);
+	TileUV uvTile(unsigned int tileX, unsigned int tileY);
+	TileUV uvTile(unsigned int tileX, unsigned int tileY, unsigned int width, unsigned int height);
 private:
 	const unsigned int m_TilesTotalX;
 	const unsigned int m_TilesTotalY;

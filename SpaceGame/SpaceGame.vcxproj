@@ -164,6 +164,8 @@
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
     <ClCompile Include="src\game\objects\ScriptParse.cpp" />
+    <ClCompile Include="src\game\objects\SpriteAnimation.cpp" />
+    <ClCompile Include="src\game\objects\TallGrass.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\objects\Tree.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
@@ -210,6 +212,8 @@
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
     <ClInclude Include="include\game\objects\Script.hpp" />
     <ClInclude Include="include\game\objects\ScriptParse.h" />
+    <ClInclude Include="include\game\objects\SpriteAnimation.h" />
+    <ClInclude Include="include\game\objects\TallGrass.h" />
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\objects\Tree.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
@@ -267,6 +271,7 @@
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl" />
     <None Include="res\shaders\Default_T_Shader.glsl" />
+    <None Include="res\shaders\Geometry_Lighting_T_Shader.glsl" />
     <None Include="res\shaders\Lighting_T_Shader.glsl" />
     <None Include="res\shaders\Shadows_Shader.glsl" />
   </ItemGroup>

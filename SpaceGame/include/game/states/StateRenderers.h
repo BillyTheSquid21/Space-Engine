@@ -49,10 +49,12 @@ public:
 	static constexpr int TEXTURE_SLOT = 0;
 	static constexpr int SHADOWS_SLOT = 1;
 
-	//Player position for lighting
+	//Lighting
 	glm::vec3 m_LightDir = glm::vec3(0.6f, 0.5f, 0.52f);
+	glm::vec3 m_LightColor = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::vec3 m_LightScaled = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 m_LightScaleFactor = glm::vec3(1.0f, 0.8f, 0.7f);
 
-	//Shadow map boiler plate
 	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 	ShadowMap shadowMap = ShadowMap(2048,2048);
 	int lightScene = 1;

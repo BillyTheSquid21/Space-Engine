@@ -1,6 +1,6 @@
 #include "game/objects/Tree.h"
 
-void TreeRenderComponent::addTree(Struct2f levelOrigin, World::TileLoc tile, World::WorldHeight level, UVData uv1, UVData uv2)
+void TreeRenderComponent::addTree(Struct2f levelOrigin, World::TileLoc tile, World::WorldHeight level, TileUV uv1, TileUV uv2)
 {
 	if (m_Trees.quadCount >= m_Trees.quads.size())
 	{
@@ -24,7 +24,7 @@ void TreeRenderComponent::addTree(Struct2f levelOrigin, World::TileLoc tile, Wor
 	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tree1, 0.0f, 0.0f, -zPos, Shape::QUAD);
 	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tree2, { xPos2 + World::TILE_SIZE / 2, yPos, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
 	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tree2, 0.0f, 0.0f, -zPos, Shape::QUAD);
-	
+
 	//Gen normals
 	CalculateQuadNormals((NormalTextureVertex*)&tree1);
 	CalculateQuadNormals((NormalTextureVertex*)&tree2);

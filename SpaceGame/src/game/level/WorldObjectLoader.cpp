@@ -138,7 +138,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 		//Add tree from properties
 		World::TileLoc tile = { strtoul(treesNode->first_node("TileX")->value(), nullptr, 10), strtoul(treesNode->first_node("TileZ")->value(), nullptr, 10) };
 		World::WorldHeight wLevel = (World::WorldHeight)strtol(treesNode->first_node("WLevel")->value(), nullptr, 10);
-		UVData uv1; UVData uv2;
+		TileUV uv1; TileUV uv2;
 		{
 			unsigned int tX1 = strtoul(treesNode->first_node("TX1")->value(), nullptr, 10);
 			unsigned int tY1 = strtoul(treesNode->first_node("TY1")->value(), nullptr, 10);
@@ -404,8 +404,8 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	xml_node<>* tX2Node = node->first_node("TX2");
 	xml_node<>* tY2Node = node->first_node("TY2");
 	World::TileTexture t2 = { strtoul(tX2Node->value(), nullptr, 10), strtoul(tY2Node->value(), nullptr, 10) };
-	UVData tex1 = ren->worldTileMap.uvTile(t1.textureX, t1.textureY);
-	UVData tex2 = ren->worldTileMap.uvTile(t2.textureX, t2.textureY);
+	TileUV tex1 = ren->worldTileMap.uvTile(t1.textureX, t1.textureY);
+	TileUV tex2 = ren->worldTileMap.uvTile(t2.textureX, t2.textureY);
 
 	//Get dim
 	xml_node<>* wNode = node->first_node("Width");

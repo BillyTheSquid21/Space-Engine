@@ -100,7 +100,7 @@ class OvSpr_Sprite : public GameObject
 public:
 	OvSpr_Sprite(OvSpr_SpriteData data);
 	//If sprite is static, simply set here, otherwise an update method is needed
-	void setSprite(UVData data);
+	void setSprite(TileUV data);
 	float m_XPos = 0.0f;
 	float m_YPos = 0.0f;
 	float m_ZPos = 0.0f;

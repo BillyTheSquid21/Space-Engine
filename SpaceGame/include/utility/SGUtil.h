@@ -29,7 +29,7 @@ static void Log(args && ... inputs)
 
 #else
 
-#define EngineLog(vars, ...) (0 && Log(vars, ##__VA_ARGS__))
+#define EngineLog(vars, ...)
 
 #endif
 

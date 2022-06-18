@@ -23,7 +23,7 @@ void SpriteMap::update(double deltaTime)
 	if (m_LastOffX != *m_OffsetX || m_LastOffY != *m_OffsetY)
 	{
 		//Update sprite map
-		UVData data = m_Map->uvTile(m_TextureOrigin.textureX + *m_OffsetX, m_TextureOrigin.textureY + *m_OffsetY);
+		TileUV data = m_Map->uvTile(m_TextureOrigin.textureX + *m_OffsetX, m_TextureOrigin.textureY + *m_OffsetY);
 		SetQuadUV((NormalTextureVertex*)m_Sprite, data.u, data.v, data.width, data.height);
 		m_LastOffX = *m_OffsetX; m_LastOffY = *m_OffsetY;
 	}
@@ -170,7 +170,7 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 	perm.pointer[tileLocation] = MovementPermissions::SPRITE_BLOCKING;
 }
 
-void OvSpr_Sprite::setSprite(UVData data)
+void OvSpr_Sprite::setSprite(TileUV data)
 {
 	SetQuadUV((NormalTextureVertex*)&m_Sprite, data.u, data.v, data.width, data.height);
 }

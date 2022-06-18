@@ -102,6 +102,32 @@ void Overworld::loadRequiredData() {
     m_LocationX = &sprite->m_TileX;
     m_LocationZ = &sprite->m_TileZ;
 
+    //Test grass
+    std::shared_ptr<TallGrass> grass(new TallGrass());
+    grass->m_LevelID = m_CurrentLevel;
+    std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&m_Renderer.worldRenderer, m_Renderer.worldTileMap.uvTile(0, 3), &grass->m_Grass));
+    std::shared_ptr<TallGrassAnimationComponent> grassAnim(new TallGrassAnimationComponent(&grass->m_GrassLoc, &grass->m_LevelID, &grass->m_ActiveStates));
+    std::shared_ptr<SpriteAnim> spriteAnim1(new SpriteAnim(5, 2));
+    std::shared_ptr<SpriteAnim> spriteAnim2(new SpriteAnim(5, 2));
+    grassRen->reserveGrass(2);
+    grassRen->addGrass({ 0,0 }, { 2,2 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
+    grassRen->addGrass({ 0,0 }, { 2,3 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
+    grassRen->generateIndices();
+    spriteAnim1->linkSprite(&grass->m_Grass.quads[0], (bool*)&grass->m_ActiveStates[0]);
+    spriteAnim2->linkSprite(&grass->m_Grass.quads[1], (bool*)&grass->m_ActiveStates[1]);
+    TileUV uv1 = m_Renderer.worldTileMap.uvTile(0, 3);
+    TileUV uv2 = m_Renderer.worldTileMap.uvTile(0, 4);
+    spriteAnim1->setFrame(0, uv1);
+    spriteAnim1->setFrame(1, uv2);
+    spriteAnim2->setFrame(0, uv1);
+    spriteAnim2->setFrame(1, uv2);
+
+    m_ObjManager.pushGameObject(grass, "Level0_Grass");
+    m_ObjManager.pushRenderHeap(grassRen, &grass->m_RenderComps);
+    m_ObjManager.pushRenderHeap(grassAnim, &grass->m_RenderComps);
+    m_ObjManager.pushUpdateHeap(spriteAnim1, &grass->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(spriteAnim2, &grass->m_UpdateComps);
+
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(globLev, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);

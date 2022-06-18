@@ -15,6 +15,8 @@
 
 #include "game/utility/Input.hpp"
 
+#include "game/objects/TallGrass.h"
+
 
 class Overworld : public State
 {
@@ -61,6 +63,7 @@ private:
 	GameGUI::TextBoxBuffer m_TextBuff;
 
 	GameInput* m_Input;
+
 };
 
 

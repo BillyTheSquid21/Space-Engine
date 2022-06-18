@@ -81,15 +81,17 @@ void OverworldRenderer::draw()
 	//Update player pos
 	glm::vec3 lightDir = glm::normalize(m_LightDir);
 
-	//Shadow pass
+	////Shadow pass
 	shadowMap.bindForWriting();
 	shadows.bind();
 
-	//matrixes
+	//Use world renderer matrix - only works for sprite too as model matrixes are same (currently)
 	glm::mat4 world = worldRenderer.m_RendererModelMatrix;
 	glm::mat4 lightView = glm::lookAt(lightDir, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	lightView = glm::translate(lightView, -camera.getPos());
 	shadows.setUniform("WVP", shadowMap.calcMVP(world, lightView));
+	
+	//Render from lights perspective
 	shadowMap.startCapture();
 	worldTexture.bind();
 	worldRenderer.drawPrimitives(shadows);
@@ -101,12 +103,15 @@ void OverworldRenderer::draw()
 	// reset viewport
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//Lighting pass
+	////Lighting pass
 	shader.bind();
 	shadowMap.bindForReading(SHADOWS_SLOT);
 
+	//Scale lighting color
+	m_LightScaled = m_LightColor * m_LightScaleFactor;
+
 	//Set universal uniforms
-	shader.setUniform("u_AmbLight", 0.5f);
+	shader.setUniform("u_AmbLight", &m_LightScaled);
 	shader.setUniform("u_LightDir", &lightDir);
 	shader.setUniform("u_LightMVP", shadowMap.getMVP());
 	shader.setUniform("u_ShadowMap", SHADOWS_SLOT);
