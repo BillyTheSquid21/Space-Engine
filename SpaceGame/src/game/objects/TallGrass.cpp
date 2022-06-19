@@ -34,8 +34,8 @@ void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::TileLoc til
 	Norm_Tex_Quad grass = CreateNormalTextureQuad(xPos, yPos, (float)World::TILE_SIZE, (float)World::TILE_SIZE, m_UV.u, m_UV.v, m_UV.width, m_UV.height);
 
 	//Position shape
-	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&grass, { xPos, yPos, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
-	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&grass, 0.0f, World::TILE_SIZE/sqrt(2), -zPos - World::TILE_SIZE, Shape::QUAD);
+	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&grass, { xPos, yPos, 0.0f }, -90.0f, Shape::QUAD, Axis::X);
+	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&grass, 0.0f, 0.1f, -zPos - World::TILE_SIZE, Shape::QUAD);
 
 	//Gen normals
 	CalculateQuadNormals((NormalTextureVertex*)&grass);

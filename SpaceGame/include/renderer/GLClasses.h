@@ -144,6 +144,12 @@ struct ShaderProgramSource {
 	std::string FragmentSource;
 };
 
+struct GeoShaderProgramSource {
+	std::string VertexSource;
+	std::string FragmentSource;
+	std::string GeometrySource;
+};
+
 class Shader
 {
 public:
@@ -151,6 +157,7 @@ public:
 	~Shader();
 
 	void create(const std::string& filepath);
+	void createGeo(const std::string& filepath);
 
 	void bind() const;
 	void unbind() const;
@@ -166,7 +173,9 @@ private:
 	std::unordered_map<std::string, int> m_UniformLocationCache;
 	unsigned int compileShader(const std::string& source, unsigned int type);
 	unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
+	unsigned int createGeoShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader);
 	ShaderProgramSource parseShader(const std::string& filePath);
+	GeoShaderProgramSource parseGeoShader(const std::string& filePath);
 	int getUniformLocation(const std::string& name);
 };
 

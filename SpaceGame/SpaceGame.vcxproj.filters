@@ -442,7 +442,10 @@
     <None Include="res\shaders\Shadows_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\shaders\Geometry_Lighting_T_Shader.glsl">
+    <None Include="res\shaders\Grass_Drawing_Shader.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\Grass_Shadows_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

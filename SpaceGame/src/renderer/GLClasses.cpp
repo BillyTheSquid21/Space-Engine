@@ -153,12 +153,12 @@ void ShadowMapFBO::bindForReading(unsigned int slot)
 }
 
 //Shader
+static enum class ShaderType {
+	NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2
+};
+
 ShaderProgramSource Shader::parseShader(const std::string& filePath) {
 	std::ifstream stream(filePath);
-
-	enum class ShaderType {
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
-	};
 
 	ShaderType type = ShaderType::NONE;
 
@@ -182,6 +182,35 @@ ShaderProgramSource Shader::parseShader(const std::string& filePath) {
 	return { ss[0].str(), ss[1].str() };
 }
 
+//Shader
+GeoShaderProgramSource Shader::parseGeoShader(const std::string& filePath) {
+	std::ifstream stream(filePath);
+
+	ShaderType type = ShaderType::NONE;
+
+	std::string line;
+	std::stringstream ss[3]; //sets up three string streams
+	while (getline(stream, line)) {
+		if (line.find("#shader") != std::string::npos) {
+			if (line.find("vertex") != std::string::npos) {
+				type = ShaderType::VERTEX;
+			}
+			else if (line.find("fragment") != std::string::npos) {
+				type = ShaderType::FRAGMENT;
+			}
+			else if (line.find("geometry") != std::string::npos) {
+				type = ShaderType::GEOMETRY;
+			}
+		}
+		else if (type != ShaderType::NONE) {
+			ss[(int)type] << line << "\n";
+		}
+
+	}
+
+	return { ss[0].str(), ss[1].str(), ss[2].str() };
+}
+
 unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
 	//returns id of shader program
 	unsigned int program = glCreateProgram();
@@ -195,6 +224,26 @@ unsigned int Shader::createShader(const std::string& vertexShader, const std::st
 
 	glDeleteShader(vs);
 	glDeleteShader(fs);
+
+	return program;
+}
+
+unsigned int Shader::createGeoShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) {
+	//returns id of shader program
+	unsigned int program = glCreateProgram();
+	unsigned int vs = compileShader(vertexShader, GL_VERTEX_SHADER);
+	unsigned int fs = compileShader(fragmentShader, GL_FRAGMENT_SHADER);
+	unsigned int gs = compileShader(geometryShader, GL_GEOMETRY_SHADER);
+
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glAttachShader(program, gs);
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+	glDeleteShader(gs);
 
 	return program;
 }
@@ -232,6 +281,11 @@ Shader::~Shader() {
 void Shader::create(const std::string& filepath) {
 	ShaderProgramSource source = parseShader(filepath);
 	m_ID = createShader(source.VertexSource, source.FragmentSource);
+}
+
+void Shader::createGeo(const std::string& filepath) {
+	GeoShaderProgramSource source = parseGeoShader(filepath);
+	m_ID = createGeoShader(source.VertexSource, source.FragmentSource, source.GeometrySource);
 }
 
 void Shader::bind() const {

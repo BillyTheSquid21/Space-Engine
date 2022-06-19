@@ -19,11 +19,14 @@ class OverworldRenderer
 public:
 
 	//Rendering
-	Shader shader;
-	Shader shadows;
+	Shader sceneShader;
+	Shader sceneShadows;
+	Shader grassShader;
+	Shader grassShadows;
 	Camera camera;
 
 	Render::Renderer<NormalTextureVertex> worldRenderer;
+	Render::Renderer<NormalTextureVertex> grassRenderer;
 	Render::Renderer<NormalTextureVertex> spriteRenderer;
 	Render::InstanceRenderer<NormalTextureVertex> modelRenderer;
 
