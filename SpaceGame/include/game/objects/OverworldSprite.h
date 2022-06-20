@@ -105,7 +105,7 @@ public:
 	float m_YPos = 0.0f;
 	float m_ZPos = 0.0f;
 	Norm_Tex_Quad m_Sprite;
-	unsigned int m_TileX = 0; unsigned int m_TileZ = 0;
+	World::TileLoc m_Tile = { 0,0 };
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
 	bool m_Busy = false; //allows to turn off behaviour when script running
 };
@@ -157,7 +157,7 @@ namespace Ov_Translation
 	void CentreOnTileSprite(std::shared_ptr<T> sprite)
 	{
 		std::shared_ptr<OvSpr_DirectionalSprite> spr = std::static_pointer_cast<T>(sprite);
-		CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_TileX, spr->m_TileZ, &spr->m_Sprite);
+		CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_Tile.x, spr->m_Tile.z, &spr->m_Sprite);
 	}
 
 	//Slope ascending and descending - balanced for smoothness

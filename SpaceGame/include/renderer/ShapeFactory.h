@@ -36,8 +36,6 @@ namespace Primitive
 #define Quad std::array<ColorTextureVertex, 4>
 #define Tex_Quad std::array<TextureVertex, 4>
 #define Norm_Tex_Quad std::array<NormalTextureVertex, 4>
-#define Line std::array<ColorTextureVertex, 4>	//Line is just a quad set up to be more convinient
-#define Tri std::array<ColorTextureVertex, 3>
 
 template<typename T>
 struct QuadArray
@@ -98,18 +96,10 @@ const float GUI_LAYER_4 = 0.88f;
 const float GUI_LAYER_5 = 0.90f;
 const float GUI_LAYER_6 = 0.92f;
 
-//Shape Creation
+//Quad Creation
 Quad CreateQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 Tex_Quad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 Norm_Tex_Quad CreateNormalTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
-Line CreateLine(float xStart, float yStart, float xEnd, float yEnd, float stroke);
-Tri CreateTri(float x, float y, float radius);
-
-//Currently only applies to color texture vertex - will update if another derived vertex needs to access colour
-void ColorShape(void* verticesArray, float r, float g, float b, Shape type);
-void ColorShapeVertex(void* verticesArray, unsigned int vertex, float r, float g, float b, Shape type);
-void TransparencyShape(void* verticesArray, float alpha, Shape type);
-void TransparencyShapeVertex(void* verticesArray, unsigned int index, float alpha, Shape type);
 
 //Currently only applies to texture vertex - will update if another derived vertex needs to access uvs
 template<typename T>
@@ -130,7 +120,7 @@ unsigned short int GetFloatCount(Shape type) {
 }
 
 //Shape translation - all shapes are defined relative to centre
-static void TranslateShapeVertexInternal(void* vertexPointer, float deltaX, float deltaY, float deltaZ) {
+static void TranslateVertexInternal(void* vertexPointer, float deltaX, float deltaY, float deltaZ) {
 	Vertex* vertex = (Vertex*)(void*)vertexPointer;
 	vertex->position.x += deltaX;
 	vertex->position.y += deltaY;
@@ -138,7 +128,7 @@ static void TranslateShapeVertexInternal(void* vertexPointer, float deltaX, floa
 }
 
 template<typename T>
-void TranslateShape(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type)
+void Translate(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type)
 {
 	T* vertexPointer = (T*)verticesArray;
 
@@ -147,40 +137,47 @@ void TranslateShape(void* verticesArray, float deltaX, float deltaY, float delta
 
 	//Translate for each vertice
 	for (int i = 0; i < numberOfVertices; i++) {
-		TranslateShapeVertexInternal(&vertexPointer[i], deltaX, deltaY, deltaZ);
+		TranslateVertexInternal(&vertexPointer[i], deltaX, deltaY, deltaZ);
 	}
 }
 
 template<typename T>
-void TranslateShapeVertex(void* verticesArray, unsigned int index, float deltaX, float deltaY, float deltaZ)
+void Translate(void* verticesArray, float deltaX, float deltaY, float deltaZ, size_t verticeCount)
 {
 	T* vertexPointer = (T*)verticesArray;
 
 	//Translate for each vertice
-	TranslateShapeVertexInternal(&vertexPointer[index], deltaX, deltaY, deltaZ);
+	for (int i = 0; i < verticeCount; i++) {
+		TranslateVertexInternal(&vertexPointer[i], deltaX, deltaY, deltaZ);
+	}
+}
+
+template<typename T>
+void TranslateVertex(void* verticesArray, unsigned int index, float deltaX, float deltaY, float deltaZ)
+{
+	T* vertexPointer = (T*)verticesArray;
+
+	//Translate for each vertice
+	TranslateVertexInternal(&vertexPointer[index], deltaX, deltaY, deltaZ);
 }
 
 //Position shapes
 template<typename T>
-void PositionShape(void* verticesArray, Struct3f currentPosition, Struct3f newPosition, Shape type)
+void Position(void* verticesArray, Struct3f currentPosition, Struct3f newPosition, Shape type)
 {
 	//get amount to translate by
 	float deltaX = newPosition.a - currentPosition.a;
 	float deltaY = newPosition.b - currentPosition.b;
 	float deltaZ = newPosition.c - currentPosition.c;
 
-	TranslateShape<T>(verticesArray, deltaX, deltaY, deltaZ, type);
+	Translate<T>(verticesArray, deltaX, deltaY, deltaZ, type);
 }
 
 //Rotation
 template<typename T>
-void RotateShape(void* verticesArray, Struct3f rotationCentre, float angle, Shape type, Axis axis)
+static void AxialRotateInternal(void* verticesArray, glm::vec3 rotationCentre, float angle, size_t verticeCount, Axis axis)
 {
 	T* vertexPointer = (T*)verticesArray;
-
-	//Set number of vertices to translate
-	unsigned short int numberOfVertices = GetVerticesCount(type);
-
 	glm::vec3 axisVector = { 1.0f, 0.0f, 0.0f };
 	switch (axis)
 	{
@@ -196,12 +193,49 @@ void RotateShape(void* verticesArray, Struct3f rotationCentre, float angle, Shap
 	}
 
 	//Translate for each vertice
-	for (int i = 0; i < numberOfVertices; i++) {
+	for (int i = 0; i < verticeCount; i++) {
 		Vertex* vertex = (Vertex*)(void*)&vertexPointer[i];
-		glm::vec3 position = { vertex->position.x - rotationCentre.a, vertex->position.y - rotationCentre.b, vertex->position.z - rotationCentre.c };
+		glm::vec3 position = { vertex->position.x - rotationCentre.x, vertex->position.y - rotationCentre.y, vertex->position.z - rotationCentre.z };
 		position = glm::rotate(position, glm::radians(angle), axisVector);
-		vertex->position = { position.x + rotationCentre.a, position.y + rotationCentre.b, position.z + rotationCentre.c };
+		vertex->position = { position.x + rotationCentre.x, position.y + rotationCentre.y, position.z + rotationCentre.z };
 	}
+}
+
+template<typename T>
+void AxialRotate(void* verticesArray, glm::vec3 rotationCentre, float angle, Shape type, Axis axis)
+{
+	//Set number of vertices to translate
+	size_t numberOfVertices = GetVerticesCount(type);
+	AxialRotateInternal<T>(verticesArray, rotationCentre, angle, numberOfVertices, axis);
+}
+
+template<typename T>
+void AxialRotate(void* verticesArray, glm::vec3 rotationCentre, float angle, size_t verticeCount, Axis axis)
+{
+	AxialRotateInternal<T>(verticesArray, rotationCentre, angle, verticeCount, axis);
+}
+
+template<typename T>
+static void SimpleScaleInternal(void* verticesArray, glm::vec3 scale, size_t verticeCount)
+{
+	T* vertexPointer = (T*)verticesArray;
+	for (int i = 0; i < verticeCount; i++)
+	{
+		vertexPointer[i].position *= scale;
+	}
+}
+
+template<typename T>
+void SimpleScale(void* verticesArray, glm::vec3 scale, Shape type)
+{
+	size_t numberOfVertices = GetVerticesCount(type);
+	SimpleScaleInternal<T>(verticesArray, scale, numberOfVertices);
+}
+
+template<typename T>
+void SimpleScale(void* verticesArray, glm::vec3 scale, size_t verticeCount)
+{
+	SimpleScaleInternal<T>(verticesArray, scale, verticeCount);
 }
 
 #endif

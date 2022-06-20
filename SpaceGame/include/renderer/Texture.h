@@ -68,7 +68,7 @@ namespace Tex
     {
     public:
         TextureAtlasRGBA() = default;
-        ~TextureAtlasRGBA() { clearBuffers(); };
+        ~TextureAtlasRGBA() { clearBuffers(); glDeleteTextures(1, &m_ID); };
         void loadTexture(const std::string& path, const std::string& name);
         void generateAtlas();
         void generateTexture(unsigned int slot);
@@ -92,9 +92,9 @@ namespace Tex
             UVTransform trans = m_AtlasRequest.at(texName);
             for (int i = 0; i < vertCount; i++)
             {
-                vertices[i].uvCoords.a *= trans.scaleU;
-                vertices[i].uvCoords.b *= trans.scaleV;
-                vertices[i].uvCoords.b += trans.deltaV;
+                vertices[i].uvCoords.x *= trans.scaleU;
+                vertices[i].uvCoords.y *= trans.scaleV;
+                vertices[i].uvCoords.y += trans.deltaV;
             }
         }
 

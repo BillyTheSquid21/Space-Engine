@@ -168,6 +168,7 @@
     <ClCompile Include="src\game\objects\TallGrass.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\objects\Tree.cpp" />
+    <ClCompile Include="src\game\objects\WarpTile.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
@@ -175,7 +176,6 @@
     <ClCompile Include="src\game\utility\GameText.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
-    <ClCompile Include="src\renderer\Model.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
     <ClCompile Include="src\renderer\ShadowMap.cpp" />
     <ClCompile Include="src\renderer\ShapeFactory.cpp" />
@@ -216,6 +216,7 @@
     <ClInclude Include="include\game\objects\TallGrass.h" />
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\objects\Tree.h" />
+    <ClInclude Include="include\game\objects\WarpTile.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
@@ -224,7 +225,7 @@
     <ClInclude Include="include\game\utility\Input.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
-    <ClInclude Include="include\renderer\Model.h" />
+    <ClInclude Include="include\renderer\Model.hpp" />
     <ClInclude Include="include\renderer\Plane.h" />
     <ClInclude Include="include\renderer\Renderer.hpp" />
     <ClInclude Include="include\renderer\RenderQueue.hpp" />

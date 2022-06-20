@@ -25,7 +25,7 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 			float tileXPos = ((float)x * tileSize) + xPos;
 			float tileYPos = ((float)y * tileSize) + yPos;
 			Norm_Tex_Quad quad = CreateNormalTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.0f, 0.0f);
-			RotateShape<NormalTextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
+			AxialRotate<NormalTextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			unsigned int quadIndex = (x * m_YCount) + y;
 			m_Quads[quadIndex] = quad;
 		}

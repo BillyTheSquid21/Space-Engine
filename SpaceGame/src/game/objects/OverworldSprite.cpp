@@ -147,26 +147,26 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 {
 	using namespace World;
 	//Set
-	m_TileX = data.tile.x; m_TileZ = data.tile.z; m_CurrentLevel = data.levelID;
+	m_Tile = data.tile; m_CurrentLevel = data.levelID;
 	//X Y Z
 	//Get origin
 	Struct2f origin = World::Level::queryOrigin(data.levelID);
-	float x = origin.a + (m_TileX * TILE_SIZE); float y = ((float)data.height / sqrt(2)) * TILE_SIZE;
-	float z = origin.b -(m_TileZ * TILE_SIZE);
+	float x = origin.a + (m_Tile.x * TILE_SIZE); float y = ((float)data.height / sqrt(2)) * TILE_SIZE;
+	float z = origin.b -(m_Tile.z * TILE_SIZE);
 	//Set pos - x in tile middle
 	m_XPos = x + TILE_SIZE / 2; m_YPos = y; m_ZPos = z - TILE_SIZE / 2;
 	//Make Sprite
 	m_Sprite = CreateNormalTextureQuad(x, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, 0.0f, 0.0f, 0.05f, 0.1f);
 	//Position Sprite
-	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&m_Sprite, { x + TILE_SIZE / 2, y, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
-	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&m_Sprite, 0.0f, 0.0f, m_ZPos, Shape::QUAD);
+	AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&m_Sprite, { x + TILE_SIZE / 2, y, 0.0f }, -45.0f, Shape::QUAD, Axis::X);
+	Translate<NormalTextureVertex>((NormalTextureVertex*)&m_Sprite, 0.0f, 0.0f, m_ZPos, Shape::QUAD);
 	//Calc normal
 	CalculateQuadNormals((NormalTextureVertex*)&m_Sprite);
 
 	//Make current tile blocked
 	World::Level::PermVectorFragment perm = Level::queryPermissions(m_CurrentLevel, data.height);
 	World::LevelDimensions dim = Level::queryDimensions(m_CurrentLevel);
-	unsigned int tileLocation = m_TileX * dim.levelH + m_TileZ;
+	unsigned int tileLocation = m_Tile.x * dim.levelH + m_Tile.z;
 	perm.pointer[tileLocation] = MovementPermissions::SPRITE_BLOCKING;
 }
 
@@ -183,19 +183,19 @@ void Ov_Translation::Walk(World::Direction* direction, float* x, float* z, Norm_
 	{
 	case Direction::EAST:
 		*x += deltaTime * TILE_SIZE * WALK_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, deltaTime * TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, deltaTime * TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::WEST:
 		*x += deltaTime * -TILE_SIZE * WALK_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, deltaTime * -TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, deltaTime * -TILE_SIZE * WALK_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::NORTH:
 		*z += deltaTime * -TILE_SIZE * WALK_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * WALK_SPEED, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * WALK_SPEED, Shape::QUAD);
 		break;
 	case Direction::SOUTH:
 		*z += deltaTime * TILE_SIZE * WALK_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * WALK_SPEED, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * WALK_SPEED, Shape::QUAD);
 		break;
 	default:
 		break;
@@ -211,19 +211,19 @@ void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Norm_T
 	{
 	case Direction::EAST:
 		*x += deltaTime * TILE_SIZE * RUN_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, deltaTime * TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, deltaTime * TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::WEST:
 		*x += deltaTime * -TILE_SIZE * RUN_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, deltaTime * -TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, deltaTime * -TILE_SIZE * RUN_SPEED, 0.0f, 0.0f, Shape::QUAD);
 		break;
 	case Direction::NORTH:
 		*z += deltaTime * -TILE_SIZE * RUN_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * RUN_SPEED, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * -TILE_SIZE * RUN_SPEED, Shape::QUAD);
 		break;
 	case Direction::SOUTH:
 		*z += deltaTime * TILE_SIZE * RUN_SPEED;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * RUN_SPEED, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, 0.0f, deltaTime * TILE_SIZE * RUN_SPEED, Shape::QUAD);
 		break;
 	default:
 		break;
@@ -242,7 +242,7 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeigh
 	float deltaX = *x - expectedX;
 	float deltaZ = *z - expectedZ;
 	float deltaY = *y - expectedY;
-	TranslateShape<NormalTextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
+	Translate<NormalTextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
 	*x = expectedX;
 	*z = expectedZ;
 	*y = expectedY;
@@ -262,7 +262,7 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeigh
 	float deltaX = *x - expectedX;
 	float deltaZ = *z - expectedZ;
 	float deltaY = *y - expectedY;
-	TranslateShape<NormalTextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
+	Translate<NormalTextureVertex>(sprite, -deltaX, -deltaY, -deltaZ, Shape::QUAD);
 	*x = expectedX;
 	*z = expectedZ;
 	*y = expectedY;
@@ -273,12 +273,12 @@ void Ov_Translation::AscendSlope(float* y, Norm_Tex_Quad* sprite, double deltaTi
 	if (!running)
 	{
 		*y += (World::WALK_SPEED / sqrt(2))* World::TILE_SIZE * deltaTime;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, (World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 	else
 	{
 		*y += (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, (World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 }
 
@@ -317,12 +317,12 @@ void Ov_Translation::DescendSlope(float* y, Norm_Tex_Quad* sprite, double deltaT
 	if (!running)
 	{
 		*y += (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, (-World::WALK_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 	else
 	{
 		*y += (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime;
-		TranslateShape<NormalTextureVertex>(sprite, 0.0f, (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
+		Translate<NormalTextureVertex>(sprite, 0.0f, (-World::RUN_SPEED / sqrt(2)) * World::TILE_SIZE * deltaTime, 0.0f, Shape::QUAD);
 	}
 }
 

@@ -328,7 +328,7 @@ void WorldParse::WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManage
 	{
 		std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> tmp = manager->updateGroupAt<NPC_RandWalk>(manager->queryGroupID("RandWalk"));
 		NPC_RandWalk rWalk(&sprite->m_Direction, &sprite->m_WorldLevel, &sprite->m_YPos, &sprite->m_Busy, &sprite->m_Walking, &sprite->m_Sprite, &sprite->m_Timer);
-		rWalk.linkLocation(&sprite->m_TileX, &sprite->m_TileZ, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_CurrentLevel);
+		rWalk.linkLocation(&sprite->m_Tile.x, &sprite->m_Tile.z, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_CurrentLevel);
 
 		//Check active and add
 		bool active = (bool)strtoul(randWNode->value(), nullptr, 10);

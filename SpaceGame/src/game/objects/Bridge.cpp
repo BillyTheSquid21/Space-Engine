@@ -32,9 +32,9 @@ BridgeRenderComponent::BridgeRenderComponent(Struct2f pos, World::WorldHeight he
 			{
 				tile = CreateNormalTextureQuad(xPos, yPos + TILE_SIZE, TILE_SIZE, TILE_SIZE, data1.u, data1.v, data1.width - bridgeOffset * data1.width, data1.height);
 				tileSide = CreateNormalTextureQuad(xPos, yPos + TILE_SIZE, 9.0f, TILE_SIZE, data1.u + data1.width - bridgeOffset * data1.width, data1.v, bridgeOffset * data1.width, data1.height);
-				RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos, yPos, 0.0f }, -90.0f, Shape::QUAD, Axis::Z);
-				RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
-				TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, TILE_SIZE, 0.0f, zPos, Shape::QUAD);
+				AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos, yPos, 0.0f }, -90.0f, Shape::QUAD, Axis::Z);
+				AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
+				Translate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, TILE_SIZE, 0.0f, zPos, Shape::QUAD);
 				if (!horizontal)
 				{
 					alternate = false;
@@ -46,9 +46,9 @@ BridgeRenderComponent::BridgeRenderComponent(Struct2f pos, World::WorldHeight he
 			{
 				tile = CreateNormalTextureQuad(xPos, yPos + TILE_SIZE, TILE_SIZE, TILE_SIZE, data2.u + bridgeOffset * data1.width, data2.v, data2.width - bridgeOffset * data1.width, data2.height);
 				tileSide = CreateNormalTextureQuad(xPos, yPos + TILE_SIZE, 9.0f, TILE_SIZE, data2.u, data2.v, bridgeOffset * data2.width, data2.height);
-				RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Z); 
-				RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos-32.0f, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
-				TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, TILE_SIZE, -9.0f, zPos, Shape::QUAD);
+				AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Z); 
+				AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos-32.0f, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
+				Translate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, TILE_SIZE, -9.0f, zPos, Shape::QUAD);
 				if (!horizontal)
 				{
 					alternate = true;
@@ -56,14 +56,14 @@ BridgeRenderComponent::BridgeRenderComponent(Struct2f pos, World::WorldHeight he
 			}
 			
 			//Position Sprite
-			RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tile, { x + TILE_SIZE / 2, yPos, 0.0f }, -90.0f, Shape::QUAD, Axis::X);
-			TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tile, 0.0f, 0.0f, zPos, Shape::QUAD); 
+			AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tile, { x + TILE_SIZE / 2, yPos, 0.0f }, -90.0f, Shape::QUAD, Axis::X);
+			Translate<NormalTextureVertex>((NormalTextureVertex*)&tile, 0.0f, 0.0f, zPos, Shape::QUAD); 
 			
 			//If horizontal, rotate about centre
 			if (horizontal)
 			{
-				RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tile, { xPos + TILE_SIZE/2 , yPos, zPos-TILE_SIZE/2 }, -90.0f, Shape::QUAD, Axis::Y);
-				RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos + TILE_SIZE / 2 , yPos, zPos - TILE_SIZE / 2 }, -90.0f, Shape::QUAD, Axis::Y);
+				AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tile, { xPos + TILE_SIZE/2 , yPos, zPos-TILE_SIZE/2 }, -90.0f, Shape::QUAD, Axis::Y);
+				AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tileSide, { xPos + TILE_SIZE / 2 , yPos, zPos - TILE_SIZE / 2 }, -90.0f, Shape::QUAD, Axis::Y);
 			}
 
 			//Gen normals

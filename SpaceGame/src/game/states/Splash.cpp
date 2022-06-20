@@ -25,11 +25,11 @@ void Splash::init(int width, int height) {
     //Splash
     m_Splash = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.0f, 0.0f, 0.5f, 1.0f);
     m_Splash2 = CreateQuad(-0.55f, 0.6f, 1.1f, 1.0f, 0.5f, 0.0f, 0.5f, 1.0f);
-    RotateShape<ColorTextureVertex>(&m_Splash2, { 0.0f, 0.0f, 0.0f }, 90, Shape::QUAD, Axis::Y);
-    TranslateShape<ColorTextureVertex>(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
+    AxialRotate<ColorTextureVertex>(&m_Splash2, { 0.0f, 0.0f, 0.0f }, 90, Shape::QUAD, Axis::Y);
+    Translate<ColorTextureVertex>(&m_Splash2, 0.55f, 0.0f, -0.55f, Shape::QUAD);
 
-    TranslateShape<ColorTextureVertex>(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
-    TranslateShape<ColorTextureVertex>(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    Translate<ColorTextureVertex>(&m_Splash, 0.0f, 0.0f, 0.55f, Shape::QUAD);
+    Translate<ColorTextureVertex>(&m_Splash2, 0.0f, 0.0f, 0.55f, Shape::QUAD);
 
     EngineLog("Splash Screen loaded");
 }
@@ -55,7 +55,6 @@ void Splash::update(double deltaTime, double time) {
     float alpha = 1.0f;
     if (m_CurrentTime < m_FadeIn) {
         alpha = (float)m_CurrentTime / (float)m_FadeIn;
-        TransparencyShape((ColorTextureVertex*)&m_Splash, alpha, Shape::QUAD);
     }
 
     //Rotate to second half of splash
@@ -63,9 +62,6 @@ void Splash::update(double deltaTime, double time) {
         //Rotate and update angle
         m_Renderer.m_RendererModelMatrix = glm::rotate(m_Renderer.m_RendererModelMatrix, glm::radians(-40.0f * (float)deltaTime), glm::vec3(0.0f, 1.0f, 0.0f));
         angle += -40.0f * (float)deltaTime;
-
-        //Fade first half out as it rotates
-        TransparencyShape((ColorTextureVertex*)&m_Splash, (float)(1.0 + ((5.0 - time) / 2.0)), Shape::QUAD);
     }
 
 }

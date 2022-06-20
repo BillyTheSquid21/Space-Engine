@@ -2,9 +2,11 @@
 #ifndef LOADING_ZONE_H
 #define LOADING_ZONE_H
 
+#include <functional>
+
 #include "core/GameObject.hpp"
 #include "game/objects/OverworldSprite.h"
-#include <functional>
+
 #include "mtlib/ThreadPool.h"
 
 //Class to pin all loading zones of a region to - eg all overworld, all inside building
@@ -26,7 +28,7 @@ private:
 
 	//Loading zone data
 	Struct2f m_Origin = {0.0f, 0.0f}; //Lower left
-	Struct2f m_Bounds = {0.0f, 0.0f}; //Width and height going out
+	Struct2f m_Bounds = {0.0f, 0.0f}; //Width and height going out (stretch infinitely in y)
 	World::LevelID m_L1_ID;
 	World::LevelID m_L2_ID;
 	bool m_PlayerInside = false;

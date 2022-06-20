@@ -56,6 +56,14 @@ void OverworldRenderer::loadRendererData()
 	spriteTexture.generateTexture(TEXTURE_SLOT);
 	spriteTexture.bind();
 	spriteTexture.clearBuffer();
+
+	//Model debug texture
+	debugTexture.loadTexture("res/textures/Debug.png");
+	debugTexture.generateTexture(TEXTURE_SLOT);
+	debugTexture.bind();
+	debugTexture.clearBuffer();
+	model.setRen(&modelRenderer);
+	Translate<NormalTextureVertex>(model.getVertices(), 278, 0, -64, model.getVertCount());
 }
 
 void OverworldRenderer::generateAtlas()
@@ -80,6 +88,8 @@ void OverworldRenderer::bufferRenderData()
 
 void OverworldRenderer::draw()
 {
+	model.render();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Send cam uniforms
@@ -109,6 +119,8 @@ void OverworldRenderer::draw()
 	worldRenderer.drawPrimitives(sceneShadows);
 	spriteTexture.bind();
 	spriteRenderer.drawPrimitives(sceneShadows);
+	debugTexture.bind();
+	modelRenderer.drawPrimitives(sceneShadows);
 	sceneShadows.unbind();
 
 	//Grass scene
@@ -147,6 +159,7 @@ void OverworldRenderer::draw()
 
 	//Models - Make have per model inv transp later when models are used more
 	modelAtlas.bind();
+	debugTexture.bind();
 	modelRenderer.drawPrimitives(sceneShader);
 
 	//World
@@ -157,7 +170,7 @@ void OverworldRenderer::draw()
 	worldRenderer.drawPrimitives(sceneShader);
 	sceneShader.unbind();
 
-	//Set universal uniforms
+	//Grass
 	grassShader.bind();
 	shadowMap.bindForReading(SHADOWS_SLOT);
 

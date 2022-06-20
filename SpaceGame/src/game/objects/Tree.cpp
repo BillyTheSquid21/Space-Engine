@@ -22,13 +22,13 @@ void TreeRenderComponent::addTree(Struct2f levelOrigin, World::TileLoc tile, Wor
 	Norm_Tex_Quad tree4 = CreateNormalTextureQuad(xPos2, yPos + TREE_HEIGHT, (float)World::TILE_SIZE, TREE_HEIGHT + 10.0f, uv2.u, uv2.v, uv2.width, uv2.height);
 
 	//Position Sprite
-	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tree1, 1.0f, 0.0f, -zPos, Shape::QUAD);
-	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tree2, 1.0f, 0.0f, -zPos, Shape::QUAD);
+	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree1, 1.0f, 0.0f, -zPos, Shape::QUAD);
+	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree2, 1.0f, 0.0f, -zPos, Shape::QUAD);
 	
-	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tree3, { xPos1 + World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
-	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tree3, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
-	RotateShape<NormalTextureVertex>((NormalTextureVertex*)&tree4, { xPos2 - World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
-	TranslateShape<NormalTextureVertex>((NormalTextureVertex*)&tree4, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
+	AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tree3, { xPos1 + World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
+	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree3, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
+	AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tree4, { xPos2 - World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
+	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree4, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
 
 	//Gen normals
 	CalculateQuadNormals((NormalTextureVertex*)&tree1);

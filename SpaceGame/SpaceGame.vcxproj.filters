@@ -168,9 +168,6 @@
     <ClCompile Include="src\game\utility\GameText.cpp">
       <Filter>Source Files\Game\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\Model.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\utility\SGUtil.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
@@ -205,6 +202,9 @@
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\game\objects\TallGrass.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\objects\WarpTile.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -380,7 +380,7 @@
     <ClInclude Include="include\game\data\PlayerData.hpp">
       <Filter>Header Files\Game\Data</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\Model.h">
+    <ClInclude Include="include\renderer\Model.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\utility\SimpleQueue.hpp">
@@ -426,6 +426,9 @@
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="include\game\objects\TallGrass.h">
+      <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\objects\WarpTile.h">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
   </ItemGroup>

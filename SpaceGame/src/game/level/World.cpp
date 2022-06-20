@@ -5,11 +5,11 @@ static void RotateTileCorner(Norm_Tex_Quad* quad, float angle) {
     NormalTextureVertex v0 = quad->at(0);
     float x = v0.position.x + (World::TILE_SIZE / 2);
     float z = v0.position.z + (World::TILE_SIZE / 2);
-    RotateShape<NormalTextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
+    AxialRotate<NormalTextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
 }
 
 void World::tileLevel(Norm_Tex_Quad* quad, WorldHeight level) {
-    TranslateShape<NormalTextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
+    Translate<NormalTextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
 World::Direction World::GetDirection(std::string dir) 
@@ -258,7 +258,7 @@ void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
     }
 
     for (int i = 0; i < verticesToSlope; i++) {
-        TranslateShapeVertex<NormalTextureVertex>((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
+        TranslateVertex<NormalTextureVertex>((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
     }
 }
 

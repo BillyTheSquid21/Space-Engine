@@ -132,7 +132,7 @@ public:
 			if (!m_NPC->m_Walking)
 			{
 				m_NPC->m_Walking = true;
-				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_NPC->m_WorldLevel);
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel);
 			}
 			else if (m_NPC->m_Timer >= World::WALK_DURATION)
 			{
@@ -148,7 +148,7 @@ public:
 			if (!m_NPC->m_Running)
 			{
 				m_NPC->m_Running = true;
-				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_NPC->m_WorldLevel);
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel);
 			}
 			else if (m_NPC->m_Timer >= World::RUN_DURATION)
 			{
@@ -171,7 +171,7 @@ public:
 		case ScriptInstruction::WAIT_INTERACT:
 			if (m_Input->HELD_E && !m_NPC->m_Busy)
 			{
-				if (World::CheckPlayerInteracting({ m_Player->m_TileX, m_Player->m_TileZ }, { m_NPC->m_TileX, m_NPC->m_TileZ }, m_Player->m_Direction))
+				if (World::CheckPlayerInteracting(m_Player->m_Tile, m_NPC->m_Tile, m_Player->m_Direction))
 				{
 					m_Index++;
 				}
