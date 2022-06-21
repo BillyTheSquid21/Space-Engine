@@ -58,7 +58,7 @@ void OverworldRenderer::loadRendererData()
 	spriteTexture.clearBuffer();
 
 	//Model debug texture
-	debugTexture.loadTexture("res/textures/Debug.png");
+	debugTexture.loadTexture("res/textures/gs_pc_a.png");
 	debugTexture.generateTexture(TEXTURE_SLOT);
 	debugTexture.bind();
 	debugTexture.clearBuffer();

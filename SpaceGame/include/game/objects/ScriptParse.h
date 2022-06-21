@@ -2,6 +2,7 @@
 #define GAME_SCRIPT_PARSE
 
 #include "game/objects/script.hpp"
+#include "game/level/World.h"
 
 ///Script parsing
 ///

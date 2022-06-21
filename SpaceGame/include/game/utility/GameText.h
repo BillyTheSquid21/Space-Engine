@@ -5,6 +5,10 @@
 #include <string>
 #include "game/objects/Script.hpp"
 #include "rapidjson/rapidjson.h"
+#include "rapidjson/istreamwrapper.h"
+#include "rapidjson/document.h"
+#include <fstream>
+#include <sstream>
 
 //Function that deals with getting the string for text boxes
 namespace GameText 

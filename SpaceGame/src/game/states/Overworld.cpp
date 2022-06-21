@@ -181,7 +181,7 @@ void Overworld::loadRequiredData() {
 
     //Test warp tile
     std::shared_ptr<WarpTile> warp(new WarpTile());
-    std::shared_ptr<WarpTileUpdateComponent> warpUpdate(new WarpTileUpdateComponent(sprite.get(), { 10,2 }, World::WorldHeight::F0, {0,4}, World::WorldHeight::F1, World::LevelID::LEVEL_TEST));
+    std::shared_ptr<WarpTileUpdateComponent> warpUpdate(new WarpTileUpdateComponent(sprite.get(), { 10,2 }, World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0,4}, World::WorldHeight::F1, World::LevelID::LEVEL_TEST));
     std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1);
     std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1);
     warpUpdate->setLoadingFuncs(ld, uld);

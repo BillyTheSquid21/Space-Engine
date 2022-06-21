@@ -6,7 +6,6 @@
 #include <string>
 #include <memory>
 #include <functional>
-#include "game/objects/OverworldSprite.h"
 
 //Instructions
 enum class ScriptInstruction

@@ -1,26 +1,16 @@
 #include "game/objects/WarpTile.h"
 
-WarpTileUpdateComponent::WarpTileUpdateComponent(OvSpr_RunningSprite* player, World::TileLoc loc, World::WorldHeight height, World::TileLoc dest, World::WorldHeight destHeight, World::LevelID levelDest)
+WarpTileUpdateComponent::WarpTileUpdateComponent(OvSpr_RunningSprite* player, World::TileLoc loc, World::WorldHeight height, World::LevelID currentLevel, World::TileLoc dest, World::WorldHeight destHeight, World::LevelID levelDest)
 {
 	m_PlayerPointer = player; m_CurrentHeight = height; m_TileLocation = loc; m_TileDestination = dest;
-	m_LevelDestination = levelDest; m_DestHeight = destHeight;
+	m_LevelDestination = levelDest; m_DestHeight = destHeight; m_LevelCurrent = currentLevel;
 }
 
 void WarpTileUpdateComponent::update(double deltaTime)
 {
-	if (m_PlayerPointer->m_CurrentLevel != m_LevelCurrent)
-	{
-		return;
-	}
+	ActionTileComponent::update(deltaTime);
 
-	if (m_TileLocation.x == m_PlayerPointer->m_Tile.x && m_TileLocation.z == m_PlayerPointer->m_Tile.z
-		&& m_CurrentHeight == m_PlayerPointer->m_WorldLevel && !m_Warping)
-	{
-		m_Warping = true;
-		return;
-	}
-
-	if (m_Warping && !(m_PlayerPointer->m_Walking || m_PlayerPointer->m_Running))
+	if (m_Occupied && !(m_PlayerPointer->m_Walking || m_PlayerPointer->m_Running))
 	{
 		//Load destination level
 		m_LoadLv(m_LevelDestination);
@@ -39,6 +29,6 @@ void WarpTileUpdateComponent::update(double deltaTime)
 		m_PlayerPointer->m_WorldLevel = m_DestHeight;
 
 		//Reset
-		m_Warping = false;
+		m_Occupied = false;
 	}
 }
