@@ -41,7 +41,7 @@ void Texture::clearBuffer() const {
 
 Texture::~Texture()
 {
-    glDeleteTextures(1, &m_ID);
+    deleteTexture();
 }
 
 void Texture::bind() const
@@ -76,6 +76,7 @@ void Tex::TextureAtlasRGBA::clearBuffers()
 {
     clearTextureBuffers();
     clearAtlasBuffers();
+    m_AtlasRequest.clear();
 }
 
 void Tex::TextureAtlasRGBA::clearAtlasBuffers()
@@ -94,9 +95,9 @@ void Tex::TextureAtlasRGBA::clearTextureBuffers()
         if (m_LocalBuffers[i].buffer) {
             stbi_image_free(m_LocalBuffers[i].buffer);
             m_LocalBuffers[i].buffer = nullptr;
-            return;
         }
     }
+    m_LocalBuffers.clear();
 }
 
 void Tex::TextureAtlasRGBA::generateAtlas()
@@ -139,11 +140,6 @@ void Tex::TextureAtlasRGBA::generateAtlas()
         trans.scaleU = (float)   buffer.width  / (float)largestWidth;
         trans.scaleV = (float)   buffer.height / (float)height;
         
-        //Check if name already submitted
-        if (m_AtlasRequest.find(buffer.name) != m_AtlasRequest.end())
-        {
-            EngineLog("Duplicate atlas texture name - the most recent will take precedent!");
-        }
         m_AtlasRequest[buffer.name] = trans;   
     }
     clearTextureBuffers();
@@ -168,4 +164,8 @@ void Tex::TextureAtlasRGBA::generateTexture(unsigned int slot)
     //Assign to slot
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_AtlasBuffer);
     m_Slot = slot;
+
+    //Changes cycle number - if cycle is different to models they will remap
+    m_AtlasGenCycle++;
+    m_RequestNewTextures = false;
 }

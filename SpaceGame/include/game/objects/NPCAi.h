@@ -4,6 +4,8 @@
 
 #include <vector>
 #include "game/objects/OverworldScript.hpp"
+#include "game/objects/ScriptParse.h"
+#include "game/GUI/GUI.h"
 
 class NPC_OverworldScript : public OverworldScript
 {
@@ -81,6 +83,11 @@ public:
 private:
 	std::shared_ptr<OvSpr_RunningSprite> m_NPC;
 };
+
+//Creates either a heap or stack allocated npc script
+std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player, GameInput* input);
+NPC_OverworldScript CreateNPCOvScript(std::string filePath, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player, GameInput* input);
+
 
 class NPC_RandWalk : public TilePosition
 {

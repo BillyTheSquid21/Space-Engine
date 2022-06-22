@@ -135,14 +135,12 @@ namespace Model
     class Model
     {
     public:
-        Model(const char* path) { m_DataLoadedFtr = std::async(std::launch::async, LoadTextureVertexOBJ<VertexType>, path, std::ref(m_Vertices), std::ref(m_Indices)); }
+        Model() = default;
+
+        void load(const char* path) { LoadTextureVertexOBJ<NormalTextureVertex>(path, m_Vertices, m_Indices); m_DataLoaded = true; }
         void setRen(Render::Renderer<VertexType>* ren) { m_Ren = ren; }
         void render()
         {
-            if (m_DataLoadedFtr._Is_ready())
-            {
-                m_DataLoaded = m_DataLoadedFtr.get();
-            }
             if (!m_DataLoaded)
             {
                 return;
@@ -152,10 +150,10 @@ namespace Model
 
         VertexType* getVertices() const { return (VertexType*)&m_Vertices[0]; }
         unsigned int getVertCount() const { return m_Vertices.size(); }
+        bool isLoaded() const { return m_DataLoaded; }
 
     private:
         Render::Renderer<VertexType>* m_Ren = nullptr;
-        std::future<bool> m_DataLoadedFtr;
         bool m_DataLoaded;
 
         //Data

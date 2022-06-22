@@ -134,3 +134,20 @@ void ObjectManager::cleanObjects()
 	EngineLog("Objects cleaned: ", cleanedTotal);
 	EngineLog("Time to clean objects: ", EngineTimer::EndTimer(ts));
 }
+
+void ObjectManager::reset()
+{
+	//Clear absolutely everything
+	std::lock_guard<std::shared_mutex> groupLock(m_GroupMutex);
+	std::lock_guard<std::shared_mutex> heapLock(m_HeapMutex);
+	std::lock_guard<std::shared_mutex> objLock(m_ObjMutex);
+
+	//Clear
+	m_UpdateGroup.clear();
+	m_RenderGroup.clear();
+	m_UpdateHeap.clear();
+	m_RenderHeap.clear();
+	m_Objects.clear();
+	m_GroupIDMap.clear();
+	m_ObjIDMap.clear();
+}

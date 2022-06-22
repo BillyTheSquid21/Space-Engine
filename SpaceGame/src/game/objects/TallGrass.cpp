@@ -21,7 +21,7 @@ void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::TileLoc til
 {
 	if (m_Grass->quadCount >= m_Grass->quads.size())
 	{
-		EngineLog("Try reserving more space, tree count out of range!");
+		EngineLog("Try reserving more space, grass count out of range!");
 		return;
 	}
 

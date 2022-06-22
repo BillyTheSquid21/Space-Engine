@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Level>
+	<TallGrass name="Level0_Grass">
+		<Count>7</Count>
+		<TXFrame1>0</TXFrame1>
+		<TYFrame1>3</TYFrame1>
+		<TXFrame2>0</TXFrame2>
+		<TYFrame2>4</TYFrame2>
+		<TXFrame3>0</TXFrame3>
+		<TYFrame3>5</TYFrame3>
+		<Grass>
+			<TileX>2</TileX>
+			<TileZ>2</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+		<Grass>
+			<TileX>2</TileX>
+			<TileZ>3</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+		<Grass>
+			<TileX>3</TileX>
+			<TileZ>2</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+		<Grass>
+			<TileX>3</TileX>
+			<TileZ>3</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+		<Grass>
+			<TileX>4</TileX>
+			<TileZ>3</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+		<Grass>
+			<TileX>5</TileX>
+			<TileZ>5</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+		<Grass>
+			<TileX>1</TileX>
+			<TileZ>3</TileZ>
+			<WLevel>0</WLevel>
+		</Grass>
+	</TallGrass>
 	<Trees name="Level0_Trees">
 		<Count>10</Count>
 		<Tree>
@@ -123,7 +167,6 @@
 				<TY>0</TY>
 				<Dir>1</Dir>
 				<RandWalk>1</RandWalk>
-				<NPCScript>test.sgs</NPCScript>
 			</WalkSprite>
 		</Object>
 		<Object name="Level0_npc7">
@@ -168,28 +211,6 @@
 				<RandWalk>1</RandWalk>
 			</WalkSprite>
 		</Object>
-		<Object name="Level0_npc4">
-			<WalkSprite>
-				<TileX>1</TileX>
-				<TileZ>9</TileZ>
-				<WLevel>0</WLevel>
-				<TX>0</TX>
-				<TY>4</TY>
-				<Dir>7</Dir>
-				<RandWalk>1</RandWalk>
-			</WalkSprite>
-		</Object>
-    		<Object name="Level1_d">
-     			<DirSprite>
-        			<TileX>0</TileX>
-        			<TileZ>0</TileZ>
-       		 	<WLevel>0</WLevel>
-        			<TX>0</TX>
-        			<TY>0</TY>
-        			<Dir>1</Dir>
-        			<RandWalk>0</RandWalk>
-      			</DirSprite>
-    		</Object>
 		<Object name="Level0_Bridge">
 			<Bridge>
 				<TileX>4</TileX>

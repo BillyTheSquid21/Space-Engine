@@ -1,28 +1,68 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Level>
-  <Objects>
-    <Object name="Level1_gsd">
-      <DirSprite>
-        <TileX>16</TileX>
-        <TileZ>5</TileZ>
-        <WLevel>0</WLevel>
-        <TX>0</TX>
-        <TY>0</TY>
-        <Dir>1</Dir>
-        <RandWalk>0</RandWalk>
-      </DirSprite>
-    </Object>
-    <Object name="Level1_adadad">
-      <WalkSprite>
-        <TileX>14</TileX>
-        <TileZ>6</TileZ>
-        <WLevel>0</WLevel>
-        <TX>6</TX>
-        <TY>0</TY>
-        <Dir>7</Dir>
-        <RandWalk>1</RandWalk>
-        <NPCScript>test.sgs</NPCScript>
-      </WalkSprite>
-    </Object>
-  </Objects>
+	<Objects>
+		<Object name="Level1_gsd">
+			<DirSprite>
+				<TileX>16</TileX>
+				<TileZ>5</TileZ>
+				<WLevel>0</WLevel>
+				<TX>0</TX>
+				<TY>0</TY>
+				<Dir>1</Dir>
+				<RandWalk>0</RandWalk>
+			</DirSprite>
+		</Object>
+		<Object name="Level1_Model">
+			<Model>
+				<OffsetX>450</OffsetX>
+				<OffsetY>5.0</OffsetY>
+				<OffsetZ>100</OffsetZ>
+				<Scale>0.8</Scale>
+				<Model>untitled.obj</Model>
+				<Texture>gs_pc_a.png</Texture>
+			</Model>
+		</Object>
+		<Object name="Level1_Model2">
+			<Model>
+				<OffsetX>550</OffsetX>
+				<OffsetY>5.0</OffsetY>
+				<OffsetZ>100</OffsetZ>
+				<Scale>0.8</Scale>
+				<Model>untitled.obj</Model>
+				<Texture>debug.png</Texture>
+			</Model>
+		</Object>
+		<Object name="Level1_Model3">
+			<Model>
+				<OffsetX>650</OffsetX>
+				<OffsetY>5.0</OffsetY>
+				<OffsetZ>100</OffsetZ>
+				<Scale>0.8</Scale>
+				<Model>untitled.obj</Model>
+				<Texture>gs_pc_a.png</Texture>
+			</Model>
+		</Object>
+		<Object name="Level1_Model4">
+			<Model>
+				<OffsetX>650</OffsetX>
+				<OffsetY>5.0</OffsetY>
+				<OffsetZ>100</OffsetZ>
+				<Scale>0.8</Scale>
+				<Model>untitled.obj</Model>
+				<Texture>gs_pc_a.png</Texture>
+			</Model>
+		</Object>
+		<Object name="Level1_adadad">
+			<WalkSprite>
+				<TileX>14</TileX>
+				<TileZ>6</TileZ>
+				<WLevel>0</WLevel>
+				<TX>6</TX>
+				<TY>0</TY>
+				<Dir>7</Dir>
+				<RandWalk>1</RandWalk>
+				<NPCScript>test.sgs</NPCScript>
+			</WalkSprite>
+		</Object>
+	</Objects>
 </Level>

@@ -115,6 +115,8 @@ public:
 
 	std::vector<GameObjectContainer>& getObjects() { return m_Objects; }
 	unsigned int getObjectCount() { return m_Objects.size(); }
+
+	void reset();
  
 private:
 	//Keep separate to allow to be called at different times

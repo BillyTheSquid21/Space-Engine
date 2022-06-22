@@ -4,12 +4,13 @@
 
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.h"
-#include "renderer/Model.hpp"
+#include "game/objects/ModelObject.hpp"
 #include "renderer/ShadowMap.h"
 
 #include "game/level/World.h"
 
 #include "game/objects/TileMap.h"
+#include "mtlib/ThreadPool.h"
 
 //Keeps renderer classes for each state close to easily pass around functions
 
@@ -47,6 +48,7 @@ public:
 	void purgeData();
 	void bufferRenderData();
 	void draw(); //Draw scene renderer
+	void ensureModelMapping(unsigned int objectCount);
 
 	//Slot identifiers
 	static constexpr int TEXTURE_SLOT = 0;
@@ -62,8 +64,7 @@ public:
 	ShadowMap shadowMap = ShadowMap(2048,2048);
 	int lightScene = 1;
 
-	//model test
-	Model::Model<NormalTextureVertex> model = Model::Model<NormalTextureVertex>("res/model/untitled.obj");
+	unsigned int lastObjectCount = 0;
 };
 
 #endif

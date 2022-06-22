@@ -13,6 +13,7 @@
 class OverworldScript : public UpdateComponent
 {
 public:
+	OverworldScript() = default;
 	OverworldScript(Script script, uint16_t size, OvSpr_RunningSprite* player, FlagArray* flags, GameInput* input) { m_Script = script; m_Size = size; m_Player = player; m_FlagArray = flags; m_Input = input; }
 	void linkText(std::string* t1, std::string* t2, bool* showBox) { m_TextLine1 = t1; m_TextLine2 = t2; m_ShowTextBox = showBox; }
 	void update(double deltaTime)
@@ -94,7 +95,7 @@ public:
 		}
 		return false;
 	}
-protected:
+public:
 	Script m_Script;
 	FlagArray* m_FlagArray;
 	uint16_t m_Index = 0;

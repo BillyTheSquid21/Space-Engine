@@ -10,7 +10,7 @@
 
 #include "mtlib/ThreadPool.h"
 
-#define THREAD_POOL_SIZE 3
+#define THREAD_POOL_SIZE 5
 
 class DemoGame : public Game
 {

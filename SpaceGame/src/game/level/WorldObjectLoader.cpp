@@ -2,7 +2,7 @@
 
 static enum class ObjectType
 {
-	Trees, DirectionalSprite, WalkingSprite, Bridge, LoadingZone, NULL_TYPE
+	Trees, Grass, DirectionalSprite, WalkingSprite, Bridge, LoadingZone, WarpTile, ScriptTile, Model, NULL_TYPE
 };
 
 static ObjectType GetType(std::string string)
@@ -19,13 +19,29 @@ static ObjectType GetType(std::string string)
 	{
 		return ObjectType::Trees;
 	}
+	else if (string == "Grass")
+	{
+		return ObjectType::Grass;
+	}
 	else if (string == "Bridge")
 	{
 		return ObjectType::Bridge;
 	}
+	else if (string == "Model")
+	{
+		return ObjectType::Model;
+	}
 	else if (string == "LoadingZones")
 	{
 		return ObjectType::LoadingZone;
+	}
+	else if (string == "WarpTile")
+	{
+		return ObjectType::WarpTile;
+	}
+	else if (string == "ScriptTile")
+	{
+		return ObjectType::ScriptTile;
 	}
 	else
 	{
@@ -64,7 +80,7 @@ WorldParse::XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id, bool gl
 	return { tmp, doc };
 }
 
-bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input)
+bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
 	//Setup
 	using namespace rapidxml;
@@ -74,7 +90,7 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 	xml_node<>* objRoot = doc.doc->first_node()->first_node("Objects");
 	if (!objRoot)
 	{
-		EngineLog("Error loading objects: ", (int)levelID);
+		EngineTimer::EndTimer(ts);
 		return false;
 	}
 
@@ -97,6 +113,15 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 		case ObjectType::Bridge:
 			WorldParse::LoadBridge(name, identifyingNode, manager, ren, levelID);
 			break;
+		case ObjectType::Model:
+			WorldParse::LoadModel(name, identifyingNode, manager, ren, levelID);
+			break;
+		case ObjectType::WarpTile:
+			WorldParse::LoadWarpTile(name, identifyingNode, manager, levelID, ld, uld);
+			break;
+		case ObjectType::ScriptTile:
+			WorldParse::LoadScriptTile(name, identifyingNode, manager, levelID, flags, textBuff, input);
+			break;
 		default:
 			break;
 		}
@@ -116,7 +141,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 	xml_node<>* treesRoot = doc.doc->first_node()->first_node("Trees");
 	if (!treesRoot)
 	{
-		EngineLog("Error loading trees: ", (int)levelID);
+		EngineTimer::EndTimer(ts);
 		return false;
 	}
 
@@ -128,8 +153,6 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 	int treeCount = 0;
 	for (xml_node<>* treesNode = treesRoot->first_node("Tree"); treesNode; treesNode = treesNode->next_sibling("Tree"))
 	{
-		xml_attribute<>* pAttr = treesRoot->first_attribute("name");
-		std::string name = pAttr->value();
 		ObjectType identifier = GetType(treesNode->name());
 		if (identifier != ObjectType::Trees)
 		{
@@ -170,6 +193,88 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 	EngineLog("Time taken to load trees: ", EngineTimer::EndTimer(ts));
 	return true;
 }
+
+bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
+{
+	//Setup
+	using namespace rapidxml;
+	std::shared_lock<std::shared_mutex> fileLock(mutex);
+	auto ts = EngineTimer::StartTimer();
+
+	xml_node<>* tallGrassRoot = doc.doc->first_node()->first_node("TallGrass");
+	if (!tallGrassRoot)
+	{
+		EngineTimer::EndTimer(ts);
+		return false;
+	}
+	//Get texture UVs
+	TileUV uv1 = ren->worldTileMap.uvTile(strtoul(tallGrassRoot->first_node("TXFrame1")->value(), nullptr, 10),
+		strtoul(tallGrassRoot->first_node("TYFrame1")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE );
+	TileUV uv2 = ren->worldTileMap.uvTile(strtoul(tallGrassRoot->first_node("TXFrame2")->value(), nullptr, 10),
+		strtoul(tallGrassRoot->first_node("TYFrame2")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
+	TileUV uv3 = ren->worldTileMap.uvTile(strtoul(tallGrassRoot->first_node("TXFrame3")->value(), nullptr, 10),
+		strtoul(tallGrassRoot->first_node("TYFrame3")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
+	std::shared_ptr<TallGrassObject> grass(new TallGrassObject());
+	grass->m_LevelID = levelID;
+	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->grassRenderer, uv1, &grass->m_Grass));
+	std::shared_ptr<TallGrassAnimationComponent> grassAnim(new TallGrassAnimationComponent(&grass->m_GrassLoc, &grass->m_LevelID, &grass->m_ActiveStates));
+	grassRen->reserveGrass(strtoul(tallGrassRoot->first_node("Count")->value(), nullptr, 10));
+
+	//Add grass
+	Struct2f origin = World::Level::queryOrigin(levelID);
+	int grassCount = 0;
+
+	for (xml_node<>* grassNode = tallGrassRoot->first_node("Grass"); grassNode; grassNode = grassNode->next_sibling("Grass"))
+	{
+		ObjectType identifier = GetType(grassNode->name());
+		if (identifier != ObjectType::Grass)
+		{
+			continue;
+		}
+		//Add tree from properties
+		World::TileLoc tile = { strtoul(grassNode->first_node("TileX")->value(), nullptr, 10), strtoul(grassNode->first_node("TileZ")->value(), nullptr, 10) };
+		World::WorldHeight wLevel = (World::WorldHeight)strtol(grassNode->first_node("WLevel")->value(), nullptr, 10);
+		grassRen->addGrass(origin, tile, wLevel, levelID, &grass->m_GrassLoc, &grass->m_ActiveStates);
+		grassCount++;
+	}
+
+	//Add grass comp
+	grassRen->generateIndices();
+	{
+		std::lock_guard<std::shared_mutex> heapLock(manager->getHeapMutex());
+		manager->pushRenderHeap(grassRen, &grass->m_RenderComps);
+		manager->pushRenderHeap(grassAnim, &grass->m_RenderComps);
+	}
+
+	//Create animations
+	for (int i = 0; i < grass->m_Grass.quadCount; i++)
+	{
+		//Add animation component
+		SpriteAnim anim(8, 3);
+		anim.setFrame(0, uv1);
+		anim.setFrame(1, uv2);
+		anim.setFrame(2, uv3);
+		anim.linkSprite(&grass->m_Grass.quads[i], (bool*)&grass->m_ActiveStates[i]);
+
+		//Add sprite animator
+		std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
+		std::shared_ptr<UpdateComponentGroup<SpriteAnim>> sprGrp = manager->updateGroupAt<SpriteAnim>(manager->queryGroupID("SpriteAnim"));
+		sprGrp->addExistingComponent(&grass->m_UpdateComps, anim);
+	}
+
+	//Get tree name
+	std::string name;
+	if (tallGrassRoot->first_attribute("name"))
+	{
+		name = tallGrassRoot->first_attribute("name")->value();
+	}
+
+	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
+	manager->pushGameObject(grass, name);
+	EngineLog("Time taken to load grass: ", EngineTimer::EndTimer(ts));
+	return true;
+}
+
 
 bool WorldParse::ParseGlobalObjects(ObjectManager* manager, XML_Doc_Wrapper doc, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
@@ -295,12 +400,9 @@ void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectMana
 	if (node->first_node("NPCScript"))
 	{
 		std::string filePath = node->first_node("NPCScript")->value();
-		ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
 		std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 		std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite>(manager->getObjects()[0].obj);
-		std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player.get(), flags, input));
-		npcScript->linkText(&textBuff->t1, &textBuff->t2, &textBuff->showTextBox);
-		npcScript->linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(sprite)); //if sprite type doesnt support command, undefined behaviour - TODO fix
+		std::shared_ptr<NPC_OverworldScript> npcScript = AllocateNPCOvScript(filePath, flags, textBuff, sprite, player, input);
 		manager->pushUpdateHeap(npcScript, &sprite->m_UpdateComps);
 	}
 }
@@ -391,6 +493,126 @@ OvSpr_SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, W
 }
 
 //Loaders
+void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+{
+	using rapidxml::xml_node;
+	//Get data
+	xml_node<>* tileXCurr = node->first_node("TileXCurr");
+	xml_node<>* tileZCurr = node->first_node("TileZCurr");
+	World::TileLoc tileCurrent = { strtoul(tileXCurr->value(), nullptr, 10), strtoul(tileZCurr->value(), nullptr, 10) };
+	xml_node<>* tileXDest = node->first_node("TileXDest");
+	xml_node<>* tileZDest = node->first_node("TileZDest");
+	World::TileLoc tileDestination = { strtoul(tileXDest->value(), nullptr, 10), strtoul(tileZDest->value(), nullptr, 10) };
+	xml_node<>* wLevelCurr = node->first_node("WLevelCurr");
+	World::WorldHeight heightCurrent = (World::WorldHeight)strtoul(wLevelCurr->value(), nullptr, 10);
+	xml_node<>* wLevelDest = node->first_node("WLevelDest");
+	World::WorldHeight heightDestination = (World::WorldHeight)strtoul(wLevelDest->value(), nullptr, 10);
+	xml_node<>* idDest = node->first_node("LevelIDDest");
+	World::LevelID levelIDDestination = (World::LevelID)strtoul(idDest->value(), nullptr, 10);
+
+	//Create object
+	std::lock_guard<std::shared_mutex> objectLock(manager->getObjectMutex());
+	OvSpr_RunningSprite* player = (OvSpr_RunningSprite*)manager->getObjects()[0].obj.get();
+	
+	std::shared_ptr<WarpTile> warpTile(new WarpTile());
+	WarpTileUpdateComponent warpTileUpdate(player, tileCurrent, heightCurrent, levelID, tileDestination, heightDestination, levelIDDestination);
+	warpTileUpdate.setLoadingFuncs(ld, uld);
+
+	std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
+	manager->updateGroupAt<WarpTileUpdateComponent>(manager->queryGroupID("WarpTile"))->addExistingComponent(&warpTile->m_UpdateComps, warpTileUpdate);
+	manager->pushGameObject(warpTile, name);
+}
+
+void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
+{
+	using rapidxml::xml_node;
+	//Get data
+	xml_node<>* tileX = node->first_node("TileX");
+	xml_node<>* tileZ = node->first_node("TileZ");
+	World::TileLoc tile = { strtoul(tileX->value(), nullptr, 10), strtoul(tileZ->value(), nullptr, 10) };
+	xml_node<>* wLevel = node->first_node("WLevel");
+	World::WorldHeight height = (World::WorldHeight)strtoul(wLevel->value(), nullptr, 10);
+
+	//For now all scripts are on heap - common templates can have their own group in theory later
+	std::shared_ptr<ScriptTile> scriptTile(new ScriptTile());
+	
+	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
+	std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite, GameObject>(manager->getObjects()[0].obj);
+
+	//See what type of script and do accordingly
+	xml_node<>* scriptType;
+
+	scriptType = node->first_node("Overworld_Script");
+	if (scriptType)
+	{
+		std::shared_ptr<ScriptTileUpdateComponent<OverworldScript>> scriptUpdate(new ScriptTileUpdateComponent<OverworldScript>(player.get(), tile, height, levelID));
+		//Create OW Script - add when creation function added
+	}
+	scriptType = node->first_node("NPC_Script");
+	if (scriptType)
+	{
+		std::shared_ptr<ScriptTileUpdateComponent<NPC_OverworldScript>> scriptUpdate(new ScriptTileUpdateComponent<NPC_OverworldScript>(player.get(), tile, height, levelID));
+		xml_node<>* npcNode = node->first_node("NPC_Target");
+		std::string npcName = npcNode->value();
+		std::shared_ptr<OvSpr_RunningSprite> npc = manager->objectAt<OvSpr_RunningSprite>(manager->queryObjectID(npcName));
+		//get script
+		std::string scriptName = scriptType->value();
+		NPC_OverworldScript script = CreateNPCOvScript(scriptName, flags, textBuff, npc, player, input);
+		scriptUpdate->setScript(script);
+		//upload
+		manager->pushUpdateHeap(scriptUpdate, &scriptTile->m_UpdateComps);
+		manager->pushGameObject(scriptTile, name);
+	}
+}
+
+static void LoadModelAsync(std::string name, std::string tex, std::string model, glm::vec3 offset, glm::vec3 scaleFactor, OverworldRenderer* ren, ObjectManager* manager)
+{
+	std::shared_ptr<ModelObject> modelObj(new ModelObject(tex, model, ren->modelAtlas));
+	modelObj->setRen(&ren->modelRenderer);
+
+	//Scale then translate
+	SimpleScale<NormalTextureVertex>(modelObj->m_Model.getVertices(), scaleFactor, modelObj->m_Model.getVertCount());
+	Translate<NormalTextureVertex>(modelObj->m_Model.getVertices(), offset.x, offset.y, offset.z, modelObj->m_Model.getVertCount());
+
+	//Add atlas update and render to groups
+	std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
+	manager->renderGroupAt<ModelRender>(manager->queryGroupID("ModelRender"))->addComponent(&modelObj->m_RenderComps, &modelObj->m_Model);
+	manager->renderGroupAt<ModelAtlasUpdate>(manager->queryGroupID("ModelAtlas"))->addComponent(&modelObj->m_RenderComps, tex, &modelObj->m_Model, &ren->modelAtlas);
+	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
+	manager->pushGameObject(modelObj, name);
+}
+
+static void WorldParse::LoadModel(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID)
+{
+	using rapidxml::xml_node;
+
+	//Get data
+	xml_node<>* offX = node->first_node("OffsetX");
+	xml_node<>* offY = node->first_node("OffsetY");
+	xml_node<>* offZ = node->first_node("OffsetZ");
+	xml_node<>* scale = node->first_node("Scale");
+	xml_node<>* mod = node->first_node("Model");
+	xml_node<>* tex = node->first_node("Texture");
+
+	glm::vec3 offset; glm::vec3 scaleFactor;
+	{
+		Struct2f origin = World::Level::queryOrigin(levelID);
+		float x = strtof(offX->value(), nullptr);
+		float y = strtof(offY->value(), nullptr);
+		float z = strtof(offZ->value(), nullptr);
+		offset = glm::vec3(x + origin.a, y, -z + origin.b);
+		float scl = strtof(scale->value(), nullptr);
+		scaleFactor = glm::vec3(scl, scl, scl);
+	}
+
+	std::string texture = tex->value(); std::string model = mod->value();
+
+	//Load on thread pool - TODO Implement and sync together
+	LoadModelAsync(name, texture, model, offset, scaleFactor, ren, manager);
+	//MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
+	//pool->Run(&LoadModelAsync, name, texture, model, offset, scaleFactor, ren, manager);
+}
+
 void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID)
 {
 	using rapidxml::xml_node;
@@ -461,6 +683,7 @@ void World::LevelContainer::InitialiseGlobalObjects()
 	std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, this, std::placeholders::_1);
 	std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, this, std::placeholders::_1);
 	WorldParse::ParseGlobalObjects(m_ObjManager, doc, ld, uld);
+	m_LoadingPtr = ld; m_UnloadingPtr = uld;
 }
 
 void World::LevelContainer::LoadLevel(World::LevelID id)
@@ -479,7 +702,8 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 		xml_node<>* root;
 		xml_node<>* objRoot;
 		xml_node<>* treeRoot;
-		std::future<bool> f1; std::future<bool> f2; std::shared_mutex mutex;
+		xml_node<>* grassRoot;
+		std::future<bool> f1; std::future<bool> f2; std::future<bool> f3; std::shared_mutex mutex;
 		XML_Doc_Wrapper doc = ParseLevelXML(id, false);
 
 		root = doc.doc->first_node();
@@ -492,14 +716,19 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 		//Check for if trees or objects are meant to be present to avoid sending off a redundant thread
 		objRoot = root->first_node("Objects");
 		treeRoot = root->first_node("Trees");
+		grassRoot = root->first_node("TallGrass");
 
 		if (objRoot)
 		{
-			f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_Renderer, id, m_Flags, m_TextBuffer, std::ref(mutex), doc, m_Input);
+			f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_Renderer, id, m_Flags, m_TextBuffer, std::ref(mutex), doc, m_Input, m_LoadingPtr, m_UnloadingPtr);
 		}
 		if (treeRoot)
 		{
 			f2 = std::async(std::launch::async, &ParseLevelTrees, m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
+		}
+		if (grassRoot)
+		{
+			f3 = std::async(std::launch::async, &ParseLevelGrass, m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
 		}
 	}
 	m_Levels[(int)id].setLoaded(true);

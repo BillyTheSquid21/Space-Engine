@@ -13,7 +13,7 @@ struct GrassData
 	World::MovementPermissions lastPermission;
 };
 
-class TallGrass : public GameObject
+class TallGrassObject : public GameObject
 {
 public:
 	//Sprites

@@ -56,14 +56,6 @@ void OverworldRenderer::loadRendererData()
 	spriteTexture.generateTexture(TEXTURE_SLOT);
 	spriteTexture.bind();
 	spriteTexture.clearBuffer();
-
-	//Model debug texture
-	debugTexture.loadTexture("res/textures/gs_pc_a.png");
-	debugTexture.generateTexture(TEXTURE_SLOT);
-	debugTexture.bind();
-	debugTexture.clearBuffer();
-	model.setRen(&modelRenderer);
-	Translate<NormalTextureVertex>(model.getVertices(), 278, 0, -64, model.getVertCount());
 }
 
 void OverworldRenderer::generateAtlas()
@@ -75,7 +67,9 @@ void OverworldRenderer::generateAtlas()
 
 void OverworldRenderer::purgeData() 
 { 
-	worldTexture.unbind(); 
+	worldTexture.deleteTexture();
+	spriteTexture.deleteTexture();
+	debugTexture.deleteTexture();
 }
 
 void OverworldRenderer::bufferRenderData()
@@ -86,10 +80,25 @@ void OverworldRenderer::bufferRenderData()
 	grassRenderer.bufferVideoData();
 }
 
+void OverworldRenderer::ensureModelMapping(unsigned int objectCount)
+{
+	if (objectCount == lastObjectCount)
+	{
+		return;
+	}
+	if (!modelAtlas.shouldRequestNewTextures())
+	{
+		modelAtlas.requestNewTextures();
+	}
+	else
+	{
+		generateAtlas();
+		lastObjectCount = objectCount;
+	}
+}
+
 void OverworldRenderer::draw()
 {
-	model.render();
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Send cam uniforms
@@ -159,7 +168,6 @@ void OverworldRenderer::draw()
 
 	//Models - Make have per model inv transp later when models are used more
 	modelAtlas.bind();
-	debugTexture.bind();
 	modelRenderer.drawPrimitives(sceneShader);
 
 	//World

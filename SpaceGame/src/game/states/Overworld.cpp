@@ -72,19 +72,27 @@ void Overworld::loadRequiredData() {
     std::shared_ptr<RenderComponentGroup<SpriteRender>> spriteGroup(new RenderComponentGroup<SpriteRender>());
     std::shared_ptr<UpdateComponentGroup<TilePosition>> tileGroup(new UpdateComponentGroup<TilePosition>());
     std::shared_ptr<UpdateComponentGroup<SpriteMap>> mapGroup(new UpdateComponentGroup<SpriteMap>());
+    std::shared_ptr<UpdateComponentGroup<SpriteAnim>> animGroup(new UpdateComponentGroup<SpriteAnim>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationRunning>> runGroup(new UpdateComponentGroup<UpdateAnimationRunning>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationFacing>> faceGroup(new UpdateComponentGroup<UpdateAnimationFacing>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
     std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> randWGroup(new UpdateComponentGroup<NPC_RandWalk>());
+    std::shared_ptr<UpdateComponentGroup<WarpTileUpdateComponent>> warpGroup(new UpdateComponentGroup<WarpTileUpdateComponent>());
+    std::shared_ptr<RenderComponentGroup<ModelAtlasUpdate>> modAtlasGroup(new RenderComponentGroup<ModelAtlasUpdate>());
+    std::shared_ptr<RenderComponentGroup<ModelRender>> modRenGroup(new RenderComponentGroup<ModelRender>());
 
     //Add component groups
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
+    m_ObjManager.pushRenderGroup(modAtlasGroup, "ModelAtlas");
+    m_ObjManager.pushRenderGroup(modRenGroup, "ModelRender");
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
+    m_ObjManager.pushUpdateGroup(animGroup, "SpriteAnim");
     m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
     m_ObjManager.pushUpdateGroup(faceGroup, "UpdateFacing");
     m_ObjManager.pushUpdateGroup(walkGroup, "UpdateWalking");
     m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
+    m_ObjManager.pushUpdateGroup(warpGroup, "WarpTile");
 
     //Load level data
     m_Levels.BuildFirstLevel(m_CurrentLevel);
@@ -102,93 +110,13 @@ void Overworld::loadRequiredData() {
     m_LocationX = &sprite->m_Tile.x;
     m_LocationZ = &sprite->m_Tile.z;
 
+    //Player is always first object pushed on overworld load - makes searching easier
     m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(globLev, &sprite->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
     m_ObjManager.pushGameObject(sprite, "Player");
 
-    //Test grass
-    std::shared_ptr<TallGrass> grass(new TallGrass());
-    grass->m_LevelID = m_CurrentLevel;
-    std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&m_Renderer.grassRenderer, m_Renderer.worldTileMap.uvTile(0, 3), &grass->m_Grass));
-    std::shared_ptr<TallGrassAnimationComponent> grassAnim(new TallGrassAnimationComponent(&grass->m_GrassLoc, &grass->m_LevelID, &grass->m_ActiveStates));
-    std::shared_ptr<SpriteAnim> spriteAnim1(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim2(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim3(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim4(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim5(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim6(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim7(new SpriteAnim(8, 3));
-    std::shared_ptr<SpriteAnim> spriteAnim8(new SpriteAnim(8, 3));
-    grassRen->reserveGrass(8);
-    grassRen->addGrass({ 0,0 }, { 2,2 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 2,3 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 1,3 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 1,2 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 3,2 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 3,3 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 4,3 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->addGrass({ 0,0 }, { 4,2 }, World::WorldHeight::F0, m_CurrentLevel, &grass->m_GrassLoc, &grass->m_ActiveStates);
-    grassRen->generateIndices();
-    spriteAnim1->linkSprite(&grass->m_Grass.quads[0], (bool*)&grass->m_ActiveStates[0]);
-    spriteAnim2->linkSprite(&grass->m_Grass.quads[1], (bool*)&grass->m_ActiveStates[1]);
-    spriteAnim3->linkSprite(&grass->m_Grass.quads[2], (bool*)&grass->m_ActiveStates[2]);
-    spriteAnim4->linkSprite(&grass->m_Grass.quads[3], (bool*)&grass->m_ActiveStates[3]);
-    spriteAnim5->linkSprite(&grass->m_Grass.quads[4], (bool*)&grass->m_ActiveStates[4]);
-    spriteAnim6->linkSprite(&grass->m_Grass.quads[5], (bool*)&grass->m_ActiveStates[5]);
-    spriteAnim7->linkSprite(&grass->m_Grass.quads[6], (bool*)&grass->m_ActiveStates[6]);
-    spriteAnim8->linkSprite(&grass->m_Grass.quads[7], (bool*)&grass->m_ActiveStates[7]);
-    TileUV uv1 = m_Renderer.worldTileMap.uvTile(0, 3);
-    TileUV uv2 = m_Renderer.worldTileMap.uvTile(0, 4);
-    TileUV uv3 = m_Renderer.worldTileMap.uvTile(0, 5);
-    spriteAnim1->setFrame(0, uv1);
-    spriteAnim1->setFrame(1, uv2);
-    spriteAnim1->setFrame(2, uv3);
-    spriteAnim2->setFrame(0, uv1);
-    spriteAnim2->setFrame(1, uv2);
-    spriteAnim2->setFrame(2, uv3);
-    spriteAnim3->setFrame(0, uv1);
-    spriteAnim3->setFrame(1, uv2);
-    spriteAnim3->setFrame(2, uv3);
-    spriteAnim4->setFrame(0, uv1);
-    spriteAnim4->setFrame(1, uv2);
-    spriteAnim4->setFrame(2, uv3);
-    spriteAnim5->setFrame(0, uv1);
-    spriteAnim5->setFrame(1, uv2);
-    spriteAnim5->setFrame(2, uv3);
-    spriteAnim6->setFrame(0, uv1);
-    spriteAnim6->setFrame(1, uv2);
-    spriteAnim6->setFrame(2, uv3);
-    spriteAnim7->setFrame(0, uv1);
-    spriteAnim7->setFrame(1, uv2);
-    spriteAnim7->setFrame(2, uv3);
-    spriteAnim8->setFrame(0, uv1);
-    spriteAnim8->setFrame(1, uv2);
-    spriteAnim8->setFrame(2, uv3);
-
-    m_ObjManager.pushRenderHeap(grassRen, &grass->m_RenderComps);
-    m_ObjManager.pushRenderHeap(grassAnim, &grass->m_RenderComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim1, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim2, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim3, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim4, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim5, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim6, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim7, &grass->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(spriteAnim8, &grass->m_UpdateComps);
-
-    m_ObjManager.pushGameObject(grass, "Level0_Grass");
-
-    //Test warp tile
-    std::shared_ptr<WarpTile> warp(new WarpTile());
-    std::shared_ptr<WarpTileUpdateComponent> warpUpdate(new WarpTileUpdateComponent(sprite.get(), { 10,2 }, World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0,4}, World::WorldHeight::F1, World::LevelID::LEVEL_TEST));
-    std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1);
-    std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1);
-    warpUpdate->setLoadingFuncs(ld, uld);
-
-    m_ObjManager.pushUpdateHeap(warpUpdate, &warp->m_UpdateComps);
-    m_ObjManager.pushGameObject(warp);
-
+    //Init levels
     m_Levels.InitialiseGlobalObjects();
     m_Levels.LoadLevel(m_CurrentLevel);
 
@@ -199,6 +127,7 @@ void Overworld::loadRequiredData() {
 
 void Overworld::purgeRequiredData() {
     m_Renderer.purgeData();
+    m_ObjManager.reset();
     m_DataLoaded = false;
 }
 
@@ -227,6 +156,9 @@ void Overworld::render() {
     auto ts = EngineTimer::StartTimer();
 
     GameGUI::StartFrame();
+
+    //If new objects created, ensure models are mapped correctly
+    m_Renderer.ensureModelMapping(m_ObjManager.getObjectCount());
 
     //Renders
     m_Levels.render();

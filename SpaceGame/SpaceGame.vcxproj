@@ -165,7 +165,6 @@
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
     <ClCompile Include="src\game\objects\ScriptParse.cpp" />
-    <ClCompile Include="src\game\objects\ScriptTile.cpp" />
     <ClCompile Include="src\game\objects\SpriteAnimation.cpp" />
     <ClCompile Include="src\game\objects\TallGrass.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
@@ -210,13 +209,14 @@
     <ClInclude Include="include\game\objects\ActionTile.h" />
     <ClInclude Include="include\game\objects\Bridge.h" />
     <ClInclude Include="include\game\objects\LoadingZone.h" />
+    <ClInclude Include="include\game\objects\ModelObject.hpp" />
     <ClInclude Include="include\game\objects\NPCAi.h" />
     <ClInclude Include="include\game\objects\OverworldScript.hpp" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
     <ClInclude Include="include\game\objects\Script.hpp" />
     <ClInclude Include="include\game\objects\ScriptParse.h" />
-    <ClInclude Include="include\game\objects\ScriptTile.h" />
+    <ClInclude Include="include\game\objects\ScriptTile.hpp" />
     <ClInclude Include="include\game\objects\SpriteAnimation.h" />
     <ClInclude Include="include\game\objects\TallGrass.h" />
     <ClInclude Include="include\game\objects\TileMap.h" />

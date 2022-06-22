@@ -17,6 +17,7 @@
 
 #include "game/objects/TallGrass.h"
 #include "game/objects/WarpTile.h"
+#include "game/objects/ScriptTile.hpp"
 
 
 class Overworld : public State
