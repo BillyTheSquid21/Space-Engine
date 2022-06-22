@@ -85,6 +85,12 @@
     <Filter Include="Source Files\Vendor\mtlib">
       <UniqueIdentifier>{36438ec0-a26f-4609-a1b6-b9c6c2a20da5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Pokemon">
+      <UniqueIdentifier>{3b7693cf-bd48-4c01-ab4a-212dffbcf029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Pokemon">
+      <UniqueIdentifier>{0c75cfba-4e3b-497b-b611-2d5661aebea0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -209,6 +215,12 @@
     </ClCompile>
     <ClCompile Include="src\game\objects\ActionTile.cpp">
       <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\pokemon\Pokemon.cpp">
+      <Filter>Source Files\Game\Pokemon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\pokemon\PokemonBattle.cpp">
+      <Filter>Source Files\Game\Pokemon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +457,15 @@
     </ClInclude>
     <ClInclude Include="include\game\objects\ModelObject.hpp">
       <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\pokemon\Pokemon.h">
+      <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\pokemon\PokemonBattle.h">
+      <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\utility\Random.hpp">
+      <Filter>Header Files\Game\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

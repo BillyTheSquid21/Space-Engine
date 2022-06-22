@@ -170,6 +170,8 @@
     <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\objects\Tree.cpp" />
     <ClCompile Include="src\game\objects\WarpTile.cpp" />
+    <ClCompile Include="src\game\pokemon\Pokemon.cpp" />
+    <ClCompile Include="src\game\pokemon\PokemonBattle.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
     <ClCompile Include="src\game\states\Splash.cpp" />
@@ -222,12 +224,15 @@
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\objects\Tree.h" />
     <ClInclude Include="include\game\objects\WarpTile.h" />
+    <ClInclude Include="include\game\pokemon\Pokemon.h" />
+    <ClInclude Include="include\game\pokemon\PokemonBattle.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
     <ClInclude Include="include\game\states\Splash.h" />
     <ClInclude Include="include\game\states\StateRenderers.h" />
     <ClInclude Include="include\game\utility\GameText.h" />
     <ClInclude Include="include\game\utility\Input.hpp" />
+    <ClInclude Include="include\game\utility\Random.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Model.hpp" />

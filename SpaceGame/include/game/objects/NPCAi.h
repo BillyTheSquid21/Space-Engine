@@ -6,6 +6,7 @@
 #include "game/objects/OverworldScript.hpp"
 #include "game/objects/ScriptParse.h"
 #include "game/GUI/GUI.h"
+#include "game/utility/Random.hpp"
 
 class NPC_OverworldScript : public OverworldScript
 {
