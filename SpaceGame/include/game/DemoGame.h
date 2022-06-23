@@ -6,6 +6,7 @@
 #include "game/states/Splash.h"
 #include "game/states/MainMenu.h"
 #include "game/states/Overworld.h"
+#include "game/states/Battle.h"
 #include "game/gui/GUI.h"
 
 #include "mtlib/ThreadPool.h"
@@ -35,5 +36,6 @@ private:
 #define SplashScreen m_States[0] 
 #define MainMenuScreen m_States[1] 
 #define OverworldScreen m_States[2] 
+#define BattleScreen m_States[3]
 
 #endif 

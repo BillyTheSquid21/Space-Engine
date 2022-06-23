@@ -7,6 +7,8 @@
 #include <memory>
 #include <functional>
 
+#include "game/utility/Flags.hpp"
+
 //Instructions
 enum class ScriptInstruction
 {
@@ -105,7 +107,5 @@ struct ScriptElement
 };
 
 typedef std::shared_ptr<ScriptElement[]> Script;
-typedef std::array<bool, std::numeric_limits<uint16_t>::max()> FlagArray; //known size at runtime
-
 
 #endif

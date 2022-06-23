@@ -10,15 +10,15 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     //Input
     m_Input = input;
 
+    //Fonts - TODO make load in loadRequiredData()
+    m_Fonts = fonts;
+    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 20);
+    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
+
     m_Renderer.initialiseRenderer(width, height);
 
     //test level
     m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Flags, &m_TextBuff, m_Input);
-
-    //gui shit test
-    m_Fonts = fonts;
-    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 20);
-    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
 
     std::shared_ptr<GameGUI::GameTextBox> tb(new GameGUI::GameTextBox(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f, m_TextBuff.t1, m_TextBuff.t2));
     tb->setFontContainer(m_Fonts);
@@ -64,7 +64,6 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
 }
 
 void Overworld::loadRequiredData() {
-
     m_Renderer.loadRendererData();
 
     //Create groups
@@ -128,6 +127,8 @@ void Overworld::loadRequiredData() {
 void Overworld::purgeRequiredData() {
     m_Renderer.purgeData();
     m_ObjManager.reset();
+    m_Fonts->clearFonts();
+    m_Levels.UnloadAll();
     m_DataLoaded = false;
 }
 

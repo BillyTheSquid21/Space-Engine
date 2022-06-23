@@ -21,6 +21,8 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags, &m_GameInput);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
+	std::shared_ptr<Battle> battle(new Battle());
+	battle->init(m_Width, m_Height, &m_Fonts, &s_GlobalFlags, &m_GameInput);
 
 	//Add states
 	std::shared_ptr<State> stateSplashScreen = std::static_pointer_cast<State>(splashScreen);
@@ -29,6 +31,8 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	m_States.push_back(stateMainMenuScreen);
 	std::shared_ptr<State> stateOverworld = std::static_pointer_cast<State>(overworld);
 	m_States.push_back(overworld);
+	std::shared_ptr<State> stateBattle = std::static_pointer_cast<State>(battle);
+	m_States.push_back(battle);
 
 	//Init threadpool
 	MtLib::ThreadPool::Init(THREAD_POOL_SIZE);
@@ -79,7 +83,8 @@ void DemoGame::update(double deltaTime) {
 	//time to switch from splash
 	if (m_GlfwTime > 0.0) {
 		SplashScreen->setActive(false);
-		MainMenuScreen->setActive(true);
+		MainMenuScreen->setActive(false);
+		BattleScreen->setActive(true);
 	}
 
 	Game::update(deltaTime);

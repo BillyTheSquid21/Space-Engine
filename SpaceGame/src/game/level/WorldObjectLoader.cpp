@@ -760,6 +760,14 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 	m_Levels[(int)id].setLoaded(false);
 }
 
+void World::LevelContainer::UnloadAll()
+{
+	for (int i = 0; i < (int)World::LevelID::LEVEL_NULL; i++)
+	{
+		UnloadLevel((World::LevelID)i);
+	}
+}
+
 void World::LevelContainer::render()
 {
 	for (int i = 0; i < m_Levels.size(); i++)

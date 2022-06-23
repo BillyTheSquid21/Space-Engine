@@ -78,6 +78,7 @@ namespace World
 		void BuildFirstLevel(World::LevelID id); //Builds geometry and permissions first - for use when no level has been initialised
 		void LoadLevel(World::LevelID id);
 		void UnloadLevel(World::LevelID id);
+		void UnloadAll();
 		void render();
 		std::vector<Level> m_Levels;
 		std::vector<std::mutex> m_LevelMutexes; //Access mutex array to make sure the same level can't load at the same time

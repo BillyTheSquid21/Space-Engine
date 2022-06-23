@@ -222,6 +222,9 @@
     <ClCompile Include="src\game\pokemon\PokemonBattle.cpp">
       <Filter>Source Files\Game\Pokemon</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\states\Battle.cpp">
+      <Filter>Source Files\Game\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -465,6 +468,12 @@
       <Filter>Header Files\Game\Pokemon</Filter>
     </ClInclude>
     <ClInclude Include="include\game\utility\Random.hpp">
+      <Filter>Header Files\Game\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\states\Battle.h">
+      <Filter>Header Files\Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\utility\Flags.hpp">
       <Filter>Header Files\Game\Utility</Filter>
     </ClInclude>
   </ItemGroup>
