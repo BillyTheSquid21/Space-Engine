@@ -19,6 +19,7 @@ void Battle::loadRequiredData()
     m_PlayerParty[0].moves[0].type = PokemonType::Normal;
     m_PlayerParty[0].moves[0].damage = 40;
     m_EnemyParty[0].id = 0;
+    m_EnemyParty[0].condition = StatusCondition::Paralysis;
     m_EnemyParty[0].moves[0].type = PokemonType::Normal;
     m_EnemyParty[0].moves[0].damage = 40;
     m_Battle.setParties(m_PlayerParty, m_EnemyParty);

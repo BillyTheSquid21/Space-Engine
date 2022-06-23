@@ -14,7 +14,7 @@ enum class PokemonType : uint8_t
 
 enum class StatusCondition : uint8_t
 {
-	None, Poison, Sleep, Paralysis
+	None, Poison, Sleep, Paralysis, Burn, Confusion,
 };
 
 //Type effectiveness lookup for ATTACK - don't need to store defensive info
@@ -107,19 +107,22 @@ static uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending
 struct PokemonMove
 { 
 	//If null move is null
+	uint8_t id;
 	PokemonType type = PokemonType::Null;
 	uint8_t damageAcc = 100;
-	uint8_t statusAcc = 0;
+	uint8_t statusAcc = 30;
 	uint8_t damage;
-	StatusCondition status;
+	StatusCondition status = StatusCondition::Paralysis;
 };
 
 //Define pokemon struct
 struct Pokemon
 {
 	int16_t id = -1; //If id is negative, pokemon is null
-	PokemonType primaryType; PokemonType secondaryType;
+	PokemonType primaryType = PokemonType::Normal;
+	PokemonType secondaryType = PokemonType::Null;
 	int16_t level = 5;
+	int16_t health = 23;
 	StatusCondition condition = StatusCondition::None;
 	//Stats
 	int16_t hp = 23;
@@ -130,6 +133,8 @@ struct Pokemon
 	int16_t speed = 17;
 	//Moves
 	std::array<PokemonMove, 4> moves;
+	//Other
+	int8_t storage = 0; //Can be used for anything depending on context (eg for sleep acts as timer for that pokemon)
 };
 
 typedef std::array<Pokemon, 6> Party;

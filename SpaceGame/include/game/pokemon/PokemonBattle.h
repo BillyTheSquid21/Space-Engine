@@ -12,12 +12,8 @@
 static void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move);
 
 static int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move);
-
-struct MoveInfo
-{
-	PokemonMove move;
-	bool wasPlayer;
-};
+static void ProcessEndTurnStatus(Pokemon& pokemon);
+static bool ProcessStatus(Pokemon& pokemon);
 
 static enum class Stage : int8_t
 {
@@ -51,20 +47,34 @@ class PokemonBattle
 public:
 	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
 	
-	void setParties(Party playerParty, Party enemyParty) { m_PlayerParty = playerParty; m_EnemyParty = enemyParty; };
+	void setParties(Party playerParty, Party enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; };
 	void run();
 
 	static RandomContainer random;
 private:
+
+	void nextMove();
+	
+	static enum class Team : uint8_t
+	{
+		A, B
+	};
+
+	struct MoveInfo
+	{
+		PokemonMove move;
+		Team team;
+	};
+
 	//Stack array containing next moves
 	MoveInfo m_MoveQueue[MOVE_QUEUE_LENGTH];
 	unsigned int m_MoveQueueIndex = 0;
 
 	//Pokemon
-	Party m_PlayerParty; Party m_EnemyParty;
-	unsigned int m_PlayerActivePkm = 0; unsigned int m_EnemyActivePkm = 0;
+	Party m_PartyA; Party m_PartyB;
+	unsigned int m_ActivePkmA = 0; unsigned int m_ActivePkmB = 0;
 
-	CurrentStages m_PlayerStages; CurrentStages m_EnemyStages;
+	CurrentStages m_StagesA; CurrentStages m_StagesB;
 };
 
 #endif
