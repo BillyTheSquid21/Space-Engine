@@ -11,7 +11,6 @@ Camera::Camera(float width, float height, glm::vec3 position)
 void Camera::sendCameraUniforms(Shader& shader) {
 
 	view = glm::lookAt(m_Position, m_Position + m_Direction, m_Up); 
-	proj = glm::perspective(glm::radians(45.0f), (float)(m_CameraWidth / m_CameraHeight), nearPlane, farPlane);
 
 	shader.setUniform("u_View", &view);
 	shader.setUniform("u_Proj", &proj);

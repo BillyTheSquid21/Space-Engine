@@ -34,6 +34,11 @@ void MainMenu::update(double deltaTime, double time) {
 
 }
 
+void MainMenu::loadRequiredData()
+{
+    m_DataLoaded = true;
+}
+
 void MainMenu::render() {
     //ImGUI
     GameGUI::StartFrame();

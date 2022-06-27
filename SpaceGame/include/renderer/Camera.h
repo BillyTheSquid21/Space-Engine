@@ -16,6 +16,7 @@ public:
 
 	//get data from camera
 	void sendCameraUniforms(Shader& shader);
+	void setProjection(glm::mat4 project) { proj = project; }
 
 	//move camera relative to orientation
 	void moveForwards(float speed);

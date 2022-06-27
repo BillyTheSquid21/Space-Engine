@@ -2,7 +2,7 @@
 #ifndef TALL_GRASS_H
 #define TALL_GRASS_H
 
-#include "game/objects/SpriteAnimation.h"
+#include "game/objects/SpriteAnimation.hpp"
 #include "game/level/World.h"
 
 //Location

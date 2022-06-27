@@ -112,7 +112,7 @@ struct PokemonMove
 	uint8_t damageAcc = 100;
 	uint8_t statusAcc = 30;
 	uint8_t damage;
-	StatusCondition status = StatusCondition::Paralysis;
+	StatusCondition status = StatusCondition::None;
 };
 
 //Define pokemon struct

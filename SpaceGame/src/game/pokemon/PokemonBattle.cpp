@@ -27,6 +27,11 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move)
 	}
 
 	//Status
+	if (move.status == StatusCondition::None)
+	{
+		return;
+	}
+
 	roll = PokemonBattle::random.next();
 	if (roll < move.statusAcc * 100)
 	{
@@ -183,15 +188,19 @@ void PokemonBattle::nextMove()
 	m_MoveQueueIndex--;
 }
 
-void PokemonBattle::run()
+void PokemonBattle::run(bool progress)
 {
+	if (!progress)
+	{
+		return;
+	}
 	//Check if won
-	if (m_PartyA[m_ActivePkmA].health < 0)
+	if (m_PartyA[m_ActivePkmA].health <= 0)
 	{
 		EngineLog("Player Lost!");
 		return;
 	}
-	else if (m_PartyB[m_ActivePkmB].health < 0)
+	else if (m_PartyB[m_ActivePkmB].health <= 0)
 	{
 		EngineLog("Enemy Lost!");
 		return;
@@ -202,12 +211,7 @@ void PokemonBattle::run()
 	EngineLog("Enemy HP: ", m_PartyB[m_ActivePkmB].health);
 
 	//Await player input, add to queue
-	std::string move1;
-	std::cin >> move1;
-	if (move1 == "1")
-	{
-		m_MoveQueue[m_MoveQueueIndex] = { m_PartyA[m_ActivePkmA].moves[0], Team::A };
-	}
+	m_MoveQueue[m_MoveQueueIndex] = { m_PartyA[m_ActivePkmA].moves[0], Team::A };
 	m_MoveQueueIndex++;
 	
 	//Await enemy input, add to queue
@@ -215,7 +219,29 @@ void PokemonBattle::run()
 	m_MoveQueueIndex++;
 
 	this->nextMove();
+	//Check if won
+	if (m_PartyA[m_ActivePkmA].health <= 0)
+	{
+		EngineLog("Player Lost!");
+		return;
+	}
+	else if (m_PartyB[m_ActivePkmB].health <= 0)
+	{
+		EngineLog("Enemy Lost!");
+		return;
+	}
 	this->nextMove();
+	//Check if won
+	if (m_PartyA[m_ActivePkmA].health <= 0)
+	{
+		EngineLog("Player Lost!");
+		return;
+	}
+	else if (m_PartyB[m_ActivePkmB].health <= 0)
+	{
+		EngineLog("Enemy Lost!");
+		return;
+	}
 
 	//Process end turn status
 	ProcessEndTurnStatus(m_PartyA[m_ActivePkmA]);

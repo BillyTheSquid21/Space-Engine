@@ -71,7 +71,7 @@ void Overworld::loadRequiredData() {
     std::shared_ptr<RenderComponentGroup<SpriteRender>> spriteGroup(new RenderComponentGroup<SpriteRender>());
     std::shared_ptr<UpdateComponentGroup<TilePosition>> tileGroup(new UpdateComponentGroup<TilePosition>());
     std::shared_ptr<UpdateComponentGroup<SpriteMap>> mapGroup(new UpdateComponentGroup<SpriteMap>());
-    std::shared_ptr<UpdateComponentGroup<SpriteAnim>> animGroup(new UpdateComponentGroup<SpriteAnim>());
+    std::shared_ptr<UpdateComponentGroup<SpriteAnim<TextureVertex, Tex_Quad>>> animGroup(new UpdateComponentGroup<SpriteAnim<TextureVertex, Tex_Quad>>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationRunning>> runGroup(new UpdateComponentGroup<UpdateAnimationRunning>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationFacing>> faceGroup(new UpdateComponentGroup<UpdateAnimationFacing>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
@@ -133,6 +133,21 @@ void Overworld::purgeRequiredData() {
 }
 
 void Overworld::update(double deltaTime, double time) {
+    if (!m_Sample)
+    {
+        m_SampleTime += deltaTime;
+        if (m_SampleTime > 0.357f)
+        {
+            
+            m_Sample = true;
+            m_SampleTime = 0.0f;
+        }
+    }
+    else
+    {
+        m_Sample = false;
+    }
+    
     //Start timer
     auto ts = EngineTimer::StartTimer();
 
@@ -148,15 +163,21 @@ void Overworld::update(double deltaTime, double time) {
 
     //End timer
     double timeTaken = EngineTimer::EndTimer(ts) * 1000.0;
-    m_UpdateTime = "Time to update: " + std::to_string(timeTaken) + "ms";
+    
+    if (m_Sample)
+    {
+        m_UpdateTime = "Time to update: " + std::to_string(timeTaken) + "ms";
+    }
 }
 
 void Overworld::render() {
+    //ImGUI - I don't know why having this here increases speed
+    //I will remove when I get to the bottom of it
+    GameGUI::StartFrame();
+    GameGUI::EndFrame();
 
     //Start timer
     auto ts = EngineTimer::StartTimer();
-
-    GameGUI::StartFrame();
 
     //If new objects created, ensure models are mapped correctly
     m_Renderer.ensureModelMapping(m_ObjManager.getObjectCount());
@@ -169,7 +190,15 @@ void Overworld::render() {
     m_Renderer.bufferRenderData();
     m_Renderer.draw();
 
+    //Display timer
+    double timeTaken = EngineTimer::EndTimer(ts) * 1000.0;
+    if (m_Sample)
+    {
+        m_RenderTime = "Time to render: " + std::to_string(timeTaken) + "ms";
+    }
+
     //IMGUI Test
+    GameGUI::StartFrame();
     if (m_TextBuff.showTextBox)
     {
         m_TextBoxGUI.render();
@@ -178,9 +207,6 @@ void Overworld::render() {
     m_DebugGUI.render();
 
     GameGUI::EndFrame();
-
-    double timeTaken = EngineTimer::EndTimer(ts) * 1000.0;
-    m_RenderTime = "Time to render: " + std::to_string(timeTaken) + "ms";
 }
 
 void Overworld::handleInput(int key, int scancode, int action, int mods) {

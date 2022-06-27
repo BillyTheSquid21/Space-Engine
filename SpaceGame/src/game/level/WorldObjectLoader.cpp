@@ -250,7 +250,7 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 	for (int i = 0; i < grass->m_Grass.quadCount; i++)
 	{
 		//Add animation component
-		SpriteAnim anim(8, 3);
+		SpriteAnim<NormalTextureVertex, Norm_Tex_Quad> anim(8, 3);
 		anim.setFrame(0, uv1);
 		anim.setFrame(1, uv2);
 		anim.setFrame(2, uv3);
@@ -258,7 +258,7 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 
 		//Add sprite animator
 		std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
-		std::shared_ptr<UpdateComponentGroup<SpriteAnim>> sprGrp = manager->updateGroupAt<SpriteAnim>(manager->queryGroupID("SpriteAnim"));
+		std::shared_ptr<UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>> sprGrp = manager->updateGroupAt<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>(manager->queryGroupID("SpriteAnim"));
 		sprGrp->addExistingComponent(&grass->m_UpdateComps, anim);
 	}
 

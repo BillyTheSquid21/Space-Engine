@@ -204,9 +204,6 @@
     <ClCompile Include="src\renderer\ShadowMap.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\objects\SpriteAnimation.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\objects\TallGrass.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
@@ -224,6 +221,12 @@
     </ClCompile>
     <ClCompile Include="src\game\states\Battle.cpp">
       <Filter>Source Files\Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\utility\ImageRead.cpp">
+      <Filter>Source Files\Game\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\pokemon\PokemonIO.cpp">
+      <Filter>Source Files\Game\Pokemon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,7 +443,7 @@
     <ClInclude Include="include\renderer\ShadowMap.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\objects\SpriteAnimation.h">
+    <ClInclude Include="include\game\objects\SpriteAnimation.hpp">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="include\game\objects\TallGrass.h">
@@ -475,6 +478,12 @@
     </ClInclude>
     <ClInclude Include="include\game\utility\Flags.hpp">
       <Filter>Header Files\Game\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\utility\ImageRead.h">
+      <Filter>Header Files\Game\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\pokemon\PokemonIO.h">
+      <Filter>Header Files\Game\Pokemon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

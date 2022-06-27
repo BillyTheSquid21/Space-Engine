@@ -142,6 +142,16 @@ namespace GameGUI
 		std::string m_Name = "##Child0";
 	};
 
+	class Button : public GUIElement
+	{
+	public:
+		Button(std::string text, bool* trigger) { m_ButtonText = text; m_Trigger = trigger; };
+		void openNest();
+	private:
+		std::string m_ButtonText;
+		bool* m_Trigger = nullptr;
+	};
+
 	//Game Text box class
 	class GameTextBox : public GUIElementBase
 	{

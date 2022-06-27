@@ -26,6 +26,7 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	grassRenderer.generate((float)width, (float)height, &camera);
 
 	//Camera
+	camera.setProjection(glm::perspective(glm::radians(45.0f), (float)((float)width / (float)height), 0.1f, 1000.0f));
 	camera.moveUp(World::TILE_SIZE * 5);
 	camera.panYDegrees(45.0f);
 
@@ -128,7 +129,7 @@ void OverworldRenderer::draw()
 	worldRenderer.drawPrimitives(sceneShadows);
 	spriteTexture.bind();
 	spriteRenderer.drawPrimitives(sceneShadows);
-	debugTexture.bind();
+	modelAtlas.bind();
 	modelRenderer.drawPrimitives(sceneShadows);
 	sceneShadows.unbind();
 
@@ -193,4 +194,122 @@ void OverworldRenderer::draw()
 	grassShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
 	grassRenderer.drawPrimitives(grassShader);
 	grassShader.unbind();
+}
+
+//battle
+#include "game/states/StateRenderers.h"
+
+void BattleRenderer::initialiseRenderer(unsigned int width, unsigned int height)
+{
+	//Renderer setup
+	camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	//World Renderer
+	worldRenderer.setLayout<float>(3, 2);
+	worldRenderer.setDrawingMode(GL_TRIANGLES);
+	worldRenderer.generate((float)width, (float)height, &camera);
+
+	//Background Renderer
+	backgroundRenderer.setLayout<float>(3, 2);
+	backgroundRenderer.setDrawingMode(GL_TRIANGLES);
+	backgroundRenderer.generate((float)width, (float)height, &camera);
+
+	//Pokemon renderer
+	pokemonARenderer.setLayout<float>(3, 2);
+	pokemonARenderer.setDrawingMode(GL_TRIANGLES);
+	pokemonARenderer.generate((float)width, (float)height, &camera);
+	pokemonBRenderer.setLayout<float>(3, 2);
+	pokemonBRenderer.setDrawingMode(GL_TRIANGLES);
+	pokemonBRenderer.generate((float)width, (float)height, &camera);
+
+	//Camera
+	camera.setProjection(glm::perspective(glm::radians(45.0f), (float)((float)width / (float)height), 0.1f, 4000.0f));
+	camera.moveUp((float)width/19.2f);
+	camera.moveZ((float)width / -22.2f);
+	camera.moveX((float)width / -38.4f);
+	camera.panYDegrees(15.0f);
+
+	SCREEN_HEIGHT = height; SCREEN_WIDTH = width;
+}
+
+void BattleRenderer::loadRendererData()
+{
+	//Shader
+	sceneShader.create("res/shaders/Default_T_Shader.glsl");
+
+	//Load world texture
+	platformTexture.loadTexture("res/textures/BattlePlatform.png");
+	platformTexture.generateTexture(TEXTURE_SLOT);
+	platformTexture.bind();
+	platformTexture.clearBuffer();
+
+	//Load background
+	backgroundTexture.loadTexture("res/textures/BattleBackground.png");
+	backgroundTexture.generateTexture(TEXTURE_SLOT);
+	backgroundTexture.bind();
+	backgroundTexture.clearBuffer();
+
+	//Load pokemon A tex
+	pokemonATexture.loadTexture("res/textures/pokemon/Bulbasaur.png");
+	pokemonATexture.generateTexture(TEXTURE_SLOT);
+	pokemonATexture.bind();
+	pokemonATexture.clearBuffer();
+
+	//Load pokemon B tex
+	pokemonBTexture.loadTexture("res/textures/pokemon/Chandelure2.png");
+	pokemonBTexture.generateTexture(TEXTURE_SLOT);
+	pokemonBTexture.bind();
+	pokemonBTexture.clearBuffer();
+}
+
+void BattleRenderer::purgeData()
+{
+	platformTexture.deleteTexture();
+	backgroundTexture.deleteTexture();
+	pokemonATexture.deleteTexture();
+	pokemonBTexture.deleteTexture();
+}
+
+void BattleRenderer::bufferRenderData()
+{
+	worldRenderer.bufferVideoData();
+	backgroundRenderer.bufferVideoData();
+	pokemonARenderer.bufferVideoData();
+	pokemonBRenderer.bufferVideoData();
+}
+
+void BattleRenderer::draw()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Send cam uniforms
+	sceneShader.bind();
+	camera.sendCameraUniforms(sceneShader);
+
+	//Set universal uniforms
+	sceneShader.setUniform("u_Texture", TEXTURE_SLOT);
+
+	//World
+	platformTexture.bind();
+	sceneShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
+	worldRenderer.drawPrimitives(sceneShader);
+	sceneShader.unbind();
+
+	//Background
+	backgroundTexture.bind();
+	sceneShader.setUniform("u_Model", &backgroundRenderer.m_RendererModelMatrix);
+	backgroundRenderer.drawPrimitives(sceneShader);
+	sceneShader.unbind();
+
+	//Sprite A
+	pokemonATexture.bind();
+	sceneShader.setUniform("u_Model", &pokemonARenderer.m_RendererModelMatrix);
+	pokemonARenderer.drawPrimitives(sceneShader);
+
+	//Sprite B
+	pokemonBTexture.bind();
+	sceneShader.setUniform("u_Model", &pokemonBRenderer.m_RendererModelMatrix);
+	pokemonBRenderer.drawPrimitives(sceneShader);
+
+	sceneShader.unbind();
 }

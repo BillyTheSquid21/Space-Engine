@@ -15,6 +15,7 @@ public:
 	void init(int width, int height, GLFWwindow* window, std::shared_ptr<Overworld> overworldPtr, FontContainer* fonts);
 	void update(double deltaTime, double time);
 	void render();
+	void loadRequiredData();
 private:
 	GLFWwindow* m_WindowPointer;
 	Render::Renderer<ColorTextureVertex> m_Renderer;

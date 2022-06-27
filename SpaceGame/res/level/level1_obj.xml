@@ -12,44 +12,14 @@
 				<RandWalk>0</RandWalk>
 			</DirSprite>
 		</Object>
-		<Object name="Level1_Model">
-			<Model>
-				<OffsetX>450</OffsetX>
-				<OffsetY>5.0</OffsetY>
-				<OffsetZ>100</OffsetZ>
-				<Scale>0.8</Scale>
-				<Model>untitled.obj</Model>
-				<Texture>gs_pc_a.png</Texture>
-			</Model>
-		</Object>
-		<Object name="Level1_Model2">
-			<Model>
-				<OffsetX>550</OffsetX>
-				<OffsetY>5.0</OffsetY>
-				<OffsetZ>100</OffsetZ>
-				<Scale>0.8</Scale>
-				<Model>untitled.obj</Model>
-				<Texture>debug.png</Texture>
-			</Model>
-		</Object>
-		<Object name="Level1_Model3">
-			<Model>
-				<OffsetX>650</OffsetX>
-				<OffsetY>5.0</OffsetY>
-				<OffsetZ>100</OffsetZ>
-				<Scale>0.8</Scale>
-				<Model>untitled.obj</Model>
-				<Texture>gs_pc_a.png</Texture>
-			</Model>
-		</Object>
 		<Object name="Level1_Model4">
 			<Model>
 				<OffsetX>650</OffsetX>
 				<OffsetY>5.0</OffsetY>
 				<OffsetZ>100</OffsetZ>
-				<Scale>0.8</Scale>
-				<Model>untitled.obj</Model>
-				<Texture>gs_pc_a.png</Texture>
+				<Scale>20.8</Scale>
+				<Model>WackyCube.obj</Model>
+				<Texture>RandomTexture.png</Texture>
 			</Model>
 		</Object>
 		<Object name="Level1_adadad">

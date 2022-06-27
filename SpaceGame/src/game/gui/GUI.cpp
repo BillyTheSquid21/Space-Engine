@@ -9,8 +9,17 @@ void GameGUI::StartFrame()
 
 void GameGUI::EndFrame()
 {
+	ImGuiIO& io = ImGui::GetIO();
+
 	ImGui::Render(); 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); 
+
+	// Update and Render additional Platform Windows
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
 }
 
 void GameGUI::SetColors(int r, int g, int b, ImGuiCol target) {
@@ -98,7 +107,6 @@ void GameGUI::GUIContainer::render()
 	m_Base->setStyle();
 	m_Base->renderStart();
 	m_Base->openNest();
-	
 	for (int i = 0; i < m_NestCount + 1; i++)
 	{
 		//Open all nests (and close self contained)
@@ -174,6 +182,17 @@ void GameGUI::DebugPanel::closeNest()
 void GameGUI::TextBox::openNest()
 {
 	ImGui::Text(m_Text.c_str());
+}
+
+void GameGUI::Button::openNest()
+{
+	if (ImGui::Button(m_ButtonText.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 50))) {
+		*m_Trigger = true;
+	}
+	else
+	{
+		*m_Trigger = false;
+	}
 }
 
 GameGUI::GameTextBox::GameTextBox(float width, float height, float x, float y, std::string& t1, std::string& t2)

@@ -61,10 +61,44 @@ public:
 	glm::vec3 m_LightScaleFactor = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
-	ShadowMap shadowMap = ShadowMap(2048,2048);
+	ShadowMap shadowMap = ShadowMap(2048, 2048);
 	int lightScene = 1;
 
 	unsigned int lastObjectCount = 0;
+};
+
+//battle
+class BattleRenderer
+{
+public:
+
+	//Rendering
+	Shader sceneShader;
+	Camera camera;
+
+	Render::Renderer<TextureVertex> worldRenderer;
+	Render::Renderer<TextureVertex> backgroundRenderer;
+	Render::Renderer<TextureVertex> pokemonARenderer;
+	Render::Renderer<TextureVertex> pokemonBRenderer;
+
+	//Textures
+	Texture platformTexture;
+	Texture backgroundTexture;
+	static const int SPRITE_WIDTH = 96;
+	Texture pokemonATexture;
+	Texture pokemonBTexture;
+
+	//Setup renderer one time
+	void initialiseRenderer(unsigned int width, unsigned int height);
+	void loadRendererData(); //Load data for renderer
+	void purgeData();
+	void bufferRenderData();
+	void draw(); //Draw scene renderer
+
+	//Slot identifiers
+	static constexpr int TEXTURE_SLOT = 0;
+
+	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 };
 
 #endif

@@ -9,9 +9,42 @@
 #include "game/gui/GUI.h"
 #include "game/states/StateRenderers.h"
 #include "game/pokemon/PokemonBattle.h"
+#include "game/objects/SpriteAnimation.hpp"
 
 #include "game/utility/Flags.hpp"
 #include "game/utility/Input.hpp"
+#include "game/utility/ImageRead.h"
+
+class BattleScene
+{
+public:
+	void init(float width, float height);
+	void render(Render::Renderer<TextureVertex>& tex, Render::Renderer<TextureVertex>& back, Render::Renderer<TextureVertex>& pok1, Render::Renderer<TextureVertex>& pok2);
+	void update(double deltaTime);
+private:
+	Tex_Quad platform1; Tex_Quad platform2;
+	Tex_Quad background;
+	Tex_Quad pokemonA;
+	Tex_Quad pokemonB;
+	const float FRAME_COUNT = 51.0f;
+	SpriteAnim<TextureVertex, Tex_Quad> pokemonAAnim;
+	SpriteAnim<TextureVertex, Tex_Quad> pokemonBAnim;
+	bool active = true;
+};
+
+class HealthHUD : public GameGUI::GUIElementBase
+{
+public:
+	HealthHUD()
+	{
+		m_WindowWidth = 350.0f;
+		m_WindowHeight = 120.0f;
+		m_WindowX = 20.0f;
+		m_WindowY = 20.0f;
+	}
+private:
+
+};
 
 class Battle : public State
 {
@@ -23,6 +56,9 @@ public:
 	void purgeRequiredData();
 	void handleInput(int key, int scancode, int action, int mods);
 private:
+
+	//Rendering
+	BattleRenderer m_Renderer;
 	int m_Width; int m_Height;
 
 	//Font
@@ -36,6 +72,18 @@ private:
 
 	//Battle
 	PokemonBattle m_Battle;
+	BattleScene m_Scene;
+
+	//GUI
+	GameGUI::GUIContainer gui1;
+	GameGUI::GUIContainer gui2;
+	std::string healthA;
+	std::string healthB;
+	std::string conditionA;
+	std::string conditionB;
+	const std::string health = "Health is: ";
+	const std::string status = "Status is: ";
+	bool trigger = false;
 
 	Party m_PlayerParty;
 	Party m_EnemyParty;

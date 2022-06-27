@@ -48,7 +48,12 @@ public:
 	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
 	
 	void setParties(Party playerParty, Party enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; };
-	void run();
+	void run(bool progress);
+
+	int16_t getHealthA() { return m_PartyA[m_ActivePkmA].health; }
+	int16_t getHealthB() { return m_PartyB[m_ActivePkmB].health; }
+	uint8_t getStatusA() { return (uint8_t)m_PartyA[m_ActivePkmA].condition; }
+	uint8_t getStatusB() { return (uint8_t)m_PartyB[m_ActivePkmB].condition; }
 
 	static RandomContainer random;
 private:
