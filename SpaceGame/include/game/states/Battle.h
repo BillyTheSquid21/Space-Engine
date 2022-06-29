@@ -32,18 +32,13 @@ private:
 	bool active = true;
 };
 
-class HealthHUD : public GameGUI::GUIElementBase
+//Base HUD that fills whole screen and can have elements placed on
+class HUD : public GameGUI::GUIElementBase
 {
 public:
-	HealthHUD()
-	{
-		m_WindowWidth = 350.0f;
-		m_WindowHeight = 120.0f;
-		m_WindowX = 20.0f;
-		m_WindowY = 20.0f;
-	}
-private:
-
+	using GUIElementBase::GUIElementBase;
+	void openNest();
+	void closeNest();
 };
 
 class Battle : public State
@@ -75,15 +70,15 @@ private:
 	BattleScene m_Scene;
 
 	//GUI
-	GameGUI::GUIContainer gui1;
-	GameGUI::GUIContainer gui2;
+	GameGUI::GUIContainer gui;
 	std::string healthA;
 	std::string healthB;
 	std::string conditionA;
 	std::string conditionB;
 	const std::string health = "Health is: ";
 	const std::string status = "Status is: ";
-	bool trigger = false;
+	bool moveTriggers[4] = { false,false,false,false };
+	int selectedMove = -1;
 
 	Party m_PlayerParty;
 	Party m_EnemyParty;

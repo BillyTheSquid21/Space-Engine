@@ -7,6 +7,11 @@ uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending)
 	return TypeLookup[(int)attacking][(int)defending];
 }
 
+float LookupStageMultiplier(Stage stage)
+{
+	return StatStageLookup[(int)stage];
+}
+
 void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move)
 {
 	//Damage
@@ -188,9 +193,9 @@ void PokemonBattle::nextMove()
 	m_MoveQueueIndex--;
 }
 
-void PokemonBattle::run(bool progress)
+void PokemonBattle::run(int move)
 {
-	if (!progress)
+	if (move == -1)
 	{
 		return;
 	}

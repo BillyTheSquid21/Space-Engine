@@ -86,6 +86,19 @@ void BattleScene::update(double deltaTime)
     pokemonBAnim.update(deltaTime);
 }
 
+//HUD
+void HUD::openNest()
+{
+    ImGui::Begin("Debug Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::PushFont(io.Fonts->Fonts[0]);
+}
+
+void HUD::closeNest()
+{
+    ImGui::PopFont();
+}
+
 void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags, GameInput* input) {
     //Width and height
     m_Width = width; m_Height = height;
@@ -103,39 +116,54 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     m_Scene.init(width, height);
 
     //Gui test
-    std::shared_ptr<GameGUI::DebugPanel> dp1(new GameGUI::DebugPanel(600.0f, 225.0f, 20.0f, 20.0f));
-    gui1.setBase(dp1);
-    std::shared_ptr<GameGUI::Divider> div1(new GameGUI::Divider());
-    div1->m_FillY = false; div1->m_FillX = true;
-    div1->m_Height = 72.0f;
-    std::shared_ptr<GameGUI::TextBox> tex1(new GameGUI::TextBox(healthB));
-    tex1->setNest(0);
-    std::shared_ptr<GameGUI::TextBox> tex3(new GameGUI::TextBox(conditionB));
-    tex3->setNest(0);
-    gui1.addElement(div1);
-    gui1.addElement(tex1);
-    gui1.addElement(tex3);
+    std::shared_ptr<HUD> hud(new HUD(m_Width, m_Height,0,0));
+    gui.setBase(hud);
 
-    std::shared_ptr<GameGUI::DebugPanel> dp2(new GameGUI::DebugPanel(600.0f, 225.0f, 1300.0f, 850.0f));
-    gui2.setBase(dp2);
-    std::shared_ptr<GameGUI::Divider> div2(new GameGUI::Divider());
-    div2->m_FillY = false; div2->m_FillX = true;
-    div2->m_Height = 72.0f;
-    std::shared_ptr<GameGUI::TextBox> tex2(new GameGUI::TextBox(healthA));
-    tex2->setNest(0);
-    std::shared_ptr<GameGUI::TextBox> tex4(new GameGUI::TextBox(conditionA));
-    tex4->setNest(0);
-    gui2.addElement(div2);
-    gui2.addElement(tex2);
-    gui2.addElement(tex4);
-    std::shared_ptr<GameGUI::Divider> div3(new GameGUI::Divider());
-    div3->m_FillY = false; div3->m_FillX = true;
-    div3->m_Height = 120.0f;
-    div3->setNest(1);
-    gui2.addElement(div3);
-    std::shared_ptr<GameGUI::Button> but(new GameGUI::Button("Next", &trigger));
-    but->setNest(1);
-    gui2.addElement(but);
+    const float hudW = 400.0f; const float hudH = 200.0f;
+    const float buffer = 40.0f;
+
+    //Add health box 1:
+    std::shared_ptr<GameGUI::Divider> enemy(new GameGUI::Divider());
+    enemy->m_Width = hudW; enemy->m_Height = hudH;
+    enemy->setNest(0);
+    enemy->m_XPos = buffer; enemy->m_YPos = buffer;
+    gui.addElement(enemy);
+    std::shared_ptr<GameGUI::TextBox> enHealth(new GameGUI::TextBox(healthB));
+    enHealth->setNest(0);
+    gui.addElement(enHealth);
+    std::shared_ptr<GameGUI::TextBox> enCond(new GameGUI::TextBox(conditionB));
+    enCond->setNest(0);
+    gui.addElement(enCond);
+
+    //Add health box 2:
+    std::shared_ptr<GameGUI::Divider> player(new GameGUI::Divider());
+    player->m_Width = hudW; player->m_Height = hudH;
+    player->setNest(1);
+    player->m_XPos = m_Width - hudW - buffer;
+    player->m_YPos = m_Height - hudH - buffer;
+    gui.addElement(player);
+    std::shared_ptr<GameGUI::TextBox> plHealth(new GameGUI::TextBox(healthA));
+    plHealth->setNest(1);
+    gui.addElement(plHealth);
+    std::shared_ptr<GameGUI::TextBox> plCond(new GameGUI::TextBox(conditionA));
+    plCond->setNest(1);
+    gui.addElement(plCond);
+    std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button("Move 1", &moveTriggers[0]));
+    but1->setNest(1);
+    but1->m_XPos = 0.0f; but1->m_YPos = 75.0f;
+    gui.addElement(but1);
+    std::shared_ptr<GameGUI::Button> but2(new GameGUI::Button("Move 2", &moveTriggers[1]));
+    but2->setNest(1);
+    but2->m_XPos = 100.0f; but2->m_YPos = 75.0f;
+    gui.addElement(but2);
+    std::shared_ptr<GameGUI::Button> but3(new GameGUI::Button("Move 3", &moveTriggers[2]));
+    but3->setNest(1);
+    but3->m_XPos = 0.0f; but3->m_YPos = 150.0f;
+    gui.addElement(but3);
+    std::shared_ptr<GameGUI::Button> but4(new GameGUI::Button("Move 4", &moveTriggers[3]));
+    but4->setNest(1);
+    but4->m_XPos = 100.0f; but4->m_YPos = 150.0f;
+    gui.addElement(but4);
 
     EngineLog("Battle scene loaded");
 }
@@ -163,7 +191,21 @@ void Battle::purgeRequiredData()
 
 void Battle::update(double deltaTime, double time)
 {
-    m_Battle.run(trigger);
+    //Check selected move - -1 if none
+    bool progress = false;
+    for (int i = 0; i < 4; i++)
+    {
+        if (moveTriggers[i])
+        {
+            selectedMove = i;
+            progress = true;
+            break;
+        }
+    }
+
+    m_Battle.run(selectedMove);
+    selectedMove = -1;
+
     m_Scene.update(deltaTime);
 
     //Update health
@@ -186,22 +228,11 @@ void Battle::render()
     //IMGUI Test
     GameGUI::StartFrame();
     GameGUI::ResetStyle();
-    gui1.render();
-    GameGUI::EndFrame();
-    GameGUI::StartFrame();
-    gui2.render();
+    gui.render();
     GameGUI::EndFrame();
 }
 
 void Battle::handleInput(int key, int scancode, int action, int mods)
 {
     m_Input->handleInput(key, scancode, action, mods);
-    if (m_Input->PRESSED_A)
-    {
-        trigger = true;
-    }
-    else
-    {
-        trigger = false;
-    }
 }

@@ -69,7 +69,15 @@ namespace GameGUI
 		//Checks whether nest has been closed
 		bool m_RenderCycleComplete = false;
 		
+		//Positioning
+		float m_Width = 0.0f; float m_Height = 0.0f;
+		float m_XPos = -1.0f; float m_YPos = -1.0f; //if negative, don't check pos (default)
+		bool m_FillX = false;
+		bool m_FillY = false;
+
 	protected:
+		void updateDimensions(); //Adjusts dimensions - can be called to auto fill if allowed
+
 		//Tracks which nest currently in - defaults to first
 		int m_NestNumber = 0;
 		float m_WindowWidth = 0; float m_WindowHeight = 0;
@@ -87,6 +95,7 @@ namespace GameGUI
 	protected:
 		float m_WindowWidth; float m_WindowHeight;
 		float m_WindowX; float m_WindowY;
+		ImGuiWindowFlags m_Flags;
 	};
 
 	//GUI container - contains list of elements with instructions
@@ -135,9 +144,6 @@ namespace GameGUI
 		void closeNest();
 		void setNest(int nest) { m_NestNumber = nest; m_Name = "##Child" + std::to_string(m_NestNumber); }
 
-		float m_Width = 0.0f; float m_Height = 0.0f;
-		bool m_FillX = false;
-		bool m_FillY = false;
 	private:
 		std::string m_Name = "##Child0";
 	};

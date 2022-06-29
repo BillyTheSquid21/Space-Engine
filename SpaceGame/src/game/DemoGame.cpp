@@ -13,9 +13,6 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
 
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
 	//States
 	std::shared_ptr<Splash> splashScreen(new Splash());
 	splashScreen->init(m_Width, m_Height);

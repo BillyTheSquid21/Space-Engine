@@ -9,17 +9,8 @@ void GameGUI::StartFrame()
 
 void GameGUI::EndFrame()
 {
-	ImGuiIO& io = ImGui::GetIO();
-
 	ImGui::Render(); 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); 
-
-	// Update and Render additional Platform Windows
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-	}
 }
 
 void GameGUI::SetColors(int r, int g, int b, ImGuiCol target) {
@@ -102,6 +93,26 @@ void FontContainer::clearFonts() {
 }
 
 //GUI
+void GameGUI::GUIElement::updateDimensions()
+{
+	if (m_FillX)
+	{
+		m_Width = ImGui::GetContentRegionAvail().x;
+	}
+	if (m_FillY)
+	{
+		m_Height = ImGui::GetContentRegionAvail().y;
+	}
+	if (m_XPos != -1.0f)
+	{
+		ImGui::SetCursorPosX(m_XPos);
+	}
+	if (m_YPos != -1.0f)
+	{
+		ImGui::SetCursorPosY(m_YPos);
+	}
+}
+
 void GameGUI::GUIContainer::render()
 {
 	m_Base->setStyle();
@@ -149,17 +160,8 @@ void GameGUI::GUIContainer::render()
 
 void GameGUI::Divider::openNest()
 {
-	float width = m_Width; float height = m_Height;
-	if (m_FillX)
-	{
-		width = ImGui::GetContentRegionAvail().x;
-	}
-	if (m_FillY)
-	{
-		height = ImGui::GetContentRegionAvail().y;
-	}
-
-	ImGui::BeginChild(m_Name.c_str(), ImVec2(width, height), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
+	updateDimensions();
+	ImGui::BeginChild(m_Name.c_str(), ImVec2(m_Width, m_Height), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
 }
 
 void GameGUI::Divider::closeNest()
@@ -186,7 +188,8 @@ void GameGUI::TextBox::openNest()
 
 void GameGUI::Button::openNest()
 {
-	if (ImGui::Button(m_ButtonText.c_str(), ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 50))) {
+	updateDimensions();
+	if (ImGui::Button(m_ButtonText.c_str(), ImVec2(m_Width, m_Height))) {
 		*m_Trigger = true;
 	}
 	else
