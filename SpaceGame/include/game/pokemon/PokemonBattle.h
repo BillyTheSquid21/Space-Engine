@@ -6,16 +6,11 @@
 #include "game/pokemon/Pokemon.h"
 #include "game/utility/Random.hpp"
 
-#define MOVE_QUEUE_LENGTH 30
+#define MOVE_QUEUE_LENGTH 3
 #define BATTLE_PROBABILITY_MAX 10000
-
-static void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move);
-
-static int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move);
-static void ProcessEndTurnStatus(Pokemon& pokemon);
-static bool ProcessStatus(Pokemon& pokemon);
-
 #define STAGES_COUNT 13
+#define TYPE_COUNT 18
+
 static enum class Stage : int8_t
 {
 	STAGE_N6 = 0, 
@@ -43,8 +38,6 @@ static constexpr float StatStageLookup[STAGES_COUNT]
 //Type effectiveness lookup for ATTACK - don't need to store defensive info
 //Stored in order the types are stored above and so can be used as keys
 //0 is no effect, 1 is half power, 2 is normal power, 4 is 2x power (value / 2 to get multiplier)
-#define TYPE_COUNT 18
-
 static const uint8_t FairyEff[TYPE_COUNT]
 {
 	2,1,2,2,2,2,4,1,2,2,2,2,2,2,4,4,1,2
@@ -124,9 +117,6 @@ static const uint8_t* TypeLookup[TYPE_COUNT]
 	PsychicEff, BugEff, RockEff, GhostEff, DarkEff, DragonEff, SteelEff, FairyEff
 };
 
-static uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending);
-static float LookupStageMultiplier(Stage stage);
-
 struct CurrentStages
 {
 	Stage attackStage = Stage::STAGE_0;
@@ -137,13 +127,50 @@ struct CurrentStages
 	Stage critStage = Stage::STAGE_0;
 };
 
+static uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending);
+static float LookupStageMultiplier(Stage stage);
+static void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage);
+static int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage);
+static bool ProcessStatus(Pokemon& pokemon);
+static void ProcessEndTurnStatus(Pokemon& pokemon);
+
+class MoveQueue
+{
+public:
+	MoveQueue() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
+	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages);
+	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, unsigned int turnIndex);
+	void processTurn();
+
+	static const int POKEMON_COUNT = 2;
+	struct MoveTurn
+	{
+		struct Combined
+		{
+			PokemonMove move;
+			Pokemon* origin;
+			CurrentStages* originStages;
+			Pokemon* target;
+			CurrentStages* targetStages;
+		};
+		Combined moves[POKEMON_COUNT];
+		uint8_t size = 0;
+	};
+	static RandomContainer random;
+private:
+	MoveTurn m_MoveQueue[MOVE_QUEUE_LENGTH]; //Array of how many moves to look ahead
+	unsigned int m_QueueIndex = 0; //Rolls around to make queue array circular
+};
+
+static bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs);
+
 class PokemonBattle
 {
 public:
 	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
 	
 	void setParties(Party playerParty, Party enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; };
-	void run(int move);
+	void run(MoveSlot move);
 
 	int16_t getHealthA() { return m_PartyA[m_ActivePkmA].health; }
 	int16_t getHealthB() { return m_PartyB[m_ActivePkmB].health; }
@@ -160,20 +187,14 @@ private:
 		A, B
 	};
 
-	struct MoveInfo
-	{
-		PokemonMove move;
-		Team team;
-	};
-
 	//Stack array containing next moves
-	MoveInfo m_MoveQueue[MOVE_QUEUE_LENGTH];
-	unsigned int m_MoveQueueIndex = 0;
+	MoveQueue m_MoveQueue;
 
 	//Pokemon
 	Party m_PartyA; Party m_PartyB;
 	unsigned int m_ActivePkmA = 0; unsigned int m_ActivePkmB = 0;
-
+	MoveSlot m_NextMoveA = MoveSlot::SLOT_NULL;
+	MoveSlot m_NextMoveB = MoveSlot::SLOT_NULL;
 	CurrentStages m_StagesA; CurrentStages m_StagesB;
 };
 

@@ -193,18 +193,17 @@ void Battle::update(double deltaTime, double time)
 {
     //Check selected move - -1 if none
     bool progress = false;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < (int)MoveSlot::SLOT_NULL; i++)
     {
         if (moveTriggers[i])
         {
-            selectedMove = i;
+            selectedMove = (MoveSlot)i;
             progress = true;
             break;
         }
     }
-
     m_Battle.run(selectedMove);
-    selectedMove = -1;
+    selectedMove = MoveSlot::SLOT_NULL;
 
     m_Scene.update(deltaTime);
 

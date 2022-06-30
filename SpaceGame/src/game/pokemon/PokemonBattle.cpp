@@ -1,6 +1,12 @@
 #include "game/pokemon/PokemonBattle.h"
 
 RandomContainer PokemonBattle::random;
+RandomContainer MoveQueue::random;
+
+bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs)
+{
+	return lhs.origin->speed < rhs.origin->speed;
+}
 
 uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending)
 {
@@ -12,7 +18,7 @@ float LookupStageMultiplier(Stage stage)
 	return StatStageLookup[(int)stage];
 }
 
-void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move)
+void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage)
 {
 	//Damage
 
@@ -21,7 +27,7 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move)
 	if (roll < move.damageAcc * 100)
 	{
 		EngineLog("HP Before: ", target.health);
-		int16_t damage = CalculateDamage(attacker, target, move);
+		int16_t damage = CalculateDamage(attacker, target, move, attackerStage, defenderStage);
 		target.health -= damage;
 		EngineLog("HP After: ", target.health);
 		EngineLog("DAMAGE: ", damage);
@@ -49,12 +55,12 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move)
 	}
 }
 
-int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move)
+int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage)
 {
-	//Calc whether critical hit - 6.25%
+	//Calc whether critical hit - 6.25% at stage one
 	float critical = 1;
 	float critRoll = PokemonBattle::random.next();
-	if (critRoll < 625.0f)
+	if (critRoll < (625.0f*LookupStageMultiplier(attackerStage.critStage)))
 	{
 		critical = 2;
 		EngineLog("Its a critical hit!");
@@ -82,7 +88,7 @@ int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move)
 	type *= primaryMod * secondaryMod;
 
 	float level = ((2 * (float)attacker.level) / 5) + 2;
-	float attackOverDefence = (float)attacker.attack / (float)target.defense;
+	float attackOverDefence = (LookupStageMultiplier(attackerStage.attackStage)*(float)attacker.attack) / (LookupStageMultiplier(defenderStage.defenseStage)*(float)target.defense);
 	float damageOut = ((level * (float)move.damage * attackOverDefence) / 50.0f) + 2.0f;
 
 	//Now multiply premultiplier by additional effects - easy to add
@@ -159,26 +165,59 @@ bool ProcessStatus(Pokemon& pokemon)
 	}
 }
 
+//Move queue
+void MoveQueue::queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages)
+{
+	uint8_t& index = m_MoveQueue[m_QueueIndex].size;
+	m_MoveQueue[m_QueueIndex].moves[index].move = move;
+	m_MoveQueue[m_QueueIndex].moves[index].origin = origin;
+	m_MoveQueue[m_QueueIndex].moves[index].target = target;
+	m_MoveQueue[m_QueueIndex].moves[index].originStages = originStages;
+	m_MoveQueue[m_QueueIndex].moves[index].targetStages = targetStages;
+	index++;
+}
+
+void MoveQueue::queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, unsigned int turnIndex)
+{
+	uint8_t& index = m_MoveQueue[turnIndex].size;
+	m_MoveQueue[turnIndex].moves[index].move = move;
+	m_MoveQueue[turnIndex].moves[index].origin = origin;
+	m_MoveQueue[turnIndex].moves[index].target = target;
+	m_MoveQueue[turnIndex].moves[index].originStages = originStages;
+	m_MoveQueue[turnIndex].moves[index].targetStages = targetStages;
+	index++;
+}
+
+void MoveQueue::processTurn()
+{
+	//First sort indexes by fastest pokemon - if same speed roll to solve
+	MoveTurn turn = m_MoveQueue[m_QueueIndex];
+
+	//Sort array into speed order
+	std::sort(std::begin(turn.moves), std::end(turn.moves), SortBySpeed);
+
+	//Carry out attacks
+	for (int i = 0; i < turn.size; i++)
+	{
+		//First process status
+		if (!ProcessStatus(*turn.moves[i].origin))
+		{
+			ExecuteAttack(*turn.moves[i].origin, *turn.moves[i].target, turn.moves[i].move, *turn.moves[i].originStages, *turn.moves[i].targetStages);
+		}
+	}
+
+	//Next turn
+	m_QueueIndex++;
+	if (m_QueueIndex >= MOVE_QUEUE_LENGTH)
+	{
+		m_QueueIndex = 0;
+	}
+}
+
 void PokemonBattle::nextMove()
 {
 	//Execute top move
-	Team teamAttacking = m_MoveQueue[m_MoveQueueIndex - 1].team;
-	if (teamAttacking == Team::A)
-	{
-		//First check if any status effect change outcome
-		if (!ProcessStatus(m_PartyA[m_ActivePkmA]))
-		{
-			ExecuteAttack(m_PartyA[m_ActivePkmA], m_PartyB[m_ActivePkmB], m_MoveQueue[m_MoveQueueIndex - 1].move);
-		}
-	}
-	else if (teamAttacking == Team::B)
-	{
-		//First check if any status effect change outcome
-		if (!ProcessStatus(m_PartyB[m_ActivePkmB]))
-		{
-			ExecuteAttack(m_PartyB[m_ActivePkmB], m_PartyA[m_ActivePkmA], m_MoveQueue[m_MoveQueueIndex - 1].move);
-		}
-	}
+	m_MoveQueue.processTurn();
 	//Check if anyone is dead
 	if (m_PartyA[m_ActivePkmA].health < 0)
 	{
@@ -190,15 +229,16 @@ void PokemonBattle::nextMove()
 		EngineLog("Enemy Lost!");
 		return;
 	}
-	m_MoveQueueIndex--;
 }
 
-void PokemonBattle::run(int move)
+void PokemonBattle::run(MoveSlot move)
 {
-	if (move == -1)
+	m_NextMoveA = move;
+	if (m_NextMoveA == MoveSlot::SLOT_NULL)
 	{
 		return;
 	}
+
 	//Check if won
 	if (m_PartyA[m_ActivePkmA].health <= 0)
 	{
@@ -211,42 +251,16 @@ void PokemonBattle::run(int move)
 		return;
 	}
 
-	EngineLog("BATTLE: ", m_MoveQueueIndex);
 	EngineLog("Player HP: ", m_PartyA[m_ActivePkmA].health);
 	EngineLog("Enemy HP: ", m_PartyB[m_ActivePkmB].health);
 
 	//Await player input, add to queue
-	m_MoveQueue[m_MoveQueueIndex] = { m_PartyA[m_ActivePkmA].moves[0], Team::A };
-	m_MoveQueueIndex++;
+	m_MoveQueue.queueMove(m_PartyA[m_ActivePkmA].moves[0], &m_PartyA[m_ActivePkmA], &m_PartyB[m_ActivePkmB], &m_StagesA, &m_StagesB);
 	
 	//Await enemy input, add to queue
-	m_MoveQueue[m_MoveQueueIndex] = { m_PartyB[m_ActivePkmB].moves[0], Team::B };
-	m_MoveQueueIndex++;
+	m_MoveQueue.queueMove(m_PartyB[m_ActivePkmB].moves[0], &m_PartyB[m_ActivePkmB], &m_PartyA[m_ActivePkmA], &m_StagesB, &m_StagesA);
 
 	this->nextMove();
-	//Check if won
-	if (m_PartyA[m_ActivePkmA].health <= 0)
-	{
-		EngineLog("Player Lost!");
-		return;
-	}
-	else if (m_PartyB[m_ActivePkmB].health <= 0)
-	{
-		EngineLog("Enemy Lost!");
-		return;
-	}
-	this->nextMove();
-	//Check if won
-	if (m_PartyA[m_ActivePkmA].health <= 0)
-	{
-		EngineLog("Player Lost!");
-		return;
-	}
-	else if (m_PartyB[m_ActivePkmB].health <= 0)
-	{
-		EngineLog("Enemy Lost!");
-		return;
-	}
 
 	//Process end turn status
 	ProcessEndTurnStatus(m_PartyA[m_ActivePkmA]);

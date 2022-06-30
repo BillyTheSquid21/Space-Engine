@@ -78,7 +78,7 @@ private:
 	const std::string health = "Health is: ";
 	const std::string status = "Status is: ";
 	bool moveTriggers[4] = { false,false,false,false };
-	int selectedMove = -1;
+	MoveSlot selectedMove = MoveSlot::SLOT_NULL;
 
 	Party m_PlayerParty;
 	Party m_EnemyParty;

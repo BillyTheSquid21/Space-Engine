@@ -21,17 +21,30 @@ enum class StatusCondition : uint8_t
 struct PokemonMove
 { 
 	//If null move is null
-	uint8_t id;
+	uint8_t id = 0;
 	PokemonType type = PokemonType::Null;
 	uint8_t damageAcc = 100;
 	uint8_t statusAcc = 30;
-	uint8_t damage;
+	uint8_t damage = 0;
 	StatusCondition status = StatusCondition::None;
+	uint8_t additionalEffect = 0; //If a logically different effect is part of the move = 0 if none
+};
+
+//Slot the move fits in - can be used as direct index into move array
+enum class MoveSlot : int8_t
+{
+	SLOT_1 = 0, SLOT_2 = 1, SLOT_3 = 2, SLOT_4 = 3, SLOT_NULL = 4
+};
+
+enum class MoveCategory : int8_t
+{
+	Physical, Special, Status
 };
 
 //Define pokemon struct
 struct Pokemon
 {
+	std::string nickname = "#default";
 	int16_t id = -1; //If id is negative, pokemon is null
 	PokemonType primaryType = PokemonType::Normal;
 	PokemonType secondaryType = PokemonType::Null;
