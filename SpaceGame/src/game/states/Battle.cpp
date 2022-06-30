@@ -150,7 +150,7 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     gui.addElement(plCond);
     std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button("Move 1", &moveTriggers[0]));
     but1->setNest(1);
-    but1->m_XPos = 0.0f; but1->m_YPos = 75.0f;
+    but1->m_XPos = 8.0f; but1->m_YPos = 75.0f;
     gui.addElement(but1);
     std::shared_ptr<GameGUI::Button> but2(new GameGUI::Button("Move 2", &moveTriggers[1]));
     but2->setNest(1);
@@ -158,12 +158,26 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     gui.addElement(but2);
     std::shared_ptr<GameGUI::Button> but3(new GameGUI::Button("Move 3", &moveTriggers[2]));
     but3->setNest(1);
-    but3->m_XPos = 0.0f; but3->m_YPos = 150.0f;
+    but3->m_XPos = 8.0f; but3->m_YPos = 150.0f;
     gui.addElement(but3);
     std::shared_ptr<GameGUI::Button> but4(new GameGUI::Button("Move 4", &moveTriggers[3]));
     but4->setNest(1);
     but4->m_XPos = 100.0f; but4->m_YPos = 150.0f;
     gui.addElement(but4);
+
+    //Add text box
+    std::shared_ptr<GameGUI::Divider> textBoxBase(new GameGUI::Divider());
+    textBoxBase->m_Width = m_Width*0.3f; textBoxBase->m_Height = hudH;
+    textBoxBase->setNest(2);
+    textBoxBase->m_XPos = but4->m_XPos + textBoxBase->m_Width + m_Width*0.1f;
+    textBoxBase->m_YPos = m_Height - hudH - buffer;
+    gui.addElement(textBoxBase);
+    std::shared_ptr<GameGUI::TextBox> textBox1(new GameGUI::TextBox(BattleTextBuffer::m_Line1));
+    textBox1->setNest(2);
+    gui.addElement(textBox1);
+    std::shared_ptr<GameGUI::TextBox> textBox2(new GameGUI::TextBox(BattleTextBuffer::m_Line2));
+    textBox2->setNest(2);
+    gui.addElement(textBox2);
 
     EngineLog("Battle scene loaded");
 }
@@ -173,8 +187,10 @@ void Battle::loadRequiredData()
     m_PlayerParty[0].id = 0;
     m_PlayerParty[0].moves[0].type = PokemonType::Normal;
     m_PlayerParty[0].moves[0].damage = 25;
+    m_PlayerParty[0].moves[1].type = PokemonType::Fighting;
+    m_PlayerParty[0].moves[1].damage = 35;
     m_EnemyParty[0].id = 0;
-    m_EnemyParty[0].condition = StatusCondition::Paralysis;
+    m_EnemyParty[0].condition = StatusCondition::Burn;
     m_EnemyParty[0].moves[0].type = PokemonType::Normal;
     m_EnemyParty[0].moves[0].damage = 25;
     m_Battle.setParties(m_PlayerParty, m_EnemyParty);
@@ -202,7 +218,10 @@ void Battle::update(double deltaTime, double time)
             break;
         }
     }
-    m_Battle.run(selectedMove);
+    if (selectedMove != MoveSlot::SLOT_NULL && m_Battle.checkMoveValid(selectedMove))
+    {
+        m_Battle.run(selectedMove);
+    }
     selectedMove = MoveSlot::SLOT_NULL;
 
     m_Scene.update(deltaTime);

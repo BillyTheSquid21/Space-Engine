@@ -26,15 +26,13 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, Current
 	float roll = PokemonBattle::random.next();
 	if (roll < move.damageAcc * 100)
 	{
-		EngineLog("HP Before: ", target.health);
 		int16_t damage = CalculateDamage(attacker, target, move, attackerStage, defenderStage);
 		target.health -= damage;
-		EngineLog("HP After: ", target.health);
-		EngineLog("DAMAGE: ", damage);
 	}
 	else
 	{
-		EngineLog("MISSED!");
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("MISSED!");
 	}
 
 	//Status
@@ -46,7 +44,8 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, Current
 	roll = PokemonBattle::random.next();
 	if (roll < move.statusAcc * 100)
 	{
-		EngineLog("Status condition: ", (int)move.status);
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Status condition aquired: " + std::to_string((int)move.status));
 		target.condition = move.status;
 		if (move.status == StatusCondition::Sleep)
 		{
@@ -63,7 +62,8 @@ int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, Cu
 	if (critRoll < (625.0f*LookupStageMultiplier(attackerStage.critStage)))
 	{
 		critical = 2;
-		EngineLog("Its a critical hit!");
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Its a critical hit!");
 	}
 
 	//Calc random factor and clamp between 85 and 100
@@ -86,6 +86,16 @@ int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, Cu
 		secondaryMod = (float)LookupTypeMultiplier(move.type, target.secondaryType) / 2.0f;
 	}
 	type *= primaryMod * secondaryMod;
+	if (type > 1.0f)
+	{
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("It's super effective!");
+	}
+	else if (type < 1.0f)
+	{
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("It's not very effective...");
+	}
 
 	float level = ((2 * (float)attacker.level) / 5) + 2;
 	float attackOverDefence = (LookupStageMultiplier(attackerStage.attackStage)*(float)attacker.attack) / (LookupStageMultiplier(defenderStage.defenseStage)*(float)target.defense);
@@ -109,13 +119,15 @@ void ProcessEndTurnStatus(Pokemon& pokemon)
 		//Calc damage taken
 		damage = pokemon.hp / 16;
 		pokemon.health -= damage;
-		EngineLog("Was damaged by poison!");
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Was damaged by poison!");
 		return;
 	case StatusCondition::Burn:
 		//Calc damage taken
 		damage = pokemon.hp / 16;
 		pokemon.health -= damage;
-		EngineLog("Was hurt by burn!");
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Was hurt by burn!");
 		return;
 	default:
 		return;
@@ -134,7 +146,8 @@ bool ProcessStatus(Pokemon& pokemon)
 		//Check if sleep timer (kept in storage) has hit zero - if so sleep ends
 		if (pokemon.storage <= 0)
 		{
-			EngineLog("Woke up!");
+			BattleTextBuffer::clearText();
+			BattleTextBuffer::pushText("Woke up!");
 			pokemon.condition = StatusCondition::None;
 			pokemon.storage = 0;
 			return false;
@@ -143,12 +156,14 @@ bool ProcessStatus(Pokemon& pokemon)
 		roll = PokemonBattle::random.next();
 		if (roll <= 3333.0f)
 		{
-			EngineLog("Woke up!");
+			BattleTextBuffer::clearText();
+			BattleTextBuffer::pushText("Woke up!");
 			pokemon.condition = StatusCondition::None;
 			pokemon.storage = 0;
 			return false;
 		}
-		EngineLog("Is asleep...");
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Is asleep...");
 		pokemon.storage--;
 		return true;
 	case StatusCondition::Paralysis:
@@ -158,7 +173,8 @@ bool ProcessStatus(Pokemon& pokemon)
 		{
 			return false;
 		}
-		EngineLog("Is paralyzed! And isn't able to move!");
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Is paralyzed! And isn't able to move!");
 		return true;
 	default:
 		return false;
@@ -214,21 +230,49 @@ void MoveQueue::processTurn()
 	}
 }
 
+//Battle text buffer
+std::string BattleTextBuffer::m_Line1 = ""; std::string BattleTextBuffer::m_Line2 = "";
+int BattleTextBuffer::m_CurrentLine = 1;
+
+void BattleTextBuffer::pushText(std::string text)
+{
+	if (m_CurrentLine == 1)
+	{
+		m_Line1 = text;
+		m_CurrentLine = 2;
+	}
+	else
+	{
+		m_Line2 = text;
+		m_CurrentLine = 1;
+	}
+}
+
+//Pokemon battle
+bool PokemonBattle::checkWin()
+{
+	//Check if anyone is dead
+	if (m_PartyA[m_ActivePkmA].health < 0)
+	{
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Player lost!");
+		return true;
+	}
+	else if (m_PartyB[m_ActivePkmB].health < 0)
+	{
+		BattleTextBuffer::clearText();
+		BattleTextBuffer::pushText("Enemy lost!");
+		return true;
+	}
+	return false;
+}
+
 void PokemonBattle::nextMove()
 {
 	//Execute top move
 	m_MoveQueue.processTurn();
-	//Check if anyone is dead
-	if (m_PartyA[m_ActivePkmA].health < 0)
-	{
-		EngineLog("Player Lost!");
-		return;
-	}
-	else if (m_PartyB[m_ActivePkmB].health < 0)
-	{
-		EngineLog("Enemy Lost!");
-		return;
-	}
+	//Check if won
+	if (checkWin()) { return; }
 }
 
 void PokemonBattle::run(MoveSlot move)
@@ -240,22 +284,10 @@ void PokemonBattle::run(MoveSlot move)
 	}
 
 	//Check if won
-	if (m_PartyA[m_ActivePkmA].health <= 0)
-	{
-		EngineLog("Player Lost!");
-		return;
-	}
-	else if (m_PartyB[m_ActivePkmB].health <= 0)
-	{
-		EngineLog("Enemy Lost!");
-		return;
-	}
-
-	EngineLog("Player HP: ", m_PartyA[m_ActivePkmA].health);
-	EngineLog("Enemy HP: ", m_PartyB[m_ActivePkmB].health);
+	if (checkWin()) { return; }
 
 	//Await player input, add to queue
-	m_MoveQueue.queueMove(m_PartyA[m_ActivePkmA].moves[0], &m_PartyA[m_ActivePkmA], &m_PartyB[m_ActivePkmB], &m_StagesA, &m_StagesB);
+	m_MoveQueue.queueMove(m_PartyA[m_ActivePkmA].moves[(int)move], &m_PartyA[m_ActivePkmA], &m_PartyB[m_ActivePkmB], &m_StagesA, &m_StagesB);
 	
 	//Await enemy input, add to queue
 	m_MoveQueue.queueMove(m_PartyB[m_ActivePkmB].moves[0], &m_PartyB[m_ActivePkmB], &m_PartyA[m_ActivePkmA], &m_StagesB, &m_StagesA);

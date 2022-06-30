@@ -164,6 +164,18 @@ private:
 
 static bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs);
 
+//Static class for text buffer
+class BattleTextBuffer
+{
+public:
+	static void pushText(std::string text);
+	static void clearText() { m_Line1 = ""; m_Line2 = ""; m_CurrentLine = 1; }
+	static std::string m_Line1;
+	static std::string m_Line2;
+private:
+	static int m_CurrentLine;
+};
+
 class PokemonBattle
 {
 public:
@@ -176,11 +188,13 @@ public:
 	int16_t getHealthB() { return m_PartyB[m_ActivePkmB].health; }
 	uint8_t getStatusA() { return (uint8_t)m_PartyA[m_ActivePkmA].condition; }
 	uint8_t getStatusB() { return (uint8_t)m_PartyB[m_ActivePkmB].condition; }
+	bool checkMoveValid(MoveSlot slot) { if (m_PartyA[m_ActivePkmA].moves[(int)slot].type == PokemonType::Null) { return false; } return true; }
 
 	static RandomContainer random;
 private:
 
 	void nextMove();
+	bool checkWin();
 	
 	static enum class Team : uint8_t
 	{

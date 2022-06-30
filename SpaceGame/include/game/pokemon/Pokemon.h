@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <array>
+#include <string>
 
 //Define types
 enum class PokemonType : uint8_t
@@ -28,6 +29,7 @@ struct PokemonMove
 	uint8_t damage = 0;
 	StatusCondition status = StatusCondition::None;
 	uint8_t additionalEffect = 0; //If a logically different effect is part of the move = 0 if none
+	int16_t additionalData = 0;
 };
 
 //Slot the move fits in - can be used as direct index into move array
