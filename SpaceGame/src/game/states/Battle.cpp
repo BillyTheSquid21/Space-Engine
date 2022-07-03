@@ -1,7 +1,7 @@
 #include "game/states/Battle.h"
 
 void BattleScene::init(float width, float height)
-{
+{  
     //Do things relative to screen size
     float spriteWidth = width / 9.6f;
 
@@ -103,11 +103,14 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     //Width and height
     m_Width = width; m_Height = height;
 
+    //Get pool
+    m_Pool = MtLib::ThreadPool::Fetch();
+
     //Flags
     m_Flags = flags;
 
     //Input
-    m_Input = input;
+    m_Input = input; m_Battle.linkProgressButtons(&m_Input->PRESSED_E, &m_Input->PRESSED_X);
 
     //Renderer
     m_Renderer.initialiseRenderer(width, height);
@@ -128,6 +131,9 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     enemy->setNest(0);
     enemy->m_XPos = buffer; enemy->m_YPos = buffer;
     gui.addElement(enemy);
+    std::shared_ptr<GameGUI::TextBox> enName(new GameGUI::TextBox(nameB));
+    enName->setNest(0);
+    gui.addElement(enName);
     std::shared_ptr<GameGUI::TextBox> enHealth(new GameGUI::TextBox(healthB));
     enHealth->setNest(0);
     gui.addElement(enHealth);
@@ -142,6 +148,9 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     player->m_XPos = m_Width - hudW - buffer;
     player->m_YPos = m_Height - hudH - buffer;
     gui.addElement(player);
+    std::shared_ptr<GameGUI::TextBox> plName(new GameGUI::TextBox(nameA));
+    plName->setNest(1);
+    gui.addElement(plName);
     std::shared_ptr<GameGUI::TextBox> plHealth(new GameGUI::TextBox(healthA));
     plHealth->setNest(1);
     gui.addElement(plHealth);
@@ -150,11 +159,11 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     gui.addElement(plCond);
     std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button("Move 1", &moveTriggers[0]));
     but1->setNest(1);
-    but1->m_XPos = 8.0f; but1->m_YPos = 75.0f;
+    but1->m_XPos = 8.0f; but1->m_YPos = 115.0f;
     gui.addElement(but1);
     std::shared_ptr<GameGUI::Button> but2(new GameGUI::Button("Move 2", &moveTriggers[1]));
     but2->setNest(1);
-    but2->m_XPos = 100.0f; but2->m_YPos = 75.0f;
+    but2->m_XPos = 100.0f; but2->m_YPos = 115.0f;
     gui.addElement(but2);
     std::shared_ptr<GameGUI::Button> but3(new GameGUI::Button("Move 3", &moveTriggers[2]));
     but3->setNest(1);
@@ -184,12 +193,14 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
 
 void Battle::loadRequiredData()
 {
-    m_PlayerParty[0].id = 0;
+    m_PlayerParty[0].id = 1;
+    m_PlayerParty[0] = GeneratePokemon(m_PlayerParty[0].id);
     m_PlayerParty[0].moves[0].type = PokemonType::Normal;
     m_PlayerParty[0].moves[0].damage = 25;
     m_PlayerParty[0].moves[1].type = PokemonType::Fighting;
     m_PlayerParty[0].moves[1].damage = 35;
-    m_EnemyParty[0].id = 0;
+    m_EnemyParty[0].id = 466;
+    m_EnemyParty[0] = GeneratePokemon(m_EnemyParty[0].id);
     m_EnemyParty[0].condition = StatusCondition::Burn;
     m_EnemyParty[0].moves[0].type = PokemonType::Normal;
     m_EnemyParty[0].moves[0].damage = 25;
@@ -220,7 +231,11 @@ void Battle::update(double deltaTime, double time)
     }
     if (selectedMove != MoveSlot::SLOT_NULL && m_Battle.checkMoveValid(selectedMove))
     {
-        m_Battle.run(selectedMove);
+        if (!m_Battle.isUpdating())
+        {
+            std::function<void(MoveSlot)> runFunc = std::bind(&PokemonBattle::run, &m_Battle, std::placeholders::_1);
+            m_Pool->Run(runFunc, selectedMove);
+        }
     }
     selectedMove = MoveSlot::SLOT_NULL;
 
@@ -233,6 +248,10 @@ void Battle::update(double deltaTime, double time)
     //Update status
     conditionA = status + std::to_string(m_Battle.getStatusA());
     conditionB = status + std::to_string(m_Battle.getStatusB());
+
+    //Update nickname
+    nameA = m_Battle.getNameA();
+    nameB = m_Battle.getNameB();
 }
 
 void Battle::render()

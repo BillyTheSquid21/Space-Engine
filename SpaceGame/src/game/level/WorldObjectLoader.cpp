@@ -49,7 +49,7 @@ static ObjectType GetType(std::string string)
 	}
 }
 
-WorldParse::XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id, bool global)
+XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id, bool global)
 {
 	//Setup
 	using namespace rapidxml;
@@ -679,7 +679,7 @@ void World::LevelContainer::BuildFirstLevel(World::LevelID id)
 
 void World::LevelContainer::InitialiseGlobalObjects()
 {
-	WorldParse::XML_Doc_Wrapper doc = WorldParse::ParseLevelXML(World::LevelID::LEVEL_NULL, true);
+	XML_Doc_Wrapper doc = WorldParse::ParseLevelXML(World::LevelID::LEVEL_NULL, true);
 	std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, this, std::placeholders::_1);
 	std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, this, std::placeholders::_1);
 	WorldParse::ParseGlobalObjects(m_ObjManager, doc, ld, uld);

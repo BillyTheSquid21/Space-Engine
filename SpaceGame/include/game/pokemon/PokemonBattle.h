@@ -3,8 +3,11 @@
 #define POKEMON_BATTLE_H
 
 #include "utility/SGUtil.h"
+
 #include "game/pokemon/Pokemon.h"
 #include "game/utility/Random.hpp"
+
+#include <chrono>
 
 #define MOVE_QUEUE_LENGTH 3
 #define BATTLE_PROBABILITY_MAX 10000
@@ -180,7 +183,8 @@ class PokemonBattle
 {
 public:
 	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
-	
+	void linkProgressButtons(bool* pressE, bool* pressX) { s_Progress[0] = pressE; s_Progress[1] = pressX; }
+
 	void setParties(Party playerParty, Party enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; };
 	void run(MoveSlot move);
 
@@ -188,8 +192,14 @@ public:
 	int16_t getHealthB() { return m_PartyB[m_ActivePkmB].health; }
 	uint8_t getStatusA() { return (uint8_t)m_PartyA[m_ActivePkmA].condition; }
 	uint8_t getStatusB() { return (uint8_t)m_PartyB[m_ActivePkmB].condition; }
-	bool checkMoveValid(MoveSlot slot) { if (m_PartyA[m_ActivePkmA].moves[(int)slot].type == PokemonType::Null) { return false; } return true; }
+	std::string getNameA() { return m_PartyA[m_ActivePkmA].nickname; }
+	std::string getNameB() { return m_PartyB[m_ActivePkmB].nickname; }
 
+	bool checkMoveValid(MoveSlot slot) { if (m_PartyA[m_ActivePkmA].moves[(int)slot].type == PokemonType::Null) { return false; } return true; }
+	bool isUpdating() { return m_IsUpdating; }
+	
+	//Only to be called from battle thread - otherwise will likely lock
+	static void awaitInput();
 	static RandomContainer random;
 private:
 
@@ -204,12 +214,18 @@ private:
 	//Stack array containing next moves
 	MoveQueue m_MoveQueue;
 
+	//Bool ptr to next button
+	static bool* s_Progress[2];
+
 	//Pokemon
 	Party m_PartyA; Party m_PartyB;
 	unsigned int m_ActivePkmA = 0; unsigned int m_ActivePkmB = 0;
 	MoveSlot m_NextMoveA = MoveSlot::SLOT_NULL;
 	MoveSlot m_NextMoveB = MoveSlot::SLOT_NULL;
 	CurrentStages m_StagesA; CurrentStages m_StagesB;
+
+	//Thread
+	std::atomic<bool> m_IsUpdating = false;
 };
 
 #endif

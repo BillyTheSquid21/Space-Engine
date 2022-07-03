@@ -20,6 +20,10 @@ float LookupStageMultiplier(Stage stage)
 
 void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage)
 {
+	BattleTextBuffer::clearText();
+	BattleTextBuffer::pushText(attacker.nickname + " " + "used " + std::to_string(move.id));
+	PokemonBattle::awaitInput();
+
 	//Damage
 
 	//Roll if misses
@@ -28,11 +32,36 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, Current
 	{
 		int16_t damage = CalculateDamage(attacker, target, move, attackerStage, defenderStage);
 		target.health -= damage;
+
+		//Check if was SE
+		//Calc type effectiveness
+		float type = 1.0f;
+		//Use primary type of attacker
+		float primaryMod = (float)LookupTypeMultiplier(move.type, target.primaryType) / 2.0f;
+		float secondaryMod = 1.0f;
+		if (target.secondaryType != PokemonType::Null)
+		{
+			secondaryMod = (float)LookupTypeMultiplier(move.type, target.secondaryType) / 2.0f;
+		}
+		type *= primaryMod * secondaryMod;
+		if (type > 1.0f)
+		{
+			BattleTextBuffer::clearText();
+			BattleTextBuffer::pushText("It was super effective!");
+			PokemonBattle::awaitInput();
+		}
+		else if (type < 1.0f)
+		{
+			BattleTextBuffer::clearText();
+			BattleTextBuffer::pushText("It's not very effective...");
+			PokemonBattle::awaitInput();
+		}
 	}
 	else
 	{
 		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("MISSED!");
+		BattleTextBuffer::pushText(attacker.nickname + "'s " + "attack missed!");
+		PokemonBattle::awaitInput();
 	}
 
 	//Status
@@ -45,7 +74,8 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, Current
 	if (roll < move.statusAcc * 100)
 	{
 		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("Status condition aquired: " + std::to_string((int)move.status));
+		BattleTextBuffer::pushText(target.nickname + " was " + std::to_string((int)move.status));
+		PokemonBattle::awaitInput();
 		target.condition = move.status;
 		if (move.status == StatusCondition::Sleep)
 		{
@@ -64,6 +94,7 @@ int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, Cu
 		critical = 2;
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Its a critical hit!");
+		PokemonBattle::awaitInput();
 	}
 
 	//Calc random factor and clamp between 85 and 100
@@ -86,16 +117,6 @@ int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, Cu
 		secondaryMod = (float)LookupTypeMultiplier(move.type, target.secondaryType) / 2.0f;
 	}
 	type *= primaryMod * secondaryMod;
-	if (type > 1.0f)
-	{
-		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("It's super effective!");
-	}
-	else if (type < 1.0f)
-	{
-		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("It's not very effective...");
-	}
 
 	float level = ((2 * (float)attacker.level) / 5) + 2;
 	float attackOverDefence = (LookupStageMultiplier(attackerStage.attackStage)*(float)attacker.attack) / (LookupStageMultiplier(defenderStage.defenseStage)*(float)target.defense);
@@ -120,14 +141,16 @@ void ProcessEndTurnStatus(Pokemon& pokemon)
 		damage = pokemon.hp / 16;
 		pokemon.health -= damage;
 		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("Was damaged by poison!");
+		BattleTextBuffer::pushText(pokemon.nickname + " was hurt by poison!");
+		PokemonBattle::awaitInput();
 		return;
 	case StatusCondition::Burn:
 		//Calc damage taken
 		damage = pokemon.hp / 16;
 		pokemon.health -= damage;
 		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("Was hurt by burn!");
+		BattleTextBuffer::pushText(pokemon.nickname + " was hurt by burn!");
+		PokemonBattle::awaitInput();
 		return;
 	default:
 		return;
@@ -147,7 +170,8 @@ bool ProcessStatus(Pokemon& pokemon)
 		if (pokemon.storage <= 0)
 		{
 			BattleTextBuffer::clearText();
-			BattleTextBuffer::pushText("Woke up!");
+			BattleTextBuffer::pushText(pokemon.nickname + " woke up!");
+			PokemonBattle::awaitInput();
 			pokemon.condition = StatusCondition::None;
 			pokemon.storage = 0;
 			return false;
@@ -157,13 +181,15 @@ bool ProcessStatus(Pokemon& pokemon)
 		if (roll <= 3333.0f)
 		{
 			BattleTextBuffer::clearText();
-			BattleTextBuffer::pushText("Woke up!");
+			BattleTextBuffer::pushText(pokemon.nickname + " woke up!");
+			PokemonBattle::awaitInput();
 			pokemon.condition = StatusCondition::None;
 			pokemon.storage = 0;
 			return false;
 		}
 		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("Is asleep...");
+		BattleTextBuffer::pushText(pokemon.nickname + " is asleep...");
+		PokemonBattle::awaitInput();
 		pokemon.storage--;
 		return true;
 	case StatusCondition::Paralysis:
@@ -174,7 +200,8 @@ bool ProcessStatus(Pokemon& pokemon)
 			return false;
 		}
 		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText("Is paralyzed! And isn't able to move!");
+		BattleTextBuffer::pushText(pokemon.nickname+" is paralyzed! And isn't able to move!");
+		PokemonBattle::awaitInput();
 		return true;
 	default:
 		return false;
@@ -249,6 +276,8 @@ void BattleTextBuffer::pushText(std::string text)
 }
 
 //Pokemon battle
+bool* PokemonBattle::s_Progress[2] = { nullptr, nullptr };
+
 bool PokemonBattle::checkWin()
 {
 	//Check if anyone is dead
@@ -256,12 +285,14 @@ bool PokemonBattle::checkWin()
 	{
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Player lost!");
+		PokemonBattle::awaitInput();
 		return true;
 	}
 	else if (m_PartyB[m_ActivePkmB].health < 0)
 	{
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Enemy lost!");
+		PokemonBattle::awaitInput();
 		return true;
 	}
 	return false;
@@ -282,9 +313,10 @@ void PokemonBattle::run(MoveSlot move)
 	{
 		return;
 	}
+	m_IsUpdating = true;
 
 	//Check if won
-	if (checkWin()) { return; }
+	if (checkWin()) { m_IsUpdating = false; return; }
 
 	//Await player input, add to queue
 	m_MoveQueue.queueMove(m_PartyA[m_ActivePkmA].moves[(int)move], &m_PartyA[m_ActivePkmA], &m_PartyB[m_ActivePkmB], &m_StagesA, &m_StagesB);
@@ -297,4 +329,19 @@ void PokemonBattle::run(MoveSlot move)
 	//Process end turn status
 	ProcessEndTurnStatus(m_PartyA[m_ActivePkmA]);
 	ProcessEndTurnStatus(m_PartyB[m_ActivePkmB]);
+
+	BattleTextBuffer::clearText();
+
+	m_IsUpdating = false;
+}
+
+void PokemonBattle::awaitInput()
+{
+	while(!(*s_Progress[0] || *s_Progress[1]))
+	{
+		//Check every 50ms whether can continue
+		//Could make efficient but it works pretty well
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+	*s_Progress[0] = false; *s_Progress[1] = false; //Isn't currently thread safe
 }

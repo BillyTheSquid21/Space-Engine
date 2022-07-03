@@ -46,6 +46,7 @@ enum class MoveCategory : int8_t
 //Define pokemon struct
 struct Pokemon
 {
+	//If name == #default lookup name of pokemon
 	std::string nickname = "#default";
 	int16_t id = -1; //If id is negative, pokemon is null
 	PokemonType primaryType = PokemonType::Normal;

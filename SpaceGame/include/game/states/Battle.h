@@ -9,11 +9,14 @@
 #include "game/gui/GUI.h"
 #include "game/states/StateRenderers.h"
 #include "game/pokemon/PokemonBattle.h"
+#include "game/pokemon/PokemonIO.h"
 #include "game/objects/SpriteAnimation.hpp"
 
 #include "game/utility/Flags.hpp"
 #include "game/utility/Input.hpp"
 #include "game/utility/ImageRead.h"
+
+#include "mtlib/ThreadPool.h"
 
 class BattleScene
 {
@@ -71,10 +74,13 @@ private:
 
 	//GUI
 	GameGUI::GUIContainer gui;
+	std::string nameA;
+	std::string nameB;
 	std::string healthA;
 	std::string healthB;
 	std::string conditionA;
 	std::string conditionB;
+
 	const std::string health = "Health is: ";
 	const std::string status = "Status is: ";
 	bool moveTriggers[4] = { false,false,false,false };
@@ -82,6 +88,9 @@ private:
 
 	Party m_PlayerParty;
 	Party m_EnemyParty;
+
+	//Thread pool for keeping battle separate
+	MtLib::ThreadPool* m_Pool;
 };
 
 #endif

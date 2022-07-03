@@ -239,6 +239,7 @@
     <ClInclude Include="include\game\utility\ImageRead.h" />
     <ClInclude Include="include\game\utility\Input.hpp" />
     <ClInclude Include="include\game\utility\Random.hpp" />
+    <ClInclude Include="include\game\utility\XmlWrapper.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Model.hpp" />

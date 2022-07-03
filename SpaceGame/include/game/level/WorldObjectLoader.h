@@ -5,7 +5,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <rapidxml/rapidxml.hpp>
 #include <thread>
 
 #include "core/ObjManagement.h"
@@ -29,18 +28,13 @@
 #include "game/states/StateRenderers.h"
 
 #include "game/utility/Input.hpp"
+#include "game/utility/XmlWrapper.hpp"
 
 #include "mtlib/ThreadPool.h"
 
 //Root node of all objects is "objects"
 namespace WorldParse 
 {
-	struct XML_Doc_Wrapper
-	{
-		std::shared_ptr<std::string> data;
-		std::shared_ptr<rapidxml::xml_document<>> doc;
-	};
-
 	//Tree process is kept separate from objs as involves mainly reading data and packaging into only a single component
 	inline XML_Doc_Wrapper ParseLevelXML(World::LevelID id, bool global);
 	bool ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld);
