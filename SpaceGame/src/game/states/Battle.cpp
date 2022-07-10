@@ -25,46 +25,46 @@ void BattleScene::init(float width, float height)
     Translate<TextureVertex>(&background[0], (float)width/-2.1f, (float)height/4.0f, platform2Depth-300, GetVerticesCount(Shape::QUAD));
 
     //Get sprite dim
-    ImageDim dim = GetImageDimension("res/textures/pokemon/Torterra.png");
+    GifData dim = GetImageData("res/textures/pokemon/back/torterra.png");
 
     //Work out pokemon positioning
-    float pokemonAWidth = (dim.width / FRAME_COUNT) * (spriteWidth / 126.0f);
+    float pokemonAWidth = (dim.width / dim.frames) * (spriteWidth / 126.0f);
     float pokemonAHeight = dim.height * (spriteWidth / 126.0f);
     float pokemonAOffset = platform1Offset + 25.0f*(spriteWidth/pokemonAWidth);
     float pokemonAElevation = platform1Elevation + pokemonAHeight;
     float pokemonADepth = platform1Depth + (spriteWidth/2.0f) + pokemonAHeight/5.0f; //For taller pokemon shifts them back a bit
 
-    pokemonA = CreateTextureQuad(0, 0, pokemonAWidth,  pokemonAHeight, 0, 0, 1.0f / 51.0f, 1);
+    pokemonA = CreateTextureQuad(0, 0, pokemonAWidth,  pokemonAHeight, 0, 0, 1.0f / dim.frames, 1);
     AxialRotate<TextureVertex>(&pokemonA[0], { pokemonAWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
     Translate<TextureVertex>(&pokemonA[0], pokemonAOffset, pokemonAElevation, pokemonADepth, GetVerticesCount(Shape::QUAD));
 
-    dim = GetImageDimension("res/textures/pokemon/Chandelure2.png");
+    GifData dim2 = GetImageData("res/textures/pokemon/front/electivire.png");
 
     //Work out pokemon positioning
-    float pokemonBWidth = (dim.width / FRAME_COUNT) * (spriteWidth / 126.0f);
-    float pokemonBHeight = dim.height * (spriteWidth / 126.0f);
+    float pokemonBWidth = (dim2.width / dim2.frames) * (spriteWidth / 126.0f);
+    float pokemonBHeight = dim2.height * (spriteWidth / 126.0f);
     float pokemonBOffset = platform2Offset + 18.0f * (spriteWidth / pokemonBWidth);
     float pokemonBElevation = platform2Elevation + pokemonBHeight;
     float pokemonBDepth = platform2Depth + (spriteWidth / 2.0f) + pokemonBHeight / 5.0f; //For taller pokemon shifts them back a bit
 
-    pokemonB = CreateTextureQuad(0, 0, pokemonBWidth, pokemonBHeight, 0, 0, 1.0f / 51.0f, 1);
+    pokemonB = CreateTextureQuad(0, 0, pokemonBWidth, pokemonBHeight, 0, 0, 1.0f / (float)dim2.frames, 1);
     AxialRotate<TextureVertex>(&pokemonB[0], { pokemonAWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
     Translate<TextureVertex>(&pokemonB[0], pokemonBOffset, pokemonBElevation, pokemonBDepth, GetVerticesCount(Shape::QUAD));
 
     //Anim
-    pokemonAAnim = SpriteAnim<TextureVertex, Tex_Quad>(12, 51);
-    for (float i = 0; i < FRAME_COUNT; i+=1.0f)
+    pokemonAAnim = SpriteAnim<TextureVertex, Tex_Quad>(12, dim.frames);
+    for (float i = 0; i < dim.frames; i+=1.0f)
     {
-        TileUV frame = { i / FRAME_COUNT, 0, 1.0f / (FRAME_COUNT*1.01f), 1 };
+        TileUV frame = { i / dim.frames, 0, 1.0f / (dim.frames*1.01f), 1 };
         pokemonAAnim.setFrame(i, frame);
     }
     pokemonAAnim.linkSprite(&pokemonA, &active);
     pokemonAAnim.loop = true;
 
-    pokemonBAnim = SpriteAnim<TextureVertex, Tex_Quad>(12, 51);
-    for (float i = 0; i < FRAME_COUNT; i += 1.0f)
+    pokemonBAnim = SpriteAnim<TextureVertex, Tex_Quad>(12, dim2.frames);
+    for (float i = 0; i < dim2.frames; i += 1.0f)
     {
-        TileUV frame = { i / FRAME_COUNT, 0, 1.0f / (FRAME_COUNT * 1.01f), 1 };
+        TileUV frame = { i / dim2.frames, 0, 1.0f / (dim2.frames * 1.01f), 1 };
         pokemonBAnim.setFrame(i, frame);
     }
     pokemonBAnim.linkSprite(&pokemonB, &active);

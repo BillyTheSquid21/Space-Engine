@@ -250,13 +250,13 @@ void BattleRenderer::loadRendererData()
 	backgroundTexture.clearBuffer();
 
 	//Load pokemon A tex
-	pokemonATexture.loadTexture("res/textures/pokemon/Torterra.png");
+	pokemonATexture.loadTexture("res/textures/pokemon/back/torterra.png");
 	pokemonATexture.generateTexture(TEXTURE_SLOT);
 	pokemonATexture.bind();
 	pokemonATexture.clearBuffer();
 
 	//Load pokemon B tex
-	pokemonBTexture.loadTexture("res/textures/pokemon/Chandelure2.png");
+	pokemonBTexture.loadTexture("res/textures/pokemon/front/electivire.png");
 	pokemonBTexture.generateTexture(TEXTURE_SLOT);
 	pokemonBTexture.bind();
 	pokemonBTexture.clearBuffer();

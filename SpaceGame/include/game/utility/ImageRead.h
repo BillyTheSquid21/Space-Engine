@@ -6,12 +6,13 @@
 #include <iostream>
 #include "spaceimage/SpaceImage.hpp"
 
-struct ImageDim
+struct GifData
 {
     unsigned int width;
     unsigned int height;
+    unsigned int frames;
 };
 
-ImageDim GetImageDimension(const char* path);
+GifData GetImageData(const char* path);
 
 #endif

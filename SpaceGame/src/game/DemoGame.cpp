@@ -18,14 +18,14 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	splashScreen->init(m_Width, m_Height);
 	std::shared_ptr<Battle> battle(new Battle());
 	battle->init(m_Width, m_Height, &m_Fonts, &s_GlobalFlags, &m_GameInput);
-	battle->setActive(false);
+	battle->setActive(true);
 	std::function<void(bool)> activateBattle = std::bind(&Battle::setActive, battle.get(), std::placeholders::_1);
 	std::shared_ptr<Overworld> overworld(new Overworld());
 	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags, &m_GameInput, activateBattle);
 	overworld->setActive(false);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
-	mainMenuScreen->setActive(true);
+	mainMenuScreen->setActive(false);
 
 	//Add states
 	std::shared_ptr<State> stateSplashScreen = std::static_pointer_cast<State>(splashScreen);

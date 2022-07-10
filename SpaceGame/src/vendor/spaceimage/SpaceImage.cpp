@@ -40,7 +40,7 @@ void SpaceImage::GetPngTEXTMeta(PngChunk& chunk, ImageMeta& meta)
 
 	//Read text
 	std::string data = "";
-	for (int i = keywordLength; i < chunk.length; i++)
+	for (int i = keywordLength+1; i < chunk.length; i++)
 	{
 		data += (char)chunk.data[i];
 	}

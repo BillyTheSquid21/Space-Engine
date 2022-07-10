@@ -7,9 +7,9 @@ from dataclasses import dataclass
 
 #Script to turn gif files (eg from the pokemon showdown archive) into compatible pngs
 #Turns the gif into an image strip, with a saved metadata tag with the original frame count
-
-PATH_TO_GIF_FOLDER = "C:\\Users\\yoshi\\Downloads\\test\\gifs\\"
-PATH_TO_PNG_FOLDER = "C:\\Users\\yoshi\\Downloads\\test\\pngs\\"
+#Just use the absolute paths its python its as easy as it gets
+PATH_TO_GIF_FOLDER = "C:\\Users\\yoshi\\OneDrive\\Documents\\Code\\Pokemon Test\\gif\\"
+PATH_TO_PNG_FOLDER = "C:\\Users\\yoshi\\OneDrive\\Documents\\Code\\Pokemon Test\\png\\"
 SHOW_PROGRESS = True
 
 @dataclass
@@ -81,6 +81,7 @@ def save_Final_Image(framecount, targetImage, path):
 def main():
     print("Starting process...")
     export_Gif_Frames(PATH_TO_GIF_FOLDER, PATH_TO_PNG_FOLDER)
+    print("Done!")
 
 if __name__ == "__main__":
     main()
