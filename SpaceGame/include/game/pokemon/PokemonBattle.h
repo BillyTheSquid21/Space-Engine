@@ -8,6 +8,7 @@
 #include "game/utility/Random.hpp"
 
 #include <chrono>
+#include <functional>
 
 #define MOVE_QUEUE_LENGTH 3
 #define BATTLE_PROBABILITY_MAX 10000
@@ -143,6 +144,7 @@ public:
 	MoveQueue() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
 	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages);
 	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, unsigned int turnIndex);
+	void linkWinCheck(std::function<bool()> func) { m_CheckWin = func; }
 	void processTurn();
 
 	static const int POKEMON_COUNT = 2;
@@ -163,6 +165,7 @@ public:
 private:
 	MoveTurn m_MoveQueue[MOVE_QUEUE_LENGTH]; //Array of how many moves to look ahead
 	unsigned int m_QueueIndex = 0; //Rolls around to make queue array circular
+	std::function<bool()> m_CheckWin;
 };
 
 static bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs);
@@ -182,7 +185,7 @@ private:
 class PokemonBattle
 {
 public:
-	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
+	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); m_MoveQueue.linkWinCheck(std::bind(&PokemonBattle::checkWin, this)); }
 	void linkProgressButtons(bool* pressE, bool* pressX) { s_Progress[0] = pressE; s_Progress[1] = pressX; }
 
 	void setParties(Party playerParty, Party enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; };
@@ -195,7 +198,7 @@ public:
 	std::string getNameA() { return m_PartyA[m_ActivePkmA].nickname; }
 	std::string getNameB() { return m_PartyB[m_ActivePkmB].nickname; }
 
-	bool checkMoveValid(MoveSlot slot) { if (m_PartyA[m_ActivePkmA].moves[(int)slot].type == PokemonType::Null) { return false; } return true; }
+	bool checkMoveValid(MoveSlot slot) { if (m_PartyA[m_ActivePkmA].moves[(int)slot].type == PokemonType::None) { return false; } return true; }
 	bool isUpdating() { return m_IsUpdating; }
 	
 	//Only to be called from battle thread - otherwise will likely lock

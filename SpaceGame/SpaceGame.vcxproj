@@ -127,7 +127,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Assimp\lib;$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mtd.lib;glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;assimp-vc142-mtd.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,7 +148,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -169,6 +169,7 @@
     <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\objects\Tree.cpp" />
     <ClCompile Include="src\game\objects\WarpTile.cpp" />
+    <ClCompile Include="src\game\pokemon\PokemonLevel.cpp" />
     <ClCompile Include="src\game\pokemon\Pokemon.cpp" />
     <ClCompile Include="src\game\pokemon\PokemonBattle.cpp" />
     <ClCompile Include="src\game\pokemon\PokemonIO.cpp" />
@@ -195,6 +196,7 @@
     <ClCompile Include="src\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\vendor\mtlib\ThreadPool.cpp" />
+    <ClCompile Include="src\vendor\spaceimage\SpaceImage.cpp" />
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
     <ClCompile Include="src\vendor\stb\stb_image_write.cpp" />
   </ItemGroup>
@@ -226,6 +228,7 @@
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\objects\Tree.h" />
     <ClInclude Include="include\game\objects\WarpTile.h" />
+    <ClInclude Include="include\game\pokemon\PokemonLevel.h" />
     <ClInclude Include="include\game\pokemon\Pokemon.h" />
     <ClInclude Include="include\game\pokemon\PokemonBattle.h" />
     <ClInclude Include="include\game\pokemon\PokemonIO.h" />
@@ -285,6 +288,7 @@
     <ClInclude Include="src\vendor\rapidjson\uri.h" />
     <ClInclude Include="src\vendor\rapidjson\writer.h" />
     <ClInclude Include="src\vendor\rapidxml\rapidxml.hpp" />
+    <ClInclude Include="src\vendor\spaceimage\SpaceImage.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl" />

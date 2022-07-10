@@ -1,8 +1,11 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input) {
+void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input, std::function<void(bool)> battle) {
     //Width and height
     m_Width = width; m_Height = height;
+
+    //Battle func
+    m_StartBattle = battle; m_Renderer.m_StateToBattle = std::bind(&Overworld::startBattle, this);
 
     //Flags
     m_Flags = flags;
@@ -127,7 +130,7 @@ void Overworld::loadRequiredData() {
 void Overworld::purgeRequiredData() {
     m_Renderer.purgeData();
     m_ObjManager.reset();
-    m_Fonts->clearFonts();
+    //m_Fonts->clearFonts();
     m_Levels.UnloadAll();
     m_DataLoaded = false;
 }
@@ -241,4 +244,10 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
             }
         }
     }
+}
+
+void Overworld::startBattle()
+{
+    this->setActive(false);
+    m_StartBattle(true);
 }

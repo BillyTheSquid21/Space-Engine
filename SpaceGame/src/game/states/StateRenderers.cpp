@@ -250,7 +250,7 @@ void BattleRenderer::loadRendererData()
 	backgroundTexture.clearBuffer();
 
 	//Load pokemon A tex
-	pokemonATexture.loadTexture("res/textures/pokemon/Bulbasaur.png");
+	pokemonATexture.loadTexture("res/textures/pokemon/Torterra.png");
 	pokemonATexture.generateTexture(TEXTURE_SLOT);
 	pokemonATexture.bind();
 	pokemonATexture.clearBuffer();

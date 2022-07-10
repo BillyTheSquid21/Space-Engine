@@ -239,11 +239,13 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 	}
 
 	//Add grass comp
+	std::shared_ptr<TallGrassEncounterComponent> grassEnc(new TallGrassEncounterComponent(&grass->m_ActiveStates, ren->m_StateToBattle));
 	grassRen->generateIndices();
 	{
 		std::lock_guard<std::shared_mutex> heapLock(manager->getHeapMutex());
 		manager->pushRenderHeap(grassRen, &grass->m_RenderComps);
 		manager->pushRenderHeap(grassAnim, &grass->m_RenderComps);
+		manager->pushUpdateHeap(grassEnc, &grass->m_UpdateComps);
 	}
 
 	//Create animations

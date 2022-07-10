@@ -10,6 +10,7 @@
 #include "game/states/StateRenderers.h"
 #include "game/pokemon/PokemonBattle.h"
 #include "game/pokemon/PokemonIO.h"
+#include "game/pokemon/PokemonLevel.h"
 #include "game/objects/SpriteAnimation.hpp"
 
 #include "game/utility/Flags.hpp"
@@ -74,6 +75,8 @@ private:
 
 	//GUI
 	GameGUI::GUIContainer gui;
+	std::string levelA;
+	std::string levelB;
 	std::string nameA;
 	std::string nameB;
 	std::string healthA;

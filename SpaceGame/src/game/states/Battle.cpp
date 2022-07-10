@@ -25,7 +25,7 @@ void BattleScene::init(float width, float height)
     Translate<TextureVertex>(&background[0], (float)width/-2.1f, (float)height/4.0f, platform2Depth-300, GetVerticesCount(Shape::QUAD));
 
     //Get sprite dim
-    ImageDim dim = GetImageDimension("res/textures/pokemon/Bulbasaur.png");
+    ImageDim dim = GetImageDimension("res/textures/pokemon/Torterra.png");
 
     //Work out pokemon positioning
     float pokemonAWidth = (dim.width / FRAME_COUNT) * (spriteWidth / 126.0f);
@@ -118,7 +118,38 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     //Platform test
     m_Scene.init(width, height);
 
+    //Pkm test
+    MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
+
+    PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+    PokemonDataBank::loadData(PkmDataType::BASE_STATS);
+    PokemonDataBank::loadData(PkmDataType::MOVE_INFO);
+    PokemonDataBank::loadData(PkmDataType::POKEMON_TYPES);
+
+    m_PlayerParty[0].id = 389;
+    m_PlayerParty[0].moves[2].id = 89;
+    m_PlayerParty[0].moves[1].id = 75;
+    m_PlayerParty[0].moves[0].id = 89;
+    m_PlayerParty[0].moves[3].id = 402;
+    GeneratePokemon(m_PlayerParty[0].id, m_PlayerParty[0]);
+    SetPkmStatsFromLevel(m_PlayerParty[0]);
+    m_EnemyParty[0].id = 466;
+    m_EnemyParty[0].moves[0].id = 7;
+    m_EnemyParty[0].moves[0].status = StatusCondition::Burn;
+    m_EnemyParty[0].moves[0].statusAcc = 50;
+    GeneratePokemon(m_EnemyParty[0].id, m_EnemyParty[0]);
+    SetPkmStatsFromLevel(m_EnemyParty[0]);
+    m_Battle.setParties(m_PlayerParty, m_EnemyParty);
+
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::MOVE_INFO);
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::POKEMON_TYPES);
+
     //Gui test
+    levelA = std::to_string(m_PlayerParty[0].level);
+    levelB = std::to_string(m_EnemyParty[0].level);
+
     std::shared_ptr<HUD> hud(new HUD(m_Width, m_Height,0,0));
     gui.setBase(hud);
 
@@ -131,6 +162,9 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     enemy->setNest(0);
     enemy->m_XPos = buffer; enemy->m_YPos = buffer;
     gui.addElement(enemy);
+    std::shared_ptr<GameGUI::TextBox> enLev(new GameGUI::TextBox(levelB));
+    enLev->setNest(0);
+    gui.addElement(enLev);
     std::shared_ptr<GameGUI::TextBox> enName(new GameGUI::TextBox(nameB));
     enName->setNest(0);
     gui.addElement(enName);
@@ -148,6 +182,9 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     player->m_XPos = m_Width - hudW - buffer;
     player->m_YPos = m_Height - hudH - buffer;
     gui.addElement(player);
+    std::shared_ptr<GameGUI::TextBox> plLev(new GameGUI::TextBox(levelA));
+    plLev->setNest(1);
+    gui.addElement(plLev);
     std::shared_ptr<GameGUI::TextBox> plName(new GameGUI::TextBox(nameA));
     plName->setNest(1);
     gui.addElement(plName);
@@ -157,19 +194,25 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     std::shared_ptr<GameGUI::TextBox> plCond(new GameGUI::TextBox(conditionA));
     plCond->setNest(1);
     gui.addElement(plCond);
-    std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button("Move 1", &moveTriggers[0]));
+
+    //Move buttons
+    std::string move1 = m_PlayerParty[0].moves[0].identifier;
+    std::string move2 = m_PlayerParty[0].moves[1].identifier;
+    std::string move3 = m_PlayerParty[0].moves[2].identifier;
+    std::string move4 = m_PlayerParty[0].moves[3].identifier;
+    std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button(move1, &moveTriggers[0]));
     but1->setNest(1);
     but1->m_XPos = 8.0f; but1->m_YPos = 115.0f;
     gui.addElement(but1);
-    std::shared_ptr<GameGUI::Button> but2(new GameGUI::Button("Move 2", &moveTriggers[1]));
+    std::shared_ptr<GameGUI::Button> but2(new GameGUI::Button(move2, &moveTriggers[1]));
     but2->setNest(1);
     but2->m_XPos = 100.0f; but2->m_YPos = 115.0f;
     gui.addElement(but2);
-    std::shared_ptr<GameGUI::Button> but3(new GameGUI::Button("Move 3", &moveTriggers[2]));
+    std::shared_ptr<GameGUI::Button> but3(new GameGUI::Button(move3, &moveTriggers[2]));
     but3->setNest(1);
     but3->m_XPos = 8.0f; but3->m_YPos = 150.0f;
     gui.addElement(but3);
-    std::shared_ptr<GameGUI::Button> but4(new GameGUI::Button("Move 4", &moveTriggers[3]));
+    std::shared_ptr<GameGUI::Button> but4(new GameGUI::Button(move4, &moveTriggers[3]));
     but4->setNest(1);
     but4->m_XPos = 100.0f; but4->m_YPos = 150.0f;
     gui.addElement(but4);
@@ -193,19 +236,6 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
 
 void Battle::loadRequiredData()
 {
-    m_PlayerParty[0].id = 1;
-    m_PlayerParty[0] = GeneratePokemon(m_PlayerParty[0].id);
-    m_PlayerParty[0].moves[0].type = PokemonType::Normal;
-    m_PlayerParty[0].moves[0].damage = 25;
-    m_PlayerParty[0].moves[1].type = PokemonType::Fighting;
-    m_PlayerParty[0].moves[1].damage = 35;
-    m_EnemyParty[0].id = 466;
-    m_EnemyParty[0] = GeneratePokemon(m_EnemyParty[0].id);
-    m_EnemyParty[0].condition = StatusCondition::Burn;
-    m_EnemyParty[0].moves[0].type = PokemonType::Normal;
-    m_EnemyParty[0].moves[0].damage = 25;
-    m_Battle.setParties(m_PlayerParty, m_EnemyParty);
-
     m_Renderer.loadRendererData();
 
     m_DataLoaded = true;
@@ -216,10 +246,16 @@ void Battle::purgeRequiredData()
     m_Renderer.purgeData();
 }
 
+//Temp
+bool first = true;
 void Battle::update(double deltaTime, double time)
 {
     //Check selected move - -1 if none
     bool progress = false;
+    if (first)
+    {
+        BattleTextBuffer::pushText("A wild " + m_EnemyParty[0].nickname + " appeared!");
+    }
     for (int i = 0; i < (int)MoveSlot::SLOT_NULL; i++)
     {
         if (moveTriggers[i])
@@ -252,6 +288,14 @@ void Battle::update(double deltaTime, double time)
     //Update nickname
     nameA = m_Battle.getNameA();
     nameB = m_Battle.getNameB();
+
+    //Update level
+    if (first)
+    {
+        levelA = "Lv " + levelA;
+        levelB = "Lv " + levelB;
+    }
+    first = false;
 }
 
 void Battle::render()

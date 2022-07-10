@@ -5,7 +5,7 @@ RandomContainer MoveQueue::random;
 
 bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs)
 {
-	return lhs.origin->speed < rhs.origin->speed;
+	return lhs.origin->stats.speed < rhs.origin->stats.speed;
 }
 
 uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending)
@@ -21,7 +21,7 @@ float LookupStageMultiplier(Stage stage)
 void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage)
 {
 	BattleTextBuffer::clearText();
-	BattleTextBuffer::pushText(attacker.nickname + " " + "used " + std::to_string(move.id));
+	BattleTextBuffer::pushText(attacker.nickname + " " + "used " + move.identifier);
 	PokemonBattle::awaitInput();
 
 	//Damage
@@ -39,7 +39,7 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, Current
 		//Use primary type of attacker
 		float primaryMod = (float)LookupTypeMultiplier(move.type, target.primaryType) / 2.0f;
 		float secondaryMod = 1.0f;
-		if (target.secondaryType != PokemonType::Null)
+		if (target.secondaryType != PokemonType::None)
 		{
 			secondaryMod = (float)LookupTypeMultiplier(move.type, target.secondaryType) / 2.0f;
 		}
@@ -112,14 +112,14 @@ int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, Cu
 	//Use primary type of attacker
 	float primaryMod = (float)LookupTypeMultiplier(move.type, target.primaryType) / 2.0f;
 	float secondaryMod = 1.0f;
-	if (target.secondaryType != PokemonType::Null)
+	if (target.secondaryType != PokemonType::None)
 	{
 		secondaryMod = (float)LookupTypeMultiplier(move.type, target.secondaryType) / 2.0f;
 	}
 	type *= primaryMod * secondaryMod;
 
 	float level = ((2 * (float)attacker.level) / 5) + 2;
-	float attackOverDefence = (LookupStageMultiplier(attackerStage.attackStage)*(float)attacker.attack) / (LookupStageMultiplier(defenderStage.defenseStage)*(float)target.defense);
+	float attackOverDefence = (LookupStageMultiplier(attackerStage.attackStage)*(float)attacker.stats.attack) / (LookupStageMultiplier(defenderStage.defenseStage)*(float)target.stats.defense);
 	float damageOut = ((level * (float)move.damage * attackOverDefence) / 50.0f) + 2.0f;
 
 	//Now multiply premultiplier by additional effects - easy to add
@@ -138,7 +138,7 @@ void ProcessEndTurnStatus(Pokemon& pokemon)
 		return;
 	case StatusCondition::Poison:
 		//Calc damage taken
-		damage = pokemon.hp / 16;
+		damage = pokemon.stats.hp / 16;
 		pokemon.health -= damage;
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText(pokemon.nickname + " was hurt by poison!");
@@ -146,7 +146,7 @@ void ProcessEndTurnStatus(Pokemon& pokemon)
 		return;
 	case StatusCondition::Burn:
 		//Calc damage taken
-		damage = pokemon.hp / 16;
+		damage = pokemon.stats.hp / 16;
 		pokemon.health -= damage;
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText(pokemon.nickname + " was hurt by burn!");
@@ -246,6 +246,10 @@ void MoveQueue::processTurn()
 		if (!ProcessStatus(*turn.moves[i].origin))
 		{
 			ExecuteAttack(*turn.moves[i].origin, *turn.moves[i].target, turn.moves[i].move, *turn.moves[i].originStages, *turn.moves[i].targetStages);
+			if (m_CheckWin())
+			{
+				break;
+			}
 		}
 	}
 
@@ -281,14 +285,14 @@ bool* PokemonBattle::s_Progress[2] = { nullptr, nullptr };
 bool PokemonBattle::checkWin()
 {
 	//Check if anyone is dead
-	if (m_PartyA[m_ActivePkmA].health < 0)
+	if (m_PartyA[m_ActivePkmA].health <= 0)
 	{
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Player lost!");
 		PokemonBattle::awaitInput();
 		return true;
 	}
-	else if (m_PartyB[m_ActivePkmB].health < 0)
+	else if (m_PartyB[m_ActivePkmB].health <= 0)
 	{
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Enemy lost!");

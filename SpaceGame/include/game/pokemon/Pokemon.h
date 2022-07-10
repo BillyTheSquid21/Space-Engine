@@ -9,21 +9,69 @@
 //Define types
 enum class PokemonType : uint8_t
 {
-	Normal, Fire, Water, Grass, Electric, Ice, Fighting, Poison, Ground, Flying, 
-	Psychic, Bug, Rock, Ghost, Dark, Dragon, Steel, Fairy, Null
+	Normal, 
+	Fire, 
+	Water, 
+	Grass, 
+	Electric, 
+	Ice, 
+	Fighting, 
+	Poison, 
+	Ground, 
+	Flying, 
+	Psychic, 
+	Bug, 
+	Rock, 
+	Ghost, 
+	Dark, 
+	Dragon, 
+	Steel, 
+	Fairy,
+	None
 };
 
-enum class StatusCondition : uint8_t
+enum class StatusCondition : int8_t
 {
 	None, Poison, Sleep, Paralysis, Burn, Confusion,
+};
+
+enum class PokemonNature : int8_t
+{
+	None,
+	Hardy,
+	Bold,
+	Modest,
+	Calm,
+	Timid,
+	Lonely,
+	Docile,
+	Mild,
+	Gentle,
+	Hasty,
+	Adamant,
+	Impish,
+	Bashful,
+	Careful,
+	Rash,
+	Jolly,
+	Naughty,
+	Lax,
+	Quirky,
+	Naive,
+	Brave,
+	Relaxed,
+	Quiet,
+	Sassy,
+	Serious
 };
 
 //Define moves
 struct PokemonMove
 { 
+	std::string identifier = " ";
 	//If null move is null
-	uint8_t id = 0;
-	PokemonType type = PokemonType::Null;
+	uint16_t id = 0;
+	PokemonType type = PokemonType::None;
 	uint8_t damageAcc = 100;
 	uint8_t statusAcc = 30;
 	uint8_t damage = 0;
@@ -43,24 +91,30 @@ enum class MoveCategory : int8_t
 	Physical, Special, Status
 };
 
-//Define pokemon struct
-struct Pokemon
+struct PokemonStats
 {
-	//If name == #default lookup name of pokemon
-	std::string nickname = "#default";
-	int16_t id = -1; //If id is negative, pokemon is null
-	PokemonType primaryType = PokemonType::Normal;
-	PokemonType secondaryType = PokemonType::Null;
-	int16_t level = 5;
-	int16_t health = 23;
-	StatusCondition condition = StatusCondition::None;
-	//Stats
 	int16_t hp = 23;
 	int16_t attack = 14;
 	int16_t defense = 13;
 	int16_t spAttack = 14;
 	int16_t spDefense = 14;
 	int16_t speed = 17;
+};
+
+//Define pokemon struct
+struct Pokemon
+{
+	//Identifying info
+	std::string nickname = "#default"; //if #default lookup name
+	int16_t id = -1; //If id is negative, pokemon is null
+	PokemonNature nature = PokemonNature::None;
+	//Battle info
+	PokemonType primaryType = PokemonType::Normal;
+	PokemonType secondaryType = PokemonType::None;
+	int16_t level = 50;
+	int16_t health = 23;
+	StatusCondition condition = StatusCondition::None;
+	PokemonStats stats;
 	//Moves
 	std::array<PokemonMove, 4> moves;
 	//Other
@@ -68,6 +122,5 @@ struct Pokemon
 };
 
 typedef std::array<Pokemon, 6> Party;
-
 
 #endif

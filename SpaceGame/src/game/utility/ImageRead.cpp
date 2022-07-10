@@ -1,15 +1,7 @@
 #include "game/utility/ImageRead.h"
 
 ImageDim GetImageDimension(const char* path) {
-    std::ifstream in(path);
-    unsigned int width, height;
+    SpaceImage::ImageMeta meta = SpaceImage::ReadImage(path);
 
-    in.seekg(16);
-    in.read((char*)&width, 4);
-    in.read((char*)&height, 4);
-
-    width = ntohl(width);
-    height = ntohl(height);
-
-    return { width, height };
+    return { meta.width, meta.height };
 }

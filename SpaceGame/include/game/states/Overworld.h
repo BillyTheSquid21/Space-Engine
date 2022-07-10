@@ -19,11 +19,12 @@
 #include "game/objects/WarpTile.h"
 #include "game/objects/ScriptTile.hpp"
 
+#include <functional>
 
 class Overworld : public State
 {
 public:
-	void init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input);
+	void init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input, std::function<void(bool)> battle);
 	void update(double deltaTime, double time);
 	void render();
 	void loadRequiredData();
@@ -65,6 +66,10 @@ private:
 	GameGUI::TextBoxBuffer m_TextBuff;
 	float m_SampleTime = 0.0f;
 	bool m_Sample = false;
+
+	//Test battle
+	void startBattle();
+	std::function<void(bool)> m_StartBattle;
 
 	GameInput* m_Input;
 

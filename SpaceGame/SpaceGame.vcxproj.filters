@@ -91,6 +91,9 @@
     <Filter Include="Source Files\Game\Pokemon">
       <UniqueIdentifier>{0c75cfba-4e3b-497b-b611-2d5661aebea0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\spaceimage">
+      <UniqueIdentifier>{2e5bdab6-8870-4de1-8fbb-c4b3b162988e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -227,6 +230,12 @@
     </ClCompile>
     <ClCompile Include="src\game\pokemon\PokemonIO.cpp">
       <Filter>Source Files\Game\Pokemon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\pokemon\PokemonLevel.cpp">
+      <Filter>Source Files\Game\Pokemon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\spaceimage\SpaceImage.cpp">
+      <Filter>Source Files\Vendor\spaceimage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +496,12 @@
     </ClInclude>
     <ClInclude Include="include\game\utility\XmlWrapper.hpp">
       <Filter>Header Files\Game\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\pokemon\PokemonLevel.h">
+      <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\spaceimage\SpaceImage.hpp">
+      <Filter>Source Files\Vendor\spaceimage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

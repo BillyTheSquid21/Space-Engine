@@ -62,9 +62,12 @@ public:
 
 	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 	ShadowMap shadowMap = ShadowMap(2048, 2048);
-	int lightScene = 1;
+	int lightScene = 0;
 
 	unsigned int lastObjectCount = 0;
+
+	//Test
+	std::function<void()> m_StateToBattle;
 };
 
 //battle
