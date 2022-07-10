@@ -1,2 +1,2 @@
 Pokemon sprite images and other images will be compressed at a later date when things change less
-PNG 8 format is likely a good choice for the pokemon sprites
+Currently is not necessary, but should keep file size down
