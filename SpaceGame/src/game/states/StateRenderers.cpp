@@ -248,18 +248,6 @@ void BattleRenderer::loadRendererData()
 	backgroundTexture.generateTexture(TEXTURE_SLOT);
 	backgroundTexture.bind();
 	backgroundTexture.clearBuffer();
-
-	//Load pokemon A tex
-	pokemonATexture.loadTexture("res/textures/pokemon/back/torterra.png");
-	pokemonATexture.generateTexture(TEXTURE_SLOT);
-	pokemonATexture.bind();
-	pokemonATexture.clearBuffer();
-
-	//Load pokemon B tex
-	pokemonBTexture.loadTexture("res/textures/pokemon/front/electivire.png");
-	pokemonBTexture.generateTexture(TEXTURE_SLOT);
-	pokemonBTexture.bind();
-	pokemonBTexture.clearBuffer();
 }
 
 void BattleRenderer::purgeData()
@@ -268,6 +256,22 @@ void BattleRenderer::purgeData()
 	backgroundTexture.deleteTexture();
 	pokemonATexture.deleteTexture();
 	pokemonBTexture.deleteTexture();
+}
+
+void BattleRenderer::loadPokemonTextureA(std::string name)
+{
+	pokemonATexture.loadTexture(BACK_TEX_PATH+name+PNG_EXT);
+	pokemonATexture.generateTexture(TEXTURE_SLOT);
+	pokemonATexture.bind();
+	pokemonATexture.clearBuffer();
+}
+
+void BattleRenderer::loadPokemonTextureB(std::string name)
+{
+	pokemonBTexture.loadTexture(FRONT_TEX_PATH+name+PNG_EXT);
+	pokemonBTexture.generateTexture(TEXTURE_SLOT);
+	pokemonBTexture.bind();
+	pokemonBTexture.clearBuffer();
 }
 
 void BattleRenderer::bufferRenderData()

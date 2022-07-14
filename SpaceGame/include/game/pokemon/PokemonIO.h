@@ -45,6 +45,7 @@ public:
 
 	//Pokemon data retrieval
 	static PokemonStats GetPokemonBaseStats(uint16_t id);
+	static std::string GetPokemonName(uint16_t id);
 
 private:
 

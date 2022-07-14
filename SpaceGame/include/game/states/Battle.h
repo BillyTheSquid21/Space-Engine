@@ -24,13 +24,28 @@ class BattleScene
 public:
 	void init(float width, float height);
 	void render(Render::Renderer<TextureVertex>& tex, Render::Renderer<TextureVertex>& back, Render::Renderer<TextureVertex>& pok1, Render::Renderer<TextureVertex>& pok2);
+	void setPokemonA(std::string name);
+	void buildPlatformA();
+	void buildPlatformB();
+	void setPokemonB(std::string name);
 	void update(double deltaTime);
 private:
+	int m_Width = 0; int m_Height = 0;
+	float m_SpriteWidth = 0.0f;
+
+	//Platforms
+	struct PlatformData
+	{
+		float depth = 1.0f;
+		float elevation = 1.0f;
+		float offset = 1.0f;
+	};
 	Tex_Quad platform1; Tex_Quad platform2;
+	PlatformData platform1Data; PlatformData platform2Data;
+
 	Tex_Quad background;
 	Tex_Quad pokemonA;
 	Tex_Quad pokemonB;
-	const float FRAME_COUNT = 51.0f;
 	SpriteAnim<TextureVertex, Tex_Quad> pokemonAAnim;
 	SpriteAnim<TextureVertex, Tex_Quad> pokemonBAnim;
 	bool active = true;
@@ -54,6 +69,10 @@ public:
 	void loadRequiredData();
 	void purgeRequiredData();
 	void handleInput(int key, int scancode, int action, int mods);
+
+	//Set pokemon sprite in a given slot
+	void setPokemonA(uint16_t id);
+	void setPokemonB(uint16_t id);
 private:
 
 	//Rendering

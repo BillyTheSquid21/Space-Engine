@@ -215,6 +215,27 @@ PokemonStats PokemonDataBank::GetPokemonBaseStats(uint16_t id)
 	return baseStats;
 }
 
+std::string PokemonDataBank::GetPokemonName(uint16_t id)
+{
+	using namespace rapidjson;
+	std::string name = "bulbasaur";
+	if (!PokemonDataBank::checkData(PkmDataType::SPECIES_INFO))
+	{
+		return name;
+	}
+
+	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::SPECIES_INFO);
+	std::string idString = std::to_string(id);
+	if (!doc.HasMember(idString.c_str()))
+	{
+		return name;
+	}
+
+	const Value& stats = doc[idString.c_str()];
+	name = stats["identifier"].GetString();
+	return name;
+}
+
 inline static void LoadMoveData(Pokemon& pokemon, rapidjson::Document& doc, std::string idString, unsigned int moveIndex)
 {
 	using namespace rapidjson;

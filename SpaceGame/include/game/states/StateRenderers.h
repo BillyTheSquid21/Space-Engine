@@ -98,6 +98,13 @@ public:
 	void bufferRenderData();
 	void draw(); //Draw scene renderer
 
+	//Load texture for pokemon
+	void loadPokemonTextureA(std::string name);
+	void loadPokemonTextureB(std::string name);
+	const std::string FRONT_TEX_PATH = "res/textures/pokemon/front/";
+	const std::string BACK_TEX_PATH = "res/textures/pokemon/back/";
+	const std::string PNG_EXT = ".png";
+
 	//Slot identifiers
 	static constexpr int TEXTURE_SLOT = 0;
 

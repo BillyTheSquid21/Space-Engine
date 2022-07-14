@@ -3465,7 +3465,7 @@
       "is_default": 1
    },
    "386": {
-      "identifier": "deoxys-normal",
+      "identifier": "deoxys",
       "species_id": 386,
       "height": 17,
       "weight": 608,
@@ -3708,7 +3708,7 @@
       "is_default": 1
    },
    "413": {
-      "identifier": "wormadam-plant",
+      "identifier": "wormadam",
       "species_id": 413,
       "height": 5,
       "weight": 65,
@@ -4374,7 +4374,7 @@
       "is_default": 1
    },
    "487": {
-      "identifier": "giratina-altered",
+      "identifier": "giratina",
       "species_id": 487,
       "height": 45,
       "weight": 7500,
@@ -4419,7 +4419,7 @@
       "is_default": 1
    },
    "492": {
-      "identifier": "shaymin-land",
+      "identifier": "shaymin",
       "species_id": 492,
       "height": 2,
       "weight": 21,
@@ -4941,7 +4941,7 @@
       "is_default": 1
    },
    "550": {
-      "identifier": "basculin-red-striped",
+      "identifier": "basculin",
       "species_id": 550,
       "height": 10,
       "weight": 180,
@@ -4986,7 +4986,7 @@
       "is_default": 1
    },
    "555": {
-      "identifier": "darmanitan-standard",
+      "identifier": "darmanitan",
       "species_id": 555,
       "height": 13,
       "weight": 929,
@@ -5760,7 +5760,7 @@
       "is_default": 1
    },
    "641": {
-      "identifier": "tornadus-incarnate",
+      "identifier": "tornadus",
       "species_id": 641,
       "height": 15,
       "weight": 630,
@@ -5769,7 +5769,7 @@
       "is_default": 1
    },
    "642": {
-      "identifier": "thundurus-incarnate",
+      "identifier": "thundurus",
       "species_id": 642,
       "height": 15,
       "weight": 610,
@@ -5796,7 +5796,7 @@
       "is_default": 1
    },
    "645": {
-      "identifier": "landorus-incarnate",
+      "identifier": "landorus",
       "species_id": 645,
       "height": 15,
       "weight": 680,
@@ -5814,7 +5814,7 @@
       "is_default": 1
    },
    "647": {
-      "identifier": "keldeo-ordinary",
+      "identifier": "keldeo",
       "species_id": 647,
       "height": 14,
       "weight": 485,
@@ -5823,7 +5823,7 @@
       "is_default": 1
    },
    "648": {
-      "identifier": "meloetta-aria",
+      "identifier": "meloetta",
       "species_id": 648,
       "height": 6,
       "weight": 65,

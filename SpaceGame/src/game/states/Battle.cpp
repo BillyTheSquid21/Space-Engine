@@ -2,69 +2,92 @@
 
 void BattleScene::init(float width, float height)
 {  
+    m_Width = width; m_Height = height;
+
     //Do things relative to screen size
-    float spriteWidth = width / 9.6f;
+    m_SpriteWidth = width / 9.6f;
 
-    float platform1Depth = -height / 4.2f;
-    float platform1Elevation = -height / 27.5f;
-    float platform1Offset = -spriteWidth + width/55.0f;
+    buildPlatformA(); buildPlatformB();
+    float platform2Depth = -m_Height / 2.1f;
+    background = CreateTextureQuad(0, 0, m_Width, m_Height, 0, 0, 1, 1);
+    Translate<TextureVertex>(&background[0], (float)m_Width / -2.1f, (float)m_Height / 4.0f, platform2Depth - 300, GetVerticesCount(Shape::QUAD));
+}
 
-    float platform2Depth = -height / 2.1f;
-    float platform2Elevation = -height / 27.5f;
-    float platform2Offset = -spriteWidth + width / 6.0f;
+void BattleScene::buildPlatformA()
+{
+    //Work out positioning
+    platform1Data.depth = -m_Height / 4.2f;
+    platform1Data.elevation = -m_Height / 27.5f;
+    platform1Data.offset = -m_SpriteWidth + m_Width / 55.0f;
+    
+    //Create
+    platform1 = CreateTextureQuad(0, 0, m_SpriteWidth, m_SpriteWidth, 0, 0, 1, 1);
+    AxialRotate<TextureVertex>(&platform1[0], glm::vec3(m_SpriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TextureVertex>(&platform1[0], platform1Data.offset, platform1Data.elevation, platform1Data.depth, GetVerticesCount(Shape::QUAD));
+}
 
-    platform1 = CreateTextureQuad(0, 0, spriteWidth, spriteWidth, 0, 0, 1, 1);
-    AxialRotate<TextureVertex>(&platform1[0], glm::vec3(spriteWidth/2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&platform1[0], platform1Offset, platform1Elevation, platform1Depth, GetVerticesCount(Shape::QUAD));
+void BattleScene::buildPlatformB()
+{
+    //Work out data
+    platform2Data.depth = -m_Height / 2.1f;
+    platform2Data.elevation = -m_Height / 27.5f;
+    platform2Data.offset = -m_SpriteWidth + m_Width / 6.0f;
 
-    platform2 = CreateTextureQuad(0, 0, spriteWidth, spriteWidth, 0, 0, 1, 1);
-    AxialRotate<TextureVertex>(&platform2[0], glm::vec3(spriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&platform2[0], platform2Offset, platform2Elevation, platform2Depth, GetVerticesCount(Shape::QUAD));
+    //Create
+    platform2 = CreateTextureQuad(0, 0, m_SpriteWidth, m_SpriteWidth, 0, 0, 1, 1);
+    AxialRotate<TextureVertex>(&platform2[0], glm::vec3(m_SpriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TextureVertex>(&platform2[0], platform2Data.offset, platform2Data.elevation, platform2Data.depth, GetVerticesCount(Shape::QUAD));
+}
 
-    background = CreateTextureQuad(0, 0, width, height, 0, 0, 1, 1);
-    Translate<TextureVertex>(&background[0], (float)width/-2.1f, (float)height/4.0f, platform2Depth-300, GetVerticesCount(Shape::QUAD));
-
+void BattleScene::setPokemonA(std::string name)
+{
     //Get sprite dim
-    GifData dim = GetImageData("res/textures/pokemon/back/torterra.png");
+    std::string path = "res/textures/pokemon/back/" + name +".png";
+    GifData dim = GetImageData(path.c_str());
 
     //Work out pokemon positioning
-    float pokemonAWidth = (dim.width / dim.frames) * (spriteWidth / 126.0f);
-    float pokemonAHeight = dim.height * (spriteWidth / 126.0f);
-    float pokemonAOffset = platform1Offset + 25.0f*(spriteWidth/pokemonAWidth);
-    float pokemonAElevation = platform1Elevation + pokemonAHeight;
-    float pokemonADepth = platform1Depth + (spriteWidth/2.0f) + pokemonAHeight/5.0f; //For taller pokemon shifts them back a bit
+    float pokemonAWidth = (dim.width / dim.frames) * (m_SpriteWidth / 126.0f);
+    float pokemonAHeight = dim.height * (m_SpriteWidth / 126.0f);
+    float pokemonAOffset = platform1Data.offset + 25.0f * (m_SpriteWidth / pokemonAWidth);
+    float pokemonAElevation = platform1Data.elevation + pokemonAHeight;
+    float pokemonADepth = platform1Data.depth + (m_SpriteWidth / 2.0f) + pokemonAHeight / 5.0f; //For taller pokemon shifts them back a bit
 
-    pokemonA = CreateTextureQuad(0, 0, pokemonAWidth,  pokemonAHeight, 0, 0, 1.0f / dim.frames, 1);
+    pokemonA = CreateTextureQuad(0, 0, pokemonAWidth, pokemonAHeight, 0, 0, 1.0f / dim.frames, 1);
     AxialRotate<TextureVertex>(&pokemonA[0], { pokemonAWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
     Translate<TextureVertex>(&pokemonA[0], pokemonAOffset, pokemonAElevation, pokemonADepth, GetVerticesCount(Shape::QUAD));
 
-    GifData dim2 = GetImageData("res/textures/pokemon/front/electivire.png");
-
-    //Work out pokemon positioning
-    float pokemonBWidth = (dim2.width / dim2.frames) * (spriteWidth / 126.0f);
-    float pokemonBHeight = dim2.height * (spriteWidth / 126.0f);
-    float pokemonBOffset = platform2Offset + 18.0f * (spriteWidth / pokemonBWidth);
-    float pokemonBElevation = platform2Elevation + pokemonBHeight;
-    float pokemonBDepth = platform2Depth + (spriteWidth / 2.0f) + pokemonBHeight / 5.0f; //For taller pokemon shifts them back a bit
-
-    pokemonB = CreateTextureQuad(0, 0, pokemonBWidth, pokemonBHeight, 0, 0, 1.0f / (float)dim2.frames, 1);
-    AxialRotate<TextureVertex>(&pokemonB[0], { pokemonAWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&pokemonB[0], pokemonBOffset, pokemonBElevation, pokemonBDepth, GetVerticesCount(Shape::QUAD));
-
     //Anim
-    pokemonAAnim = SpriteAnim<TextureVertex, Tex_Quad>(12, dim.frames);
-    for (float i = 0; i < dim.frames; i+=1.0f)
+    pokemonAAnim = SpriteAnim<TextureVertex, Tex_Quad>(15, dim.frames);
+    for (float i = 0; i < dim.frames; i += 1.0f)
     {
-        TileUV frame = { i / dim.frames, 0, 1.0f / (dim.frames*1.01f), 1 };
+        TileUV frame = { i / dim.frames, 0, 1.0f / (dim.frames * 1.01f), 1 };
         pokemonAAnim.setFrame(i, frame);
     }
     pokemonAAnim.linkSprite(&pokemonA, &active);
     pokemonAAnim.loop = true;
+}
 
-    pokemonBAnim = SpriteAnim<TextureVertex, Tex_Quad>(12, dim2.frames);
-    for (float i = 0; i < dim2.frames; i += 1.0f)
+void BattleScene::setPokemonB(std::string name)
+{
+    //Get sprite dim
+    std::string path = "res/textures/pokemon/front/" + name + ".png";
+    GifData dim = GetImageData(path.c_str());
+
+    //Work out pokemon positioning
+    float pokemonBWidth = (dim.width / dim.frames) * (m_SpriteWidth / 126.0f);
+    float pokemonBHeight = dim.height * (m_SpriteWidth / 126.0f);
+    float pokemonBOffset = platform2Data.offset + 18.0f * (m_SpriteWidth / pokemonBWidth);
+    float pokemonBElevation = platform2Data.elevation + pokemonBHeight;
+    float pokemonBDepth = platform2Data.depth + (m_SpriteWidth / 2.0f) + pokemonBHeight / 5.0f; //For taller pokemon shifts them back a bit
+
+    pokemonB = CreateTextureQuad(0, 0, pokemonBWidth, pokemonBHeight, 0, 0, 1.0f / (float)dim.frames, 1);
+    AxialRotate<TextureVertex>(&pokemonB[0], { pokemonBWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TextureVertex>(&pokemonB[0], pokemonBOffset, pokemonBElevation, pokemonBDepth, GetVerticesCount(Shape::QUAD));
+
+    pokemonBAnim = SpriteAnim<TextureVertex, Tex_Quad>(15, dim.frames);
+    for (float i = 0; i < dim.frames; i += 1.0f)
     {
-        TileUV frame = { i / dim2.frames, 0, 1.0f / (dim2.frames * 1.01f), 1 };
+        TileUV frame = { i / dim.frames, 0, 1.0f / (dim.frames * 1.01f), 1 };
         pokemonBAnim.setFrame(i, frame);
     }
     pokemonBAnim.linkSprite(&pokemonB, &active);
@@ -117,26 +140,21 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
 
     //Platform test
     m_Scene.init(width, height);
-
+    PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+    setPokemonA(370);
+    setPokemonB(370);
+    
     //Pkm test
     MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
 
-    PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
     PokemonDataBank::loadData(PkmDataType::BASE_STATS);
     PokemonDataBank::loadData(PkmDataType::MOVE_INFO);
     PokemonDataBank::loadData(PkmDataType::POKEMON_TYPES);
 
-    m_PlayerParty[0].id = 389;
-    m_PlayerParty[0].moves[2].id = 89;
-    m_PlayerParty[0].moves[1].id = 75;
-    m_PlayerParty[0].moves[0].id = 89;
-    m_PlayerParty[0].moves[3].id = 402;
+    m_PlayerParty[0].id = 370;
     GeneratePokemon(m_PlayerParty[0].id, m_PlayerParty[0]);
     SetPkmStatsFromLevel(m_PlayerParty[0]);
-    m_EnemyParty[0].id = 466;
-    m_EnemyParty[0].moves[0].id = 7;
-    m_EnemyParty[0].moves[0].status = StatusCondition::Burn;
-    m_EnemyParty[0].moves[0].statusAcc = 50;
+    m_EnemyParty[0].id = 370;
     GeneratePokemon(m_EnemyParty[0].id, m_EnemyParty[0]);
     SetPkmStatsFromLevel(m_EnemyParty[0]);
     m_Battle.setParties(m_PlayerParty, m_EnemyParty);
@@ -246,15 +264,50 @@ void Battle::purgeRequiredData()
     m_Renderer.purgeData();
 }
 
+void Battle::setPokemonA(uint16_t id)
+{
+    std::string name = PokemonDataBank::GetPokemonName(id);
+    m_Scene.setPokemonA(name);
+    m_Renderer.pokemonATexture.deleteTexture();
+    m_Renderer.loadPokemonTextureA(name);
+}
+
+void Battle::setPokemonB(uint16_t id)
+{
+    std::string name = PokemonDataBank::GetPokemonName(id);
+    m_Scene.setPokemonB(name);
+    m_Renderer.pokemonBTexture.deleteTexture();
+    m_Renderer.loadPokemonTextureB(name);
+}
+
 //Temp
 bool first = true;
+int pokemonID = 472;
+double temptimer = 0.0;
 void Battle::update(double deltaTime, double time)
 {
+    //Temp show off every pokemon
+    temptimer += deltaTime;
+    if (temptimer > 3 && !(pokemonID > 649))
+    {
+        temptimer = 0.0;
+        pokemonID++;
+        PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+        setPokemonA(pokemonID);
+        setPokemonB(pokemonID);
+        m_PlayerParty[0].id = pokemonID;
+        m_EnemyParty[0].id = pokemonID;
+        m_PlayerParty[0].nickname = PokemonDataBank::GetPokemonName(pokemonID);
+        m_EnemyParty[0].nickname = PokemonDataBank::GetPokemonName(pokemonID);
+        m_Battle.setParties(m_PlayerParty, m_EnemyParty);
+        m_Pool->Run(&PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
+    }
+
     //Check selected move - -1 if none
     bool progress = false;
     if (first)
     {
-        BattleTextBuffer::pushText("A wild " + m_EnemyParty[0].nickname + " appeared!");
+        BattleTextBuffer::pushText("A whole load of pokemon appeared!");
     }
     for (int i = 0; i < (int)MoveSlot::SLOT_NULL; i++)
     {

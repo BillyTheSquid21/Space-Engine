@@ -31,7 +31,7 @@ public:
 	void linkSprite(Q* sprite, bool* animationActive) { m_Sprite = sprite; m_Active = animationActive; }
 	void update(double deltaTime)
 	{
-		if (!(*m_Active))
+		if (!m_Active || !(*m_Active))
 		{
 			return;
 		}

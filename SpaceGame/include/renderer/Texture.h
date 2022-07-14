@@ -19,7 +19,7 @@ public:
     void bind() const;
     void unbind() const;
     //Clear buffer image data is loaded into
-    void clearBuffer() const;
+    void clearBuffer();
     void deleteTexture() const { glDeleteTextures(1, &m_ID); }
 
     int width() const { return m_Width; }
@@ -28,7 +28,7 @@ public:
 private:
     unsigned int m_ID; unsigned int m_Slot = 0;
     std::string m_FilePath;
-    unsigned char* m_LocalBuffer;
+    unsigned char* m_LocalBuffer = nullptr;
     int m_Width, m_Height, m_BPP;
 
 };

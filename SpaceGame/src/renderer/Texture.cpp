@@ -31,9 +31,10 @@ void Texture::generateTexture(unsigned int slot) {
     m_Slot = slot;
 }
 
-void Texture::clearBuffer() const {
+void Texture::clearBuffer() {
     if (m_LocalBuffer) {
         stbi_image_free(m_LocalBuffer);
+        m_LocalBuffer = nullptr;
         return;
     }
     EngineLog("Error unloading texture buffer!");
