@@ -135,6 +135,15 @@ namespace GameGUI
 		std::string& m_Text;
 	};
 
+	//Base HUD that fills whole screen and can have elements placed on
+	class HUD : public GameGUI::GUIElementBase
+	{
+	public:
+		using GUIElementBase::GUIElementBase;
+		void openNest();
+		void closeNest();
+	};
+
 	class Divider : public GUIElement
 	{
 	public:
@@ -172,14 +181,29 @@ namespace GameGUI
 		std::string& m_Text2Ref;
 	};
 
-	struct TextBoxBuffer
+	class TextBuffer
 	{
-		std::string t1 = "";
-		std::string t2 = "";
-		bool showTextBox = false;
+	public:
+		void pushBuffer(std::string text);
+		void setNextPageReady(bool var) { m_NextPageReady = var; } //Can externally lock whether the page is ready (eg while waiting for an animation)
+		void nextPage();
+		bool isReady() const { return m_IsReady; }
+		bool isNextPageReady() const { return m_NextPageReady; }
+
+		//Lines
+		std::string line1;
+		std::string line2;
+	private:
+		std::vector<char> m_Buffer;
+		bool m_IsReady = true;
+		bool m_NextPageReady = true;
 	};
 
-	
+	struct TextBoxBuffer
+	{
+		TextBuffer buffer;
+		bool showTextBox = false;
+	};
 }
 
 #endif

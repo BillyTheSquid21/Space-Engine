@@ -258,8 +258,14 @@ void PlayerMove::faceDirection()
 
 void PlayerMove::update(double deltaTime) 
 {
+	//Inherit update method
+	TilePosition::update(deltaTime);
 	bool walking = m_PlayerData->m_Walking; bool running = m_PlayerData->m_Running;
-	if (m_PlayerData->m_Busy && !(walking || running))
+	if (m_PlayerData->m_Controlled)
+	{
+		return;
+	}
+	else if (m_PlayerData->m_Busy && !(walking || running))
 	{
 		//If busy and not walking or running, don't update player
 		return;
@@ -336,9 +342,6 @@ void PlayerMove::update(double deltaTime)
 			}
 		}
 	}
-
-	//Inherit update method
-	TilePosition::update(deltaTime);
 
 	//If at end of run or walk cycle
 	if ((m_Timer >= World::WALK_DURATION && walking) || (m_Timer >= World::RUN_DURATION && running))

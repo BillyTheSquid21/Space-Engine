@@ -23,11 +23,11 @@ public:
 		ScriptElement el = m_Script[m_Index];
 		switch (el.instruction)
 		{
-		case ScriptInstruction::CGE_DIR:
+		case ScriptInstruction::NPC_FACE:
 			m_NPC->m_Direction = (World::Direction)el.info.dirInfo.direction;
 			m_Index++;
 			return true;
-		case ScriptInstruction::WALK_IN_DIR:
+		case ScriptInstruction::NPC_WALK:
 			if (!m_NPC->m_Walking)
 			{
 				m_NPC->m_Walking = true;
@@ -43,15 +43,17 @@ public:
 			}
 			Ov_Translation::WalkSprite(m_NPC, deltaTime);
 			return true;
-		case ScriptInstruction::RUN_IN_DIR:
+		case ScriptInstruction::NPC_RUN:
 			if (!m_NPC->m_Running)
 			{
 				m_NPC->m_Running = true;
+				m_NPC->m_Busy = true;
 				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel);
 			}
 			else if (m_NPC->m_Timer >= World::RUN_DURATION)
 			{
 				m_NPC->m_Running = false;
+				m_NPC->m_Busy = false;
 				m_NPC->m_Timer = 0.0;
 				Ov_Translation::CentreOnTileSprite(m_NPC);
 				m_Index++;
@@ -149,11 +151,11 @@ public:
 			m_NPCData->m_Busy = el.info.busyInfo.state;
 			m_Index++;
 			break;
-		case ScriptInstruction::CGE_DIR:
+		case ScriptInstruction::NPC_FACE:
 			m_NPCData->m_Direction = (World::Direction)el.info.dirInfo.direction;
 			m_Index++;
 			break;
-		case ScriptInstruction::WALK_IN_DIR:
+		case ScriptInstruction::NPC_WALK:
 			if (!m_NPCData->m_Walking)
 			{
 				m_NPCData->m_Walking = true;
@@ -169,7 +171,7 @@ public:
 			}
 			Ov_Translation::WalkSprite(m_NPCData, deltaTime);
 			break;
-		case ScriptInstruction::RUN_IN_DIR:
+		case ScriptInstruction::NPC_RUN:
 			if (!m_NPCData->m_Running)
 			{
 				m_NPCData->m_Running = true;

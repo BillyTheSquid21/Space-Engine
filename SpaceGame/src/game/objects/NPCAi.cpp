@@ -4,8 +4,8 @@ std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, F
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
-	std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player.get(), flags, input));
-	npcScript->linkText(&textBuff->t1, &textBuff->t2, &textBuff->showTextBox);
+	std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player, flags, input));
+	npcScript->linkText(textBuff);
 	npcScript->linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 	return npcScript;
 }
@@ -14,8 +14,8 @@ NPC_OverworldScript CreateNPCOvScript(std::string filePath, FlagArray* flags, Ga
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
-	NPC_OverworldScript npcScript(script.script, script.size, player.get(), flags, input);
-	npcScript.linkText(&textBuff->t1, &textBuff->t2, &textBuff->showTextBox);
+	NPC_OverworldScript npcScript(script.script, script.size, player, flags, input);
+	npcScript.linkText(textBuff);
 	npcScript.linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 	return npcScript;
 }

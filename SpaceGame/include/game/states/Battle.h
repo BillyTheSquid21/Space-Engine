@@ -51,15 +51,6 @@ private:
 	bool active = true;
 };
 
-//Base HUD that fills whole screen and can have elements placed on
-class HUD : public GameGUI::GUIElementBase
-{
-public:
-	using GUIElementBase::GUIElementBase;
-	void openNest();
-	void closeNest();
-};
-
 class Battle : public State
 {
 public:

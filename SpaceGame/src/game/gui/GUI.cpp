@@ -158,6 +158,19 @@ void GameGUI::GUIContainer::render()
 	}
 }
 
+//HUD
+void GameGUI::HUD::openNest()
+{
+	ImGui::Begin("Debug Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::PushFont(io.Fonts->Fonts[0]);
+}
+
+void GameGUI::HUD::closeNest()
+{
+	ImGui::PopFont();
+}
+
 void GameGUI::Divider::openNest()
 {
 	updateDimensions();
@@ -221,4 +234,144 @@ void GameGUI::GameTextBox::closeNest()
 {
 	ImGui::PopFont();
 	ImGui::EndChild();
+}
+
+//Text box buffer
+void GameGUI::TextBuffer::pushBuffer(std::string text)
+{
+	//Allocate new characters
+	m_Buffer.resize(m_Buffer.size() + text.length());
+	auto bufferIterator = m_Buffer.end() - text.length();
+	std::copy(text.begin(), text.end(), bufferIterator);
+	m_IsReady = false;
+}
+
+void GameGUI::TextBuffer::nextPage()
+{
+	if (!m_NextPageReady)
+	{
+		return;
+	}
+
+	const int CHARACTER_BUFF_SIZE = 120;
+	const int ESCAPE_MULTIPLIER = 10000;
+
+	//Strip top 120 characters from buffer
+	char characters[CHARACTER_BUFF_SIZE] = {};
+	if (m_Buffer.size() < CHARACTER_BUFF_SIZE)
+	{
+		std::copy(m_Buffer.begin(), m_Buffer.end(), characters);
+	}
+	else
+	{
+		std::copy(m_Buffer.begin(), m_Buffer.begin() + CHARACTER_BUFF_SIZE-1, characters);
+	}
+	//Note locations of whitespaces in first 60 characters
+	int spaces[CHARACTER_BUFF_SIZE] = {}; //Stack to max value of 120
+	std::fill_n(spaces, CHARACTER_BUFF_SIZE, CHARACTER_BUFF_SIZE+1);
+	int spacesIndex = 0;
+
+	//Init spaces[0] to length of buffer in case only one word exists
+	spaces[0] = m_Buffer.size();
+	for (int i = 0; i < CHARACTER_BUFF_SIZE; i++)
+	{
+		if (characters[i] == ' ')
+		{
+			spaces[spacesIndex] = i;
+			spacesIndex++;
+		}
+		else if (characters[i] == '\n')
+		{
+			characters[i] = 1;			   //ascii character 1 to signal to remove this character
+			spaces[spacesIndex] = i*ESCAPE_MULTIPLIER; //*10000 signals \n so can recover original value
+			spacesIndex++;
+		}
+	}
+
+	//Work out how much to strip out for first line
+	int endIndex1 = m_Buffer.size();
+	int lastSpacesIndex = 0;
+	for (int i = 0; i < CHARACTER_BUFF_SIZE; i++)
+	{
+		//Check if next index is beyond 60 mark
+		if (spaces[i] > 60 && spaces[i] < ESCAPE_MULTIPLIER)
+		{
+			lastSpacesIndex = i;
+			break;
+		}
+		else if (spaces[i] >= ESCAPE_MULTIPLIER)
+		{
+			spaces[i] = spaces[i]/ESCAPE_MULTIPLIER;
+			endIndex1 = spaces[i];
+			lastSpacesIndex = i;
+			break;
+		}
+		//Otherwise current index is valid
+		endIndex1 = spaces[i];
+	}
+
+	//Work out how much to strip out for second line
+	int endIndex2 = 0;
+	for (int i = lastSpacesIndex; i < CHARACTER_BUFF_SIZE; i++)
+	{
+		//Find last index
+		if (spaces[i] == CHARACTER_BUFF_SIZE+1)
+		{
+			if (i == 0)
+			{
+				break;
+			}
+			endIndex2 = spaces[i - 1];
+			break;
+		}
+		else if (spaces[i] >= ESCAPE_MULTIPLIER)
+		{
+			if (i == 0)
+			{
+				break;
+			}
+			endIndex2 = spaces[i] / ESCAPE_MULTIPLIER;
+			break;
+		}
+	}
+
+	//Fill strings with characters
+	std::string line1tmp = "";
+	for (int i = 0; i < endIndex1; i++)
+	{
+		if (characters[i] == 1)
+		{
+			continue;
+		}
+		line1tmp += characters[i];
+	}
+	std::string line2tmp = "";
+	for (int i = endIndex1; i < endIndex2; i++)
+	{
+		if (i < 0 || i >= CHARACTER_BUFF_SIZE)
+		{
+			continue;
+		}
+		else if (characters[i] == 1)
+		{
+			continue;
+		}
+		line2tmp += characters[i];
+	}
+
+	//Remove used characters from buffer - check aren't erasing past end (can happen if a trailing \n is lost)
+	int deleteIndex = endIndex2 + 1;
+	if (deleteIndex >= m_Buffer.size())
+	{
+		m_Buffer.clear();
+	}
+	else
+	{
+		m_Buffer.erase(m_Buffer.begin(), m_Buffer.begin() + deleteIndex);
+	}
+	line1 = line1tmp; line2 = line2tmp;
+	if (m_Buffer.size() <= 1)
+	{
+		m_IsReady = true;
+	}
 }

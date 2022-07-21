@@ -133,6 +133,7 @@ class OvSpr_RunningSprite : public OvSpr_WalkingSprite
 public:
 	using OvSpr_WalkingSprite::OvSpr_WalkingSprite;
 	bool m_Running = false;
+	bool m_Controlled = false; //Intended for player use
 };
 
 namespace Ov_Translation

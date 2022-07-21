@@ -26,10 +26,10 @@ ScriptParse::ScriptWrapper ScriptParse::ParseScriptFromText(std::string scriptNa
 	}
 
 	//Parse each segment - assumes all lines are valid
-	Script script(new ScriptElement[seglist.size()]);
+	Script script(new ScriptElement[seglist.size()-1]);
 	std::string instrArr[MAX_INFO];
 	int index = 0;
-	for (int i = 0; i < seglist.size(); i++)
+	for (int i = 0; i < seglist.size()-1; i++)
 	{
 		std::string currentSegment = seglist[i];
 		stringsBuffer.clear();
@@ -60,7 +60,7 @@ ScriptParse::ScriptWrapper ScriptParse::ParseScriptFromText(std::string scriptNa
 		ScriptParse::ProcessInstructionInfo(instruction, instrArr, script[i]);
 	}
 
-	return {script, seglist.size()};
+	return {script, seglist.size()-1};
 }
 
 //instrs
@@ -89,6 +89,14 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	else if (instr == "-LOCK_PLAYER")
 	{
 		return ScriptInstruction::LOCK_PLAYER;
+	}
+	else if (instr == "-PLAYER_FACE")
+	{
+		return ScriptInstruction::PLAYER_FACE;
+	}
+	else if (instr == "-PLAYER_WALK")
+	{
+		return ScriptInstruction::PLAYER_WALK;
 	}
 	else if (instr == "-OPEN_MSG_BOX")
 	{
@@ -126,17 +134,17 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::FREEZE_OBJECT;
 	}
-	else if (instr == "-CGE_DIR")
+	else if (instr == "-NPC_FACE")
 	{
-		return ScriptInstruction::CGE_DIR;
+		return ScriptInstruction::NPC_FACE;
 	}
-	else if (instr == "-WALK_IN_DIR")
+	else if (instr == "-NPC_WALK")
 	{
-		return ScriptInstruction::WALK_IN_DIR;
+		return ScriptInstruction::NPC_WALK;
 	}
-	else if (instr == "-RUN_IN_DIR")
+	else if (instr == "-NPC_RUN")
 	{
-		return ScriptInstruction::WALK_IN_DIR;
+		return ScriptInstruction::NPC_RUN;
 	}
 	else if (instr == "-WAIT_INTERACT")
 	{
@@ -162,6 +170,9 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 	case ScriptInstruction::LOCK_PLAYER:
 		PSS_LOCK(instrArr, element);
 		return;
+	case ScriptInstruction::PLAYER_FACE:
+		PSS_CGE_DIR(instrArr, element);
+		return;
 	case ScriptInstruction::MSG:
 		PSS_MSG(instrArr, element);
 		return;
@@ -171,7 +182,7 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 	case ScriptInstruction::TAKE_ITEM:
 		PSS_GIVE_TAKE_ITEM(instrArr, element);
 		return;
-	case ScriptInstruction::CGE_DIR:
+	case ScriptInstruction::NPC_FACE:
 		PSS_CGE_DIR(instrArr, element);
 		return;
 	case ScriptInstruction::FREEZE_OBJECT:

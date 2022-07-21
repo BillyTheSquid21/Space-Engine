@@ -109,19 +109,6 @@ void BattleScene::update(double deltaTime)
     pokemonBAnim.update(deltaTime);
 }
 
-//HUD
-void HUD::openNest()
-{
-    ImGui::Begin("Debug Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground);
-    ImGuiIO& io = ImGui::GetIO();
-    ImGui::PushFont(io.Fonts->Fonts[0]);
-}
-
-void HUD::closeNest()
-{
-    ImGui::PopFont();
-}
-
 void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags, GameInput* input) {
     //Width and height
     m_Width = width; m_Height = height;
@@ -168,7 +155,7 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     levelA = std::to_string(m_PlayerParty[0].level);
     levelB = std::to_string(m_EnemyParty[0].level);
 
-    std::shared_ptr<HUD> hud(new HUD(m_Width, m_Height,0,0));
+    std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(m_Width, m_Height,0,0));
     gui.setBase(hud);
 
     const float hudW = 400.0f; const float hudH = 200.0f;

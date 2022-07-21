@@ -1,42 +1,13 @@
 #Test script for the game
 [0] -WAIT_INTERACT
 [1] -FREEZE_OBJECT 1
-[2] -FACE_PLAYER
+[2] -NPC_FACE -SOUTH
 [3] -LOCK_PLAYER 1
-[4] -OPEN_MSG_BOX
-[5] -MSG 0 1
-[6] -MSG 0 0
-[ -WAIT_SEC
-[7] -WAIT_INPUT
-[8] -CLEAR_TEXT
-[9] -MSG 0 2
-[10] -MSG 0 3
-[ -WAIT_SEC
-[11] -WAIT_INPUT
-[12] -CLEAR_TEXT
-[13] -MSG 0 4
-[14] -MSG 0 5
-[ -WAIT_SEC
-[15] -WAIT_INPUT
-[16] -CLEAR_TEXT
-[17] -MSG 0 6
-[18] -MSG 0 0
-[ -WAIT_SEC
-[19] -WAIT_INPUT
-[20] -CLEAR_TEXT
-[21] -MSG 0 7
-[22] -MSG 0 8
-[ -WAIT_SEC
-[23] -WAIT_INPUT
-[24] -CLEAR_TEXT
-[25] -MSG 0 9
-[26] -MSG 0 10
-[ -WAIT_SEC
-[27] -WAIT_INPUT
-[28] -CLOSE_MSG_BOX
-[29] -CLEAR_TEXT
-[30] -FREEZE_OBJECT 0
-[31] -LOCK_PLAYER 0
-
+[4] -PLAYER_FACE -SOUTH
+[5] -PLAYER_WALK
+[6] -PLAYER_WALK
+[7] -PLAYER_FACE -EAST
+[8] -PLAYER_WALK
+[9] -LOCK_PLAYER 0
 
 #NO_OP ends script, counter will no longer increment - otherwise will continue to loop

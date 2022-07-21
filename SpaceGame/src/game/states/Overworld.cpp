@@ -23,7 +23,7 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     //test level
     m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Flags, &m_TextBuff, m_Input);
 
-    std::shared_ptr<GameGUI::GameTextBox> tb(new GameGUI::GameTextBox(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f, m_TextBuff.t1, m_TextBuff.t2));
+    std::shared_ptr<GameGUI::GameTextBox> tb(new GameGUI::GameTextBox(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f, m_TextBuff.buffer.line1, m_TextBuff.buffer.line2));
     tb->setFontContainer(m_Fonts);
     m_TextBoxGUI.setBase(tb);
 
@@ -100,7 +100,7 @@ void Overworld::loadRequiredData() {
     m_Levels.BuildFirstLevel(m_CurrentLevel);
 
     //Add player and link pos to lighting
-    OvSpr_SpriteData dataPlayer = { {3, 0},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
+    OvSpr_SpriteData dataPlayer = { {8, 3},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
     sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_Renderer.spriteRenderer);
    
