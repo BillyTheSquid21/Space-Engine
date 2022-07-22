@@ -109,7 +109,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			return true;
 		}
-		return false;
+		return true;
 	}
 	case World::MovementPermissions::STAIRS_SOUTH:
 	{
@@ -127,7 +127,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			return true;
 		}
-		return false;
+		return true;
 	}
 	case World::MovementPermissions::STAIRS_EAST:
 	{
@@ -145,7 +145,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			return true;
 		}
-		return false;
+		return true;
 	}
 	case World::MovementPermissions::STAIRS_WEST:
 	{
@@ -163,7 +163,7 @@ bool PlayerMove::canWalk()
 			m_Ascend = -1;
 			return true;
 		}
-		return false;
+		return true;
 	}
 	default:
 		return true;
