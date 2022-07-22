@@ -239,13 +239,11 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 	}
 
 	//Add grass comp
-	std::shared_ptr<TallGrassEncounterComponent> grassEnc(new TallGrassEncounterComponent(&grass->m_ActiveStates, ren->m_StateToBattle));
 	grassRen->generateIndices();
 	{
 		std::lock_guard<std::shared_mutex> heapLock(manager->getHeapMutex());
 		manager->pushRenderHeap(grassRen, &grass->m_RenderComps);
 		manager->pushRenderHeap(grassAnim, &grass->m_RenderComps);
-		manager->pushUpdateHeap(grassEnc, &grass->m_UpdateComps);
 	}
 
 	//Create animations
@@ -382,11 +380,17 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 	//Check for nodes that MUST exist - those that make up the spritedata struct
 	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
 
+	//Permissions - done earlier to get before influence
+	World::MovementPermissions* permission = World::GetTilePermission(data.levelID, data.tile, data.height);
+	World::MovementPermissions permissionOriginal = *permission;
+
 	//Build base sprite
 	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
 	std::shared_ptr<OvSpr_WalkingSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->spriteRenderer);
 	
+	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
+
 	//Optionals
 	WorldParse::WalkingSpriteOptionals(node, manager, sprite);
 	WorldParse::OverworldScriptOptionals(node, manager, flags, textBuff, sprite, input);
@@ -431,8 +435,7 @@ void WorldParse::WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManage
 	if (randWNode)
 	{
 		std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> tmp = manager->updateGroupAt<NPC_RandWalk>(manager->queryGroupID("RandWalk"));
-		NPC_RandWalk rWalk(&sprite->m_Direction, &sprite->m_WorldLevel, &sprite->m_YPos, &sprite->m_Busy, &sprite->m_Walking, &sprite->m_Sprite, &sprite->m_Timer);
-		rWalk.linkLocation(&sprite->m_Tile.x, &sprite->m_Tile.z, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_CurrentLevel);
+		NPC_RandWalk rWalk(sprite);
 
 		//Check active and add
 		bool active = (bool)strtoul(randWNode->value(), nullptr, 10);

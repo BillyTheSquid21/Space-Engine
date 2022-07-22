@@ -60,17 +60,4 @@ private:
 	TileUV m_UV;
 };
 
-//Currently based on change in state for testing - TODO make player based
-class TallGrassEncounterComponent : public UpdateComponent
-{
-public:
-	TallGrassEncounterComponent(std::vector<char>* state, std::function<void()> func) { m_ActiveStates = state; m_LastState.resize(m_ActiveStates->size()); std::copy(m_ActiveStates->begin(), m_ActiveStates->end(), m_LastState.begin()); m_Random.seed(0, 100); m_Battle = func; };
-	void update(double deltaTime);
-private:
-	std::vector<char>* m_ActiveStates = nullptr;
-	std::vector<char> m_LastState;
-	RandomContainer m_Random;
-	std::function<void()> m_Battle;
-};
-
 #endif

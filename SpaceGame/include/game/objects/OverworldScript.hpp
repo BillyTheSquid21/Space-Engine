@@ -22,7 +22,7 @@ inline static bool WaitScript(float& timer, float endTime, double deltaTime)
 	return false;
 }
 
-inline static bool IsInput(GameInput* input)
+inline static bool WaitInput(GameInput* input)
 {
 	if (input->HELD_E || input->PRESSED_E || input->PRESSED_X)
 	{
@@ -40,7 +40,6 @@ public:
 	void update(double deltaTime)
 	{
 		process(deltaTime);
-
 		if (m_Index >= m_Size)
 		{
 			m_Index = 0;
@@ -75,7 +74,7 @@ public:
 				m_Index++;
 			}
 			return true;
-		case ScriptInstruction::LOCK_PLAYER:
+		case ScriptInstruction::PLAYER_LOCK:
 			m_Player->m_Busy = el.info.boolInfo.state;
 			m_Index++;
 			return true;
@@ -88,7 +87,7 @@ public:
 			{
 				m_Player->m_Walking = true;
 				m_Player->m_Controlled = true;
-				World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel);
+				World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel, m_Player->m_LastPermission, m_Player->m_LastPermissionPtr);
 			}
 			else if (m_Player->m_Timer >= World::WALK_DURATION)
 			{
@@ -106,7 +105,7 @@ public:
 			{
 				m_Player->m_Running = true;
 				m_Player->m_Controlled = true;
-				World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel);
+				World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel, m_Player->m_LastPermission, m_Player->m_LastPermissionPtr);
 			}
 			else if (m_Player->m_Timer >= World::RUN_DURATION)
 			{
@@ -141,7 +140,7 @@ public:
 				{
 					return true;
 				}
-				if (IsInput(m_Input) && m_TextBuffer->buffer.isNextPageReady())
+				if (WaitInput(m_Input) && m_TextBuffer->buffer.isNextPageReady())
 				{
 					m_TextBuffer->buffer.nextPage();
 					m_Timer = 0.0f;
@@ -166,7 +165,7 @@ public:
 			m_Index++;
 			return true;
 		case ScriptInstruction::WAIT_INPUT:
-			if (IsInput(m_Input))
+			if (WaitInput(m_Input))
 			{
 				m_Index++;
 			}

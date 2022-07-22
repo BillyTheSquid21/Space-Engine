@@ -103,7 +103,8 @@ void Overworld::loadRequiredData() {
     OvSpr_SpriteData dataPlayer = { {8, 3},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
     sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
     spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_Renderer.spriteRenderer);
-   
+    sprite->m_LastPermissionPtr = World::GetTilePermission(sprite->m_CurrentLevel, sprite->m_Tile, sprite->m_WorldLevel);
+
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_Tile.x, &sprite->m_Tile.z));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Renderer.camera));
     std::shared_ptr<UpdateGlobalLevel> globLev(new UpdateGlobalLevel(&m_CurrentLevel, &sprite->m_CurrentLevel));

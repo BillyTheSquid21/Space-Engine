@@ -126,6 +126,11 @@ public:
 	using OvSpr_DirectionalSprite::OvSpr_DirectionalSprite;
 	bool m_Walking = false;
 	double m_Timer = 0.0;
+
+	//For movable sprites, store the type of last permission and location
+	//Ensures is returned to currect type at correct index
+	World::MovementPermissions m_LastPermission = World::MovementPermissions::CLEAR;
+	World::MovementPermissions* m_LastPermissionPtr = nullptr;
 };
 
 class OvSpr_RunningSprite : public OvSpr_WalkingSprite

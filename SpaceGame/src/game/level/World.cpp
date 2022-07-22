@@ -99,7 +99,7 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Di
 
     //Lookup permission for next tile
     unsigned int lookupIndex = tileLookup.x * dimensions.levelH + tileLookup.z;
-    return { World::Level::queryPermissions(level, height).pointer[lookupIndex], leavingLevel };
+    return { permissions.pointer[lookupIndex], &permissions.pointer[lookupIndex], leavingLevel };
 }
 
 //Retrive on spot
@@ -119,36 +119,32 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Ti
 
     //Lookup permission for next tile
     unsigned int lookupIndex = loc.x * dimensions.levelH + loc.z;
-    return { World::Level::queryPermissions(level, height).pointer[lookupIndex], leavingLevel };
+    return { permissions.pointer[lookupIndex], &permissions.pointer[lookupIndex], leavingLevel };
 }
 
-void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height)
+void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr)
 {
     //Get level data
     World::LevelDimensions dim = World::Level::queryDimensions(level);
     Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);
 
     //Clear tile leaving
-    unsigned int index = loc.x * dim.levelH + loc.z;
-    //Check to make sure not blocking level bridge
-    if (index < perm.size)
-    {
-        if (perm.pointer[index] == World::MovementPermissions::SPRITE_BLOCKING)
-        {
-            perm.pointer[index] = World::MovementPermissions::CLEAR;
-        }
-    }
+    *lastPermPtr = lastPerm;
 
     //Block tile entering
     World::TileLoc tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
-    index = tileLookup.x * dim.levelH + tileLookup.z;
-    if (index < perm.size)
-    {
-        if (perm.pointer[index] == World::MovementPermissions::CLEAR)
-        {
-            perm.pointer[index] = World::MovementPermissions::SPRITE_BLOCKING;
-        }
-    }
+    World::MovementPermissions* permission = World::GetTilePermission(level, tileLookup, height);
+    lastPerm = *permission;
+    lastPermPtr = permission;
+    *permission = World::MovementPermissions::SPRITE_BLOCKING;
+}
+
+World::MovementPermissions* World::GetTilePermission(World::LevelID level, World::TileLoc loc, WorldHeight height)
+{
+    World::LevelDimensions dim = World::Level::queryDimensions(level);
+    World::Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);
+    unsigned int index = loc.x * dim.levelH + loc.z;
+    return &perm.pointer[index];
 }
 
 World::Level::PermVectorFragment World::Level::queryPermissions(LevelID level, WorldHeight height)
@@ -167,7 +163,19 @@ World::Level::PermVectorFragment World::Level::queryPermissions(LevelID level, W
             }
         }
     } 
+    EngineLog("Level permissions not found: ", (unsigned int)level);
     return {&s_MovementPermissionsCache[0].perms->at(0), 1};  //If fails, return first level permis found
+}
+
+std::vector<World::MovementPermissions>* World::Level::getPermissions(LevelID level)
+{
+    if ((unsigned int)level < s_MovementPermissionsCache.size())
+    {
+        Level::LevelPtrCache ptrCache = s_MovementPermissionsCache[((unsigned int)level)];
+        return ptrCache.perms;
+    }
+    EngineLog("Level permissions not found: ", (unsigned int)level);
+    return s_MovementPermissionsCache[0].perms; //If fails return first element
 }
 
 void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {

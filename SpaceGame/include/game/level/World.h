@@ -88,13 +88,15 @@ namespace World
 	struct LevelPermission
 	{
 		MovementPermissions perm;
+		MovementPermissions* permPointer;
 		bool leaving = false;
 	};
 
 	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
 	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height);
 	LevelPermission RetrievePermission(World::LevelID level, World::TileLoc loc, WorldHeight height);
-	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height);
+	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr);
+	MovementPermissions* GetTilePermission(World::LevelID level, World::TileLoc loc, WorldHeight height);
 
 	bool CheckPlayerInteracting(TileLoc player, TileLoc script, Direction playerFacing);
 	Direction OppositeDirection(Direction dir);
@@ -145,7 +147,7 @@ namespace World
 		};
 		
 		static PermVectorFragment queryPermissions(LevelID level, WorldHeight height);
-		
+		static std::vector<MovementPermissions>* getPermissions(LevelID level);
 		//Static caches - for data that won't change at runtime
 		static std::vector<Struct2f> s_LevelOriginCache;
 		static std::vector<LevelDimensions> s_LevelDimensionCache;
@@ -167,7 +169,6 @@ namespace World
 
 		//All levels have a rendered plane and a grid of tiles
 		Plane m_Plane;
-		//TODO - make movement permissions layered
 		std::vector<WorldHeight> m_AvailibleLevels;
 		std::vector<MovementPermissions> m_Permissions;
 		std::vector<WorldHeight> m_Heights;

@@ -53,29 +53,3 @@ void TallGrassRenderComponent::generateIndices()
 {
 	GenerateQuadArrayIndices(*m_Grass);
 }
-
-void TallGrassEncounterComponent::update(double deltaTime)
-{
-	//Check if change
-	bool change = false;
-	for (int i = 0; i < m_ActiveStates->size(); i++)
-	{
-		if (m_ActiveStates->at(i) != m_LastState[i])
-		{
-			change = true;
-			std::copy(m_ActiveStates->begin(), m_ActiveStates->end(), m_LastState.begin());
-			break;
-		}
-	}
-	if (!change)
-	{
-		return;
-	}
-
-	float roll = m_Random.next();
-	if (roll > 3)
-	{
-		return;
-	}
-	m_Battle();
-}

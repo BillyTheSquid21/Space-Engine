@@ -86,9 +86,9 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::WAIT_SEC;
 	}
-	else if (instr == "-LOCK_PLAYER")
+	else if (instr == "-PLAYER_LOCK")
 	{
-		return ScriptInstruction::LOCK_PLAYER;
+		return ScriptInstruction::PLAYER_LOCK;
 	}
 	else if (instr == "-PLAYER_FACE")
 	{
@@ -179,7 +179,7 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 	case ScriptInstruction::JMP_IF:
 		PSS_JMP_IF(instrArr, element);
 		return;
-	case ScriptInstruction::LOCK_PLAYER:
+	case ScriptInstruction::PLAYER_LOCK:
 		PSS_BOOL(instrArr, element);
 		return;
 	case ScriptInstruction::PLAYER_FACE:

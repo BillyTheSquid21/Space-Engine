@@ -29,7 +29,7 @@ void NPC_RandWalk::randomWalk()
 	float rnd = s_Random.next();
 	if (rnd <= 25.0f)
 	{
-		*m_Direction = World::Direction::EAST;
+		m_NPC->m_Direction = World::Direction::EAST;
 		if (canWalk())
 		{
 			startWalk();
@@ -37,7 +37,7 @@ void NPC_RandWalk::randomWalk()
 	}
 	else if (rnd <= 50.0f)
 	{
-		*m_Direction = World::Direction::WEST;
+		m_NPC->m_Direction = World::Direction::WEST;
 		if (canWalk())
 		{
 			startWalk();
@@ -45,7 +45,7 @@ void NPC_RandWalk::randomWalk()
 	}
 	else if (rnd <= 75.0f)
 	{
-		*m_Direction = World::Direction::NORTH;
+		m_NPC->m_Direction = World::Direction::NORTH;
 		if (canWalk())
 		{
 			startWalk();
@@ -53,7 +53,7 @@ void NPC_RandWalk::randomWalk()
 	}
 	else if (rnd <= 100.0f)
 	{
-		*m_Direction = World::Direction::SOUTH;
+		m_NPC->m_Direction = World::Direction::SOUTH;
 		if (canWalk())
 		{
 			startWalk();
@@ -69,24 +69,24 @@ void NPC_RandWalk::update(double deltaTime)
 	//Inherit update method
 	TilePosition::update(deltaTime);
 
-	if (*m_Busy)
+	if (m_NPC->m_Busy)
 	{
 		return;
 	}
 
-	if (m_CoolDownTimer <= 0.0f && !*m_Walking && !*m_Busy)
+	if (m_CoolDownTimer <= 0.0f && !m_NPC->m_Walking && !m_NPC->m_Busy)
 	{
 		randomWalk();
 	}
 
 	//Walk method
-	if (*m_WalkTimer < 1.0 && *m_Walking)
+	if (m_NPC->m_Timer < 1.0 && m_NPC->m_Walking)
 	{
-		Ov_Translation::Walk(m_Direction, m_XPos, m_ZPos, m_Sprite, deltaTime, m_WalkTimer);
+		Ov_Translation::Walk(&m_NPC->m_Direction, m_XPos, m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
 	}
 
 	//If at end of run or walk cycle
-	if (*m_WalkTimer >= 1.0 && *m_Walking)
+	if (m_NPC->m_Timer >= 1.0 && m_NPC->m_Walking)
 	{
 		cycleEnd();
 	}
@@ -100,16 +100,16 @@ void NPC_RandWalk::update(double deltaTime)
 
 void NPC_RandWalk::cycleEnd()
 {
-	*m_Walking = false;
-	*m_WalkTimer = 0.0;
+	m_NPC->m_Walking = false;
+	m_NPC->m_Timer = 0.0;
 
 	//Centre on x and y
-	Ov_Translation::CentreOnTile(*m_CurrentLevel, *m_WorldLevel, m_XPos, m_YPos, m_ZPos, *m_TileX, *m_TileZ, m_Sprite);
+	Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_Tile.x, m_NPC->m_Tile.z, &m_NPC->m_Sprite);
 }
 
 bool NPC_RandWalk::canWalk()
 {
-	World::LevelPermission perm = World::RetrievePermission(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ }, *m_WorldLevel);
+	World::LevelPermission perm = World::RetrievePermission(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel);
 	if (perm.leaving)
 	{
 		return false;
@@ -126,7 +126,7 @@ bool NPC_RandWalk::canWalk()
 
 void NPC_RandWalk::startWalk()
 {
-	*m_Walking = true;
-	*m_WalkTimer = 0.0;
-	World::ModifyTilePerm(*m_CurrentLevel, *m_Direction, { *m_TileX, *m_TileZ }, *m_WorldLevel);
+	m_NPC->m_Walking = true;
+	m_NPC->m_Timer = 0.0;
+	World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel, m_NPC->m_LastPermission, m_NPC->m_LastPermissionPtr);
 }

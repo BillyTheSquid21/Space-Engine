@@ -6,7 +6,6 @@ bool PlayerMove::canWalk()
 	World::Direction direction = m_PlayerData->m_Direction; World::LevelID levelID = m_PlayerData->m_CurrentLevel;
 	World::WorldHeight worldLevel = m_PlayerData->m_WorldLevel;
 	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
-	World::LevelPermission permissionCurrent = World::RetrievePermission(levelID, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
 	m_Ascend = 0; m_CurrentIsSlope = false; m_NextIsSlope = false;
 
 	//Check if leaving level
@@ -31,7 +30,7 @@ bool PlayerMove::canWalk()
 	}
 
 	//Check current permission if relevant
-	switch (permissionCurrent.perm)
+	switch (m_PlayerData->m_LastPermission)
 	{
 	case World::MovementPermissions::STAIRS_NORTH:
 		m_CurrentIsSlope = true;
@@ -190,7 +189,7 @@ bool PlayerMove::walkPermHelper()
 	if (canWalk())
 	{
 		//Unblock previous tile, block new tile - fix weird bug
-		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
+		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel, m_PlayerData->m_LastPermission, m_PlayerData->m_LastPermissionPtr);
 		if (m_Input->HELD_SHIFT)
 		{
 			return startRun();
