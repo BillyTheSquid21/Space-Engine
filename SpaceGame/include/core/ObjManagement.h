@@ -102,9 +102,9 @@ public:
 		{
 			return;
 		}
-		m_Objects[id].obj->messageAll(Message::KILL);
+		m_Objects[id].obj->messageAll((uint32_t)Message::KILL);
 	};
-	void removeObject(std::string name) { if (m_ObjIDMap.find(name) == m_ObjIDMap.end()) { EngineLog("Object does not exist: ", name); return; } unsigned int id = m_ObjIDMap[name]; if (m_Objects[id].obj->isDead()) { return; } m_Objects[id].obj->messageAll(Message::KILL);}
+	void removeObject(std::string name) { if (m_ObjIDMap.find(name) == m_ObjIDMap.end()) { EngineLog("Object does not exist: ", name); return; } unsigned int id = m_ObjIDMap[name]; if (m_Objects[id].obj->isDead()) { return; } m_Objects[id].obj->messageAll((uint32_t)Message::KILL);}
 	
 	//Storage for Game objects - object only removed after components deleted
 	struct GameObjectContainer

@@ -10,16 +10,18 @@
 #include "game/utility/Flags.hpp"
 
 //Instructions
-enum class ScriptInstruction
+enum class ScriptInstruction : uint32_t
 {
 	//Core
-	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, LOCK_PLAYER, PLAYER_FACE, PLAYER_WALK, OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, 
-	GIVE_ITEM, TAKE_ITEM, WAIT_INPUT,
+	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, LOCK_PLAYER, PLAYER_FACE, PLAYER_WALK, PLAYER_RUN, 
+	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, GIVE_ITEM, TAKE_ITEM, WAIT_INPUT,
+	WARP_PLAYER, SET_PLAYER_TILE, //TODO - implement
+
+	CORE_MAX, //max to give return term - TODO define each exactly so can guarantee CORE_MAX is bigger
 	
-	CORE_MAX, //max to give return term
-	
-	//Non Core
-	FREEZE_OBJECT, NPC_FACE, NPC_WALK, NPC_RUN, WAIT_INTERACT, FACE_PLAYER,
+	//NPC aimed
+	FREEZE_OBJECT, FACE_PLAYER, NPC_FACE, NPC_WALK, NPC_RUN, WAIT_INTERACT, 
+	NPC_AND_PLAYER_WALK, SHOW_SPRITE, 
 };
 
 //NOTE: flags must be written in hex in files (0xFFFFFF syntax)
@@ -75,8 +77,22 @@ struct BUSY_INFO
 	uint32_t unused : 24;
 };
 
-//Lock player info
-struct LOCK_INFO
+//Warp info
+struct WARP_INFO
+{
+	uint32_t origin : 16;
+	uint32_t dest : 16;
+};
+
+//Tile info
+struct TILE_INFO
+{
+	uint32_t x : 16;
+	uint32_t y : 16;
+};
+
+//Bool (general purpose)
+struct BOOL_INFO
 {
 	uint32_t state : 8;
 	uint32_t unused : 24;
@@ -95,7 +111,9 @@ struct InstructionInfo
 		FLAG_INFO flgInfo;
 		DIRECTION_INFO dirInfo;
 		BUSY_INFO busyInfo;
-		LOCK_INFO lockInfo;
+		BOOL_INFO boolInfo;
+		WARP_INFO warpInfo;
+		TILE_INFO tileInfo;
 		uint32_t clear;
 	};
 };

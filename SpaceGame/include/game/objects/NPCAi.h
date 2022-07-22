@@ -62,7 +62,7 @@ public:
 			Ov_Translation::RunSprite(m_NPC, deltaTime);
 			return true;
 		case ScriptInstruction::FREEZE_OBJECT:
-			m_NPC->m_Busy = (bool)el.info.lockInfo.state;
+			m_NPC->m_Busy = (bool)el.info.boolInfo.state;
 			m_Index++;
 			return true;
 		case ScriptInstruction::FACE_PLAYER:
@@ -76,6 +76,48 @@ public:
 				{
 					m_Index++;
 				}
+			}
+			return true;
+		case ScriptInstruction::NPC_AND_PLAYER_WALK:
+			if (!m_NPC->m_Walking)
+			{
+				m_NPC->m_Walking = true;
+				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel);
+			}
+			else if (m_NPC->m_Timer >= World::WALK_DURATION)
+			{
+				m_NPC->m_Walking = false;
+				m_NPC->m_Timer = 0.0;
+				Ov_Translation::CentreOnTileSprite(m_NPC);
+				m_Index++;
+				return true;
+			}
+			Ov_Translation::WalkSprite(m_NPC, deltaTime);
+			if (!m_Player->m_Walking)
+			{
+				m_Player->m_Walking = true;
+				m_Player->m_Controlled = true;
+				World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel);
+			}
+			else if (m_Player->m_Timer >= World::WALK_DURATION)
+			{
+				m_Player->m_Walking = false;
+				m_Player->m_Controlled = false;
+				m_Player->m_Timer = 0.0;
+				Ov_Translation::CentreOnTileSprite(m_Player);
+				m_Index++;
+				return true;
+			}
+			Ov_Translation::WalkSprite(m_Player, deltaTime);
+			return true;
+		case ScriptInstruction::SHOW_SPRITE:
+			if (el.info.boolInfo.state)
+			{
+				m_NPC->messageAllRender((uint32_t)Message::ACTIVATE);
+			}
+			else
+			{
+				m_NPC->messageAllRender((uint32_t)Message::DEACTIVATE);
 			}
 			return true;
 		default:

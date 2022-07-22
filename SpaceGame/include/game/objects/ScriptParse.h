@@ -40,7 +40,7 @@ namespace ScriptParse
 	inline static void PSS_SET_FLAG(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_JMP(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_JMP_IF(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
-	inline static void PSS_LOCK(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
+	inline static void PSS_BOOL(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_MSG(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_GIVE_TAKE_ITEM(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_CGE_DIR(std::string (&instrArr)[MAX_INFO], ScriptElement& element);

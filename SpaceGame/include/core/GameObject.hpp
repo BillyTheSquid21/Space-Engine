@@ -59,7 +59,7 @@ class Component
 public:
 	//Function component does will carry out
 	Component() {}
-	void recieve(Message message) { m_MessageQueue.pushBack(message); };
+	void recieve(uint32_t message) { m_MessageQueue.pushBack(message); };
 	bool isActive() const { return m_Active; }
 	void setActive(bool set) { m_Active = set; }
 	bool isDead() const { return m_Dead; }
@@ -67,10 +67,10 @@ public:
 	void kill() { m_Dead = true; m_ParentPointers = nullptr; }
 
 	//By default only checks for deactivate and activate message - can be overidden - ACTIVATE AND DEACTIVATE MUST BE REIMPLEMENTED
-	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { Message message = m_MessageQueue.nextInQueue(); 
-	if (message == Message::ACTIVATE) { setActive(true); }
-	else if (message == Message::DEACTIVATE) { setActive(false); }
-	else if (message == Message::KILL) { setActive(false); }};}
+	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { uint32_t message = m_MessageQueue.nextInQueue(); 
+	if (message == (uint32_t)Message::ACTIVATE) { setActive(true); }
+	else if (message == (uint32_t)Message::DEACTIVATE) { setActive(false); }
+	else if (message == (uint32_t)Message::KILL) { setActive(false); }};}
 
 	//Attach to parent pointers - called when added to object manager and in its place
 	//During runtime will have to pass pointer all the way down
@@ -109,7 +109,7 @@ private:
 	bool m_Active = true;
 	bool m_Dead = false;
 	std::vector<T*>* m_ParentPointers = nullptr;
-	SimpleQueue<Message> m_MessageQueue;
+	SimpleQueue<uint32_t> m_MessageQueue;
 };
 
 class RenderComponent : public Component<RenderComponent>
@@ -358,26 +358,26 @@ public:
 	unsigned int id() const { return m_ID; }
 
 	//Messaging functions
-	void messageUpdateAt(Message message, unsigned int id)
+	void messageUpdateAt(uint32_t message, unsigned int id)
 	{
 		if (!m_UpdateComps[id]) { ObjectErrorLog(ObjectError::VOID_POINTER, id); return; }
 		m_UpdateComps[id]->recieve(message);
 	};
 	
-	void messageRenderAt(Message message, unsigned int id)
+	void messageRenderAt(uint32_t message, unsigned int id)
 	{
 		if (!m_RenderComps[id]) { ObjectErrorLog(ObjectError::VOID_POINTER, id); return; }
 		m_RenderComps[id]->recieve(message);
 	};
 	
-	void messageAllUpdate(Message message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
-	void messageAllRender(Message message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
-	void messageAllExceptUpdate(Message message, unsigned int id) { for (int i = 0; i < m_UpdateComps.size(); i++) { if (id != i) { messageUpdateAt(message, i); } } };
-	void messageAllExceptRender(Message message, unsigned int id) { for (int i = 0; i < m_RenderComps.size(); i++) { if (id != i) { messageRenderAt(message, i); } } };
+	void messageAllUpdate(uint32_t message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
+	void messageAllRender(uint32_t message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
+	void messageAllExceptUpdate(uint32_t message, unsigned int id) { for (int i = 0; i < m_UpdateComps.size(); i++) { if (id != i) { messageUpdateAt(message, i); } } };
+	void messageAllExceptRender(uint32_t message, unsigned int id) { for (int i = 0; i < m_RenderComps.size(); i++) { if (id != i) { messageRenderAt(message, i); } } };
 
 	//If says kill, kill all components then mark dead
-	void messageAll(Message message) { messageAllRender(message); messageAllUpdate(message); 
-	if (message == Message::KILL) { m_Dead = true; }};
+	void messageAll(uint32_t message) { messageAllRender(message); messageAllUpdate(message);
+	if (message == (uint32_t)Message::KILL) { m_Dead = true; }};
 
 	//Checks all are dead
 	bool safeToDelete() {

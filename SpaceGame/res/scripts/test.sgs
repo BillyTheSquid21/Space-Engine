@@ -9,5 +9,6 @@
 [7] -PLAYER_FACE -EAST
 [8] -PLAYER_WALK
 [9] -LOCK_PLAYER 0
+[10] -SHOW_SPRITE 0
 
 #NO_OP ends script, counter will no longer increment - otherwise will continue to loop

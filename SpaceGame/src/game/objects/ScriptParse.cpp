@@ -98,6 +98,10 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::PLAYER_WALK;
 	}
+	else if (instr == "-PLAYER_RUN")
+	{
+		return ScriptInstruction::PLAYER_RUN;
+	}
 	else if (instr == "-OPEN_MSG_BOX")
 	{
 		return ScriptInstruction::OPEN_MSG_BOX;
@@ -146,6 +150,14 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::NPC_RUN;
 	}
+	else if (instr == "-NPC_AND_PLAYER_WALK")
+	{
+		return ScriptInstruction::NPC_AND_PLAYER_WALK;
+	}
+	else if (instr == "-SHOW_SPRITE")
+	{
+		return ScriptInstruction::SHOW_SPRITE;
+	}
 	else if (instr == "-WAIT_INTERACT")
 	{
 		return ScriptInstruction::WAIT_INTERACT;
@@ -168,7 +180,7 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 		PSS_JMP_IF(instrArr, element);
 		return;
 	case ScriptInstruction::LOCK_PLAYER:
-		PSS_LOCK(instrArr, element);
+		PSS_BOOL(instrArr, element);
 		return;
 	case ScriptInstruction::PLAYER_FACE:
 		PSS_CGE_DIR(instrArr, element);
@@ -186,7 +198,10 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 		PSS_CGE_DIR(instrArr, element);
 		return;
 	case ScriptInstruction::FREEZE_OBJECT:
-		PSS_LOCK(instrArr, element);
+		PSS_BOOL(instrArr, element);
+		return;
+	case ScriptInstruction::SHOW_SPRITE:
+		PSS_BOOL(instrArr, element);
 		return;
 	default:
 		element.info.clear = 0;
@@ -222,19 +237,19 @@ void ScriptParse::PSS_JMP_IF(std::string(&instrArr)[MAX_INFO], ScriptElement& el
 	element.info.jmpIfInfo.line = (uint16_t)strtoul(instrArr[2].c_str(), nullptr, 10);
 }
 
-void ScriptParse::PSS_LOCK(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
+void ScriptParse::PSS_BOOL(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
 {
 	if (instrArr[1][0] != '-')
 	{
-		element.info.lockInfo.state = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
+		element.info.boolInfo.state = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
 		return;
 	}
 	else if (instrArr[1] == "true")
 	{
-		element.info.lockInfo.state = 1;
+		element.info.boolInfo.state = 1;
 		return;
 	}
-	element.info.lockInfo.state = 0;
+	element.info.boolInfo.state = 0;
 }
 
 void ScriptParse::PSS_MSG(std::string(&instrArr)[MAX_INFO], ScriptElement& element)

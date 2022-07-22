@@ -76,7 +76,7 @@ public:
 			}
 			return true;
 		case ScriptInstruction::LOCK_PLAYER:
-			m_Player->m_Busy = el.info.lockInfo.state;
+			m_Player->m_Busy = el.info.boolInfo.state;
 			m_Index++;
 			return true;
 		case ScriptInstruction::PLAYER_FACE:
@@ -100,6 +100,24 @@ public:
 				return true;
 			}
 			Ov_Translation::WalkSprite(m_Player, deltaTime);
+			return true;
+		case ScriptInstruction::PLAYER_RUN:
+			if (!m_Player->m_Running)
+			{
+				m_Player->m_Running = true;
+				m_Player->m_Controlled = true;
+				World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel);
+			}
+			else if (m_Player->m_Timer >= World::RUN_DURATION)
+			{
+				m_Player->m_Running = false;
+				m_Player->m_Controlled = false;
+				m_Player->m_Timer = 0.0;
+				Ov_Translation::CentreOnTileSprite(m_Player);
+				m_Index++;
+				return true;
+			}
+			Ov_Translation::RunSprite(m_Player, deltaTime);
 			return true;
 		case ScriptInstruction::OPEN_MSG_BOX:
 			m_TextBuffer->showTextBox = true;
