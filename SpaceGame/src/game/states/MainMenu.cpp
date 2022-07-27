@@ -39,6 +39,11 @@ void MainMenu::loadRequiredData()
     m_DataLoaded = true;
 }
 
+void MainMenu::purgeRequiredData()
+{
+    m_DataLoaded = false;
+}
+
 void MainMenu::render() {
     //ImGUI
     GameGUI::StartFrame();

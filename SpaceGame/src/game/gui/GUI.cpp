@@ -113,12 +113,27 @@ void GameGUI::GUIElement::updateDimensions()
 	}
 }
 
+void GameGUI::GUIContainer::showNest(int nest, bool show)
+{
+	for (int i = 0; i < m_Elements.size(); i++)
+	{
+		if (m_Elements[i]->getNest() == nest)
+		{
+			m_Elements[i]->m_Show = show;
+		}
+	}
+}
+
 void GameGUI::GUIContainer::render()
 {
+	if (!m_Base)
+	{
+		return;
+	}
 	m_Base->setStyle();
 	m_Base->renderStart();
 	m_Base->openNest();
-	for (int i = 0; i < m_NestCount + 1; i++)
+	for (int i = 0; i <= m_NestCount; i++)
 	{
 		//Open all nests (and close self contained)
 		for (int j = 0; j < m_Elements.size(); j++)
@@ -173,34 +188,38 @@ void GameGUI::HUD::closeNest()
 
 void GameGUI::Divider::openNest()
 {
+	if (!m_Show)
+	{
+		return;
+	}
 	updateDimensions();
 	ImGui::BeginChild(m_Name.c_str(), ImVec2(m_Width, m_Height), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
 }
 
 void GameGUI::Divider::closeNest()
 {
+	if (!m_Show)
+	{
+		return;
+	}
 	ImGui::EndChild();
-}
-
-void GameGUI::DebugPanel::openNest()
-{
-	ImGui::Begin("Debug Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-	ImGuiIO& io = ImGui::GetIO();
-	ImGui::PushFont(io.Fonts->Fonts[0]);
-}
-
-void GameGUI::DebugPanel::closeNest()
-{
-	ImGui::PopFont();
 }
 
 void GameGUI::TextBox::openNest()
 {
+	if (!m_Show)
+	{
+		return;
+	}
 	ImGui::Text(m_Text.c_str());
 }
 
 void GameGUI::Button::openNest()
 {
+	if (!m_Show)
+	{
+		return;
+	}
 	updateDimensions();
 	if (ImGui::Button(m_ButtonText.c_str(), ImVec2(m_Width, m_Height))) {
 		*m_Trigger = true;
@@ -211,17 +230,14 @@ void GameGUI::Button::openNest()
 	}
 }
 
-GameGUI::GameTextBox::GameTextBox(float width, float height, float x, float y, std::string& t1, std::string& t2)
-	: m_Text1Ref(t1), m_Text2Ref(t2)
+void GameGUI::TextDisplay::openNest()
 {
-	m_WindowWidth = width; m_WindowHeight = height; m_WindowX = x; m_WindowY = y;
-}
-
-void GameGUI::GameTextBox::openNest()
-{
-	ImGui::Begin("Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+	if (!m_Show)
+	{
+		return;
+	}
+	Divider::openNest();
 	ImGui::PushFont(m_Fonts->getFont("boxfont", 70));
-	ImGui::BeginChild("##Centre", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false);
 	ImGui::SetCursorPosX(40.0f);
 	ImGui::SetCursorPosY(40.0f);
 	ImGui::Text(m_Text1Ref.c_str());
@@ -230,8 +246,12 @@ void GameGUI::GameTextBox::openNest()
 	ImGui::Text(m_Text2Ref.c_str());
 }
 
-void GameGUI::GameTextBox::closeNest()
+void GameGUI::TextDisplay::closeNest()
 {
+	if (!m_Show)
+	{
+		return;
+	}
 	ImGui::PopFont();
 	ImGui::EndChild();
 }

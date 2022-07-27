@@ -5,7 +5,7 @@ RandomContainer MoveQueue::random;
 
 bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs)
 {
-	return lhs.origin->stats.speed < rhs.origin->stats.speed;
+	return lhs.origin->stats.speed > rhs.origin->stats.speed;
 }
 
 uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending)
@@ -62,25 +62,6 @@ void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, Current
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText(attacker.nickname + "'s " + "attack missed!");
 		PokemonBattle::awaitInput();
-	}
-
-	//Status
-	if (move.status == StatusCondition::None)
-	{
-		return;
-	}
-
-	roll = PokemonBattle::random.next();
-	if (roll < move.statusAcc * 100)
-	{
-		BattleTextBuffer::clearText();
-		BattleTextBuffer::pushText(target.nickname + " was " + std::to_string((int)move.status));
-		PokemonBattle::awaitInput();
-		target.condition = move.status;
-		if (move.status == StatusCondition::Sleep)
-		{
-			target.storage = 2;
-		}
 	}
 }
 
@@ -285,18 +266,20 @@ bool* PokemonBattle::s_Progress[2] = { nullptr, nullptr };
 bool PokemonBattle::checkWin()
 {
 	//Check if anyone is dead
-	if (m_PartyA[m_ActivePkmA].health <= 0)
+	if (m_PartyA->at(m_ActivePkmA).health <= 0)
 	{
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Player lost!");
 		PokemonBattle::awaitInput();
+		m_BattleOver = true;
 		return true;
 	}
-	else if (m_PartyB[m_ActivePkmB].health <= 0)
+	else if (m_PartyB->at(m_ActivePkmB).health <= 0)
 	{
 		BattleTextBuffer::clearText();
 		BattleTextBuffer::pushText("Enemy lost!");
 		PokemonBattle::awaitInput();
+		m_BattleOver = true;
 		return true;
 	}
 	return false;
@@ -323,16 +306,16 @@ void PokemonBattle::run(MoveSlot move)
 	if (checkWin()) { m_IsUpdating = false; return; }
 
 	//Await player input, add to queue
-	m_MoveQueue.queueMove(m_PartyA[m_ActivePkmA].moves[(int)move], &m_PartyA[m_ActivePkmA], &m_PartyB[m_ActivePkmB], &m_StagesA, &m_StagesB);
+	m_MoveQueue.queueMove(m_PartyA->at(m_ActivePkmA).moves[(int)move], &m_PartyA->at(m_ActivePkmA), &m_PartyB->at(m_ActivePkmB), &m_StagesA, &m_StagesB);
 	
 	//Await enemy input, add to queue
-	m_MoveQueue.queueMove(m_PartyB[m_ActivePkmB].moves[0], &m_PartyB[m_ActivePkmB], &m_PartyA[m_ActivePkmA], &m_StagesB, &m_StagesA);
+	m_MoveQueue.queueMove(m_PartyB->at(m_ActivePkmB).moves[0], &m_PartyB->at(m_ActivePkmB), &m_PartyA->at(m_ActivePkmA), &m_StagesB, &m_StagesA);
 
 	this->nextMove();
 
 	//Process end turn status
-	ProcessEndTurnStatus(m_PartyA[m_ActivePkmA]);
-	ProcessEndTurnStatus(m_PartyB[m_ActivePkmB]);
+	ProcessEndTurnStatus(m_PartyA->at(m_ActivePkmA));
+	ProcessEndTurnStatus(m_PartyB->at(m_ActivePkmB));
 
 	BattleTextBuffer::clearText();
 

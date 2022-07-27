@@ -16,6 +16,7 @@ public:
 	void update(double deltaTime, double time);
 	void render();
 	void loadRequiredData();
+	void purgeRequiredData();
 private:
 	GLFWwindow* m_WindowPointer;
 	Render::Renderer<ColorTextureVertex> m_Renderer;

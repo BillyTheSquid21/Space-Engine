@@ -3,11 +3,11 @@
 #define DEMO_GAME_H
 
 #include "core/Game.h"
-#include "game/states/Splash.h"
 #include "game/states/MainMenu.h"
 #include "game/states/Overworld.h"
 #include "game/states/Battle.h"
 #include "game/gui/GUI.h"
+#include "game/data/PlayerData.hpp"
 
 #include "mtlib/ThreadPool.h"
 
@@ -29,6 +29,7 @@ private:
 	FontContainer m_Fonts;
 	std::vector<std::shared_ptr<State>> m_States;
 	GameInput m_GameInput;
+	PlayerData m_Data;
 	static FlagArray s_GlobalFlags;
 };
 

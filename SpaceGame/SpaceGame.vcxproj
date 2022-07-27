@@ -148,7 +148,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\x64;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;assimp-vc142-mtd.lib;glew32s.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -156,6 +156,7 @@
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\game\DemoGame.cpp" />
     <ClCompile Include="src\game\gui\GUI.cpp" />
+    <ClCompile Include="src\game\gui\OverworldGUI.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
     <ClCompile Include="src\game\level\WorldObjectLoader.cpp" />
     <ClCompile Include="src\game\objects\ActionTile.cpp" />
@@ -176,7 +177,6 @@
     <ClCompile Include="src\game\states\Battle.cpp" />
     <ClCompile Include="src\game\states\MainMenu.cpp" />
     <ClCompile Include="src\game\states\Overworld.cpp" />
-    <ClCompile Include="src\game\states\Splash.cpp" />
     <ClCompile Include="src\game\states\StateRenderers.cpp" />
     <ClCompile Include="src\game\utility\GameText.cpp" />
     <ClCompile Include="src\game\utility\ImageRead.cpp" />
@@ -210,6 +210,7 @@
     <ClInclude Include="include\game\data\PlayerData.hpp" />
     <ClInclude Include="include\game\DemoGame.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
+    <ClInclude Include="include\game\gui\OverworldGUI.h" />
     <ClInclude Include="include\game\level\World.h" />
     <ClInclude Include="include\game\level\WorldObjectLoader.h" />
     <ClInclude Include="include\game\objects\ActionTile.h" />
@@ -235,7 +236,6 @@
     <ClInclude Include="include\game\states\Battle.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />
-    <ClInclude Include="include\game\states\Splash.h" />
     <ClInclude Include="include\game\states\StateRenderers.h" />
     <ClInclude Include="include\game\utility\Flags.hpp" />
     <ClInclude Include="include\game\utility\GameText.h" />
@@ -252,6 +252,7 @@
     <ClInclude Include="include\renderer\ShadowMap.h" />
     <ClInclude Include="include\renderer\ShapeFactory.h" />
     <ClInclude Include="include\renderer\Texture.h" />
+    <ClInclude Include="include\renderer\Transition.hpp" />
     <ClInclude Include="include\renderer\Vertex.hpp" />
     <ClInclude Include="include\utility\SGUtil.h" />
     <ClInclude Include="include\utility\SimpleQueue.hpp" />
@@ -297,6 +298,7 @@
     <None Include="res\shaders\Grass_Shadows_Shader.glsl" />
     <None Include="res\shaders\Lighting_T_Shader.glsl" />
     <None Include="res\shaders\Shadows_Shader.glsl" />
+    <None Include="res\shaders\BattleTransition.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

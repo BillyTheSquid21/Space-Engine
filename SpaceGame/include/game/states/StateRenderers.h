@@ -6,6 +6,7 @@
 #include "renderer/Texture.h"
 #include "game/objects/ModelObject.hpp"
 #include "renderer/ShadowMap.h"
+#include "renderer/Transition.hpp"
 
 #include "game/level/World.h"
 
@@ -24,6 +25,7 @@ public:
 	Shader sceneShadows;
 	Shader grassShader;
 	Shader grassShadows;
+	Shader transitionShader;
 	Camera camera;
 
 	Render::Renderer<NormalTextureVertex> worldRenderer;
@@ -36,6 +38,9 @@ public:
 	Texture spriteTexture;
 	Texture debugTexture;
 
+	//Test transition
+	Transition battleTransition;
+
 	//Maps
 	TileMap worldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 	TileMap spriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
@@ -47,6 +52,7 @@ public:
 	void generateAtlas(); //Generate atlas from loaded model textures
 	void purgeData();
 	void bufferRenderData();
+	void update(double deltaTime);
 	void draw(); //Draw scene renderer
 	void ensureModelMapping(unsigned int objectCount);
 

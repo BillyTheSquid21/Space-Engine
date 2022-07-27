@@ -50,7 +50,7 @@ namespace GameGUI
 	void SetColors(int r, int g, int b, ImGuiCol target);
 	void SetNextWindowSize(float width, float height);
 	void SetNextWindowPos(float x, float y);
-	void ResetStyle();
+	void ResetStyle(); //Default style
 
 	//Base GUI element class
 	class GUIElement
@@ -59,8 +59,8 @@ namespace GameGUI
 		GUIElement() = default;
 
 		//Opens and closes IMGUI nest
-		virtual void openNest() {};
-		virtual void closeNest() {};
+		virtual void openNest() {  };
+		virtual void closeNest() {  };
 		virtual void setNest(int nest) { m_NestNumber = nest; }
 		int getNest() { return m_NestNumber; }
 
@@ -74,6 +74,7 @@ namespace GameGUI
 		float m_XPos = -1.0f; float m_YPos = -1.0f; //if negative, don't check pos (default)
 		bool m_FillX = false;
 		bool m_FillY = false;
+		bool m_Show = true;
 
 	protected:
 		void updateDimensions(); //Adjusts dimensions - can be called to auto fill if allowed
@@ -93,8 +94,6 @@ namespace GameGUI
 		void renderStart() { GameGUI::SetNextWindowSize(m_WindowWidth, m_WindowHeight); GameGUI::SetNextWindowPos(m_WindowX, m_WindowY); }
 		void renderEnd() { ImGui::End(); }
 	protected:
-		float m_WindowWidth; float m_WindowHeight;
-		float m_WindowX; float m_WindowY;
 		ImGuiWindowFlags m_Flags;
 	};
 
@@ -108,21 +107,13 @@ namespace GameGUI
 		//N1->(B->E1->E2->E3,E4) N2->(B->E5->E6)
 		void addElement(std::shared_ptr<GUIElement> element) { m_Elements.push_back(element); if (element->getNest() > m_NestCount) { m_NestCount = element->getNest(); } }
 		void render();
+		void showNest(int nest, bool show);
 	private:
 		//Base Element
-		std::shared_ptr<GUIElementBase> m_Base;
+		std::shared_ptr<GUIElementBase> m_Base = nullptr;
 		//List of nested elements in order of nesting
 		std::vector<std::shared_ptr<GUIElement>> m_Elements;
 		int m_NestCount = 0;
-	};
-
-	//Debug Panel class
-	class DebugPanel : public GUIElementBase
-	{
-	public:
-		using GUIElementBase::GUIElementBase;
-		void openNest();
-		void closeNest();
 	};
 
 	//Basic Text box class
@@ -168,10 +159,10 @@ namespace GameGUI
 	};
 
 	//Game Text box class
-	class GameTextBox : public GUIElementBase
+	class TextDisplay : public Divider
 	{
 	public:
-		GameTextBox(float width, float height, float x, float y, std::string& t1, std::string& t2);
+		TextDisplay(std::string& text1, std::string& text2) : m_Text1Ref(text1), m_Text2Ref(text2) { };
 		void setFontContainer(FontContainer* font) { m_Fonts = font; }
 		void openNest();
 		void closeNest();

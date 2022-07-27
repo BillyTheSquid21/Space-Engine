@@ -10,7 +10,7 @@ void WarpTileUpdateComponent::update(double deltaTime)
 {
 	ActionTileComponent::update(deltaTime);
 
-	if (m_Occupied && !(m_PlayerPointer->m_Walking || m_PlayerPointer->m_Running))
+	if (m_Occupied && !(m_PlayerPointer->m_Walking || m_PlayerPointer->m_Running || m_PlayerPointer->m_Busy))
 	{
 		//Load destination level
 		m_LoadLv(m_LevelDestination);

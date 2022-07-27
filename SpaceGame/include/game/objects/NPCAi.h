@@ -70,7 +70,7 @@ public:
 			m_Index++;
 			return true;
 		case ScriptInstruction::WAIT_INTERACT:
-			if (m_Input->HELD_E && !m_NPC->m_Busy)
+			if (m_Input->HELD_E && !m_NPC->m_Busy && !m_Player->m_Busy)
 			{
 				if (World::CheckPlayerInteracting(m_Player->m_Tile, m_NPC->m_Tile, m_Player->m_Direction))
 				{

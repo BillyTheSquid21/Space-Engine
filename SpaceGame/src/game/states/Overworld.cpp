@@ -1,11 +1,8 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input, std::function<void(bool)> battle) {
+void Overworld::init(int width, int height, PlayerData* data, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input) {
     //Width and height
     m_Width = width; m_Height = height;
-
-    //Battle func
-    m_StartBattle = battle; m_Renderer.m_StateToBattle = std::bind(&Overworld::startBattle, this);
 
     //Flags
     m_Flags = flags;
@@ -13,9 +10,13 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     //Input
     m_Input = input;
 
+    //Data
+    m_Data = data;
+
     //Fonts - TODO make load in loadRequiredData()
     m_Fonts = fonts;
     m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 20);
+    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 45);
     m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
 
     m_Renderer.initialiseRenderer(width, height);
@@ -23,52 +24,111 @@ void Overworld::init(int width, int height, World::LevelID levelEntry, FontConta
     //test level
     m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Flags, &m_TextBuff, m_Input);
 
-    std::shared_ptr<GameGUI::GameTextBox> tb(new GameGUI::GameTextBox(m_Width / 1.3f, 300.0f, 0.0f + (m_Width / 2 - m_Width / 2.6f), m_Height - 375.0f, m_TextBuff.buffer.line1, m_TextBuff.buffer.line2));
+    std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(width, height, 0, 0));
+    m_HUD.setBase(hud);
+    std::shared_ptr<GameGUI::TextDisplay> tb(new GameGUI::TextDisplay(m_TextBuff.buffer.line1, m_TextBuff.buffer.line2));
     tb->setFontContainer(m_Fonts);
-    m_TextBoxGUI.setBase(tb);
+    tb->m_Width = m_Width / 1.3f; tb->m_Height = 300.0f;
+    tb->setNest(1);
+    tb->m_XPos = 0.0f + (m_Width / 2 - m_Width / 2.6f);
+    tb->m_YPos = m_Height - 375.0f;
+    m_HUD.addElement(tb);
+    tb->setNest(1);
+    m_HUD.showNest(1, false);
 
     //TODO - make debug view more workable
-    std::shared_ptr<GameGUI::DebugPanel> dp(new GameGUI::DebugPanel(200.0f, 225.0f, 0.0f, 0.0f));
-    std::shared_ptr<GameGUI::Divider> div1(new GameGUI::Divider());
-    std::shared_ptr<GameGUI::Divider> div2(new GameGUI::Divider());
-    std::shared_ptr<GameGUI::Divider> div3(new GameGUI::Divider());
     std::shared_ptr<GameGUI::TextBox> tex(new GameGUI::TextBox(m_RenderTime));
     std::shared_ptr<GameGUI::TextBox> tex2(new GameGUI::TextBox(m_UpdateTime));
     std::shared_ptr<GameGUI::TextBox> tex3(new GameGUI::TextBox(m_CurrentLevelStr));
     std::shared_ptr<GameGUI::TextBox> tex4(new GameGUI::TextBox(m_CurrentTileStr));
     std::shared_ptr<GameGUI::TextBox> tex5(new GameGUI::TextBox(m_ObjectCountStr));
 
-    div1->m_FillY = false; div1->m_FillX = true;
-    div1->m_Height = 72.0f;
-
-    div2->m_FillY = false; div2->m_FillX = true;
-    div2->m_Height = 72.0f;
-    div2->setNest(1);
-
-    div3->m_FillY = false; div3->m_FillX = true;
-    div3->m_Height = 42.0f;
-    div3->setNest(2);
-
-    tex3->setNest(1);
-    tex4->setNest(1);
-    tex5->setNest(2);
+    tex->setNest(0);
+    tex2->setNest(0);
+    tex3->setNest(0);
+    tex4->setNest(0);
+    tex5->setNest(0);
     
-    m_DebugGUI.setBase(dp);
-    m_DebugGUI.addElement(div1);
-    m_DebugGUI.addElement(tex);
-    m_DebugGUI.addElement(tex2);
-    m_DebugGUI.addElement(div2);
-    m_DebugGUI.addElement(tex3);
-    m_DebugGUI.addElement(tex4);
-    m_DebugGUI.addElement(div3);
-    m_DebugGUI.addElement(tex5);
+    m_HUD.addElement(tex);
+    m_HUD.addElement(tex2);
+    m_HUD.addElement(tex3);
+    m_HUD.addElement(tex4);
+    m_HUD.addElement(tex5);
+
+    std::shared_ptr<OverworldMenu> menu(new OverworldMenu());
+    menu->m_Width = 300.0f; menu->m_Height = m_Height - 20.0f;
+    menu->setNest(2);
+    menu->m_XPos = m_Width - 320.0f;
+    menu->m_YPos = 10.0f;
+    menu->setFontContainer(m_Fonts);
+    menu->setPlayerData(m_Data);
+
+    m_HUD.addElement(menu);
+
+    //Init pkm
+    //Pkm test
+    MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
+
+    PokemonDataBank::loadData(PkmDataType::BASE_STATS);
+    PokemonDataBank::loadData(PkmDataType::MOVE_INFO);
+    PokemonDataBank::loadData(PkmDataType::POKEMON_TYPES);
+    PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+
+    m_Data->playerParty[0].id = 1;
+    GeneratePokemon(m_Data->playerParty[0].id, m_Data->playerParty[0]);
+    SetPkmStatsFromLevel(m_Data->playerParty[0]);
+    m_Data->playerParty[1].id = 9;
+    GeneratePokemon(m_Data->playerParty[1].id, m_Data->playerParty[1]);
+    SetPkmStatsFromLevel(m_Data->playerParty[1]);
+    enemy[0].id = 6;
+    GeneratePokemon(enemy[0].id, enemy[0]);
+    SetPkmStatsFromLevel(enemy[0]);
+
+    m_Data->playerParty[0].nickname = PokemonDataBank::GetPokemonName(m_Data->playerParty[0].id);
+    m_Data->playerParty[1].nickname = PokemonDataBank::GetPokemonName(m_Data->playerParty[1].id);
+    enemy[0].nickname = PokemonDataBank::GetPokemonName(6);
+    m_Data->playerParty[0].moves[0].id = 15;
+    m_Data->playerParty[1].moves[1].id = 11;
+    enemy[0].moves[0].id = 7;
+    PokemonDataBank::LoadPokemonMoves(m_Data->playerParty[0]);
+    PokemonDataBank::LoadPokemonMoves(enemy[0]);
+
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::MOVE_INFO);
+    pool->Run(PokemonDataBank::unloadData, PkmDataType::POKEMON_TYPES);
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
 
+void Overworld::setBattleFunction(std::function<void(Party*, Party*)> battle)
+{
+    //Battle func
+    m_BattleEnable = battle; m_Renderer.m_StateToBattle = std::bind(&Overworld::startBattle, this);
+}
+
 void Overworld::loadRequiredData() {
     m_Renderer.loadRendererData();
+    loadObjectData();
 
+    //Init levels
+    m_Levels.InitialiseGlobalObjects();
+    m_Levels.LoadLevel(m_CurrentLevel);
+    m_Renderer.generateAtlas();
+    
+    m_StartBattle = false;
+    m_DataLoaded = true;
+}
+
+void Overworld::purgeRequiredData() {
+    m_Renderer.purgeData();
+    m_ObjManager.reset();
+    m_Levels.UnloadAll();
+    m_DataLoaded = false;
+}
+
+void Overworld::loadObjectData()
+{
     //Create groups
     //Add component groups
     std::shared_ptr<RenderComponentGroup<SpriteRender>> spriteGroup(new RenderComponentGroup<SpriteRender>());
@@ -100,40 +160,26 @@ void Overworld::loadRequiredData() {
     m_Levels.BuildFirstLevel(m_CurrentLevel);
 
     //Add player and link pos to lighting
-    OvSpr_SpriteData dataPlayer = { {8, 3},  World::WorldHeight::F0, World::LevelID::LEVEL_ENTRY, {0, 4} };
-    sprite = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
-    spriteGroup->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, &m_Renderer.spriteRenderer);
-    sprite->m_LastPermissionPtr = World::GetTilePermission(sprite->m_CurrentLevel, sprite->m_Tile, sprite->m_WorldLevel);
+    OvSpr_SpriteData dataPlayer = { m_Data->tile,  World::WorldHeight::F0, m_Data->id, {0, 4} };
+    m_PlayerPtr = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
+    spriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer.spriteRenderer);
+    m_PlayerPtr->m_LastPermissionPtr = World::GetTilePermission(m_PlayerPtr->m_CurrentLevel, m_PlayerPtr->m_Tile, m_PlayerPtr->m_WorldLevel);
 
-    std::shared_ptr<PlayerMove> walk(new PlayerMove(&sprite->m_CurrentLevel, &sprite->m_XPos, &sprite->m_ZPos, &sprite->m_Tile.x, &sprite->m_Tile.z));
-    std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&sprite->m_XPos, &sprite->m_YPos, &sprite->m_ZPos, &m_Renderer.camera));
-    std::shared_ptr<UpdateGlobalLevel> globLev(new UpdateGlobalLevel(&m_CurrentLevel, &sprite->m_CurrentLevel));
+    std::shared_ptr<PlayerMove> walk(new PlayerMove(&m_PlayerPtr->m_CurrentLevel, &m_PlayerPtr->m_XPos, &m_PlayerPtr->m_ZPos, &m_PlayerPtr->m_Tile.x, &m_PlayerPtr->m_Tile.z));
+    std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&m_PlayerPtr->m_XPos, &m_PlayerPtr->m_YPos, &m_PlayerPtr->m_ZPos, &m_Renderer.camera));
+    std::shared_ptr<PlayerEncounter> encounter(new PlayerEncounter(&m_PlayerPtr->m_LastPermission, &m_PlayerPtr->m_Tile, &m_StartBattle));
+    std::shared_ptr<UpdateGlobalLevel> globLev(new UpdateGlobalLevel(&m_CurrentLevel, &m_PlayerPtr->m_CurrentLevel));
     walk->setInput(m_Input);
-    walk->setSpriteData(sprite);
-    m_LocationX = &sprite->m_Tile.x;
-    m_LocationZ = &sprite->m_Tile.z;
+    walk->setSpriteData(m_PlayerPtr);
+    m_LocationX = &m_PlayerPtr->m_Tile.x;
+    m_LocationZ = &m_PlayerPtr->m_Tile.z;
 
     //Player is always first object pushed on overworld load - makes searching easier
-    m_ObjManager.pushUpdateHeap(walk, &sprite->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(globLev, &sprite->m_UpdateComps);
-    m_ObjManager.pushRenderHeap(spCam, &sprite->m_RenderComps);
-    m_ObjManager.pushGameObject(sprite, "Player");
-
-    //Init levels
-    m_Levels.InitialiseGlobalObjects();
-    m_Levels.LoadLevel(m_CurrentLevel);
-
-    m_Renderer.generateAtlas();
-
-    m_DataLoaded = true;
-}
-
-void Overworld::purgeRequiredData() {
-    m_Renderer.purgeData();
-    m_ObjManager.reset();
-    //m_Fonts->clearFonts();
-    m_Levels.UnloadAll();
-    m_DataLoaded = false;
+    m_ObjManager.pushUpdateHeap(walk, &m_PlayerPtr->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(globLev, &m_PlayerPtr->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(encounter, &m_PlayerPtr->m_UpdateComps);
+    m_ObjManager.pushRenderHeap(spCam, &m_PlayerPtr->m_RenderComps);
+    m_ObjManager.pushGameObject(m_PlayerPtr, "Player");
 }
 
 void Overworld::update(double deltaTime, double time) {
@@ -160,10 +206,35 @@ void Overworld::update(double deltaTime, double time) {
     //update objects
     m_ObjManager.update(deltaTime);
 
+    //update renderer
+    m_Renderer.update(deltaTime);
+
     //test
     m_CurrentLevelStr = "Current Level: " + std::to_string((int)m_CurrentLevel);
     m_CurrentTileStr = "Current Tile: " + std::to_string((int)*m_LocationX) + ", " + std::to_string((int)*m_LocationZ);
     m_ObjectCountStr = "Objects: " + std::to_string(m_ObjManager.getObjectCount());
+   
+    //Start battle
+    if (m_StartBattle && (m_PlayerPtr->m_Walking || m_PlayerPtr->m_Running))
+    {
+        m_PlayerPtr->m_Busy = true;
+    }
+    else if (m_StartBattle && !(m_PlayerPtr->m_Walking || m_PlayerPtr->m_Running) && m_PlayerPtr->m_Busy)
+    {
+        //Store player data and start
+        m_Data->tile = m_PlayerPtr->m_Tile;
+
+        //Start transition
+        m_Renderer.battleTransition.start();
+    }
+    if (m_StartBattle && m_Renderer.battleTransition.isStarted())
+    {
+        if (m_Renderer.battleTransition.isEnded())
+        {
+            this->startBattle();
+        }
+    }
+    
 
     //End timer
     double timeTaken = EngineTimer::EndTimer(ts) * 1000.0;
@@ -175,10 +246,6 @@ void Overworld::update(double deltaTime, double time) {
 }
 
 void Overworld::render() {
-    //ImGUI - I don't know why having this here increases speed
-    //I will remove when I get to the bottom of it
-    GameGUI::StartFrame();
-    GameGUI::EndFrame();
 
     //Start timer
     auto ts = EngineTimer::StartTimer();
@@ -203,13 +270,11 @@ void Overworld::render() {
 
     //IMGUI Test
     GameGUI::StartFrame();
-    if (m_TextBuff.showTextBox)
-    {
-        m_TextBoxGUI.render();
-    }
+    m_HUD.showNest(0, m_ShowDebug);
+    m_HUD.showNest(1, m_TextBuff.showTextBox);
+    m_HUD.showNest(2, m_ShowMenu);
+    m_HUD.render();
     GameGUI::ResetStyle();
-    m_DebugGUI.render();
-
     GameGUI::EndFrame();
 }
 
@@ -235,13 +300,29 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
     {
         if (action == GLFW_PRESS)
         {
-            if (m_Renderer.lightScene == 1)
+            m_Renderer.lightScene = !m_Renderer.lightScene;
+        }
+    }
+    if (key == GLFW_KEY_F3)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_ShowDebug = !m_ShowDebug;
+        }
+    }
+    if (key == GLFW_KEY_ESCAPE || key == GLFW_KEY_BACKSPACE)
+    {
+        if (action == GLFW_PRESS)
+        {
+            if (!m_ShowMenu && !(m_PlayerPtr->m_Walking || m_PlayerPtr->m_Running))
             {
-                m_Renderer.lightScene = 0;
+                m_ShowMenu = true;
+                m_PlayerPtr->m_Busy = m_ShowMenu;
             }
-            else
+            else if (m_ShowMenu)
             {
-                m_Renderer.lightScene = 1;
+                m_ShowMenu = false;
+                m_PlayerPtr->m_Busy = m_ShowMenu;
             }
         }
     }
@@ -250,5 +331,5 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
 void Overworld::startBattle()
 {
     this->setActive(false);
-    m_StartBattle(true);
+    m_BattleEnable(&m_Data->playerParty, &enemy);
 }

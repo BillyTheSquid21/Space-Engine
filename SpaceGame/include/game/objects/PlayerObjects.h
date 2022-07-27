@@ -4,6 +4,7 @@
 
 #include "game/objects/OverworldSprite.h"
 #include "game/utility/Input.hpp"
+#include "game/utility/Random.hpp"
 
 
 //Player walk uses exact data of TilePosition so inherit for this
@@ -53,7 +54,27 @@ private:
 	float* m_ZPos = nullptr;
 };
 
-//Updates level in global state
+class PlayerEncounter : public UpdateComponent
+{
+public:
+	PlayerEncounter(World::MovementPermissions* perm, World::TileLoc* tile, bool* battle) 
+	{ 
+		m_Permission = perm; 
+		m_Tile = tile;
+		m_Random.seed(0.0f, 1000.0f); 
+		m_StartBattle = battle;
+	};
+
+	void update(double deltaTime);
+private:
+	World::MovementPermissions* m_Permission = nullptr;
+	World::TileLoc m_LastTile = { 0, 0 };
+	World::TileLoc* m_Tile = nullptr;
+	bool* m_StartBattle = nullptr;
+	RandomContainer m_Random;
+};
+
+//Updates level in global state (may soon be depreciated by just using sprite data)
 class UpdateGlobalLevel : public UpdateComponent
 {
 public:

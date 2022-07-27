@@ -14,22 +14,21 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	ImGui_ImplOpenGL3_Init("#version 330");
 
 	//States
-	std::shared_ptr<Splash> splashScreen(new Splash());
-	splashScreen->init(m_Width, m_Height);
 	std::shared_ptr<Battle> battle(new Battle());
-	battle->init(m_Width, m_Height, &m_Fonts, &s_GlobalFlags, &m_GameInput);
+	battle->init(m_Width, m_Height, &m_Data, &m_Fonts, &s_GlobalFlags, &m_GameInput);
 	battle->setActive(false);
-	std::function<void(bool)> activateBattle = std::bind(&Battle::setActive, battle.get(), std::placeholders::_1);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags, &m_GameInput, activateBattle);
+	overworld->init(m_Width, m_Height, &m_Data, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags, &m_GameInput);
 	overworld->setActive(false);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
 	mainMenuScreen->setActive(true);
 
+	std::function<void(Party*, Party*)> activateBattle = std::bind(&Battle::startBattle, battle.get(), std::placeholders::_1, std::placeholders::_2);
+	std::function<void(bool)> activateOverworld = std::bind(&Overworld::setActive, overworld.get(), std::placeholders::_1);
+	battle->setOverworldFunction(activateOverworld); overworld->setBattleFunction(activateBattle);
+
 	//Add states
-	std::shared_ptr<State> stateSplashScreen = std::static_pointer_cast<State>(splashScreen);
-	m_States.push_back(stateSplashScreen);
 	std::shared_ptr<State> stateMainMenuScreen = std::static_pointer_cast<State>(mainMenuScreen);
 	m_States.push_back(stateMainMenuScreen);
 	std::shared_ptr<State> stateOverworld = std::static_pointer_cast<State>(overworld);
@@ -67,6 +66,7 @@ void DemoGame::update(double deltaTime) {
 		if (m_States[i]->active()) {
 			states++;
 			if (!m_States[i]->hasDataLoaded()) {
+				EngineLog("Loading required data at: ", i);
 				m_States[i]->loadRequiredData();
 			}
 			minimumStatesActive = true;
@@ -75,6 +75,7 @@ void DemoGame::update(double deltaTime) {
 		else {
 			//Unload non cached data if not active with data loaded
 			if (m_States[i]->hasDataLoaded()) {
+				EngineLog("Purging required data at: ", i);
 				m_States[i]->purgeRequiredData();
 			}
 		}

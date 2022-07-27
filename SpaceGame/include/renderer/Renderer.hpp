@@ -69,9 +69,6 @@ namespace Render
 			drawCall(&m_RendererModelMatrix, shader, true);
 		}
 
-		//static indices - some indices are standard and will not change
-		static const unsigned short int IND_TRI = 3;
-
 		//Camera
 		Camera* camera = nullptr;
 
@@ -163,116 +160,6 @@ namespace Render
 
 		//Queue for rendering
 		Render::BulkRenderQueue<T*> m_PrimitiveVertices;
-	};
-
-	/**
-	 * Renderer type for meshes where instancing is more efficient than batching.
-	 * Useful for: Large meshes, dynamic objects
-	 */
-	template <typename T>
-	class InstanceRenderer : public Renderer<T>
-	{
-	public:
-		using Renderer<T>::m_PrimitiveVertices; using Renderer<T>::m_IB; using Renderer<T>::m_VB; using Renderer<T>::m_PrimitiveType; using Renderer<T>::bindAll;
-		
-		/**
-		* Sets the model to be drawn for this renderer
-		* 
-		* @param vert Pointer to model vertices
-		* @param vertSize Amount of floats contained within all the vertices to be drawn
-		* @param ind Pointer to indices for drawing
-		* @param indSize Amount of indices being submitted
-		*/
-		void commit(T* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize) { m_Model = { vert, vertSize, ind, indSize }; }
-		
-		/**
-		 * Commits a model matrix for the model, to be added to the list for drawing multiple copies
-		 */
-		void commitModelMat(glm::mat4 matrix) { m_ModelMatrixes.pushBack(matrix); }
-		
-		/**
-		* Called when collected primitives are to be drawn
-		*
-		* @param shader Shader being bound for this draw call
-		*/
-		void drawPrimitives(Shader& shader) {
-			drawCall(shader, true);
-		}
-
-		/**
-		* Gathers vertice data into renderer buffers
-		*/
-		void bufferVideoData()
-		{
-			//First get amount of data among all vertice floats
-			unsigned int totalVertFloats = m_Model.vertFloats;
-			//Get amount of data among all indice ints
-			unsigned int totalIndFloats = m_Model.indCount;
-
-			//Then create buffer with space for that many floats
-			std::vector<float> vertices; std::vector<unsigned int> indices;		//Buffer declaration
-			vertices.resize(totalVertFloats); indices.resize(totalIndFloats);	//Buffer resizing
-			auto verticesIterator = vertices.begin(); auto indicesIterator = indices.begin();
-
-			//Indexes
-			unsigned int vertIndex = 0; unsigned int indIndex = 0;
-			int vertexSizeIndex = 0; int indiceSizeIndex = 0;
-			unsigned int largestInd = 0;
-
-			//Get instructions from render queue
-			RenderContainer<T*> instructions = m_Model;
-
-			//For each bulk chunk, render all
-			//VERTICES
-			const float* dataPointer = (const float*)instructions.verts;
-			unsigned int dataSize = instructions.vertFloats;
-			vertexSizeIndex++;
-
-			//Copy vertices into vector		
-			std::copy(&dataPointer[0], &dataPointer[dataSize], verticesIterator);
-
-			//INDICES
-			const unsigned int* indDataPointer = instructions.inds;
-			unsigned int indDataSize = instructions.indCount;
-			//Add to vector one by one
-			unsigned int currentLargest = 0;
-			for (int j = 0; j < indDataSize; j++) {
-				unsigned int newValue = indDataPointer[j] + largestInd;
-				indices[indIndex] = newValue + indiceSizeIndex;
-				indIndex++;
-				if (newValue > currentLargest) {
-					currentLargest = newValue;
-				}
-			}
-			largestInd = currentLargest;
-
-			indiceSizeIndex++;
-
-			m_VB.bufferData(vertices.data(), vertices.size());
-			m_IB.bufferData(indices.data(), indices.size());
-		}
-
-	private: //TODO invtransp model for shader
-		void drawCall(Shader& shader, bool first) {
-			//Buffer data
-			while (m_ModelMatrixes.itemsWaiting())
-			{
-				BulkContainer<glm::mat4> cont = m_ModelMatrixes.nextInQueue();
-				for (int i = 0; i < cont.elementsCount; i++)
-				{
-					//Use model matrix
-					shader.setUniform("u_Model", &cont.verts[i]);
-					//Bind all objects
-					bindAll(shader);
-					//Draw Elements
-					glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
-				}
-			}
-		}
-
-		using Renderer<T>::drawCall;
-		Render::BulkQueue<glm::mat4> m_ModelMatrixes;
-		Render::RenderContainer<T*> m_Model;
 	};
 }
 

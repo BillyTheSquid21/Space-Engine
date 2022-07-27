@@ -188,18 +188,19 @@ public:
 	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); m_MoveQueue.linkWinCheck(std::bind(&PokemonBattle::checkWin, this)); }
 	void linkProgressButtons(bool* pressE, bool* pressX) { s_Progress[0] = pressE; s_Progress[1] = pressX; }
 
-	void setParties(Party playerParty, Party enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; };
+	void setParties(Party* playerParty, Party* enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; m_BattleOver = false; };
 	void run(MoveSlot move);
 
-	int16_t getHealthA() { return m_PartyA[m_ActivePkmA].health; }
-	int16_t getHealthB() { return m_PartyB[m_ActivePkmB].health; }
-	uint8_t getStatusA() { return (uint8_t)m_PartyA[m_ActivePkmA].condition; }
-	uint8_t getStatusB() { return (uint8_t)m_PartyB[m_ActivePkmB].condition; }
-	std::string getNameA() { return m_PartyA[m_ActivePkmA].nickname; }
-	std::string getNameB() { return m_PartyB[m_ActivePkmB].nickname; }
+	int16_t getHealthA() { return m_PartyA->at(m_ActivePkmA).health; }
+	int16_t getHealthB() { return m_PartyB->at(m_ActivePkmB).health; }
+	uint8_t getStatusA() { return (uint8_t)m_PartyA->at(m_ActivePkmA).condition; }
+	uint8_t getStatusB() { return (uint8_t)m_PartyB->at(m_ActivePkmB).condition; }
+	std::string getNameA() { return m_PartyA->at(m_ActivePkmA).nickname; }
+	std::string getNameB() { return m_PartyB->at(m_ActivePkmB).nickname; }
 
-	bool checkMoveValid(MoveSlot slot) { if (m_PartyA[m_ActivePkmA].moves[(int)slot].type == PokemonType::None) { return false; } return true; }
+	bool checkMoveValid(MoveSlot slot) { if (m_PartyA->at(m_ActivePkmA).moves[(int)slot].type == PokemonType::None) { return false; } return true; }
 	bool isUpdating() { return m_IsUpdating; }
+	bool isOver() { return m_BattleOver; }
 	
 	//Only to be called from battle thread - otherwise will likely lock
 	static void awaitInput();
@@ -221,7 +222,7 @@ private:
 	static bool* s_Progress[2];
 
 	//Pokemon
-	Party m_PartyA; Party m_PartyB;
+	Party* m_PartyA; Party* m_PartyB;
 	unsigned int m_ActivePkmA = 0; unsigned int m_ActivePkmB = 0;
 	MoveSlot m_NextMoveA = MoveSlot::SLOT_NULL;
 	MoveSlot m_NextMoveB = MoveSlot::SLOT_NULL;
@@ -229,6 +230,7 @@ private:
 
 	//Thread
 	std::atomic<bool> m_IsUpdating = false;
+	std::atomic<bool> m_BattleOver = false;
 };
 
 #endif

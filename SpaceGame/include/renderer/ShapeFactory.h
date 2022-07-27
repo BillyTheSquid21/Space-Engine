@@ -33,7 +33,7 @@ namespace Primitive
 	const char T_IND_COUNT = 3;
 }
 
-#define Quad std::array<ColorTextureVertex, 4>
+#define Quad std::array<Vertex, 4>
 #define Tex_Quad std::array<TextureVertex, 4>
 #define Norm_Tex_Quad std::array<NormalTextureVertex, 4>
 
@@ -97,7 +97,7 @@ const float GUI_LAYER_5 = 0.90f;
 const float GUI_LAYER_6 = 0.92f;
 
 //Quad Creation
-Quad CreateQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
+Quad CreateQuad(float x, float y, float width, float height);
 Tex_Quad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 Norm_Tex_Quad CreateNormalTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 

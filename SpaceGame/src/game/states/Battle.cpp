@@ -109,7 +109,7 @@ void BattleScene::update(double deltaTime)
     pokemonBAnim.update(deltaTime);
 }
 
-void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags, GameInput* input) {
+void Battle::init(int width, int height, PlayerData* data, FontContainer* fonts, FlagArray* flags, GameInput* input) {
     //Width and height
     m_Width = width; m_Height = height;
 
@@ -119,43 +119,30 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     //Flags
     m_Flags = flags;
 
+    //Data
+    m_Data = data;
+
     //Input
-    m_Input = input; m_Battle.linkProgressButtons(&m_Input->PRESSED_E, &m_Input->PRESSED_X);
+    m_Input = input; m_Battle->linkProgressButtons(&m_Input->PRESSED_E, &m_Input->PRESSED_X);
 
     //Renderer
     m_Renderer.initialiseRenderer(width, height);
 
     //Platform test
     m_Scene.init(width, height);
-    PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
-    setPokemonA(370);
-    setPokemonB(370);
-    
-    //Pkm test
-    MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
 
-    PokemonDataBank::loadData(PkmDataType::BASE_STATS);
-    PokemonDataBank::loadData(PkmDataType::MOVE_INFO);
-    PokemonDataBank::loadData(PkmDataType::POKEMON_TYPES);
+    EngineLog("Battle scene loaded");
+}
 
-    m_PlayerParty[0].id = 370;
-    GeneratePokemon(m_PlayerParty[0].id, m_PlayerParty[0]);
-    SetPkmStatsFromLevel(m_PlayerParty[0]);
-    m_EnemyParty[0].id = 370;
-    GeneratePokemon(m_EnemyParty[0].id, m_EnemyParty[0]);
-    SetPkmStatsFromLevel(m_EnemyParty[0]);
-    m_Battle.setParties(m_PlayerParty, m_EnemyParty);
-
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::MOVE_INFO);
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::POKEMON_TYPES);
-
+void Battle::createGUI()
+{
     //Gui test
-    levelA = std::to_string(m_PlayerParty[0].level);
-    levelB = std::to_string(m_EnemyParty[0].level);
+    gui = GameGUI::GUIContainer();
 
-    std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(m_Width, m_Height,0,0));
+    levelA = std::to_string(m_PlayerParty->at(0).level);
+    levelB = std::to_string(m_EnemyParty->at(0).level);
+
+    std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(m_Width, m_Height, 0, 0));
     gui.setBase(hud);
 
     const float hudW = 400.0f; const float hudH = 200.0f;
@@ -201,10 +188,10 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     gui.addElement(plCond);
 
     //Move buttons
-    std::string move1 = m_PlayerParty[0].moves[0].identifier;
-    std::string move2 = m_PlayerParty[0].moves[1].identifier;
-    std::string move3 = m_PlayerParty[0].moves[2].identifier;
-    std::string move4 = m_PlayerParty[0].moves[3].identifier;
+    std::string move1 = (*m_PlayerParty)[0].moves[0].identifier;
+    std::string move2 = (*m_PlayerParty)[0].moves[1].identifier;
+    std::string move3 = (*m_PlayerParty)[0].moves[2].identifier;
+    std::string move4 = (*m_PlayerParty)[0].moves[3].identifier;
     std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button(move1, &moveTriggers[0]));
     but1->setNest(1);
     but1->m_XPos = 8.0f; but1->m_YPos = 115.0f;
@@ -221,12 +208,17 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     but4->setNest(1);
     but4->m_XPos = 100.0f; but4->m_YPos = 150.0f;
     gui.addElement(but4);
+    std::shared_ptr<GameGUI::Button> but5(new GameGUI::Button("Exit", &m_Exit));
+    but5->setNest(1);
+    but5->m_XPos = 8.0f;
+    but5->m_YPos = 190.0f;
+    gui.addElement(but5);
 
     //Add text box
     std::shared_ptr<GameGUI::Divider> textBoxBase(new GameGUI::Divider());
-    textBoxBase->m_Width = m_Width*0.3f; textBoxBase->m_Height = hudH;
+    textBoxBase->m_Width = m_Width * 0.3f; textBoxBase->m_Height = hudH;
     textBoxBase->setNest(2);
-    textBoxBase->m_XPos = but4->m_XPos + textBoxBase->m_Width + m_Width*0.1f;
+    textBoxBase->m_XPos = but4->m_XPos + textBoxBase->m_Width + m_Width * 0.1f;
     textBoxBase->m_YPos = m_Height - hudH - buffer;
     gui.addElement(textBoxBase);
     std::shared_ptr<GameGUI::TextBox> textBox1(new GameGUI::TextBox(BattleTextBuffer::m_Line1));
@@ -235,13 +227,34 @@ void Battle::init(int width, int height, FontContainer* fonts, FlagArray* flags,
     std::shared_ptr<GameGUI::TextBox> textBox2(new GameGUI::TextBox(BattleTextBuffer::m_Line2));
     textBox2->setNest(2);
     gui.addElement(textBox2);
+}
 
-    EngineLog("Battle scene loaded");
+void Battle::startBattle(Party* partyA, Party* partyB)
+{
+    this->setActive(true);
+    std::shared_ptr<PokemonBattle> battle(new PokemonBattle());
+    m_Battle = battle;
+    m_Battle->setParties(partyA, partyB);
+    m_PlayerParty = partyA; m_EnemyParty = partyB;
+    BattleTextBuffer::clearText();
+}
+
+void Battle::setOverworldFunction(std::function<void(bool)> overworld)
+{
+    //Overworld
+    m_OverworldEnable = overworld;
 }
 
 void Battle::loadRequiredData()
 {
     m_Renderer.loadRendererData();
+    createGUI();
+    m_Exit = false;
+
+    PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+    setPokemonA(m_PlayerParty->at(0).id);
+    setPokemonB(m_EnemyParty->at(0).id);
+    PokemonDataBank::unloadData(PkmDataType::SPECIES_INFO);
 
     m_DataLoaded = true;
 }
@@ -249,6 +262,7 @@ void Battle::loadRequiredData()
 void Battle::purgeRequiredData()
 {
     m_Renderer.purgeData();
+    m_DataLoaded = false;
 }
 
 void Battle::setPokemonA(uint16_t id)
@@ -268,34 +282,10 @@ void Battle::setPokemonB(uint16_t id)
 }
 
 //Temp
-bool first = true;
-int pokemonID = 472;
-double temptimer = 0.0;
 void Battle::update(double deltaTime, double time)
 {
-    //Temp show off every pokemon
-    temptimer += deltaTime;
-    if (temptimer > 3 && !(pokemonID > 649))
-    {
-        temptimer = 0.0;
-        pokemonID++;
-        PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
-        setPokemonA(pokemonID);
-        setPokemonB(pokemonID);
-        m_PlayerParty[0].id = pokemonID;
-        m_EnemyParty[0].id = pokemonID;
-        m_PlayerParty[0].nickname = PokemonDataBank::GetPokemonName(pokemonID);
-        m_EnemyParty[0].nickname = PokemonDataBank::GetPokemonName(pokemonID);
-        m_Battle.setParties(m_PlayerParty, m_EnemyParty);
-        m_Pool->Run(&PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
-    }
-
     //Check selected move - -1 if none
     bool progress = false;
-    if (first)
-    {
-        BattleTextBuffer::pushText("A whole load of pokemon appeared!");
-    }
     for (int i = 0; i < (int)MoveSlot::SLOT_NULL; i++)
     {
         if (moveTriggers[i])
@@ -305,11 +295,11 @@ void Battle::update(double deltaTime, double time)
             break;
         }
     }
-    if (selectedMove != MoveSlot::SLOT_NULL && m_Battle.checkMoveValid(selectedMove))
+    if (selectedMove != MoveSlot::SLOT_NULL && m_Battle->checkMoveValid(selectedMove))
     {
-        if (!m_Battle.isUpdating())
+        if (!m_Battle->isUpdating())
         {
-            std::function<void(MoveSlot)> runFunc = std::bind(&PokemonBattle::run, &m_Battle, std::placeholders::_1);
+            std::function<void(MoveSlot)> runFunc = std::bind(&PokemonBattle::run, m_Battle, std::placeholders::_1);
             m_Pool->Run(runFunc, selectedMove);
         }
     }
@@ -318,24 +308,24 @@ void Battle::update(double deltaTime, double time)
     m_Scene.update(deltaTime);
 
     //Update health
-    healthA = health + std::to_string(m_Battle.getHealthA());
-    healthB = health + std::to_string(m_Battle.getHealthB());
+    healthA = health + std::to_string(m_Battle->getHealthA());
+    healthB = health + std::to_string(m_Battle->getHealthB());
 
     //Update status
-    conditionA = status + std::to_string(m_Battle.getStatusA());
-    conditionB = status + std::to_string(m_Battle.getStatusB());
+    conditionA = status + std::to_string(m_Battle->getStatusA());
+    conditionB = status + std::to_string(m_Battle->getStatusB());
 
     //Update nickname
-    nameA = m_Battle.getNameA();
-    nameB = m_Battle.getNameB();
+    nameA = m_Battle->getNameA();
+    nameB = m_Battle->getNameB();
 
-    //Update level
-    if (first)
+    levelA = "Lv 50";
+    levelB = "Lv 50";
+
+    if (m_Exit || m_Battle->isOver())
     {
-        levelA = "Lv " + levelA;
-        levelB = "Lv " + levelB;
+        endBattle();
     }
-    first = false;
 }
 
 void Battle::render()
@@ -356,4 +346,10 @@ void Battle::render()
 void Battle::handleInput(int key, int scancode, int action, int mods)
 {
     m_Input->handleInput(key, scancode, action, mods);
+}
+
+void Battle::endBattle()
+{
+    this->setActive(false);
+    m_OverworldEnable(true);
 }

@@ -24,15 +24,17 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	grassRenderer.setLayout<float>(3, 2, 3);
 	grassRenderer.setDrawingMode(GL_TRIANGLES);
 	grassRenderer.generate((float)width, (float)height, &camera);
-
+	
 	//Camera
 	camera.setProjection(glm::perspective(glm::radians(45.0f), (float)((float)width / (float)height), 0.1f, 1000.0f));
 	camera.moveUp(World::TILE_SIZE * 5);
 	camera.panYDegrees(45.0f);
 
-	//Shadow Map
+	//Shadow Map - Will improve moving object edge flickering TODO
 	shadowMap.init();
-	glm::mat4 lightProj = glm::ortho(-1024.0f, 1024.0f, -512.0f, 512.0f, 0.1f, 1000.0f);
+	float sWidth = pow(2, floor(log(width) / log(2)));
+	float sHeight = pow(2, floor(log(height) / log(2)));
+	glm::mat4 lightProj = glm::ortho(-sWidth, sWidth, -sHeight, sHeight, -100.0f, 750.0f);
 	shadowMap.setProjection(lightProj);
 
 	SCREEN_HEIGHT = height; SCREEN_WIDTH = width;
@@ -45,6 +47,7 @@ void OverworldRenderer::loadRendererData()
 	sceneShadows.create("res/shaders/Shadows_Shader.glsl");
 	grassShader.createGeo("res/shaders/Grass_Drawing_Shader.glsl");
 	grassShadows.createGeo("res/shaders/Grass_Shadows_Shader.glsl");
+	transitionShader.create("res/shaders/BattleTransition.glsl");
 
 	//Load world texture
 	worldTexture.loadTexture("res/textures/OW.png");
@@ -57,6 +60,12 @@ void OverworldRenderer::loadRendererData()
 	spriteTexture.generateTexture(TEXTURE_SLOT);
 	spriteTexture.bind();
 	spriteTexture.clearBuffer();
+
+	//Load transitions
+	battleTransition = Transition();
+	battleTransition.init((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	battleTransition.linkUniform("u_Height", &battleTransition.m_Height);
+	battleTransition.setCap(1.0);
 }
 
 void OverworldRenderer::generateAtlas()
@@ -71,6 +80,7 @@ void OverworldRenderer::purgeData()
 	worldTexture.deleteTexture();
 	spriteTexture.deleteTexture();
 	debugTexture.deleteTexture();
+	modelAtlas.clearAtlasBuffers();
 }
 
 void OverworldRenderer::bufferRenderData()
@@ -98,6 +108,11 @@ void OverworldRenderer::ensureModelMapping(unsigned int objectCount)
 	}
 }
 
+void OverworldRenderer::update(double deltaTime)
+{
+	battleTransition.update(deltaTime, transitionShader);
+}
+
 void OverworldRenderer::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -121,8 +136,13 @@ void OverworldRenderer::draw()
 	glm::mat4 world = worldRenderer.m_RendererModelMatrix;
 	glm::mat4 lightView = glm::lookAt(lightDir, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	lightView = glm::translate(lightView, -camera.getPos());
+
+	lightView[3][0] = floor(lightView[3][0]);
+	lightView[3][1] = floor(lightView[3][1]);
+	lightView[3][2] = floor(lightView[3][2]);
+
 	sceneShadows.setUniform("WVP", shadowMap.calcMVP(world, lightView));
-	
+
 	//Render from lights perspective
 	shadowMap.startCapture();
 	worldTexture.bind();
@@ -194,11 +214,12 @@ void OverworldRenderer::draw()
 	grassShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
 	grassRenderer.drawPrimitives(grassShader);
 	grassShader.unbind();
+
+	//Transition
+	battleTransition.render(transitionShader);
 }
 
 //battle
-#include "game/states/StateRenderers.h"
-
 void BattleRenderer::initialiseRenderer(unsigned int width, unsigned int height)
 {
 	//Renderer setup
@@ -238,6 +259,8 @@ void BattleRenderer::loadRendererData()
 	sceneShader.create("res/shaders/Default_T_Shader.glsl");
 
 	//Load world texture
+	loadPokemonTextureA("bulbasaur");
+	loadPokemonTextureB("bulbasaur");
 	platformTexture.loadTexture("res/textures/BattlePlatform.png");
 	platformTexture.generateTexture(TEXTURE_SLOT);
 	platformTexture.bind();

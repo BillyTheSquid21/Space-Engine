@@ -1,27 +1,19 @@
 #include "renderer/ShapeFactory.h"
 
 //Creation
-Quad CreateQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) {
+Quad CreateQuad(float x, float y, float width, float height) {
 
-	ColorTextureVertex v0{};
+	Vertex v0{};
 	v0.position = { x, y , 0.0f };
-	v0.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	v0.uvCoords = { uvX, uvY + uvHeight };
 
-	ColorTextureVertex v1{};
+	Vertex v1{};
 	v1.position = { x + width, y,  0.0f };
-	v1.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	v1.uvCoords = { uvX + uvWidth, uvY + uvHeight };
 
-	ColorTextureVertex v2{};
+	Vertex v2{};
 	v2.position = { x + width, y - height,  0.0f };
-	v2.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	v2.uvCoords = { uvX + uvWidth, uvY };
 
-	ColorTextureVertex v3{};
+	Vertex v3{};
 	v3.position = { x, y - height,  0.0f };
-	v3.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	v3.uvCoords = { uvX, uvY };
 
 	return { v0, v1, v2, v3 };
 }

@@ -32,6 +32,7 @@ bool PlayerMove::canWalk()
 	//Check current permission if relevant
 	switch (m_PlayerData->m_LastPermission)
 	{
+	//Stairs
 	case World::MovementPermissions::STAIRS_NORTH:
 		m_CurrentIsSlope = true;
 		if (direction == World::Direction::NORTH)
@@ -378,6 +379,25 @@ void PlayerCameraLock::render()
 {
 	m_Camera->setPos(*m_XPos, *m_YPos, *m_ZPos + m_Camera->height() / 8);
 	m_Camera->moveUp(World::TILE_SIZE * 5);
+}
+
+void PlayerEncounter::update(double deltaTime)
+{
+	if (!(m_LastTile.x == (*m_Tile).x && m_LastTile.z == (*m_Tile).z))
+	{
+		m_LastTile = *m_Tile;
+		switch (*m_Permission)
+		{
+		case World::MovementPermissions::TALL_GRASS:
+			if (m_Random.next() < 115.0f)
+			{
+				*m_StartBattle = true;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void UpdateGlobalLevel::update(double deltaTime)

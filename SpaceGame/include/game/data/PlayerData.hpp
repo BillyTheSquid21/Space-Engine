@@ -10,12 +10,13 @@
 #include "game/objects/OverworldSprite.h"
 
 //Struct for storing savefile specific data used ingame
-struct GameData
+struct PlayerData
 {
 	//Player data
 	std::string playerName;
 	unsigned int playerNumber = 0;
-	std::shared_ptr<OvSpr_RunningSprite> playerData; //Can be added to the object manager
+	World::TileLoc tile = { 8, 3 };
+	World::LevelID id = World::LevelID::LEVEL_ENTRY;
 	Party playerParty;
 
 	//Game data

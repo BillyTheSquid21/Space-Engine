@@ -26,7 +26,7 @@ void SetPkmStatsFromLevel(Pokemon& pokemon)
 	//EV support will be added later
 	//Lookup base stats
 	PokemonStats baseStats = PokemonDataBank::GetPokemonBaseStats(pokemon.id);
-
+	
 	//HP
 	HPRaiseFormula(pokemon, pokemon.stats.hp, baseStats.hp);
 	pokemon.health = pokemon.stats.hp;

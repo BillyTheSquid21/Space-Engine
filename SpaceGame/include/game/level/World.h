@@ -67,6 +67,8 @@ namespace World
 		LEVEL_BRIDGE,
 		//Sprite blocking
 		SPRITE_BLOCKING,
+		//Encounter
+		TALL_GRASS, CAVE,
 	};
 
 	//Tile arranging classes

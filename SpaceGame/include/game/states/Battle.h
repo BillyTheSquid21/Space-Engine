@@ -13,6 +13,8 @@
 #include "game/pokemon/PokemonLevel.h"
 #include "game/objects/SpriteAnimation.hpp"
 
+#include "game/data/PlayerData.hpp"
+
 #include "game/utility/Flags.hpp"
 #include "game/utility/Input.hpp"
 #include "game/utility/ImageRead.h"
@@ -54,12 +56,23 @@ private:
 class Battle : public State
 {
 public:
-	void init(int width, int height, FontContainer* fonts, FlagArray* flags, GameInput* input);
+	void init(
+		int width, 
+		int height, 
+		PlayerData* data, 
+		FontContainer* fonts, 
+		FlagArray* flags, 
+		GameInput* input
+	);
+	
+	void setOverworldFunction(std::function<void(bool)> overworld);
 	void update(double deltaTime, double time);
 	void render();
 	void loadRequiredData();
 	void purgeRequiredData();
 	void handleInput(int key, int scancode, int action, int mods);
+	void startBattle(Party* partyA, Party* partyB);
+	void createGUI();
 
 	//Set pokemon sprite in a given slot
 	void setPokemonA(uint16_t id);
@@ -79,8 +92,11 @@ private:
 	//Input
 	GameInput* m_Input;
 
+	//Data
+	PlayerData* m_Data;
+
 	//Battle
-	PokemonBattle m_Battle;
+	std::shared_ptr<PokemonBattle> m_Battle;
 	BattleScene m_Scene;
 
 	//GUI
@@ -97,10 +113,15 @@ private:
 	const std::string health = "Health is: ";
 	const std::string status = "Status is: ";
 	bool moveTriggers[4] = { false,false,false,false };
+	bool m_Exit = false;
 	MoveSlot selectedMove = MoveSlot::SLOT_NULL;
 
-	Party m_PlayerParty;
-	Party m_EnemyParty;
+	Party* m_PlayerParty;
+	Party* m_EnemyParty;
+
+	void endBattle();
+
+	std::function<void(bool)> m_OverworldEnable;
 
 	//Thread pool for keeping battle separate
 	MtLib::ThreadPool* m_Pool;

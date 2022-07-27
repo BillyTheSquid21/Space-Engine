@@ -73,9 +73,7 @@ struct PokemonMove
 	uint16_t id = 0;
 	PokemonType type = PokemonType::None;
 	uint8_t damageAcc = 100;
-	uint8_t statusAcc = 30;
 	uint8_t damage = 0;
-	StatusCondition status = StatusCondition::None;
 	uint8_t additionalEffect = 0; //If a logically different effect is part of the move = 0 if none
 	int16_t additionalData = 0;
 };

@@ -150,6 +150,7 @@ void PokemonDataBank::LoadPokemonName(uint16_t id, Pokemon& pokemon)
 
 	if (!PokemonDataBank::checkData(PkmDataType::SPECIES_INFO))
 	{
+		EngineLog("Species info not loaded!");
 		return;
 	}
 
@@ -169,6 +170,7 @@ void PokemonDataBank::LoadPokemonStats(uint16_t id, Pokemon& pokemon)
 	using namespace rapidjson;
 	if (!PokemonDataBank::checkData(PkmDataType::BASE_STATS))
 	{
+		EngineLog("Base stats not loaded!");
 		return;
 	}
 
@@ -194,6 +196,7 @@ PokemonStats PokemonDataBank::GetPokemonBaseStats(uint16_t id)
 	PokemonStats baseStats = {1,1,1,1,1,1};
 	if (!PokemonDataBank::checkData(PkmDataType::BASE_STATS))
 	{
+		EngineLog("Base stats not loaded!");
 		return baseStats;
 	}
 
@@ -221,6 +224,7 @@ std::string PokemonDataBank::GetPokemonName(uint16_t id)
 	std::string name = "bulbasaur";
 	if (!PokemonDataBank::checkData(PkmDataType::SPECIES_INFO))
 	{
+		EngineLog("Species info not loaded!");
 		return name;
 	}
 
@@ -254,6 +258,7 @@ void PokemonDataBank::LoadPokemonMoves(Pokemon& pokemon)
 
 	if (!PokemonDataBank::checkData(PkmDataType::MOVE_INFO))
 	{
+		EngineLog("Move info not loaded!");
 		return;
 	}
 
@@ -288,6 +293,7 @@ void PokemonDataBank::LoadPokemonType(Pokemon& pokemon)
 	using namespace rapidjson;
 	if (!PokemonDataBank::checkData(PkmDataType::POKEMON_TYPES))
 	{
+		EngineLog("Types not loaded!");
 		return;
 	}
 

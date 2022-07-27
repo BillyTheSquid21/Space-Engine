@@ -46,16 +46,35 @@ uniform vec3 u_LightDir;
 uniform sampler2D u_ShadowMap;
 uniform int u_LightsActive;
 
+float calcBias()
+{
+	float bias = 0.0024*tan(acos(dot(v_Normal, u_LightDir)));
+	bias = clamp(bias, 0, 0.01);
+	return bias;
+}
+
 float calcShadowFactor()
 {
+	//Get texture dimensions
+	vec2 texSize = textureSize(u_ShadowMap,0);
+
 	vec3 ProjCoords = v_LightSpacePos.xyz / v_LightSpacePos.w;
     vec2 UVCoords;
     UVCoords.x = 0.5 * ProjCoords.x + 0.5;
     UVCoords.y = 0.5 * ProjCoords.y + 0.5;
+
+	//Snap UV coords to texel increments
+	UVCoords.x *= texSize.x;
+	UVCoords.y *= texSize.y;
+	UVCoords.x = floor(UVCoords.x);
+	UVCoords.y = floor(UVCoords.y);
+	UVCoords.x /= texSize.x;
+	UVCoords.y /= texSize.y;
+
     float z = 0.5 * ProjCoords.z + 0.5;
     float Depth = texture(u_ShadowMap, UVCoords).x;
 
-	if (Depth < (z-0.003))
+	if (Depth < (z-calcBias()))
         return 1.0; //is in shadow
     else
         return 0.0;
