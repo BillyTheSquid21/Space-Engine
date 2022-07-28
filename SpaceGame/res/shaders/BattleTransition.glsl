@@ -26,12 +26,16 @@ uniform float u_Height;
 
 void main()
 {
-	int thick = int(u_Height / 34.0f);
-	int bar = int(16.0f * 2.2f * sin(u_Time*1.5f));
+	//Work out division constants for bar
+	float barConst = u_Height / ((-0.0165f*u_Height) + 48.5f);
+	float thickConst = ((0.0567f*u_Height) - 29.43f);
+
+	int thick = int(thickConst);
+	int bar = int(barConst * sin(u_Time*1.5f));
 
 	if (int(v_Position.y) % thick < bar)
 	{
-		FragColor = vec4(0.0,0.0,0.0,1.0);
+		FragColor = vec4(0.05,0.05,0.05,1.0);
 		return;
 	}
 	FragColor = vec4(0.0);
