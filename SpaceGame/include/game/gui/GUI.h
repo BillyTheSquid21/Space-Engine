@@ -180,6 +180,7 @@ namespace GameGUI
 		void nextPage();
 		bool isReady() const { return m_IsReady; }
 		bool isNextPageReady() const { return m_NextPageReady; }
+		void clear() { line1 = ""; line2 = ""; }
 
 		//Lines
 		std::string line1;

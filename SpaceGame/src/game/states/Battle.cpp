@@ -131,102 +131,26 @@ void Battle::init(int width, int height, PlayerData* data, FontContainer* fonts,
     //Platform test
     m_Scene.init(width, height);
 
+    //Fonts
+    m_Fonts = fonts;
+    m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 45);
+
+    //HUD
+    std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(width, height, 0, 0));
+    m_HUD.setBase(hud);
+    std::shared_ptr<BattleGUI> battleGUI(new BattleGUI());
+    battleGUI->setNest(0);
+    battleGUI->m_Height = height / 3.2f;
+    battleGUI->m_Width = width / 3.5f;
+    battleGUI->m_XPos = width - battleGUI->m_Width - 10.0f;
+    battleGUI->m_YPos = height - battleGUI->m_Height - 10.0f;
+    battleGUI->setFontContainer(m_Fonts);
+    m_HUD.addElement(battleGUI);
+    m_GUI = battleGUI;
+    m_GUI->setMoveTriggers(m_MoveTriggers);
+    m_GUI->linkSwitchPkm(&m_ChangePkm);
+
     EngineLog("Battle scene loaded");
-}
-
-void Battle::createGUI()
-{
-    //Gui test
-    gui = GameGUI::GUIContainer();
-
-    levelA = std::to_string(m_PlayerParty->at(0).level);
-    levelB = std::to_string(m_EnemyParty->at(0).level);
-
-    std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(m_Width, m_Height, 0, 0));
-    gui.setBase(hud);
-
-    const float hudW = 400.0f; const float hudH = 200.0f;
-    const float buffer = 40.0f;
-
-    //Add health box 1:
-    std::shared_ptr<GameGUI::Divider> enemy(new GameGUI::Divider());
-    enemy->m_Width = hudW; enemy->m_Height = hudH;
-    enemy->setNest(0);
-    enemy->m_XPos = buffer; enemy->m_YPos = buffer;
-    gui.addElement(enemy);
-    std::shared_ptr<GameGUI::TextBox> enLev(new GameGUI::TextBox(levelB));
-    enLev->setNest(0);
-    gui.addElement(enLev);
-    std::shared_ptr<GameGUI::TextBox> enName(new GameGUI::TextBox(nameB));
-    enName->setNest(0);
-    gui.addElement(enName);
-    std::shared_ptr<GameGUI::TextBox> enHealth(new GameGUI::TextBox(healthB));
-    enHealth->setNest(0);
-    gui.addElement(enHealth);
-    std::shared_ptr<GameGUI::TextBox> enCond(new GameGUI::TextBox(conditionB));
-    enCond->setNest(0);
-    gui.addElement(enCond);
-
-    //Add health box 2:
-    std::shared_ptr<GameGUI::Divider> player(new GameGUI::Divider());
-    player->m_Width = hudW; player->m_Height = hudH;
-    player->setNest(1);
-    player->m_XPos = m_Width - hudW - buffer;
-    player->m_YPos = m_Height - hudH - buffer;
-    gui.addElement(player);
-    std::shared_ptr<GameGUI::TextBox> plLev(new GameGUI::TextBox(levelA));
-    plLev->setNest(1);
-    gui.addElement(plLev);
-    std::shared_ptr<GameGUI::TextBox> plName(new GameGUI::TextBox(nameA));
-    plName->setNest(1);
-    gui.addElement(plName);
-    std::shared_ptr<GameGUI::TextBox> plHealth(new GameGUI::TextBox(healthA));
-    plHealth->setNest(1);
-    gui.addElement(plHealth);
-    std::shared_ptr<GameGUI::TextBox> plCond(new GameGUI::TextBox(conditionA));
-    plCond->setNest(1);
-    gui.addElement(plCond);
-
-    //Move buttons
-    std::string move1 = (*m_PlayerParty)[0].moves[0].identifier;
-    std::string move2 = (*m_PlayerParty)[0].moves[1].identifier;
-    std::string move3 = (*m_PlayerParty)[0].moves[2].identifier;
-    std::string move4 = (*m_PlayerParty)[0].moves[3].identifier;
-    std::shared_ptr<GameGUI::Button> but1(new GameGUI::Button(move1, &moveTriggers[0]));
-    but1->setNest(1);
-    but1->m_XPos = 8.0f; but1->m_YPos = 115.0f;
-    gui.addElement(but1);
-    std::shared_ptr<GameGUI::Button> but2(new GameGUI::Button(move2, &moveTriggers[1]));
-    but2->setNest(1);
-    but2->m_XPos = 100.0f; but2->m_YPos = 115.0f;
-    gui.addElement(but2);
-    std::shared_ptr<GameGUI::Button> but3(new GameGUI::Button(move3, &moveTriggers[2]));
-    but3->setNest(1);
-    but3->m_XPos = 8.0f; but3->m_YPos = 150.0f;
-    gui.addElement(but3);
-    std::shared_ptr<GameGUI::Button> but4(new GameGUI::Button(move4, &moveTriggers[3]));
-    but4->setNest(1);
-    but4->m_XPos = 100.0f; but4->m_YPos = 150.0f;
-    gui.addElement(but4);
-    std::shared_ptr<GameGUI::Button> but5(new GameGUI::Button("Exit", &m_Exit));
-    but5->setNest(1);
-    but5->m_XPos = 8.0f;
-    but5->m_YPos = 190.0f;
-    gui.addElement(but5);
-
-    //Add text box
-    std::shared_ptr<GameGUI::Divider> textBoxBase(new GameGUI::Divider());
-    textBoxBase->m_Width = m_Width * 0.3f; textBoxBase->m_Height = hudH;
-    textBoxBase->setNest(2);
-    textBoxBase->m_XPos = but4->m_XPos + textBoxBase->m_Width + m_Width * 0.1f;
-    textBoxBase->m_YPos = m_Height - hudH - buffer;
-    gui.addElement(textBoxBase);
-    std::shared_ptr<GameGUI::TextBox> textBox1(new GameGUI::TextBox(BattleTextBuffer::m_Line1));
-    textBox1->setNest(2);
-    gui.addElement(textBox1);
-    std::shared_ptr<GameGUI::TextBox> textBox2(new GameGUI::TextBox(BattleTextBuffer::m_Line2));
-    textBox2->setNest(2);
-    gui.addElement(textBox2);
 }
 
 void Battle::startBattle(Party* partyA, Party* partyB)
@@ -236,7 +160,7 @@ void Battle::startBattle(Party* partyA, Party* partyB)
     m_Battle = battle;
     m_Battle->setParties(partyA, partyB);
     m_PlayerParty = partyA; m_EnemyParty = partyB;
-    BattleTextBuffer::clearText();
+    PokemonBattle::textBuffer.clear();
 }
 
 void Battle::setOverworldFunction(std::function<void(bool)> overworld)
@@ -248,7 +172,7 @@ void Battle::setOverworldFunction(std::function<void(bool)> overworld)
 void Battle::loadRequiredData()
 {
     m_Renderer.loadRendererData();
-    createGUI();
+    m_Battle->linkHealthGui(std::bind(&BattleGUI::setHealthPerc, m_GUI, std::placeholders::_1, std::placeholders::_2));
     m_Exit = false;
 
     PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
@@ -271,6 +195,12 @@ void Battle::setPokemonA(uint16_t id)
     m_Scene.setPokemonA(name);
     m_Renderer.pokemonATexture.deleteTexture();
     m_Renderer.loadPokemonTextureA(name);
+
+    //Gui
+    m_GUI->setNameA(m_Battle->getNameA());
+    m_GUI->setLevelA(m_Battle->getLevelA());
+    m_GUI->setMoves(m_Battle->getMovesA());
+    m_GUI->setHealthPercA(m_Battle->getHealthPercA());
 }
 
 void Battle::setPokemonB(uint16_t id)
@@ -279,23 +209,47 @@ void Battle::setPokemonB(uint16_t id)
     m_Scene.setPokemonB(name);
     m_Renderer.pokemonBTexture.deleteTexture();
     m_Renderer.loadPokemonTextureB(name);
+
+    //Gui
+    m_GUI->setNameB(m_Battle->getNameB());
+    m_GUI->setLevelB(m_Battle->getLevelB());
+    m_GUI->setHealthPercB(m_Battle->getHealthPercB());
 }
 
 //Temp
 void Battle::update(double deltaTime, double time)
 {
     //Check selected move - -1 if none
-    bool progress = false;
     for (int i = 0; i < (int)MoveSlot::SLOT_NULL; i++)
     {
-        if (moveTriggers[i])
+        if (m_MoveTriggers[i])
         {
             selectedMove = (MoveSlot)i;
-            progress = true;
             break;
         }
     }
-    if (selectedMove != MoveSlot::SLOT_NULL && m_Battle->checkMoveValid(selectedMove))
+    //Check if pokemon switched
+    if (m_ChangePkm)
+    {
+        for (int i = 0; i < m_PlayerParty->size(); i++)
+        {
+            if (m_PlayerParty->at(i).health <= 0 || m_PlayerParty->at(i).id == -1)
+            {
+                continue;
+            }
+            if (!m_Battle->checkFaintA(false))
+            {
+                selectedMove = MoveSlot::SLOT_CHANGE;
+            }
+            m_Battle->setActiveA(i);
+            PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+            setPokemonA(m_PlayerParty->at(i).id);
+            m_Pool->Run(PokemonDataBank::unloadData,PkmDataType::SPECIES_INFO);
+            m_ChangePkm = false;
+            break;
+        }
+    }
+    if (selectedMove != MoveSlot::SLOT_NULL && (selectedMove == MoveSlot::SLOT_CHANGE || m_Battle->checkMoveValid(selectedMove)))
     {
         if (!m_Battle->isUpdating())
         {
@@ -306,21 +260,6 @@ void Battle::update(double deltaTime, double time)
     selectedMove = MoveSlot::SLOT_NULL;
 
     m_Scene.update(deltaTime);
-
-    //Update health
-    healthA = health + std::to_string(m_Battle->getHealthA());
-    healthB = health + std::to_string(m_Battle->getHealthB());
-
-    //Update status
-    conditionA = status + std::to_string(m_Battle->getStatusA());
-    conditionB = status + std::to_string(m_Battle->getStatusB());
-
-    //Update nickname
-    nameA = m_Battle->getNameA();
-    nameB = m_Battle->getNameB();
-
-    levelA = "Lv 50";
-    levelB = "Lv 50";
 
     if (m_Exit || m_Battle->isOver())
     {
@@ -338,8 +277,7 @@ void Battle::render()
 
     //IMGUI Test
     GameGUI::StartFrame();
-    GameGUI::ResetStyle();
-    gui.render();
+    m_HUD.render();
     GameGUI::EndFrame();
 }
 

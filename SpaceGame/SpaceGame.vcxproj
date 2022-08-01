@@ -155,6 +155,7 @@
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\game\DemoGame.cpp" />
+    <ClCompile Include="src\game\gui\BattleGUI.cpp" />
     <ClCompile Include="src\game\gui\GUI.cpp" />
     <ClCompile Include="src\game\gui\OverworldGUI.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\game\objects\TileMap.cpp" />
     <ClCompile Include="src\game\objects\Tree.cpp" />
     <ClCompile Include="src\game\objects\WarpTile.cpp" />
+    <ClCompile Include="src\game\pokemon\MoveEffects.cpp" />
     <ClCompile Include="src\game\pokemon\PokemonLevel.cpp" />
     <ClCompile Include="src\game\pokemon\Pokemon.cpp" />
     <ClCompile Include="src\game\pokemon\PokemonBattle.cpp" />
@@ -209,6 +211,7 @@
     <ClInclude Include="include\core\State.hpp" />
     <ClInclude Include="include\game\data\PlayerData.hpp" />
     <ClInclude Include="include\game\DemoGame.h" />
+    <ClInclude Include="include\game\gui\BattleGUI.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\gui\OverworldGUI.h" />
     <ClInclude Include="include\game\level\World.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="include\game\objects\TileMap.h" />
     <ClInclude Include="include\game\objects\Tree.h" />
     <ClInclude Include="include\game\objects\WarpTile.h" />
+    <ClInclude Include="include\game\pokemon\MoveEffects.h" />
     <ClInclude Include="include\game\pokemon\PokemonLevel.h" />
     <ClInclude Include="include\game\pokemon\Pokemon.h" />
     <ClInclude Include="include\game\pokemon\PokemonBattle.h" />
@@ -298,7 +302,7 @@
     <None Include="res\shaders\Grass_Shadows_Shader.glsl" />
     <None Include="res\shaders\Lighting_T_Shader.glsl" />
     <None Include="res\shaders\Shadows_Shader.glsl" />
-    <None Include="res\shaders\BattleTransition.glsl" />
+    <None Include="res\shaders\Battle_Transition.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

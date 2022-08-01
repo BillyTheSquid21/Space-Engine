@@ -237,6 +237,12 @@
     <ClCompile Include="src\game\gui\OverworldGUI.cpp">
       <Filter>Source Files\Game\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\gui\BattleGUI.cpp">
+      <Filter>Source Files\Game\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\pokemon\MoveEffects.cpp">
+      <Filter>Source Files\Game\Pokemon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -506,6 +512,12 @@
     <ClInclude Include="include\renderer\Transition.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="include\game\gui\BattleGUI.h">
+      <Filter>Header Files\Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\pokemon\MoveEffects.h">
+      <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl">
@@ -526,7 +538,7 @@
     <None Include="res\shaders\Grass_Shadows_Shader.glsl">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\shaders\BattleTransition.glsl">
+    <None Include="res\shaders\Battle_Transition.glsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

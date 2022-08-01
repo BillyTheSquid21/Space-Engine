@@ -7,6 +7,7 @@
 #include "core/ObjManagement.h"
 
 #include "game/gui/GUI.h"
+#include "game/gui/BattleGUI.h"
 #include "game/states/StateRenderers.h"
 #include "game/pokemon/PokemonBattle.h"
 #include "game/pokemon/PokemonIO.h"
@@ -72,7 +73,6 @@ public:
 	void purgeRequiredData();
 	void handleInput(int key, int scancode, int action, int mods);
 	void startBattle(Party* partyA, Party* partyB);
-	void createGUI();
 
 	//Set pokemon sprite in a given slot
 	void setPokemonA(uint16_t id);
@@ -98,22 +98,12 @@ private:
 	//Battle
 	std::shared_ptr<PokemonBattle> m_Battle;
 	BattleScene m_Scene;
+	GameGUI::GUIContainer m_HUD;
+	std::shared_ptr<BattleGUI> m_GUI;
 
-	//GUI
-	GameGUI::GUIContainer gui;
-	std::string levelA;
-	std::string levelB;
-	std::string nameA;
-	std::string nameB;
-	std::string healthA;
-	std::string healthB;
-	std::string conditionA;
-	std::string conditionB;
-
-	const std::string health = "Health is: ";
-	const std::string status = "Status is: ";
-	bool moveTriggers[4] = { false,false,false,false };
+	bool m_MoveTriggers[4] = { false,false,false,false };
 	bool m_Exit = false;
+	bool m_ChangePkm = false;
 	MoveSlot selectedMove = MoveSlot::SLOT_NULL;
 
 	Party* m_PlayerParty;

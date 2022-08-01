@@ -66,6 +66,22 @@ void OverworldMenu::pkmDivider(int slot)
 	//Check pokemon in slot
 	if (m_PlayerData->playerParty[slot].id != -1)
 	{
+		//Check if fainted and should display red
+		bool fainted = false;
+		if (m_PlayerData->playerParty[slot].health <= 0)
+		{
+			fainted = true;
+		}
+
+		if (!fainted)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.227f, 0.606f, 0.849f, 1.0f));
+		}
+		else
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.82f, 0.32f, 0.22f, 1.0f));
+		}
+
 		//Create text - will probably make more efficient if needed
 		std::string text = "";
 		text += m_PlayerData->playerParty[slot].nickname;
@@ -75,6 +91,7 @@ void OverworldMenu::pkmDivider(int slot)
 		text += "Status: " + std::to_string((int)m_PlayerData->playerParty[slot].condition);
 
 		ImGui::Button(text.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, m_Height / 6.2f));
+		ImGui::PopStyleColor();
 	}
 }
 

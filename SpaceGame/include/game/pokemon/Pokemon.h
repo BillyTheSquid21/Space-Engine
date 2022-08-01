@@ -65,28 +65,28 @@ enum class PokemonNature : int8_t
 	Serious
 };
 
+enum class DamageType : int8_t
+{
+	Other = 1, Physical = 2, Special = 3
+};
+
 //Define moves
 struct PokemonMove
 { 
 	std::string identifier = " ";
-	//If null move is null
+	//If 0 move is null
 	uint16_t id = 0;
 	PokemonType type = PokemonType::None;
+	DamageType damageType;
 	uint8_t damageAcc = 100;
 	uint8_t damage = 0;
 	uint8_t additionalEffect = 0; //If a logically different effect is part of the move = 0 if none
-	int16_t additionalData = 0;
 };
 
 //Slot the move fits in - can be used as direct index into move array
 enum class MoveSlot : int8_t
 {
-	SLOT_1 = 0, SLOT_2 = 1, SLOT_3 = 2, SLOT_4 = 3, SLOT_NULL = 4
-};
-
-enum class MoveCategory : int8_t
-{
-	Physical, Special, Status
+	SLOT_1 = 0, SLOT_2 = 1, SLOT_3 = 2, SLOT_4 = 3, SLOT_NULL = 4, SLOT_ITEM, SLOT_CHANGE
 };
 
 struct PokemonStats

@@ -3,9 +3,11 @@
 #define POKEMON_BATTLE_H
 
 #include "utility/SGUtil.h"
+#include "game/utility/GameText.h"
 
 #include "game/pokemon/Pokemon.h"
 #include "game/utility/Random.hpp"
+#include "game/gui/GUI.h"
 
 #include <chrono>
 #include <functional>
@@ -129,22 +131,49 @@ struct CurrentStages
 	Stage spDefenseStage = Stage::STAGE_0;
 	Stage speedStage = Stage::STAGE_0;
 	Stage critStage = Stage::STAGE_0;
+	Stage accStage = Stage::STAGE_0;
+	Stage evasStage = Stage::STAGE_0;
 };
 
 static uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending);
 static float LookupStageMultiplier(Stage stage);
-static void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage);
-static int16_t CalculateDamage(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage);
+
+//Attacking
+static void ExecuteAttack(
+	Pokemon& attacker,
+	Pokemon& target,
+	PokemonMove move,
+	CurrentStages& attackerStage,
+	CurrentStages& defenderStage,
+	std::string message
+);
+
+//Can use interchangably with attack and sp. attack as is now agnostic
+static int16_t CalculateDamage(
+	int16_t attackStat, 
+	int16_t defenceStat, 
+	Pokemon& attacker, 
+	Pokemon& target, 
+	PokemonMove move, 
+	Stage attackStage, 
+	Stage defendStage, 
+	Stage critStage
+);
+
 static bool ProcessStatus(Pokemon& pokemon);
 static void ProcessEndTurnStatus(Pokemon& pokemon);
+
+struct TurnData
+{
+
+};
 
 class MoveQueue
 {
 public:
 	MoveQueue() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
-	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages);
-	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, unsigned int turnIndex);
-	void linkWinCheck(std::function<bool()> func) { m_CheckWin = func; }
+	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, std::string message);
+	void linkFaintCheck(std::function<void(bool)> func) { m_CheckFaint = func; }
 	void processTurn();
 
 	static const int POKEMON_COUNT = 2;
@@ -152,11 +181,16 @@ public:
 	{
 		struct Combined
 		{
+			//Move component
 			PokemonMove move;
+
+			//Attack component
 			Pokemon* origin;
 			CurrentStages* originStages;
 			Pokemon* target;
 			CurrentStages* targetStages;
+
+			std::string message;
 		};
 		Combined moves[POKEMON_COUNT];
 		uint8_t size = 0;
@@ -165,38 +199,36 @@ public:
 private:
 	MoveTurn m_MoveQueue[MOVE_QUEUE_LENGTH]; //Array of how many moves to look ahead
 	unsigned int m_QueueIndex = 0; //Rolls around to make queue array circular
-	std::function<bool()> m_CheckWin;
+	std::function<void(bool)> m_CheckFaint;
 };
 
 static bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs);
 
-//Static class for text buffer
-class BattleTextBuffer
-{
-public:
-	static void pushText(std::string text);
-	static void clearText() { m_Line1 = ""; m_Line2 = ""; m_CurrentLine = 1; }
-	static std::string m_Line1;
-	static std::string m_Line2;
-private:
-	static int m_CurrentLine;
-};
-
 class PokemonBattle
 {
 public:
-	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); m_MoveQueue.linkWinCheck(std::bind(&PokemonBattle::checkWin, this)); }
+	PokemonBattle() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); m_MoveQueue.linkFaintCheck(std::bind(&PokemonBattle::checkFaint, this, std::placeholders::_1)); }
 	void linkProgressButtons(bool* pressE, bool* pressX) { s_Progress[0] = pressE; s_Progress[1] = pressX; }
+	void linkHealthGui(std::function<void(float, float)> func);
 
 	void setParties(Party* playerParty, Party* enemyParty) { m_PartyA = playerParty; m_PartyB = enemyParty; m_BattleOver = false; };
 	void run(MoveSlot move);
+	void setActiveA(int slot) { m_ActivePkmA = slot; }
+	void setActiveB(int slot) { m_ActivePkmB = slot; }
 
-	int16_t getHealthA() { return m_PartyA->at(m_ActivePkmA).health; }
-	int16_t getHealthB() { return m_PartyB->at(m_ActivePkmB).health; }
-	uint8_t getStatusA() { return (uint8_t)m_PartyA->at(m_ActivePkmA).condition; }
-	uint8_t getStatusB() { return (uint8_t)m_PartyB->at(m_ActivePkmB).condition; }
-	std::string getNameA() { return m_PartyA->at(m_ActivePkmA).nickname; }
-	std::string getNameB() { return m_PartyB->at(m_ActivePkmB).nickname; }
+	int16_t getHealthA() const { return m_PartyA->at(m_ActivePkmA).health; }
+	int16_t getHealthB() const { return m_PartyB->at(m_ActivePkmB).health; }
+	int16_t getHPA() const { return m_PartyA->at(m_ActivePkmA).stats.hp; }
+	int16_t getHPB() const { return m_PartyB->at(m_ActivePkmB).stats.hp; }
+	float getHealthPercA() { return ((float)getHealthA()) / ((float)getHPA()); }
+	float getHealthPercB() { return ((float)getHealthB()) / ((float)getHPB()); }
+	int16_t getLevelA()  const { return m_PartyA->at(m_ActivePkmA).level; }
+	int16_t getLevelB()  const { return m_PartyB->at(m_ActivePkmB).level; }
+	uint8_t getStatusA() const { return (uint8_t)m_PartyA->at(m_ActivePkmA).condition; }
+	uint8_t getStatusB() const { return (uint8_t)m_PartyB->at(m_ActivePkmB).condition; }
+	std::string getNameA() const { return m_PartyA->at(m_ActivePkmA).nickname; }
+	std::string getNameB() const { return m_PartyB->at(m_ActivePkmB).nickname; }
+	std::array<PokemonMove, 4>& getMovesA() const { return m_PartyA->at(m_ActivePkmA).moves; }
 
 	bool checkMoveValid(MoveSlot slot) { if (m_PartyA->at(m_ActivePkmA).moves[(int)slot].type == PokemonType::None) { return false; } return true; }
 	bool isUpdating() { return m_IsUpdating; }
@@ -205,11 +237,25 @@ public:
 	//Only to be called from battle thread - otherwise will likely lock
 	static void awaitInput();
 	static RandomContainer random;
+
+	//Public turn helpers
+	bool checkFaintA(bool textEnabled);
+	bool checkFaintB(bool textEnabled);
+
+	//Text
+	static GameGUI::TextBuffer textBuffer;
+
 private:
 
+	//Private turn helpers
 	void nextMove();
-	bool checkWin();
-	
+	void checkFaint(bool textEnabled); //See if any pokemon have fainted
+	bool checkLossA(); //See if team A has no viable pokemon
+	bool checkLossB(); //See if team B has no viable pokemon
+	bool checkLoss();  //Check both
+	bool replacePokemon(); //Force player or enemy to change out fainted pkm
+	void nextViablePokemonB();
+
 	static enum class Team : uint8_t
 	{
 		A, B
@@ -231,6 +277,7 @@ private:
 	//Thread
 	std::atomic<bool> m_IsUpdating = false;
 	std::atomic<bool> m_BattleOver = false;
+	std::function<void(float,float)> m_HealthUpdate;
 };
 
 #endif

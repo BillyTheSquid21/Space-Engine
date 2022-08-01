@@ -47,7 +47,7 @@ void OverworldRenderer::loadRendererData()
 	sceneShadows.create("res/shaders/Shadows_Shader.glsl");
 	grassShader.createGeo("res/shaders/Grass_Drawing_Shader.glsl");
 	grassShadows.createGeo("res/shaders/Grass_Shadows_Shader.glsl");
-	transitionShader.create("res/shaders/BattleTransition.glsl");
+	transitionShader.create("res/shaders/Battle_Transition.glsl");
 
 	//Load world texture
 	worldTexture.loadTexture("res/textures/OW.png");

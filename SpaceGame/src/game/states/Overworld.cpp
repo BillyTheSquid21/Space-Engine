@@ -87,10 +87,17 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     m_Data->playerParty[0].nickname = PokemonDataBank::GetPokemonName(m_Data->playerParty[0].id);
     m_Data->playerParty[1].nickname = PokemonDataBank::GetPokemonName(m_Data->playerParty[1].id);
     enemy[0].nickname = PokemonDataBank::GetPokemonName(6);
-    m_Data->playerParty[0].moves[0].id = 15;
-    m_Data->playerParty[1].moves[1].id = 11;
+    m_Data->playerParty[0].moves[0].id = 33;
+    m_Data->playerParty[0].moves[1].id = 77;
+    m_Data->playerParty[0].moves[2].id = 22;
+    m_Data->playerParty[1].moves[0].id = 61;
+    m_Data->playerParty[1].moves[1].id = 130;
+    m_Data->playerParty[1].moves[2].id = 399;
+    m_Data->playerParty[1].moves[2].id = 58;
+    m_Data->playerParty[1].moves[0].id = 61;
     enemy[0].moves[0].id = 7;
     PokemonDataBank::LoadPokemonMoves(m_Data->playerParty[0]);
+    PokemonDataBank::LoadPokemonMoves(m_Data->playerParty[1]);
     PokemonDataBank::LoadPokemonMoves(enemy[0]);
 
     pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
@@ -274,7 +281,6 @@ void Overworld::render() {
     m_HUD.showNest(1, m_TextBuff.showTextBox);
     m_HUD.showNest(2, m_ShowMenu);
     m_HUD.render();
-    GameGUI::ResetStyle();
     GameGUI::EndFrame();
 }
 

@@ -246,8 +246,23 @@ inline static void LoadMoveData(Pokemon& pokemon, rapidjson::Document& doc, std:
 	const Value& stats = doc[idString.c_str()];
 	PokemonMove& move = pokemon.moves[moveIndex];
 	move.identifier = stats["identifier"].GetString();
-	move.damage = stats["power"].GetInt();
-	move.damageAcc = stats["accuracy"].GetInt();
+	move.damageType = (DamageType)stats["damage_class_id"].GetInt();
+	if (stats["power"].IsNull())
+	{
+		move.damage = 0;
+	}
+	else
+	{
+		move.damage = stats["power"].GetInt();
+	}
+	if (stats["accuracy"].IsNull())
+	{
+		move.damageAcc = 100;
+	}
+	else
+	{
+		move.damageAcc = stats["accuracy"].GetInt();
+	}
 	move.type = (PokemonType)stats["type_id"].GetInt();
 
 }
@@ -284,7 +299,7 @@ void PokemonDataBank::LoadPokemonMoves(Pokemon& pokemon)
 	idString = std::to_string(pokemon.moves[3].id);
 	if (pokemon.moves[3].id > 0 && doc.HasMember(idString.c_str()))
 	{
-		LoadMoveData(pokemon, doc, idString,2);
+		LoadMoveData(pokemon, doc, idString,3);
 	}
 }
 

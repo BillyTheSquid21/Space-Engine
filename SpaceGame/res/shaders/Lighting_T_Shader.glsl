@@ -48,7 +48,7 @@ uniform int u_LightsActive;
 
 float calcBias()
 {
-	float bias = 0.0024*tan(acos(dot(v_Normal, u_LightDir)));
+	float bias = 0.0027*tan(acos(dot(v_Normal, u_LightDir)));
 	bias = clamp(bias, 0, 0.01);
 	return bias;
 }
