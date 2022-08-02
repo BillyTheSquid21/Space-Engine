@@ -3,7 +3,7 @@
 RandomContainer PokemonBattle::random;
 RandomContainer MoveQueue::random;
 
-bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs)
+bool SortBySpeed(const TurnData& lhs, const TurnData& rhs)
 {
 	if (lhs.move.id == 0)
 	{
@@ -22,78 +22,121 @@ float LookupStageMultiplier(Stage stage)
 	return StatStageLookup[(int)stage];
 }
 
-void ExecuteAttack(Pokemon& attacker, Pokemon& target, PokemonMove move, CurrentStages& attackerStage, CurrentStages& defenderStage, std::string message)
+static void CheckSuperEffective(TurnData move)
 {
-	PokemonBattle::textBuffer.pushBuffer(message);
+	//Check if was SE
+		//Calc type effectiveness
+	float type = 1.0f;
+	//Use primary type of attacker
+	float primaryMod = (float)LookupTypeMultiplier(move.move.type, move.target->primaryType) / 2.0f;
+	float secondaryMod = 1.0f;
+	if (move.target->secondaryType != PokemonType::None)
+	{
+		secondaryMod = (float)LookupTypeMultiplier(move.move.type, move.target->secondaryType) / 2.0f;
+	}
+	type *= primaryMod * secondaryMod;
+	if (type > 1.0f)
+	{
+		PokemonBattle::textBuffer.pushBuffer("It was super effective!\n");
+		PokemonBattle::awaitInput();
+	}
+	else if (type < 1.0f && type > 0.0f)
+	{
+		PokemonBattle::textBuffer.pushBuffer("It's not very effective...\n");
+		PokemonBattle::awaitInput();
+	}
+	else if (type == 0.0f)
+	{
+		PokemonBattle::textBuffer.pushBuffer("The enemy was immune!\n");
+		PokemonBattle::awaitInput();
+	}
+}
+
+static int16_t ExecuteDamage(TurnData turn)
+{
+	if (turn.move.damage <= 0)
+	{
+		return 0;
+	}
+
+	int16_t damage = 0;
+	switch (turn.move.damageType)
+	{
+	case DamageType::Physical:
+		damage = CalculateDamage(
+			turn.origin->stats.attack,
+			turn.target->stats.defense,
+			*turn.origin,
+			*turn.target,
+			turn.move,
+			turn.originStages->attackStage,
+			turn.targetStages->defenseStage,
+			turn.originStages->critStage
+		);
+		break;
+	case DamageType::Special:
+		damage = CalculateDamage(
+			turn.origin->stats.spAttack,
+			turn.target->stats.spDefense,
+			*turn.origin,
+			*turn.target,
+			turn.move,
+			turn.originStages->spAttackStage,
+			turn.targetStages->spDefenseStage,
+			turn.originStages->critStage
+		);
+		break;
+	}
+
+	turn.target->health -= damage;
+	return damage;
+}
+
+void ExecuteAttack(TurnData& turn)
+{
+	PokemonBattle::textBuffer.pushBuffer(turn.message);
 	PokemonBattle::awaitInput();
+
+	//Check for pre effect and handle any text
+	PreMoveEffect(turn, PokemonBattle::random, PokemonBattle::textBuffer);
+	if (!PokemonBattle::textBuffer.isReady())
+	{
+		PokemonBattle::awaitInput();
+	}
+	if (turn.move.skipAccuracy)
+	{
+		if (ExecuteDamage(turn) > 0)
+		{
+			CheckSuperEffective(turn);
+		}
+		return;
+	}
 
 	//Damage
 	//Roll if misses
 	float roll = PokemonBattle::random.next();
-	if (roll < move.damageAcc * 100)
+	if (roll < turn.move.accuracy * 100 && !CheckPkmStateMiss(*turn.targetState))
 	{
-		int16_t damage = 0;
-
-		switch (move.damageType)
+		if (ExecuteDamage(turn) > 0)
 		{
-		case DamageType::Physical:
-			damage = CalculateDamage(
-				attacker.stats.attack,
-				target.stats.defense,
-				attacker,
-				target,
-				move,
-				attackerStage.attackStage,
-				defenderStage.defenseStage,
-				attackerStage.critStage
-			);
-			break;
-		case DamageType::Special:
-			damage = CalculateDamage(
-				attacker.stats.spAttack,
-				target.stats.spDefense,
-				attacker,
-				target,
-				move,
-				attackerStage.spAttackStage,
-				defenderStage.spDefenseStage,
-				attackerStage.critStage
-			);
-			break;
+			CheckSuperEffective(turn);
 		}
 
-		target.health -= damage;
-
-		//Check if was SE
-		//Calc type effectiveness
-		float type = 1.0f;
-		//Use primary type of attacker
-		float primaryMod = (float)LookupTypeMultiplier(move.type, target.primaryType) / 2.0f;
-		float secondaryMod = 1.0f;
-		if (target.secondaryType != PokemonType::None)
+		//Check for post effect and handle any text
+		PostMoveEffect(turn, PokemonBattle::random, PokemonBattle::textBuffer);
+		if (!PokemonBattle::textBuffer.isReady())
 		{
-			secondaryMod = (float)LookupTypeMultiplier(move.type, target.secondaryType) / 2.0f;
-		}
-		type *= primaryMod * secondaryMod;
-		if (type > 1.0f)
-		{
-			PokemonBattle::textBuffer.pushBuffer("It was super effective!\n");
-			PokemonBattle::awaitInput();
-		}
-		else if (type < 1.0f)
-		{
-			PokemonBattle::textBuffer.pushBuffer("It's not very effective...\n");
 			PokemonBattle::awaitInput();
 		}
 	}
 	else
 	{
-		PokemonBattle::textBuffer.pushBuffer(attacker.nickname + "'s " + "attack missed!\n");
+		PokemonBattle::textBuffer.pushBuffer(turn.origin->nickname + "'s " + "attack missed!\n");
 		PokemonBattle::awaitInput();
 	}
 }
 
-int16_t CalculateDamage(int16_t attackStat, int16_t defenceStat, Pokemon& attacker, Pokemon& target, PokemonMove move, Stage attackStage, Stage defendStage, Stage critStage)
+int16_t CalculateDamage(int16_t attackStat, int16_t defenceStat, Pokemon& attacker, Pokemon& target, TurnMove move, Stage attackStage, Stage defendStage, Stage critStage)
 {
 	//Calc whether critical hit - 6.25% at stage one
 	float critical = 1;
@@ -214,22 +257,29 @@ bool ProcessStatus(Pokemon& pokemon)
 }
 
 //Move queue
-void MoveQueue::queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, std::string message)
+void MoveQueue::queueMove(TurnData move, int turnsAhead)
 {
-	uint8_t& index = m_MoveQueue[m_QueueIndex].size;
-	m_MoveQueue[m_QueueIndex].moves[index].move = move;
-	m_MoveQueue[m_QueueIndex].moves[index].origin = origin;
-	m_MoveQueue[m_QueueIndex].moves[index].target = target;
-	m_MoveQueue[m_QueueIndex].moves[index].originStages = originStages;
-	m_MoveQueue[m_QueueIndex].moves[index].targetStages = targetStages;
-	m_MoveQueue[m_QueueIndex].moves[index].message = message;
+	int queueIndex = m_QueueIndex;
+	//Move ahead to move index
+	for (int i = 0; i < turnsAhead; i++)
+	{
+		queueIndex++;
+		if (queueIndex >= MOVE_QUEUE_LENGTH)
+		{
+			queueIndex = 0;
+		}
+	}
+
+	uint8_t& index = m_MoveQueue[queueIndex].size;
+
+	m_MoveQueue[queueIndex].moves[index] = move;
 	index++;
 }
 
 void MoveQueue::processTurn()
 {
 	//First sort indexes by fastest pokemon - if same speed roll to solve
-	MoveTurn turn = m_MoveQueue[m_QueueIndex];
+	Turn turn = m_MoveQueue[m_QueueIndex];
 
 	//Sort array into speed order
 	std::sort(std::begin(turn.moves), std::end(turn.moves), SortBySpeed);
@@ -244,7 +294,7 @@ void MoveQueue::processTurn()
 		}
 		if (!ProcessStatus(*turn.moves[i].origin))
 		{
-			ExecuteAttack(*turn.moves[i].origin, *turn.moves[i].target, turn.moves[i].move, *turn.moves[i].originStages, *turn.moves[i].targetStages, turn.moves[i].message);
+			ExecuteAttack(turn.moves[i]);
 			m_CheckFaint(true);
 			if (turn.moves[i].target->health <= 0)
 			{
@@ -253,12 +303,25 @@ void MoveQueue::processTurn()
 		}
 	}
 
+	//Clear current turn
+	Turn blankTurn;
+	m_MoveQueue[m_QueueIndex] = blankTurn;
+
 	//Next turn
 	m_QueueIndex++;
 	if (m_QueueIndex >= MOVE_QUEUE_LENGTH)
 	{
 		m_QueueIndex = 0;
 	}
+}
+
+//Queue a move
+void QueueMove(MoveQueue& queue, PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, 
+	PokemonMoveState* originState, PokemonMoveState* targetState)
+{
+	//Otherwise pass through additional processing
+	std::function<void(TurnData, int)> queueFunc = std::bind(&MoveQueue::queueMove, &queue, std::placeholders::_1, std::placeholders::_2);
+	QueueMovesWithEffects(queueFunc, move, origin, target, originStages, targetStages, originState, targetState);
 }
 
 //Battle text buffer
@@ -410,14 +473,19 @@ void PokemonBattle::run(MoveSlot move)
 	if (replacePokemon()) { m_IsUpdating = false; return; }
 
 	//Await player input, add to queue
-	if (move != MoveSlot::SLOT_CHANGE && move != MoveSlot::SLOT_ITEM)
+	if (move != MoveSlot::SLOT_CHANGE && move != MoveSlot::SLOT_ITEM && !CheckPkmStateMiss(m_PkmStateA))
 	{
-		m_MoveQueue.queueMove(m_PartyA->at(m_ActivePkmA).moves[(int)move], &m_PartyA->at(m_ActivePkmA), &m_PartyB->at(m_ActivePkmB), &m_StagesA, &m_StagesB, m_PartyA->at(m_ActivePkmA).nickname + " " + "used " + m_PartyA->at(m_ActivePkmA).moves[(int)move].identifier + "\n");
+		QueueMove(m_MoveQueue, m_PartyA->at(m_ActivePkmA).moves[(int)move], &m_PartyA->at(m_ActivePkmA), &m_PartyB->at(m_ActivePkmB), &m_StagesA, &m_StagesB,
+		&m_PkmStateA, &m_PkmStateB);
 	}
 	
 	//Await enemy input, add to queue
-	m_MoveQueue.queueMove(m_PartyB->at(m_ActivePkmB).moves[0], &m_PartyB->at(m_ActivePkmB), &m_PartyA->at(m_ActivePkmA), &m_StagesB, &m_StagesA, m_PartyB->at(m_ActivePkmB).nickname + " " + "used " + m_PartyB->at(m_ActivePkmB).moves[0].identifier + "\n");
-
+	if (!CheckPkmStateMiss(m_PkmStateB))
+	{
+		QueueMove(m_MoveQueue, m_PartyB->at(m_ActivePkmB).moves[0], &m_PartyB->at(m_ActivePkmB), &m_PartyA->at(m_ActivePkmA), &m_StagesB, &m_StagesA,
+			&m_PkmStateB, &m_PkmStateA);
+	}
+	
 	this->nextMove();
 
 	//Process end turn status

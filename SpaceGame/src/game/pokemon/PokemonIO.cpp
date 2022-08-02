@@ -81,6 +81,7 @@ void PokemonDataBank::loadJson(std::string path, PkmDataType type)
 {
 	//Parse and store
 	using namespace rapidjson;
+	std::lock_guard lock(mutex);
 	std::ifstream ifs((filePathStart + path).c_str());
 	rapidjson::IStreamWrapper isw(ifs);
 
@@ -100,7 +101,6 @@ void PokemonDataBank::loadData(PkmDataType type)
 	{
 		return;
 	}
-	std::lock_guard lock(mutex);
 	loadJson(getPath(type), type);
 }
 
@@ -120,6 +120,7 @@ void PokemonDataBank::unloadData(PkmDataType type)
 
 bool PokemonDataBank::checkData(PkmDataType type)
 {
+	std::lock_guard lock(mutex);
 	for (int i = 0; i < data.size(); i++)
 	{
 		if (data[i].type == type)
@@ -132,6 +133,7 @@ bool PokemonDataBank::checkData(PkmDataType type)
 
 rapidjson::Document& PokemonDataBank::getData(PkmDataType type)
 {
+	std::lock_guard lock(mutex);
 	for (int i = 0; i < data.size(); i++)
 	{
 		if (data[i].type == type)
@@ -147,7 +149,6 @@ rapidjson::Document& PokemonDataBank::getData(PkmDataType type)
 void PokemonDataBank::LoadPokemonName(uint16_t id, Pokemon& pokemon)
 {
 	using namespace rapidjson;
-
 	if (!PokemonDataBank::checkData(PkmDataType::SPECIES_INFO))
 	{
 		EngineLog("Species info not loaded!");
@@ -155,6 +156,7 @@ void PokemonDataBank::LoadPokemonName(uint16_t id, Pokemon& pokemon)
 	}
 
 	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::SPECIES_INFO);
+	std::lock_guard lock(mutex);
 	std::string idString = std::to_string(id);
 	if (!doc.HasMember(idString.c_str()))
 	{
@@ -175,6 +177,7 @@ void PokemonDataBank::LoadPokemonStats(uint16_t id, Pokemon& pokemon)
 	}
 
 	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::BASE_STATS);
+	std::lock_guard lock(mutex);
 	std::string idString = std::to_string(id);
 	if (!doc.HasMember(idString.c_str()))
 	{
@@ -201,6 +204,7 @@ PokemonStats PokemonDataBank::GetPokemonBaseStats(uint16_t id)
 	}
 
 	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::BASE_STATS);
+	std::lock_guard lock(mutex);
 	std::string idString = std::to_string(id);
 	
 	if (!doc.HasMember(idString.c_str()))
@@ -229,6 +233,7 @@ std::string PokemonDataBank::GetPokemonName(uint16_t id)
 	}
 
 	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::SPECIES_INFO);
+	std::lock_guard lock(mutex);
 	std::string idString = std::to_string(id);
 	if (!doc.HasMember(idString.c_str()))
 	{
@@ -257,20 +262,23 @@ inline static void LoadMoveData(Pokemon& pokemon, rapidjson::Document& doc, std:
 	}
 	if (stats["accuracy"].IsNull())
 	{
-		move.damageAcc = 100;
+		move.accuracy = 100;
 	}
 	else
 	{
-		move.damageAcc = stats["accuracy"].GetInt();
+		move.accuracy = stats["accuracy"].GetInt();
 	}
 	move.type = (PokemonType)stats["type_id"].GetInt();
-
+	move.effect = stats["effect_id"].GetInt();
+	if (!stats["effect_chance"].IsNull())
+	{
+		move.effectData = stats["effect_chance"].GetInt();
+	}
 }
 
 void PokemonDataBank::LoadPokemonMoves(Pokemon& pokemon)
 {
 	using namespace rapidjson;
-
 	if (!PokemonDataBank::checkData(PkmDataType::MOVE_INFO))
 	{
 		EngineLog("Move info not loaded!");
@@ -278,6 +286,7 @@ void PokemonDataBank::LoadPokemonMoves(Pokemon& pokemon)
 	}
 
 	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::MOVE_INFO);
+	std::lock_guard lock(mutex);
 	std::string idString;
 
 	//Moves in slot order
@@ -313,6 +322,7 @@ void PokemonDataBank::LoadPokemonType(Pokemon& pokemon)
 	}
 
 	rapidjson::Document& doc = PokemonDataBank::getData(PkmDataType::POKEMON_TYPES);
+	std::lock_guard lock(mutex);
 	std::string idString = std::to_string(pokemon.id);
 	if (!doc.HasMember(idString.c_str()))
 	{

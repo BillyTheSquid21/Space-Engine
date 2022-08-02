@@ -518,6 +518,12 @@
     <ClInclude Include="include\game\pokemon\MoveEffects.h">
       <Filter>Header Files\Game\Pokemon</Filter>
     </ClInclude>
+    <ClInclude Include="include\game\pokemon\Turn.hpp">
+      <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\pokemon\StatStages.hpp">
+      <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl">

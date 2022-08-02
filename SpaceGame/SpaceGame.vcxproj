@@ -237,6 +237,8 @@
     <ClInclude Include="include\game\pokemon\Pokemon.h" />
     <ClInclude Include="include\game\pokemon\PokemonBattle.h" />
     <ClInclude Include="include\game\pokemon\PokemonIO.h" />
+    <ClInclude Include="include\game\pokemon\StatStages.hpp" />
+    <ClInclude Include="include\game\pokemon\Turn.hpp" />
     <ClInclude Include="include\game\states\Battle.h" />
     <ClInclude Include="include\game\states\MainMenu.h" />
     <ClInclude Include="include\game\states\Overworld.h" />

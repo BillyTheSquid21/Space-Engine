@@ -6,40 +6,18 @@
 #include "game/utility/GameText.h"
 
 #include "game/pokemon/Pokemon.h"
+#include "game/pokemon/StatStages.hpp"
+#include "game/pokemon/Turn.hpp"
+#include "game/pokemon/MoveEffects.h"
 #include "game/utility/Random.hpp"
 #include "game/gui/GUI.h"
 
 #include <chrono>
 #include <functional>
 
-#define MOVE_QUEUE_LENGTH 3
+#define MOVE_QUEUE_LENGTH 5
 #define BATTLE_PROBABILITY_MAX 10000
-#define STAGES_COUNT 13
 #define TYPE_COUNT 18
-
-static enum class Stage : int8_t
-{
-	STAGE_N6 = 0, 
-	STAGE_N5 = 1, 
-	STAGE_N4 = 2, 
-	STAGE_N3 = 3, 
-	STAGE_N2 = 4, 
-	STAGE_N1 = 5, 
-	STAGE_0 =  6, 
-	STAGE_P1 = 7, 
-	STAGE_P2 = 8, 
-	STAGE_P3 = 9, 
-	STAGE_P4 = 10, 
-	STAGE_P5 = 11, 
-	STAGE_P6 = 12
-};
-
-static constexpr float StatStageLookup[STAGES_COUNT]
-{
-	1.0f/4.0f, 2.0f/7.0f, 2.0f/6.0f, 2.0f/5.0f, 2.0f/4.0f, 2.0f/3.0f,
-	1.0f,
-	3.0f/2.0f, 4.0f/2.0f, 5.0f/2.0f, 6.0f/2.0f, 7.0f/2.0f, 8.0f/2.0f
-};
 
 //Type effectiveness lookup for ATTACK - don't need to store defensive info
 //Stored in order the types are stored above and so can be used as keys
@@ -123,30 +101,11 @@ static const uint8_t* TypeLookup[TYPE_COUNT]
 	PsychicEff, BugEff, RockEff, GhostEff, DarkEff, DragonEff, SteelEff, FairyEff
 };
 
-struct CurrentStages
-{
-	Stage attackStage = Stage::STAGE_0;
-	Stage defenseStage = Stage::STAGE_0;
-	Stage spAttackStage = Stage::STAGE_0;
-	Stage spDefenseStage = Stage::STAGE_0;
-	Stage speedStage = Stage::STAGE_0;
-	Stage critStage = Stage::STAGE_0;
-	Stage accStage = Stage::STAGE_0;
-	Stage evasStage = Stage::STAGE_0;
-};
-
 static uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending);
 static float LookupStageMultiplier(Stage stage);
 
 //Attacking
-static void ExecuteAttack(
-	Pokemon& attacker,
-	Pokemon& target,
-	PokemonMove move,
-	CurrentStages& attackerStage,
-	CurrentStages& defenderStage,
-	std::string message
-);
+static void ExecuteAttack(TurnData& turn);
 
 //Can use interchangably with attack and sp. attack as is now agnostic
 static int16_t CalculateDamage(
@@ -154,7 +113,7 @@ static int16_t CalculateDamage(
 	int16_t defenceStat, 
 	Pokemon& attacker, 
 	Pokemon& target, 
-	PokemonMove move, 
+	TurnMove move, 
 	Stage attackStage, 
 	Stage defendStage, 
 	Stage critStage
@@ -163,46 +122,40 @@ static int16_t CalculateDamage(
 static bool ProcessStatus(Pokemon& pokemon);
 static void ProcessEndTurnStatus(Pokemon& pokemon);
 
-struct TurnData
-{
-
-};
-
+//Queue has a circular stack array of moves so a move can have an effect ahead
 class MoveQueue
 {
 public:
 	MoveQueue() { random.seed(0.0f, BATTLE_PROBABILITY_MAX); }
-	void queueMove(PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages, std::string message);
+
+	void queueMove(TurnData move, int turnsAhead);
 	void linkFaintCheck(std::function<void(bool)> func) { m_CheckFaint = func; }
 	void processTurn();
 
 	static const int POKEMON_COUNT = 2;
-	struct MoveTurn
+	struct Turn
 	{
-		struct Combined
-		{
-			//Move component
-			PokemonMove move;
-
-			//Attack component
-			Pokemon* origin;
-			CurrentStages* originStages;
-			Pokemon* target;
-			CurrentStages* targetStages;
-
-			std::string message;
-		};
-		Combined moves[POKEMON_COUNT];
+		TurnData moves[POKEMON_COUNT];
 		uint8_t size = 0;
 	};
 	static RandomContainer random;
 private:
-	MoveTurn m_MoveQueue[MOVE_QUEUE_LENGTH]; //Array of how many moves to look ahead
+	Turn m_MoveQueue[MOVE_QUEUE_LENGTH]; //Array of how many moves to look ahead
 	unsigned int m_QueueIndex = 0; //Rolls around to make queue array circular
 	std::function<void(bool)> m_CheckFaint;
 };
 
-static bool SortBySpeed(const MoveQueue::MoveTurn::Combined& lhs, const MoveQueue::MoveTurn::Combined& rhs);
+static bool SortBySpeed(const TurnData& lhs, const TurnData& rhs);
+static void QueueMove(
+	MoveQueue& queue, 
+	PokemonMove move,
+	Pokemon* origin,
+	Pokemon* target,
+	CurrentStages* originStages,
+	CurrentStages* targetStages,
+	PokemonMoveState* originState,
+	PokemonMoveState* targetState
+);
 
 class PokemonBattle
 {
@@ -268,11 +221,13 @@ private:
 	static bool* s_Progress[2];
 
 	//Pokemon
-	Party* m_PartyA; Party* m_PartyB;
+	Party* m_PartyA = nullptr; Party* m_PartyB = nullptr;
 	unsigned int m_ActivePkmA = 0; unsigned int m_ActivePkmB = 0;
 	MoveSlot m_NextMoveA = MoveSlot::SLOT_NULL;
 	MoveSlot m_NextMoveB = MoveSlot::SLOT_NULL;
 	CurrentStages m_StagesA; CurrentStages m_StagesB;
+	PokemonMoveState m_PkmStateA = PokemonMoveState::Normal;
+	PokemonMoveState m_PkmStateB = PokemonMoveState::Normal;
 
 	//Thread
 	std::atomic<bool> m_IsUpdating = false;
