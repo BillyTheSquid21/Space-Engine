@@ -9,7 +9,8 @@ bool SortBySpeed(const TurnData& lhs, const TurnData& rhs)
 	{
 		return 0;
 	}
-	return lhs.origin->stats.speed > rhs.origin->stats.speed;
+	return lhs.origin->stats.speed * LookupStageMultiplier(lhs.originStages->speedStage) 
+			> rhs.origin->stats.speed * LookupStageMultiplier(rhs.originStages->speedStage);
 }
 
 uint8_t LookupTypeMultiplier(PokemonType attacking, PokemonType defending)
