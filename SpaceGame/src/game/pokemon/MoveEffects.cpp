@@ -37,6 +37,24 @@ static void Dig_Effect_Queue(std::function<void(TurnData, int)>& queue, PokemonM
 	queue(turn1, 0); queue(turn2, 1);
 }
 
+static void Fly_Effect_Queue(std::function<void(TurnData, int)>& queue, PokemonMove move, Pokemon* origin, Pokemon* target, CurrentStages* originStages, CurrentStages* targetStages,
+	PokemonMoveState* originState, PokemonMoveState* targetState)
+{
+	//Queue for next turn a move that does no damage, does
+	//not check accuracy and sets state to flying
+	TurnData turn1 = CreateTurnData(move, origin, target, originStages, targetStages, originState, targetState);
+	turn1.move.skipAccuracy = true;
+	turn1.move.damage = 0;
+	turn1.move.effectData = (int8_t)true; //Data says is flying
+	turn1.message = origin->nickname + " flew into the sky!\n";
+
+	//Then queue a move that does the damage of the move and changes state back
+	TurnData turn2 = CreateTurnData(move, origin, target, originStages, targetStages, originState, targetState);
+	turn2.move.effectData = (int8_t)false; //Data says is now back up
+
+	queue(turn1, 0); queue(turn2, 1);
+}
+
 //Pre Effect Functions
 static void Dig_Effect_Pre(TurnData& turn, GameGUI::TextBuffer& text)
 {
@@ -45,6 +63,19 @@ static void Dig_Effect_Pre(TurnData& turn, GameGUI::TextBuffer& text)
 	if ((bool)turn.move.effectData)
 	{
 		*turn.originState = PokemonMoveState::Digging;
+		return;
+	}
+	*turn.originState = PokemonMoveState::Normal;
+	return;
+}
+
+static void Fly_Effect_Pre(TurnData& turn, GameGUI::TextBuffer& text)
+{
+	//Check additional data, if true set state to digging
+	//If false, set to normal
+	if ((bool)turn.move.effectData)
+	{
+		*turn.originState = PokemonMoveState::Flying;
 		return;
 	}
 	*turn.originState = PokemonMoveState::Normal;
@@ -84,6 +115,9 @@ void PreMoveEffect(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer&
 	case (int16_t)MoveEffectID::Dig:
 		Dig_Effect_Pre(turn, text);
 		return;
+	case (int16_t)MoveEffectID::Fly:
+		Fly_Effect_Pre(turn, text);
+		return;
 	default:
 		return;
 	}
@@ -97,6 +131,8 @@ void QueueMovesWithEffects(std::function<void(TurnData, int)>& queue, PokemonMov
 	case (uint16_t)MoveEffectID::Dig:
 		Dig_Effect_Queue(queue, move, origin, target, originStages, targetStages, originState, targetState);
 		return;
+	case (uint16_t)MoveEffectID::Fly:
+		Fly_Effect_Queue(queue, move, origin, target, originStages, targetStages, originState, targetState);
 	default:
 		TurnData data = CreateTurnData(move, origin, target, originStages, targetStages, originState, targetState);
 		queue(data, 0);

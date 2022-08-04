@@ -214,6 +214,7 @@
     <ClInclude Include="include\game\gui\BattleGUI.h" />
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\gui\OverworldGUI.h" />
+    <ClInclude Include="include\game\items\Items.hpp" />
     <ClInclude Include="include\game\level\World.h" />
     <ClInclude Include="include\game\level\WorldObjectLoader.h" />
     <ClInclude Include="include\game\objects\ActionTile.h" />

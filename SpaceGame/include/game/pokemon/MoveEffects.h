@@ -17,13 +17,13 @@ enum class MoveEffectID : int16_t
 {
 	//Effect
 	None = 1, Burn = 5, Paralysis = 7, Sleep = 2, Poison = 3, Freeze = 6,
-	Badly_Poisoned = 34,
+	Badly_Poisoned = 34, Paralysis_2 = 68,
 
 	//Stages
 	Defense_1_Down = 20, Attack_1_Down = 19,
 
 	//Moves
-	Thunder_Wave = 68, Dig = 257,
+	Dig = 257, Fly = 156
 };
 
 //Determines how to queue moves depending on effect

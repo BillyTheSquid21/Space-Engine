@@ -94,6 +94,9 @@
     <Filter Include="Source Files\Vendor\spaceimage">
       <UniqueIdentifier>{2e5bdab6-8870-4de1-8fbb-c4b3b162988e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Items">
+      <UniqueIdentifier>{d082c991-160a-4da6-ae63-853c82cf0e31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -523,6 +526,9 @@
     </ClInclude>
     <ClInclude Include="include\game\pokemon\StatStages.hpp">
       <Filter>Header Files\Game\Pokemon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\items\Items.hpp">
+      <Filter>Header Files\Game\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

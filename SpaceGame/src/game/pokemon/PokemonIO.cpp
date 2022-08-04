@@ -1,5 +1,30 @@
 #include "game/pokemon/PokemonIO.h"
 
+//Function for converting short ID's to string
+//Useful for avoiding constantly using std::to_string to get similar short numbers 
+template <int places>
+static inline void ID_To_String(char(&id)[places + 1], uint16_t index)
+{
+	id[places] = '\0';
+
+	uint16_t base = 10;
+	uint16_t result = index;
+
+	for (int i = places - 1; i >= 0; i--)
+	{
+		id[i] = (result % base) + 48;
+		result = result / base;
+	}
+
+	int times = 1; int size;
+	while (id[0] == '0' && times < places)
+	{
+		size = 5 - times;
+		memmove(&id[0], &id[1], size);
+		times++;
+	}
+}
+
 static void AddStat(Pokemon& pkm, int stat, int value)
 {
 	switch (stat)
@@ -58,13 +83,15 @@ static void AddStat(PokemonStats& stats, int stat, int value)
 //Data Bank
 const std::string PokemonDataBank::filenames[fileCount] =
 {
-	"pokemon.json",
-	"pokemon_stats.json",
-	"moves.json",
-	"pokemon_types.json"
+	"pokemon/pokemon.json",
+	"pokemon/pokemon_stats.json",
+	"pokemon/moves.json",
+	"pokemon/pokemon_types.json",
+	"items/items.json",
+	"items/item_categories.json"
 };
 std::vector<PokemonDataBank::PkmData> PokemonDataBank::data;
-const std::string PokemonDataBank::filePathStart = "res/pokemon/";
+const std::string PokemonDataBank::filePathStart = "res/data/";
 std::mutex PokemonDataBank::mutex;
 
 std::string PokemonDataBank::getPath(PkmDataType type)
@@ -352,4 +379,55 @@ void GeneratePokemon(uint16_t id, Pokemon& pokemon)
 	PokemonDataBank::LoadPokemonName(id, pokemon);
 	PokemonDataBank::LoadPokemonMoves(pokemon);
 	PokemonDataBank::LoadPokemonType(pokemon);
+}
+
+//Items
+static bool SortByPocket(const ItemSlot& lhs, const ItemSlot& rhs)
+{
+	//If is a tm, order alphabetically
+	if (lhs.item.pocketId == 4 && rhs.item.pocketId == 4)
+	{
+		return lhs.item.name < rhs.item.name;
+	}
+	return lhs.item.pocketId > rhs.item.pocketId;
+}
+
+void PokemonDataBank::InitializeBag(PlayerBag& bag)
+{
+	using namespace rapidjson;
+	if (!PokemonDataBank::checkData(PkmDataType::ITEMS))
+	{
+		EngineLog("Items not loaded!");
+		return;
+	}
+	if (!PokemonDataBank::checkData(PkmDataType::ITEM_CATEGORIES))
+	{
+		EngineLog("Item categories not loaded!");
+		return;
+	}
+
+	rapidjson::Document& itemDoc = PokemonDataBank::getData(PkmDataType::ITEMS);
+	rapidjson::Document& categoryDoc = PokemonDataBank::getData(PkmDataType::ITEM_CATEGORIES);
+	std::lock_guard lock(mutex);
+
+	//Go through each entry in the item json file
+	char id[5] = { '1', '\0' };
+	for (uint32_t i = 0; i < MAX_ITEM_TYPES; i++)
+	{
+		ID_To_String<4>(id, i);
+		if (!itemDoc.HasMember(id))
+		{
+			continue;
+		}
+		const Value& itemData = itemDoc[id];
+		int categoryID = itemData["category_id"].GetInt();
+		ID_To_String<4>(id, categoryID);
+
+		const Value& categoryData = categoryDoc[id];
+		Item item = {i, categoryData["pocket_id"].GetInt(), categoryID, itemData["identifier"].GetString() };
+		bag.items[i].item = item; bag.items[i].count = 1;
+	}
+
+	//Sort array in order of pocket ID
+	std::sort(bag.items.begin(), bag.items.end(), SortByPocket);
 }

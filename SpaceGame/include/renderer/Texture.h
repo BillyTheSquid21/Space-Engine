@@ -13,6 +13,7 @@ public:
 
     //Load texture into buffer from file path
     void loadTexture(const std::string& path);
+    inline void loadTexture(const std::string& path, bool flip);
     //Generate texture into slot
     void generateTexture(unsigned int slot);
     //Bind and Unbind texture
@@ -21,6 +22,8 @@ public:
     //Clear buffer image data is loaded into
     void clearBuffer();
     void deleteTexture() const { glDeleteTextures(1, &m_ID); }
+
+    unsigned int getID() const { return m_ID; }
 
     int width() const { return m_Width; }
     int height() const { return m_Height; }

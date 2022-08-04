@@ -6,6 +6,7 @@
 #include <string>
 #include "game/level/World.h"
 #include "game/pokemon/Pokemon.h"
+#include "game/items/Items.hpp"
 #include "game/utility/Flags.hpp"
 #include "game/objects/OverworldSprite.h"
 
@@ -18,6 +19,7 @@ struct PlayerData
 	World::TileLoc tile = { 8, 3 };
 	World::LevelID id = World::LevelID::LEVEL_ENTRY;
 	Party playerParty;
+	PlayerBag bag;
 
 	//Game data
 	FlagArray flags;

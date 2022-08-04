@@ -2,7 +2,12 @@
 
 void Texture::loadTexture(const std::string& path)
 {
-    stbi_set_flip_vertically_on_load(1);
+    loadTexture(path, true);
+}
+
+inline void Texture::loadTexture(const std::string& path, bool flip)
+{
+    stbi_set_flip_vertically_on_load(flip);
     //if texture has been previously generated don't generate until buffer cleared
     if (m_LocalBuffer) {
         EngineLog("Texture already generated!");
@@ -37,7 +42,6 @@ void Texture::clearBuffer() {
         m_LocalBuffer = nullptr;
         return;
     }
-    EngineLog("Error unloading texture buffer!");
 }
 
 Texture::~Texture()
