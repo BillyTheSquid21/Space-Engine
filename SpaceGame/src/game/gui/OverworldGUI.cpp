@@ -5,6 +5,7 @@ void OverworldMenu::openNest()
 {
 	if (!m_Show)
 	{
+		m_LastSelectedItem = 0;
 		return;
 	}
 	menuStyle();
@@ -22,12 +23,14 @@ void OverworldMenu::openNest()
 	{
 		m_ShowPkmMenu = !m_ShowPkmMenu;
 		m_ShowBag = false;
+		m_LastSelectedItem = 0;
 		unloadAllIcons();
 	}
 	if (ImGui::Button("Bag", ImVec2(ImGui::GetContentRegionAvail().x, 75.0f)))
 	{
 		m_ShowBag = !m_ShowBag;
 		m_ShowPkmMenu = false;
+		m_LastSelectedItem = 0;
 		unloadAllIcons();
 	}
 	endMenuStyle();
@@ -64,7 +67,7 @@ void OverworldMenu::endMenuStyle()
 void OverworldMenu::pkmMenu()
 {
 	pkmMenuStyle();
-	ImGui::BeginChild("PkmMenu", ImVec2(m_Width * 5.2f, ImGui::GetContentRegionAvail().y), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
+	ImGui::BeginChild("PkmMenu", ImVec2(m_XPos * 0.95f, ImGui::GetContentRegionAvail().y), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
 	
 	//Top divider
 	ImGui::PushFont(m_Fonts->getFont("boxfont", 45));
@@ -125,7 +128,7 @@ void OverworldMenu::endPkmMenuStyle()
 
 void OverworldMenu::bag()
 {
-	ImGui::BeginChild("Bag", ImVec2(m_Width * 5.2f, ImGui::GetContentRegionAvail().y), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
+	ImGui::BeginChild("Bag", ImVec2(m_XPos * 0.95f, ImGui::GetContentRegionAvail().y), ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoScrollbar);
 	bagButtons();
 
 	//Add view
@@ -281,7 +284,34 @@ void OverworldMenu::bagItems()
 		}
 		ImGui::SetCursorPosX(x);
 		ImGui::SetCursorPosY(y);
-		ImGui::Button(name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 150.0f));
+
+		float buttonWidth = ImGui::GetContentRegionAvail().x * 0.80f;
+		if (m_LastSelectedItem != i && ImGui::Button(name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x * 0.80f, 150.0f)))
+		{
+			m_LastSelectedItem = i;
+		}
+		if (m_LastSelectedItem == i)
+		{
+			ImGui::Button("Toss", ImVec2(buttonWidth / 3.05f, 150.0f));
+			ImGui::SetCursorPosX(x + buttonWidth / 3.0f);
+			ImGui::SetCursorPosY(y);
+			ImGui::Button("Use", ImVec2(buttonWidth / 3.05f, 150.0f));
+			ImGui::SetCursorPosX(x + (2*buttonWidth / 3.0f));
+			ImGui::SetCursorPosY(y);
+			if (ImGui::Button("Cancel", ImVec2(buttonWidth / 3.0f, 150.0f)))
+			{
+				m_LastSelectedItem = 0;
+			}
+		}
+
+		//Quantity
+		ImGui::SetCursorPosX(x + buttonWidth + 5.0f);
+		ImGui::SetCursorPosY(y);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.4f, 0.45f, 0.85f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.36f, 0.4f, 0.45f, 0.85f));
+		ImGui::Button(("Quantity " + std::to_string(m_PlayerData->bag.items[i].count)).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 150.0f));
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
 	}
 }
 

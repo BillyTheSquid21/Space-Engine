@@ -425,7 +425,7 @@ void PokemonDataBank::InitializeBag(PlayerBag& bag)
 
 		const Value& categoryData = categoryDoc[id];
 		Item item = {i, categoryData["pocket_id"].GetInt(), categoryID, itemData["identifier"].GetString() };
-		bag.items[i].item = item; bag.items[i].count = 1;
+		bag.items[i].item = item; bag.items[i].count = 1; //Temp to show all
 	}
 
 	//Sort array in order of pocket ID
