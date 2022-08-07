@@ -236,6 +236,7 @@ void GameGUI::TextDisplay::openNest()
 	{
 		return;
 	}
+	style();
 	Divider::openNest();
 	ImGui::PushFont(m_Fonts->getFont("boxfont", 70));
 	ImGui::SetCursorPosX(40.0f);
@@ -254,6 +255,35 @@ void GameGUI::TextDisplay::closeNest()
 	}
 	ImGui::PopFont();
 	ImGui::EndChild();
+	endStyle();
+}
+
+void GameGUI::TextDisplay::style()
+{
+	//Style
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 118.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 40.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 4.0f);
+
+	//Color
+	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.2f, 0.2f, 0.25f, 0.9f));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.36f, 0.4f, 0.45f, 0.85f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.996f, 0.694f, 0.224f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.996f, 0.794f, 0.324f, 1.0f));
+}
+
+void GameGUI::TextDisplay::endStyle()
+{
+	//Style
+	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
+
+	//Color
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 //Text box buffer

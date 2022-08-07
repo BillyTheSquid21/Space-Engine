@@ -80,7 +80,7 @@ XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id, bool global)
 	return { tmp, doc };
 }
 
-bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
 	//Setup
 	using namespace rapidxml;
@@ -105,10 +105,10 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 		switch (identifier)
 		{
 		case ObjectType::DirectionalSprite:
-			WorldParse::LoadDirectionalSprite(name, identifyingNode, manager, ren, flags, textBuff, levelID, input);
+			WorldParse::LoadDirectionalSprite(name, identifyingNode, manager, ren, data, textBuff, levelID, input);
 			break;
 		case ObjectType::WalkingSprite:
-			WorldParse::LoadWalkingSprite(name, identifyingNode, manager, ren, flags, textBuff, levelID, input);
+			WorldParse::LoadWalkingSprite(name, identifyingNode, manager, ren, data, textBuff, levelID, input);
 			break;
 		case ObjectType::Bridge:
 			WorldParse::LoadBridge(name, identifyingNode, manager, ren, levelID);
@@ -120,7 +120,7 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 			WorldParse::LoadWarpTile(name, identifyingNode, manager, levelID, ld, uld);
 			break;
 		case ObjectType::ScriptTile:
-			WorldParse::LoadScriptTile(name, identifyingNode, manager, levelID, flags, textBuff, input);
+			WorldParse::LoadScriptTile(name, identifyingNode, manager, levelID, data, textBuff, input);
 			break;
 		default:
 			break;
@@ -159,7 +159,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 			continue;
 		}
 		//Add tree from properties
-		World::TileLoc tile = { strtoul(treesNode->first_node("TileX")->value(), nullptr, 10), strtoul(treesNode->first_node("TileZ")->value(), nullptr, 10) };
+		World::Tile tile = { strtoul(treesNode->first_node("TileX")->value(), nullptr, 10), strtoul(treesNode->first_node("TileZ")->value(), nullptr, 10) };
 		World::WorldHeight wLevel = (World::WorldHeight)strtol(treesNode->first_node("WLevel")->value(), nullptr, 10);
 		TileUV uv1; TileUV uv2;
 		{
@@ -232,7 +232,7 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 			continue;
 		}
 		//Add tree from properties
-		World::TileLoc tile = { strtoul(grassNode->first_node("TileX")->value(), nullptr, 10), strtoul(grassNode->first_node("TileZ")->value(), nullptr, 10) };
+		World::Tile tile = { strtoul(grassNode->first_node("TileX")->value(), nullptr, 10), strtoul(grassNode->first_node("TileZ")->value(), nullptr, 10) };
 		World::WorldHeight wLevel = (World::WorldHeight)strtol(grassNode->first_node("WLevel")->value(), nullptr, 10);
 		grassRen->addGrass(origin, tile, wLevel, levelID, &grass->m_GrassLoc, &grass->m_ActiveStates);
 		grassCount++;
@@ -355,7 +355,7 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
+void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
 {
 	using rapidxml::xml_node;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
@@ -374,7 +374,7 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
+void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
 {
 	using rapidxml::xml_node;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
@@ -393,14 +393,14 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 
 	//Optionals
 	WorldParse::WalkingSpriteOptionals(node, manager, sprite);
-	WorldParse::OverworldScriptOptionals(node, manager, flags, textBuff, sprite, input);
+	WorldParse::OverworldScriptOptionals(node, manager, pdata, textBuff, sprite, input);
 
 	//Push object
 	std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite, GameInput* input)
+void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite, GameInput* input)
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	if (node->first_node("NPCScript"))
@@ -408,7 +408,7 @@ void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectMana
 		std::string filePath = node->first_node("NPCScript")->value();
 		std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 		std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite>(manager->getObjects()[0].obj);
-		std::shared_ptr<NPC_OverworldScript> npcScript = AllocateNPCOvScript(filePath, flags, textBuff, sprite, player, input);
+		std::shared_ptr<NPC_OverworldScript> npcScript = AllocateNPCOvScript(filePath, textBuff, sprite, player);
 		manager->pushUpdateHeap(npcScript, &sprite->m_UpdateComps);
 	}
 }
@@ -460,9 +460,9 @@ OvSpr_SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, W
 
 	//Position in tiles
 	xml_node<>* xTileNode = node->first_node("TileX");
-	unsigned int xTile = strtoul(xTileNode->value(), nullptr, 10);
+	int xTile = strtol(xTileNode->value(), nullptr, 10);
 	xml_node<>* zTileNode = node->first_node("TileZ");
-	unsigned int zTile = strtoul(zTileNode->value(), nullptr, 10);
+	int zTile = strtol(zTileNode->value(), nullptr, 10);
 	
 	//Check to make sure node is not occupied, if is, shuffle till a free spot is found
 	{
@@ -504,10 +504,10 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	//Get data
 	xml_node<>* tileXCurr = node->first_node("TileXCurr");
 	xml_node<>* tileZCurr = node->first_node("TileZCurr");
-	World::TileLoc tileCurrent = { strtoul(tileXCurr->value(), nullptr, 10), strtoul(tileZCurr->value(), nullptr, 10) };
+	World::Tile tileCurrent = { strtoul(tileXCurr->value(), nullptr, 10), strtoul(tileZCurr->value(), nullptr, 10) };
 	xml_node<>* tileXDest = node->first_node("TileXDest");
 	xml_node<>* tileZDest = node->first_node("TileZDest");
-	World::TileLoc tileDestination = { strtoul(tileXDest->value(), nullptr, 10), strtoul(tileZDest->value(), nullptr, 10) };
+	World::Tile tileDestination = { strtoul(tileXDest->value(), nullptr, 10), strtoul(tileZDest->value(), nullptr, 10) };
 	xml_node<>* wLevelCurr = node->first_node("WLevelCurr");
 	World::WorldHeight heightCurrent = (World::WorldHeight)strtoul(wLevelCurr->value(), nullptr, 10);
 	xml_node<>* wLevelDest = node->first_node("WLevelDest");
@@ -528,13 +528,13 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	manager->pushGameObject(warpTile, name);
 }
 
-void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
+void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
 {
 	using rapidxml::xml_node;
 	//Get data
 	xml_node<>* tileX = node->first_node("TileX");
 	xml_node<>* tileZ = node->first_node("TileZ");
-	World::TileLoc tile = { strtoul(tileX->value(), nullptr, 10), strtoul(tileZ->value(), nullptr, 10) };
+	World::Tile tile = { strtoul(tileX->value(), nullptr, 10), strtoul(tileZ->value(), nullptr, 10) };
 	xml_node<>* wLevel = node->first_node("WLevel");
 	World::WorldHeight height = (World::WorldHeight)strtoul(wLevel->value(), nullptr, 10);
 
@@ -562,7 +562,7 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 		std::shared_ptr<OvSpr_RunningSprite> npc = manager->objectAt<OvSpr_RunningSprite>(manager->queryObjectID(npcName));
 		//get script
 		std::string scriptName = scriptType->value();
-		NPC_OverworldScript script = CreateNPCOvScript(scriptName, flags, textBuff, npc, player, input);
+		NPC_OverworldScript script = CreateNPCOvScript(scriptName, textBuff, npc, player);
 		scriptUpdate->setScript(script);
 		//upload
 		manager->pushUpdateHeap(scriptUpdate, &scriptTile->m_UpdateComps);
@@ -650,7 +650,7 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	//Get pos
 	xml_node<>* tileXNode = node->first_node("TileX");
 	xml_node<>* tileZNode = node->first_node("TileZ");
-	World::TileLoc tile = { strtoul(tileXNode->value(), nullptr, 10), strtoul(tileZNode->value(), nullptr, 10) };
+	World::Tile tile = { strtoul(tileXNode->value(), nullptr, 10), strtoul(tileZNode->value(), nullptr, 10) };
 	Struct2f offset = World::Level::queryOrigin(levelID);
 	offset.a += tile.x * World::TILE_SIZE;
 	offset.b -= tile.z * World::TILE_SIZE;
@@ -665,9 +665,9 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	manager->pushGameObject(bridge, name);
 }
 
-void World::LevelContainer::InitialiseLevels(ObjectManager* obj, OverworldRenderer* ren, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
+void World::LevelContainer::InitialiseLevels(ObjectManager* obj, OverworldRenderer* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
 {
-	m_Input = input; m_ObjManager = obj; m_Renderer = ren; m_Flags = flags; m_TextBuffer = textBuff;
+	m_Input = input; m_ObjManager = obj; m_Renderer = ren; m_Data = data; m_TextBuffer = textBuff;
 	m_Levels.resize((int)World::LevelID::LEVEL_NULL);
 	std::vector<std::mutex> mutexes((int)World::LevelID::LEVEL_NULL);
 	m_LevelMutexes.swap(mutexes);
@@ -725,7 +725,7 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 
 		if (objRoot)
 		{
-			f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_Renderer, id, m_Flags, m_TextBuffer, std::ref(mutex), doc, m_Input, m_LoadingPtr, m_UnloadingPtr);
+			f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_Renderer, id, m_Data, m_TextBuffer, std::ref(mutex), doc, m_Input, m_LoadingPtr, m_UnloadingPtr);
 		}
 		if (treeRoot)
 		{

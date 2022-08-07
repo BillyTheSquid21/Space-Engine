@@ -33,11 +33,6 @@ static void Log(args && ... inputs)
 
 #endif
 
-float invSqrt(float number); //Supposedly a faster inv sqrt
-int intFloor(float x); //supposedly faster floor
-int roundDownMultiple(float num, int multiple);
-int roundUpMultiple(float num, int multiple);
-
 //return structs
 struct Struct2f
 {

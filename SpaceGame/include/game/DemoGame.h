@@ -29,8 +29,7 @@ private:
 	FontContainer m_Fonts;
 	std::vector<std::shared_ptr<State>> m_States;
 	GameInput m_GameInput;
-	PlayerData m_Data;
-	static FlagArray s_GlobalFlags;
+	static PlayerData m_Data;
 };
 
 //Defined of which entry corresponds to what state

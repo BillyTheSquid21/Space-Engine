@@ -5,7 +5,7 @@ bool PlayerMove::canWalk()
 {
 	World::Direction direction = m_PlayerData->m_Direction; World::LevelID levelID = m_PlayerData->m_CurrentLevel;
 	World::WorldHeight worldLevel = m_PlayerData->m_WorldLevel;
-	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel);
+	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, *m_Tile, m_PlayerData->m_WorldLevel);
 	m_Ascend = 0; m_CurrentIsSlope = false; m_NextIsSlope = false;
 
 	//Check if leaving level
@@ -190,7 +190,7 @@ bool PlayerMove::walkPermHelper()
 	if (canWalk())
 	{
 		//Unblock previous tile, block new tile - fix weird bug
-		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, { *m_TileX, *m_TileZ }, m_PlayerData->m_WorldLevel, m_PlayerData->m_LastPermission, m_PlayerData->m_LastPermissionPtr);
+		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, *m_Tile, m_PlayerData->m_WorldLevel, m_PlayerData->m_LastPermission, m_PlayerData->m_LastPermissionPtr);
 		if (m_Input->HELD_SHIFT)
 		{
 			return startRun();
@@ -363,13 +363,13 @@ void PlayerMove::cycleEnd(bool anyHeld)
 	if (!m_NextIsSlope)
 	{
 		//Is false as 
-		Ov_Translation::CentreOnTile(m_PlayerData->m_CurrentLevel, m_PlayerData->m_WorldLevel, m_XPos, &m_PlayerData->m_YPos, m_ZPos, *m_TileX, *m_TileZ, &m_PlayerData->m_Sprite, false);
+		Ov_Translation::CentreOnTile(m_PlayerData->m_CurrentLevel, m_PlayerData->m_WorldLevel, m_XPos, &m_PlayerData->m_YPos, m_ZPos, *m_Tile, &m_PlayerData->m_Sprite, false);
 		return;
 	}
 	if (m_NextIsSlope)
 	{
 		//Is true as 
-		Ov_Translation::CentreOnTile(m_PlayerData->m_CurrentLevel, m_PlayerData->m_WorldLevel, m_XPos, &m_PlayerData->m_YPos, m_ZPos, *m_TileX, *m_TileZ, &m_PlayerData->m_Sprite, true);
+		Ov_Translation::CentreOnTile(m_PlayerData->m_CurrentLevel, m_PlayerData->m_WorldLevel, m_XPos, &m_PlayerData->m_YPos, m_ZPos, *m_Tile, &m_PlayerData->m_Sprite, true);
 		return;
 	}
 

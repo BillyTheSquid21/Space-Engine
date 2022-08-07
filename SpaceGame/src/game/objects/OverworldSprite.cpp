@@ -14,8 +14,8 @@ void TilePosition::update(double deltaTime)
 	Struct2f origin = World::Level::queryOrigin(*m_CurrentLevel);
 	float deltaX = *m_XPos - origin.a;
 	float deltaZ = *m_ZPos - origin.b;
-	*m_TileX = (unsigned int)(deltaX / World::TILE_SIZE);
-	*m_TileZ = (unsigned int)(-deltaZ / World::TILE_SIZE);
+	m_Tile->x = (unsigned int)(deltaX / World::TILE_SIZE);
+	m_Tile->z = (unsigned int)(-deltaZ / World::TILE_SIZE);
 }
 
 void SpriteMap::update(double deltaTime)
@@ -232,12 +232,12 @@ void Ov_Translation::Run(World::Direction* direction, float* x, float* z, Norm_T
 	*walkTimer += deltaTime;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, World::Tile tile, Norm_Tex_Quad* sprite)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);
-	float expectedX = (float)(World::TILE_SIZE * tileX) + origin.a + World::TILE_SIZE / 2;
-	float expectedZ = (float)(-World::TILE_SIZE * tileZ) + origin.b - World::TILE_SIZE / 2;
+	float expectedX = (float)(World::TILE_SIZE * tile.x) + origin.a + World::TILE_SIZE / 2;
+	float expectedZ = (float)(-World::TILE_SIZE * tile.z) + origin.b - World::TILE_SIZE / 2;
 	float expectedY = ((int)worldLevel / sqrt(2)) * World::TILE_SIZE;
 	float deltaX = *x - expectedX;
 	float deltaZ = *z - expectedZ;
@@ -248,12 +248,12 @@ void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeigh
 	*y = expectedY;
 }
 
-void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite, bool onSlope)
+void Ov_Translation::CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, World::Tile tile, Norm_Tex_Quad* sprite, bool onSlope)
 {
 	//Centre on x and y
 	Struct2f origin = World::Level::queryOrigin(currentLevel);
-	float expectedX = (float)(World::TILE_SIZE * tileX) + origin.a + World::TILE_SIZE / 2;
-	float expectedZ = (float)(-World::TILE_SIZE * tileZ) + origin.b - World::TILE_SIZE / 2;
+	float expectedX = (float)(World::TILE_SIZE * tile.x) + origin.a + World::TILE_SIZE / 2;
+	float expectedZ = (float)(-World::TILE_SIZE * tile.z) + origin.b - World::TILE_SIZE / 2;
 	float expectedY = ((int)worldLevel / sqrt(2)) * World::TILE_SIZE;
 	if (onSlope)
 	{

@@ -21,8 +21,11 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
 
     m_Renderer.initialiseRenderer(width, height);
 
-    //test level
-    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Flags, &m_TextBuff, m_Input);
+    //Init levels and scripts
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Data, &m_TextBuff, m_Input);
+    std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1);
+    std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1);
+    OverworldScript::init(m_Data, m_Input, ld, uld);
 
     std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(width, height, 0, 0));
     m_HUD.setBase(hud);
@@ -171,7 +174,7 @@ void Overworld::loadObjectData()
     spriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer.spriteRenderer);
     m_PlayerPtr->m_LastPermissionPtr = World::GetTilePermission(m_PlayerPtr->m_CurrentLevel, m_PlayerPtr->m_Tile, m_PlayerPtr->m_WorldLevel);
 
-    std::shared_ptr<PlayerMove> walk(new PlayerMove(&m_PlayerPtr->m_CurrentLevel, &m_PlayerPtr->m_XPos, &m_PlayerPtr->m_ZPos, &m_PlayerPtr->m_Tile.x, &m_PlayerPtr->m_Tile.z));
+    std::shared_ptr<PlayerMove> walk(new PlayerMove(&m_PlayerPtr->m_CurrentLevel, &m_PlayerPtr->m_XPos, &m_PlayerPtr->m_ZPos, &m_PlayerPtr->m_Tile));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&m_PlayerPtr->m_XPos, &m_PlayerPtr->m_YPos, &m_PlayerPtr->m_ZPos, &m_Renderer.camera));
     std::shared_ptr<PlayerEncounter> encounter(new PlayerEncounter(&m_PlayerPtr->m_LastPermission, &m_PlayerPtr->m_Tile, &m_StartBattle));
     std::shared_ptr<UpdateGlobalLevel> globLev(new UpdateGlobalLevel(&m_CurrentLevel, &m_PlayerPtr->m_CurrentLevel));

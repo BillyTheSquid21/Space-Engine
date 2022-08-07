@@ -86,8 +86,8 @@ private:
 	std::string m_CurrentLevelStr = "";
 	std::string m_CurrentTileStr = ""; 
 	std::string m_ObjectCountStr = "";
-	unsigned int* m_LocationX = nullptr;
-	unsigned int* m_LocationZ = nullptr;
+	int* m_LocationX = nullptr;
+	int* m_LocationZ = nullptr;
 	GameGUI::TextBoxBuffer m_TextBuff;
 	float m_SampleTime = 0.0f;
 	bool m_Sample = false;

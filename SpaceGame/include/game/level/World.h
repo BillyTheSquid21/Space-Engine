@@ -81,10 +81,14 @@ namespace World
 		unsigned int textureY;
 	};
 
-	struct TileLoc
+	struct Tile
 	{
-		unsigned int x;
-		unsigned int z;
+		int x;
+		int z;
+
+		bool operator==(Tile& tile) { return (this->x == tile.x && this->z == tile.z); };
+		Tile operator-(Tile& tile) { Tile newTile; newTile.x = this->x - tile.x; newTile.z = this->z - tile.z; return newTile; }
+		Tile operator+(Tile& tile) { Tile newTile; newTile.x = this->x + tile.x; newTile.z = this->z + tile.z; return newTile; }
 	};
 
 	struct LevelPermission
@@ -94,13 +98,14 @@ namespace World
 		bool leaving = false;
 	};
 
-	TileLoc NextTileInInputDirection(Direction direct, TileLoc tile);
-	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height);
-	LevelPermission RetrievePermission(World::LevelID level, World::TileLoc loc, WorldHeight height);
-	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr);
-	MovementPermissions* GetTilePermission(World::LevelID level, World::TileLoc loc, WorldHeight height);
+	Tile NextTileInInputDirection(Direction direct, Tile tile);
+	World::Direction DirectionOfAdjacentTile(World::Tile scr, World::Tile dest);
+	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::Tile loc, WorldHeight height);
+	LevelPermission RetrievePermission(World::LevelID level, World::Tile loc, WorldHeight height);
+	void ModifyTilePerm(World::LevelID level, World::Direction direction, World::Tile loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr);
+	MovementPermissions* GetTilePermission(World::LevelID level, World::Tile loc, WorldHeight height);
 
-	bool CheckPlayerInteracting(TileLoc player, TileLoc script, Direction playerFacing);
+	bool CheckPlayerInteracting(Tile player, Tile script, Direction playerFacing);
 	Direction OppositeDirection(Direction dir);
 
 	struct LevelDimensions

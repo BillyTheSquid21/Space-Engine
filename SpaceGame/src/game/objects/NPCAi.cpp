@@ -1,20 +1,20 @@
 #include "game/objects/NPCAi.h"
 
-std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player, GameInput* input)
+std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player)
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
-	std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player, flags, input));
+	std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player));
 	npcScript->linkText(textBuff);
 	npcScript->linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 	return npcScript;
 }
 
-NPC_OverworldScript CreateNPCOvScript(std::string filePath, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player, GameInput* input)
+NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player)
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
-	NPC_OverworldScript npcScript(script.script, script.size, player, flags, input);
+	NPC_OverworldScript npcScript(script.script, script.size, player);
 	npcScript.linkText(textBuff);
 	npcScript.linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 	return npcScript;
@@ -104,7 +104,7 @@ void NPC_RandWalk::cycleEnd()
 	m_NPC->m_Timer = 0.0;
 
 	//Centre on x and y
-	Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_Tile.x, m_NPC->m_Tile.z, &m_NPC->m_Sprite);
+	Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_Tile, &m_NPC->m_Sprite);
 }
 
 bool NPC_RandWalk::canWalk()

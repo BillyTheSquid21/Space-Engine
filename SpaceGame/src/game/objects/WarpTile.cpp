@@ -1,6 +1,6 @@
 #include "game/objects/WarpTile.h"
 
-WarpTileUpdateComponent::WarpTileUpdateComponent(OvSpr_RunningSprite* player, World::TileLoc loc, World::WorldHeight height, World::LevelID currentLevel, World::TileLoc dest, World::WorldHeight destHeight, World::LevelID levelDest)
+WarpTileUpdateComponent::WarpTileUpdateComponent(OvSpr_RunningSprite* player, World::Tile loc, World::WorldHeight height, World::LevelID currentLevel, World::Tile dest, World::WorldHeight destHeight, World::LevelID levelDest)
 {
 	m_PlayerPointer = player; m_CurrentHeight = height; m_TileLocation = loc; m_TileDestination = dest;
 	m_LevelDestination = levelDest; m_DestHeight = destHeight; m_LevelCurrent = currentLevel;

@@ -44,6 +44,9 @@ namespace ScriptParse
 	inline static void PSS_MSG(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_GIVE_TAKE_ITEM(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 	inline static void PSS_CGE_DIR(std::string (&instrArr)[MAX_INFO], ScriptElement& element);
+	inline static void PSS_WAIT(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
+	inline static void PSS_SET_TILE(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
+	inline static void PSS_WARP(std::string(&instrArr)[MAX_INFO], ScriptElement& element);
 }
 
 #endif

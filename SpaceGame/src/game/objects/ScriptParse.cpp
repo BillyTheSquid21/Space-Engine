@@ -126,9 +126,29 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::TAKE_ITEM;
 	}
+	else if (instr == "-WARP_PLAYER")
+	{
+		return ScriptInstruction::WARP_PLAYER;
+	}
 	else if (instr == "-WAIT_INPUT")
 	{
 		return ScriptInstruction::WAIT_INPUT;
+	}
+	else if (instr == "-WAIT_FOR")
+	{
+		return ScriptInstruction::WAIT_FOR;
+	}
+	else if (instr == "-SET_PLAYER_TILE")
+	{
+		return ScriptInstruction::SET_PLAYER_TILE;
+	}
+	else if (instr == "-PLAYER_WALK_TO_TILE")
+	{
+		return ScriptInstruction::PLAYER_WALK_TO_TILE;
+	}
+	else if (instr == "-PLAYER_RUN_TO_TILE")
+	{
+		return ScriptInstruction::PLAYER_RUN_TO_TILE;
 	}
 	else if (instr == "-FACE_PLAYER")
 	{
@@ -188,11 +208,26 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 	case ScriptInstruction::MSG:
 		PSS_MSG(instrArr, element);
 		return;
+	case ScriptInstruction::WAIT_FOR:
+		PSS_WAIT(instrArr, element);
+		return;
 	case ScriptInstruction::GIVE_ITEM:
 		PSS_GIVE_TAKE_ITEM(instrArr, element);
 		return;
 	case ScriptInstruction::TAKE_ITEM:
 		PSS_GIVE_TAKE_ITEM(instrArr, element);
+		return;
+	case ScriptInstruction::WARP_PLAYER:
+		PSS_WARP(instrArr, element);
+		return;
+	case ScriptInstruction::SET_PLAYER_TILE:
+		PSS_SET_TILE(instrArr, element);
+		return;
+	case ScriptInstruction::PLAYER_WALK_TO_TILE:
+		PSS_SET_TILE(instrArr, element);
+		return;
+	case ScriptInstruction::PLAYER_RUN_TO_TILE:
+		PSS_SET_TILE(instrArr, element);
 		return;
 	case ScriptInstruction::NPC_FACE:
 		PSS_CGE_DIR(instrArr, element);
@@ -276,4 +311,21 @@ void ScriptParse::PSS_CGE_DIR(std::string(&instrArr)[MAX_INFO], ScriptElement& e
 		element.info.dirInfo.direction = (uint8_t)strtoul(instrArr[1].c_str(), nullptr, 10);
 		return;
 	}
+}
+
+void ScriptParse::PSS_WAIT(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
+{
+	element.info.waitInfo.millis = (uint32_t)strtoul(instrArr[1].c_str(), nullptr, 10);
+}
+
+void ScriptParse::PSS_SET_TILE(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
+{
+	element.info.tileInfo.x = (uint16_t)strtoul(instrArr[1].c_str(), nullptr, 10);
+	element.info.tileInfo.z = (uint16_t)strtoul(instrArr[2].c_str(), nullptr, 10);
+}
+
+void ScriptParse::PSS_WARP(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
+{
+	element.info.warpInfo.origin = (int16_t)strtoul(instrArr[1].c_str(), nullptr, 10);
+	element.info.warpInfo.dest = (int16_t)strtoul(instrArr[2].c_str(), nullptr, 10);
 }

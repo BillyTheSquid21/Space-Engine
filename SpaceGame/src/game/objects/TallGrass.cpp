@@ -17,7 +17,7 @@ void TallGrassAnimationComponent::render()
 	}
 }
 
-void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::TileLoc tile, World::WorldHeight level, World::LevelID levelID, std::vector<GrassData>* grassLoc, std::vector<char>* states)
+void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID, std::vector<GrassData>* grassLoc, std::vector<char>* states)
 {
 	if (m_Grass->quadCount >= m_Grass->quads.size())
 	{

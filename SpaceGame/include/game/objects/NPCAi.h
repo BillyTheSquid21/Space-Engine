@@ -3,10 +3,11 @@
 #define NPC_AI_H
 
 #include <vector>
-#include "game/objects/OverworldScript.hpp"
+#include "game/objects/OverworldScript.h"
 #include "game/objects/ScriptParse.h"
 #include "game/GUI/GUI.h"
 #include "game/utility/Random.hpp"
+#include "game/data/PlayerData.hpp"
 
 class NPC_OverworldScript : public OverworldScript
 {
@@ -124,15 +125,15 @@ private:
 };
 
 //Creates either a heap or stack allocated npc script
-std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player, GameInput* input);
-NPC_OverworldScript CreateNPCOvScript(std::string filePath, FlagArray* flags, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player, GameInput* input);
+std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player);
+NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player);
 
 
 class NPC_RandWalk : public TilePosition
 {
 public:
 	NPC_RandWalk(std::shared_ptr<OvSpr_WalkingSprite> npc) {
-		m_NPC = npc; m_CurrentLevel = &m_NPC->m_CurrentLevel; m_XPos = &m_NPC->m_XPos; m_ZPos = &m_NPC->m_ZPos; m_TileX = &m_NPC->m_Tile.x; m_TileZ = &m_NPC->m_Tile.z;
+		m_NPC = npc; m_CurrentLevel = &m_NPC->m_CurrentLevel; m_XPos = &m_NPC->m_XPos; m_ZPos = &m_NPC->m_ZPos; m_Tile = &m_NPC->m_Tile;
 	if (!s_Random.isSeeded()) { s_Random.seed(0.0f, MAX_SEED); } m_CoolDownTimer = s_Random.next() / 8.0f;};
 
 	void update(double deltaTime);

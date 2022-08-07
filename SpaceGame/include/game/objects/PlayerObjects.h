@@ -57,7 +57,7 @@ private:
 class PlayerEncounter : public UpdateComponent
 {
 public:
-	PlayerEncounter(World::MovementPermissions* perm, World::TileLoc* tile, bool* battle) 
+	PlayerEncounter(World::MovementPermissions* perm, World::Tile* tile, bool* battle) 
 	{ 
 		m_Permission = perm; 
 		m_Tile = tile;
@@ -68,8 +68,8 @@ public:
 	void update(double deltaTime);
 private:
 	World::MovementPermissions* m_Permission = nullptr;
-	World::TileLoc m_LastTile = { 0, 0 };
-	World::TileLoc* m_Tile = nullptr;
+	World::Tile m_LastTile = { 0, 0 };
+	World::Tile* m_Tile = nullptr;
 	bool* m_StartBattle = nullptr;
 	RandomContainer m_Random;
 };

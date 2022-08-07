@@ -164,6 +164,7 @@
     <ClCompile Include="src\game\objects\Bridge.cpp" />
     <ClCompile Include="src\game\objects\LoadingZone.cpp" />
     <ClCompile Include="src\game\objects\NPCAi.cpp" />
+    <ClCompile Include="src\game\objects\OverworldScript.cpp" />
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
     <ClCompile Include="src\game\objects\ScriptParse.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="src\game\states\StateRenderers.cpp" />
     <ClCompile Include="src\game\utility\GameText.cpp" />
     <ClCompile Include="src\game\utility\ImageRead.cpp" />
+    <ClCompile Include="src\game\utility\PathFinding.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
@@ -222,7 +224,7 @@
     <ClInclude Include="include\game\objects\LoadingZone.h" />
     <ClInclude Include="include\game\objects\ModelObject.hpp" />
     <ClInclude Include="include\game\objects\NPCAi.h" />
-    <ClInclude Include="include\game\objects\OverworldScript.hpp" />
+    <ClInclude Include="include\game\objects\OverworldScript.h" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
     <ClInclude Include="include\game\objects\Script.hpp" />
@@ -248,6 +250,7 @@
     <ClInclude Include="include\game\utility\GameText.h" />
     <ClInclude Include="include\game\utility\ImageRead.h" />
     <ClInclude Include="include\game\utility\Input.hpp" />
+    <ClInclude Include="include\game\utility\PathFinding.h" />
     <ClInclude Include="include\game\utility\Random.hpp" />
     <ClInclude Include="include\game\utility\XmlWrapper.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />

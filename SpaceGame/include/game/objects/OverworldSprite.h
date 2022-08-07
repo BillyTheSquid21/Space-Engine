@@ -22,12 +22,12 @@ class TilePosition : public UpdateComponent
 {
 public:
 	TilePosition() = default;
-	TilePosition(World::LevelID* levelPtr, float* x, float* z, unsigned int* xTile, unsigned int* zTile) { m_CurrentLevel = levelPtr; m_XPos = x; m_ZPos = z; m_TileX = xTile; m_TileZ = zTile; };
+	TilePosition(World::LevelID* levelPtr, float* x, float* z, World::Tile* tile) { m_CurrentLevel = levelPtr; m_XPos = x; m_ZPos = z; m_Tile = tile; };
 	void update(double deltaTime);
 
 protected:
 	World::LevelID* m_CurrentLevel = nullptr;
-	unsigned int* m_TileX = nullptr; unsigned int* m_TileZ = nullptr;
+	World::Tile* m_Tile;
 	float* m_XPos = nullptr; float* m_ZPos = nullptr;
 };
 
@@ -89,7 +89,7 @@ private:
 //Overworld sprite data - each adds slightly more data for functionality
 struct OvSpr_SpriteData
 {
-	World::TileLoc tile;
+	World::Tile tile;
 	World::WorldHeight height;
 	World::LevelID levelID;
 	World::TileTexture texture;
@@ -105,7 +105,7 @@ public:
 	float m_YPos = 0.0f;
 	float m_ZPos = 0.0f;
 	Norm_Tex_Quad m_Sprite;
-	World::TileLoc m_Tile = { 0,0 };
+	World::Tile m_Tile = { 0,0 };
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
 	bool m_Busy = false; //allows to turn off behaviour when script running
 };
@@ -157,13 +157,13 @@ namespace Ov_Translation
 		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
 		Run(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
 	}
-	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite);
-	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, unsigned int tileX, unsigned int tileZ, Norm_Tex_Quad* sprite, bool onSlope);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, World::Tile tile, Norm_Tex_Quad* sprite);
+	void CentreOnTile(World::LevelID currentLevel, World::WorldHeight worldLevel, float* x, float* y, float* z, World::Tile tile, Norm_Tex_Quad* sprite, bool onSlope);
 	template<typename T>
 	void CentreOnTileSprite(std::shared_ptr<T> sprite)
 	{
 		std::shared_ptr<OvSpr_DirectionalSprite> spr = std::static_pointer_cast<T>(sprite);
-		CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_Tile.x, spr->m_Tile.z, &spr->m_Sprite);
+		CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_Tile, &spr->m_Sprite);
 	}
 
 	//Slope ascending and descending - balanced for smoothness

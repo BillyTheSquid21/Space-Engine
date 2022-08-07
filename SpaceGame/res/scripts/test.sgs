@@ -7,6 +7,8 @@
 [5] -CLOSE_MSG_BOX
 [6] -PLAYER_LOCK 0
 [7] -FREEZE_OBJECT 0
+[8] -GIVE_ITEM 1 1
+[9] -PLAYER_RUN_TO_TILE 26 28
 
 
 #NO_OP ends script, counter will no longer increment - otherwise will continue to loop

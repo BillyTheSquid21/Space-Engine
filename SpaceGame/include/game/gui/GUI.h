@@ -167,6 +167,8 @@ namespace GameGUI
 		void openNest();
 		void closeNest();
 	private:
+		void style();
+		void endStyle();
 		FontContainer* m_Fonts = nullptr;
 		std::string& m_Text1Ref;
 		std::string& m_Text2Ref;

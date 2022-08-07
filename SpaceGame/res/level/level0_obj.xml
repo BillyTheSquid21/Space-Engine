@@ -1971,7 +1971,7 @@
     <Object name="Level0_npc1">
       <WalkSprite>
         <TileX>13</TileX>
-        <TileZ>5</TileZ>
+        <TileZ>4</TileZ>
         <WLevel>0</WLevel>
         <TX>0</TX>
         <TY>0</TY>

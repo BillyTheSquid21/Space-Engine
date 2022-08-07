@@ -49,7 +49,7 @@ private:
 	Texture m_Icons[12];
 	float m_LastScroll = -1.0f;
 	BagPocket m_LastPocket = BagPocket::Items;
-	int m_LastSelectedItem = 0;
+	int m_LastSelectedItem = -1;
 	bool m_AwaitingIconLoad = false;
 	bool m_IconsLoaded = false;
 

@@ -5,7 +5,7 @@ void OverworldMenu::openNest()
 {
 	if (!m_Show)
 	{
-		m_LastSelectedItem = 0;
+		m_LastSelectedItem = -1;
 		return;
 	}
 	menuStyle();
@@ -23,14 +23,14 @@ void OverworldMenu::openNest()
 	{
 		m_ShowPkmMenu = !m_ShowPkmMenu;
 		m_ShowBag = false;
-		m_LastSelectedItem = 0;
+		m_LastSelectedItem = -1;
 		unloadAllIcons();
 	}
 	if (ImGui::Button("Bag", ImVec2(ImGui::GetContentRegionAvail().x, 75.0f)))
 	{
 		m_ShowBag = !m_ShowBag;
 		m_ShowPkmMenu = false;
-		m_LastSelectedItem = 0;
+		m_LastSelectedItem = -1;
 		unloadAllIcons();
 	}
 	endMenuStyle();
@@ -300,7 +300,7 @@ void OverworldMenu::bagItems()
 			ImGui::SetCursorPosY(y);
 			if (ImGui::Button("Cancel", ImVec2(buttonWidth / 3.0f, 150.0f)))
 			{
-				m_LastSelectedItem = 0;
+				m_LastSelectedItem = -1;
 			}
 		}
 

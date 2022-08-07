@@ -18,7 +18,7 @@ public:
 	//Reserve to make loading in faster
 	void reserveTrees(unsigned int count) { unsigned int size = count * 4; m_Trees.quads.resize(size); }
 	void generateIndices();
-	void addTree(Struct2f levelOrigin, World::TileLoc tile, World::WorldHeight level, TileUV uv1, TileUV uv2);
+	void addTree(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, TileUV uv1, TileUV uv2);
 private:
 	Render::Renderer<NormalTextureVertex>* m_Renderer;
 	QuadArray<Norm_Tex_Quad> m_Trees;

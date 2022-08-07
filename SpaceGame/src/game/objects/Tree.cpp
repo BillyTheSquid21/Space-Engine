@@ -1,6 +1,6 @@
 #include "game/objects/Tree.h"
 
-void TreeRenderComponent::addTree(Struct2f levelOrigin, World::TileLoc tile, World::WorldHeight level, TileUV uv1, TileUV uv2)
+void TreeRenderComponent::addTree(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, TileUV uv1, TileUV uv2)
 {
 	if (m_Trees.quadCount >= m_Trees.quads.size())
 	{

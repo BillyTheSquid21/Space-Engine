@@ -33,7 +33,7 @@ World::Direction World::GetDirection(std::string dir)
     return World::Direction::SOUTH; //default
 }
 
-World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::TileLoc tile)
+World::Tile World::NextTileInInputDirection(World::Direction direct, World::Tile tile)
 {
     switch (direct)
     {
@@ -55,9 +55,31 @@ World::TileLoc World::NextTileInInputDirection(World::Direction direct, World::T
     return tile;
 }
 
-bool World::CheckPlayerInteracting(World::TileLoc player, World::TileLoc script, World::Direction playerFacing)
+World::Direction World::DirectionOfAdjacentTile(World::Tile src, World::Tile dest)
 {
-    World::TileLoc nextTile = NextTileInInputDirection(playerFacing, player);
+    World::Tile result = src - dest;
+    if (result.x == 1)
+    {
+        return World::Direction::WEST;
+    }
+    else if (result.x == -1)
+    {
+        return World::Direction::EAST;
+    }
+    else if (result.z == 1)
+    {
+        return World::Direction::SOUTH;
+    }
+    else if (result.z == -1)
+    {
+        return World::Direction::NORTH;
+    }
+    return World::Direction::DIRECTION_NULL;
+}
+
+bool World::CheckPlayerInteracting(World::Tile player, World::Tile script, World::Direction playerFacing)
+{
+    World::Tile nextTile = NextTileInInputDirection(playerFacing, player);
     if (script.x == nextTile.x && script.z == nextTile.z)
     {
         return true;
@@ -82,11 +104,11 @@ World::Direction World::OppositeDirection(World::Direction dir)
 }
 
 //Retrive in dir
-World::LevelPermission World::RetrievePermission(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height)
+World::LevelPermission World::RetrievePermission(World::LevelID level, World::Direction direction, World::Tile loc, WorldHeight height)
 {
     Level::PermVectorFragment permissions = World::Level::queryPermissions(level, height);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
-    World::TileLoc tileLookup = World::NextTileInInputDirection(direction, loc);
+    World::Tile tileLookup = World::NextTileInInputDirection(direction, loc);
 
     //if outside level bounds, check current tile instead
     bool leavingLevel = false;
@@ -103,7 +125,7 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Di
 }
 
 //Retrive on spot
-World::LevelPermission World::RetrievePermission(World::LevelID level, World::TileLoc loc, WorldHeight height)
+World::LevelPermission World::RetrievePermission(World::LevelID level, World::Tile loc, WorldHeight height)
 {
     Level::PermVectorFragment permissions = World::Level::queryPermissions(level, height);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
@@ -122,7 +144,7 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Ti
     return { permissions.pointer[lookupIndex], &permissions.pointer[lookupIndex], leavingLevel };
 }
 
-void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::TileLoc loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr)
+void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::Tile loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr)
 {
     //Get level data
     World::LevelDimensions dim = World::Level::queryDimensions(level);
@@ -132,14 +154,14 @@ void World::ModifyTilePerm(World::LevelID level, World::Direction direction, Wor
     *lastPermPtr = lastPerm;
 
     //Block tile entering
-    World::TileLoc tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
+    World::Tile tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
     World::MovementPermissions* permission = World::GetTilePermission(level, tileLookup, height);
     lastPerm = *permission;
     lastPermPtr = permission;
     *permission = World::MovementPermissions::SPRITE_BLOCKING;
 }
 
-World::MovementPermissions* World::GetTilePermission(World::LevelID level, World::TileLoc loc, WorldHeight height)
+World::MovementPermissions* World::GetTilePermission(World::LevelID level, World::Tile loc, WorldHeight height)
 {
     World::LevelDimensions dim = World::Level::queryDimensions(level);
     World::Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);

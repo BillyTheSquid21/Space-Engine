@@ -1,7 +1,7 @@
 #include "game/DemoGame.h"
 
-//Initialise static flag array
-FlagArray DemoGame::s_GlobalFlags = {};
+//Initialise data
+PlayerData DemoGame::m_Data;
 
 bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback) {
 	bool success = Game::init(name, kCallback, mCallback, sCallback);
@@ -26,10 +26,10 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 
 	//States
 	std::shared_ptr<Battle> battle(new Battle());
-	battle->init(m_Width, m_Height, &m_Data, &m_Fonts, &s_GlobalFlags, &m_GameInput);
+	battle->init(m_Width, m_Height, &m_Data, &m_Fonts, &m_Data.flags, &m_GameInput);
 	battle->setActive(false);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, &m_Data, World::LevelID::LEVEL_ENTRY, &m_Fonts, &s_GlobalFlags, &m_GameInput);
+	overworld->init(m_Width, m_Height, &m_Data, World::LevelID::LEVEL_ENTRY, &m_Fonts, &m_Data.flags, &m_GameInput);
 	overworld->setActive(false);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);

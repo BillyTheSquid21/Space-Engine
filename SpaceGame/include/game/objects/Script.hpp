@@ -14,8 +14,8 @@ enum class ScriptInstruction : uint32_t
 {
 	//Core
 	NO_OP, SET_FLAG, JMP, JMP_IF, WAIT_SEC, PLAYER_LOCK, PLAYER_FACE, PLAYER_WALK, PLAYER_RUN, 
-	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, GIVE_ITEM, TAKE_ITEM, WAIT_INPUT,
-	WARP_PLAYER, SET_PLAYER_TILE, //TODO - implement
+	OPEN_MSG_BOX, CLOSE_MSG_BOX, MSG, CLEAR_TEXT, GIVE_ITEM, TAKE_ITEM, WAIT_INPUT, WAIT_FOR,
+	WARP_PLAYER, SET_PLAYER_TILE, PLAYER_WALK_TO_TILE, PLAYER_RUN_TO_TILE,
 
 	CORE_MAX, //max to give return term - TODO define each exactly so can guarantee CORE_MAX is bigger
 	
@@ -88,7 +88,13 @@ struct WARP_INFO
 struct TILE_INFO
 {
 	uint32_t x : 16;
-	uint32_t y : 16;
+	uint32_t z : 16;
+};
+
+//Wait info
+struct WAIT_INFO
+{
+	uint32_t millis;
 };
 
 //Bool (general purpose)
@@ -114,6 +120,7 @@ struct InstructionInfo
 		BOOL_INFO boolInfo;
 		WARP_INFO warpInfo;
 		TILE_INFO tileInfo;
+		WAIT_INFO waitInfo;
 		uint32_t clear;
 	};
 };

@@ -246,6 +246,12 @@
     <ClCompile Include="src\game\pokemon\MoveEffects.cpp">
       <Filter>Source Files\Game\Pokemon</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\objects\OverworldScript.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\utility\PathFinding.cpp">
+      <Filter>Source Files\Game\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -473,7 +479,7 @@
     <ClInclude Include="include\game\objects\ScriptTile.hpp">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\objects\OverworldScript.hpp">
+    <ClInclude Include="include\game\objects\OverworldScript.h">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="include\game\objects\ModelObject.hpp">
@@ -529,6 +535,9 @@
     </ClInclude>
     <ClInclude Include="include\game\items\Items.hpp">
       <Filter>Header Files\Game\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\utility\PathFinding.h">
+      <Filter>Header Files\Game\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

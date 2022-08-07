@@ -11,7 +11,7 @@
 //Location
 struct GrassData
 {
-	World::TileLoc loc;
+	World::Tile loc;
 	World::WorldHeight height;
 	World::MovementPermissions lastPermission;
 };
@@ -49,7 +49,7 @@ public:
 	TallGrassRenderComponent(Render::Renderer<NormalTextureVertex>* ren, TileUV uv, QuadArray<Norm_Tex_Quad>* grass) { m_Renderer = ren; m_UV = uv; m_Grass = grass; }
 	
 	void reserveGrass(unsigned int count) { m_Grass->quads.resize(count); }
-	void addGrass(Struct2f levelOrigin, World::TileLoc tile, World::WorldHeight level, World::LevelID levelID , std::vector<GrassData>* grassLoc, std::vector<char>* states);
+	void addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID , std::vector<GrassData>* grassLoc, std::vector<char>* states);
 	void generateIndices();
 
 	void render() { if (m_Grass->quads.size() == 0) { return; } m_Renderer->commit((NormalTextureVertex*)&m_Grass->quads[0], GetFloatCount<NormalTextureVertex>(Shape::QUAD) * m_Grass->quadCount, (unsigned int*)&m_Grass->indices[0], m_Grass->indices.size()); };
