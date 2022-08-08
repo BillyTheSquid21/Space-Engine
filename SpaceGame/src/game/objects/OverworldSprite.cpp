@@ -355,6 +355,205 @@ void Ov_Translation::DescendSlope(float* y, Norm_Tex_Quad* sprite, double deltaT
 	DescendSlope(y, sprite, deltaTime, running);
 }
 
+void Ov_Translation::CheckAscend(OvSpr_WalkingSprite* spr)
+{
+	//Check how to ascend
+	spr->m_MoveVerticalFirst = false;
+	if (spr->m_Ascend)
+	{
+		if (spr->m_CurrentIsSlope && !spr->m_NextIsSlope)
+		{
+			spr->m_MoveVerticalFirst = true;
+		}
+		if (spr->m_CurrentIsSlope && spr->m_NextIsSlope)
+		{
+			spr->m_MoveVerticalFirst = false;
+		}
+	}
+}
+
+void Ov_Translation::WalkMethod(OvSpr_WalkingSprite* spr, double deltaTime)
+{
+	//Walk method
+	if (spr->m_Timer < World::WALK_DURATION && spr->m_Walking)
+	{
+		Ov_Translation::Walk(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
+		if (spr->m_Ascend == 1)
+		{
+			if (spr->m_CurrentIsSlope && spr->m_NextIsSlope)
+			{
+				Ov_Translation::AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, false);
+			}
+			else
+			{
+				Ov_Translation::AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, false, spr->m_Timer, spr->m_MoveVerticalFirst);
+			}
+		}
+		else if (spr->m_Ascend == -1)
+		{
+			if (spr->m_CurrentIsSlope && spr->m_NextIsSlope)
+			{
+				Ov_Translation::DescendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, false);
+			}
+			else
+			{
+				Ov_Translation::DescendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, false, spr->m_Timer, spr->m_MoveVerticalFirst);
+			}
+		}
+	}
+}
+
+void Ov_Translation::RunMethod(OvSpr_RunningSprite* spr, double deltaTime)
+{
+	if (!(spr->m_Timer < World::RUN_DURATION && spr->m_Running))
+	{
+		return;
+	}
+
+	Ov_Translation::Run(&spr->m_Direction, &spr->m_XPos, &spr->m_ZPos, &spr->m_Sprite, deltaTime, &spr->m_Timer);
+	if (spr->m_Ascend == 1)
+	{
+		if (spr->m_CurrentIsSlope && spr->m_NextIsSlope)
+		{
+			Ov_Translation::AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, true);
+		}
+		else
+		{
+			Ov_Translation::AscendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, true, spr->m_Timer, spr->m_MoveVerticalFirst);
+		}
+	}
+	else if (spr->m_Ascend == -1)
+	{
+		if (spr->m_CurrentIsSlope && spr->m_NextIsSlope)
+		{
+			Ov_Translation::DescendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, true);
+		}
+		else
+		{
+			Ov_Translation::DescendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, true, spr->m_Timer, spr->m_MoveVerticalFirst);
+		}
+	}
+}
+
+void Ov_Translation::CycleEnd(OvSpr_WalkingSprite* spr)
+{
+	spr->m_Walking = false;
+	spr->m_Timer = 0.0;
+
+	CentreSprite(spr);
+}
+
+void Ov_Translation::CycleEnd(OvSpr_WalkingSprite* spr, bool anyInputsHeld)
+{
+	if (!anyInputsHeld)
+	{
+		spr->m_Walking = false;
+	}
+	spr->m_Timer = 0.0;
+
+	CentreSprite(spr);
+}
+
+void Ov_Translation::CycleEnd(OvSpr_RunningSprite* spr)
+{
+	spr->m_Walking = false;
+	spr->m_Running = false;
+	spr->m_Timer = 0.0;
+
+	CentreSprite(spr);
+}
+
+void Ov_Translation::CycleEnd(OvSpr_RunningSprite* spr, bool anyInputsHeld)
+{
+	if (!anyInputsHeld)
+	{
+		spr->m_Running = false;
+	}
+	spr->m_Timer = 0.0;
+
+	//Centre on x and y
+	CentreSprite(spr);
+}
+
+void Ov_Translation::CentreSprite(OvSpr_WalkingSprite* spr)
+{
+	//Centre on x and y
+	if (!spr->m_NextIsSlope)
+	{
+		//Is false as 
+		Ov_Translation::CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_Tile, &spr->m_Sprite, false);
+		return;
+	}
+	if (spr->m_NextIsSlope)
+	{
+		//Is true as 
+		Ov_Translation::CentreOnTile(spr->m_CurrentLevel, spr->m_WorldLevel, &spr->m_XPos, &spr->m_YPos, &spr->m_ZPos, spr->m_Tile, &spr->m_Sprite, true);
+		return;
+	}
+}
+
+bool Ov_Translation::SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime)
+{
+	CheckAscend(spr);
+	WalkMethod(spr, deltaTime);
+	if (spr->m_Timer >= World::WALK_DURATION && spr->m_Walking)
+	{
+		CycleEnd(spr);
+		return false;
+	}
+	return true;
+}
+
+bool Ov_Translation::SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime, bool anyInputsHeld)
+{
+	if (!spr->m_Walking)
+	{
+		return false;
+	}
+
+	CheckAscend(spr);
+	WalkMethod(spr, deltaTime);
+	if (spr->m_Timer >= World::WALK_DURATION)
+	{
+		CycleEnd(spr, anyInputsHeld);
+		return false;
+	}
+	return true;
+}
+
+bool Ov_Translation::SpriteRun(OvSpr_RunningSprite* spr, double deltaTime)
+{
+	if (!spr->m_Running)
+	{
+		return false;
+	}
+
+	CheckAscend(spr);
+	RunMethod(spr, deltaTime);
+	if (spr->m_Timer >= World::RUN_DURATION)
+	{
+		CycleEnd(spr);
+		return false;
+	}
+	return true;
+}
+
+bool Ov_Translation::SpriteRun(OvSpr_RunningSprite* spr, double deltaTime, bool anyInputsHeld)
+{
+	if (!spr->m_Running)
+	{
+		return false;
+	}
+
+	CheckAscend(spr);
+	RunMethod(spr, deltaTime);
+	if (spr->m_Timer >= World::RUN_DURATION && spr->m_Running)
+	{
+		CycleEnd(spr, anyInputsHeld);
+		return false;
+	}
+	return true;
+}
 
 std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
 	Render::Renderer<NormalTextureVertex>* sprtRen)

@@ -8,13 +8,12 @@
 
 
 //Player walk uses exact data of TilePosition so inherit for this
-//TODO - refined many methods etc - however is currently very fast and so should be fine
 class PlayerMove : public TilePosition
 {
 public:
 	using TilePosition::TilePosition;
 	void update(double deltaTime);
-	void setInput(GameInput* input) { m_Input = input; };
+	void linkInput(GameInput* input) { m_Input = input; };
 	void setSpriteData(std::shared_ptr<OvSpr_RunningSprite> player) { m_PlayerData = player; }
 private:
 	bool canWalk();
@@ -25,16 +24,8 @@ private:
 
 	//Modify
 	void faceDirection();
-	void cycleEnd(bool anyHeld);
 
 	GameInput* m_Input = nullptr;
-
-	//Ascend stores whether was just going up or down
-	//OnSlope stores whether is on a slope to get order of moving along and up slope right
-	char m_Ascend = 0; //0 if no, 1 if up, -1 if down
-	bool m_CurrentIsSlope = false; //Says whether currently on slope
-	bool m_NextIsSlope = false;
-	bool m_MoveVerticalFirst = false;
 
 	std::shared_ptr<OvSpr_RunningSprite> m_PlayerData;
 

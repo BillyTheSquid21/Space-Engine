@@ -93,6 +93,9 @@ public:
 	//Remove objects
 	void removeObject(unsigned int id)
 	{
+		std::lock_guard<std::shared_mutex> objLock(m_ObjMutex);
+		std::lock_guard<std::shared_mutex> groupLock(m_GroupMutex);
+		std::lock_guard<std::shared_mutex> heapLock(m_HeapMutex);
 		if (id >= m_Objects.size())
 		{
 			EngineLog("Object does not exist: ", id);

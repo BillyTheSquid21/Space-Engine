@@ -174,6 +174,10 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::NPC_AND_PLAYER_WALK;
 	}
+	else if (instr == "-NPC_WALK_TO_TILE")
+	{
+	return ScriptInstruction::NPC_WALK_TO_TILE;
+	}
 	else if (instr == "-SHOW_SPRITE")
 	{
 		return ScriptInstruction::SHOW_SPRITE;
@@ -237,6 +241,9 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 		return;
 	case ScriptInstruction::SHOW_SPRITE:
 		PSS_BOOL(instrArr, element);
+		return;
+	case ScriptInstruction::NPC_WALK_TO_TILE:
+		PSS_SET_TILE(instrArr, element);
 		return;
 	default:
 		element.info.clear = 0;

@@ -21,7 +21,7 @@ enum class ScriptInstruction : uint32_t
 	
 	//NPC aimed
 	FREEZE_OBJECT, FACE_PLAYER, NPC_FACE, NPC_WALK, NPC_RUN, WAIT_INTERACT, 
-	NPC_AND_PLAYER_WALK, SHOW_SPRITE, 
+	NPC_AND_PLAYER_WALK, SHOW_SPRITE, NPC_WALK_TO_TILE,
 };
 
 //NOTE: flags must be written in hex in files (0xFFFFFF syntax)

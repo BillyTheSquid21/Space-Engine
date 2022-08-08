@@ -29,38 +29,39 @@ public:
 			m_Index++;
 			return true;
 		case ScriptInstruction::NPC_WALK:
-			if (!m_NPC->m_Walking)
+			if (SpriteWalk(m_NPC.get(), m_NPC->m_Busy, deltaTime))
 			{
-				m_NPC->m_Walking = true;
-				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel, m_NPC->m_LastPermission, m_NPC->m_LastPermissionPtr);
-			}
-			else if (m_NPC->m_Timer >= World::WALK_DURATION)
-			{
-				m_NPC->m_Walking = false;
-				m_NPC->m_Timer = 0.0;
-				Ov_Translation::CentreOnTileSprite(m_NPC);
 				m_Index++;
-				return true;
 			}
-			Ov_Translation::WalkSprite(m_NPC, deltaTime);
 			return true;
 		case ScriptInstruction::NPC_RUN:
-			if (!m_NPC->m_Running)
+			if (SpriteRun(m_NPC.get(), m_NPC->m_Busy, deltaTime))
 			{
-				m_NPC->m_Running = true;
-				m_NPC->m_Busy = true;
-				World::ModifyTilePerm(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel, m_NPC->m_LastPermission, m_NPC->m_LastPermissionPtr);
-			}
-			else if (m_NPC->m_Timer >= World::RUN_DURATION)
-			{
-				m_NPC->m_Running = false;
-				m_NPC->m_Busy = false;
-				m_NPC->m_Timer = 0.0;
-				Ov_Translation::CentreOnTileSprite(m_NPC);
 				m_Index++;
+			}
+			return true;
+		case ScriptInstruction::NPC_WALK_TO_TILE:
+			if (m_Path.directionsIndex == -1)
+			{
+				m_Path = PathFinding::GetPath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z });
+				m_NPC->m_Direction = m_Path.directions[m_Path.directionsIndex];
+				m_Path.directionsIndex++;
+			}
+			else if (m_Path.directionsIndex >= m_Path.directions.size())
+			{
+				if (SpriteWalk(m_NPC.get(), m_NPC->m_Busy, deltaTime))
+				{
+					PathFinding::Path path; m_Path = path;
+					m_Index++;
+				}
 				return true;
 			}
-			Ov_Translation::RunSprite(m_NPC, deltaTime);
+			else if (SpriteWalk(m_NPC.get(), m_NPC->m_Busy, deltaTime))
+			{
+				PathFinding::ValidatePath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, m_Path);
+				m_NPC->m_Direction = m_Path.directions[m_Path.directionsIndex];
+				m_Path.directionsIndex++;
+			}
 			return true;
 		case ScriptInstruction::FREEZE_OBJECT:
 			m_NPC->m_Busy = (bool)el.info.boolInfo.state;

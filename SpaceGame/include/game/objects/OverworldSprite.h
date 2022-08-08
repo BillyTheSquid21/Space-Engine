@@ -131,6 +131,13 @@ public:
 	//Ensures is returned to currect type at correct index
 	World::MovementPermissions m_LastPermission = World::MovementPermissions::CLEAR;
 	World::MovementPermissions* m_LastPermissionPtr = nullptr;
+
+	//Ascend stores whether was just going up or down
+	//OnSlope stores whether is on a slope to get order of moving along and up slope right
+	char m_Ascend = 0; //0 if no, 1 if up, -1 if down
+	bool m_CurrentIsSlope = false; //Says whether currently on slope
+	bool m_NextIsSlope = false;
+	bool m_MoveVerticalFirst = false;
 };
 
 class OvSpr_RunningSprite : public OvSpr_WalkingSprite
@@ -183,6 +190,20 @@ namespace Ov_Translation
 		std::shared_ptr<OvSpr_RunningSprite> spr = std::static_pointer_cast<T>(sprite);
 		DescendSlope(&spr->m_YPos, &spr->m_Sprite, deltaTime, spr->m_Running);
 	}
+
+	static void CheckAscend(OvSpr_WalkingSprite* spr);
+	static void WalkMethod(OvSpr_WalkingSprite* spr, double deltaTime);
+	static void RunMethod(OvSpr_RunningSprite* spr, double deltaTime);
+	static void CycleEnd(OvSpr_WalkingSprite* spr);
+	static void CycleEnd(OvSpr_WalkingSprite* spr, bool anyInputsHeld);
+	static void CycleEnd(OvSpr_RunningSprite* spr);
+	static void CycleEnd(OvSpr_RunningSprite* spr, bool anyInputsHeld);
+	static void CentreSprite(OvSpr_WalkingSprite* spr);
+
+	bool SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime);
+	bool SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime, bool anyInputsHeld);
+	bool SpriteRun(OvSpr_RunningSprite* spr, double deltaTime);
+	bool SpriteRun(OvSpr_RunningSprite* spr, double deltaTime, bool anyInputsHeld);
 }
 
 //Creation methods 

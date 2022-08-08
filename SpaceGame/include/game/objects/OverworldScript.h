@@ -100,13 +100,13 @@ public:
 			m_Index++;
 			return true;
 		case ScriptInstruction::PLAYER_WALK:
-			if (WalkPlayer(deltaTime))
+			if (SpriteWalk(m_Player.get(), m_Player->m_Controlled, deltaTime))
 			{
 				m_Index++;
 			}
 			return true;
 		case ScriptInstruction::PLAYER_RUN:
-			if (RunPlayer(deltaTime))
+			if (SpriteRun(m_Player.get(), m_Player->m_Controlled, deltaTime))
 			{
 				m_Index++;
 			}
@@ -120,14 +120,14 @@ public:
 			}
 			else if (m_Path.directionsIndex >= m_Path.directions.size())
 			{
-				if (WalkPlayer(deltaTime))
+				if (SpriteWalk(m_Player.get(), m_Player->m_Controlled, deltaTime))
 				{
 					PathFinding::Path path; m_Path = path;
 					m_Index++;
 				}
 				return true;
 			}
-			else if (WalkPlayer(deltaTime))
+			else if (SpriteWalk(m_Player.get(), m_Player->m_Controlled, deltaTime))
 			{
 				PathFinding::ValidatePath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, m_Path);
 				m_Player->m_Direction = m_Path.directions[m_Path.directionsIndex];
@@ -143,14 +143,14 @@ public:
 			}
 			else if (m_Path.directionsIndex >= m_Path.directions.size())
 			{
-				if (RunPlayer(deltaTime))
+				if (SpriteRun(m_Player.get(), m_Player->m_Controlled, deltaTime))
 				{
 					PathFinding::Path path; m_Path = path;
 					m_Index++;
 				}
 				return true;
 			}
-			else if (RunPlayer(deltaTime))
+			else if (SpriteRun(m_Player.get(), m_Player->m_Controlled, deltaTime))
 			{
 				PathFinding::ValidatePath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, m_Path);
 				m_Player->m_Direction = m_Path.directions[m_Path.directionsIndex];
@@ -270,43 +270,35 @@ public:
 public:
 
 	//Private helper functions
-	bool WalkPlayer(double deltaTime)
+	bool SpriteWalk(OvSpr_WalkingSprite* subject, bool& setBusy, double deltaTime)
 	{
-		if (!m_Player->m_Walking)
+		if (!subject->m_Walking)
 		{
-			m_Player->m_Walking = true;
-			m_Player->m_Controlled = true;
-			World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel, m_Player->m_LastPermission, m_Player->m_LastPermissionPtr);
+			subject->m_Walking = true;
+			setBusy = true;
+			World::ModifyTilePerm(subject->m_CurrentLevel, subject->m_Direction, subject->m_Tile, subject->m_WorldLevel, subject->m_LastPermission, subject->m_LastPermissionPtr);
 		}
-		else if (m_Player->m_Timer >= World::WALK_DURATION)
+		else if (!Ov_Translation::SpriteWalk(subject, deltaTime))
 		{
-			m_Player->m_Walking = false;
-			m_Player->m_Controlled = false;
-			m_Player->m_Timer = 0.0;
-			Ov_Translation::CentreOnTileSprite(m_Player);
+			setBusy = false;
 			return true;
 		}
-		Ov_Translation::WalkSprite(m_Player, deltaTime);
 		return false;
 	}
 
-	bool RunPlayer(double deltaTime)
+	bool SpriteRun(OvSpr_RunningSprite* subject, bool& setBusy, double deltaTime)
 	{
-		if (!m_Player->m_Running)
+		if (!subject->m_Running)
 		{
-			m_Player->m_Running = true;
-			m_Player->m_Controlled = true;
-			World::ModifyTilePerm(m_Player->m_CurrentLevel, m_Player->m_Direction, m_Player->m_Tile, m_Player->m_WorldLevel, m_Player->m_LastPermission, m_Player->m_LastPermissionPtr);
+			subject->m_Running = true;
+			setBusy = true;
+			World::ModifyTilePerm(subject->m_CurrentLevel, subject->m_Direction, subject->m_Tile, subject->m_WorldLevel, subject->m_LastPermission, subject->m_LastPermissionPtr);
 		}
-		else if (m_Player->m_Timer >= World::RUN_DURATION)
+		else if (!Ov_Translation::SpriteRun(subject, deltaTime))
 		{
-			m_Player->m_Running = false;
-			m_Player->m_Controlled = false;
-			m_Player->m_Timer = 0.0;
-			Ov_Translation::CentreOnTileSprite(m_Player);
+			setBusy = false;
 			return true;
 		}
-		Ov_Translation::RunSprite(m_Player, deltaTime);
 		return false;
 	}
 

@@ -165,6 +165,25 @@ World::MovementPermissions* World::GetTilePermission(World::LevelID level, World
 {
     World::LevelDimensions dim = World::Level::queryDimensions(level);
     World::Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);
+    
+    if (loc.x < 0)
+    {
+        loc.x = 0;
+    }
+    else if (loc.x >= dim.levelW)
+    {
+        loc.x = dim.levelW - 1;
+    }
+
+    if (loc.z < 0)
+    {
+        loc.z = 0;
+    }
+    else if (loc.z >= dim.levelW)
+    {
+        loc.z = dim.levelH - 1;
+    }
+
     unsigned int index = loc.x * dim.levelH + loc.z;
     return &perm.pointer[index];
 }

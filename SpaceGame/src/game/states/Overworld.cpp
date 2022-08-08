@@ -159,7 +159,7 @@ void Overworld::loadObjectData()
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
     m_ObjManager.pushUpdateGroup(animGroup, "SpriteAnim");
-    m_ObjManager.pushUpdateGroup(runGroup, "RunMap");
+    m_ObjManager.pushUpdateGroup(runGroup, "UpdateRunning");
     m_ObjManager.pushUpdateGroup(faceGroup, "UpdateFacing");
     m_ObjManager.pushUpdateGroup(walkGroup, "UpdateWalking");
     m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
@@ -178,7 +178,7 @@ void Overworld::loadObjectData()
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&m_PlayerPtr->m_XPos, &m_PlayerPtr->m_YPos, &m_PlayerPtr->m_ZPos, &m_Renderer.camera));
     std::shared_ptr<PlayerEncounter> encounter(new PlayerEncounter(&m_PlayerPtr->m_LastPermission, &m_PlayerPtr->m_Tile, &m_StartBattle));
     std::shared_ptr<UpdateGlobalLevel> globLev(new UpdateGlobalLevel(&m_CurrentLevel, &m_PlayerPtr->m_CurrentLevel));
-    walk->setInput(m_Input);
+    walk->linkInput(m_Input);
     walk->setSpriteData(m_PlayerPtr);
     m_LocationX = &m_PlayerPtr->m_Tile.x;
     m_LocationZ = &m_PlayerPtr->m_Tile.z;

@@ -2,7 +2,7 @@
 
 static enum class ObjectType
 {
-	Trees, Grass, DirectionalSprite, WalkingSprite, Bridge, LoadingZone, WarpTile, ScriptTile, Model, NULL_TYPE
+	Trees, Grass, DirectionalSprite, WalkingSprite, RunningSprite, Bridge, LoadingZone, WarpTile, ScriptTile, Model, NULL_TYPE
 };
 
 static ObjectType GetType(std::string string)
@@ -14,6 +14,10 @@ static ObjectType GetType(std::string string)
 	else if (string == "WalkSprite")
 	{
 		return ObjectType::WalkingSprite;
+	}
+	else if (string == "RunSprite")
+	{
+		return ObjectType::RunningSprite;
 	}
 	else if (string == "Tree")
 	{
@@ -104,6 +108,9 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 
 		switch (identifier)
 		{
+		case ObjectType::RunningSprite:
+			WorldParse::LoadRunningSprite(name, identifyingNode, manager, ren, data, textBuff, levelID, input);
+			break;
 		case ObjectType::DirectionalSprite:
 			WorldParse::LoadDirectionalSprite(name, identifyingNode, manager, ren, data, textBuff, levelID, input);
 			break;
@@ -389,6 +396,32 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 	std::shared_ptr<OvSpr_WalkingSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->spriteRenderer);
 	
+	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
+
+	//Optionals
+	WorldParse::WalkingSpriteOptionals(node, manager, sprite);
+	WorldParse::OverworldScriptOptionals(node, manager, pdata, textBuff, sprite, input);
+
+	//Push object
+	std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
+	manager->pushGameObject(sprite, name);
+}
+
+void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
+{
+	using rapidxml::xml_node;
+	//Check for nodes that MUST exist - those that make up the spritedata struct
+	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
+
+	//Permissions - done earlier to get before influence
+	World::MovementPermissions* permission = World::GetTilePermission(data.levelID, data.tile, data.height);
+	World::MovementPermissions permissionOriginal = *permission;
+
+	//Build base sprite
+	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
+	std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+		manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationRunning>(manager->queryGroupID("UpdateRunning")).get(), &ren->spriteRenderer);
+
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
 
 	//Optionals
@@ -749,15 +782,12 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 	}
 	
 	//Purge all level tagged objects
+	std::vector<ObjectManager::GameObjectContainer>& objs = m_ObjManager->getObjects();
+	for (int i = 0; i < objs.size(); i++)
 	{
-		std::lock_guard<std::shared_mutex> objLock(m_ObjManager->getObjectMutex());
-		std::vector<ObjectManager::GameObjectContainer>& objs = m_ObjManager->getObjects();
-		for (int i = 0; i < objs.size(); i++)
+		if (objs[i].name.find("Level" + std::to_string((int)id)) != std::string::npos)
 		{
-			if (objs[i].name.find("Level" + std::to_string((int)id)) != std::string::npos)
-			{
-				m_ObjManager->removeObject(i);
-			}
+			m_ObjManager->removeObject(i);
 		}
 	}
 

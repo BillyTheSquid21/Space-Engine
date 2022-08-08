@@ -1969,7 +1969,7 @@
   </Trees>
   <Objects>
     <Object name="Level0_npc1">
-      <WalkSprite>
+      <RunSprite>
         <TileX>13</TileX>
         <TileZ>4</TileZ>
         <WLevel>0</WLevel>
@@ -1978,7 +1978,7 @@
         <Dir>7</Dir>
         <RandWalk>1</RandWalk>
         <NPCScript>test.sgs</NPCScript>
-      </WalkSprite>
+      </RunSprite>
     </Object>
     <Object name="Level0_house1">
       <Model>
