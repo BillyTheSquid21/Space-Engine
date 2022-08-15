@@ -1968,18 +1968,6 @@
     </Tree>
   </Trees>
   <Objects>
-    <Object name="Level0_npc1">
-      <RunSprite>
-        <TileX>18</TileX>
-        <TileZ>17</TileZ>
-        <WLevel>0</WLevel>
-        <TX>0</TX>
-        <TY>0</TY>
-        <Dir>7</Dir>
-        <RandWalk>1</RandWalk>
-        <NPCScript>test.sgs</NPCScript>
-      </RunSprite>
-    </Object>
     <Object name="Level0_house1">
       <Model>
         <OffsetX>416</OffsetX>

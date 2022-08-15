@@ -24,10 +24,10 @@ namespace World
 	//Level data
 	enum class LevelID : unsigned int
 	{
-		LEVEL_ENTRY, LEVEL_TEST,
+		LEVEL_ENTRY = 0, LEVEL_TEST = 1,
 
 		//Null entry - keep at end for size purposes
-		LEVEL_NULL
+		LEVEL_NULL = 10000
 	};
 
 	//When level data is written, use int value the respective enum value evaluates to

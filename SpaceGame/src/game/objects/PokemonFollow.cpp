@@ -130,6 +130,7 @@ void PokemonFollow::update(double deltaTime)
 		}
 	}
 
+	//Cooldown for selections
 	if (m_Cooldown != 0.0)
 	{
 		m_Cooldown -= deltaTime;
@@ -152,6 +153,15 @@ void PokemonFollow::update(double deltaTime)
 		World::Direction dir = World::DirectionOfAdjacentTile(*m_Tile, m_LastDestTile);
 		m_Pkm->m_Direction = dir;
 
+		//Check where new tile is relatively - if suddenly changes just move in dir of player
+		World::Tile tileDiff = m_Player->m_Tile - m_LastDestTile;
+		if (tileDiff.x > 1 || tileDiff.x < -1 || tileDiff.z > 1 || tileDiff.z < -1)
+		{
+			m_Pkm->m_Direction = m_Player->m_Direction;
+			m_Pkm->m_CurrentLevel = m_Player->m_CurrentLevel;
+			m_Pointer->m_CurrentLevel = m_Player->m_CurrentLevel;
+		}
+
 		//Create script to walk there
 		Script script(new ScriptElement[1]);
 		script[0].instruction = ScriptInstruction::PLAYER_WALK;
@@ -164,6 +174,15 @@ void PokemonFollow::update(double deltaTime)
 		//Get direction to new tile
 		World::Direction dir = World::DirectionOfAdjacentTile(*m_Tile, m_LastDestTile);
 		m_Pkm->m_Direction = dir;
+
+		//Check where new tile is relatively - if suddenly changes just move in dir of player
+		World::Tile tileDiff = m_Player->m_Tile - m_LastDestTile;
+		if (tileDiff.x > 1 || tileDiff.x < -1 || tileDiff.z > 1 || tileDiff.z < -1)
+		{
+			m_Pkm->m_Direction = m_Player->m_Direction;
+			m_Pkm->m_CurrentLevel = m_Player->m_CurrentLevel;
+			m_Pointer->m_CurrentLevel = m_Player->m_CurrentLevel;
+		}
 
 		//Create script to walk there
 		Script script(new ScriptElement[1]);

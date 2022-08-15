@@ -36,7 +36,7 @@ private:
 	void genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle);
 
 	Render::Renderer<NormalTextureVertex>* m_Renderer = nullptr;
-	Norm_Tex_Quad* m_Quads;
+	std::vector<Norm_Tex_Quad> m_Quads;
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
 
 	//Indices buffer for plane

@@ -124,6 +124,13 @@ class OvSpr_WalkingSprite : public OvSpr_DirectionalSprite
 {
 public:
 	using OvSpr_DirectionalSprite::OvSpr_DirectionalSprite;
+
+	//Ensure pointers are nulled
+	void messageAll(uint32_t message) {
+		messageAllRender(message); messageAllUpdate(message);
+		if (message == (uint32_t)Message::KILL) { m_Dead = true; m_LastPermissionPtr = nullptr; }
+	};
+
 	bool m_Walking = false;
 	double m_Timer = 0.0;
 

@@ -104,7 +104,7 @@ public:
 	void setID(uint16_t id) { m_ID = id; }
 	uint16_t id() const { return m_ID; }
 
-private:
+protected:
 	uint16_t m_ID = 0;
 	bool m_Active = true;
 	bool m_Dead = false;
@@ -358,25 +358,25 @@ public:
 	unsigned int id() const { return m_ID; }
 
 	//Messaging functions
-	void messageUpdateAt(uint32_t message, unsigned int id)
+	virtual void messageUpdateAt(uint32_t message, unsigned int id)
 	{
 		if (!m_UpdateComps[id]) { ObjectErrorLog(ObjectError::VOID_POINTER, id); return; }
 		m_UpdateComps[id]->recieve(message);
 	};
 	
-	void messageRenderAt(uint32_t message, unsigned int id)
+	virtual void messageRenderAt(uint32_t message, unsigned int id)
 	{
 		if (!m_RenderComps[id]) { ObjectErrorLog(ObjectError::VOID_POINTER, id); return; }
 		m_RenderComps[id]->recieve(message);
 	};
 	
-	void messageAllUpdate(uint32_t message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
-	void messageAllRender(uint32_t message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
-	void messageAllExceptUpdate(uint32_t message, unsigned int id) { for (int i = 0; i < m_UpdateComps.size(); i++) { if (id != i) { messageUpdateAt(message, i); } } };
-	void messageAllExceptRender(uint32_t message, unsigned int id) { for (int i = 0; i < m_RenderComps.size(); i++) { if (id != i) { messageRenderAt(message, i); } } };
+	virtual void messageAllUpdate(uint32_t message) { for (int i = 0; i < m_UpdateComps.size(); i++) { messageUpdateAt(message, i); } };
+	virtual void messageAllRender(uint32_t message) { for (int i = 0; i < m_RenderComps.size(); i++) { messageRenderAt(message, i); } };
+	virtual void messageAllExceptUpdate(uint32_t message, unsigned int id) { for (int i = 0; i < m_UpdateComps.size(); i++) { if (id != i) { messageUpdateAt(message, i); } } };
+	virtual void messageAllExceptRender(uint32_t message, unsigned int id) { for (int i = 0; i < m_RenderComps.size(); i++) { if (id != i) { messageRenderAt(message, i); } } };
 
 	//If says kill, kill all components then mark dead
-	void messageAll(uint32_t message) { messageAllRender(message); messageAllUpdate(message);
+	virtual void messageAll(uint32_t message) { messageAllRender(message); messageAllUpdate(message);
 	if (message == (uint32_t)Message::KILL) { m_Dead = true; }};
 
 	//Checks all are dead

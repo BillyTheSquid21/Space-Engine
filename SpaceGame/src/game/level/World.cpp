@@ -146,6 +146,12 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Ti
 
 void World::ModifyTilePerm(World::LevelID level, World::Direction direction, World::Tile loc, WorldHeight height, MovementPermissions& lastPerm, MovementPermissions*& lastPermPtr)
 {
+    //Ensure data is not nullptr
+    if (!lastPermPtr)
+    {
+        return;
+    }
+
     //Get level data
     World::LevelDimensions dim = World::Level::queryDimensions(level);
     Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);

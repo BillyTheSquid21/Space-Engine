@@ -7,6 +7,7 @@ Plane::~Plane() {
 void Plane::genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle) {
 	//If required, purge existing data
 	purgeData();
+	m_SafeToDraw = false;
 
 	//Define from bottom left so bump up one
 	yPos += tileSize;
@@ -18,7 +19,7 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 	//Find total number of quads
 	unsigned int quadCount = m_XCount * m_YCount;
 
-	m_Quads = new Norm_Tex_Quad[quadCount];
+	m_Quads.resize(quadCount);
 	
 	for (int y = 0; y < m_YCount; y++) {
 		for (int x = 0; x < m_XCount; x++) {
@@ -27,7 +28,7 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 			Norm_Tex_Quad quad = CreateNormalTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.0f, 0.0f);
 			AxialRotate<NormalTextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			unsigned int quadIndex = (x * m_YCount) + y;
-			m_Quads[quadIndex] = quad;
+			m_Quads.at(quadIndex) = quad;
 		}
 	}
 	//Buffer indices to minimise counts of data sent to render queue
@@ -99,6 +100,7 @@ void Plane::generatePlaneNormals()
 		glm::vec3 tri2Edge1 = m_Quads[i].at(2).position - m_Quads[i].at(0).position;
 		glm::vec3 tri2Edge2 = m_Quads[i].at(0).position - m_Quads[i].at(3).position;
 		glm::vec3 tri2Norm = glm::normalize(glm::cross(tri2Edge1, tri2Edge2));
+		
 		//Set norms 2
 		m_Quads[i].at(0).normals += tri2Norm;
 		m_Quads[i].at(2).normals += tri2Norm;
@@ -114,16 +116,17 @@ void Plane::generatePlaneNormals()
 
 void Plane::render() 
 {	
-	if (!m_Quads || !m_SafeToDraw)
+	if (m_Quads.size() <= 0 || !m_SafeToDraw)
 	{
 		return;
 	}
-	m_Renderer->commit((NormalTextureVertex*)&m_Quads[0], GetFloatCount<NormalTextureVertex>(Shape::QUAD) * (m_XCount * m_YCount), (unsigned int*)&m_Indices[0], m_Indices.size());
+	m_Renderer->commit((NormalTextureVertex*)&m_Quads[0], GetFloatCount<NormalTextureVertex>(Shape::QUAD) * m_Quads.size(), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
 Norm_Tex_Quad* Plane::accessQuad(unsigned int x, unsigned int y) {
-	if (&m_Quads[x * m_YCount + y]) {
-		return &m_Quads[x * m_YCount + y];
+	int index = x * m_YCount + y;
+	if (index < m_Quads.size()) {
+		return &m_Quads.at(index);
 	}
 	return &m_Quads[0];
 }
@@ -135,9 +138,9 @@ void Plane::texturePlane(float u, float v, float width, float height) {
 }
 
 void Plane::purgeData() {
-	if (m_Quads != NULL) {
-		delete[] m_Quads;
-		m_Quads = nullptr;
+	if (m_Quads.size() > 0) {
+		m_Quads.clear();
+		m_Indices.clear();
 		m_SafeToDraw = false;
 	}
 }
