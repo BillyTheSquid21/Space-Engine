@@ -43,7 +43,12 @@ public:
 		case ScriptInstruction::NPC_WALK_TO_TILE:
 			if (m_Path.directionsIndex == -1)
 			{
-				m_Path = PathFinding::GetPath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z });
+				m_Path = PathFinding::GetPath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h);
+				if (m_Path.directionsIndex == -2)
+				{
+					m_Index++;
+					return true;
+				}
 				m_NPC->m_Direction = m_Path.directions[m_Path.directionsIndex];
 				m_Path.directionsIndex++;
 			}
@@ -58,7 +63,35 @@ public:
 			}
 			else if (SpriteWalk(m_NPC.get(), m_NPC->m_Busy, deltaTime))
 			{
-				PathFinding::ValidatePath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, m_Path);
+				PathFinding::ValidatePath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h, m_Path);
+				m_NPC->m_Direction = m_Path.directions[m_Path.directionsIndex];
+				m_Path.directionsIndex++;
+			}
+			return true;
+		case ScriptInstruction::NPC_RUN_TO_TILE:
+			if (m_Path.directionsIndex == -1)
+			{
+				m_Path = PathFinding::GetPath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h);
+				if (m_Path.directionsIndex == -2)
+				{
+					m_Index++;
+					return true;
+				}
+				m_NPC->m_Direction = m_Path.directions[m_Path.directionsIndex];
+				m_Path.directionsIndex++;
+			}
+			else if (m_Path.directionsIndex >= m_Path.directions.size())
+			{
+				if (SpriteRun(m_NPC.get(), m_NPC->m_Busy, deltaTime))
+				{
+					PathFinding::Path path; m_Path = path;
+					m_Index++;
+				}
+				return true;
+			}
+			else if (SpriteRun(m_NPC.get(), m_NPC->m_Busy, deltaTime))
+			{
+				PathFinding::ValidatePath(m_NPC.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h, m_Path);
 				m_NPC->m_Direction = m_Path.directions[m_Path.directionsIndex];
 				m_Path.directionsIndex++;
 			}
@@ -69,6 +102,10 @@ public:
 			return true;
 		case ScriptInstruction::FACE_PLAYER:
 			m_NPC->m_Direction = World::OppositeDirection(m_Player->m_Direction);
+			m_Index++;
+			return true;
+		case ScriptInstruction::FACE_WITH_PLAYER:
+			m_NPC->m_Direction = m_Player->m_Direction;
 			m_Index++;
 			return true;
 		case ScriptInstruction::WAIT_INTERACT:
@@ -146,7 +183,6 @@ private:
 	float m_CoolDownTimer = 0.0f;
 
 	//Moving helpers
-	bool canWalk();
 	void startWalk();
 	void cycleEnd();
 	void randomWalk();

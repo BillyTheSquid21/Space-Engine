@@ -33,7 +33,7 @@ World::Direction World::GetDirection(std::string dir)
     return World::Direction::SOUTH; //default
 }
 
-World::Tile World::NextTileInInputDirection(World::Direction direct, World::Tile tile)
+World::Tile World::NextTileInDirection(World::Direction direct, World::Tile tile)
 {
     switch (direct)
     {
@@ -58,19 +58,19 @@ World::Tile World::NextTileInInputDirection(World::Direction direct, World::Tile
 World::Direction World::DirectionOfAdjacentTile(World::Tile src, World::Tile dest)
 {
     World::Tile result = src - dest;
-    if (result.x == 1)
+    if (result.x >= 1)
     {
         return World::Direction::WEST;
     }
-    else if (result.x == -1)
+    else if (result.x <= -1)
     {
         return World::Direction::EAST;
     }
-    else if (result.z == 1)
+    else if (result.z >= 1)
     {
         return World::Direction::SOUTH;
     }
-    else if (result.z == -1)
+    else if (result.z <= -1)
     {
         return World::Direction::NORTH;
     }
@@ -79,7 +79,7 @@ World::Direction World::DirectionOfAdjacentTile(World::Tile src, World::Tile des
 
 bool World::CheckPlayerInteracting(World::Tile player, World::Tile script, World::Direction playerFacing)
 {
-    World::Tile nextTile = NextTileInInputDirection(playerFacing, player);
+    World::Tile nextTile = NextTileInDirection(playerFacing, player);
     if (script.x == nextTile.x && script.z == nextTile.z)
     {
         return true;
@@ -108,7 +108,7 @@ World::LevelPermission World::RetrievePermission(World::LevelID level, World::Di
 {
     Level::PermVectorFragment permissions = World::Level::queryPermissions(level, height);
     World::LevelDimensions dimensions = World::Level::queryDimensions(level);
-    World::Tile tileLookup = World::NextTileInInputDirection(direction, loc);
+    World::Tile tileLookup = World::NextTileInDirection(direction, loc);
 
     //if outside level bounds, check current tile instead
     bool leavingLevel = false;
@@ -154,7 +154,7 @@ void World::ModifyTilePerm(World::LevelID level, World::Direction direction, Wor
     *lastPermPtr = lastPerm;
 
     //Block tile entering
-    World::Tile tileLookup = World::NextTileInInputDirection(direction, { loc.x, loc.z });
+    World::Tile tileLookup = World::NextTileInDirection(direction, { loc.x, loc.z });
     World::MovementPermissions* permission = World::GetTilePermission(level, tileLookup, height);
     lastPerm = *permission;
     lastPermPtr = permission;

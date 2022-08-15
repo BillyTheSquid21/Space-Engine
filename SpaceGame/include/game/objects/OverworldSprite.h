@@ -27,7 +27,7 @@ public:
 
 protected:
 	World::LevelID* m_CurrentLevel = nullptr;
-	World::Tile* m_Tile;
+	World::Tile* m_Tile = nullptr;
 	float* m_XPos = nullptr; float* m_ZPos = nullptr;
 };
 
@@ -98,12 +98,13 @@ struct OvSpr_SpriteData
 class OvSpr_Sprite : public GameObject
 {
 public:
-	OvSpr_Sprite(OvSpr_SpriteData data);
+	OvSpr_Sprite(OvSpr_SpriteData data, bool block);
 	//If sprite is static, simply set here, otherwise an update method is needed
 	void setSprite(TileUV data);
 	float m_XPos = 0.0f;
 	float m_YPos = 0.0f;
 	float m_ZPos = 0.0f;
+	World::WorldHeight m_WorldLevel = World::WorldHeight::F0;
 	Norm_Tex_Quad m_Sprite;
 	World::Tile m_Tile = { 0,0 };
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_NULL;
@@ -114,7 +115,6 @@ class OvSpr_DirectionalSprite : public OvSpr_Sprite
 {
 public:
 	using OvSpr_Sprite::OvSpr_Sprite;
-	World::WorldHeight m_WorldLevel = World::WorldHeight::F0;
 	World::Direction m_Direction = World::Direction::SOUTH;
 	unsigned int m_AnimationOffsetY = 0;
 	unsigned int m_AnimationOffsetX = 0;
@@ -150,6 +150,7 @@ public:
 
 namespace Ov_Translation
 {
+	//TODO - remove old walksprite type methods
 	void Walk(World::Direction* direction, float* x, float* z, Norm_Tex_Quad* sprite, double deltaTime, double* walkTimer);
 	template<typename T>
 	void WalkSprite(std::shared_ptr<T> sprite, double deltaTime)
@@ -195,15 +196,14 @@ namespace Ov_Translation
 	static void WalkMethod(OvSpr_WalkingSprite* spr, double deltaTime);
 	static void RunMethod(OvSpr_RunningSprite* spr, double deltaTime);
 	static void CycleEnd(OvSpr_WalkingSprite* spr);
-	static void CycleEnd(OvSpr_WalkingSprite* spr, bool anyInputsHeld);
 	static void CycleEnd(OvSpr_RunningSprite* spr);
-	static void CycleEnd(OvSpr_RunningSprite* spr, bool anyInputsHeld);
 	static void CentreSprite(OvSpr_WalkingSprite* spr);
 
 	bool SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime);
-	bool SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime, bool anyInputsHeld);
 	bool SpriteRun(OvSpr_RunningSprite* spr, double deltaTime);
-	bool SpriteRun(OvSpr_RunningSprite* spr, double deltaTime, bool anyInputsHeld);
+
+	bool CheckCanWalkNPC(OvSpr_WalkingSprite* spr);
+	bool CheckCanWalk(OvSpr_WalkingSprite* spr);
 }
 
 //Creation methods 
@@ -211,13 +211,15 @@ namespace Ov_ObjCreation
 {
 	//Allows creating sprite types, and modifies references to common component groups
 	std::shared_ptr<OvSpr_Sprite> BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		Render::Renderer<NormalTextureVertex>* sprtRen);
+		Render::Renderer<NormalTextureVertex>* sprtRen, bool block);
 	std::shared_ptr<OvSpr_DirectionalSprite> BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
 		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<NormalTextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_WalkingSprite> BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
 		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<NormalTextureVertex>* sprtRen);
 	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
 		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<NormalTextureVertex>* sprtRen);
+	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp,
+		UpdateComponentGroup<SpriteMap>* sprMap, Render::Renderer<NormalTextureVertex>* sprtRen);
 }
 
 #endif

@@ -16,7 +16,7 @@ struct PlayerData
 	//Player data
 	std::string playerName;
 	unsigned int playerNumber = 0;
-	World::Tile tile = { 8, 3 };
+	World::Tile tile = { 12, 3 };
 	World::LevelID id = World::LevelID::LEVEL_ENTRY;
 	Party playerParty;
 	PlayerBag bag;

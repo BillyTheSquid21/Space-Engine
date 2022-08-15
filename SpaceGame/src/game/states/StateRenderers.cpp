@@ -15,6 +15,11 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	spriteRenderer.setDrawingMode(GL_TRIANGLES);
 	spriteRenderer.generate((float)width, (float)height, &camera);
 
+	//Pkm Renderer
+	pokemonRenderer.setLayout<float>(3, 2, 3);
+	pokemonRenderer.setDrawingMode(GL_TRIANGLES);
+	pokemonRenderer.generate((float)width, (float)height, &camera);
+
 	//Model Renderer
 	modelRenderer.setLayout<float>(3, 2, 3);
 	modelRenderer.setDrawingMode(GL_TRIANGLES);
@@ -61,6 +66,13 @@ void OverworldRenderer::loadRendererData()
 	spriteTexture.bind();
 	spriteTexture.clearBuffer();
 
+	//Load companion pkm texture
+	pokemonTexture.loadTexture("res/textures/pokemon/overworld/bulbasaur.png");
+	pokemonTexture.generateTexture(TEXTURE_SLOT);
+	pokemonTexture.bind();
+	pokemonTexture.clearBuffer();
+	pokemonTileMap = TileMap::TileMap(pokemonTexture.width(), pokemonTexture.height(), (float)pokemonTexture.width() / 2.0f, (float)pokemonTexture.height() / 4.0f);
+
 	//Load transitions
 	battleTransition = Transition();
 	battleTransition.init((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
@@ -79,13 +91,14 @@ void OverworldRenderer::purgeData()
 { 
 	worldTexture.deleteTexture();
 	spriteTexture.deleteTexture();
-	debugTexture.deleteTexture();
+	pokemonTexture.deleteTexture();
 	modelAtlas.clearAtlasBuffers();
 }
 
 void OverworldRenderer::bufferRenderData()
 {
 	spriteRenderer.bufferVideoData();
+	pokemonRenderer.bufferVideoData();
 	modelRenderer.bufferVideoData();
 	worldRenderer.bufferVideoData();
 	grassRenderer.bufferVideoData();
@@ -147,6 +160,8 @@ void OverworldRenderer::draw()
 	shadowMap.startCapture();
 	worldTexture.bind();
 	worldRenderer.drawPrimitives(sceneShadows);
+	pokemonTexture.bind();
+	pokemonRenderer.drawPrimitives(sceneShadows);
 	spriteTexture.bind();
 	spriteRenderer.drawPrimitives(sceneShadows);
 	modelAtlas.bind();
@@ -186,6 +201,13 @@ void OverworldRenderer::draw()
 	sceneShader.setUniform("u_InvTranspModel", &SpriteInvTranspModel);
 	sceneShader.setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
 	spriteRenderer.drawPrimitives(sceneShader);
+
+	//Pokemon Sprite
+	pokemonTexture.bind();
+	glm::mat4 PkmInvTranspModel = glm::mat4(glm::transpose(glm::inverse(pokemonRenderer.m_RendererModelMatrix)));
+	sceneShader.setUniform("u_InvTranspModel", &PkmInvTranspModel);
+	sceneShader.setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
+	pokemonRenderer.drawPrimitives(sceneShader);
 
 	//Models - Make have per model inv transp later when models are used more
 	modelAtlas.bind();

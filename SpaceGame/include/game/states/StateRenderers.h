@@ -31,12 +31,13 @@ public:
 	Render::Renderer<NormalTextureVertex> worldRenderer;
 	Render::Renderer<NormalTextureVertex> grassRenderer;
 	Render::Renderer<NormalTextureVertex> spriteRenderer;
+	Render::Renderer<NormalTextureVertex> pokemonRenderer;
 	Render::Renderer<NormalTextureVertex> modelRenderer;
 
 	//Textures
 	Texture worldTexture;
 	Texture spriteTexture;
-	Texture debugTexture;
+	Texture pokemonTexture;
 
 	//Test transition
 	Transition battleTransition;
@@ -44,6 +45,7 @@ public:
 	//Maps
 	TileMap worldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 	TileMap spriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
+	TileMap pokemonTileMap = TileMap(1.0f, 1.0f, 1.0f, 1.0f);
 	Tex::TextureAtlasRGBA modelAtlas;
 
 	//Setup renderer one time

@@ -30,7 +30,7 @@ static void PrintPath(std::vector<PathFinding::PathNode>& vec, World::Level::Per
 	}
 }
 
-void PathFinding::ValidatePath(OvSpr_WalkingSprite* subject, World::Tile dest, Path& path)
+void PathFinding::ValidatePath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height, Path& path)
 {
 	using namespace World;
 	//Check each tile on path to ensure is still clear
@@ -55,23 +55,32 @@ void PathFinding::ValidatePath(OvSpr_WalkingSprite* subject, World::Tile dest, P
 		}
 	}
 
-	if (!blockage)
+	if (!blockage && dest == path.dest)
 	{
 		return;
 	}
 
 	//If blocked, find new path
-	EngineLog("Path blocked, recalculating!");
-	path = GetPath(subject, dest);
+	path = GetPath(subject, dest, height);
 }
 
-PathFinding::Path PathFinding::GetPath(OvSpr_WalkingSprite* subject, World::Tile dest)
+PathFinding::Path PathFinding::GetPath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height)
 {
+	std::vector<PathNode> nodes;
+	std::vector<World::Direction> directions;
+
+	//If at destination, don't calculate
+	if (subject->m_Tile == dest && subject->m_WorldLevel == height)
+	{
+		nodes.emplace_back(-1, dest, height, 0.0f, 0.0f);
+		directions.push_back(World::Direction::DIRECTION_NULL);
+		return { nodes, directions, -2, dest };
+	}
+
 	//Get vector of tiles
-	std::vector<PathNode> nodes = FindPath(subject, dest);
+	nodes = FindPath(subject, dest, height);
 
 	//Create vector of directions and init to nodes size
-	std::vector<World::Direction> directions;
 	int size = 1;
 	PathNode node = nodes[nodes.size() - 1];
 	while (node.parentIndex != -1)
@@ -95,15 +104,17 @@ PathFinding::Path PathFinding::GetPath(OvSpr_WalkingSprite* subject, World::Tile
 		directionsIndex--;
 	}
 
-	return { nodes, directions, 0 };
+	return { nodes, directions, 0, dest };
 }
 
-std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* subject, World::Tile dest)
+std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height)
 {
 	using namespace World;
 	//Get permissions fragment of current layer
 	auto timer = EngineTimer::StartTimer();
-	Level::PermVectorFragment layer = Level::queryPermissions(subject->m_CurrentLevel, subject->m_WorldLevel);
+
+	std::vector<Permission> permissions;
+	permissions.emplace_back(Level::queryPermissions(subject->m_CurrentLevel, subject->m_WorldLevel), subject->m_WorldLevel);
 	LevelDimensions dimensions = Level::queryDimensions(subject->m_CurrentLevel);
 
 	//find path
@@ -117,14 +128,14 @@ std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* su
 	int distZ = abs(start.z - dest.z);
 	int distStartToEnd = distX + distZ;
 
-	PathNode startNode = { -1, start, 0, distStartToEnd };
+	PathNode startNode = { -1, start, subject->m_WorldLevel, 0, distStartToEnd };
 	openList.push_back(startNode);
 
 	bool targetFound = false;
 
 	//2. repeat steps
 	//2.a Look for node with lowest (g+h) on open list
-	constexpr int MAX_STEPS = 100; //To avoid being stuck in a loop of trying to find a location
+	constexpr int MAX_STEPS = 1000; //To avoid being stuck in a loop of trying to find a location
 	int step = 0;
 	while (!targetFound && openList.size() > 0 && step < MAX_STEPS)
 	{
@@ -181,9 +192,11 @@ std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* su
 					continue;
 				}
 
-				//if is not clear, continue
-				MovementPermissions permission = layer.pointer[nextTile.x * dimensions.levelH + nextTile.z];
-				if (permission != MovementPermissions::CLEAR)
+				//If in bounds, make node
+				PathNode nextNode = { -1, nextTile, closedList[currentNodeIndex].height, 0, 0 };
+
+				//Check permissions for any new logic
+				if (!CheckPermission(closedList[currentNodeIndex], nextNode, permissions, dimensions, subject->m_CurrentLevel))
 				{
 					continue;
 				}
@@ -191,7 +204,7 @@ std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* su
 				//2.c.i if is on the closed list, ignore
 				for (int i = 0; i < closedList.size(); i++)
 				{
-					if (closedList[i].tile == nextTile)
+					if (closedList[i] == nextNode)
 					{
 						continue;
 					}
@@ -199,7 +212,6 @@ std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* su
 
 				//2.c.ii if isnt on open list, add to open list
 				//make current node the parent and note dists
-				PathNode nextNode = { -1, nextTile, 0, 0 };
 				bool onOpenList = false;
 				int openListIndex = 0;
 				for (int i = 0; i < openList.size(); i++)
@@ -261,4 +273,89 @@ std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* su
 
 	EngineLog("Time to find path: ", EngineTimer::EndTimer(timer), "s");
 	return closedList;
+}
+
+bool PathFinding::CheckPermission(PathNode& lastNode, PathNode& nextNode, std::vector<Permission>& perm, World::LevelDimensions dim, World::LevelID id)
+{
+	using namespace World;
+	
+	//Find permissions for current level
+	MovementPermissions permission = MovementPermissions::WALL;
+	bool permissionsFound = false;
+	for (int i = 0; i < perm.size(); i++)
+	{
+		if (lastNode.height == perm[i].height)
+		{
+			permission = perm[i].permission.pointer[nextNode.tile.x * dim.levelH + nextNode.tile.z];
+			permissionsFound = true;
+			break;
+		}
+	}
+
+	if (!permissionsFound)
+	{
+		Permission permissionReq = { Level::queryPermissions(id, lastNode.height), lastNode.height };
+		permission = permissionReq.permission.pointer[nextNode.tile.x * dim.levelH + nextNode.tile.z];
+		perm.push_back(permissionReq);
+	}
+
+	//Get direction from last node to this
+	World::Direction direction = World::DirectionOfAdjacentTile(lastNode.tile, nextNode.tile);
+	//Check permissions for additional logic
+	switch (permission)
+	{
+	case MovementPermissions::CLEAR:
+		return true;
+	case MovementPermissions::STAIRS_NORTH:
+		if (direction == World::Direction::SOUTH)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height - 1);
+			return true;
+		}
+		else if (direction == World::Direction::NORTH)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height + 1);
+			return true;
+		}
+		return false;
+	case MovementPermissions::STAIRS_SOUTH:
+		if (direction == World::Direction::NORTH)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height - 1);
+			return true;
+		}
+		else if (direction == World::Direction::SOUTH)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height + 1);
+			return true;
+		}
+		return false;
+	case MovementPermissions::STAIRS_EAST:
+		if (direction == World::Direction::WEST)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height - 1);
+			return true;
+		}
+		else if (direction == World::Direction::EAST)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height + 1);
+			return true;
+		}
+		return false;
+	case MovementPermissions::STAIRS_WEST:
+		if (direction == World::Direction::EAST)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height - 1);
+			return true;
+		}
+		else if (direction == World::Direction::WEST)
+		{
+			nextNode.height = (World::WorldHeight)((int)nextNode.height + 1);
+			return true;
+		}
+		return false;
+	default:
+		return false;
+	}
+	return true;
 }

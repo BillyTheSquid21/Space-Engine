@@ -52,15 +52,20 @@ public:
 	OverworldScript(Script script, uint16_t size, std::shared_ptr<OvSpr_RunningSprite> player) { m_Script = script; m_Size = size; m_Player = player; }
 	
 	static void init(PlayerData* data, GameInput* input, std::function<void(World::LevelID)> load, std::function<void(World::LevelID)> unload) { m_Data = data; m_Input = input; m_LoadLv = load; m_UnloadLv = unload; };
-	
+	void setScript(Script script, uint16_t size) { m_Script = script; m_Size = size; m_Index = 0; }
 	void linkText(GameGUI::TextBoxBuffer* buffer) { m_TextBuffer = buffer; }
+	void forceSkip() { m_Index++; }
+	void setPath(PathFinding::Path path) { m_Path = path; }
+	int getIndex() { return m_Index; }
+	ScriptInstruction getInstruction() { if (m_Index >= m_Size) { return m_Script[0].instruction; } return m_Script[m_Index].instruction; }
+	ScriptElement& getElement(int index) { return m_Script[index]; }
 	void update(double deltaTime)
 	{
-		process(deltaTime);
-		if (m_Index >= m_Size-1)
+		if (m_Index >= m_Size)
 		{
 			m_Index = 0;
 		}
+		process(deltaTime);
 	}
 
 	virtual bool process(double deltaTime)
@@ -70,6 +75,9 @@ public:
 		ScriptElement el = m_Script[m_Index];
 		switch (el.instruction)
 		{
+		case ScriptInstruction::BLANK_OP:
+			m_Index++;
+			return true;
 		case ScriptInstruction::JMP:
 			m_Index = el.info.jmpInfo.line;
 			return true;
@@ -114,7 +122,12 @@ public:
 		case ScriptInstruction::PLAYER_WALK_TO_TILE:
 			if (m_Path.directionsIndex == -1)
 			{
-				m_Path = PathFinding::GetPath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z });
+				m_Path = PathFinding::GetPath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h);
+				if (m_Path.directionsIndex == -2)
+				{
+					m_Index++;
+					return true;
+				}
 				m_Player->m_Direction = m_Path.directions[m_Path.directionsIndex];
 				m_Path.directionsIndex++;
 			}
@@ -129,7 +142,7 @@ public:
 			}
 			else if (SpriteWalk(m_Player.get(), m_Player->m_Controlled, deltaTime))
 			{
-				PathFinding::ValidatePath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, m_Path);
+				PathFinding::ValidatePath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h, m_Path);
 				m_Player->m_Direction = m_Path.directions[m_Path.directionsIndex];
 				m_Path.directionsIndex++;
 			}
@@ -137,7 +150,12 @@ public:
 		case ScriptInstruction::PLAYER_RUN_TO_TILE:
 			if (m_Path.directionsIndex == -1)
 			{
-				m_Path = PathFinding::GetPath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z });
+				m_Path = PathFinding::GetPath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h);
+				if (m_Path.directionsIndex == -2)
+				{
+					m_Index++;
+					return true;
+				}
 				m_Player->m_Direction = m_Path.directions[m_Path.directionsIndex];
 				m_Path.directionsIndex++;
 			}
@@ -152,7 +170,7 @@ public:
 			}
 			else if (SpriteRun(m_Player.get(), m_Player->m_Controlled, deltaTime))
 			{
-				PathFinding::ValidatePath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, m_Path);
+				PathFinding::ValidatePath(m_Player.get(), { (int)el.info.tileInfo.x, (int)el.info.tileInfo.z }, (World::WorldHeight)el.info.tileInfo.h, m_Path);
 				m_Player->m_Direction = m_Path.directions[m_Path.directionsIndex];
 				m_Path.directionsIndex++;
 			}
@@ -274,6 +292,10 @@ public:
 	{
 		if (!subject->m_Walking)
 		{
+			if (!Ov_Translation::CheckCanWalk(subject))
+			{
+				return true;
+			}
 			subject->m_Walking = true;
 			setBusy = true;
 			World::ModifyTilePerm(subject->m_CurrentLevel, subject->m_Direction, subject->m_Tile, subject->m_WorldLevel, subject->m_LastPermission, subject->m_LastPermissionPtr);
@@ -290,6 +312,10 @@ public:
 	{
 		if (!subject->m_Running)
 		{
+			if (!Ov_Translation::CheckCanWalk(subject))
+			{
+				return true;
+			}
 			subject->m_Running = true;
 			setBusy = true;
 			World::ModifyTilePerm(subject->m_CurrentLevel, subject->m_Direction, subject->m_Tile, subject->m_WorldLevel, subject->m_LastPermission, subject->m_LastPermissionPtr);

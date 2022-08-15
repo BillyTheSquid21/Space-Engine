@@ -16,7 +16,6 @@ public:
 	void linkInput(GameInput* input) { m_Input = input; };
 	void setSpriteData(std::shared_ptr<OvSpr_RunningSprite> player) { m_PlayerData = player; }
 private:
-	bool canWalk();
 	bool startWalk();
 	bool startRun();
 	bool checkInputs();

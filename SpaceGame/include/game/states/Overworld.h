@@ -19,6 +19,7 @@
 #include "game/objects/TallGrass.h"
 #include "game/objects/WarpTile.h"
 #include "game/objects/ScriptTile.hpp"
+#include "game/objects/PokemonFollow.h"
 
 #include "game/data/PlayerData.hpp"
 #include "game/pokemon/Pokemon.h"
@@ -78,6 +79,9 @@ private:
 
 	//Test battle
 	Party enemy;
+
+	//Test pointer
+	bool m_AnimatePointer = true;
 
 	//Test GUI
 	GameGUI::GUIContainer m_HUD;

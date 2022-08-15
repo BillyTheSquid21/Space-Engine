@@ -167,6 +167,7 @@
     <ClCompile Include="src\game\objects\OverworldScript.cpp" />
     <ClCompile Include="src\game\objects\OverworldSprite.cpp" />
     <ClCompile Include="src\game\objects\PlayerObjects.cpp" />
+    <ClCompile Include="src\game\objects\PokemonFollow.cpp" />
     <ClCompile Include="src\game\objects\ScriptParse.cpp" />
     <ClCompile Include="src\game\objects\TallGrass.cpp" />
     <ClCompile Include="src\game\objects\TileMap.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="include\game\objects\OverworldScript.h" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
+    <ClInclude Include="include\game\objects\PokemonFollow.h" />
     <ClInclude Include="include\game\objects\Script.hpp" />
     <ClInclude Include="include\game\objects\ScriptParse.h" />
     <ClInclude Include="include\game\objects\ScriptTile.hpp" />

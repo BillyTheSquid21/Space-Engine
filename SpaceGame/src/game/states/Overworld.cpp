@@ -143,7 +143,7 @@ void Overworld::loadObjectData()
     std::shared_ptr<RenderComponentGroup<SpriteRender>> spriteGroup(new RenderComponentGroup<SpriteRender>());
     std::shared_ptr<UpdateComponentGroup<TilePosition>> tileGroup(new UpdateComponentGroup<TilePosition>());
     std::shared_ptr<UpdateComponentGroup<SpriteMap>> mapGroup(new UpdateComponentGroup<SpriteMap>());
-    std::shared_ptr<UpdateComponentGroup<SpriteAnim<TextureVertex, Tex_Quad>>> animGroup(new UpdateComponentGroup<SpriteAnim<TextureVertex, Tex_Quad>>());
+    std::shared_ptr<UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>> animGroup(new UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationRunning>> runGroup(new UpdateComponentGroup<UpdateAnimationRunning>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationFacing>> faceGroup(new UpdateComponentGroup<UpdateAnimationFacing>());
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
@@ -183,12 +183,49 @@ void Overworld::loadObjectData()
     m_LocationX = &m_PlayerPtr->m_Tile.x;
     m_LocationZ = &m_PlayerPtr->m_Tile.z;
 
+    //Add companion test
+    OvSpr_SpriteData dataCompanion = { { m_PlayerPtr->m_Tile.x - 1, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
+    std::shared_ptr<OvSpr_RunningSprite> companionPtr = Ov_ObjCreation::BuildRunningSprite(dataCompanion, m_Renderer.pokemonTileMap, spriteGroup.get(), mapGroup.get(), &m_Renderer.pokemonRenderer);
+    spriteGroup->addComponent(&companionPtr->m_RenderComps, &companionPtr->m_Sprite, &m_Renderer.pokemonRenderer);
+    companionPtr->m_LastPermissionPtr = World::GetTilePermission(companionPtr->m_CurrentLevel, companionPtr->m_Tile, companionPtr->m_WorldLevel);
+    std::shared_ptr<PokemonFollow> follow(new PokemonFollow(&companionPtr->m_CurrentLevel, &companionPtr->m_XPos, &companionPtr->m_ZPos, &companionPtr->m_Tile));
+    ScriptParse::ScriptWrapper scriptWrap = ScriptParse::ParseScriptFromText("blank.sgs");
+    std::shared_ptr<OverworldScript> script(new OverworldScript(scriptWrap.script, scriptWrap.size, companionPtr));
+    script->linkText(&m_TextBuff);
+    follow->linkScript(script.get());
+    follow->linkInput(m_Input);
+    std::shared_ptr<PokemonAnimation> pkmAnim(new PokemonAnimation(companionPtr.get()));
+
+    //Add pointer test
+    OvSpr_SpriteData ptrData = { { m_PlayerPtr->m_Tile.x - 2, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
+    std::shared_ptr<OvSpr_Sprite> ptrSprite = Ov_ObjCreation::BuildSprite(ptrData, m_Renderer.worldTileMap, spriteGroup.get(), &m_Renderer.worldRenderer, false);
+    AxialRotate<NormalTextureVertex>(&ptrSprite->m_Sprite, { ptrSprite->m_XPos + World::TILE_SIZE / 2.0f,  ptrSprite->m_YPos, ptrSprite->m_ZPos }, -45.0f, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<NormalTextureVertex>(&ptrSprite->m_Sprite, 0.0f, 1.0f, World::TILE_SIZE / 2.0f, Shape::QUAD);
+    SpriteAnim<NormalTextureVertex, Norm_Tex_Quad> anim = SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>(8, 3);
+    TileUV uv1 = m_Renderer.worldTileMap.uvTile(0, 6);
+    TileUV uv2 = m_Renderer.worldTileMap.uvTile(0, 7);
+    TileUV uv3 = m_Renderer.worldTileMap.uvTile(0, 8);
+    anim.setFrame(0, uv1); anim.setFrame(1, uv2); anim.setFrame(2, uv3);
+    anim.linkSprite(&ptrSprite->m_Sprite, &m_AnimatePointer);
+    anim.loop = true;
+    animGroup->addExistingComponent(&companionPtr->m_UpdateComps, anim);
+    ptrSprite->messageAllRender((int)Message::DEACTIVATE);
+    tileGroup->addComponent(&ptrSprite->m_UpdateComps, &ptrSprite->m_CurrentLevel, &ptrSprite->m_XPos, &ptrSprite->m_ZPos, &ptrSprite->m_Tile);
+
+    //Link sprites to pkm follow
+    follow->linkSprites(m_PlayerPtr.get(), companionPtr.get(), ptrSprite.get());
+
     //Player is always first object pushed on overworld load - makes searching easier
     m_ObjManager.pushUpdateHeap(walk, &m_PlayerPtr->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(globLev, &m_PlayerPtr->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(encounter, &m_PlayerPtr->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(follow, &companionPtr->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(script, &companionPtr->m_UpdateComps);
+    m_ObjManager.pushUpdateHeap(pkmAnim, &companionPtr->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &m_PlayerPtr->m_RenderComps);
     m_ObjManager.pushGameObject(m_PlayerPtr, "Player");
+    m_ObjManager.pushGameObject(companionPtr, "Companion");
+    m_ObjManager.pushGameObject(ptrSprite, "Pointer");
 }
 
 void Overworld::update(double deltaTime, double time) {

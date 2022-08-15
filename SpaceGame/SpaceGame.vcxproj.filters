@@ -252,6 +252,9 @@
     <ClCompile Include="src\game\utility\PathFinding.cpp">
       <Filter>Source Files\Game\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\objects\PokemonFollow.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -538,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="include\game\utility\PathFinding.h">
       <Filter>Header Files\Game\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\objects\PokemonFollow.h">
+      <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

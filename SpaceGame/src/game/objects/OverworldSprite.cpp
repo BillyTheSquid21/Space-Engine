@@ -143,7 +143,7 @@ void UpdateAnimationRunning::update(double deltaTime)
 }
 
 //Objects
-OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
+OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data, bool block)
 {
 	using namespace World;
 	//Set
@@ -153,6 +153,7 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 	Struct2f origin = World::Level::queryOrigin(data.levelID);
 	float x = origin.a + (m_Tile.x * TILE_SIZE); float y = ((float)data.height / sqrt(2)) * TILE_SIZE;
 	float z = origin.b -(m_Tile.z * TILE_SIZE);
+	m_WorldLevel = data.height;
 	//Set pos - x in tile middle
 	m_XPos = x + TILE_SIZE / 2; m_YPos = y; m_ZPos = z - TILE_SIZE / 2;
 	//Make Sprite
@@ -164,10 +165,13 @@ OvSpr_Sprite::OvSpr_Sprite(OvSpr_SpriteData data)
 	CalculateQuadNormals((NormalTextureVertex*)&m_Sprite);
 
 	//Make current tile blocked
-	World::Level::PermVectorFragment perm = Level::queryPermissions(m_CurrentLevel, data.height);
-	World::LevelDimensions dim = Level::queryDimensions(m_CurrentLevel);
-	unsigned int tileLocation = m_Tile.x * dim.levelH + m_Tile.z;
-	perm.pointer[tileLocation] = MovementPermissions::SPRITE_BLOCKING;
+	if (block)
+	{
+		World::Level::PermVectorFragment perm = Level::queryPermissions(m_CurrentLevel, data.height);
+		World::LevelDimensions dim = Level::queryDimensions(m_CurrentLevel);
+		unsigned int tileLocation = m_Tile.x * dim.levelH + m_Tile.z;
+		perm.pointer[tileLocation] = MovementPermissions::SPRITE_BLOCKING;
+	}
 }
 
 void OvSpr_Sprite::setSprite(TileUV data)
@@ -443,35 +447,12 @@ void Ov_Translation::CycleEnd(OvSpr_WalkingSprite* spr)
 	CentreSprite(spr);
 }
 
-void Ov_Translation::CycleEnd(OvSpr_WalkingSprite* spr, bool anyInputsHeld)
-{
-	if (!anyInputsHeld)
-	{
-		spr->m_Walking = false;
-	}
-	spr->m_Timer = 0.0;
-
-	CentreSprite(spr);
-}
-
 void Ov_Translation::CycleEnd(OvSpr_RunningSprite* spr)
 {
 	spr->m_Walking = false;
 	spr->m_Running = false;
 	spr->m_Timer = 0.0;
 
-	CentreSprite(spr);
-}
-
-void Ov_Translation::CycleEnd(OvSpr_RunningSprite* spr, bool anyInputsHeld)
-{
-	if (!anyInputsHeld)
-	{
-		spr->m_Running = false;
-	}
-	spr->m_Timer = 0.0;
-
-	//Centre on x and y
 	CentreSprite(spr);
 }
 
@@ -504,23 +485,6 @@ bool Ov_Translation::SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime)
 	return true;
 }
 
-bool Ov_Translation::SpriteWalk(OvSpr_WalkingSprite* spr, double deltaTime, bool anyInputsHeld)
-{
-	if (!spr->m_Walking)
-	{
-		return false;
-	}
-
-	CheckAscend(spr);
-	WalkMethod(spr, deltaTime);
-	if (spr->m_Timer >= World::WALK_DURATION)
-	{
-		CycleEnd(spr, anyInputsHeld);
-		return false;
-	}
-	return true;
-}
-
 bool Ov_Translation::SpriteRun(OvSpr_RunningSprite* spr, double deltaTime)
 {
 	if (!spr->m_Running)
@@ -538,27 +502,196 @@ bool Ov_Translation::SpriteRun(OvSpr_RunningSprite* spr, double deltaTime)
 	return true;
 }
 
-bool Ov_Translation::SpriteRun(OvSpr_RunningSprite* spr, double deltaTime, bool anyInputsHeld)
+bool Ov_Translation::CheckCanWalk(OvSpr_WalkingSprite* spr)
 {
-	if (!spr->m_Running)
+	//Check if leaving level
+	World::LevelPermission permissionNext = World::RetrievePermission(spr->m_CurrentLevel, spr->m_Direction, spr->m_Tile, spr->m_WorldLevel);
+	if (permissionNext.leaving)
 	{
-		return false;
+		if (spr->m_LastPermission == World::MovementPermissions::LEVEL_BRIDGE)
+		{
+			return true;
+		}
 	}
 
-	CheckAscend(spr);
-	RunMethod(spr, deltaTime);
-	if (spr->m_Timer >= World::RUN_DURATION && spr->m_Running)
+	World::Direction direction = spr->m_Direction; World::LevelID levelID = spr->m_CurrentLevel;
+	World::WorldHeight worldLevel = spr->m_WorldLevel;
+	spr->m_Ascend = 0; spr->m_CurrentIsSlope = false; spr->m_NextIsSlope = false;
+	
+	//Check if next tile is impassable - check is here to prevent changing data like slope
+	switch (permissionNext.perm)
 	{
-		CycleEnd(spr, anyInputsHeld);
+	case World::MovementPermissions::WALL:
+		return false;
+	case World::MovementPermissions::SPRITE_BLOCKING:
+		return false;
+	default:
+		break;
+	}
+
+	//Check current permission if relevant
+	switch (spr->m_LastPermission)
+	{
+		//Stairs
+	case World::MovementPermissions::STAIRS_NORTH:
+		spr->m_CurrentIsSlope = true;
+		if (direction == World::Direction::NORTH)
+		{
+			spr->m_Ascend = 1;
+		}
+		else if (direction == World::Direction::SOUTH)
+		{
+			spr->m_Ascend = -1;
+			int levelTmp = (int)worldLevel;
+			levelTmp--;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+		}
+		break;
+	case World::MovementPermissions::STAIRS_SOUTH:
+		spr->m_CurrentIsSlope = true;
+		if (direction == World::Direction::SOUTH)
+		{
+			spr->m_Ascend = 1;
+		}
+		else if (direction == World::Direction::NORTH)
+		{
+			spr->m_Ascend = -1;
+			int levelTmp = (int)worldLevel;
+			levelTmp--;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+		}
+		break;
+	case World::MovementPermissions::STAIRS_EAST:
+		spr->m_CurrentIsSlope = true;
+		if (direction == World::Direction::EAST)
+		{
+			spr->m_Ascend = 1;
+		}
+		else if (direction == World::Direction::WEST)
+		{
+			spr->m_Ascend = -1;
+			int levelTmp = (int)worldLevel;
+			levelTmp--;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+		}
+		break;
+	case World::MovementPermissions::STAIRS_WEST:
+		spr->m_CurrentIsSlope = true;
+		if (direction == World::Direction::WEST)
+		{
+			spr->m_Ascend = 1;
+		}
+		else if (direction == World::Direction::EAST)
+		{
+			spr->m_Ascend = -1;
+			int levelTmp = (int)worldLevel;
+			levelTmp--;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+		}
+		break;
+	}
+
+	//Check next permission if relevant
+	switch (permissionNext.perm)
+	{
+	case World::MovementPermissions::STAIRS_NORTH:
+	{
+		spr->m_NextIsSlope = true;
+		if (direction == World::Direction::NORTH)
+		{
+			spr->m_Ascend = 1;
+			int levelTmp = (int)worldLevel;
+			levelTmp++;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+			return true;
+		}
+		else if (direction == World::Direction::SOUTH)
+		{
+			spr->m_Ascend = -1;
+			return true;
+		}
+		return true;
+	}
+	case World::MovementPermissions::STAIRS_SOUTH:
+	{
+		spr->m_NextIsSlope = true;
+		if (direction == World::Direction::SOUTH)
+		{
+			spr->m_Ascend = 1;
+			int levelTmp = (int)worldLevel;
+			levelTmp++;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+			return true;
+		}
+		else if (direction == World::Direction::NORTH)
+		{
+			spr->m_Ascend = -1;
+			return true;
+		}
+		return true;
+	}
+	case World::MovementPermissions::STAIRS_EAST:
+	{
+		spr->m_NextIsSlope = true;
+		if (direction == World::Direction::EAST)
+		{
+			spr->m_Ascend = 1;
+			int levelTmp = (int)worldLevel;
+			levelTmp++;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+			return true;
+		}
+		else if (direction == World::Direction::WEST)
+		{
+			spr->m_Ascend = -1;
+			return true;
+		}
+		return true;
+	}
+	case World::MovementPermissions::STAIRS_WEST:
+	{
+		spr->m_NextIsSlope = true;
+		if (direction == World::Direction::WEST)
+		{
+			spr->m_Ascend = 1;
+			int levelTmp = (int)worldLevel;
+			levelTmp++;
+			spr->m_WorldLevel = (World::WorldHeight)levelTmp;
+			return true;
+		}
+		else if (direction == World::Direction::EAST)
+		{
+			spr->m_Ascend = -1;
+			return true;
+		}
+		return true;
+	}
+	default:
+		return true;
+	}
+}
+
+bool Ov_Translation::CheckCanWalkNPC(OvSpr_WalkingSprite* spr)
+{
+	World::Direction direction = spr->m_Direction; World::LevelID levelID = spr->m_CurrentLevel;
+	World::WorldHeight worldLevel = spr->m_WorldLevel;
+	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, spr->m_Tile, spr->m_WorldLevel);
+	spr->m_Ascend = 0; spr->m_CurrentIsSlope = false; spr->m_NextIsSlope = false;
+
+	//Check if next tile is impassable
+	switch (permissionNext.perm)
+	{
+	case World::MovementPermissions::CLEAR:
+		return true;
+	default:
 		return false;
 	}
-	return true;
 }
 
 std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-	Render::Renderer<NormalTextureVertex>* sprtRen)
+	Render::Renderer<NormalTextureVertex>* sprtRen, bool block)
 {
-	std::shared_ptr<OvSpr_Sprite> sprite(new OvSpr_Sprite(data));
+	std::shared_ptr<OvSpr_Sprite> sprite(new OvSpr_Sprite(data, block));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
 	//Add render group components
 	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
@@ -568,7 +701,7 @@ std::shared_ptr<OvSpr_Sprite> Ov_ObjCreation::BuildSprite(OvSpr_SpriteData data,
 std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp,
 	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<NormalTextureVertex>* sprtRen)
 {
-	std::shared_ptr<OvSpr_DirectionalSprite> sprite(new OvSpr_DirectionalSprite(data));
+	std::shared_ptr<OvSpr_DirectionalSprite> sprite(new OvSpr_DirectionalSprite(data, true));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
 	//Add render group components
 	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
@@ -582,7 +715,7 @@ std::shared_ptr<OvSpr_DirectionalSprite> Ov_ObjCreation::BuildDirectionalSprite(
 std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
 	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<NormalTextureVertex>* sprtRen)
 {
-	std::shared_ptr<OvSpr_WalkingSprite> sprite(new OvSpr_WalkingSprite(data));
+	std::shared_ptr<OvSpr_WalkingSprite> sprite(new OvSpr_WalkingSprite(data, true));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
 	//Add render group components
 	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
@@ -596,7 +729,7 @@ std::shared_ptr<OvSpr_WalkingSprite> Ov_ObjCreation::BuildWalkingSprite(OvSpr_Sp
 std::shared_ptr<OvSpr_RunningSprite> Ov_ObjCreation::BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
 	UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<NormalTextureVertex>* sprtRen)
 {
-	std::shared_ptr<OvSpr_RunningSprite> sprite(new OvSpr_RunningSprite(data));
+	std::shared_ptr<OvSpr_RunningSprite> sprite(new OvSpr_RunningSprite(data, true));
 	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
 	//Add render group components
 	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
@@ -604,5 +737,17 @@ std::shared_ptr<OvSpr_RunningSprite> Ov_ObjCreation::BuildRunningSprite(OvSpr_Sp
 	sprMap->addComponent(&sprite->m_UpdateComps, &sprite->m_Sprite, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &map, data.texture);
 	//Add running map components
 	runUp->addComponent(&sprite->m_UpdateComps, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &sprite->m_Direction, &sprite->m_Walking, &sprite->m_Running);
+	return sprite;
+}
+
+std::shared_ptr<OvSpr_RunningSprite> Ov_ObjCreation::BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp,
+	UpdateComponentGroup<SpriteMap>* sprMap, Render::Renderer<NormalTextureVertex>* sprtRen)
+{
+	std::shared_ptr<OvSpr_RunningSprite> sprite(new OvSpr_RunningSprite(data, true));
+	sprite->setSprite(map.uvTile(data.texture.textureX, data.texture.textureY));
+	//Add render group components
+	renGrp->addComponent(&sprite->m_RenderComps, &sprite->m_Sprite, sprtRen);
+	//Add sprite map components
+	sprMap->addComponent(&sprite->m_UpdateComps, &sprite->m_Sprite, &sprite->m_AnimationOffsetX, &sprite->m_AnimationOffsetY, &map, data.texture);
 	return sprite;
 }

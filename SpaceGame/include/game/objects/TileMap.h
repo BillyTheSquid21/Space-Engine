@@ -29,12 +29,12 @@ public:
 	TileUV uvTile(unsigned int tileX, unsigned int tileY);
 	TileUV uvTile(unsigned int tileX, unsigned int tileY, unsigned int width, unsigned int height);
 private:
-	const unsigned int m_TilesTotalX;
-	const unsigned int m_TilesTotalY;
-	const unsigned int m_TexWidth;
-	const unsigned int m_TexHeight;
-	const float m_SelectWidth;
-	const float m_SelectHeight;
+	unsigned int m_TilesTotalX;
+	unsigned int m_TilesTotalY;
+	unsigned int m_TexWidth;
+	unsigned int m_TexHeight;
+	float m_SelectWidth;
+	float m_SelectHeight;
 	static const float s_TextureSpillOffset; //Prevents borders on edge of quads especially in plane
 	static const float s_PreviousTileOffset; //Prevents slightly sampling tile before in map
 };

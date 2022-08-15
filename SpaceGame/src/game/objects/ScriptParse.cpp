@@ -26,10 +26,10 @@ ScriptParse::ScriptWrapper ScriptParse::ParseScriptFromText(std::string scriptNa
 	}
 
 	//Parse each segment - assumes all lines are valid
-	Script script(new ScriptElement[seglist.size()-1]);
+	Script script(new ScriptElement[seglist.size()]);
 	std::string instrArr[MAX_INFO];
 	int index = 0;
-	for (int i = 0; i < seglist.size()-1; i++)
+	for (int i = 0; i < seglist.size(); i++)
 	{
 		std::string currentSegment = seglist[i];
 		stringsBuffer.clear();
@@ -60,7 +60,7 @@ ScriptParse::ScriptWrapper ScriptParse::ParseScriptFromText(std::string scriptNa
 		ScriptParse::ProcessInstructionInfo(instruction, instrArr, script[i]);
 	}
 
-	return {script, seglist.size()-1};
+	return {script, seglist.size()};
 }
 
 //instrs
@@ -69,6 +69,10 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	if (instr == "-NO_OP")
 	{
 		return ScriptInstruction::NO_OP;
+	}
+	else if (instr == "-BLANK_OP")
+	{
+		return ScriptInstruction::BLANK_OP;
 	}
 	else if (instr == "-SET_FLAG")
 	{
@@ -158,6 +162,10 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::FREEZE_OBJECT;
 	}
+	else if (instr == "-FACE_WITH_PLAYER")
+	{
+		return ScriptInstruction::FACE_WITH_PLAYER;
+	}
 	else if (instr == "-NPC_FACE")
 	{
 		return ScriptInstruction::NPC_FACE;
@@ -176,7 +184,11 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	}
 	else if (instr == "-NPC_WALK_TO_TILE")
 	{
-	return ScriptInstruction::NPC_WALK_TO_TILE;
+		return ScriptInstruction::NPC_WALK_TO_TILE;
+	}
+	else if (instr == "-NPC_RUN_TO_TILE")
+	{
+		return ScriptInstruction::NPC_RUN_TO_TILE;
 	}
 	else if (instr == "-SHOW_SPRITE")
 	{
@@ -243,6 +255,9 @@ void ScriptParse::ProcessInstructionInfo(ScriptInstruction instr, std::string(&i
 		PSS_BOOL(instrArr, element);
 		return;
 	case ScriptInstruction::NPC_WALK_TO_TILE:
+		PSS_SET_TILE(instrArr, element);
+		return;
+	case ScriptInstruction::NPC_RUN_TO_TILE:
 		PSS_SET_TILE(instrArr, element);
 		return;
 	default:
@@ -327,8 +342,9 @@ void ScriptParse::PSS_WAIT(std::string(&instrArr)[MAX_INFO], ScriptElement& elem
 
 void ScriptParse::PSS_SET_TILE(std::string(&instrArr)[MAX_INFO], ScriptElement& element)
 {
-	element.info.tileInfo.x = (uint16_t)strtoul(instrArr[1].c_str(), nullptr, 10);
+	element.info.tileInfo.x = (uint16_t)strtoul(instrArr[1].c_str(), nullptr, 10); //Maxes out at 4096 due to reduced bits
 	element.info.tileInfo.z = (uint16_t)strtoul(instrArr[2].c_str(), nullptr, 10);
+	element.info.tileInfo.h = (int8_t)strtoul(instrArr[3].c_str(), nullptr, 10);
 }
 
 void ScriptParse::PSS_WARP(std::string(&instrArr)[MAX_INFO], ScriptElement& element)

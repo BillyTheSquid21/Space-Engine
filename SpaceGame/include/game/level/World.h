@@ -2,17 +2,18 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "fstream"
+#include "string"
+#include "sstream"
+#include "atomic"
+#include "stdint.h"
+
 #include "renderer/Plane.h"
 #include "renderer/Texture.h"
 #include "game/objects/TileMap.h"
-#include <stdint.h>
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
-#include <rapidxml/rapidxml.hpp>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <atomic>
+#include "rapidjson/document.h"
+#include "rapidjson/istreamwrapper.h"
+#include "rapidxml/rapidxml.hpp"
 
 //Tiles
 namespace World
@@ -45,7 +46,7 @@ namespace World
 
 	World::Direction GetDirection(std::string dir);
 
-	enum class WorldHeight : int //Has been previously known as "WorldLevel" - changed because of confusion with levelID
+	enum class WorldHeight : int8_t //Has been previously known as "WorldLevel" - changed because of confusion with levelID
 	{
 		//Above ground
 		F0 = 0, F1 = 1, F2 = 2, F3 = 3, F4 = 4, F5 = 5,
@@ -58,17 +59,17 @@ namespace World
 	enum class MovementPermissions
 	{
 		//Basic permission
-		CLEAR, WALL,
+		CLEAR = 0, WALL = 1,
 		//Slopes - changes character y pos as moves through - must be on both levels
-		STAIRS_NORTH, STAIRS_SOUTH, STAIRS_EAST, STAIRS_WEST,
+		STAIRS_NORTH = 2, STAIRS_SOUTH = 3, STAIRS_EAST = 4, STAIRS_WEST = 5,
 		//Terrain
-		WATER, LEDGE_NORTH, LEDGE_SOUTH, LEDGE_EAST, LEDGE_WEST,
+		WATER = 6, LEDGE_NORTH = 7, LEDGE_SOUTH = 8, LEDGE_EAST = 9, LEDGE_WEST = 10,
 		//Level bridge - lets walk into next level so don't need to check outside bounds
-		LEVEL_BRIDGE,
+		LEVEL_BRIDGE = 11,
 		//Sprite blocking
-		SPRITE_BLOCKING,
+		SPRITE_BLOCKING = 12,
 		//Encounter
-		TALL_GRASS, CAVE,
+		TALL_GRASS = 13, CAVE = 14,
 	};
 
 	//Tile arranging classes
@@ -98,7 +99,7 @@ namespace World
 		bool leaving = false;
 	};
 
-	Tile NextTileInInputDirection(Direction direct, Tile tile);
+	Tile NextTileInDirection(Direction direct, Tile tile);
 	World::Direction DirectionOfAdjacentTile(World::Tile scr, World::Tile dest);
 	LevelPermission RetrievePermission(World::LevelID level, World::Direction direction, World::Tile loc, WorldHeight height);
 	LevelPermission RetrievePermission(World::LevelID level, World::Tile loc, WorldHeight height);

@@ -1970,8 +1970,8 @@
   <Objects>
     <Object name="Level0_npc1">
       <RunSprite>
-        <TileX>13</TileX>
-        <TileZ>4</TileZ>
+        <TileX>18</TileX>
+        <TileZ>17</TileZ>
         <WLevel>0</WLevel>
         <TX>0</TX>
         <TY>0</TY>

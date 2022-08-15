@@ -355,7 +355,7 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 
 	//Build base sprite
 	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
-	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), &ren->spriteRenderer);
+	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), &ren->spriteRenderer, true); //For now block for loaded sprites
 
 	//Push object
 	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
@@ -433,6 +433,7 @@ void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node,
 	manager->pushGameObject(sprite, name);
 }
 
+//TODO - make scripts not heap
 void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite, GameInput* input)
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly

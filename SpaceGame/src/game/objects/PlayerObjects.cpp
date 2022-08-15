@@ -1,176 +1,6 @@
 #include "game/objects/PlayerObjects.h"
 
 //Player
-bool PlayerMove::canWalk()
-{
-	World::Direction direction = m_PlayerData->m_Direction; World::LevelID levelID = m_PlayerData->m_CurrentLevel;
-	World::WorldHeight worldLevel = m_PlayerData->m_WorldLevel;
-	World::LevelPermission permissionNext = World::RetrievePermission(levelID, direction, *m_Tile, m_PlayerData->m_WorldLevel);
-	m_PlayerData->m_Ascend = 0; m_PlayerData->m_CurrentIsSlope = false; m_PlayerData->m_NextIsSlope = false;
-
-	//Check if leaving level
-	if (permissionNext.leaving)
-	{
-		if (m_PlayerData->m_LastPermission == World::MovementPermissions::LEVEL_BRIDGE)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	//Check if next tile is impassable - check is here to prevent changing data like slope
-	switch (permissionNext.perm)
-	{
-	case World::MovementPermissions::WALL:
-		return false;
-	case World::MovementPermissions::SPRITE_BLOCKING:
-		return false;
-	default:
-		break;
-	}
-
-	//Check current permission if relevant
-	switch (m_PlayerData->m_LastPermission)
-	{
-	//Stairs
-	case World::MovementPermissions::STAIRS_NORTH:
-		m_PlayerData->m_CurrentIsSlope = true;
-		if (direction == World::Direction::NORTH)
-		{
-			m_PlayerData->m_Ascend = 1;
-		}
-		else if (direction == World::Direction::SOUTH)
-		{
-			m_PlayerData->m_Ascend = -1;
-			int levelTmp = (int)worldLevel;
-			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-		}
-		break;
-	case World::MovementPermissions::STAIRS_SOUTH:
-		m_PlayerData->m_CurrentIsSlope = true;
-		if (direction == World::Direction::SOUTH)
-		{
-			m_PlayerData->m_Ascend = 1;
-		}
-		else if (direction == World::Direction::NORTH)
-		{
-			m_PlayerData->m_Ascend = -1;
-			int levelTmp = (int)worldLevel;
-			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-		}
-		break;
-	case World::MovementPermissions::STAIRS_EAST:
-		m_PlayerData->m_CurrentIsSlope = true;
-		if (direction == World::Direction::EAST)
-		{
-			m_PlayerData->m_Ascend = 1;
-		}
-		else if (direction == World::Direction::WEST)
-		{
-			m_PlayerData->m_Ascend = -1;
-			int levelTmp = (int)worldLevel;
-			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-		}
-		break;
-	case World::MovementPermissions::STAIRS_WEST:
-		m_PlayerData->m_CurrentIsSlope = true;
-		if (direction == World::Direction::WEST)
-		{
-			m_PlayerData->m_Ascend = 1;
-		}
-		else if (direction == World::Direction::EAST)
-		{
-			m_PlayerData->m_Ascend = -1;
-			int levelTmp = (int)worldLevel;
-			levelTmp--;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-		}
-		break;
-	}
-
-	//Check next permission if relevant
-	switch (permissionNext.perm)
-	{
-	case World::MovementPermissions::STAIRS_NORTH:
-	{
-		m_PlayerData->m_NextIsSlope = true;
-		if (direction == World::Direction::NORTH)
-		{
-			m_PlayerData->m_Ascend = 1;
-			int levelTmp = (int)worldLevel;
-			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-			return true;
-		}
-		else if (direction == World::Direction::SOUTH)
-		{
-			m_PlayerData->m_Ascend = -1;
-			return true;
-		}
-		return true;
-	}
-	case World::MovementPermissions::STAIRS_SOUTH:
-	{
-		m_PlayerData->m_NextIsSlope = true;
-		if (direction == World::Direction::SOUTH)
-		{
-			m_PlayerData->m_Ascend = 1;
-			int levelTmp = (int)worldLevel;
-			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-			return true;
-		}
-		else if (direction == World::Direction::NORTH)
-		{
-			m_PlayerData->m_Ascend = -1;
-			return true;
-		}
-		return true;
-	}
-	case World::MovementPermissions::STAIRS_EAST:
-	{
-		m_PlayerData->m_NextIsSlope = true;
-		if (direction == World::Direction::EAST)
-		{
-			m_PlayerData->m_Ascend = 1;
-			int levelTmp = (int)worldLevel;
-			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-			return true;
-		}
-		else if (direction == World::Direction::WEST)
-		{
-			m_PlayerData->m_Ascend = -1;
-			return true;
-		}
-		return true;
-	}
-	case World::MovementPermissions::STAIRS_WEST:
-	{
-		m_PlayerData->m_NextIsSlope = true;
-		if (direction == World::Direction::WEST)
-		{
-			m_PlayerData->m_Ascend = 1;
-			int levelTmp = (int)worldLevel;
-			levelTmp++;
-			m_PlayerData->m_WorldLevel = (World::WorldHeight)levelTmp;
-			return true;
-		}
-		else if (direction == World::Direction::EAST)
-		{
-			m_PlayerData->m_Ascend = -1;
-			return true;
-		}
-		return true;
-	}
-	default:
-		return true;
-	}
-}
-
 bool PlayerMove::startWalk()
 {
 	m_PlayerData->m_Walking = true;
@@ -187,7 +17,7 @@ bool PlayerMove::startRun()
 
 bool PlayerMove::walkPermHelper()
 {
-	if (canWalk())
+	if (Ov_Translation::CheckCanWalk(m_PlayerData.get()))
 	{
 		//Unblock previous tile, block new tile - fix weird bug
 		World::ModifyTilePerm(m_PlayerData->m_CurrentLevel, m_PlayerData->m_Direction, *m_Tile, m_PlayerData->m_WorldLevel, m_PlayerData->m_LastPermission, m_PlayerData->m_LastPermissionPtr);
@@ -271,16 +101,19 @@ void PlayerMove::update(double deltaTime)
 		return;
 	}
 
-	//Checks to start walking
-	bool anyHeld = checkInputs();
+	//Checks to start walking - don't start until turn after
+	if (checkInputs())
+	{
+		return;
+	}
 
 	if (m_PlayerData->m_Walking)
 	{
-		Ov_Translation::SpriteWalk(m_PlayerData.get(), deltaTime, anyHeld);
+		Ov_Translation::SpriteWalk(m_PlayerData.get(), deltaTime);
 	}
 	else if (m_PlayerData->m_Running)
 	{
-		Ov_Translation::SpriteRun(m_PlayerData.get(), deltaTime, anyHeld);
+		Ov_Translation::SpriteRun(m_PlayerData.get(), deltaTime);
 	}
 }
 

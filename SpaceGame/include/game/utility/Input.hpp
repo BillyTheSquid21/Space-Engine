@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 
 //Definitions for inputs that persist
-#define STORED_INPUTS_COUNT 14
+#define STORED_INPUTS_COUNT 15
 #define HELD_A m_PersistentInput[0]
 #define HELD_D m_PersistentInput[1]
 #define HELD_CTRL m_PersistentInput[2]
@@ -21,6 +21,7 @@
 #define PRESSED_W m_PersistentInput[11]
 #define PRESSED_S m_PersistentInput[12]
 #define PRESSED_E m_PersistentInput[13]
+#define PRESSED_CTRL m_PersistentInput[14]
 
 class GameInput
 {
@@ -36,6 +37,26 @@ public:
 	const double m_TimeToHold = 0.313;
 	bool m_HoldTimerActive = false;
 
+    bool anyHeld()
+    {
+        for (int i = 0; i < STORED_INPUTS_COUNT; i++)
+        {
+            if (m_PersistentInput[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void clear()
+    {
+        for (int i = 0; i < STORED_INPUTS_COUNT; i++)
+        {
+            m_PersistentInput[i] = false;
+        }
+    }
+
 	void update(double deltaTime) 
 	{
 		if (m_HoldTimerActive)
@@ -47,7 +68,7 @@ public:
 	void handleInput(int key, int scancode, int action, int mods)
 	{
         //Reset pressed
-        PRESSED_A = false; PRESSED_D = false; PRESSED_S = false; PRESSED_W = false; PRESSED_E = false; PRESSED_X = false;
+        PRESSED_A = false; PRESSED_D = false; PRESSED_S = false; PRESSED_W = false; PRESSED_E = false; PRESSED_X = false; PRESSED_CTRL = false;
 
         if (key == GLFW_KEY_A) {
             if (action == GLFW_PRESS) {
@@ -96,10 +117,17 @@ public:
         }
         if (key == GLFW_KEY_LEFT_CONTROL) {
             if (action == GLFW_PRESS) {
-                HELD_CTRL = true;
+                PRESSED_CTRL = true;
+                m_HoldTimerActive = true;
             }
             else if (action == GLFW_RELEASE) {
                 HELD_CTRL = false;
+                m_TimeHeld = 0.0;
+            }
+            if (m_TimeHeld >= m_TimeToHold)
+            {
+                HELD_A = true;
+                m_HoldTimerActive = false;
             }
         }
         if (key == GLFW_KEY_LEFT_SHIFT) {

@@ -30,7 +30,7 @@ void NPC_RandWalk::randomWalk()
 	if (rnd <= 25.0f)
 	{
 		m_NPC->m_Direction = World::Direction::EAST;
-		if (canWalk())
+		if (Ov_Translation::CheckCanWalkNPC(m_NPC.get()))
 		{
 			startWalk();
 		}
@@ -38,7 +38,7 @@ void NPC_RandWalk::randomWalk()
 	else if (rnd <= 50.0f)
 	{
 		m_NPC->m_Direction = World::Direction::WEST;
-		if (canWalk())
+		if (Ov_Translation::CheckCanWalkNPC(m_NPC.get()))
 		{
 			startWalk();
 		}
@@ -46,7 +46,7 @@ void NPC_RandWalk::randomWalk()
 	else if (rnd <= 75.0f)
 	{
 		m_NPC->m_Direction = World::Direction::NORTH;
-		if (canWalk())
+		if (Ov_Translation::CheckCanWalkNPC(m_NPC.get()))
 		{
 			startWalk();
 		}
@@ -54,7 +54,7 @@ void NPC_RandWalk::randomWalk()
 	else if (rnd <= 100.0f)
 	{
 		m_NPC->m_Direction = World::Direction::SOUTH;
-		if (canWalk())
+		if (Ov_Translation::CheckCanWalkNPC(m_NPC.get()))
 		{
 			startWalk();
 		}
@@ -80,16 +80,7 @@ void NPC_RandWalk::update(double deltaTime)
 	}
 
 	//Walk method
-	if (m_NPC->m_Timer < 1.0 && m_NPC->m_Walking)
-	{
-		Ov_Translation::Walk(&m_NPC->m_Direction, m_XPos, m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
-	}
-
-	//If at end of run or walk cycle
-	if (m_NPC->m_Timer >= 1.0 && m_NPC->m_Walking)
-	{
-		cycleEnd();
-	}
+	Ov_Translation::SpriteWalk(m_NPC.get(), deltaTime);
 
 	//cooldown timer
 	if (m_CoolDownTimer > 0.0f)
@@ -105,23 +96,6 @@ void NPC_RandWalk::cycleEnd()
 
 	//Centre on x and y
 	Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_Tile, &m_NPC->m_Sprite);
-}
-
-bool NPC_RandWalk::canWalk()
-{
-	World::LevelPermission perm = World::RetrievePermission(m_NPC->m_CurrentLevel, m_NPC->m_Direction, m_NPC->m_Tile, m_NPC->m_WorldLevel);
-	if (perm.leaving)
-	{
-		return false;
-	}
-	//if not leaving, check permissions
-	switch (perm.perm)
-	{
-	case World::MovementPermissions::CLEAR:
-		return true;
-	default:
-		return false;
-	}
 }
 
 void NPC_RandWalk::startWalk()
