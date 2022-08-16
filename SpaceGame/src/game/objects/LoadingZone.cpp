@@ -9,8 +9,8 @@ void LoadingZoneComponent::render()
 			&& m_PlayerPointer->m_ZPos <= m_Origin.b && m_PlayerPointer->m_ZPos >= m_Origin.b - m_Bounds.b)
 		{
 			m_PlayerInside = true;
-			m_Pool->Run(m_LoadLv, m_L1_ID);
-			m_Pool->Run(m_LoadLv, m_L2_ID);
+			m_LoadLv(m_L1_ID);
+			m_LoadLv(m_L2_ID);
 			
 			EngineLog("Player entered loading zone");
 		}
@@ -28,11 +28,11 @@ void LoadingZoneComponent::render()
 			m_PlayerInside = false;
 			if (m_PlayerPointer->m_CurrentLevel != m_L1_ID)
 			{
-				m_Pool->Run(m_UnloadLv, m_L1_ID);
+				m_UnloadLv(m_L1_ID);
 			}
 			else
 			{
-				m_Pool->Run(m_UnloadLv, m_L2_ID);
+				m_UnloadLv(m_L2_ID);
 			}
 			EngineLog("Player left loading zone");
 			return;

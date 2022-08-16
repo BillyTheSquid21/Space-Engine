@@ -143,6 +143,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 	//Setup
 	using namespace rapidxml;
 	std::shared_lock<std::shared_mutex> fileLock(mutex);
+
 	auto ts = EngineTimer::StartTimer();
 
 	xml_node<>* treesRoot = doc.doc->first_node()->first_node("Trees");
@@ -185,7 +186,6 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 
 	//Add tree comp
 	treeComp->generateIndices();
-	std::lock_guard<std::shared_mutex> heapLock(manager->getHeapMutex());
 	manager->pushRenderHeap(treeComp, &tree->m_RenderComps);
 
 	//Get tree name
@@ -195,7 +195,6 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 		name = treesRoot->first_attribute("name")->value();
 	}
 
-	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	manager->pushGameObject(tree, name);
 	EngineLog("Time taken to load trees: ", EngineTimer::EndTimer(ts));
 	return true;
@@ -248,7 +247,6 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 	//Add grass comp
 	grassRen->generateIndices();
 	{
-		std::lock_guard<std::shared_mutex> heapLock(manager->getHeapMutex());
 		manager->pushRenderHeap(grassRen, &grass->m_RenderComps);
 		manager->pushRenderHeap(grassAnim, &grass->m_RenderComps);
 	}
@@ -264,7 +262,6 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 		anim.linkSprite(&grass->m_Grass.quads[i], (bool*)&grass->m_ActiveStates[i]);
 
 		//Add sprite animator
-		std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
 		std::shared_ptr<UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>> sprGrp = manager->updateGroupAt<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>(manager->queryGroupID("SpriteAnim"));
 		sprGrp->addExistingComponent(&grass->m_UpdateComps, anim);
 	}
@@ -276,7 +273,6 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 		name = tallGrassRoot->first_attribute("name")->value();
 	}
 
-	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	manager->pushGameObject(grass, name);
 	EngineLog("Time taken to load grass: ", EngineTimer::EndTimer(ts));
 	return true;
@@ -316,7 +312,6 @@ void WorldParse::LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, O
 	using namespace rapidxml;
 	std::shared_ptr<LoadingZone> zone(new LoadingZone());
 	std::shared_ptr<RenderComponentGroup<LoadingZoneComponent>> group(new RenderComponentGroup<LoadingZoneComponent>());
-	std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
 	manager->pushRenderGroup(group, "LoadingZones");
 	//Load each zone
 	std::shared_ptr<OvSpr_RunningSprite> playerPtr = manager->objectAt<OvSpr_RunningSprite>(manager->queryObjectID("Player"));
@@ -343,7 +338,6 @@ void WorldParse::LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, O
 		//Add to group
 		group->addExistingComponent(&zone->m_RenderComps, comp);
 	}
-	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	manager->pushGameObject(zone, "LoadingZone");
 }
 
@@ -354,11 +348,9 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Build base sprite
-	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
 	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), &ren->spriteRenderer, true); //For now block for loaded sprites
 
 	//Push object
-	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	manager->pushGameObject(sprite, name);
 }
 
@@ -369,7 +361,6 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Build base sprite
-	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
 	std::shared_ptr<OvSpr_DirectionalSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationFacing>(manager->queryGroupID("UpdateFacing")).get(), &ren->spriteRenderer);
 
@@ -377,7 +368,6 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	WorldParse::DirectionalSpriteOptionals(node, sprite);
 
 	//Push object
-	std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 	manager->pushGameObject(sprite, name);
 }
 
@@ -392,7 +382,6 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 	World::MovementPermissions permissionOriginal = *permission;
 
 	//Build base sprite
-	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
 	std::shared_ptr<OvSpr_WalkingSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->spriteRenderer);
 	
@@ -403,7 +392,6 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 	WorldParse::OverworldScriptOptionals(node, manager, pdata, textBuff, sprite, input);
 
 	//Push object
-	std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 	manager->pushGameObject(sprite, name);
 }
 
@@ -418,7 +406,6 @@ void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node,
 	World::MovementPermissions permissionOriginal = *permission;
 
 	//Build base sprite
-	std::lock_guard<std::shared_mutex> gLock(manager->getGroupMutex());
 	std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 		manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationRunning>(manager->queryGroupID("UpdateRunning")).get(), &ren->spriteRenderer);
 
@@ -429,7 +416,6 @@ void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node,
 	WorldParse::OverworldScriptOptionals(node, manager, pdata, textBuff, sprite, input);
 
 	//Push object
-	std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 	manager->pushGameObject(sprite, name);
 }
 
@@ -440,7 +426,6 @@ void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectMana
 	if (node->first_node("NPCScript"))
 	{
 		std::string filePath = node->first_node("NPCScript")->value();
-		std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 		std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite>(manager->getObjects()[0].obj);
 		std::shared_ptr<NPC_OverworldScript> npcScript = AllocateNPCOvScript(filePath, textBuff, sprite, player);
 		manager->pushUpdateHeap(npcScript, &sprite->m_UpdateComps);
@@ -550,14 +535,12 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	World::LevelID levelIDDestination = (World::LevelID)strtoul(idDest->value(), nullptr, 10);
 
 	//Create object
-	std::lock_guard<std::shared_mutex> objectLock(manager->getObjectMutex());
 	OvSpr_RunningSprite* player = (OvSpr_RunningSprite*)manager->getObjects()[0].obj.get();
 	
 	std::shared_ptr<WarpTile> warpTile(new WarpTile());
 	WarpTileUpdateComponent warpTileUpdate(player, tileCurrent, heightCurrent, levelID, tileDestination, heightDestination, levelIDDestination);
 	warpTileUpdate.setLoadingFuncs(ld, uld);
 
-	std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
 	manager->updateGroupAt<WarpTileUpdateComponent>(manager->queryGroupID("WarpTile"))->addExistingComponent(&warpTile->m_UpdateComps, warpTileUpdate);
 	manager->pushGameObject(warpTile, name);
 }
@@ -575,7 +558,7 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 	//For now all scripts are on heap - common templates can have their own group in theory later
 	std::shared_ptr<ScriptTile> scriptTile(new ScriptTile());
 	
-	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
+	//std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite, GameObject>(manager->getObjects()[0].obj);
 
 	//See what type of script and do accordingly
@@ -614,10 +597,8 @@ static void LoadModelAsync(std::string name, std::string tex, std::string model,
 	Translate<NormalTextureVertex>(modelObj->m_Model.getVertices(), offset.x, offset.y, offset.z, modelObj->m_Model.getVertCount());
 
 	//Add atlas update and render to groups
-	std::lock_guard<std::shared_mutex> groupLock(manager->getGroupMutex());
 	manager->renderGroupAt<ModelRender>(manager->queryGroupID("ModelRender"))->addComponent(&modelObj->m_RenderComps, &modelObj->m_Model);
 	manager->renderGroupAt<ModelAtlasUpdate>(manager->queryGroupID("ModelAtlas"))->addComponent(&modelObj->m_RenderComps, tex, &modelObj->m_Model, &ren->modelAtlas);
-	std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	manager->pushGameObject(modelObj, name);
 }
 
@@ -693,9 +674,7 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	std::shared_ptr<BridgeRenderComponent> bridgeRen(new BridgeRenderComponent(offset, worldLevel, width, height, tex1, tex2, &ren->worldRenderer, horizontal));
 	bridgeRen->generateIndices();
 
-	std::lock_guard<std::shared_mutex> heapLock(manager->getHeapMutex());
 	manager->pushRenderHeap(bridgeRen, &bridge->m_RenderComps);
-	std::lock_guard<std::shared_mutex> oLock(manager->getObjectMutex());
 	manager->pushGameObject(bridge, name);
 }
 
@@ -742,8 +721,10 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 		xml_node<>* objRoot;
 		xml_node<>* treeRoot;
 		xml_node<>* grassRoot;
-		std::future<bool> f1; std::future<bool> f2; std::future<bool> f3; std::shared_mutex mutex;
 		XML_Doc_Wrapper doc = ParseLevelXML(id, false);
+
+		std::thread t1; std::thread t2; std::thread t3;
+		std::shared_mutex mutex;
 
 		root = doc.doc->first_node();
 		if (!root)
@@ -759,16 +740,30 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 
 		if (objRoot)
 		{
-			f1 = std::async(std::launch::async, &ParseLevelObjects, m_ObjManager, m_Renderer, id, m_Data, m_TextBuffer, std::ref(mutex), doc, m_Input, m_LoadingPtr, m_UnloadingPtr);
+			ParseLevelObjects(m_ObjManager, m_Renderer, id, m_Data, m_TextBuffer, std::ref(mutex), doc, m_Input, m_LoadingPtr, m_UnloadingPtr);
 		}
 		if (treeRoot)
 		{
-			f2 = std::async(std::launch::async, &ParseLevelTrees, m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
+			ParseLevelTrees(m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
 		}
 		if (grassRoot)
 		{
-			f3 = std::async(std::launch::async, &ParseLevelGrass, m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
+			ParseLevelGrass(m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
 		}
+
+		//Check if can join and join
+		//if (t1.joinable())
+		//{
+		//	t1.join();
+		//}
+		//if (t2.joinable())
+		//{
+		//	t2.join();
+		//}
+		//if (t3.joinable())
+		//{
+		//	t3.join();
+		//}
 	}
 	m_Levels[(int)id].setLoaded(true);
 }
@@ -798,7 +793,7 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 
 void World::LevelContainer::UnloadAll()
 {
-	for (int i = 0; i < (int)World::LevelID::LEVEL_NULL; i++)
+	for (int i = 0; i < m_Levels.size(); i++)
 	{
 		UnloadLevel((World::LevelID)i);
 	}

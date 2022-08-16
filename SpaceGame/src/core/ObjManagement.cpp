@@ -4,17 +4,13 @@
 //Threads are currently disabled
 void ObjectManager::update(double deltaTime) {
 	//Launch async cleanup task every 10 seconds to check for dead objects
-	std::future<void> f;
 	if (m_CheckCleanupTimer > 10.0)
 	{
 		EngineLog("Cleaning objects...");
-		f = std::async(std::launch::async, &ObjectManager::cleanObjects, this);
-		//cleanObjects();
+		this->cleanObjects();
 		m_CheckCleanupTimer = 0.0;
 	}
 
-	std::lock_guard<std::shared_mutex> object(m_ObjMutex);
-	std::lock_guard<std::shared_mutex> groupLock(m_GroupMutex);
 	for (unsigned int i = 0; i < m_UpdateGroup.size(); i++) {
 		m_UpdateGroup[i]->iterate(deltaTime);
 	}
@@ -28,7 +24,6 @@ void ObjectManager::update(double deltaTime) {
 	bool inactiveFound = false;
 	bool activeAfterInactive = false;
 
-	std::lock_guard<std::shared_mutex> heapLock(m_HeapMutex);
 	for (unsigned int i = 0; i < m_UpdateHeap.size(); i++) {
 		m_UpdateHeap[i]->processMessages();
 		if (m_UpdateHeap[i]->isActive()) {
@@ -63,8 +58,6 @@ void ObjectManager::update(double deltaTime) {
 }
 
 void ObjectManager::render() {
-	std::lock_guard<std::shared_mutex> object(m_ObjMutex);
-	std::lock_guard<std::shared_mutex> groupLock(m_GroupMutex);
 	for (int i = 0; i < m_RenderGroup.size(); i++) {
 		m_RenderGroup[i]->iterate();
 	}
@@ -78,7 +71,6 @@ void ObjectManager::render() {
 	bool inactiveFound = false;
 	bool activeAfterInactive = false;
 
-	std::lock_guard<std::shared_mutex> heapLock(m_HeapMutex);
 	for (unsigned int i = 0; i < m_RenderHeap.size(); i++) {
 		m_RenderHeap[i]->processMessages();
 		if (m_RenderHeap[i]->isActive()) {
@@ -115,9 +107,6 @@ void ObjectManager::cleanObjects()
 	auto ts = EngineTimer::StartTimer();
 	int size = m_Objects.size();
 	int cleanedTotal = 0;
-	std::lock_guard<std::shared_mutex> objLock(m_ObjMutex);
-	std::lock_guard<std::shared_mutex> groupLock(m_GroupMutex);
-	std::lock_guard<std::shared_mutex> heapLock(m_HeapMutex);
 	for (int i = 0; i < size; i++)
 	{
 		if (!m_Objects[i].obj->isDead())
@@ -146,9 +135,6 @@ void ObjectManager::cleanObjects()
 void ObjectManager::reset()
 {
 	//Clear absolutely everything
-	std::lock_guard<std::shared_mutex> groupLock(m_GroupMutex);
-	std::lock_guard<std::shared_mutex> heapLock(m_HeapMutex);
-	std::lock_guard<std::shared_mutex> objLock(m_ObjMutex);
 
 	//Clear
 	m_UpdateGroup.clear();

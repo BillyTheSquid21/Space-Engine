@@ -2,10 +2,10 @@
 #ifndef OBJECT_LOADER_H
 #define OBJECT_LOADER_H
 
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <thread>
+#include "fstream"
+#include "string"
+#include "sstream"
+#include "thread"
 
 #include "core/ObjManagement.h"
 #include "game/level/World.h"

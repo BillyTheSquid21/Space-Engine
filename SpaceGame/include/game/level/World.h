@@ -7,7 +7,7 @@
 #include "sstream"
 #include "atomic"
 #include "stdint.h"
-
+#include "core/GameObject.hpp"
 #include "renderer/Plane.h"
 #include "renderer/Texture.h"
 #include "game/objects/TileMap.h"
@@ -27,7 +27,7 @@ namespace World
 		LEVEL_ENTRY = 0, LEVEL_TEST = 1,
 
 		//Null entry - keep at end for size purposes
-		LEVEL_NULL = 10000
+		LEVEL_NULL = 2
 	};
 
 	//When level data is written, use int value the respective enum value evaluates to

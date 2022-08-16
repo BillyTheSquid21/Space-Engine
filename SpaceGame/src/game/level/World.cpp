@@ -199,14 +199,17 @@ World::Level::PermVectorFragment World::Level::queryPermissions(LevelID level, W
     if ((unsigned int)level < s_MovementPermissionsCache.size()) 
     { 
         Level::LevelPtrCache ptrCache = s_MovementPermissionsCache[((unsigned int)level)];
-        for (int i = 0; i < ptrCache.levels->size(); i++)
+        if (ptrCache.levels != nullptr && ptrCache.perms != nullptr)
         {
-            if (height == ptrCache.levels->at(i))
+            for (int i = 0; i < ptrCache.levels->size(); i++)
             {
-                World::LevelDimensions dim = queryDimensions(level);
-                unsigned int size = dim.levelH * dim.levelW;
-                unsigned int index = size * i;
-                return { &ptrCache.perms->at(index), size };
+                if (height == ptrCache.levels->at(i))
+                {
+                    World::LevelDimensions dim = queryDimensions(level);
+                    unsigned int size = dim.levelH * dim.levelW;
+                    unsigned int index = size * i;
+                    return { &ptrCache.perms->at(index), size };
+                }
             }
         }
     } 
