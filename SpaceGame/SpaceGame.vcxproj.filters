@@ -545,6 +545,9 @@
     <ClInclude Include="include\game\objects\PokemonFollow.h">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="include\utility\SegArray.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl">

@@ -266,6 +266,7 @@
     <ClInclude Include="include\renderer\Texture.h" />
     <ClInclude Include="include\renderer\Transition.hpp" />
     <ClInclude Include="include\renderer\Vertex.hpp" />
+    <ClInclude Include="include\utility\SegArray.hpp" />
     <ClInclude Include="include\utility\SGUtil.h" />
     <ClInclude Include="include\utility\SimpleQueue.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />

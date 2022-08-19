@@ -26,7 +26,7 @@
 #include "game/pokemon/PokemonIO.h"
 #include "game/pokemon/PokemonLevel.h"
 
-#include <functional>
+#include "functional"
 
 class Overworld : public State
 {
