@@ -14,15 +14,10 @@ template
 class SegArray
 {
 public:
-	SegArray(T zero) 
+	SegArray() 
 	{ 
-		Node initialNode;
-
-		//Allocate stride
-		m_Stride = stride; m_Zero = zero;
-		initialNode.data = std::make_shared<T[]>(m_Stride);
-		std::fill_n(initialNode.data.get(), m_Stride, m_Zero);
-		m_Nodes.push_back(initialNode);
+		m_Stride = stride;
+		m_Nodes.emplace_back(std::make_shared<T[]>(m_Stride), 0);
 	};
 
 	void pushBack(T obj) 
@@ -30,10 +25,7 @@ public:
 		//Check if over running
 		if (m_Size == m_Nodes.size() * m_Stride)
 		{
-			Node node;
-			node.data = std::make_shared<T[]>(m_Stride);
-			std::fill_n(node.data.get(), m_Stride, m_Zero);
-			m_Nodes.push_back(node);
+			m_Nodes.emplace_back(std::make_shared<T[]>(m_Stride), 0);
 		}
 
 		T& ind = getIndex(m_Size);
@@ -41,17 +33,6 @@ public:
 		m_Size++;
 
 		m_Nodes[m_Nodes.size()-1].size++;
-	}
-
-	void clearAt(size_t index)
-	{
-		if (index >= m_Size)
-		{
-			return;
-		}
-
-		T& ind = getIndex(index);
-		ind = m_Zero;
 	}
 
 	void eraseAt(size_t index)
@@ -85,7 +66,6 @@ public:
 
 		Node& endNode = m_Nodes[m_Nodes.size() - 1];
 		endNode = m_Nodes[m_Nodes.size()-1];
-		endNode.data[m_Stride - 1] = m_Zero;
 		endNode.size--;
 
 		//If current node is now empty, remove
@@ -93,6 +73,14 @@ public:
 		{
 			m_Nodes.pop_back();
 		}
+	}
+
+	void shrinkTo(size_t size)
+	{
+		int nodeCount = getNode(size - 1) + 1;
+		m_Nodes.resize(nodeCount);
+		m_Nodes[m_Nodes.size() - 1].size = size - m_Nodes.size() - 1;
+		m_Size = size;
 	}
 
 	T& operator[](size_t index) 
@@ -131,7 +119,6 @@ private:
 	std::vector<Node> m_Nodes;
 	size_t m_Stride;
 	size_t m_Size = 0;
-	T m_Zero;
 };
 
 #endif

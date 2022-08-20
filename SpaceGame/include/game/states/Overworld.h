@@ -2,30 +2,25 @@
 #ifndef OVERWORLD_H
 #define OVERWORLD_H
 
-#include "game/level/World.h"
-
+#include "GL/glew.h"
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
-
+#include "game/level/World.h"
 #include "game/level/WorldObjectLoader.h"
 #include "game/objects/Bridge.h"
 #include "game/gui/GUI.h"
 #include "game/gui/OverworldGUI.h"
 #include "game/utility/GameText.h"
 #include "game/states/StateRenderers.h"
-
 #include "game/utility/Input.hpp"
-
 #include "game/objects/TallGrass.h"
 #include "game/objects/WarpTile.h"
 #include "game/objects/ScriptTile.hpp"
 #include "game/objects/PokemonFollow.h"
-
 #include "game/data/PlayerData.hpp"
 #include "game/pokemon/Pokemon.h"
 #include "game/pokemon/PokemonIO.h"
 #include "game/pokemon/PokemonLevel.h"
-
 #include "functional"
 
 class Overworld : public State
