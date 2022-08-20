@@ -324,7 +324,7 @@ std::vector<World::Level::LevelPtrCache> World::Level::s_MovementPermissionsCach
 bool World::Level::s_CacheInit = false;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
-bool World::Level::buildLevel(Render::Renderer<NormalTextureVertex>* planeRenderer, TileMap* tileMapPointer)
+bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapPointer)
 {
     //Checks if the caches are setup - should happen on first load which shouldn't need to be atomic (not loading through loading zone)
     if (!s_CacheInit)

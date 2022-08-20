@@ -1,6 +1,6 @@
 #include "game/objects/Bridge.h"
 
-BridgeRenderComponent::BridgeRenderComponent(Struct2f pos, World::WorldHeight height, unsigned int width, unsigned int length, TileUV data1, TileUV data2, Render::Renderer<NormalTextureVertex>* ren, bool horizontal)
+BridgeRenderComponent::BridgeRenderComponent(Struct2f pos, World::WorldHeight height, unsigned int width, unsigned int length, TileUV data1, TileUV data2, Render::Renderer* ren, bool horizontal)
 {
 	using World::TILE_SIZE;
 	constexpr float bridgeOffset = 9.0f / 32.0f;

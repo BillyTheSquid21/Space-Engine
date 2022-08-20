@@ -94,7 +94,7 @@ void BattleScene::setPokemonB(std::string name)
     pokemonBAnim.loop = true;
 }
 
-void BattleScene::render(Render::Renderer<TextureVertex>& tex, Render::Renderer<TextureVertex>& back, Render::Renderer<TextureVertex>& pok1, Render::Renderer<TextureVertex>& pok2)
+void BattleScene::render(Render::Renderer& tex, Render::Renderer& back, Render::Renderer& pok1, Render::Renderer& pok2)
 {
     tex.commit(&platform1[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
     tex.commit(&platform2[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);

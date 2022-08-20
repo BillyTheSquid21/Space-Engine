@@ -136,7 +136,7 @@ namespace World
 	{
 	public:
 		//Load level data
-		bool buildLevel(Render::Renderer<NormalTextureVertex>* planeRenderer, TileMap* tileMapPointer);
+		bool buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapPointer);
 		void setID(World::LevelID id) { m_ID = id; }
 		void purgeLevel(); //Clears heap data
 		void render();

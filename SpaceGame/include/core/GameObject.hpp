@@ -2,11 +2,11 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
+#include "stdint.h"
+#include "random"
+#include "queue"
 #include "renderer/Renderer.hpp"
-#include "utility/SimpleQueue.hpp"
 #include "core/Message.hpp"
-#include <stdint.h>
-#include <random>
 
 //1.System is set up to keep similar components contiguous
 //2.Components are put in a group where they will be contiguous
@@ -59,7 +59,7 @@ class Component
 public:
 	//Function component does will carry out
 	Component() {}
-	void recieve(uint32_t message) { m_MessageQueue.pushBack(message); };
+	void recieve(uint32_t message) { m_MessageQueue.push(message); };
 	bool isActive() const { return m_Active; }
 	void setActive(bool set) { m_Active = set; }
 	bool isDead() const { return m_Dead; }
@@ -67,10 +67,16 @@ public:
 	void kill() { m_Dead = true; m_ParentPointers = nullptr; }
 
 	//By default only checks for deactivate and activate message - can be overidden - ACTIVATE AND DEACTIVATE MUST BE REIMPLEMENTED
-	virtual void processMessages() { while (m_MessageQueue.itemsWaiting()) { uint32_t message = m_MessageQueue.nextInQueue(); 
-	if (message == (uint32_t)Message::ACTIVATE) { setActive(true); }
-	else if (message == (uint32_t)Message::DEACTIVATE) { setActive(false); }
-	else if (message == (uint32_t)Message::KILL) { setActive(false); }};}
+	virtual void processMessages() {
+		while (m_MessageQueue.size() > 0) {
+			uint32_t message = m_MessageQueue.front();
+			if (message == (uint32_t)Message::ACTIVATE) { setActive(true); }
+			else if (message == (uint32_t)Message::DEACTIVATE) { setActive(false); }
+			else if (message == (uint32_t)Message::KILL) { setActive(false); 
+			} 
+			m_MessageQueue.pop();
+		};
+	}
 
 	//Attach to parent pointers - called when added to object manager and in its place
 	//During runtime will have to pass pointer all the way down
@@ -109,7 +115,7 @@ protected:
 	bool m_Active = true;
 	bool m_Dead = false;
 	std::vector<T*>* m_ParentPointers = nullptr;
-	SimpleQueue<uint32_t> m_MessageQueue;
+	std::queue<uint32_t> m_MessageQueue;
 };
 
 class RenderComponent : public Component<RenderComponent>

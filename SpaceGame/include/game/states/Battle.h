@@ -26,7 +26,7 @@ class BattleScene
 {
 public:
 	void init(float width, float height);
-	void render(Render::Renderer<TextureVertex>& tex, Render::Renderer<TextureVertex>& back, Render::Renderer<TextureVertex>& pok1, Render::Renderer<TextureVertex>& pok2);
+	void render(Render::Renderer& tex, Render::Renderer& back, Render::Renderer& pok1, Render::Renderer& pok2);
 	void setPokemonA(std::string name);
 	void buildPlatformA();
 	void buildPlatformB();

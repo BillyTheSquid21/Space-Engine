@@ -110,7 +110,7 @@ private:
 	//Render
 	Quad m_Quad;
 	Camera m_Camera;
-	Render::Renderer<Vertex> m_Renderer;
+	Render::Renderer m_Renderer;
 
 	//Update
 	double m_Timer = 0.0;

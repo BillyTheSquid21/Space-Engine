@@ -28,11 +28,11 @@ public:
 	Shader transitionShader;
 	Camera camera;
 
-	Render::Renderer<NormalTextureVertex> worldRenderer;
-	Render::Renderer<NormalTextureVertex> grassRenderer;
-	Render::Renderer<NormalTextureVertex> spriteRenderer;
-	Render::Renderer<NormalTextureVertex> pokemonRenderer;
-	Render::Renderer<NormalTextureVertex> modelRenderer;
+	Render::Renderer worldRenderer;
+	Render::Renderer grassRenderer;
+	Render::Renderer spriteRenderer;
+	Render::Renderer pokemonRenderer;
+	Render::Renderer modelRenderer;
 
 	//Textures
 	Texture worldTexture;
@@ -87,10 +87,10 @@ public:
 	Shader sceneShader;
 	Camera camera;
 
-	Render::Renderer<TextureVertex> worldRenderer;
-	Render::Renderer<TextureVertex> backgroundRenderer;
-	Render::Renderer<TextureVertex> pokemonARenderer;
-	Render::Renderer<TextureVertex> pokemonBRenderer;
+	Render::Renderer worldRenderer;
+	Render::Renderer backgroundRenderer;
+	Render::Renderer pokemonARenderer;
+	Render::Renderer pokemonBRenderer;
 
 	//Textures
 	Texture platformTexture;

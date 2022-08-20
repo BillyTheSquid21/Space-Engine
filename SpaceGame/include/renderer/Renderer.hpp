@@ -13,7 +13,6 @@ namespace Render
 	* Renderer for when batching is more efficient than instancing.
 	* Useful for: primitives, sprites, small meshes, static geometry
 	*/
-	template<typename T>
 	class Renderer
 	{
 	public:
@@ -75,10 +74,13 @@ namespace Render
 		/**
 		* Called when collected primitives are to be drawn
 		* 
-		* @param shader Shader being bound for this draw call
 		*/
 		void drawPrimitives() {
-			drawCall(&m_RendererModelMatrix, true);
+			//Bind all objects
+			bindAll();
+			//Draw Elements
+			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
+			glBindVertexArray(0);
 		}
 
 		//Camera
@@ -151,13 +153,6 @@ namespace Render
 	protected:
 		//Helper functions - TODO - use thread pooling so separate renderers collect data in parallel
 		void bindAll() { m_VA.bind();	m_IB.bind(); }
-		void drawCall(glm::mat4* modelMatrix, bool first) {
-			//Bind all objects
-			bindAll();
-			//Draw Elements
-			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
-			glBindVertexArray(0);
-		}
 
 		//type of primitive being drawn
 		GLenum m_PrimitiveType = GL_TRIANGLES;

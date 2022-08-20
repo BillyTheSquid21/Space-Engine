@@ -138,7 +138,7 @@ namespace Model
         Model() = default;
 
         void load(const char* path) { LoadTextureVertexOBJ<NormalTextureVertex>(path, m_Vertices, m_Indices); m_DataLoaded = true; }
-        void setRen(Render::Renderer<VertexType>* ren) { m_Ren = ren; }
+        void setRen(Render::Renderer* ren) { m_Ren = ren; }
         void render()
         {
             if (!m_DataLoaded)
@@ -153,7 +153,7 @@ namespace Model
         bool isLoaded() const { return m_DataLoaded; }
 
     private:
-        Render::Renderer<VertexType>* m_Ren = nullptr;
+        Render::Renderer* m_Ren = nullptr;
         bool m_DataLoaded;
 
         //Data

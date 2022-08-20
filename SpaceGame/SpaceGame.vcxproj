@@ -267,7 +267,6 @@
     <ClInclude Include="include\renderer\Vertex.hpp" />
     <ClInclude Include="include\utility\SegArray.hpp" />
     <ClInclude Include="include\utility\SGUtil.h" />
-    <ClInclude Include="include\utility\SimpleQueue.hpp" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />
     <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />

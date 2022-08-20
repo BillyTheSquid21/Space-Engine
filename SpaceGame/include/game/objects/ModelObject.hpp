@@ -16,7 +16,7 @@ public:
 		m_Texture = texture; atlas.loadTexture(TexturePathBegin+texture, texture);
 		m_Model.load((ModelPathBegin + modelPath).c_str());
 	}
-	void setRen(Render::Renderer<NormalTextureVertex>* ren) { m_Model.setRen(ren); }
+	void setRen(Render::Renderer* ren) { m_Model.setRen(ren); }
 
 	std::string m_Texture = "";
 	Model::Model<NormalTextureVertex> m_Model;

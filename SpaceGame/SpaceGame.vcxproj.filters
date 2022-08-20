@@ -425,9 +425,6 @@
     <ClInclude Include="include\renderer\Model.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\utility\SimpleQueue.hpp">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="include\utility\SGUtil.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>

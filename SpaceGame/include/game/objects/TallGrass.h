@@ -46,7 +46,7 @@ private:
 class TallGrassRenderComponent : public RenderComponent
 {
 public:
-	TallGrassRenderComponent(Render::Renderer<NormalTextureVertex>* ren, TileUV uv, QuadArray<Norm_Tex_Quad>* grass) { m_Renderer = ren; m_UV = uv; m_Grass = grass; }
+	TallGrassRenderComponent(Render::Renderer* ren, TileUV uv, QuadArray<Norm_Tex_Quad>* grass) { m_Renderer = ren; m_UV = uv; m_Grass = grass; }
 	
 	void reserveGrass(unsigned int count) { m_Grass->quads.resize(count); }
 	void addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID , std::vector<GrassData>* grassLoc, std::vector<char>* states);
@@ -55,7 +55,7 @@ public:
 	void render() { if (m_Grass->quads.size() == 0) { return; } m_Renderer->commit((NormalTextureVertex*)&m_Grass->quads[0], GetFloatCount<NormalTextureVertex>(Shape::QUAD) * m_Grass->quadCount, (unsigned int*)&m_Grass->indices[0], m_Grass->indices.size()); };
 
 private:
-	Render::Renderer<NormalTextureVertex>* m_Renderer;
+	Render::Renderer* m_Renderer;
 	QuadArray<Norm_Tex_Quad>* m_Grass = nullptr;
 	TileUV m_UV;
 };

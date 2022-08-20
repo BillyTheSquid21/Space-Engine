@@ -22,7 +22,7 @@ public:
 	
 	//Render
 	void render();
-	void setRenderer(Render::Renderer<NormalTextureVertex>* ren) { m_Renderer = ren; }
+	void setRenderer(Render::Renderer* ren) { m_Renderer = ren; }
 
 	//Access specific tile
 	Norm_Tex_Quad* accessQuad(unsigned int x, unsigned int y);
@@ -35,7 +35,7 @@ private:
 	//Helper
 	void genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle);
 
-	Render::Renderer<NormalTextureVertex>* m_Renderer = nullptr;
+	Render::Renderer* m_Renderer = nullptr;
 	std::vector<Norm_Tex_Quad> m_Quads;
 	unsigned int m_XCount = 0; unsigned int m_YCount = 0;
 

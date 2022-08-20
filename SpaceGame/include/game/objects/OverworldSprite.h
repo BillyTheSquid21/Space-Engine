@@ -11,11 +11,11 @@ class SpriteRender : public RenderComponent
 {
 public:
 	SpriteRender() = default;
-	SpriteRender(Norm_Tex_Quad* sprite, Render::Renderer<NormalTextureVertex>* ren) { m_Sprite = sprite; m_Renderer = ren; }
+	SpriteRender(Norm_Tex_Quad* sprite, Render::Renderer* ren) { m_Sprite = sprite; m_Renderer = ren; }
 	void render();
 private:
 	Norm_Tex_Quad* m_Sprite = nullptr;
-	Render::Renderer<NormalTextureVertex>* m_Renderer = nullptr;
+	Render::Renderer* m_Renderer = nullptr;
 };
 
 class TilePosition : public UpdateComponent
@@ -218,15 +218,15 @@ namespace Ov_ObjCreation
 {
 	//Allows creating sprite types, and modifies references to common component groups
 	std::shared_ptr<OvSpr_Sprite> BuildSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		Render::Renderer<NormalTextureVertex>* sprtRen, bool block);
+		Render::Renderer* sprtRen, bool block);
 	std::shared_ptr<OvSpr_DirectionalSprite> BuildDirectionalSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer<NormalTextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationFacing>* faceUp, Render::Renderer* sprtRen);
 	std::shared_ptr<OvSpr_WalkingSprite> BuildWalkingSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer<NormalTextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationWalking>* walkUp, Render::Renderer* sprtRen);
 	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp, 
-		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer<NormalTextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, UpdateComponentGroup<UpdateAnimationRunning>* runUp, Render::Renderer* sprtRen);
 	std::shared_ptr<OvSpr_RunningSprite> BuildRunningSprite(OvSpr_SpriteData data, TileMap& map, RenderComponentGroup<SpriteRender>* renGrp,
-		UpdateComponentGroup<SpriteMap>* sprMap, Render::Renderer<NormalTextureVertex>* sprtRen);
+		UpdateComponentGroup<SpriteMap>* sprMap, Render::Renderer* sprtRen);
 }
 
 #endif

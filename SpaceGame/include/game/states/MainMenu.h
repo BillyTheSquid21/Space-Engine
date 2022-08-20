@@ -19,7 +19,7 @@ public:
 	void purgeRequiredData();
 private:
 	GLFWwindow* m_WindowPointer;
-	Render::Renderer<ColorTextureVertex> m_Renderer;
+	Render::Renderer m_Renderer;
 	Shader m_Shader;
 	Camera m_Camera;
 	int m_Width; int m_Height;
