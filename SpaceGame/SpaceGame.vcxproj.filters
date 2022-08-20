@@ -266,9 +266,6 @@
     <ClInclude Include="include\renderer\Renderer.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\RenderQueue.hpp">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\ShapeFactory.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>

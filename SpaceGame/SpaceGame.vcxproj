@@ -260,7 +260,6 @@
     <ClInclude Include="include\renderer\Model.hpp" />
     <ClInclude Include="include\renderer\Plane.h" />
     <ClInclude Include="include\renderer\Renderer.hpp" />
-    <ClInclude Include="include\renderer\RenderQueue.hpp" />
     <ClInclude Include="include\renderer\ShadowMap.h" />
     <ClInclude Include="include\renderer\ShapeFactory.h" />
     <ClInclude Include="include\renderer\Texture.h" />

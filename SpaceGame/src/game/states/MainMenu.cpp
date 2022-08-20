@@ -54,7 +54,7 @@ void MainMenu::render() {
     //Renders
     m_Shader.setUniform("u_Texture", 0);
     m_Camera.sendCameraUniforms(m_Shader);
-    m_Renderer.drawPrimitives(m_Shader);
+    m_Renderer.drawPrimitives();
 
     //IMGui - All of this is shit and additionally testing right now
     GameGUI::SetNextWindowSize(300.0f, m_Height);

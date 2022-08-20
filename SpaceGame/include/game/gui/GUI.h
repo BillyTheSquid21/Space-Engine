@@ -6,8 +6,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "utility/SGUtil.h"
-#include "renderer/RenderQueue.hpp"
-#include <unordered_map>
+#include "unordered_map"
 
 //Create type of map which allows searches for font size
 typedef std::unordered_map<unsigned char, unsigned int> FontSizeMap;

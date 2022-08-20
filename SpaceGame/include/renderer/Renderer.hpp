@@ -4,7 +4,7 @@
 
 #include "ShapeFactory.h"
 #include "GLClasses.h"
-#include "RenderQueue.hpp"
+#include "utility/SegArray.hpp"
 #include "Camera.h"
 
 namespace Render
@@ -51,22 +51,34 @@ namespace Render
 		void setDrawingMode(GLenum type) { m_PrimitiveType = type; }
 
 		/**
-		* System for commiting vertices. Uses Bulk Render Queue.
+		* System for commiting vertices. Uses Segmented Array.
 		* 
 		* @param vert Pointer to vertices being drawn
 		* @param vertSize Amount of floats contained within all the vertices to be drawn
 		* @param ind Pointer to indices for drawing
 		* @param indSize Amount of indices being submitted
 		*/
-		void commit(T* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize) { m_PrimitiveVertices.pushBack(vert, vertSize, ind, indSize); }							//only adds the vertices if no geometry exists
+		void commit(void* vert, unsigned int vertSize, const unsigned int* ind, unsigned short int indSize) 
+		{ 
+			if (m_VerticesIndex >= m_RenderInstructions.size())
+			{
+				m_RenderInstructions.emplaceBack(vert, vertSize, ind, indSize);
+			}
+			else
+			{
+				m_RenderInstructions[m_VerticesIndex] = Info::Info(vert, vertSize, ind, indSize);
+			}
+			m_VertSize += vertSize; m_IndSize += indSize;
+			m_VerticesIndex++;
+		}							
 		
 		/**
 		* Called when collected primitives are to be drawn
 		* 
 		* @param shader Shader being bound for this draw call
 		*/
-		void drawPrimitives(Shader& shader) {
-			drawCall(&m_RendererModelMatrix, shader, true);
+		void drawPrimitives() {
+			drawCall(&m_RendererModelMatrix, true);
 		}
 
 		//Camera
@@ -80,14 +92,9 @@ namespace Render
 		*/
 		void bufferVideoData()
 		{
-			//First get amount of data among all vertice floats
-			unsigned int totalVertFloats = m_PrimitiveVertices.vertFloatCount();
-			//Get amount of data among all indice ints
-			unsigned int totalIndFloats = m_PrimitiveVertices.indIntCount();
-
 			//Then create buffer with space for that many floats
 			std::vector<float> vertices; std::vector<unsigned int> indices;		//Buffer declaration
-			vertices.resize(totalVertFloats); indices.resize(totalIndFloats);	//Buffer resizing
+			vertices.resize(m_VertSize); indices.resize(m_IndSize);				//Buffer resizing
 			auto verticesIterator = vertices.begin(); auto indicesIterator = indices.begin();
 
 			//Indexes
@@ -95,55 +102,58 @@ namespace Render
 			int vertexSizeIndex = 0; int indiceSizeIndex = 0;
 			unsigned int largestInd = 0;
 
-			while (m_PrimitiveVertices.itemsWaiting()) {
+			for (int i = 0; i < m_VerticesIndex; i++) 
+			{
 				//Get instructions from render queue
-				BulkRenderContainer<T*> instructions = m_PrimitiveVertices.nextInQueue();
+				Info instructions = m_RenderInstructions[i];
 
-				//For each bulk chunk, render all
-				for (int i = 0; i < instructions.elementsCount; i++)
-				{
-					//VERTICES
-					const float* dataPointer = (const float*)instructions.verts[i];
-					unsigned int dataSize = instructions.vertFloats[i];
-					vertexSizeIndex++;
+				//VERTICES
+				const float* dataPointer = (const float*)instructions.verts;
+				unsigned int dataSize = instructions.vertFloats;
+				vertexSizeIndex++;
 
-					//Copy vertices into vector		
-					std::copy(&dataPointer[0], &dataPointer[dataSize], verticesIterator + vertIndex);
-					vertIndex += dataSize;
+				//Copy vertices into vector		
+				std::copy(&dataPointer[0], &dataPointer[dataSize], verticesIterator + vertIndex);
+				vertIndex += dataSize;
 
-					//INDICES
-					const unsigned int* indDataPointer = instructions.inds[i];
-					unsigned int indDataSize = instructions.indCount[i];
-					//Add to vector one by one
-					unsigned int currentLargest = 0;
-					for (int j = 0; j < indDataSize; j++) {
-						unsigned int newValue = indDataPointer[j] + largestInd;
-						indices[indIndex] = newValue + indiceSizeIndex;
-						indIndex++;
-						if (newValue > currentLargest) {
-							currentLargest = newValue;
-						}
+				//INDICES
+				const unsigned int* indDataPointer = instructions.inds;
+				unsigned int indDataSize = instructions.indCount;
+				
+				//Add to vector one by one
+				unsigned int currentLargest = 0;
+				for (int j = 0; j < indDataSize; j++) {
+					unsigned int newValue = indDataPointer[j] + largestInd;
+					indices[indIndex] = newValue + indiceSizeIndex;
+					indIndex++;
+					if (newValue > currentLargest) {
+						currentLargest = newValue;
 					}
-					largestInd = currentLargest;
-
-					indiceSizeIndex++;
 				}
+				largestInd = currentLargest;
+
+				indiceSizeIndex++;
 
 			}
 			m_VB.bufferData(vertices.data(), vertices.size());
 			m_IB.bufferData(indices.data(), indices.size());
+
+			//Keep array to correct size
+			if (m_VerticesIndex < m_RenderInstructions.size())
+			{
+				EngineLog("BEEP");
+				m_RenderInstructions.shrinkTo(m_VerticesIndex);
+			}
+			m_VerticesIndex = 0;
+			m_VertSize = 0; m_IndSize = 0;
 		}
 
 	protected:
 		//Helper functions - TODO - use thread pooling so separate renderers collect data in parallel
-		void bindAll(Shader& shader) { shader.bind();	m_VA.bind();	m_IB.bind(); }
-		void drawCall(glm::mat4* modelMatrix, Shader& shader, bool first) {
-			//Use model matrix
-			//
-			//shader.setUniform("u_Model", modelMatrix); 
-
+		void bindAll() { m_VA.bind();	m_IB.bind(); }
+		void drawCall(glm::mat4* modelMatrix, bool first) {
 			//Bind all objects
-			bindAll(shader);
+			bindAll();
 			//Draw Elements
 			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
 			glBindVertexArray(0);
@@ -159,7 +169,20 @@ namespace Render
 		VertexBufferLayout m_VBL;
 
 		//Queue for rendering
-		Render::BulkRenderQueue<T*> m_PrimitiveVertices;
+		struct Info
+		{
+			Info() = default;
+			Info(void* v, unsigned int vF, const unsigned int* i, unsigned short int iC) : verts(v), vertFloats(vF), inds(i), indCount(iC) {}
+			void* verts = nullptr;
+			unsigned int vertFloats = 0;
+			const unsigned int* inds = nullptr;
+			unsigned int indCount = 0;
+		};
+
+		SegArray<Info, 96> m_RenderInstructions;
+		unsigned int m_VertSize = 0;
+		unsigned int m_IndSize = 0;
+		unsigned int m_VerticesIndex = 0;
 	};
 }
 

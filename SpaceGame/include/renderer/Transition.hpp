@@ -101,7 +101,7 @@ public:
 			}
 		}
 
-		m_Renderer.drawPrimitives(shader);
+		m_Renderer.drawPrimitives();
 	}
 
 	float m_Width; float m_Height;

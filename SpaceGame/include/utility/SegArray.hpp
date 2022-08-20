@@ -35,6 +35,22 @@ public:
 		m_Nodes[m_Nodes.size()-1].size++;
 	}
 
+	template<typename... Args>
+	void emplaceBack(Args... args)
+	{
+		//Check if over running
+		if (m_Size == m_Nodes.size() * m_Stride)
+		{
+			m_Nodes.emplace_back(std::make_shared<T[]>(m_Stride), 0);
+		}
+
+		T& ind = getIndex(m_Size);
+		ind = T(args...);
+		m_Size++;
+
+		m_Nodes[m_Nodes.size() - 1].size++;
+	}
+
 	void eraseAt(size_t index)
 	{
 		if (index >= m_Size)
@@ -78,7 +94,10 @@ public:
 	void shrinkTo(size_t size)
 	{
 		int nodeCount = getNode(size - 1) + 1;
-		m_Nodes.resize(nodeCount);
+		if (!(size < m_Stride))
+		{
+			m_Nodes.resize(nodeCount);
+		}
 		m_Nodes[m_Nodes.size() - 1].size = size - m_Nodes.size() - 1;
 		m_Size = size;
 	}

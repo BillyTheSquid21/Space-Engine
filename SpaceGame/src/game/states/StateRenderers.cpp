@@ -159,20 +159,20 @@ void OverworldRenderer::draw()
 	//Render from lights perspective
 	shadowMap.startCapture();
 	worldTexture.bind();
-	worldRenderer.drawPrimitives(sceneShadows);
+	worldRenderer.drawPrimitives();
 	pokemonTexture.bind();
-	pokemonRenderer.drawPrimitives(sceneShadows);
+	pokemonRenderer.drawPrimitives();
 	spriteTexture.bind();
-	spriteRenderer.drawPrimitives(sceneShadows);
+	spriteRenderer.drawPrimitives();
 	modelAtlas.bind();
-	modelRenderer.drawPrimitives(sceneShadows);
+	modelRenderer.drawPrimitives();
 	sceneShadows.unbind();
 
 	//Grass scene
 	grassShadows.bind();
 	worldTexture.bind();
 	grassShadows.setUniform("WVP", shadowMap.calcMVP(world, lightView));
-	grassRenderer.drawPrimitives(grassShadows);
+	grassRenderer.drawPrimitives();
 	grassShadows.unbind();
 
 	shadowMap.endCapture(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -200,25 +200,25 @@ void OverworldRenderer::draw()
 	glm::mat4 SpriteInvTranspModel = glm::mat4(glm::transpose(glm::inverse(spriteRenderer.m_RendererModelMatrix)));
 	sceneShader.setUniform("u_InvTranspModel", &SpriteInvTranspModel);
 	sceneShader.setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
-	spriteRenderer.drawPrimitives(sceneShader);
+	spriteRenderer.drawPrimitives();
 
 	//Pokemon Sprite
 	pokemonTexture.bind();
 	glm::mat4 PkmInvTranspModel = glm::mat4(glm::transpose(glm::inverse(pokemonRenderer.m_RendererModelMatrix)));
 	sceneShader.setUniform("u_InvTranspModel", &PkmInvTranspModel);
 	sceneShader.setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
-	pokemonRenderer.drawPrimitives(sceneShader);
+	pokemonRenderer.drawPrimitives();
 
 	//Models - Make have per model inv transp later when models are used more
 	modelAtlas.bind();
-	modelRenderer.drawPrimitives(sceneShader);
+	modelRenderer.drawPrimitives();
 
 	//World
 	worldTexture.bind();
 	glm::mat4 WorldInvTranspModel = glm::mat4(glm::transpose(glm::inverse(worldRenderer.m_RendererModelMatrix)));
 	sceneShader.setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	sceneShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
-	worldRenderer.drawPrimitives(sceneShader);
+	worldRenderer.drawPrimitives();
 	sceneShader.unbind();
 
 	//Grass
@@ -234,7 +234,7 @@ void OverworldRenderer::draw()
 
 	grassShader.setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	grassShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
-	grassRenderer.drawPrimitives(grassShader);
+	grassRenderer.drawPrimitives();
 	grassShader.unbind();
 
 	//Transition
@@ -341,24 +341,24 @@ void BattleRenderer::draw()
 	//World
 	platformTexture.bind();
 	sceneShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
-	worldRenderer.drawPrimitives(sceneShader);
+	worldRenderer.drawPrimitives();
 	sceneShader.unbind();
 
 	//Background
 	backgroundTexture.bind();
 	sceneShader.setUniform("u_Model", &backgroundRenderer.m_RendererModelMatrix);
-	backgroundRenderer.drawPrimitives(sceneShader);
+	backgroundRenderer.drawPrimitives();
 	sceneShader.unbind();
 
 	//Sprite A
 	pokemonATexture.bind();
 	sceneShader.setUniform("u_Model", &pokemonARenderer.m_RendererModelMatrix);
-	pokemonARenderer.drawPrimitives(sceneShader);
+	pokemonARenderer.drawPrimitives();
 
 	//Sprite B
 	pokemonBTexture.bind();
 	sceneShader.setUniform("u_Model", &pokemonBRenderer.m_RendererModelMatrix);
-	pokemonBRenderer.drawPrimitives(sceneShader);
+	pokemonBRenderer.drawPrimitives();
 
 	sceneShader.unbind();
 }
