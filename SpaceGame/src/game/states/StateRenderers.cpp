@@ -1,9 +1,12 @@
 #include "game/states/StateRenderers.h"
 
-void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int height)
+void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int height, ObjectManager* obj)
 {
 	//Renderer setup
 	camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	//Object manager pointer
+	objects = obj;
 
 	//World Renderer
 	worldRenderer.setLayout<float>(3, 2, 3);
@@ -55,20 +58,20 @@ void OverworldRenderer::loadRendererData()
 	transitionShader.create("res/shaders/Battle_Transition.glsl");
 
 	//Load world texture
-	worldTexture.loadTexture("res/textures/OW.png");
-	worldTexture.generateTexture(TEXTURE_SLOT);
+	worldTexture.loadTexture("res/textures/tilesets/0.png");
+	worldTexture.generateTexture(OVERWORLD_TEXTURE_SLOT);
 	worldTexture.bind();
 	worldTexture.clearBuffer();
 
 	//Load sprite textures
 	spriteTexture.loadTexture("res/textures/Sprite.png");
-	spriteTexture.generateTexture(TEXTURE_SLOT);
+	spriteTexture.generateTexture(OVERWORLD_TEXTURE_SLOT);
 	spriteTexture.bind();
 	spriteTexture.clearBuffer();
 
 	//Load companion pkm texture
 	pokemonTexture.loadTexture("res/textures/pokemon/overworld/bulbasaur.png");
-	pokemonTexture.generateTexture(TEXTURE_SLOT);
+	pokemonTexture.generateTexture(OVERWORLD_TEXTURE_SLOT);
 	pokemonTexture.bind();
 	pokemonTexture.clearBuffer();
 	pokemonTileMap = TileMap::TileMap(pokemonTexture.width(), pokemonTexture.height(), (float)pokemonTexture.width() / 2.0f, (float)pokemonTexture.height() / 4.0f);
@@ -83,7 +86,7 @@ void OverworldRenderer::loadRendererData()
 void OverworldRenderer::generateAtlas()
 {
 	modelAtlas.generateAtlas();
-	modelAtlas.generateTexture(TEXTURE_SLOT);
+	modelAtlas.generateTexture(OVERWORLD_TEXTURE_SLOT);
 	modelAtlas.bind();
 }
 
@@ -102,23 +105,52 @@ void OverworldRenderer::bufferRenderData()
 	modelRenderer.bufferVideoData();
 	worldRenderer.bufferVideoData();
 	grassRenderer.bufferVideoData();
+
+	//If trigger to remap models sent, remap and buffer atlas
+	if (m_RemapModels && m_LevelsLeftLoading <= 0)
+	{
+		mapModelTextures();
+	}
 }
 
-void OverworldRenderer::ensureModelMapping(unsigned int objectCount)
+void OverworldRenderer::mapModelTextures()
 {
-	if (objectCount == lastObjectCount)
+	//Request new textures
+	modelAtlas.clearBuffers();
+	modelAtlas.deleteTextures();
+	std::vector<ObjectManager::GameObjectContainer> objs = objects->getObjects();
+	std::vector<ModelObject*> objPtrs;
+	for (int i = 0; i < objs.size(); i++)
 	{
-		return;
+		//If a model that isn't dead is found
+		if (objs[i].obj->getTag() == (uint16_t)ObjectType::Model
+			&& !objs[i].obj->isDead())
+		{
+			ModelObject* obj = (ModelObject*)objs[i].obj.get();
+			modelAtlas.loadTexture("res/textures/" + obj->m_Texture, obj->m_Texture);
+			objPtrs.push_back(obj);
+		}
 	}
-	if (!modelAtlas.shouldRequestNewTextures())
+	modelAtlas.generateAtlas();
+	modelAtlas.generateTexture(OVERWORLD_TEXTURE_SLOT);
+	modelAtlas.bind();
+	for (int i = 0; i < objPtrs.size(); i++)
 	{
-		modelAtlas.requestNewTextures();
+		ModelObject* obj = objPtrs[i];
+		Tex::TextureAtlasRGBA::unmapModelVerts(
+			obj->m_Model.getVertices(),
+			obj->m_Model.getVertCount(),
+			obj->m_Texture,
+			obj->m_LastTransform
+		);
+		obj->m_LastTransform = modelAtlas.mapModelVerts(
+			obj->m_Model.getVertices(),
+			obj->m_Model.getVertCount(),
+			obj->m_Texture
+		);
 	}
-	else
-	{
-		generateAtlas();
-		lastObjectCount = objectCount;
-	}
+	m_RemapModels = false;
+	m_LevelsLeftLoading = 0;
 }
 
 void OverworldRenderer::update(double deltaTime)
@@ -182,7 +214,7 @@ void OverworldRenderer::draw()
 
 	////Lighting pass
 	sceneShader.bind();
-	shadowMap.bindForReading(SHADOWS_SLOT);
+	shadowMap.bindForReading(OVERWORLD_SHADOWS_SLOT);
 
 	//Scale lighting color
 	m_LightScaled = m_LightColor * m_LightScaleFactor;
@@ -191,9 +223,9 @@ void OverworldRenderer::draw()
 	sceneShader.setUniform("u_AmbLight", &m_LightScaled);
 	sceneShader.setUniform("u_LightDir", &lightDir);
 	sceneShader.setUniform("u_LightMVP", shadowMap.getMVP());
-	sceneShader.setUniform("u_ShadowMap", SHADOWS_SLOT);
+	sceneShader.setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
 	sceneShader.setUniform("u_LightsActive", lightScene);
-	sceneShader.setUniform("u_Texture", TEXTURE_SLOT);
+	sceneShader.setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
 
 	//Sprites
 	spriteTexture.bind();
@@ -223,14 +255,14 @@ void OverworldRenderer::draw()
 
 	//Grass
 	grassShader.bind();
-	shadowMap.bindForReading(SHADOWS_SLOT);
+	shadowMap.bindForReading(OVERWORLD_SHADOWS_SLOT);
 
 	grassShader.setUniform("u_AmbLight", &m_LightScaled);
 	grassShader.setUniform("u_LightDir", &lightDir);
 	grassShader.setUniform("u_LightMVP", shadowMap.getMVP());
-	grassShader.setUniform("u_ShadowMap", SHADOWS_SLOT);
+	grassShader.setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
 	grassShader.setUniform("u_LightsActive", lightScene);
-	grassShader.setUniform("u_Texture", TEXTURE_SLOT);
+	grassShader.setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
 
 	grassShader.setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	grassShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
@@ -284,13 +316,13 @@ void BattleRenderer::loadRendererData()
 	loadPokemonTextureA("bulbasaur");
 	loadPokemonTextureB("bulbasaur");
 	platformTexture.loadTexture("res/textures/BattlePlatform.png");
-	platformTexture.generateTexture(TEXTURE_SLOT);
+	platformTexture.generateTexture(BATTLE_TEXTURE_SLOT);
 	platformTexture.bind();
 	platformTexture.clearBuffer();
 
 	//Load background
 	backgroundTexture.loadTexture("res/textures/BattleBackground.png");
-	backgroundTexture.generateTexture(TEXTURE_SLOT);
+	backgroundTexture.generateTexture(BATTLE_TEXTURE_SLOT);
 	backgroundTexture.bind();
 	backgroundTexture.clearBuffer();
 }
@@ -306,7 +338,7 @@ void BattleRenderer::purgeData()
 void BattleRenderer::loadPokemonTextureA(std::string name)
 {
 	pokemonATexture.loadTexture(BACK_TEX_PATH+name+PNG_EXT);
-	pokemonATexture.generateTexture(TEXTURE_SLOT);
+	pokemonATexture.generateTexture(BATTLE_TEXTURE_SLOT);
 	pokemonATexture.bind();
 	pokemonATexture.clearBuffer();
 }
@@ -314,7 +346,7 @@ void BattleRenderer::loadPokemonTextureA(std::string name)
 void BattleRenderer::loadPokemonTextureB(std::string name)
 {
 	pokemonBTexture.loadTexture(FRONT_TEX_PATH+name+PNG_EXT);
-	pokemonBTexture.generateTexture(TEXTURE_SLOT);
+	pokemonBTexture.generateTexture(BATTLE_TEXTURE_SLOT);
 	pokemonBTexture.bind();
 	pokemonBTexture.clearBuffer();
 }
@@ -336,7 +368,7 @@ void BattleRenderer::draw()
 	camera.sendCameraUniforms(sceneShader);
 
 	//Set universal uniforms
-	sceneShader.setUniform("u_Texture", TEXTURE_SLOT);
+	sceneShader.setUniform("u_Texture", BATTLE_TEXTURE_SLOT);
 
 	//World
 	platformTexture.bind();

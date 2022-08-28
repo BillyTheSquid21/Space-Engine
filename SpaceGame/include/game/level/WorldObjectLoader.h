@@ -6,12 +6,11 @@
 #include "string"
 #include "sstream"
 #include "thread"
-
 #include "core/ObjManagement.h"
 #include "game/level/World.h"
-
+#include "game/level/TextureSlots.hpp"
 #include "game/GUI/GUI.h"
-
+#include "game/objects/ObjectTypes.hpp"
 #include "game/objects/PlayerObjects.h"
 #include "game/objects/NPCAi.h"
 #include "game/objects/Script.hpp"
@@ -24,12 +23,9 @@
 #include "game/objects/WarpTile.h"
 #include "game/objects/NPCAi.h"
 #include "game/objects/Bridge.h"
-
 #include "game/states/StateRenderers.h"
-
 #include "game/utility/Input.hpp"
 #include "game/utility/XmlWrapper.hpp"
-
 #include "mtlib/ThreadPool.h"
 
 //Root node of all objects is "objects"
@@ -71,6 +67,12 @@ namespace World
 		void InitialiseLevels(ObjectManager* obj, OverworldRenderer* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input);
 		void InitialiseGlobalObjects();
 		void BuildFirstLevel(World::LevelID id); //Builds geometry and permissions first - for use when no level has been initialised
+		
+		//Level signals - allows deferring start of level loading
+		void SignalLoadLevel(World::LevelID id) { m_Renderer->isModifyingLevel(); m_ChangeLevel.emplace_back(id, 1); };
+		void SignalUnloadLevel(World::LevelID id) { m_Renderer->isModifyingLevel(); m_ChangeLevel.emplace_back(id, 2); };
+		void ChangeLevel();
+		
 		void LoadLevel(World::LevelID id);
 		void UnloadLevel(World::LevelID id);
 		void UnloadAll();
@@ -78,6 +80,14 @@ namespace World
 		std::vector<Level> m_Levels;
 		std::vector<std::mutex> m_LevelMutexes; //Access mutex array to make sure the same level can't load at the same time
 	private:
+		//Load level		
+		struct LevelLoad
+		{
+			World::LevelID id;
+			char state = 0;
+		};
+		std::vector<LevelLoad> m_ChangeLevel;
+
 		//Pointer to rendering stuff
 		ObjectManager* m_ObjManager;
 		PlayerData* m_Data;

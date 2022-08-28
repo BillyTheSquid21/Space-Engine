@@ -24,10 +24,10 @@ namespace World
 	//Level data
 	enum class LevelID : unsigned int
 	{
-		LEVEL_ENTRY = 0, LEVEL_TEST = 1,
+		LEVEL_ENTRY = 0, LEVEL_TEST = 1, LEVEL_TEST2 = 2,
 
 		//Null entry - keep at end for size purposes
-		LEVEL_NULL = 2
+		LEVEL_NULL = 3
 	};
 
 	//When level data is written, use int value the respective enum value evaluates to
@@ -35,13 +35,15 @@ namespace World
 	//Slope Directions - north is -Z axis, south is +Z axis, west is +X axis, east is -X (taken from abs)
 	enum class Direction : uint8_t
 	{
-		DIRECTION_NULL,
-		NORTH, NORTHEAST, NORTHWEST,	//Quads are aligned with vertex 0 and 1 being north facing
-		SOUTH, SOUTHEAST, SOUTHWEST,	//Each level is TILE_SIZE / sqrt(2) up due to geometry
-		EAST,
-		WEST,
-		NORTHEAST_WRAPPED, NORTHWEST_WRAPPED, 
-		SOUTHEAST_WRAPPED, SOUTHWEST_WRAPPED //Wraps slope around corner
+		DIRECTION_NULL = 0,
+		NORTH = 1, NORTHEAST = 2, NORTHWEST = 3,	//Quads are aligned with vertex 0 and 1 being north facing
+		SOUTH = 4, SOUTHEAST = 5, SOUTHWEST = 6,	//Each level is TILE_SIZE / sqrt(2) up due to geometry
+		EAST = 7,
+		WEST = 8,
+		NORTHEAST_WRAPPED = 9, NORTHWEST_WRAPPED = 10, 
+		SOUTHEAST_WRAPPED = 11, SOUTHWEST_WRAPPED = 12,		//Wraps slope around corner
+		NORTH_WALL = 13, SOUTH_WALL = 14, EAST_WALL = 15,
+		WEST_WALL = 16
 	};
 
 	World::Direction GetDirection(std::string dir);
@@ -72,10 +74,6 @@ namespace World
 		TALL_GRASS = 13, CAVE = 14,
 	};
 
-	//Tile arranging classes
-	void tileLevel(Norm_Tex_Quad* quad, WorldHeight level);
-	void SlopeTile(Norm_Tex_Quad* quad, Direction direction);
-
 	struct TileTexture
 	{
 		unsigned int textureX;
@@ -91,6 +89,11 @@ namespace World
 		Tile operator-(Tile& tile) { Tile newTile; newTile.x = this->x - tile.x; newTile.z = this->z - tile.z; return newTile; }
 		Tile operator+(Tile& tile) { Tile newTile; newTile.x = this->x + tile.x; newTile.z = this->z + tile.z; return newTile; }
 	};
+
+	//Tile arranging classes
+	void TileLevel(Norm_Tex_Quad* quad, WorldHeight level);
+	void SlopeTile(Norm_Tex_Quad* quad, Direction direction);
+	void StackWall(Norm_Tex_Quad* quad, std::vector<Direction>& dir, Tile tile, int width, int height);
 
 	struct LevelPermission
 	{
@@ -121,8 +124,11 @@ namespace World
 		LevelID id;
 		unsigned int width;
 		unsigned int height;
+		unsigned int tileset;
 		float originX;
 		float originY;
+		glm::vec3 lightColor;
+		glm::vec3 lightDir;
 		std::vector<WorldHeight> planeHeights;
 		std::vector<WorldHeight> presentWorldLevels;
 		std::vector<Direction> planeDirections;
@@ -136,7 +142,7 @@ namespace World
 	{
 	public:
 		//Load level data
-		bool buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapPointer);
+		bool buildLevel(Render::Renderer* planeRenderer, TileMap* tileMap, Texture* tileset, glm::vec3& lColor, glm::vec3& lDir);
 		void setID(World::LevelID id) { m_ID = id; }
 		void purgeLevel(); //Clears heap data
 		void render();
@@ -151,7 +157,7 @@ namespace World
 		struct PermVectorFragment
 		{
 			MovementPermissions* pointer;
-			size_t size;
+			int size;
 		};
 		
 		static PermVectorFragment queryPermissions(LevelID level, WorldHeight height);
@@ -185,7 +191,6 @@ namespace World
 		unsigned int m_LevelTilesX = 0;
 		unsigned int m_LevelTilesY = 0;
 		unsigned int m_LevelTotalTiles = 0;
-
 
 		float m_XOffset = 0.0f; float m_YOffset = 0.0f;
 		bool m_Loaded = false;

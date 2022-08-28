@@ -19,12 +19,12 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 45);
     m_Fonts->loadFont("res\\fonts\\PokemonXY\\PokemonXY.ttf", "boxfont", 70);
 
-    m_Renderer.initialiseRenderer(width, height);
+    m_Renderer.initialiseRenderer(width, height, &m_ObjManager);
 
     //Init levels and scripts
     m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Data, &m_TextBuff, m_Input);
-    std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, &m_Levels, std::placeholders::_1);
-    std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, &m_Levels, std::placeholders::_1);
+    std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::SignalLoadLevel, &m_Levels, std::placeholders::_1);
+    std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::SignalUnloadLevel, &m_Levels, std::placeholders::_1);
     OverworldScript::init(m_Data, m_Input, ld, uld);
 
     std::shared_ptr<GameGUI::HUD> hud(new GameGUI::HUD(width, height, 0, 0));
@@ -122,7 +122,7 @@ void Overworld::loadRequiredData() {
 
     //Init levels
     m_Levels.InitialiseGlobalObjects();
-    m_Levels.LoadLevel(m_CurrentLevel);
+    m_Levels.SignalLoadLevel(m_CurrentLevel);
     m_Renderer.generateAtlas();
     
     m_StartBattle = false;
@@ -149,12 +149,10 @@ void Overworld::loadObjectData()
     std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
     std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> randWGroup(new UpdateComponentGroup<NPC_RandWalk>());
     std::shared_ptr<UpdateComponentGroup<WarpTileUpdateComponent>> warpGroup(new UpdateComponentGroup<WarpTileUpdateComponent>());
-    std::shared_ptr<RenderComponentGroup<ModelAtlasUpdate>> modAtlasGroup(new RenderComponentGroup<ModelAtlasUpdate>());
     std::shared_ptr<RenderComponentGroup<ModelRender>> modRenGroup(new RenderComponentGroup<ModelRender>());
 
     //Add component groups
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
-    m_ObjManager.pushRenderGroup(modAtlasGroup, "ModelAtlas");
     m_ObjManager.pushRenderGroup(modRenGroup, "ModelRender");
     m_ObjManager.pushUpdateGroup(tileGroup, "TilePosition");
     m_ObjManager.pushUpdateGroup(mapGroup, "SpriteMap");
@@ -173,6 +171,7 @@ void Overworld::loadObjectData()
     m_PlayerPtr = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
     spriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer.spriteRenderer);
     m_PlayerPtr->m_LastPermissionPtr = World::GetTilePermission(m_PlayerPtr->m_CurrentLevel, m_PlayerPtr->m_Tile, m_PlayerPtr->m_WorldLevel);
+    m_PlayerPtr->setTag((uint16_t)ObjectType::RunningSprite);
 
     std::shared_ptr<PlayerMove> walk(new PlayerMove(&m_PlayerPtr->m_CurrentLevel, &m_PlayerPtr->m_XPos, &m_PlayerPtr->m_ZPos, &m_PlayerPtr->m_Tile));
     std::shared_ptr<PlayerCameraLock> spCam(new PlayerCameraLock(&m_PlayerPtr->m_XPos, &m_PlayerPtr->m_YPos, &m_PlayerPtr->m_ZPos, &m_Renderer.camera));
@@ -184,48 +183,49 @@ void Overworld::loadObjectData()
     m_LocationZ = &m_PlayerPtr->m_Tile.z;
 
     //Add companion test
-    OvSpr_SpriteData dataCompanion = { { m_PlayerPtr->m_Tile.x - 1, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
-    std::shared_ptr<OvSpr_RunningSprite> companionPtr = Ov_ObjCreation::BuildRunningSprite(dataCompanion, m_Renderer.pokemonTileMap, spriteGroup.get(), mapGroup.get(), &m_Renderer.pokemonRenderer);
-    spriteGroup->addComponent(&companionPtr->m_RenderComps, &companionPtr->m_Sprite, &m_Renderer.pokemonRenderer);
-    companionPtr->m_LastPermissionPtr = World::GetTilePermission(companionPtr->m_CurrentLevel, companionPtr->m_Tile, companionPtr->m_WorldLevel);
-    std::shared_ptr<PokemonFollow> follow(new PokemonFollow(&companionPtr->m_CurrentLevel, &companionPtr->m_XPos, &companionPtr->m_ZPos, &companionPtr->m_Tile));
-    ScriptParse::ScriptWrapper scriptWrap = ScriptParse::ParseScriptFromText("blank.sgs");
-    std::shared_ptr<OverworldScript> script(new OverworldScript(scriptWrap.script, scriptWrap.size, companionPtr));
-    script->linkText(&m_TextBuff);
-    follow->linkScript(script.get());
-    follow->linkInput(m_Input);
-    std::shared_ptr<PokemonAnimation> pkmAnim(new PokemonAnimation(companionPtr.get()));
+    //OvSpr_SpriteData dataCompanion = { { m_PlayerPtr->m_Tile.x - 1, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
+    //std::shared_ptr<OvSpr_RunningSprite> companionPtr = Ov_ObjCreation::BuildRunningSprite(dataCompanion, m_Renderer.pokemonTileMap, spriteGroup.get(), mapGroup.get(), &m_Renderer.pokemonRenderer);
+    //companionPtr->setTag((uint16_t)ObjectType::RunningSprite);
+    //spriteGroup->addComponent(&companionPtr->m_RenderComps, &companionPtr->m_Sprite, &m_Renderer.pokemonRenderer);
+    //companionPtr->m_LastPermissionPtr = World::GetTilePermission(companionPtr->m_CurrentLevel, companionPtr->m_Tile, companionPtr->m_WorldLevel);
+    //std::shared_ptr<PokemonFollow> follow(new PokemonFollow(&companionPtr->m_CurrentLevel, &companionPtr->m_XPos, &companionPtr->m_ZPos, &companionPtr->m_Tile));
+    //ScriptParse::ScriptWrapper scriptWrap = ScriptParse::ParseScriptFromText("blank.sgs");
+    //std::shared_ptr<OverworldScript> script(new OverworldScript(scriptWrap.script, scriptWrap.size, companionPtr));
+    //script->linkText(&m_TextBuff);
+    //follow->linkScript(script.get());
+    //follow->linkInput(m_Input);
+    //std::shared_ptr<PokemonAnimation> pkmAnim(new PokemonAnimation(companionPtr.get()));
 
     //Add pointer test
-    OvSpr_SpriteData ptrData = { { m_PlayerPtr->m_Tile.x - 2, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
-    std::shared_ptr<OvSpr_Sprite> ptrSprite = Ov_ObjCreation::BuildSprite(ptrData, m_Renderer.worldTileMap, spriteGroup.get(), &m_Renderer.worldRenderer, false);
-    AxialRotate<NormalTextureVertex>(&ptrSprite->m_Sprite, { ptrSprite->m_XPos + World::TILE_SIZE / 2.0f,  ptrSprite->m_YPos, ptrSprite->m_ZPos }, -45.0f, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<NormalTextureVertex>(&ptrSprite->m_Sprite, 0.0f, 1.0f, World::TILE_SIZE / 2.0f, Shape::QUAD);
-    SpriteAnim<NormalTextureVertex, Norm_Tex_Quad> anim = SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>(8, 3);
-    TileUV uv1 = m_Renderer.worldTileMap.uvTile(0, 6);
-    TileUV uv2 = m_Renderer.worldTileMap.uvTile(0, 7);
-    TileUV uv3 = m_Renderer.worldTileMap.uvTile(0, 8);
-    anim.setFrame(0, uv1); anim.setFrame(1, uv2); anim.setFrame(2, uv3);
-    anim.linkSprite(&ptrSprite->m_Sprite, &m_AnimatePointer);
-    anim.loop = true;
-    animGroup->addExistingComponent(&companionPtr->m_UpdateComps, anim);
-    ptrSprite->messageAllRender((int)Message::DEACTIVATE);
-    tileGroup->addComponent(&ptrSprite->m_UpdateComps, &ptrSprite->m_CurrentLevel, &ptrSprite->m_XPos, &ptrSprite->m_ZPos, &ptrSprite->m_Tile);
+    //OvSpr_SpriteData ptrData = { { m_PlayerPtr->m_Tile.x - 2, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
+    //std::shared_ptr<OvSpr_Sprite> ptrSprite = Ov_ObjCreation::BuildSprite(ptrData, m_Renderer.worldTileMap, spriteGroup.get(), &m_Renderer.worldRenderer, false);
+    //AxialRotate<NormalTextureVertex>(&ptrSprite->m_Sprite, { ptrSprite->m_XPos + World::TILE_SIZE / 2.0f,  ptrSprite->m_YPos, ptrSprite->m_ZPos }, -45.0f, GetVerticesCount(Shape::QUAD), Axis::X);
+    //Translate<NormalTextureVertex>(&ptrSprite->m_Sprite, 0.0f, 1.0f, World::TILE_SIZE / 2.0f, Shape::QUAD);
+    //SpriteAnim<NormalTextureVertex, Norm_Tex_Quad> anim = SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>(8, 3);
+    //TileUV uv1 = m_Renderer.worldTileMap.uvTile(0, 6);
+    //TileUV uv2 = m_Renderer.worldTileMap.uvTile(0, 7);
+    //TileUV uv3 = m_Renderer.worldTileMap.uvTile(0, 8);
+    //anim.setFrame(0, uv1); anim.setFrame(1, uv2); anim.setFrame(2, uv3);
+    //anim.linkSprite(&ptrSprite->m_Sprite, &m_AnimatePointer);
+    //anim.loop = true;
+    //animGroup->addExistingComponent(&companionPtr->m_UpdateComps, anim);
+    //ptrSprite->messageAllRender((int)Message::DEACTIVATE);
+    //tileGroup->addComponent(&ptrSprite->m_UpdateComps, &ptrSprite->m_CurrentLevel, &ptrSprite->m_XPos, &ptrSprite->m_ZPos, &ptrSprite->m_Tile);
 
     //Link sprites to pkm follow
-    follow->linkSprites(m_PlayerPtr.get(), companionPtr.get(), ptrSprite.get());
+    //follow->linkSprites(m_PlayerPtr.get(), companionPtr.get(), ptrSprite.get());
 
     //Player is always first object pushed on overworld load - makes searching easier
     m_ObjManager.pushUpdateHeap(walk, &m_PlayerPtr->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(globLev, &m_PlayerPtr->m_UpdateComps);
     m_ObjManager.pushUpdateHeap(encounter, &m_PlayerPtr->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(follow, &companionPtr->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(script, &companionPtr->m_UpdateComps);
-    m_ObjManager.pushUpdateHeap(pkmAnim, &companionPtr->m_UpdateComps);
+    //m_ObjManager.pushUpdateHeap(follow, &companionPtr->m_UpdateComps);
+    //m_ObjManager.pushUpdateHeap(script, &companionPtr->m_UpdateComps);
+    //m_ObjManager.pushUpdateHeap(pkmAnim, &companionPtr->m_UpdateComps);
     m_ObjManager.pushRenderHeap(spCam, &m_PlayerPtr->m_RenderComps);
     m_ObjManager.pushGameObject(m_PlayerPtr, "Player");
-    m_ObjManager.pushGameObject(companionPtr, "Companion");
-    m_ObjManager.pushGameObject(ptrSprite, "Pointer");
+    //m_ObjManager.pushGameObject(companionPtr, "Companion");
+    //m_ObjManager.pushGameObject(ptrSprite, "Pointer");
 }
 
 void Overworld::update(double deltaTime, double time) {
@@ -251,6 +251,9 @@ void Overworld::update(double deltaTime, double time) {
 
     //update objects
     m_ObjManager.update(deltaTime);
+
+    //update levels
+    m_Levels.ChangeLevel();
 
     //update renderer
     m_Renderer.update(deltaTime);
@@ -295,9 +298,6 @@ void Overworld::render() {
 
     //Start timer
     auto ts = EngineTimer::StartTimer();
-
-    //If new objects created, ensure models are mapped correctly
-    m_Renderer.ensureModelMapping(m_ObjManager.getObjectCount());
 
     //Renders
     m_Levels.render();

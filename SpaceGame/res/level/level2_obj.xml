@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Level>
+  <Objects>
+    <Object name="Level2_model1">
+      <Model>
+        <OffsetX>106</OffsetX>
+        <OffsetY>9</OffsetY>
+        <OffsetZ>64</OffsetZ>
+        <Scale>0.1</Scale>
+        <Model>Box.obj</Model>
+        <Texture>wood.png</Texture>
+      </Model>
+    </Object>
+    <Object name="Level2_model2">
+      <Model>
+        <OffsetX>128</OffsetX>
+        <OffsetY>9</OffsetY>
+        <OffsetZ>64</OffsetZ>
+        <Scale>0.1</Scale>
+        <Model>Box.obj</Model>
+        <Texture>wood.png</Texture>
+      </Model>
+    </Object>
+    <Object name="Level2_warp">
+      <WarpTile>
+        <TileXCurr>7</TileXCurr>
+        <TileZCurr>0</TileZCurr>
+        <TileXDest>13</TileXDest>
+        <TileZDest>8</TileZDest>
+        <WLevelCurr>0</WLevelCurr>
+        <WLevelDest>1</WLevelDest>
+        <LevelIDDest>1</LevelIDDest>
+      </WarpTile>
+    </Object>
+  </Objects>
+</Level>

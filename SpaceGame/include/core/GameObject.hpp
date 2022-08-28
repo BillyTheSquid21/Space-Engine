@@ -416,6 +416,10 @@ public:
 
 	bool isDead() const { return m_Dead; }
 
+	//Set object tag/type to be able to view object type when cast to GameObject
+	void setTag(uint16_t tag) { m_Tag = tag; }
+	uint16_t getTag() const { return m_Tag; }
+
 	//Locations in memory of all attached components - must update in component if changes
 	std::vector<UpdateComponent*> m_UpdateComps;
 	std::vector<RenderComponent*> m_RenderComps;
@@ -427,6 +431,7 @@ protected:
 	unsigned int m_ID;
 	bool m_Active = true;
 	bool m_Dead = false;
+	uint16_t m_Tag = 0; //Tag for user defined type
 };
 
 #endif

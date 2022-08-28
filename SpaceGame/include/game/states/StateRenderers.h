@@ -2,14 +2,15 @@
 #ifndef STATE_RENDERERS_HPP
 #define STATE_RENDERERS_HPP
 
+#include "core/ObjManagement.h"
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.h"
 #include "game/objects/ModelObject.hpp"
 #include "renderer/ShadowMap.h"
 #include "renderer/Transition.hpp"
-
+#include "game/objects/ObjectTypes.hpp"
 #include "game/level/World.h"
-
+#include "game/level/TextureSlots.hpp"
 #include "game/objects/TileMap.h"
 #include "mtlib/ThreadPool.h"
 
@@ -48,31 +49,36 @@ public:
 	TileMap pokemonTileMap = TileMap(1.0f, 1.0f, 1.0f, 1.0f);
 	Tex::TextureAtlasRGBA modelAtlas;
 
+	//Objects
+	ObjectManager* objects = nullptr;
+
 	//Setup renderer one time
-	void initialiseRenderer(unsigned int width, unsigned int height);
+	void initialiseRenderer(unsigned int width, unsigned int height, ObjectManager* obj);
 	void loadRendererData(); //Load data for renderer
 	void generateAtlas(); //Generate atlas from loaded model textures
 	void purgeData();
 	void bufferRenderData();
 	void update(double deltaTime);
 	void draw(); //Draw scene renderer
-	void ensureModelMapping(unsigned int objectCount);
+	void mapModelTextures();
+	void signalMapModelTextures() { m_RemapModels = true; }
 
-	//Slot identifiers
-	static constexpr int TEXTURE_SLOT = 0;
-	static constexpr int SHADOWS_SLOT = 1;
+	//Notifies renderer to wait until a level has been modified to change model mapping
+	void isModifyingLevel() { m_LevelsLeftLoading++; }
+	void hasLevelModified() { m_LevelsLeftLoading--; }
 
 	//Lighting
 	glm::vec3 m_LightDir = glm::vec3(0.6f, 0.5f, 0.52f);
-	glm::vec3 m_LightColor = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::vec3 m_LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 	glm::vec3 m_LightScaled = glm::vec3(1.0f, 1.0f, 1.0f);
-	glm::vec3 m_LightScaleFactor = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 m_LightScaleFactor = glm::vec3(0.5f, 0.5f, 0.5f);
 
 	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 	ShadowMap shadowMap = ShadowMap(2048, 2048);
 	int lightScene = 0;
 
-	unsigned int lastObjectCount = 0;
+	bool m_RemapModels = false;
+	int m_LevelsLeftLoading = 0;
 
 	//Test
 	std::function<void()> m_StateToBattle;
@@ -112,9 +118,6 @@ public:
 	const std::string FRONT_TEX_PATH = "res/textures/pokemon/front/";
 	const std::string BACK_TEX_PATH = "res/textures/pokemon/back/";
 	const std::string PNG_EXT = ".png";
-
-	//Slot identifiers
-	static constexpr int TEXTURE_SLOT = 0;
 
 	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 };

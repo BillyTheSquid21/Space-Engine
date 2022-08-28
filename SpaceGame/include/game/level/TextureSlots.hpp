@@ -1,0 +1,9 @@
+#pragma once
+#ifndef TEXTURE_SLOTS_H
+#define TEXTURE_SLOTS_H
+
+#define OVERWORLD_TEXTURE_SLOT 0
+#define OVERWORLD_SHADOWS_SLOT 1
+#define BATTLE_TEXTURE_SLOT 0
+
+#endif

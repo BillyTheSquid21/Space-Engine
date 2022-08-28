@@ -8,7 +8,7 @@
 class Texture
 {
 public:
-    Texture() : m_ID(0), m_FilePath("null"), m_LocalBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0) {};
+    Texture() : m_ID(0), m_FilePath("res/debug.png"), m_LocalBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0) {};
     ~Texture();
 
     //Load texture into buffer from file path

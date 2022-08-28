@@ -71,6 +71,15 @@ void Tex::TextureAtlasRGBA::loadTexture(const std::string& path, const std::stri
         return;
     }
 
+    //if texture is already in atlas, don't add
+    for (int i = 0; i < m_LocalBuffers.size(); i++)
+    {
+        if (m_LocalBuffers[i].name == name)
+        {
+            return;
+        }
+    }
+
     TexBuffer texBuff;
     texBuff.name = name;
     texBuff.buffer = (TexChannel_4*)stbi_load(path.c_str(), &texBuff.width, &texBuff.height, &texBuff.bpp, 4);

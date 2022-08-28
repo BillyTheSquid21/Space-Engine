@@ -1,10 +1,5 @@
 #include "game/level/WorldObjectLoader.h"
 
-static enum class ObjectType
-{
-	Trees, Grass, DirectionalSprite, WalkingSprite, RunningSprite, Bridge, LoadingZone, WarpTile, ScriptTile, Model, NULL_TYPE
-};
-
 static ObjectType GetType(std::string string)
 {
 	if (string == "DirSprite")
@@ -155,6 +150,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 
 	std::shared_ptr<TreeRenderComponent> treeComp(new TreeRenderComponent(&ren->worldRenderer));
 	std::shared_ptr<TreeObject> tree(new TreeObject());
+	tree->setTag((uint16_t)ObjectType::Trees);
 	treeComp->reserveTrees(strtoul(treesRoot->first_node("Count")->value(), nullptr, 10));
 
 	Struct2f origin = World::Level::queryOrigin(levelID);
@@ -222,6 +218,7 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 		strtoul(tallGrassRoot->first_node("TYFrame3")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
 	std::shared_ptr<TallGrassObject> grass(new TallGrassObject());
 	grass->m_LevelID = levelID;
+	grass->setTag((uint16_t)ObjectType::Grass);
 	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->grassRenderer, uv1, &grass->m_Grass));
 	std::shared_ptr<TallGrassAnimationComponent> grassAnim(new TallGrassAnimationComponent(&grass->m_GrassLoc, &grass->m_LevelID, &grass->m_ActiveStates));
 	grassRen->reserveGrass(strtoul(tallGrassRoot->first_node("Count")->value(), nullptr, 10));
@@ -311,6 +308,7 @@ void WorldParse::LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, O
 {
 	using namespace rapidxml;
 	std::shared_ptr<LoadingZone> zone(new LoadingZone());
+	zone->setTag((uint16_t)ObjectType::LoadingZone);
 	std::shared_ptr<RenderComponentGroup<LoadingZoneComponent>> group(new RenderComponentGroup<LoadingZoneComponent>());
 	manager->pushRenderGroup(group, "LoadingZones");
 	//Load each zone
@@ -349,6 +347,7 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 
 	//Build base sprite
 	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), &ren->spriteRenderer, true); //For now block for loaded sprites
+	//sprite->setTag((uint16_t)ObjectType::Sprite);
 
 	//Push object
 	manager->pushGameObject(sprite, name);
@@ -363,6 +362,7 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	//Build base sprite
 	std::shared_ptr<OvSpr_DirectionalSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationFacing>(manager->queryGroupID("UpdateFacing")).get(), &ren->spriteRenderer);
+	sprite->setTag((uint16_t)ObjectType::DirectionalSprite);
 
 	//Optionals
 	WorldParse::DirectionalSpriteOptionals(node, sprite);
@@ -386,6 +386,7 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->spriteRenderer);
 	
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
+	sprite->setTag((uint16_t)ObjectType::WalkingSprite);
 
 	//Optionals
 	WorldParse::WalkingSpriteOptionals(node, manager, sprite);
@@ -408,7 +409,7 @@ void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node,
 	//Build base sprite
 	std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 		manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationRunning>(manager->queryGroupID("UpdateRunning")).get(), &ren->spriteRenderer);
-
+	sprite->setTag((uint16_t)ObjectType::RunningSprite);
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
 
 	//Optionals
@@ -538,9 +539,9 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	OvSpr_RunningSprite* player = (OvSpr_RunningSprite*)manager->getObjects()[0].obj.get();
 	
 	std::shared_ptr<WarpTile> warpTile(new WarpTile());
+	warpTile->setTag((uint16_t)ObjectType::WarpTile);
 	WarpTileUpdateComponent warpTileUpdate(player, tileCurrent, heightCurrent, levelID, tileDestination, heightDestination, levelIDDestination);
 	warpTileUpdate.setLoadingFuncs(ld, uld);
-
 	manager->updateGroupAt<WarpTileUpdateComponent>(manager->queryGroupID("WarpTile"))->addExistingComponent(&warpTile->m_UpdateComps, warpTileUpdate);
 	manager->pushGameObject(warpTile, name);
 }
@@ -557,7 +558,8 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 
 	//For now all scripts are on heap - common templates can have their own group in theory later
 	std::shared_ptr<ScriptTile> scriptTile(new ScriptTile());
-	
+	scriptTile->setTag((uint16_t)ObjectType::ScriptTile);
+
 	//std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
 	std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite, GameObject>(manager->getObjects()[0].obj);
 
@@ -591,6 +593,7 @@ static void LoadModelAsync(std::string name, std::string tex, std::string model,
 {
 	std::shared_ptr<ModelObject> modelObj(new ModelObject(tex, model, ren->modelAtlas));
 	modelObj->setRen(&ren->modelRenderer);
+	modelObj->setTag((uint16_t)ObjectType::Model);
 
 	//Scale then translate
 	SimpleScale<NormalTextureVertex>(modelObj->m_Model.getVertices(), scaleFactor, modelObj->m_Model.getVertCount());
@@ -598,7 +601,6 @@ static void LoadModelAsync(std::string name, std::string tex, std::string model,
 
 	//Add atlas update and render to groups
 	manager->renderGroupAt<ModelRender>(manager->queryGroupID("ModelRender"))->addComponent(&modelObj->m_RenderComps, &modelObj->m_Model);
-	manager->renderGroupAt<ModelAtlasUpdate>(manager->queryGroupID("ModelAtlas"))->addComponent(&modelObj->m_RenderComps, tex, &modelObj->m_Model, &ren->modelAtlas);
 	manager->pushGameObject(modelObj, name);
 }
 
@@ -629,8 +631,6 @@ static void WorldParse::LoadModel(std::string name, rapidxml::xml_node<>* node, 
 
 	//Load on thread pool - TODO Implement and sync together
 	LoadModelAsync(name, texture, model, offset, scaleFactor, ren, manager);
-	//MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
-	//pool->Run(&LoadModelAsync, name, texture, model, offset, scaleFactor, ren, manager);
 }
 
 void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID)
@@ -671,6 +671,7 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	offset.b -= tile.z * World::TILE_SIZE;
 
 	std::shared_ptr<Bridge> bridge(new Bridge());
+	bridge->setTag((uint16_t)ObjectType::Bridge);
 	std::shared_ptr<BridgeRenderComponent> bridgeRen(new BridgeRenderComponent(offset, worldLevel, width, height, tex1, tex2, &ren->worldRenderer, horizontal));
 	bridgeRen->generateIndices();
 
@@ -692,16 +693,38 @@ void World::LevelContainer::InitialiseLevels(ObjectManager* obj, OverworldRender
 
 void World::LevelContainer::BuildFirstLevel(World::LevelID id)
 {
-	m_Levels[(int)id].buildLevel(&m_Renderer->worldRenderer, &m_Renderer->worldTileMap);
+	m_Levels[(int)id].buildLevel(&m_Renderer->worldRenderer, &m_Renderer->worldTileMap, &m_Renderer->worldTexture, m_Renderer->m_LightColor, m_Renderer->m_LightDir);
 }
 
 void World::LevelContainer::InitialiseGlobalObjects()
 {
 	XML_Doc_Wrapper doc = WorldParse::ParseLevelXML(World::LevelID::LEVEL_NULL, true);
-	std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::LoadLevel, this, std::placeholders::_1);
-	std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::UnloadLevel, this, std::placeholders::_1);
+	std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::SignalLoadLevel, this, std::placeholders::_1);
+	std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::SignalUnloadLevel, this, std::placeholders::_1);
 	WorldParse::ParseGlobalObjects(m_ObjManager, doc, ld, uld);
 	m_LoadingPtr = ld; m_UnloadingPtr = uld;
+}
+
+void World::LevelContainer::ChangeLevel()
+{
+	if (m_ChangeLevel.size() <= 0)
+	{
+		return;
+	}
+	for (int i = 0; i < m_ChangeLevel.size(); i++)
+	{
+		LevelLoad info = m_ChangeLevel.back();
+
+		if (info.state == 1)
+		{
+			LoadLevel(info.id);
+		}
+		else if (info.state == 2)
+		{
+			UnloadLevel(info.id);
+		}
+		m_ChangeLevel.pop_back();
+	}
 }
 
 void World::LevelContainer::LoadLevel(World::LevelID id)
@@ -710,11 +733,12 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 	std::lock_guard<std::mutex> levelAccessLock(m_LevelMutexes[(int)id]);
 	if (m_Levels[(int)id].loaded())
 	{
+		m_Renderer->hasLevelModified();
 		return;
 	}
 
 	using namespace rapidxml;
-	if (m_Levels[(int)id].buildLevel(&m_Renderer->worldRenderer, &m_Renderer->worldTileMap))
+	if (m_Levels[(int)id].buildLevel(&m_Renderer->worldRenderer, &m_Renderer->worldTileMap, &m_Renderer->worldTexture, m_Renderer->m_LightColor, m_Renderer->m_LightDir))
 	{
 		using namespace  WorldParse;
 		xml_node<>* root;
@@ -723,13 +747,13 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 		xml_node<>* grassRoot;
 		XML_Doc_Wrapper doc = ParseLevelXML(id, false);
 
-		std::thread t1; std::thread t2; std::thread t3;
 		std::shared_mutex mutex;
 
 		root = doc.doc->first_node();
 		if (!root)
 		{
 			EngineLog("Root node not found. Error on level: ", (int)id);
+			m_Renderer->hasLevelModified();
 			return;
 		}
 
@@ -750,21 +774,12 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 		{
 			ParseLevelGrass(m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
 		}
-
-		//Check if can join and join
-		//if (t1.joinable())
-		//{
-		//	t1.join();
-		//}
-		//if (t2.joinable())
-		//{
-		//	t2.join();
-		//}
-		//if (t3.joinable())
-		//{
-		//	t3.join();
-		//}
 	}
+
+	//Map textures for newly loaded models
+	m_Renderer->signalMapModelTextures();
+	m_Renderer->hasLevelModified();
+
 	m_Levels[(int)id].setLoaded(true);
 }
 
@@ -774,6 +789,7 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 	std::lock_guard<std::mutex> levelAccessLock(m_LevelMutexes[(int)id]);
 	if (!m_Levels[(int)id].loaded())
 	{
+		m_Renderer->hasLevelModified();
 		return;
 	}
 	
@@ -789,13 +805,17 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 
 	m_Levels[(int)id].purgeLevel();
 	m_Levels[(int)id].setLoaded(false);
+
+	//Map textures for remaining models
+	m_Renderer->signalMapModelTextures();
+	m_Renderer->hasLevelModified();
 }
 
 void World::LevelContainer::UnloadAll()
 {
 	for (int i = 0; i < m_Levels.size(); i++)
 	{
-		UnloadLevel((World::LevelID)i);
+		SignalUnloadLevel((World::LevelID)i);
 	}
 }
 

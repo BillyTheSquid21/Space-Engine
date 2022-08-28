@@ -3,10 +3,10 @@
   <Objects>
     <LoadingZones name="LoadingZones">
       <Zone>
-        <X>640</X>
-        <Z>864</Z>
-        <Width>512</Width>
-        <Height>128</Height>
+        <X>-128</X>
+        <Z>160</Z>
+        <Width>320</Width>
+        <Height>352</Height>
         <L1ID>0</L1ID>
         <L2ID>1</L2ID>
       </Zone>

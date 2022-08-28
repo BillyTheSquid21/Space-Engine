@@ -8,7 +8,7 @@ static void RotateTileCorner(Norm_Tex_Quad* quad, float angle) {
     AxialRotate<NormalTextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
 }
 
-void World::tileLevel(Norm_Tex_Quad* quad, WorldHeight level) {
+void World::TileLevel(Norm_Tex_Quad* quad, WorldHeight level) {
     Translate<NormalTextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
@@ -156,6 +156,12 @@ void World::ModifyTilePerm(World::LevelID level, World::Direction direction, Wor
     World::LevelDimensions dim = World::Level::queryDimensions(level);
     Level::PermVectorFragment perm = World::Level::queryPermissions(level, height);
 
+    //Check if level loaded yet
+    if (perm.size == -1)
+    {
+        return;
+    }
+
     //Clear tile leaving
     *lastPermPtr = lastPerm;
 
@@ -206,15 +212,27 @@ World::Level::PermVectorFragment World::Level::queryPermissions(LevelID level, W
                 if (height == ptrCache.levels->at(i))
                 {
                     World::LevelDimensions dim = queryDimensions(level);
-                    unsigned int size = dim.levelH * dim.levelW;
-                    unsigned int index = size * i;
+                    int size = dim.levelH * dim.levelW;
+                    int index = size * i;
                     return { &ptrCache.perms->at(index), size };
                 }
             }
         }
     } 
     EngineLog("Level permissions not found: ", (unsigned int)level);
-    return {&s_MovementPermissionsCache[0].perms->at(0), 1};  //If fails, return first level permis found
+    
+    //Return first non null permission to prevent crash
+    for (int i = 0; i < s_MovementPermissionsCache.size(); i++)
+    {
+        if (s_MovementPermissionsCache[i].perms != nullptr)
+        {
+            return { &s_MovementPermissionsCache[i].perms->at(0), -1 };
+        }
+    }
+
+    //Failure case - Will crash if no permissions exist at all
+    EngineLog("No permissions have been loaded");
+    return {&s_MovementPermissionsCache[0].perms->at(0), -1};
 }
 
 std::vector<World::MovementPermissions>* World::Level::getPermissions(LevelID level)
@@ -310,6 +328,37 @@ void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
         //Rotate
         RotateTileCorner(quad, -270.0f);
         break;
+    case Direction::NORTH_WALL:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticesToSlope = 2;
+        TranslateVertex<NormalTextureVertex>(quad, 0, 0.0f, 0.0f, World::TILE_SIZE);
+        TranslateVertex<NormalTextureVertex>(quad, 1, 0.0f, 0.0f, World::TILE_SIZE);
+        break;
+    case Direction::SOUTH_WALL:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticesToSlope = 2;
+        RotateTileCorner(quad, -180.0f);
+        TranslateVertex<NormalTextureVertex>(quad, 0, 0.0f, 0.0f, -World::TILE_SIZE);
+        TranslateVertex<NormalTextureVertex>(quad, 1, 0.0f, 0.0f, -World::TILE_SIZE);
+        break;
+    case Direction::EAST_WALL:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticesToSlope = 2;
+        RotateTileCorner(quad, -90.0f);
+        TranslateVertex<NormalTextureVertex>(quad, 0, -World::TILE_SIZE, 0.0f, 0.0f);
+        TranslateVertex<NormalTextureVertex>(quad, 1, -World::TILE_SIZE, 0.0f, 0.0f);
+        break;
+    case Direction::WEST_WALL:
+        verticeIndex[0] = 0;
+        verticeIndex[1] = 1;
+        verticesToSlope = 2;
+        RotateTileCorner(quad, -270.0f);
+        TranslateVertex<NormalTextureVertex>(quad, 0, World::TILE_SIZE, 0.0f, 0.0f);
+        TranslateVertex<NormalTextureVertex>(quad, 1, World::TILE_SIZE, 0.0f, 0.0f);
+        break;
     default:
         verticesToSlope = 0;
         break;
@@ -320,11 +369,77 @@ void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
     }
 }
 
+void World::StackWall(Norm_Tex_Quad* quad, std::vector<Direction>& dir, Tile tile, int width, int height)
+{
+    int yFirstIndex = tile.z * width + tile.x;
+    Direction firstDir = dir[yFirstIndex];
+
+    //Get direction to look for other walls
+    Direction lookDirection = Direction::DIRECTION_NULL;
+    switch (firstDir)
+    {
+    case Direction::NORTH_WALL:
+        lookDirection = Direction::SOUTH;
+        break;
+    case Direction::SOUTH_WALL:
+        lookDirection = Direction::NORTH;
+        break;
+    case Direction::EAST_WALL:
+        lookDirection = Direction::WEST;
+        break;
+    case Direction::WEST_WALL:
+        lookDirection = Direction::EAST;
+        break;
+    default:
+        break;
+    }
+
+    if (lookDirection == Direction::DIRECTION_NULL)
+    {
+        return;
+    }
+
+    tile = NextTileInDirection(lookDirection, tile);
+    yFirstIndex = tile.z * width + tile.x;
+    Direction currentDir = dir[yFirstIndex];
+    int stackCount = 0;
+
+    while (currentDir == firstDir)
+    {
+        if (tile.x < 0 || tile.x >= width || tile.z < 0 || tile.z >= height)
+        {
+            break;
+        }
+        tile = NextTileInDirection(lookDirection, tile);
+        yFirstIndex = tile.z * width + tile.x;
+        currentDir = dir[yFirstIndex];
+        stackCount++;
+    }
+
+    switch (firstDir)
+    {
+    case Direction::NORTH_WALL:
+        Translate<NormalTextureVertex>(&quad[0], 0.0f, 0.0f, stackCount * World::TILE_SIZE, Shape::QUAD);
+        break;
+    case Direction::SOUTH_WALL:
+        Translate<NormalTextureVertex>(&quad[0], 0.0f, 0.0f, stackCount * -World::TILE_SIZE, Shape::QUAD);
+        break;
+    case Direction::EAST_WALL:
+        Translate<NormalTextureVertex>(&quad[0], stackCount * -World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
+        break;
+    case Direction::WEST_WALL:
+        Translate<NormalTextureVertex>(&quad[0], stackCount * World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
+        break;
+    default:
+        break;
+    }
+}
+
 std::vector<World::Level::LevelPtrCache> World::Level::s_MovementPermissionsCache;
 bool World::Level::s_CacheInit = false;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
-bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapPointer)
+bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMap, Texture* tileset, glm::vec3& lColor, glm::vec3& lDir)
 {
     //Checks if the caches are setup - should happen on first load which shouldn't need to be atomic (not loading through loading zone)
     if (!s_CacheInit)
@@ -336,7 +451,18 @@ bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapP
     }
 
     LevelData data = ParseLevel(m_ID);
-    m_TileMapPointer = tileMapPointer;
+    m_TileMapPointer = tileMap;
+
+    //Set lighting
+    lColor = data.lightColor; lDir = data.lightDir;
+
+    //Set tileset
+    tileset->deleteTexture();
+    tileset->loadTexture("res/textures/tilesets/" + std::to_string(data.tileset) + ".png");
+    tileset->generateTexture(0);
+    tileset->bind();
+    tileset->clearBuffer();
+    *tileMap = TileMap::TileMap(tileset->width(), tileset->height(), World::TILE_SIZE, World::TILE_SIZE);
 
     //Allocate permission array
     m_LevelTilesX = data.width; m_LevelTilesY = data.height;
@@ -359,8 +485,8 @@ bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapP
 
     unsigned int xFirstIndex = 0;
     unsigned int yFirstIndex = 0;
-    for (unsigned int y = 0; y < m_LevelTilesY; y++) {
-        for (unsigned int x = 0; x < m_LevelTilesX; x++) {
+    for (int y = 0; y < m_LevelTilesY; y++) {
+        for (int x = 0; x < m_LevelTilesX; x++) {
             //Calculate index for an x first search and a y first search
             xFirstIndex = x * m_LevelTilesY + y;
             yFirstIndex = y * m_LevelTilesX + x;
@@ -369,12 +495,16 @@ bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMapP
             if (!(xFirstIndex >= m_LevelTotalTiles)) {
                 //Adjust heights
                 m_Heights[xFirstIndex] = data.planeHeights[yFirstIndex];
-                tileLevel(m_Plane.accessQuad(x, y), m_Heights[xFirstIndex]);
+                TileLevel(m_Plane.accessQuad(x, y), m_Heights[xFirstIndex]);
             }
 
             //Slope tiles
             if (data.planeDirections[yFirstIndex] != World::Direction::DIRECTION_NULL) {
                 World::SlopeTile(m_Plane.accessQuad(x, y), data.planeDirections[yFirstIndex]);
+                if (data.planeDirections[yFirstIndex] >= Direction::NORTH_WALL || data.planeDirections[yFirstIndex] <= Direction::WEST_WALL)
+                {
+                    StackWall(m_Plane.accessQuad(x, y), data.planeDirections, { x,y }, m_LevelTilesX, m_LevelTilesY);
+                }
             }
 
             //Permissions
@@ -434,6 +564,7 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     //Info
     unsigned int width; unsigned int height;
     float levelOX; float levelOZ;
+    unsigned int tileset;
 
     //Vectors
     std::vector<WorldHeight> planeHeights;
@@ -447,7 +578,8 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     assert(doc.HasMember("levelHeight"));
     assert(doc.HasMember("levelOriginX"));
     assert(doc.HasMember("levelOriginZ"));
-    assert(doc.HasMember("worldLevels")); //Tells you what levels have permissions
+    assert(doc.HasMember("levelTileset"));
+    assert(doc.HasMember("worldLevels")); 
     assert(doc.HasMember("planeHeightsR0"));
     assert(doc.HasMember("planeDirectionsR0"));
     assert(doc.HasMember("planeTexturesR0"));
@@ -458,6 +590,20 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     height = doc["levelHeight"].GetInt();
     levelOX = doc["levelOriginX"].GetFloat();
     levelOZ = doc["levelOriginZ"].GetFloat();
+    tileset = doc["levelTileset"].GetInt();
+
+    //Get lighting info
+    glm::vec3 lightColor = glm::vec3(
+        doc["lightColorR"].GetFloat(),
+        doc["lightColorG"].GetFloat(),
+        doc["lightColorB"].GetFloat()
+    );
+
+    glm::vec3 lightDir = glm::vec3(
+        doc["lightDirX"].GetFloat(),
+        doc["lightDirY"].GetFloat(),
+        doc["lightDirZ"].GetFloat()
+    );
 
     //Read in
 
@@ -553,6 +699,22 @@ World::LevelData World::ParseLevel(World::LevelID id) {
         Level::s_LevelDimensionCache[(unsigned int)id] = { width, height };
     }
 
-    LevelData data = { id, width, height, levelOX, levelOZ, planeHeights, worldLevels, planeDirections, planePermissions, planeTextures };
+    LevelData data = 
+    { 
+        id, 
+        width, 
+        height, 
+        tileset,
+        levelOX, 
+        levelOZ, 
+        lightColor, 
+        lightDir, 
+        planeHeights, 
+        worldLevels, 
+        planeDirections, 
+        planePermissions, 
+        planeTextures 
+    };
+
     return data;
 }

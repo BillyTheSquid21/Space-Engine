@@ -8,6 +8,7 @@
 #include "game/level/World.h"
 #include "game/level/WorldObjectLoader.h"
 #include "game/objects/Bridge.h"
+#include "game/objects/ObjectTypes.hpp"
 #include "game/gui/GUI.h"
 #include "game/gui/OverworldGUI.h"
 #include "game/utility/GameText.h"

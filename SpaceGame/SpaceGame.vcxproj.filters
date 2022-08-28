@@ -542,6 +542,12 @@
     <ClInclude Include="include\utility\SegArray.hpp">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="include\game\level\TextureSlots.hpp">
+      <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\objects\ObjectTypes.hpp">
+      <Filter>Header Files\Game\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl">

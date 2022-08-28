@@ -143,7 +143,6 @@ namespace Render
 			//Keep array to correct size
 			if (m_VerticesIndex < m_RenderInstructions.size())
 			{
-				EngineLog("BEEP");
 				m_RenderInstructions.shrinkTo(m_VerticesIndex);
 			}
 			m_VerticesIndex = 0;

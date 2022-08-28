@@ -218,6 +218,7 @@
     <ClInclude Include="include\game\gui\GUI.h" />
     <ClInclude Include="include\game\gui\OverworldGUI.h" />
     <ClInclude Include="include\game\items\Items.hpp" />
+    <ClInclude Include="include\game\level\TextureSlots.hpp" />
     <ClInclude Include="include\game\level\World.h" />
     <ClInclude Include="include\game\level\WorldObjectLoader.h" />
     <ClInclude Include="include\game\objects\ActionTile.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="include\game\objects\LoadingZone.h" />
     <ClInclude Include="include\game\objects\ModelObject.hpp" />
     <ClInclude Include="include\game\objects\NPCAi.h" />
+    <ClInclude Include="include\game\objects\ObjectTypes.hpp" />
     <ClInclude Include="include\game\objects\OverworldScript.h" />
     <ClInclude Include="include\game\objects\OverworldSprite.h" />
     <ClInclude Include="include\game\objects\PlayerObjects.h" />
