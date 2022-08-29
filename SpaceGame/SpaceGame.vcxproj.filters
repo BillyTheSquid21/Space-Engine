@@ -571,5 +571,11 @@
     <None Include="res\shaders\Battle_Transition.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="res\shaders\Fade_Out_Transition.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\shaders\Fade_In_Transition.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

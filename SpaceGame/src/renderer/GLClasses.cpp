@@ -275,7 +275,7 @@ unsigned int Shader::compileShader(const std::string& source, unsigned int type)
 
 
 Shader::~Shader() {
-	glDeleteProgram(m_ID);
+	deleteShader();
 }
 
 void Shader::create(const std::string& filepath) {

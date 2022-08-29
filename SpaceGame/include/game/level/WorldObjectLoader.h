@@ -47,7 +47,7 @@ namespace WorldParse
 	//Other loading
 	static void LoadBridge(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID);
 	static void LoadModel(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID);
-	static void LoadWarpTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld);
+	static void LoadWarpTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld);
 	static void LoadScriptTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input);
 	static void LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld);
 	

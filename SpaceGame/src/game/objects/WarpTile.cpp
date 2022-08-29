@@ -9,12 +9,16 @@ WarpTileUpdateComponent::WarpTileUpdateComponent(OvSpr_RunningSprite* player, Wo
 void WarpTileUpdateComponent::update(double deltaTime)
 {
 	ActionTileComponent::update(deltaTime);
-	if (m_Occupied && !(m_PlayerPointer->m_Walking || m_PlayerPointer->m_Running || m_PlayerPointer->m_Busy))
+	if (!m_Triggered && m_Occupied && !(m_PlayerPointer->m_Walking || m_PlayerPointer->m_Running || m_PlayerPointer->m_Busy))
 	{
+		//Signal fade out
+		m_Fade->start();
 		//Unload current level
 		m_UnloadLv(m_LevelCurrent);
 		//Load destination level
 		m_LoadLv(m_LevelDestination);
+		m_Triggered = true;
+		m_PlayerPointer->m_Controlled = true;
 		EngineLog("Warping to level: ", (int)m_LevelDestination);
 	}
 }
@@ -37,4 +41,5 @@ void WarpTileUpdateComponent::changeLevel()
 
 	//Reset
 	m_Occupied = false;
+	m_PlayerPointer->m_Controlled = false;
 }

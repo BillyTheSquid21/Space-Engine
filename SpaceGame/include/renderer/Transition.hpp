@@ -2,8 +2,9 @@
 #ifndef TRANSITION_H
 #define TRANSITION_H
 
-#include <string>
-
+#include "string"
+#include "renderer/Camera.h"
+#include "renderer/Renderer.hpp"
 #include "renderer/GLClasses.h"
 #include "renderer/ShapeFactory.h"
 
@@ -23,7 +24,7 @@ public:
 		m_Camera.setProjection(glm::ortho(0.0f, width, -height, 0.0f, -1.0f, 1.0f));
 	}
 
-	void update(double deltaTime, Shader& shader)
+	void update(double deltaTime)
 	{
 		if (!m_Started)
 		{
@@ -42,6 +43,17 @@ public:
 		m_Started = true;
 	}
 
+	void stop()
+	{
+		m_Timer = 0.0;
+		m_Started = false;
+	}
+
+	bool isStarted() const 
+	{ 
+		return m_Started; 
+	}
+
 	bool isEnded()
 	{
 		if (m_Timer >= m_Cap)
@@ -52,8 +64,6 @@ public:
 		}
 		return false;
 	}
-
-	bool isStarted() const { return m_Started; }
 
 	//Uniform links
 	void linkUniform(std::string name, float* value)

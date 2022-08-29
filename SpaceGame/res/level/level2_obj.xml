@@ -7,7 +7,7 @@
         <OffsetY>9</OffsetY>
         <OffsetZ>64</OffsetZ>
         <Scale>0.1</Scale>
-        <Model>Box.obj</Model>
+        <Model>box.obj</Model>
         <Texture>wood.png</Texture>
       </Model>
     </Object>
@@ -17,7 +17,7 @@
         <OffsetY>9</OffsetY>
         <OffsetZ>64</OffsetZ>
         <Scale>0.1</Scale>
-        <Model>Box.obj</Model>
+        <Model>box.obj</Model>
         <Texture>wood.png</Texture>
       </Model>
     </Object>

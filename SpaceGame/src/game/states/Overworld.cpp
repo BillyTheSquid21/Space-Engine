@@ -253,7 +253,10 @@ void Overworld::update(double deltaTime, double time) {
     m_ObjManager.update(deltaTime);
 
     //update levels
-    m_Levels.ChangeLevel();
+    if (!m_Renderer.fadeOut.isStarted())
+    {
+        m_Levels.ChangeLevel();
+    }
 
     //update renderer
     m_Renderer.update(deltaTime);

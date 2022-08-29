@@ -14,6 +14,15 @@
 #include "game/objects/TileMap.h"
 #include "mtlib/ThreadPool.h"
 
+#define OVERWORLD_SHADER 0
+#define OVERWORLD_SHADOW_SHADER 1
+#define GRASS_SHADER 2
+#define GRASS_SHADOW_SHADER 3
+#define BATTLE_TRANSITION_SHADER 4
+#define FADE_OUT_SHADER 5
+#define FADE_IN_SHADER 6
+#define OVERWORLD_SHADER_COUNT 7
+
 //Keeps renderer classes for each state close to easily pass around functions
 
 //Overworld renderer
@@ -22,11 +31,7 @@ class OverworldRenderer
 public:
 
 	//Rendering
-	Shader sceneShader;
-	Shader sceneShadows;
-	Shader grassShader;
-	Shader grassShadows;
-	Shader transitionShader;
+	std::vector<Shader> shaders;
 	Camera camera;
 
 	Render::Renderer worldRenderer;
@@ -39,15 +44,19 @@ public:
 	Texture worldTexture;
 	Texture spriteTexture;
 	Texture pokemonTexture;
+	Tex::TextureAtlasRGBA modelAtlas;
 
 	//Test transition
 	Transition battleTransition;
+	Transition fadeOut;
+	Transition fadeIn;
+	float m_FadeTime = 0.5f;
+	bool m_ReadyToShow = false;
 
 	//Maps
 	TileMap worldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 	TileMap spriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
 	TileMap pokemonTileMap = TileMap(1.0f, 1.0f, 1.0f, 1.0f);
-	Tex::TextureAtlasRGBA modelAtlas;
 
 	//Objects
 	ObjectManager* objects = nullptr;
@@ -101,9 +110,9 @@ public:
 	//Textures
 	Texture platformTexture;
 	Texture backgroundTexture;
-	static const int SPRITE_WIDTH = 96;
 	Texture pokemonATexture;
 	Texture pokemonBTexture;
+	static const int SPRITE_WIDTH = 96;
 
 	//Setup renderer one time
 	void initialiseRenderer(unsigned int width, unsigned int height);

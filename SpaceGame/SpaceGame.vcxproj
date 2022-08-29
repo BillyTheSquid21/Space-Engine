@@ -307,6 +307,8 @@
   <ItemGroup>
     <None Include="res\shaders\Default_CT_Shader.glsl" />
     <None Include="res\shaders\Default_T_Shader.glsl" />
+    <None Include="res\shaders\Fade_In_Transition.glsl" />
+    <None Include="res\shaders\Fade_Out_Transition.glsl" />
     <None Include="res\shaders\Grass_Drawing_Shader.glsl" />
     <None Include="res\shaders\Grass_Shadows_Shader.glsl" />
     <None Include="res\shaders\Lighting_T_Shader.glsl" />

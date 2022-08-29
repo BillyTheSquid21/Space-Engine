@@ -51,11 +51,14 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 void OverworldRenderer::loadRendererData()
 {
 	//Shader
-	sceneShader.create("res/shaders/Lighting_T_Shader.glsl");
-	sceneShadows.create("res/shaders/Shadows_Shader.glsl");
-	grassShader.createGeo("res/shaders/Grass_Drawing_Shader.glsl");
-	grassShadows.createGeo("res/shaders/Grass_Shadows_Shader.glsl");
-	transitionShader.create("res/shaders/Battle_Transition.glsl");
+	shaders.resize(OVERWORLD_SHADER_COUNT);
+	shaders[OVERWORLD_SHADER].create("res/shaders/Lighting_T_Shader.glsl");
+	shaders[OVERWORLD_SHADOW_SHADER].create("res/shaders/Shadows_Shader.glsl");
+	shaders[GRASS_SHADER].createGeo("res/shaders/Grass_Drawing_Shader.glsl");
+	shaders[GRASS_SHADOW_SHADER].createGeo("res/shaders/Grass_Shadows_Shader.glsl");
+	shaders[BATTLE_TRANSITION_SHADER].create("res/shaders/Battle_Transition.glsl");
+	shaders[FADE_OUT_SHADER].create("res/shaders/Fade_Out_Transition.glsl");
+	shaders[FADE_IN_SHADER].create("res/shaders/Fade_In_Transition.glsl");
 
 	//Load world texture
 	worldTexture.loadTexture("res/textures/tilesets/0.png");
@@ -81,6 +84,16 @@ void OverworldRenderer::loadRendererData()
 	battleTransition.init((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 	battleTransition.linkUniform("u_Height", &battleTransition.m_Height);
 	battleTransition.setCap(1.0);
+
+	fadeOut = Transition();
+	fadeOut.init((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	fadeOut.linkUniform("u_FadeCap", &m_FadeTime);
+	fadeOut.setCap(m_FadeTime);
+
+	fadeIn = Transition();
+	fadeIn.init((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	fadeIn.linkUniform("u_FadeCap", &m_FadeTime);
+	fadeIn.setCap(m_FadeTime);
 }
 
 void OverworldRenderer::generateAtlas()
@@ -92,10 +105,19 @@ void OverworldRenderer::generateAtlas()
 
 void OverworldRenderer::purgeData() 
 { 
+	//Delete textures
 	worldTexture.deleteTexture();
 	spriteTexture.deleteTexture();
 	pokemonTexture.deleteTexture();
 	modelAtlas.clearAtlasBuffers();
+	modelAtlas.deleteTextures();
+
+	//Delete shaders
+	for (int i = 0; i < shaders.size(); i++)
+	{
+		shaders[i].deleteShader();
+	}
+	shaders.clear();
 }
 
 void OverworldRenderer::bufferRenderData()
@@ -118,7 +140,7 @@ void OverworldRenderer::mapModelTextures()
 	//Request new textures
 	modelAtlas.clearBuffers();
 	modelAtlas.deleteTextures();
-	std::vector<ObjectManager::GameObjectContainer> objs = objects->getObjects();
+	std::vector<ObjectManager::GameObjectContainer>& objs = objects->getObjects();
 	std::vector<ModelObject*> objPtrs;
 	for (int i = 0; i < objs.size(); i++)
 	{
@@ -155,18 +177,34 @@ void OverworldRenderer::mapModelTextures()
 
 void OverworldRenderer::update(double deltaTime)
 {
-	battleTransition.update(deltaTime, transitionShader);
+	battleTransition.update(deltaTime);
+	fadeOut.update(deltaTime);
+	fadeIn.update(deltaTime);
 }
 
 void OverworldRenderer::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//Handle fading
+	if (fadeIn.isEnded())
+	{
+
+	}
+	if (fadeOut.isEnded())
+	{
+		m_ReadyToShow = false;
+	}
+	if (!m_ReadyToShow)
+	{
+		return;
+	}
+
 	//Send cam uniforms
-	sceneShader.bind();
-	camera.sendCameraUniforms(sceneShader);
-	grassShader.bind();
-	camera.sendCameraUniforms(grassShader);
+	shaders[OVERWORLD_SHADER].bind();
+	camera.sendCameraUniforms(shaders[OVERWORLD_SHADER]);
+	shaders[GRASS_SHADER].bind();
+	camera.sendCameraUniforms(shaders[GRASS_SHADER]);
 
 	//Update player pos
 	glm::vec3 lightDir = glm::normalize(m_LightDir);
@@ -175,7 +213,7 @@ void OverworldRenderer::draw()
 	shadowMap.bindForWriting();
 
 	//Normal scene
-	sceneShadows.bind();
+	shaders[OVERWORLD_SHADOW_SHADER].bind();
 
 	//Use world renderer matrix - only works for sprite too as model matrixes are same (currently)
 	glm::mat4 world = worldRenderer.m_RendererModelMatrix;
@@ -186,7 +224,7 @@ void OverworldRenderer::draw()
 	lightView[3][1] = floor(lightView[3][1]);
 	lightView[3][2] = floor(lightView[3][2]);
 
-	sceneShadows.setUniform("WVP", shadowMap.calcMVP(world, lightView));
+	shaders[OVERWORLD_SHADOW_SHADER].setUniform("WVP", shadowMap.calcMVP(world, lightView));
 
 	//Render from lights perspective
 	shadowMap.startCapture();
@@ -198,14 +236,14 @@ void OverworldRenderer::draw()
 	spriteRenderer.drawPrimitives();
 	modelAtlas.bind();
 	modelRenderer.drawPrimitives();
-	sceneShadows.unbind();
+	shaders[OVERWORLD_SHADOW_SHADER].unbind();
 
 	//Grass scene
-	grassShadows.bind();
+	shaders[GRASS_SHADOW_SHADER].bind();
 	worldTexture.bind();
-	grassShadows.setUniform("WVP", shadowMap.calcMVP(world, lightView));
+	shaders[GRASS_SHADOW_SHADER].setUniform("WVP", shadowMap.calcMVP(world, lightView));
 	grassRenderer.drawPrimitives();
-	grassShadows.unbind();
+	shaders[GRASS_SHADOW_SHADER].unbind();
 
 	shadowMap.endCapture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -213,32 +251,32 @@ void OverworldRenderer::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	////Lighting pass
-	sceneShader.bind();
+	shaders[OVERWORLD_SHADER].bind();
 	shadowMap.bindForReading(OVERWORLD_SHADOWS_SLOT);
 
 	//Scale lighting color
 	m_LightScaled = m_LightColor * m_LightScaleFactor;
 
 	//Set universal uniforms
-	sceneShader.setUniform("u_AmbLight", &m_LightScaled);
-	sceneShader.setUniform("u_LightDir", &lightDir);
-	sceneShader.setUniform("u_LightMVP", shadowMap.getMVP());
-	sceneShader.setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
-	sceneShader.setUniform("u_LightsActive", lightScene);
-	sceneShader.setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
+	shaders[OVERWORLD_SHADER].setUniform("u_AmbLight", &m_LightScaled);
+	shaders[OVERWORLD_SHADER].setUniform("u_LightDir", &lightDir);
+	shaders[OVERWORLD_SHADER].setUniform("u_LightMVP", shadowMap.getMVP());
+	shaders[OVERWORLD_SHADER].setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
+	shaders[OVERWORLD_SHADER].setUniform("u_LightsActive", lightScene);
+	shaders[OVERWORLD_SHADER].setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
 
 	//Sprites
 	spriteTexture.bind();
 	glm::mat4 SpriteInvTranspModel = glm::mat4(glm::transpose(glm::inverse(spriteRenderer.m_RendererModelMatrix)));
-	sceneShader.setUniform("u_InvTranspModel", &SpriteInvTranspModel);
-	sceneShader.setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
+	shaders[OVERWORLD_SHADER].setUniform("u_InvTranspModel", &SpriteInvTranspModel);
+	shaders[OVERWORLD_SHADER].setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
 	spriteRenderer.drawPrimitives();
 
 	//Pokemon Sprite
 	pokemonTexture.bind();
 	glm::mat4 PkmInvTranspModel = glm::mat4(glm::transpose(glm::inverse(pokemonRenderer.m_RendererModelMatrix)));
-	sceneShader.setUniform("u_InvTranspModel", &PkmInvTranspModel);
-	sceneShader.setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
+	shaders[OVERWORLD_SHADER].setUniform("u_InvTranspModel", &PkmInvTranspModel);
+	shaders[OVERWORLD_SHADER].setUniform("u_Model", &spriteRenderer.m_RendererModelMatrix);
 	pokemonRenderer.drawPrimitives();
 
 	//Models - Make have per model inv transp later when models are used more
@@ -248,29 +286,31 @@ void OverworldRenderer::draw()
 	//World
 	worldTexture.bind();
 	glm::mat4 WorldInvTranspModel = glm::mat4(glm::transpose(glm::inverse(worldRenderer.m_RendererModelMatrix)));
-	sceneShader.setUniform("u_InvTranspModel", &WorldInvTranspModel);
-	sceneShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
+	shaders[OVERWORLD_SHADER].setUniform("u_InvTranspModel", &WorldInvTranspModel);
+	shaders[OVERWORLD_SHADER].setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
 	worldRenderer.drawPrimitives();
-	sceneShader.unbind();
+	shaders[OVERWORLD_SHADER].unbind();
 
 	//Grass
-	grassShader.bind();
+	shaders[GRASS_SHADER].bind();
 	shadowMap.bindForReading(OVERWORLD_SHADOWS_SLOT);
 
-	grassShader.setUniform("u_AmbLight", &m_LightScaled);
-	grassShader.setUniform("u_LightDir", &lightDir);
-	grassShader.setUniform("u_LightMVP", shadowMap.getMVP());
-	grassShader.setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
-	grassShader.setUniform("u_LightsActive", lightScene);
-	grassShader.setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
+	shaders[GRASS_SHADER].setUniform("u_AmbLight", &m_LightScaled);
+	shaders[GRASS_SHADER].setUniform("u_LightDir", &lightDir);
+	shaders[GRASS_SHADER].setUniform("u_LightMVP", shadowMap.getMVP());
+	shaders[GRASS_SHADER].setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
+	shaders[GRASS_SHADER].setUniform("u_LightsActive", lightScene);
+	shaders[GRASS_SHADER].setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
 
-	grassShader.setUniform("u_InvTranspModel", &WorldInvTranspModel);
-	grassShader.setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
+	shaders[GRASS_SHADER].setUniform("u_InvTranspModel", &WorldInvTranspModel);
+	shaders[GRASS_SHADER].setUniform("u_Model", &worldRenderer.m_RendererModelMatrix);
 	grassRenderer.drawPrimitives();
-	grassShader.unbind();
+	shaders[GRASS_SHADER].unbind();
 
 	//Transition
-	battleTransition.render(transitionShader);
+	battleTransition.render(shaders[BATTLE_TRANSITION_SHADER]);
+	fadeOut.render(shaders[FADE_OUT_SHADER]);
+	fadeIn.render(shaders[FADE_IN_SHADER]);
 }
 
 //battle
@@ -329,10 +369,14 @@ void BattleRenderer::loadRendererData()
 
 void BattleRenderer::purgeData()
 {
+	//Delete Textures
 	platformTexture.deleteTexture();
 	backgroundTexture.deleteTexture();
 	pokemonATexture.deleteTexture();
 	pokemonBTexture.deleteTexture();
+	
+	//Delete shaders
+	sceneShader.deleteShader();
 }
 
 void BattleRenderer::loadPokemonTextureA(std::string name)

@@ -119,7 +119,7 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 			WorldParse::LoadModel(name, identifyingNode, manager, ren, levelID);
 			break;
 		case ObjectType::WarpTile:
-			WorldParse::LoadWarpTile(name, identifyingNode, manager, levelID, ld, uld);
+			WorldParse::LoadWarpTile(name, identifyingNode, manager, ren, levelID, ld, uld);
 			break;
 		case ObjectType::ScriptTile:
 			WorldParse::LoadScriptTile(name, identifyingNode, manager, levelID, data, textBuff, input);
@@ -518,7 +518,7 @@ OvSpr_SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, W
 }
 
 //Loaders
-void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
 	using rapidxml::xml_node;
 	//Get data
@@ -542,6 +542,7 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	warpTile->setTag((uint16_t)ObjectType::WarpTile);
 	WarpTileUpdateComponent warpTileUpdate(player, tileCurrent, heightCurrent, levelID, tileDestination, heightDestination, levelIDDestination);
 	warpTileUpdate.setLoadingFuncs(ld, uld);
+	warpTileUpdate.linkFadeTransition(&ren->fadeOut);
 	manager->updateGroupAt<WarpTileUpdateComponent>(manager->queryGroupID("WarpTile"))->addExistingComponent(&warpTile->m_UpdateComps, warpTileUpdate);
 	manager->pushGameObject(warpTile, name);
 }
@@ -781,6 +782,13 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 	m_Renderer->hasLevelModified();
 
 	m_Levels[(int)id].setLoaded(true);
+
+	if (!m_Renderer->m_ReadyToShow)
+	{
+		m_Renderer->fadeIn.start();
+		m_Renderer->fadeOut.stop();
+		m_Renderer->m_ReadyToShow = true;
+	}
 }
 
 void World::LevelContainer::UnloadLevel(World::LevelID id)

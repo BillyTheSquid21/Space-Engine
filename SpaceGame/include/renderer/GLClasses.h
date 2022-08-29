@@ -161,6 +161,7 @@ public:
 
 	void bind() const;
 	void unbind() const;
+	void deleteShader() { glDeleteProgram(m_ID); }
 
 	//set uniforms - overload for each data type
 	void setUniform(const std::string& name, int uniform);
