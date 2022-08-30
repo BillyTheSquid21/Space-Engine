@@ -130,8 +130,8 @@ void Overworld::loadRequiredData() {
 }
 
 void Overworld::purgeRequiredData() {
-    m_Renderer.purgeData();
     m_ObjManager.reset();
+    m_Renderer.purgeData();
     m_Levels.UnloadAll();
     m_DataLoaded = false;
 }
@@ -167,9 +167,9 @@ void Overworld::loadObjectData()
     m_Levels.BuildFirstLevel(m_CurrentLevel);
 
     //Add player and link pos to lighting
-    OvSpr_SpriteData dataPlayer = { m_Data->tile,  World::WorldHeight::F0, m_Data->id, {0, 4} };
-    m_PlayerPtr = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.spriteTileMap, spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer.spriteRenderer);
-    spriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer.spriteRenderer);
+    OvSpr_SpriteData dataPlayer = { m_Data->tile,  m_Data->height, m_Data->id, {0, 4} };
+    m_PlayerPtr = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.tilemap(StateTileMap::OVERWORLD_SPRITE), spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer[StateRen::OVERWORLD_SPRITE]);
+    spriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer[StateRen::OVERWORLD_SPRITE]);
     m_PlayerPtr->m_LastPermissionPtr = World::GetTilePermission(m_PlayerPtr->m_CurrentLevel, m_PlayerPtr->m_Tile, m_PlayerPtr->m_WorldLevel);
     m_PlayerPtr->setTag((uint16_t)ObjectType::RunningSprite);
 
@@ -253,7 +253,7 @@ void Overworld::update(double deltaTime, double time) {
     m_ObjManager.update(deltaTime);
 
     //update levels
-    if (!m_Renderer.fadeOut.isStarted())
+    if (!m_Renderer.transition(StateTrans::OVERWORLD_FADE_OUT).isStarted())
     {
         m_Levels.ChangeLevel();
     }
@@ -275,13 +275,14 @@ void Overworld::update(double deltaTime, double time) {
     {
         //Store player data and start
         m_Data->tile = m_PlayerPtr->m_Tile;
+        m_Data->height = m_PlayerPtr->m_WorldLevel;
 
         //Start transition
-        m_Renderer.battleTransition.start();
+        m_Renderer.transition(StateTrans::OVERWORLD_BATTLE).start();
     }
-    if (m_StartBattle && m_Renderer.battleTransition.isStarted())
+    if (m_StartBattle && m_Renderer.transition(StateTrans::OVERWORLD_BATTLE).isStarted())
     {
-        if (m_Renderer.battleTransition.isEnded())
+        if (m_Renderer.transition(StateTrans::OVERWORLD_BATTLE).isEnded())
         {
             this->startBattle();
         }
@@ -334,14 +335,14 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
     {
         if (action == GLFW_PRESS)
         {
-            m_Renderer.worldRenderer.setDrawingMode(GL_LINES);
+            m_Renderer[StateRen::OVERWORLD].setDrawingMode(GL_LINES);
         }
     }
     if (key == GLFW_KEY_U)
     {
         if (action == GLFW_PRESS)
         {
-            m_Renderer.worldRenderer.setDrawingMode(GL_TRIANGLES);
+            m_Renderer[StateRen::OVERWORLD].setDrawingMode(GL_TRIANGLES);
         }
     }
     if (key == GLFW_KEY_L)

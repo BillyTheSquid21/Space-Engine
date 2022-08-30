@@ -7,7 +7,7 @@
         <OffsetY>9</OffsetY>
         <OffsetZ>64</OffsetZ>
         <Scale>0.1</Scale>
-        <Model>box.obj</Model>
+        <Model>Box.obj</Model>
         <Texture>wood.png</Texture>
       </Model>
     </Object>
@@ -17,13 +17,13 @@
         <OffsetY>9</OffsetY>
         <OffsetZ>64</OffsetZ>
         <Scale>0.1</Scale>
-        <Model>box.obj</Model>
+        <Model>Box.obj</Model>
         <Texture>wood.png</Texture>
       </Model>
     </Object>
     <Object name="Level2_warp">
       <WarpTile>
-        <TileXCurr>7</TileXCurr>
+        <TileXCurr>6</TileXCurr>
         <TileZCurr>0</TileZCurr>
         <TileXDest>13</TileXDest>
         <TileZDest>8</TileZDest>

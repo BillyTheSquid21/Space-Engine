@@ -1,5 +1,54 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Level>
+  <TallGrass name="Level0_grass">
+    <Count>8</Count>
+    <TXFrame1>0</TXFrame1>
+    <TYFrame1>3</TYFrame1>
+    <TXFrame2>0</TXFrame2>
+    <TYFrame2>4</TYFrame2>
+    <TXFrame3>0</TXFrame3>
+    <TYFrame3>5</TYFrame3>
+    <Grass>
+      <TileX>9</TileX>
+      <TileZ>5</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>8</TileX>
+      <TileZ>5</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>8</TileX>
+      <TileZ>6</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>9</TileX>
+      <TileZ>6</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>8</TileX>
+      <TileZ>7</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>8</TileX>
+      <TileZ>8</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>9</TileX>
+      <TileZ>8</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>9</TileX>
+      <TileZ>7</TileZ>
+      <WLevel>1</WLevel>
+    </Grass>
+  </TallGrass>
   <Trees name="Level0_trees">
     <Count>176</Count>
     <Tree>

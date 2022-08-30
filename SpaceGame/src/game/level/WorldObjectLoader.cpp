@@ -148,7 +148,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 		return false;
 	}
 
-	std::shared_ptr<TreeRenderComponent> treeComp(new TreeRenderComponent(&ren->worldRenderer));
+	std::shared_ptr<TreeRenderComponent> treeComp(new TreeRenderComponent(&ren->at(StateRen::OVERWORLD)));
 	std::shared_ptr<TreeObject> tree(new TreeObject());
 	tree->setTag((uint16_t)ObjectType::Trees);
 	treeComp->reserveTrees(strtoul(treesRoot->first_node("Count")->value(), nullptr, 10));
@@ -173,8 +173,8 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 			unsigned int tY2 = strtoul(treesNode->first_node("TY2")->value(), nullptr, 10);
 			float tWidth = strtof(treesNode->first_node("TW")->value(), nullptr);
 			float tHeight = strtof(treesNode->first_node("TH")->value(), nullptr);
-			uv1 = ren->worldTileMap.uvTile(tX1, tY1, tWidth, tHeight);
-			uv2 = ren->worldTileMap.uvTile(tX2, tY2, tWidth, tHeight);
+			uv1 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(tX1, tY1, tWidth, tHeight);
+			uv2 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(tX2, tY2, tWidth, tHeight);
 		}
 		treeComp->addTree(origin, tile, wLevel, uv1, uv2);
 		treeCount++;
@@ -210,16 +210,16 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 		return false;
 	}
 	//Get texture UVs
-	TileUV uv1 = ren->worldTileMap.uvTile(strtoul(tallGrassRoot->first_node("TXFrame1")->value(), nullptr, 10),
+	TileUV uv1 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(strtoul(tallGrassRoot->first_node("TXFrame1")->value(), nullptr, 10),
 		strtoul(tallGrassRoot->first_node("TYFrame1")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE );
-	TileUV uv2 = ren->worldTileMap.uvTile(strtoul(tallGrassRoot->first_node("TXFrame2")->value(), nullptr, 10),
+	TileUV uv2 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(strtoul(tallGrassRoot->first_node("TXFrame2")->value(), nullptr, 10),
 		strtoul(tallGrassRoot->first_node("TYFrame2")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
-	TileUV uv3 = ren->worldTileMap.uvTile(strtoul(tallGrassRoot->first_node("TXFrame3")->value(), nullptr, 10),
+	TileUV uv3 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(strtoul(tallGrassRoot->first_node("TXFrame3")->value(), nullptr, 10),
 		strtoul(tallGrassRoot->first_node("TYFrame3")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
 	std::shared_ptr<TallGrassObject> grass(new TallGrassObject());
 	grass->m_LevelID = levelID;
 	grass->setTag((uint16_t)ObjectType::Grass);
-	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->grassRenderer, uv1, &grass->m_Grass));
+	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->at(StateRen::OVERWORLD_GRASS), uv1, &grass->m_Grass));
 	std::shared_ptr<TallGrassAnimationComponent> grassAnim(new TallGrassAnimationComponent(&grass->m_GrassLoc, &grass->m_LevelID, &grass->m_ActiveStates));
 	grassRen->reserveGrass(strtoul(tallGrassRoot->first_node("Count")->value(), nullptr, 10));
 
@@ -346,7 +346,9 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), &ren->spriteRenderer, true); //For now block for loaded sprites
+	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), 
+		manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), 
+		&ren->at(StateRen::OVERWORLD_SPRITE), true); //For now block for loaded sprites
 	//sprite->setTag((uint16_t)ObjectType::Sprite);
 
 	//Push object
@@ -360,8 +362,8 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_DirectionalSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
-			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationFacing>(manager->queryGroupID("UpdateFacing")).get(), &ren->spriteRenderer);
+	std::shared_ptr<OvSpr_DirectionalSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationFacing>(manager->queryGroupID("UpdateFacing")).get(), &ren->at(StateRen::OVERWORLD_SPRITE));
 	sprite->setTag((uint16_t)ObjectType::DirectionalSprite);
 
 	//Optionals
@@ -382,8 +384,8 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 	World::MovementPermissions permissionOriginal = *permission;
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_WalkingSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
-			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->spriteRenderer);
+	std::shared_ptr<OvSpr_WalkingSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->at(StateRen::OVERWORLD_SPRITE));
 	
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
 	sprite->setTag((uint16_t)ObjectType::WalkingSprite);
@@ -407,8 +409,8 @@ void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node,
 	World::MovementPermissions permissionOriginal = *permission;
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->spriteTileMap, manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
-		manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationRunning>(manager->queryGroupID("UpdateRunning")).get(), &ren->spriteRenderer);
+	std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+		manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationRunning>(manager->queryGroupID("UpdateRunning")).get(), &ren->at(StateRen::OVERWORLD_SPRITE));
 	sprite->setTag((uint16_t)ObjectType::RunningSprite);
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
 
@@ -542,7 +544,7 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	warpTile->setTag((uint16_t)ObjectType::WarpTile);
 	WarpTileUpdateComponent warpTileUpdate(player, tileCurrent, heightCurrent, levelID, tileDestination, heightDestination, levelIDDestination);
 	warpTileUpdate.setLoadingFuncs(ld, uld);
-	warpTileUpdate.linkFadeTransition(&ren->fadeOut);
+	warpTileUpdate.linkFadeTransition(&ren->transition(StateTrans::OVERWORLD_FADE_OUT));
 	manager->updateGroupAt<WarpTileUpdateComponent>(manager->queryGroupID("WarpTile"))->addExistingComponent(&warpTile->m_UpdateComps, warpTileUpdate);
 	manager->pushGameObject(warpTile, name);
 }
@@ -592,8 +594,8 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 
 static void LoadModelAsync(std::string name, std::string tex, std::string model, glm::vec3 offset, glm::vec3 scaleFactor, OverworldRenderer* ren, ObjectManager* manager)
 {
-	std::shared_ptr<ModelObject> modelObj(new ModelObject(tex, model, ren->modelAtlas));
-	modelObj->setRen(&ren->modelRenderer);
+	std::shared_ptr<ModelObject> modelObj(new ModelObject(tex, model, ren->atlas()));
+	modelObj->setRen(&ren->at(StateRen::OVERWORLD_MODEL));
 	modelObj->setTag((uint16_t)ObjectType::Model);
 
 	//Scale then translate
@@ -647,8 +649,8 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	xml_node<>* tX2Node = node->first_node("TX2");
 	xml_node<>* tY2Node = node->first_node("TY2");
 	World::TileTexture t2 = { strtoul(tX2Node->value(), nullptr, 10), strtoul(tY2Node->value(), nullptr, 10) };
-	TileUV tex1 = ren->worldTileMap.uvTile(t1.textureX, t1.textureY);
-	TileUV tex2 = ren->worldTileMap.uvTile(t2.textureX, t2.textureY);
+	TileUV tex1 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(t1.textureX, t1.textureY);
+	TileUV tex2 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(t2.textureX, t2.textureY);
 
 	//Get dim
 	xml_node<>* wNode = node->first_node("Width");
@@ -673,7 +675,7 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 
 	std::shared_ptr<Bridge> bridge(new Bridge());
 	bridge->setTag((uint16_t)ObjectType::Bridge);
-	std::shared_ptr<BridgeRenderComponent> bridgeRen(new BridgeRenderComponent(offset, worldLevel, width, height, tex1, tex2, &ren->worldRenderer, horizontal));
+	std::shared_ptr<BridgeRenderComponent> bridgeRen(new BridgeRenderComponent(offset, worldLevel, width, height, tex1, tex2, &ren->at(StateRen::OVERWORLD), horizontal));
 	bridgeRen->generateIndices();
 
 	manager->pushRenderHeap(bridgeRen, &bridge->m_RenderComps);
@@ -694,7 +696,7 @@ void World::LevelContainer::InitialiseLevels(ObjectManager* obj, OverworldRender
 
 void World::LevelContainer::BuildFirstLevel(World::LevelID id)
 {
-	m_Levels[(int)id].buildLevel(&m_Renderer->worldRenderer, &m_Renderer->worldTileMap, &m_Renderer->worldTexture, m_Renderer->m_LightColor, m_Renderer->m_LightDir);
+	m_Levels[(int)id].buildLevel(&m_Renderer->at(StateRen::OVERWORLD), &m_Renderer->tilemap(StateTileMap::OVERWORLD), &m_Renderer->texture(StateTex::OVERWORLD), m_Renderer->m_LightColor, m_Renderer->m_LightDir);
 }
 
 void World::LevelContainer::InitialiseGlobalObjects()
@@ -739,7 +741,7 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 	}
 
 	using namespace rapidxml;
-	if (m_Levels[(int)id].buildLevel(&m_Renderer->worldRenderer, &m_Renderer->worldTileMap, &m_Renderer->worldTexture, m_Renderer->m_LightColor, m_Renderer->m_LightDir))
+	if (m_Levels[(int)id].buildLevel(&m_Renderer->at(StateRen::OVERWORLD), &m_Renderer->tilemap(StateTileMap::OVERWORLD_SPRITE), &m_Renderer->texture(StateTex::OVERWORLD), m_Renderer->m_LightColor, m_Renderer->m_LightDir))
 	{
 		using namespace  WorldParse;
 		xml_node<>* root;
@@ -775,19 +777,19 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 		{
 			ParseLevelGrass(m_ObjManager, m_Renderer, id, std::ref(mutex), doc);
 		}
+
+		//Map textures for newly loaded models
+		m_Renderer->signalMapModelTextures();
+		m_Renderer->hasLevelModified();
+
+		m_Levels[(int)id].setLoaded(true);
 	}
 
-	//Map textures for newly loaded models
-	m_Renderer->signalMapModelTextures();
-	m_Renderer->hasLevelModified();
-
-	m_Levels[(int)id].setLoaded(true);
-
-	if (!m_Renderer->m_ReadyToShow)
+	if (!m_Renderer->readyToShow)
 	{
-		m_Renderer->fadeIn.start();
-		m_Renderer->fadeOut.stop();
-		m_Renderer->m_ReadyToShow = true;
+		m_Renderer->transition(StateTrans::OVERWORLD_FADE_IN).start();
+		m_Renderer->transition(StateTrans::OVERWORLD_FADE_OUT).stop();
+		m_Renderer->readyToShow = true;
 	}
 }
 
@@ -823,7 +825,7 @@ void World::LevelContainer::UnloadAll()
 {
 	for (int i = 0; i < m_Levels.size(); i++)
 	{
-		SignalUnloadLevel((World::LevelID)i);
+		UnloadLevel((World::LevelID)i);
 	}
 }
 

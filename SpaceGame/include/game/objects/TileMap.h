@@ -25,6 +25,7 @@ struct TileUV
 class TileMap
 {
 public:
+	TileMap() = default;
 	TileMap(unsigned int texW, unsigned int texH, unsigned int selW, unsigned int selH);
 	TileUV uvTile(unsigned int tileX, unsigned int tileY);
 	TileUV uvTile(unsigned int tileX, unsigned int tileY, unsigned int width, unsigned int height);

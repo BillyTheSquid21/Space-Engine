@@ -12,54 +12,71 @@
 #include "game/level/World.h"
 #include "game/level/TextureSlots.hpp"
 #include "game/objects/TileMap.h"
+#include "utility/SegArray.hpp"
 #include "mtlib/ThreadPool.h"
 
-#define OVERWORLD_SHADER 0
-#define OVERWORLD_SHADOW_SHADER 1
-#define GRASS_SHADER 2
-#define GRASS_SHADOW_SHADER 3
-#define BATTLE_TRANSITION_SHADER 4
-#define FADE_OUT_SHADER 5
-#define FADE_IN_SHADER 6
-#define OVERWORLD_SHADER_COUNT 7
+//In this file the renderers for each state with anything more than trivial is stored.
+//I used SegArrays to store components as this ensures the address will not change while the state is running
+//For dynamic resources, ensure you use push and pop if address is referenced
 
-//Keeps renderer classes for each state close to easily pass around functions
+//Stores index of specific reserved shaders in array
+enum class StateShader
+{
+	//Overworld
+	OVERWORLD = 0, OVERWORLD_SHADOW = 1, OVERWORLD_GRASS = 2,
+	OVERWORLD_GRASS_SHADOW = 3, OVERWORLD_BATTLE = 4, OVERWORLD_FADE_OUT = 5,
+	OVERWORLD_FADE_IN = 6, OVERWORLD_COUNT = 7,
+
+	//Battle
+	BATTLE = 0, BATTLE_COUNT = 1
+};
+
+//Stores index of specific reserved renderers in array
+enum class StateRen
+{
+	//Overworld
+	OVERWORLD = 0, OVERWORLD_GRASS = 1, OVERWORLD_SPRITE = 2, 
+	OVERWORLD_POKEMON = 3, OVERWORLD_MODEL = 4, OVERWORLD_COUNT = 5,
+
+	//Battle
+	BATTLE_PLATFORM = 0, BATTLE_BACKGROUND = 1, BATTLE_POKEMONA = 2, BATTLE_POKEMONB = 3,
+	BATTLE_COUNT = 4
+};
+
+//Stores index of specific reserved transitions in array
+enum class StateTrans
+{
+	OVERWORLD_BATTLE = 0, OVERWORLD_FADE_OUT = 1, OVERWORLD_FADE_IN = 2,
+	OVERWORLD_COUNT = 3
+};
+
+//Stores index of specific reserved textures in array
+enum class StateTex
+{
+	//Overworld
+	OVERWORLD = 0, OVERWORLD_SPRITE = 1, OVERWORLD_POKEMON = 2, OVERWORLD_COUNT = 3,
+	
+	//Battle
+	BATTLE_PLATFORM = 0, BATTLE_BACKGROUND = 1, BATTLE_POKEMONA = 2, BATTLE_POKEMONB = 3,
+	BATTLE_COUNT = 4
+};
+
+//Stores index of specific reserved tilemaps in array
+enum class StateTileMap
+{
+	OVERWORLD = 0, OVERWORLD_SPRITE = 1, OVERWORLD_POKEMON = 2, OVERWORLD_COUNT = 3
+};
+
+//TODO - add other slots
 
 //Overworld renderer
 class OverworldRenderer
 {
 public:
-
-	//Rendering
-	std::vector<Shader> shaders;
 	Camera camera;
 
-	Render::Renderer worldRenderer;
-	Render::Renderer grassRenderer;
-	Render::Renderer spriteRenderer;
-	Render::Renderer pokemonRenderer;
-	Render::Renderer modelRenderer;
-
-	//Textures
-	Texture worldTexture;
-	Texture spriteTexture;
-	Texture pokemonTexture;
-	Tex::TextureAtlasRGBA modelAtlas;
-
 	//Test transition
-	Transition battleTransition;
-	Transition fadeOut;
-	Transition fadeIn;
-	float m_FadeTime = 0.5f;
-	bool m_ReadyToShow = false;
-
-	//Maps
-	TileMap worldTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
-	TileMap spriteTileMap = TileMap(640.0f, 320.0f, 32.0f, 32.0f);
-	TileMap pokemonTileMap = TileMap(1.0f, 1.0f, 1.0f, 1.0f);
-
-	//Objects
-	ObjectManager* objects = nullptr;
+	bool readyToShow = false;
 
 	//Setup renderer one time
 	void initialiseRenderer(unsigned int width, unsigned int height, ObjectManager* obj);
@@ -76,21 +93,60 @@ public:
 	void isModifyingLevel() { m_LevelsLeftLoading++; }
 	void hasLevelModified() { m_LevelsLeftLoading--; }
 
+	//Get renderer
+	Render::Renderer& operator[](StateRen slot) { return renderers[(int)slot]; }
+	Render::Renderer& at(StateRen slot) { return renderers[(int)slot]; }
+
+	//Get texture
+	Texture& texture(StateTex slot) { return textures[(int)slot]; }
+	Tex::TextureAtlasRGBA& atlas() { return textureAtlas; }
+
+	//Get shader
+	Shader& shader(StateShader slot) { return shaders[(int)slot]; }
+
+	//Get transition
+	Transition& transition(StateTrans slot) { return transitions[(int)slot]; }
+
+	//Get tilemap
+	TileMap& tilemap(StateTileMap slot) { return tileMaps[(int)slot]; }
+
 	//Lighting
 	glm::vec3 m_LightDir = glm::vec3(0.6f, 0.5f, 0.52f);
 	glm::vec3 m_LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 	glm::vec3 m_LightScaled = glm::vec3(1.0f, 1.0f, 1.0f);
 	glm::vec3 m_LightScaleFactor = glm::vec3(0.5f, 0.5f, 0.5f);
 
-	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
-	ShadowMap shadowMap = ShadowMap(2048, 2048);
 	int lightScene = 0;
+
+	//Start battle function
+	std::function<void()> m_StateToBattle;
+
+private:
+	//Objects
+	ObjectManager* objects = nullptr;
+
+	//Rendering
+	SegArray<Shader, (int)StateShader::OVERWORLD_COUNT> shaders;
+	SegArray<Render::Renderer, (int)StateRen::OVERWORLD_COUNT> renderers;
+	SegArray<Texture, (int)StateTex::OVERWORLD_COUNT> textures;
+
+	//Textures
+	Tex::TextureAtlasRGBA textureAtlas;
+
+	//Transitions
+	SegArray<Transition, (int)StateTrans::OVERWORLD_COUNT> transitions;
+	float fadeTime = 0.5f;
+
+	//Tilemaps
+	SegArray<TileMap, (int)StateTileMap::OVERWORLD_COUNT> tileMaps;
+
+	//Shadow map
+	ShadowMap shadowMap = ShadowMap(2048, 2048);
+
+	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 
 	bool m_RemapModels = false;
 	int m_LevelsLeftLoading = 0;
-
-	//Test
-	std::function<void()> m_StateToBattle;
 };
 
 //battle
@@ -102,16 +158,23 @@ public:
 	Shader sceneShader;
 	Camera camera;
 
-	Render::Renderer worldRenderer;
-	Render::Renderer backgroundRenderer;
-	Render::Renderer pokemonARenderer;
-	Render::Renderer pokemonBRenderer;
+	//Get renderer
+	Render::Renderer& operator[](StateRen slot) { return renderers[(int)slot]; }
+	Render::Renderer& at(StateRen slot) { return renderers[(int)slot]; }
+	Render::Renderer& operator[](int slot) { return renderers[slot]; }
+	Render::Renderer& at(int slot) { return renderers[slot]; }
 
-	//Textures
-	Texture platformTexture;
-	Texture backgroundTexture;
-	Texture pokemonATexture;
-	Texture pokemonBTexture;
+	//Get texture
+	Texture& texture(StateTex slot) { return textures[(int)slot]; }
+	Texture& texture(int slot) { return textures[slot]; }
+
+	//Get shader
+	Shader& shader(StateShader slot) { return shaders[(int)slot]; }
+
+	SegArray<Render::Renderer, (int)StateRen::BATTLE_COUNT> renderers;
+	SegArray<Texture, (int)StateTex::BATTLE_COUNT> textures;
+	SegArray<Shader, (int)StateShader::BATTLE_COUNT> shaders;
+
 	static const int SPRITE_WIDTH = 96;
 
 	//Setup renderer one time

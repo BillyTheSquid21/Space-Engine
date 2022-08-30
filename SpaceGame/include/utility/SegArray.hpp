@@ -17,13 +17,12 @@ public:
 	SegArray() 
 	{ 
 		m_Stride = stride;
-		m_Nodes.emplace_back(std::make_shared<T[]>(m_Stride), 0);
 	};
 
 	void pushBack(T obj) 
 	{ 
 		//Check if over running
-		if (m_Size == m_Nodes.size() * m_Stride)
+		if (m_Size == m_Nodes.size() * m_Stride || m_Size == 0)
 		{
 			m_Nodes.emplace_back(std::make_shared<T[]>(m_Stride), 0);
 		}
@@ -49,6 +48,11 @@ public:
 		m_Size++;
 
 		m_Nodes[m_Nodes.size() - 1].size++;
+	}
+
+	void popBack()
+	{
+		eraseAt(m_Size - 1);
 	}
 
 	void eraseAt(size_t index)
@@ -102,10 +106,37 @@ public:
 		m_Size = size;
 	}
 
+	void resize(size_t size)
+	{
+		int nodeCount = getNode(size - 1) + 1;
+		int currentNodeCount = m_Nodes.size();
+		if (nodeCount > currentNodeCount)
+		{
+			m_Nodes.resize(nodeCount);
+		}
+
+		//Initialise all new nodes
+		for (int i = currentNodeCount; i < m_Nodes.size() - 1; i++)
+		{
+			m_Nodes[i] = { std::make_shared<T[]>(m_Stride), m_Stride };
+		}
+
+		//For last node, init and set size correctly
+		size_t lastNodeSize = size - ((m_Nodes.size() - 1) * m_Stride);
+		m_Nodes[m_Nodes.size() - 1] = { std::make_shared<T[]>(m_Stride), lastNodeSize };
+		m_Size = size;
+	}
+
 	T& operator[](size_t index) 
 	{ 
 		assert(!(index >= m_Size));
 		return getIndex(index);
+	}
+
+	void clear()
+	{
+		m_Nodes.clear();
+		m_Size = 0;
 	}
 
 	size_t size() const { return m_Size; }

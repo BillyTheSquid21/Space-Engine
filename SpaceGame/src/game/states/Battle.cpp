@@ -94,13 +94,13 @@ void BattleScene::setPokemonB(std::string name)
     pokemonBAnim.loop = true;
 }
 
-void BattleScene::render(Render::Renderer& tex, Render::Renderer& back, Render::Renderer& pok1, Render::Renderer& pok2)
+void BattleScene::render(BattleRenderer& ren)
 {
-    tex.commit(&platform1[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    tex.commit(&platform2[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    back.commit(&background[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    pok1.commit(&pokemonA[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    pok2.commit(&pokemonB[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_PLATFORM].commit(&platform1[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_PLATFORM].commit(&platform2[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_BACKGROUND].commit(&background[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_POKEMONA].commit(&pokemonA[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_POKEMONB].commit(&pokemonB[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
 }
 
 void BattleScene::update(double deltaTime)
@@ -193,7 +193,7 @@ void Battle::setPokemonA(uint16_t id)
 {
     std::string name = PokemonDataBank::GetPokemonName(id);
     m_Scene.setPokemonA(name);
-    m_Renderer.pokemonATexture.deleteTexture();
+    m_Renderer.texture(StateTex::BATTLE_POKEMONA).deleteTexture();
     m_Renderer.loadPokemonTextureA(name);
 
     //Gui
@@ -207,7 +207,7 @@ void Battle::setPokemonB(uint16_t id)
 {
     std::string name = PokemonDataBank::GetPokemonName(id);
     m_Scene.setPokemonB(name);
-    m_Renderer.pokemonBTexture.deleteTexture();
+    m_Renderer.texture(StateTex::BATTLE_POKEMONB).deleteTexture();
     m_Renderer.loadPokemonTextureB(name);
 
     //Gui
@@ -270,7 +270,7 @@ void Battle::update(double deltaTime, double time)
 void Battle::render()
 {
     //Scene
-    m_Scene.render(m_Renderer.worldRenderer, m_Renderer.backgroundRenderer, m_Renderer.pokemonARenderer, m_Renderer.pokemonBRenderer);
+    m_Scene.render(m_Renderer);
 
     m_Renderer.bufferRenderData();
     m_Renderer.draw();
