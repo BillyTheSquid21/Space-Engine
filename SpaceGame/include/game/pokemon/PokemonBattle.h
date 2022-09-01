@@ -9,11 +9,10 @@
 #include "game/pokemon/StatStages.hpp"
 #include "game/pokemon/Turn.hpp"
 #include "game/pokemon/MoveEffects.h"
-#include "game/utility/Random.hpp"
+#include "utility/Random.h"
 #include "game/gui/GUI.h"
-
-#include <chrono>
-#include <functional>
+#include "chrono"
+#include "functional"
 
 #define MOVE_QUEUE_LENGTH 5
 #define BATTLE_PROBABILITY_MAX 10000
@@ -138,7 +137,7 @@ public:
 		TurnData moves[POKEMON_COUNT];
 		uint8_t size = 0;
 	};
-	static RandomContainer random;
+	static SGRandom::RandomContainer random;
 private:
 	Turn m_MoveQueue[MOVE_QUEUE_LENGTH]; //Array of how many moves to look ahead
 	unsigned int m_QueueIndex = 0; //Rolls around to make queue array circular
@@ -189,7 +188,7 @@ public:
 	
 	//Only to be called from battle thread - otherwise will likely lock
 	static void awaitInput();
-	static RandomContainer random;
+	static SGRandom::RandomContainer random;
 
 	//Public turn helpers
 	bool checkFaintA(bool textEnabled);

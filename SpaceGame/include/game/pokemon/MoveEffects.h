@@ -8,7 +8,7 @@
 #include "game/pokemon/Turn.hpp"
 #include "game/pokemon/StatStages.hpp"
 #include "game/gui/GUI.h"
-#include "game/utility/Random.hpp"
+#include "utility/Random.h"
 
 //Evaluates effects from number value based on the dataset the game uses
 //Effects are either named after the effect or the main move that uses it
@@ -39,9 +39,9 @@ void QueueMovesWithEffects(
 );
 
 //Handles effect of moves before turn
-void PreMoveEffect(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer& text);
+void PreMoveEffect(TurnData& turn, SGRandom::RandomContainer& random, GameGUI::TextBuffer& text);
 //Handles effect of moves after turn
-void PostMoveEffect(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer& text);
+void PostMoveEffect(TurnData& turn, SGRandom::RandomContainer& random, GameGUI::TextBuffer& text);
 //Checks if miss from wrong state
 bool CheckPkmStateMiss(PokemonMoveState state);
 

@@ -108,7 +108,7 @@ ShadowMapFBO::~ShadowMapFBO()
 
 bool ShadowMapFBO::init(unsigned int width, unsigned int height)
 {
-	 // Create the FBO
+	// Create the FBO
     glGenFramebuffers(1, &m_fbo);
 
     // Create the depth buffer
@@ -119,6 +119,7 @@ bool ShadowMapFBO::init(unsigned int width, unsigned int height)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap, 0);
@@ -157,58 +158,11 @@ static enum class ShaderType {
 	NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2
 };
 
-ShaderProgramSource Shader::parseShader(const std::string& filePath) {
+std::string Shader::parseShader(const std::string& filePath) {
 	std::ifstream stream(filePath);
-
-	ShaderType type = ShaderType::NONE;
-
-	std::string line;
-	std::stringstream ss[2]; //sets up two string streams
-	while (getline(stream, line)) {
-		if (line.find("#shader") != std::string::npos) {
-			if (line.find("vertex") != std::string::npos) {
-				type = ShaderType::VERTEX;
-			}
-			else if (line.find("fragment") != std::string::npos) {
-				type = ShaderType::FRAGMENT;
-			}
-		}
-		else if (type != ShaderType::NONE) {
-			ss[(int)type] << line << "\n";
-		}
-
-	}
-
-	return { ss[0].str(), ss[1].str() };
-}
-
-//Shader
-GeoShaderProgramSource Shader::parseGeoShader(const std::string& filePath) {
-	std::ifstream stream(filePath);
-
-	ShaderType type = ShaderType::NONE;
-
-	std::string line;
-	std::stringstream ss[3]; //sets up three string streams
-	while (getline(stream, line)) {
-		if (line.find("#shader") != std::string::npos) {
-			if (line.find("vertex") != std::string::npos) {
-				type = ShaderType::VERTEX;
-			}
-			else if (line.find("fragment") != std::string::npos) {
-				type = ShaderType::FRAGMENT;
-			}
-			else if (line.find("geometry") != std::string::npos) {
-				type = ShaderType::GEOMETRY;
-			}
-		}
-		else if (type != ShaderType::NONE) {
-			ss[(int)type] << line << "\n";
-		}
-
-	}
-
-	return { ss[0].str(), ss[1].str(), ss[2].str() };
+	std::stringstream buff;
+	buff << stream.rdbuf();
+	return buff.str();
 }
 
 unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
@@ -278,13 +232,22 @@ Shader::~Shader() {
 	deleteShader();
 }
 
-void Shader::create(const std::string& filepath) {
-	ShaderProgramSource source = parseShader(filepath);
+void Shader::create(const std::string& vert, const std::string& frag) {
+	ShaderProgramSource source =
+	{
+		parseShader(vert), 
+		parseShader(frag)
+	};
 	m_ID = createShader(source.VertexSource, source.FragmentSource);
 }
 
-void Shader::createGeo(const std::string& filepath) {
-	GeoShaderProgramSource source = parseGeoShader(filepath);
+void Shader::create(const std::string& vert, const std::string& geo, const std::string& frag) {
+	GeoShaderProgramSource source =
+	{
+		parseShader(vert),
+		parseShader(geo),
+		parseShader(frag)
+	};
 	m_ID = createGeoShader(source.VertexSource, source.FragmentSource, source.GeometrySource);
 }
 

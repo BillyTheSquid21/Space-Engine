@@ -148,7 +148,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 		return false;
 	}
 
-	std::shared_ptr<TreeRenderComponent> treeComp(new TreeRenderComponent(&ren->at(StateRen::OVERWORLD)));
+	std::shared_ptr<TreeRenderComponent> treeComp(new TreeRenderComponent(&ren->at(StateRen::OVERWORLD_TREE)));
 	std::shared_ptr<TreeObject> tree(new TreeObject());
 	tree->setTag((uint16_t)ObjectType::Trees);
 	treeComp->reserveTrees(strtoul(treesRoot->first_node("Count")->value(), nullptr, 10));

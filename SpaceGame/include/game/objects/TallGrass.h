@@ -4,9 +4,8 @@
 
 #include "game/objects/SpriteAnimation.hpp"
 #include "game/level/World.h"
-#include "game/utility/Random.hpp"
-
-#include <functional>
+#include "utility/Random.h"
+#include "functional"
 
 //Location
 struct GrassData

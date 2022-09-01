@@ -21,7 +21,7 @@ NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuff
 }
 
 const float NPC_RandWalk::MAX_SEED = 100.0f;
-RandomContainer NPC_RandWalk::s_Random;
+SGRandom::RandomContainer NPC_RandWalk::s_Random;
 
 void NPC_RandWalk::randomWalk()
 {

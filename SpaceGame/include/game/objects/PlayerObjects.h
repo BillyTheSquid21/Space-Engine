@@ -4,7 +4,7 @@
 
 #include "game/objects/OverworldSprite.h"
 #include "game/utility/Input.hpp"
-#include "game/utility/Random.hpp"
+#include "utility/Random.h"
 
 
 //Player walk uses exact data of TilePosition so inherit for this
@@ -61,7 +61,7 @@ private:
 	World::Tile m_LastTile = { 0, 0 };
 	World::Tile* m_Tile = nullptr;
 	bool* m_StartBattle = nullptr;
-	RandomContainer m_Random;
+	SGRandom::RandomContainer m_Random;
 };
 
 //Updates level in global state (may soon be depreciated by just using sprite data)

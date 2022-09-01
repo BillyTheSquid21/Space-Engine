@@ -18,7 +18,10 @@ void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<O
     m_Renderer.generate((float)width, (float)height, &m_Camera);
 
     //Shader
-    m_Shader.create("res/shaders/Default_CT_Shader.glsl");
+    m_Shader.create(
+        "res/shaders/frag/Default_CT_Shader.vert",
+        "res/shaders/vert/Default_CT_Shader.frag"
+    );
 
     //Set texture uniform - is blank
     m_Shader.setUniform("u_Texture", 0);

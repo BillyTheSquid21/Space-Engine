@@ -83,7 +83,7 @@ static void Fly_Effect_Pre(TurnData& turn, GameGUI::TextBuffer& text)
 }
 
 //Post Effect Functions
-static void Burn_Effect_Post(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer& text)
+static void Burn_Effect_Post(TurnData& turn, SGRandom::RandomContainer& random, GameGUI::TextBuffer& text)
 {
 	//Roll for whether burns and drop attack
 	float roll = random.next();
@@ -96,7 +96,7 @@ static void Burn_Effect_Post(TurnData& turn, RandomContainer& random, GameGUI::T
 }
 
 //Queue
-void PostMoveEffect(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer& text)
+void PostMoveEffect(TurnData& turn, SGRandom::RandomContainer& random, GameGUI::TextBuffer& text)
 {
 	switch (turn.move.effectID)
 	{
@@ -108,7 +108,7 @@ void PostMoveEffect(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer
 	}
 }
 
-void PreMoveEffect(TurnData& turn, RandomContainer& random, GameGUI::TextBuffer& text)
+void PreMoveEffect(TurnData& turn, SGRandom::RandomContainer& random, GameGUI::TextBuffer& text)
 {
 	switch (turn.move.effectID)
 	{

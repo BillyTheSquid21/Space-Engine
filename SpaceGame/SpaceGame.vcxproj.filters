@@ -97,6 +97,15 @@
     <Filter Include="Header Files\Game\Items">
       <UniqueIdentifier>{d082c991-160a-4da6-ae63-853c82cf0e31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\vert">
+      <UniqueIdentifier>{72ea5c30-7efc-4bbc-b399-25360095a4e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\frag">
+      <UniqueIdentifier>{8556a76d-93c9-429e-a37c-3626e3df9d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\geo">
+      <UniqueIdentifier>{ff29be8e-4996-490e-9a93-071cdf24df0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -254,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="src\game\objects\PokemonFollow.cpp">
       <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\Random.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,9 +500,6 @@
     <ClInclude Include="include\game\pokemon\PokemonBattle.h">
       <Filter>Header Files\Game\Pokemon</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\utility\Random.hpp">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="include\game\states\Battle.h">
       <Filter>Header Files\Game\States</Filter>
     </ClInclude>
@@ -548,34 +557,64 @@
     <ClInclude Include="include\game\objects\ObjectTypes.hpp">
       <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="include\utility\Random.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Default_CT_Shader.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Default_CT_Shader.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Default_T_Shader.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Default_T_Shader.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Lighting_T_Shader.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Lighting_T_Geom_Shader.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Shadows_Shader.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Geom_Shadow_Shader.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Grass_Drawing_Shader.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Lighting_T_Shader.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Grass_Shadows_Shader.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Shadow_Shader.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Battle_Transition.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\vert\Transition.vert">
+      <Filter>Resource Files\vert</Filter>
     </None>
-    <None Include="res\shaders\Fade_Out_Transition.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\geo\Grass_Draw_Shader.geom">
+      <Filter>Resource Files\geo</Filter>
     </None>
-    <None Include="res\shaders\Fade_In_Transition.glsl">
-      <Filter>Resource Files</Filter>
+    <None Include="res\shaders\geo\Grass_Shadow_Shader.geom">
+      <Filter>Resource Files\geo</Filter>
+    </None>
+    <None Include="res\shaders\frag\Battle_Transition.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\frag\Default_CT_Shader.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\frag\Default_T_Shader.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\frag\Fade_In_Transition.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\frag\Fade_Out_Transition.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\frag\Lighting_T_Shader.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\frag\Shadow_Shader.frag">
+      <Filter>Resource Files\frag</Filter>
+    </None>
+    <None Include="res\shaders\geo\Tree_Draw_Shader.geom">
+      <Filter>Resource Files\geo</Filter>
+    </None>
+    <None Include="res\shaders\geo\Tree_Shadow_Shader.geom">
+      <Filter>Resource Files\geo</Filter>
     </None>
   </ItemGroup>
 </Project>

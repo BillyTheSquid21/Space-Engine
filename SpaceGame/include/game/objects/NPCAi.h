@@ -6,7 +6,7 @@
 #include "game/objects/OverworldScript.h"
 #include "game/objects/ScriptParse.h"
 #include "game/GUI/GUI.h"
-#include "game/utility/Random.hpp"
+#include "utility/Random.h"
 #include "game/data/PlayerData.hpp"
 
 class NPC_OverworldScript : public OverworldScript
@@ -188,7 +188,7 @@ private:
 	void randomWalk();
 
 	//Static randomness for randwalk class
-	static RandomContainer s_Random;
+	static SGRandom::RandomContainer s_Random;
 	static const float MAX_SEED;
 };
 

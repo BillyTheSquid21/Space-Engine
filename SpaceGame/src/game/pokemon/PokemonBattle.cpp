@@ -1,7 +1,7 @@
 #include "game/pokemon/PokemonBattle.h"
 
-RandomContainer PokemonBattle::random;
-RandomContainer MoveQueue::random;
+SGRandom::RandomContainer PokemonBattle::random;
+SGRandom::RandomContainer MoveQueue::random;
 
 bool SortBySpeed(const TurnData& lhs, const TurnData& rhs)
 {

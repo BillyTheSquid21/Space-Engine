@@ -16,6 +16,7 @@ public:
     inline void loadTexture(const std::string& path, bool flip);
     //Generate texture into slot
     void generateTexture(unsigned int slot);
+    void generateTexture(unsigned int slot, void* buffer);
     //Bind and Unbind texture
     void bind() const;
     void unbind() const;
@@ -25,6 +26,9 @@ public:
 
     unsigned int getID() const { return m_ID; }
 
+    void setWidth(int width) { m_Width = width; }
+    void setHeight(int height) { m_Height = height; }
+    void setBPP(int bpp) { m_BPP = bpp; }
     int width() const { return m_Width; }
     int height() const { return m_Height; }
 

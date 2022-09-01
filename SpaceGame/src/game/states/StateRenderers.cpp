@@ -20,6 +20,8 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	glm::mat4 lightProj = glm::ortho(-sWidth, sWidth, -sHeight, sHeight, -100.0f, 750.0f);
 	shadowMap.setProjection(lightProj);
 
+	m_Pool = MtLib::ThreadPool::Fetch();
+
 	SCREEN_HEIGHT = height; SCREEN_WIDTH = width;
 }
 
@@ -53,15 +55,62 @@ void OverworldRenderer::loadRendererData()
 	this->at(StateRen::OVERWORLD_GRASS).setDrawingMode(GL_TRIANGLES);
 	this->at(StateRen::OVERWORLD_GRASS).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
 
+	//Tree Renderer
+	this->at(StateRen::OVERWORLD_TREE).setLayout<float>(3, 2, 3);
+	this->at(StateRen::OVERWORLD_TREE).setDrawingMode(GL_TRIANGLES);
+	this->at(StateRen::OVERWORLD_TREE).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+
 	//Shaders
 	shaders.resize((int)StateShader::OVERWORLD_COUNT);
-	shader(StateShader::OVERWORLD).create("res/shaders/Lighting_T_Shader.glsl");
-	shader(StateShader::OVERWORLD_SHADOW).create("res/shaders/Shadows_Shader.glsl");
-	shader(StateShader::OVERWORLD_GRASS).createGeo("res/shaders/Grass_Drawing_Shader.glsl");
-	shader(StateShader::OVERWORLD_GRASS_SHADOW).createGeo("res/shaders/Grass_Shadows_Shader.glsl");
-	shader(StateShader::OVERWORLD_BATTLE).create("res/shaders/Battle_Transition.glsl");
-	shader(StateShader::OVERWORLD_FADE_OUT).create("res/shaders/Fade_Out_Transition.glsl");
-	shader(StateShader::OVERWORLD_FADE_IN).create("res/shaders/Fade_In_Transition.glsl");
+	
+	shader(StateShader::OVERWORLD).create(
+		"res/shaders/vert/Lighting_T_Shader.vert",
+		"res/shaders/frag/Lighting_T_Shader.frag"
+	);
+	
+	shader(StateShader::OVERWORLD_SHADOW).create(
+		"res/shaders/vert/Shadow_Shader.vert",
+		"res/shaders/frag/Shadow_Shader.frag"
+	);
+	
+	shader(StateShader::OVERWORLD_GRASS).create(
+		"res/shaders/vert/Lighting_T_Geom_Shader.vert",
+		"res/shaders/geo/Grass_Draw_Shader.geom",
+		"res/shaders/frag/Lighting_T_Shader.frag"
+	);
+
+	shader(StateShader::OVERWORLD_GRASS_SHADOW).create(
+		"res/shaders/vert/Geom_Shadow_Shader.vert",
+		"res/shaders/geo/Grass_Shadow_Shader.geom",
+		"res/shaders/frag/Shadow_Shader.frag"
+	);
+	
+	shader(StateShader::OVERWORLD_BATTLE).create(
+		"res/shaders/vert/Transition.vert",
+		"res/shaders/frag/Battle_Transition.frag"
+	);
+
+	shader(StateShader::OVERWORLD_FADE_OUT).create(
+		"res/shaders/vert/Transition.vert",
+		"res/shaders/frag/Fade_Out_Transition.frag"
+	);
+
+	shader(StateShader::OVERWORLD_FADE_IN).create(
+		"res/shaders/vert/Transition.vert",
+		"res/shaders/frag/Fade_In_Transition.frag"
+	);
+
+	shader(StateShader::OVERWORLD_TREE).create(
+		"res/shaders/vert/Lighting_T_Geom_Shader.vert",
+		"res/shaders/geo/Tree_Draw_Shader.geom",
+		"res/shaders/frag/Lighting_T_Shader.frag"
+	);
+
+	shader(StateShader::OVERWORLD_TREE_SHADOW).create(
+		"res/shaders/vert/Geom_Shadow_Shader.vert",
+		"res/shaders/geo/Tree_Shadow_Shader.geom",
+		"res/shaders/frag/Shadow_Shader.frag"
+	);
 
 	//Textures
 	textures.resize((int)StateTex::OVERWORLD_COUNT);
@@ -83,6 +132,35 @@ void OverworldRenderer::loadRendererData()
 	texture(StateTex::OVERWORLD_POKEMON).generateTexture(OVERWORLD_TEXTURE_SLOT);
 	texture(StateTex::OVERWORLD_POKEMON).bind();
 	texture(StateTex::OVERWORLD_POKEMON).clearBuffer();
+
+	//Init wind
+	m_PerlinGenerator = SGRandom::Perlin2D<uint8_t, 3, 13, 512>::Perlin2D(false, (uint8_t)0, (uint8_t)255, (uint8_t)120, (uint8_t)135, (uint8_t)0, (uint8_t)255);
+	m_PerlinGenerator.randomize(10000000.0f);
+	m_BufferA.resize(m_PerlinGenerator.dataSizeBytes());
+	m_BufferB.resize(m_PerlinGenerator.dataSizeBytes());
+	m_ScrollNoise = std::bind(&SGRandom::Perlin2D<uint8_t, 3, 13, 512>::scrollNoise, &m_PerlinGenerator, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	
+	//Write into buffer A first
+	memcpy(&m_BufferA[0], m_PerlinGenerator.data(), m_PerlinGenerator.dataSizeBytes());
+
+	//Scroll and write into buffer B
+	m_PerlinGenerator.scrollNoise(1, 0, 1000000.0f);
+	memcpy(&m_BufferB[0], m_PerlinGenerator.data(), m_PerlinGenerator.dataSizeBytes());
+
+	//Start scrolling for next buffer
+	m_Pool->RunAndReturn(m_ScrollNoise, &m_NoiseReady, 1, 0, 1000000.0f);
+
+
+	//Init wind textures
+	texture(StateTex::OVERWORLD_WIND_A).setWidth(512); texture(StateTex::OVERWORLD_WIND_A).setHeight(512);
+	texture(StateTex::OVERWORLD_WIND_A).setBPP(3);
+	texture(StateTex::OVERWORLD_WIND_A).generateTexture(OVERWORLD_WIND_SLOT_A, &m_BufferA[0]);
+	texture(StateTex::OVERWORLD_WIND_A).bind();
+
+	texture(StateTex::OVERWORLD_WIND_B).setWidth(512); texture(StateTex::OVERWORLD_WIND_B).setHeight(512);
+	texture(StateTex::OVERWORLD_WIND_B).setBPP(3);
+	texture(StateTex::OVERWORLD_WIND_B).generateTexture(OVERWORLD_WIND_SLOT_A, &m_BufferB[0]);
+	texture(StateTex::OVERWORLD_WIND_B).bind();
 
 	//Tilemaps
 	tileMaps.resize((int)StateTileMap::OVERWORLD_COUNT);
@@ -141,6 +219,9 @@ void OverworldRenderer::purgeData()
 
 	//Delete tilemaps
 	tileMaps.clear();
+
+	//Clear noise map
+	m_PerlinGenerator.clear();
 
 	readyToShow = false;
 }
@@ -205,6 +286,53 @@ void OverworldRenderer::update(double deltaTime)
 	{
 		transitions[i].update(deltaTime);
 	}
+	m_Time += deltaTime;
+	m_WindTimer += deltaTime;
+
+	//Change weighting of wind buffers depending on current buffer
+	if (m_CurrBuffer == 0)
+	{
+		m_WindWeightA = 1.0f - (m_WindTimer / m_WindSampleInterval);
+	}
+	else if (m_CurrBuffer == 1)
+	{
+		m_WindWeightA = m_WindTimer / m_WindSampleInterval;
+	}
+	if (m_WindWeightA < 0.0f)
+	{
+		m_WindWeightA = 0.0f;
+	}
+	else if (m_WindWeightA > 1.0f)
+	{
+		m_WindWeightA = 1.0f;
+	}
+
+	if (m_WindTimer > m_WindSampleInterval && m_NoiseReady)
+	{
+		//Check which buffer to write to
+		//Write to buffer with oldest data
+		if (m_CurrBuffer == 0)
+		{
+			memcpy(&m_BufferA[0], m_PerlinGenerator.data(), m_PerlinGenerator.dataSizeBytes());
+			texture(StateTex::OVERWORLD_WIND_A).deleteTexture();
+			texture(StateTex::OVERWORLD_WIND_A).generateTexture(OVERWORLD_WIND_SLOT_A, &m_BufferA[0]);
+			texture(StateTex::OVERWORLD_WIND_A).bind();
+			m_WindWeightA = 0.0f;
+		}
+		else if (m_CurrBuffer == 1)
+		{
+			memcpy(&m_BufferB[0], m_PerlinGenerator.data(), m_PerlinGenerator.dataSizeBytes());
+			texture(StateTex::OVERWORLD_WIND_B).deleteTexture();
+			texture(StateTex::OVERWORLD_WIND_B).generateTexture(OVERWORLD_WIND_SLOT_B, &m_BufferB[0]);
+			texture(StateTex::OVERWORLD_WIND_B).bind();
+			m_WindWeightA = 1.0f;
+		}
+		m_CurrBuffer = !m_CurrBuffer;
+
+		//Start scrolling texture next
+		m_Pool->RunAndReturn(m_ScrollNoise, &m_NoiseReady, 1, 0, 1000000.0f);
+		m_WindTimer = 0;
+	}
 }
 
 void OverworldRenderer::draw()
@@ -230,6 +358,8 @@ void OverworldRenderer::draw()
 	camera.sendCameraUniforms(shader(StateShader::OVERWORLD));
 	shader(StateShader::OVERWORLD_GRASS).bind();
 	camera.sendCameraUniforms(shader(StateShader::OVERWORLD_GRASS));
+	shader(StateShader::OVERWORLD_TREE).bind();
+	camera.sendCameraUniforms(shader(StateShader::OVERWORLD_TREE));
 
 	//Update player pos
 	glm::vec3 lightDir = glm::normalize(m_LightDir);
@@ -269,6 +399,18 @@ void OverworldRenderer::draw()
 	shader(StateShader::OVERWORLD_GRASS_SHADOW).setUniform("WVP", shadowMap.calcMVP(world, lightView));
 	this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();
 	shader(StateShader::OVERWORLD_GRASS_SHADOW).unbind();
+
+	//Tree scene
+	shader(StateShader::OVERWORLD_TREE_SHADOW).bind();
+	texture(StateTex::OVERWORLD).bind();
+	texture(StateTex::OVERWORLD_WIND_A).bind();
+	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("WVP", shadowMap.calcMVP(world, lightView));
+	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_Time", (float)m_Time);
+	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_WindA", OVERWORLD_WIND_SLOT_A);
+	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_WindB", OVERWORLD_WIND_SLOT_B);
+	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_WeightA", m_WindWeightA);
+	this->at(StateRen::OVERWORLD_TREE).drawPrimitives();
+	shader(StateShader::OVERWORLD_TREE_SHADOW).unbind();
 
 	shadowMap.endCapture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -332,6 +474,24 @@ void OverworldRenderer::draw()
 	this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();
 	shader(StateShader::OVERWORLD_GRASS).unbind();
 
+	//Trees
+	shader(StateShader::OVERWORLD_TREE).bind();
+
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_AmbLight", &m_LightScaled);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_LightDir", &lightDir);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_LightMVP", shadowMap.getMVP());
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_LightsActive", lightScene);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_Time", (float)m_Time);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_WindA", OVERWORLD_WIND_SLOT_A);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_WindB", OVERWORLD_WIND_SLOT_B);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_WeightA", m_WindWeightA);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_InvTranspModel", &WorldInvTranspModel);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_Model", &this->at(StateRen::OVERWORLD_TREE).m_RendererModelMatrix);
+	this->at(StateRen::OVERWORLD_TREE).drawPrimitives();
+	shader(StateShader::OVERWORLD_TREE).unbind();
+
 	//Transition
 	transition(StateTrans::OVERWORLD_BATTLE).render(shader(StateShader::OVERWORLD_BATTLE));
 	transition(StateTrans::OVERWORLD_FADE_OUT).render(shader(StateShader::OVERWORLD_FADE_OUT));
@@ -357,7 +517,10 @@ void BattleRenderer::initialiseRenderer(unsigned int width, unsigned int height)
 void BattleRenderer::loadRendererData()
 {
 	//Shader
-	sceneShader.create("res/shaders/Default_T_Shader.glsl");
+	sceneShader.create(
+		"res/shaders/vert/Default_T_Shader.vert",
+		"res/shaders/frag/Default_T_Shader.frag"
+	);
 
 	renderers.resize((int)StateRen::BATTLE_COUNT);
 

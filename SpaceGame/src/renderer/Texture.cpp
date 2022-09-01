@@ -18,6 +18,11 @@ inline void Texture::loadTexture(const std::string& path, bool flip)
 
 void Texture::generateTexture(unsigned int slot) {
 
+    generateTexture(slot, m_LocalBuffer);
+}
+
+void Texture::generateTexture(unsigned int slot, void* buffer) {
+
     //Generate texture
     glGenTextures(1, &m_ID);
 
@@ -32,7 +37,14 @@ void Texture::generateTexture(unsigned int slot) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     //Assign to slot
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer);
+    if (m_BPP == 4)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    }
+    else if (m_BPP == 3)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+    }
     m_Slot = slot;
 }
 

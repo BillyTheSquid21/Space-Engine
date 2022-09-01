@@ -13,6 +13,9 @@
 #include "game/level/TextureSlots.hpp"
 #include "game/objects/TileMap.h"
 #include "utility/SegArray.hpp"
+#include "utility/Random.h"
+#include "functional"
+#include "atomic"
 #include "mtlib/ThreadPool.h"
 
 //In this file the renderers for each state with anything more than trivial is stored.
@@ -25,7 +28,7 @@ enum class StateShader
 	//Overworld
 	OVERWORLD = 0, OVERWORLD_SHADOW = 1, OVERWORLD_GRASS = 2,
 	OVERWORLD_GRASS_SHADOW = 3, OVERWORLD_BATTLE = 4, OVERWORLD_FADE_OUT = 5,
-	OVERWORLD_FADE_IN = 6, OVERWORLD_COUNT = 7,
+	OVERWORLD_FADE_IN = 6, OVERWORLD_TREE = 7, OVERWORLD_TREE_SHADOW = 8, OVERWORLD_COUNT = 9,
 
 	//Battle
 	BATTLE = 0, BATTLE_COUNT = 1
@@ -36,7 +39,7 @@ enum class StateRen
 {
 	//Overworld
 	OVERWORLD = 0, OVERWORLD_GRASS = 1, OVERWORLD_SPRITE = 2, 
-	OVERWORLD_POKEMON = 3, OVERWORLD_MODEL = 4, OVERWORLD_COUNT = 5,
+	OVERWORLD_POKEMON = 3, OVERWORLD_MODEL = 4, OVERWORLD_TREE = 5, OVERWORLD_COUNT = 6,
 
 	//Battle
 	BATTLE_PLATFORM = 0, BATTLE_BACKGROUND = 1, BATTLE_POKEMONA = 2, BATTLE_POKEMONB = 3,
@@ -54,7 +57,8 @@ enum class StateTrans
 enum class StateTex
 {
 	//Overworld
-	OVERWORLD = 0, OVERWORLD_SPRITE = 1, OVERWORLD_POKEMON = 2, OVERWORLD_COUNT = 3,
+	OVERWORLD = 0, OVERWORLD_SPRITE = 1, OVERWORLD_POKEMON = 2, OVERWORLD_WIND_A = 3, OVERWORLD_WIND_B = 4,
+	OVERWORLD_COUNT = 5,
 	
 	//Battle
 	BATTLE_PLATFORM = 0, BATTLE_BACKGROUND = 1, BATTLE_POKEMONA = 2, BATTLE_POKEMONB = 3,
@@ -121,6 +125,20 @@ public:
 	//Start battle function
 	std::function<void()> m_StateToBattle;
 
+	//Perlin wind
+	//Have two buffers to interpolate between
+	//-1->0->1 is 0 -> 128 -> 256 as vectors
+	SGRandom::Perlin2D<uint8_t, 3, 13, 512> m_PerlinGenerator;
+	std::vector<unsigned char> m_BufferA;
+	std::vector<unsigned char> m_BufferB;
+	std::function<bool(int, int, float)> m_ScrollNoise;
+	bool m_CurrBuffer = 0; //0 is A, 1 is B
+	std::atomic_bool m_NoiseReady = false;
+	double m_WindTimer = 0.0;
+	MtLib::ThreadPool* m_Pool;
+	double m_WindSampleInterval = 5.0;
+	float m_WindWeightA = 0.0f;
+
 private:
 	//Objects
 	ObjectManager* objects = nullptr;
@@ -147,6 +165,7 @@ private:
 
 	bool m_RemapModels = false;
 	int m_LevelsLeftLoading = 0;
+	double m_Time = 0.0f; //Time variable - just keeps going up indefinately
 };
 
 //battle
