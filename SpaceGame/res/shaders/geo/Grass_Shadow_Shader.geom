@@ -8,6 +8,7 @@ uniform mat4 WVP;
 in DATA
 {
 	vec2 v_TexCoord;
+	vec3 v_Normal;
 } data_in[];
 
 out vec2 v_TexCoord;

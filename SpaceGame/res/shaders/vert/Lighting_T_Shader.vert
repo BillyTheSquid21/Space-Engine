@@ -20,7 +20,7 @@ out vec4 v_LightSpacePos;
 
 void main()
 {	
-	gl_Position = u_Proj * u_View * u_Model * vec4(position);
+	gl_Position = u_Proj * u_View * u_Model * position;
 	v_TexCoord = texCoord;
 	v_Normal = mat3(u_InvTranspModel) * normal;
 

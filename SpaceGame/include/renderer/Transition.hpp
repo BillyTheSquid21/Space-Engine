@@ -18,7 +18,7 @@ public:
 
 		m_Renderer.setLayout<float>(3);
 		m_Renderer.setDrawingMode(GL_TRIANGLES);
-		m_Renderer.generate(width, height, &m_Camera);
+		m_Renderer.generate(width, height, &m_Camera, sizeof(Vertex));
 
 		m_Quad = CreateQuad(0, 0, width, height);
 		m_Camera.setProjection(glm::ortho(0.0f, width, -height, 0.0f, -1.0f, 1.0f));

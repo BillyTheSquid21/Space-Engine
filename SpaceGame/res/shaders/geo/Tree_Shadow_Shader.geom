@@ -4,7 +4,6 @@ layout(triangles) in;
 layout(triangle_strip, max_vertices = 36) out;
 
 uniform mat4 WVP;
-uniform float u_Time;
 uniform sampler2D u_WindA;
 uniform sampler2D u_WindB;
 uniform float u_WeightA;
@@ -12,6 +11,7 @@ uniform float u_WeightA;
 in DATA
 {
 	vec2 v_TexCoord;
+	vec3 v_Normal;
 } data_in[];
 
 out vec2 v_TexCoord;
@@ -51,15 +51,25 @@ void main()
 	vec4 windTexA = texture(u_WindA, gl_in[0].gl_Position.xy/512.0);
 	vec4 windVecA = vec4(windTexA.xyz, 0.0);
 	windVecA -= vec4(0.5,0.5,0.5,0.0);
-	windVecA *= 8;
+	windVecA *= 6;
 
 	vec4 windTexB = texture(u_WindB, gl_in[0].gl_Position.xy/512.0);
 	vec4 windVecB = vec4(windTexB.xyz, 0.0);
 	windVecB -= vec4(0.5,0.5,0.5,0.0);
-	windVecB *= 8;
+	windVecB *= 6;
 
 	//Mix vectors based on weighting towards A
-	vec4 windVec = slerp(windVecA, windVecB, u_WeightA);
+	vec4 windVec = slerp(windVecB, windVecA, u_WeightA);
+
+	//If wind is close to parallel with leaves
+	//Push on bottom additionally
+	//(Assume all vertice normals are the same as they should be)
+	float result = dot(vec3(windVec.xyz), data_in[0].v_Normal) / (length(windVec)*length(data_in[0].v_Normal));
+	float inFlow = 0.0;
+	if (result > 1.0 - 0.3 || result < -1.0 + 0.5)
+	{
+		inFlow = 1.0;
+	}
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -71,6 +81,7 @@ void main()
 		{
 			position = position + windVec;
 		}
+		position = position + inFlow*(windVec / 15.0);
 
 		gl_Position = WVP * position;
 		v_TexCoord = data_in[i].v_TexCoord;

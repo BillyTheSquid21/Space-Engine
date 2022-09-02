@@ -128,16 +128,23 @@ public:
 	//Perlin wind
 	//Have two buffers to interpolate between
 	//-1->0->1 is 0 -> 128 -> 256 as vectors
-	SGRandom::Perlin2D<uint8_t, 3, 13, 512> m_PerlinGenerator;
-	std::vector<unsigned char> m_BufferA;
-	std::vector<unsigned char> m_BufferB;
+	SGRandom::Perlin2D<uint8_t, 3, 17, 512> m_PerlinGenerator;
+	std::vector<uint8_t> m_BufferA;
+	std::vector<uint8_t> m_BufferB;
 	std::function<bool(int, int, float)> m_ScrollNoise;
 	bool m_CurrBuffer = 0; //0 is A, 1 is B
 	std::atomic_bool m_NoiseReady = false;
 	double m_WindTimer = 0.0;
 	MtLib::ThreadPool* m_Pool;
-	double m_WindSampleInterval = 5.0;
+	double m_WindSampleInterval = 4.0;
 	float m_WindWeightA = 0.0f;
+
+	//Test instancing
+	glm::vec3 offsets[10]
+	{
+		{40,4,4}, { -20, 23, 50 }, { -5, 13, 5}, { -35, 44, 44}, { -35, 44, 40 },
+		{44,20,44}, { 10, 44, 10 }, { -52,44, 53}, { -335, 44,44}, { -351,44, 430 }
+	};
 
 private:
 	//Objects

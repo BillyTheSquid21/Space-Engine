@@ -26,7 +26,7 @@ namespace Primitive
 
 	//Tris
 	const char TRI_VERT = 3;
-	const unsigned int T_IND[6]
+	const unsigned int T_IND[3]
 	{
 		0, 1, 2
 	};	

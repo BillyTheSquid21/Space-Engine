@@ -18,7 +18,7 @@ public:
 	VertexBuffer() = default;
 	~VertexBuffer();
 
-	void create(unsigned int count);
+	void create(size_t dataSize);
 	void bufferData(const void* data, unsigned int count);
 	void bind() const;
 	void unbind() const;
@@ -71,6 +71,7 @@ struct VertexBufferElement
 	unsigned int count;
 	unsigned int type;
 	unsigned int normalized;
+	bool instanced;
 
 	static unsigned int getTypeSize(unsigned int type) {
 		switch (type) {
@@ -79,6 +80,10 @@ struct VertexBufferElement
 		case GL_UNSIGNED_BYTE: return 1;
 		default: return 0;
 		}
+	}
+
+	static unsigned int getTypeSize(unsigned int type, size_t count) {
+		return getTypeSize(type) * count;
 	}
 };
 
@@ -89,25 +94,25 @@ public:
 	~VertexBufferLayout() = default;
 
 	template<typename T>
-	void push(unsigned int count) { //default
+	void push(unsigned int count, bool instance) { //default
 		static_assert(false, "Unknown type pushed to VBL");
 	}
 
 	template<>
-	void push<float>(unsigned int count) { //push float
-		m_Elements.push_back({ count, GL_FLOAT, GL_FALSE });
+	void push<float>(unsigned int count, bool instance) { //push float
+		m_Elements.push_back({ count, GL_FLOAT, GL_FALSE, instance });
 		m_Stride += count * VertexBufferElement::getTypeSize(GL_FLOAT);
 	}
 
 	template<>
-	void push<unsigned int>(unsigned int count) {  //push uint
-		m_Elements.push_back({ count, GL_UNSIGNED_INT, GL_FALSE });
+	void push<unsigned int>(unsigned int count, bool instance) {  //push uint
+		m_Elements.push_back({ count, GL_UNSIGNED_INT, GL_FALSE, instance });
 		m_Stride += count * VertexBufferElement::getTypeSize(GL_UNSIGNED_INT);
 	}
 
 	template<>
-	void push<unsigned char>(unsigned int count) {  //push uint
-		m_Elements.push_back({ count, GL_UNSIGNED_BYTE, GL_TRUE });
+	void push<unsigned char>(unsigned int count, bool instance) {  //push char
+		m_Elements.push_back({ count, GL_UNSIGNED_BYTE, GL_TRUE, instance });
 		m_Stride += count * VertexBufferElement::getTypeSize(GL_UNSIGNED_BYTE);
 	}
 
@@ -133,7 +138,7 @@ public:
 	void unbind() const;
 
 	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
-
+	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout, int start);
 
 private:
 	unsigned int m_ID;

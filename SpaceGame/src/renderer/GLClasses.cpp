@@ -3,11 +3,11 @@
 
 //count means number of, size is in bytes
 
-void VertexBuffer::create(unsigned int count) {
+void VertexBuffer::create(size_t dataSize) {
 	glGenBuffers(1, &m_ID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 	//tells how much data to set aside - size in bytes
-	glBufferData(GL_ARRAY_BUFFER, sizeof(ColorTextureVertex) * count, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_DYNAMIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -24,7 +24,7 @@ void VertexBuffer::unbind() const {
 
 void VertexBuffer::bufferData(const void* data, unsigned int count) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(ColorTextureVertex) * count, nullptr, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, count * sizeof(float), data);
 }
 
@@ -86,7 +86,27 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 		glVertexAttribPointer(i, element.count, element.type, element.normalized,
 			layout.getStride(), (const void*)offset);
 		offset += element.count * VertexBufferElement::getTypeSize(element.type);
+		glVertexAttribDivisor(i, (int)element.instanced);
 	}
+}
+
+void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout, int start)
+{
+	bind();
+	vb.bind();
+	const std::vector<VertexBufferElement> elements = layout.getElements();
+	unsigned int offset = 0;
+	for (unsigned int i = 0; i < elements.size(); i++)
+	{
+		const VertexBufferElement element = elements[i];
+		glEnableVertexAttribArray(i + start);
+		glVertexAttribPointer(i + start, element.count, element.type, element.normalized,
+			layout.getStride(), (const void*)offset);
+		offset += element.count * VertexBufferElement::getTypeSize(element.type);
+		glVertexAttribDivisor(i + start, (int)element.instanced);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 ShadowMapFBO::ShadowMapFBO()

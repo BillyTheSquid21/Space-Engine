@@ -33,32 +33,32 @@ void OverworldRenderer::loadRendererData()
 	//World Renderer
 	this->at(StateRen::OVERWORLD).setLayout<float>(3, 2, 3);
 	this->at(StateRen::OVERWORLD).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::OVERWORLD).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::OVERWORLD).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Sprite Renderer
 	this->at(StateRen::OVERWORLD_SPRITE).setLayout<float>(3, 2, 3);
 	this->at(StateRen::OVERWORLD_SPRITE).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::OVERWORLD_SPRITE).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::OVERWORLD_SPRITE).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Pkm Renderer
 	this->at(StateRen::OVERWORLD_POKEMON).setLayout<float>(3, 2, 3);
 	this->at(StateRen::OVERWORLD_POKEMON).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::OVERWORLD_POKEMON).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::OVERWORLD_POKEMON).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Model Renderer
 	this->at(StateRen::OVERWORLD_MODEL).setLayout<float>(3, 2, 3);
 	this->at(StateRen::OVERWORLD_MODEL).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::OVERWORLD_MODEL).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::OVERWORLD_MODEL).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Grass Renderer
 	this->at(StateRen::OVERWORLD_GRASS).setLayout<float>(3, 2, 3);
 	this->at(StateRen::OVERWORLD_GRASS).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::OVERWORLD_GRASS).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::OVERWORLD_GRASS).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Tree Renderer
 	this->at(StateRen::OVERWORLD_TREE).setLayout<float>(3, 2, 3);
 	this->at(StateRen::OVERWORLD_TREE).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::OVERWORLD_TREE).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::OVERWORLD_TREE).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Shaders
 	shaders.resize((int)StateShader::OVERWORLD_COUNT);
@@ -134,11 +134,11 @@ void OverworldRenderer::loadRendererData()
 	texture(StateTex::OVERWORLD_POKEMON).clearBuffer();
 
 	//Init wind
-	m_PerlinGenerator = SGRandom::Perlin2D<uint8_t, 3, 13, 512>::Perlin2D(false, (uint8_t)0, (uint8_t)255, (uint8_t)120, (uint8_t)135, (uint8_t)0, (uint8_t)255);
+	m_PerlinGenerator = SGRandom::Perlin2D<uint8_t, 3, 17, 512>::Perlin2D(false, (uint8_t)0, (uint8_t)255, (uint8_t)120, (uint8_t)135, (uint8_t)0, (uint8_t)255);
 	m_PerlinGenerator.randomize(10000000.0f);
 	m_BufferA.resize(m_PerlinGenerator.dataSizeBytes());
 	m_BufferB.resize(m_PerlinGenerator.dataSizeBytes());
-	m_ScrollNoise = std::bind(&SGRandom::Perlin2D<uint8_t, 3, 13, 512>::scrollNoise, &m_PerlinGenerator, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	m_ScrollNoise = std::bind(&SGRandom::Perlin2D<uint8_t, 3, 17, 512>::scrollNoise, &m_PerlinGenerator, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	
 	//Write into buffer A first
 	memcpy(&m_BufferA[0], m_PerlinGenerator.data(), m_PerlinGenerator.dataSizeBytes());
@@ -150,7 +150,6 @@ void OverworldRenderer::loadRendererData()
 	//Start scrolling for next buffer
 	m_Pool->RunAndReturn(m_ScrollNoise, &m_NoiseReady, 1, 0, 1000000.0f);
 
-
 	//Init wind textures
 	texture(StateTex::OVERWORLD_WIND_A).setWidth(512); texture(StateTex::OVERWORLD_WIND_A).setHeight(512);
 	texture(StateTex::OVERWORLD_WIND_A).setBPP(3);
@@ -159,7 +158,7 @@ void OverworldRenderer::loadRendererData()
 
 	texture(StateTex::OVERWORLD_WIND_B).setWidth(512); texture(StateTex::OVERWORLD_WIND_B).setHeight(512);
 	texture(StateTex::OVERWORLD_WIND_B).setBPP(3);
-	texture(StateTex::OVERWORLD_WIND_B).generateTexture(OVERWORLD_WIND_SLOT_A, &m_BufferB[0]);
+	texture(StateTex::OVERWORLD_WIND_B).generateTexture(OVERWORLD_WIND_SLOT_B, &m_BufferB[0]);
 	texture(StateTex::OVERWORLD_WIND_B).bind();
 
 	//Tilemaps
@@ -318,6 +317,7 @@ void OverworldRenderer::update(double deltaTime)
 			texture(StateTex::OVERWORLD_WIND_A).generateTexture(OVERWORLD_WIND_SLOT_A, &m_BufferA[0]);
 			texture(StateTex::OVERWORLD_WIND_A).bind();
 			m_WindWeightA = 0.0f;
+			m_CurrBuffer = 1;
 		}
 		else if (m_CurrBuffer == 1)
 		{
@@ -326,8 +326,8 @@ void OverworldRenderer::update(double deltaTime)
 			texture(StateTex::OVERWORLD_WIND_B).generateTexture(OVERWORLD_WIND_SLOT_B, &m_BufferB[0]);
 			texture(StateTex::OVERWORLD_WIND_B).bind();
 			m_WindWeightA = 1.0f;
+			m_CurrBuffer = 0;
 		}
-		m_CurrBuffer = !m_CurrBuffer;
 
 		//Start scrolling texture next
 		m_Pool->RunAndReturn(m_ScrollNoise, &m_NoiseReady, 1, 0, 1000000.0f);
@@ -405,7 +405,6 @@ void OverworldRenderer::draw()
 	texture(StateTex::OVERWORLD).bind();
 	texture(StateTex::OVERWORLD_WIND_A).bind();
 	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("WVP", shadowMap.calcMVP(world, lightView));
-	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_Time", (float)m_Time);
 	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_WindA", OVERWORLD_WIND_SLOT_A);
 	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_WindB", OVERWORLD_WIND_SLOT_B);
 	shader(StateShader::OVERWORLD_TREE_SHADOW).setUniform("u_WeightA", m_WindWeightA);
@@ -483,7 +482,6 @@ void OverworldRenderer::draw()
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_LightsActive", lightScene);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
-	shader(StateShader::OVERWORLD_TREE).setUniform("u_Time", (float)m_Time);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_WindA", OVERWORLD_WIND_SLOT_A);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_WindB", OVERWORLD_WIND_SLOT_B);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_WeightA", m_WindWeightA);
@@ -527,20 +525,20 @@ void BattleRenderer::loadRendererData()
 	//World Renderer
 	this->at(StateRen::BATTLE_PLATFORM).setLayout<float>(3, 2);
 	this->at(StateRen::BATTLE_PLATFORM).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::BATTLE_PLATFORM).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::BATTLE_PLATFORM).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(TextureVertex));
 
 	//Background Renderer
 	this->at(StateRen::BATTLE_BACKGROUND).setLayout<float>(3, 2);
 	this->at(StateRen::BATTLE_BACKGROUND).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::BATTLE_BACKGROUND).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::BATTLE_BACKGROUND).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(TextureVertex));
 
 	//Pokemon renderer
 	this->at(StateRen::BATTLE_POKEMONA).setLayout<float>(3, 2);
 	this->at(StateRen::BATTLE_POKEMONA).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::BATTLE_POKEMONA).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::BATTLE_POKEMONA).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(TextureVertex));
 	this->at(StateRen::BATTLE_POKEMONB).setLayout<float>(3, 2);
 	this->at(StateRen::BATTLE_POKEMONB).setDrawingMode(GL_TRIANGLES);
-	this->at(StateRen::BATTLE_POKEMONB).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera);
+	this->at(StateRen::BATTLE_POKEMONB).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(TextureVertex));
 
 	//Load world texture
 	textures.resize((int)StateTex::BATTLE_COUNT);

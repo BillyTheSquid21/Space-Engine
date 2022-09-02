@@ -9,10 +9,12 @@ out vec2 v_TexCoord;
 out DATA
 {
 	vec2 v_TexCoord;
+	vec3 v_Normal;
 } data_out;
 
 void main()
 {
 	data_out.v_TexCoord = texCoord;
+	data_out.v_Normal = normal;
 	gl_Position = position;
 }
