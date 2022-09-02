@@ -22,6 +22,12 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 
 	m_Pool = MtLib::ThreadPool::Fetch();
 
+	//Init grass
+	m_Grass[0].position -= glm::vec3(0.0f, 0.0f, 0.01f);
+	m_Grass[1].position -= glm::vec3(0.0f, 0.0f, 0.01f);
+	m_Grass[2].color -= glm::vec4(0.1f, 0.2f, 0.1f, 0.0f);
+	m_Grass[3].color -= glm::vec4(0.1f, 0.2f, 0.1f, 0.0f);
+
 	SCREEN_HEIGHT = height; SCREEN_WIDTH = width;
 }
 
@@ -51,9 +57,10 @@ void OverworldRenderer::loadRendererData()
 	this->at(StateRen::OVERWORLD_MODEL).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
 
 	//Grass Renderer
-	this->at(StateRen::OVERWORLD_GRASS).setLayout<float>(3, 2, 3);
+	this->at(StateRen::OVERWORLD_GRASS).setLayout<float>(3, 4);
 	this->at(StateRen::OVERWORLD_GRASS).setDrawingMode(GL_TRIANGLES);
 	this->at(StateRen::OVERWORLD_GRASS).generate((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, &camera, sizeof(NormalTextureVertex));
+	this->at(StateRen::OVERWORLD_GRASS).addInstances<float>(sizeof(glm::vec3), 3, 2);
 
 	//Tree Renderer
 	this->at(StateRen::OVERWORLD_TREE).setLayout<float>(3, 2, 3);
@@ -74,13 +81,13 @@ void OverworldRenderer::loadRendererData()
 	);
 	
 	shader(StateShader::OVERWORLD_GRASS).create(
-		"res/shaders/vert/Lighting_T_Geom_Shader.vert",
-		"res/shaders/geo/Grass_Draw_Shader.geom",
-		"res/shaders/frag/Lighting_T_Shader.frag"
+		"res/shaders/vert/Lighting_C_Geom_Shader.vert",
+		"res/shaders/geo/Grass_Draw_Shader2.geom",
+		"res/shaders/frag/Lighting_C_Shader.frag"
 	);
 
 	shader(StateShader::OVERWORLD_GRASS_SHADOW).create(
-		"res/shaders/vert/Geom_Shadow_Shader.vert",
+		"res/shaders/vert/Grass_Shadow_Shader.vert",
 		"res/shaders/geo/Grass_Shadow_Shader.geom",
 		"res/shaders/frag/Shadow_Shader.frag"
 	);
@@ -227,6 +234,8 @@ void OverworldRenderer::purgeData()
 
 void OverworldRenderer::bufferRenderData()
 {
+	//Test grass
+	this->at(StateRen::OVERWORLD_GRASS).commit(&m_Grass[0], GetFloatCount<ColorVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
 	for (int i = 0; i < renderers.size(); i++)
 	{
 		renderers[i].bufferVideoData();
@@ -467,7 +476,9 @@ void OverworldRenderer::draw()
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_LightsActive", lightScene);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
-
+	shader(StateShader::OVERWORLD_GRASS).setUniform("u_WindA", OVERWORLD_WIND_SLOT_A);
+	shader(StateShader::OVERWORLD_GRASS).setUniform("u_WindB", OVERWORLD_WIND_SLOT_B);
+	shader(StateShader::OVERWORLD_GRASS).setUniform("u_WeightA", m_WindWeightA);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_Model", &this->at(StateRen::OVERWORLD).m_RendererModelMatrix);
 	this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();

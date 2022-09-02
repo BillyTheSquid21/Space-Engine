@@ -1,55 +1,30 @@
 #include "game/objects/TallGrass.h"
 
-void TallGrassAnimationComponent::render()
+void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID)
 {
-	for (int i = 0; i < m_GrassLoc->size(); i++)
-	{
-		World::LevelPermission perm = World::RetrievePermission(*m_LevelID, m_GrassLoc->at(i).loc, m_GrassLoc->at(i).height);
-		if (perm.perm != m_GrassLoc->at(i).lastPermission)
-		{
-			if ((*m_ActiveStates)[i] == (char)true)
-			{
-				continue;
-			}
-			(*m_ActiveStates)[i] = (char)true;
-			m_GrassLoc->at(i).lastPermission = perm.perm;
-		}
-	}
-}
-
-void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID, std::vector<GrassData>* grassLoc, std::vector<char>* states)
-{
-	if (m_Grass->quadCount >= m_Grass->quads.size())
-	{
-		EngineLog("Try reserving more space, grass count out of range!");
-		return;
-	}
+	assert(m_Grass->m_PositionCount < m_Grass->m_Grass.size());
 
 	//Dimensions
 	float xPos = levelOrigin.a + tile.x * (float)World::TILE_SIZE;
-	float zPos = -1 * levelOrigin.b + tile.z * (float)World::TILE_SIZE;
+	float zPos = levelOrigin.b - tile.z * (float)World::TILE_SIZE;
 	float yPos = ((int)level / sqrt(2)) * World::TILE_SIZE;
 
-	//Create Sprite
-	Norm_Tex_Quad grass = CreateNormalTextureQuad(xPos, yPos, (float)World::TILE_SIZE, (float)World::TILE_SIZE, m_UV.u, m_UV.v, m_UV.width, m_UV.height);
+	//Spread across tile
+	for (int z = 0; z < GRASS_DENSITY; z++)
+	{
+		for (int x = 0; x < GRASS_DENSITY; x++)
+		{
+			glm::vec3 pos = { xPos + ((float)World::TILE_SIZE) * ((float)x/GRASS_DENSITY), yPos,  zPos - ((float)World::TILE_SIZE) * ((float)z / (float)GRASS_DENSITY) };
+			
+			//slightly offset
+			float dX = rand() % 100 - 50;
+			pos.x += dX / 100.0f;
 
-	//Position shape
-	AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&grass, { xPos, yPos, 0.0f }, -90.0f, Shape::QUAD, Axis::X);
-	Translate<NormalTextureVertex>((NormalTextureVertex*)&grass, 0.0f, 0.1f, -zPos - World::TILE_SIZE, Shape::QUAD);
-
-	//Gen normals
-	CalculateQuadNormals((NormalTextureVertex*)&grass);
-
-	m_Grass->quads[m_Grass->quadCount] = grass;
-	m_Grass->quadCount++;
-
-	//Add data
-	World::LevelPermission perm = World::RetrievePermission(levelID, tile, level);
-	grassLoc->push_back({ tile, level, perm.perm });
-	states->push_back((char)false);
-}
-
-void TallGrassRenderComponent::generateIndices()
-{
-	GenerateQuadArrayIndices(*m_Grass);
+			float dZ = rand() % 100 - 50;
+			pos.z += dZ / 100.0f;
+			
+			m_Grass->m_Grass[m_Grass->m_PositionCount] = pos;
+			m_Grass->m_PositionCount++;
+		}
+	}
 }

@@ -19,6 +19,28 @@ Quad CreateQuad(float x, float y, float width, float height) {
 }
 
 //Creation
+Color_Quad CreateColorQuad(float x, float y, float width, float height, glm::vec4 color) {
+
+	ColorVertex v0{};
+	v0.position = { x, y , 0.0f };
+	v0.color = color;
+
+	ColorVertex v1{};
+	v1.position = { x + width, y,  0.0f };
+	v1.color = color;
+
+	ColorVertex v2{};
+	v2.position = { x + width, y - height,  0.0f };
+	v2.color = color;
+
+	ColorVertex v3{};
+	v3.position = { x, y - height,  0.0f };
+	v3.color = color;
+
+	return { v0, v1, v2, v3 };
+}
+
+//Creation
 Tex_Quad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) {
 
 	TextureVertex v0{};

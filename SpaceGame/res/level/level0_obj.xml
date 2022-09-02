@@ -9,44 +9,44 @@
     <TXFrame3>0</TXFrame3>
     <TYFrame3>5</TYFrame3>
     <Grass>
-      <TileX>9</TileX>
+      <TileX>12</TileX>
       <TileZ>5</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>8</TileX>
+      <TileX>11</TileX>
       <TileZ>5</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>8</TileX>
+      <TileX>11</TileX>
       <TileZ>6</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>9</TileX>
+      <TileX>12</TileX>
       <TileZ>6</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>8</TileX>
+      <TileX>11</TileX>
       <TileZ>7</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>8</TileX>
+      <TileX>11</TileX>
       <TileZ>8</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>9</TileX>
+      <TileX>12</TileX>
       <TileZ>8</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
     <Grass>
-      <TileX>9</TileX>
+      <TileX>12</TileX>
       <TileZ>7</TileZ>
-      <WLevel>1</WLevel>
+      <WLevel>0</WLevel>
     </Grass>
   </TallGrass>
   <Trees name="Level0_trees">

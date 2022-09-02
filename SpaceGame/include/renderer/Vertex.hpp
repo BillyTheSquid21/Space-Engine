@@ -19,6 +19,11 @@ struct alignas(4) Vertex
 	glm::vec3 position;
 };
 
+struct alignas(4) ColorVertex : public Vertex
+{
+	glm::vec4 color;
+};
+
 struct alignas(4) TextureVertex : public Vertex
 {
 	glm::vec2 uvCoords;

@@ -219,8 +219,7 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 	std::shared_ptr<TallGrassObject> grass(new TallGrassObject());
 	grass->m_LevelID = levelID;
 	grass->setTag((uint16_t)ObjectType::Grass);
-	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->at(StateRen::OVERWORLD_GRASS), uv1, &grass->m_Grass));
-	std::shared_ptr<TallGrassAnimationComponent> grassAnim(new TallGrassAnimationComponent(&grass->m_GrassLoc, &grass->m_LevelID, &grass->m_ActiveStates));
+	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->at(StateRen::OVERWORLD_GRASS), grass.get()));
 	grassRen->reserveGrass(strtoul(tallGrassRoot->first_node("Count")->value(), nullptr, 10));
 
 	//Add grass
@@ -237,31 +236,12 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 		//Add tree from properties
 		World::Tile tile = { strtoul(grassNode->first_node("TileX")->value(), nullptr, 10), strtoul(grassNode->first_node("TileZ")->value(), nullptr, 10) };
 		World::WorldHeight wLevel = (World::WorldHeight)strtol(grassNode->first_node("WLevel")->value(), nullptr, 10);
-		grassRen->addGrass(origin, tile, wLevel, levelID, &grass->m_GrassLoc, &grass->m_ActiveStates);
+		grassRen->addGrass(origin, tile, wLevel, levelID);
 		grassCount++;
 	}
 
 	//Add grass comp
-	grassRen->generateIndices();
-	{
-		manager->pushRenderHeap(grassRen, &grass->m_RenderComps);
-		manager->pushRenderHeap(grassAnim, &grass->m_RenderComps);
-	}
-
-	//Create animations
-	for (int i = 0; i < grass->m_Grass.quadCount; i++)
-	{
-		//Add animation component
-		SpriteAnim<NormalTextureVertex, Norm_Tex_Quad> anim(8, 3);
-		anim.setFrame(0, uv1);
-		anim.setFrame(1, uv2);
-		anim.setFrame(2, uv3);
-		anim.linkSprite(&grass->m_Grass.quads[i], (bool*)&grass->m_ActiveStates[i]);
-
-		//Add sprite animator
-		std::shared_ptr<UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>> sprGrp = manager->updateGroupAt<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>(manager->queryGroupID("SpriteAnim"));
-		sprGrp->addExistingComponent(&grass->m_UpdateComps, anim);
-	}
+	manager->pushRenderHeap(grassRen, &grass->m_RenderComps);
 
 	//Get tree name
 	std::string name;

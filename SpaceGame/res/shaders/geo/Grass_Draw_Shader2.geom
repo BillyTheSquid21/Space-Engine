@@ -3,7 +3,7 @@
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
-uniform mat4 WVP;
+uniform mat4 u_LightMVP;
 uniform sampler2D u_WindA;
 uniform sampler2D u_WindB;
 uniform float u_WeightA;
@@ -12,9 +12,13 @@ in DATA
 {
 	vec3 v_Normal;
 	vec4 v_Color;
+	mat4 v_Proj;
 } data_in[];
 
-out vec2 v_TexCoord;
+out vec3 v_Normal;
+out vec3 v_FragPos;
+out vec4 v_LightSpacePos;
+out vec4 v_Color;
 
 vec4 slerp(vec4 qa, vec4 qb, float t)
 {
@@ -64,7 +68,7 @@ void main()
 	//Push on bottom additionally
 	//(Assume all vertice normals are the same as they should be)
 	float result = dot(vec3(windVec.xyz), data_in[0].v_Normal) / (length(windVec)*length(data_in[0].v_Normal));
-	float inFlow = 1.0f/result;
+	float inFlow = 1.0/result;
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -74,10 +78,14 @@ void main()
 		//Wave tree there
 		if (position.y >= lastHighestVert)
 		{
-			position = position + windVec + inFlow*(windVec / 4.0);
+			position = position + windVec + inFlow*(windVec / 4.0);;
 		}
 
-		gl_Position = WVP * position;
+		gl_Position = data_in[i].v_Proj * position;
+		v_Normal = data_in[i].v_Normal;
+		v_LightSpacePos = u_LightMVP * position;
+		v_FragPos = vec3(gl_Position);
+		v_Color = data_in[i].v_Color;
 		EmitVertex();
 	}
 	EndPrimitive();

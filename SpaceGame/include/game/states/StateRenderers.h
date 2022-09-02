@@ -139,12 +139,9 @@ public:
 	double m_WindSampleInterval = 4.0;
 	float m_WindWeightA = 0.0f;
 
-	//Test instancing
-	glm::vec3 offsets[10]
-	{
-		{40,4,4}, { -20, 23, 50 }, { -5, 13, 5}, { -35, 44, 44}, { -35, 44, 40 },
-		{44,20,44}, { 10, 44, 10 }, { -52,44, 53}, { -335, 44,44}, { -351,44, 430 }
-	};
+	//Test grass
+	Color_Quad m_Grass = CreateColorQuad(0, 8, 0.7f, 8, {0.17f, 0.57f, 0.27f, 1.0f});
+	glm::vec3 pos[3] = { { 0, 0, 0 }, { 2, 0, 0 } };
 
 private:
 	//Objects

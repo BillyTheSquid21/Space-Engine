@@ -35,6 +35,7 @@ namespace Primitive
 
 #define Quad std::array<Vertex, 4>
 #define Tex_Quad std::array<TextureVertex, 4>
+#define Color_Quad std::array<ColorVertex, 4>
 #define Norm_Tex_Quad std::array<NormalTextureVertex, 4>
 
 template<typename T>
@@ -98,6 +99,7 @@ const float GUI_LAYER_6 = 0.92f;
 
 //Quad Creation
 Quad CreateQuad(float x, float y, float width, float height);
+Color_Quad CreateColorQuad(float x, float y, float width, float height, glm::vec4 color);
 Tex_Quad CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 Norm_Tex_Quad CreateNormalTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight);
 
