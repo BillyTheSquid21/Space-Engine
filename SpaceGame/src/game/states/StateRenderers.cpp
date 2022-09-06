@@ -23,10 +23,10 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	m_Pool = MtLib::ThreadPool::Fetch();
 
 	//Init grass
-	m_Grass[0].position -= glm::vec3(0.0f, 0.0f, 0.01f);
-	m_Grass[1].position -= glm::vec3(0.0f, 0.0f, 0.01f);
-	m_Grass[2].color -= glm::vec4(0.1f, 0.2f, 0.1f, 0.0f);
-	m_Grass[3].color -= glm::vec4(0.1f, 0.2f, 0.1f, 0.0f);
+	m_Grass[0].position -= glm::vec3(0.0f, 0.0f, 3.0f);
+	m_Grass[1].position -= glm::vec3(0.0f, 0.0f, 3.0f);
+	m_Grass[2].color -= glm::vec4(0.05f, 0.1f, 0.07f, 0.0f);
+	m_Grass[3].color -= glm::vec4(0.05f, 0.1f, 0.07f, 0.0f);
 
 	SCREEN_HEIGHT = height; SCREEN_WIDTH = width;
 }
@@ -81,8 +81,8 @@ void OverworldRenderer::loadRendererData()
 	);
 	
 	shader(StateShader::OVERWORLD_GRASS).create(
-		"res/shaders/vert/Lighting_C_Geom_Shader.vert",
-		"res/shaders/geo/Grass_Draw_Shader2.geom",
+		"res/shaders/vert/Grass_Draw_Shader.vert",
+		"res/shaders/geo/Grass_Draw_Shader.geom",
 		"res/shaders/frag/Lighting_C_Shader.frag"
 	);
 

@@ -315,14 +315,13 @@
     <None Include="res\shaders\frag\Lighting_T_Shader.frag" />
     <None Include="res\shaders\frag\Shadow_Shader.frag" />
     <None Include="res\shaders\geo\Grass_Draw_Shader.geom" />
-    <None Include="res\shaders\geo\Grass_Draw_Shader2.geom" />
     <None Include="res\shaders\geo\Grass_Shadow_Shader.geom" />
     <None Include="res\shaders\geo\Tree_Draw_Shader.geom" />
     <None Include="res\shaders\geo\Tree_Shadow_Shader.geom" />
     <None Include="res\shaders\vert\Default_CT_Shader.vert" />
     <None Include="res\shaders\vert\Default_T_Shader.vert" />
     <None Include="res\shaders\vert\Grass_Shadow_Shader.vert" />
-    <None Include="res\shaders\vert\Lighting_C_Geom_Shader.vert" />
+    <None Include="res\shaders\vert\Grass_Draw_Shader.vert" />
     <None Include="res\shaders\vert\Lighting_T_Geom_Shader.vert" />
     <None Include="res\shaders\vert\Geom_Shadow_Shader.vert" />
     <None Include="res\shaders\vert\Lighting_T_Shader.vert" />

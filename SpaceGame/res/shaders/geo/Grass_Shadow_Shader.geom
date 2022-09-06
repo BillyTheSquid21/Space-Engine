@@ -50,12 +50,12 @@ void main()
 	vec4 windTexA = texture(u_WindA, gl_in[0].gl_Position.xy/512.0);
 	vec4 windVecA = vec4(windTexA.xyz, 0.0);
 	windVecA -= vec4(0.5,0.5,0.5,0.0);
-	windVecA *= 8;
+	windVecA *= 12;
 
 	vec4 windTexB = texture(u_WindB, gl_in[0].gl_Position.xy/512.0);
 	vec4 windVecB = vec4(windTexB.xyz, 0.0);
 	windVecB -= vec4(0.5,0.5,0.5,0.0);
-	windVecB *= 8;
+	windVecB *= 12;
 
 	//Mix vectors based on weighting towards A
 	vec4 windVec = slerp(windVecB, windVecA, u_WeightA);
@@ -74,7 +74,7 @@ void main()
 		//Wave tree there
 		if (position.y >= lastHighestVert)
 		{
-			position = position + windVec + inFlow*(windVec / 4.0);
+			position = position + windVec;// + inFlow*(windVec / 4.0);
 		}
 
 		gl_Position = WVP * position;

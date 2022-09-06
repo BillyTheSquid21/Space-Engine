@@ -18,10 +18,10 @@ void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::Tile tile, 
 			
 			//slightly offset
 			float dX = rand() % 100 - 50;
-			pos.x += dX / 100.0f;
+			pos.x += dX / 50.0f;
 
 			float dZ = rand() % 100 - 50;
-			pos.z += dZ / 100.0f;
+			pos.z += dZ / 50.0f;
 			
 			m_Grass->m_Grass[m_Grass->m_PositionCount] = pos;
 			m_Grass->m_PositionCount++;

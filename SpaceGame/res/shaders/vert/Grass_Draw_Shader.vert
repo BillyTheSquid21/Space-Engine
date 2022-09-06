@@ -17,12 +17,25 @@ out DATA
 	vec3 v_Normal;
 	vec4 v_Color;
 	mat4 v_Proj;
+	float v_HeightVariance;
 } data_out;
+
+float calcOffset()
+{
+	int i = gl_InstanceID;
+	return sin(i) + ((cos(i/5.0))/2.0) + (sin(i/10.0)/-4.0);
+}
 
 void main()
 {	
+	//Slightly offset color and height of blades
+	float heightVar = calcOffset();
+	data_out.v_HeightVariance = 2*heightVar;
+
+	float colorOff = 10/sin(gl_InstanceID);
+	data_out.v_Color = color + vec4(heightVar/colorOff, heightVar/colorOff, heightVar/colorOff,0.0);
+
 	gl_Position = u_Model * (position + vec4(offset,0.0));
 	data_out.v_Proj = u_Proj * u_View * u_Model;
 	data_out.v_Normal = vec3(0.0,0.0,1.0);
-	data_out.v_Color = color;
 }

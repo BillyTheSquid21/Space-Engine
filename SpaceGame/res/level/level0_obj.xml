@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Level>
   <TallGrass name="Level0_grass">
-    <Count>8</Count>
+    <Count>27</Count>
     <TXFrame1>0</TXFrame1>
     <TYFrame1>3</TYFrame1>
     <TXFrame2>0</TXFrame2>
@@ -46,6 +46,101 @@
     <Grass>
       <TileX>12</TileX>
       <TileZ>7</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>11</TileX>
+      <TileZ>3</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>11</TileX>
+      <TileZ>4</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>12</TileX>
+      <TileZ>4</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>12</TileX>
+      <TileZ>3</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>13</TileX>
+      <TileZ>3</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>13</TileX>
+      <TileZ>4</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>12</TileX>
+      <TileZ>7</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>13</TileX>
+      <TileZ>5</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>13</TileX>
+      <TileZ>6</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>14</TileX>
+      <TileZ>3</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>14</TileX>
+      <TileZ>4</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>14</TileX>
+      <TileZ>5</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>14</TileX>
+      <TileZ>6</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>14</TileX>
+      <TileZ>7</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>11</TileX>
+      <TileZ>9</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>11</TileX>
+      <TileZ>10</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>12</TileX>
+      <TileZ>9</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>12</TileX>
+      <TileZ>10</TileZ>
+      <WLevel>0</WLevel>
+    </Grass>
+    <Grass>
+      <TileX>14</TileX>
+      <TileZ>8</TileZ>
       <WLevel>0</WLevel>
     </Grass>
   </TallGrass>

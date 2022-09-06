@@ -136,11 +136,11 @@ public:
 	std::atomic_bool m_NoiseReady = false;
 	double m_WindTimer = 0.0;
 	MtLib::ThreadPool* m_Pool;
-	double m_WindSampleInterval = 4.0;
+	double m_WindSampleInterval = 1.6;
 	float m_WindWeightA = 0.0f;
 
 	//Test grass
-	Color_Quad m_Grass = CreateColorQuad(0, 8, 0.7f, 8, {0.17f, 0.57f, 0.27f, 1.0f});
+	Color_Quad m_Grass = CreateColorQuad(0, 10.0f, 0.8f, 10.0f, {0.125f, 0.627f, 0.439f, 1.0f});
 	glm::vec3 pos[3] = { { 0, 0, 0 }, { 2, 0, 0 } };
 
 private:
