@@ -25,8 +25,8 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	//Init grass
 	m_Grass[0].position -= glm::vec3(0.0f, 0.0f, 3.0f);
 	m_Grass[1].position -= glm::vec3(0.0f, 0.0f, 3.0f);
-	m_Grass[2].color -= glm::vec4(0.05f, 0.1f, 0.07f, 0.0f);
-	m_Grass[3].color -= glm::vec4(0.05f, 0.1f, 0.07f, 0.0f);
+	m_Grass[2].color *= glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	m_Grass[3].color *= glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 
 	SCREEN_HEIGHT = height; SCREEN_WIDTH = width;
 }
@@ -403,11 +403,11 @@ void OverworldRenderer::draw()
 	shader(StateShader::OVERWORLD_SHADOW).unbind();
 
 	//Grass scene
-	shader(StateShader::OVERWORLD_GRASS_SHADOW).bind();
-	texture(StateTex::OVERWORLD).bind();
-	shader(StateShader::OVERWORLD_GRASS_SHADOW).setUniform("WVP", shadowMap.calcMVP(world, lightView));
-	this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();
-	shader(StateShader::OVERWORLD_GRASS_SHADOW).unbind();
+	//shader(StateShader::OVERWORLD_GRASS_SHADOW).bind();
+	//texture(StateTex::OVERWORLD).bind();
+	//shader(StateShader::OVERWORLD_GRASS_SHADOW).setUniform("WVP", shadowMap.calcMVP(world, lightView));
+	//this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();
+	//shader(StateShader::OVERWORLD_GRASS_SHADOW).unbind();
 
 	//Tree scene
 	shader(StateShader::OVERWORLD_TREE_SHADOW).bind();
