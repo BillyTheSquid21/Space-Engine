@@ -7,6 +7,7 @@
 class ShadowMap
 {
 public:
+	ShadowMap() = default;
 	ShadowMap(unsigned int width, unsigned int height);
 	
 	void init();
@@ -24,7 +25,7 @@ private:
 	ShadowMapFBO m_FBO;
 	glm::mat4 m_Proj;
 	glm::mat4 m_MVP; 
-	const unsigned int SHADOW_WIDTH; const unsigned int SHADOW_HEIGHT;
+	unsigned int SHADOW_WIDTH; unsigned int SHADOW_HEIGHT;
 };
 
 #endif

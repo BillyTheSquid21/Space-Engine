@@ -5,7 +5,7 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	//Renderer setup
 	camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 0.0f));
 
-	//Object manager pointer
+	//Object manager and player ptrs
 	objects = obj;
 
 	//Camera
@@ -14,9 +14,10 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	camera.panYDegrees(45.0f);
 
 	//Shadow Map - Will improve moving object edge flickering TODO
-	shadowMap.init();
 	float sWidth = pow(2, floor(log(width) / log(2)));
 	float sHeight = pow(2, floor(log(height) / log(2)));
+	shadowMap = ShadowMap(2*sWidth, 2*sHeight);
+	shadowMap.init();
 	glm::mat4 lightProj = glm::ortho(-sWidth, sWidth, -sHeight, sHeight, -100.0f, 750.0f);
 	shadowMap.setProjection(lightProj);
 
@@ -216,17 +217,9 @@ void OverworldRenderer::purgeData()
 		shaders[i].deleteShader();
 	}
 	shaders.clear();
-
-	//Delete renderers
 	renderers.clear();
-
-	//Delete transitions
 	transitions.clear();
-
-	//Delete tilemaps
 	tileMaps.clear();
-
-	//Clear noise map
 	m_PerlinGenerator.clear();
 
 	readyToShow = false;
@@ -234,7 +227,7 @@ void OverworldRenderer::purgeData()
 
 void OverworldRenderer::bufferRenderData()
 {
-	//Test grass
+	//Commit grass blade quad
 	this->at(StateRen::OVERWORLD_GRASS).commit(&m_Grass[0], GetFloatCount<ColorVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
 	for (int i = 0; i < renderers.size(); i++)
 	{
@@ -296,6 +289,22 @@ void OverworldRenderer::update(double deltaTime)
 	}
 	m_Time += deltaTime;
 	m_WindTimer += deltaTime;
+
+	//Update player position - TODO use glm::vec3 for player pos in sprite
+	if (m_PlayerPtr)
+	{
+		//Update pure pointer to be slightly behind sprite for grass
+		m_PlayerPos = { m_PlayerPtr->m_XPos, m_PlayerPtr->m_YPos, m_PlayerPtr->m_ZPos - 10.0f };
+		
+		//For horizontal sprinting skew displacement ahead of player
+		if (m_PlayerPtr->m_Running || m_WasRunning)
+		{
+			World::Direction dir = m_PlayerPtr->m_Direction;
+			m_PlayerPos.x += ((float)(dir == World::Direction::EAST) * 5.0f) + ((float)(dir == World::Direction::WEST) * -5.0f);
+			
+			m_WasRunning = m_PlayerPtr->m_Running;
+		}
+	}
 
 	//Change weighting of wind buffers depending on current buffer
 	if (m_CurrBuffer == 0)
@@ -479,6 +488,7 @@ void OverworldRenderer::draw()
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_WindA", OVERWORLD_WIND_SLOT_A);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_WindB", OVERWORLD_WIND_SLOT_B);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_WeightA", m_WindWeightA);
+	shader(StateShader::OVERWORLD_GRASS).setUniform("u_PlayerPos", &m_PlayerPos);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_Model", &this->at(StateRen::OVERWORLD).m_RendererModelMatrix);
 	this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();

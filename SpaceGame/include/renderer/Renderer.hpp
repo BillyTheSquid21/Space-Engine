@@ -184,6 +184,8 @@ namespace Render
 			//Return if is non instanced
 			if (m_InstanceIndex <= 0)
 			{
+				m_InstanceIndex = 0;
+				m_InstanceSize = 0;
 				return;
 			}
 

@@ -7,6 +7,7 @@ uniform mat4 u_LightMVP;
 uniform sampler2D u_WindA;
 uniform sampler2D u_WindB;
 uniform float u_WeightA;
+uniform vec3 u_PlayerPos;
 
 in DATA
 {
@@ -41,13 +42,17 @@ void main()
 {
 	//Work out which vertice or two is highest
 	float lastHighestVert = -10000000.0; //Assume nothing lower
-
+	float lastLowestVert = 10000000.0;
 	for (int i = 0; i < 3; i++)
 	{
 		float y = gl_in[i].gl_Position.y;
 		if (gl_in[i].gl_Position.y >= lastHighestVert)
 		{
 			lastHighestVert = y;
+		}
+		else if (gl_in[i].gl_Position.y <= lastLowestVert)
+		{
+			lastLowestVert = y;
 		}
 	}
 
@@ -71,6 +76,21 @@ void main()
 	float result = dot(vec3(windVec.xyz), data_in[0].v_Normal) / (length(windVec)*length(data_in[0].v_Normal));
 	float inFlow = 1.0/result;
 
+	//If close to player, move in opposite direction
+	float underfootLowerThreshold = 6.5;
+	float underfootUpperThreshold = 22.0;
+
+	vec2 playerToGrass = vec2(gl_in[2].gl_Position.xz) - vec2(u_PlayerPos.xz);
+	vec3 playerDisplace = vec3(0.0,0.0,0.0);
+	float dist = length(playerToGrass);
+	if (dist < underfootUpperThreshold && gl_in[2].gl_Position.y == u_PlayerPos.y)
+	{
+		//Push away and reduce strength with distance
+	    vec2 normalizedDist = normalize(playerToGrass);
+		playerDisplace = vec3(normalizedDist.x, 0.0, normalizedDist.y);
+		playerDisplace *= (vec3(180, 1.0, 180)/pow((length(playerToGrass))*(float((dist > 3.5))), 2));
+	}
+
 	for (int i = 0; i < 3; i++)
 	{
 		vec4 position = gl_in[i].gl_Position;
@@ -81,6 +101,11 @@ void main()
 		{
 			position = position + windVec;
 			position += vec4(0.0, data_in[i].v_HeightVariance, 0.0, 0.0);
+			
+			//Flatten if underfoot
+			playerDisplace.y = float((dist < underfootLowerThreshold)) * (lastLowestVert - position.y);
+			playerDisplace *= vec3(dist >= underfootLowerThreshold, 1.0 ,dist >= underfootLowerThreshold);
+			position += vec4(playerDisplace.xyz, 0.0);
 		}
 
 		gl_Position = data_in[i].v_Proj * position;

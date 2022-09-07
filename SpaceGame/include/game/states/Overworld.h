@@ -22,6 +22,7 @@
 #include "game/pokemon/Pokemon.h"
 #include "game/pokemon/PokemonIO.h"
 #include "game/pokemon/PokemonLevel.h"
+#include "mtlib/ThreadPool.h"
 #include "functional"
 
 class Overworld : public State
@@ -99,6 +100,8 @@ private:
 	std::function<void(Party*, Party*)> m_BattleEnable;
 
 	GameInput* m_Input;
+
+	MtLib::ThreadPool* m_Pool = nullptr;
 
 };
 

@@ -19,7 +19,7 @@ public:
 };
 
 //checks if any permissions have changed and therefore whether to trigger any animations
-#define GRASS_DENSITY 20.0f
+#define GRASS_DENSITY 50.0f
 class TallGrassRenderComponent : public RenderComponent
 {
 public:
@@ -34,7 +34,7 @@ public:
 		{ 
 			return; 
 		} 
-		m_Renderer->commitInstance(&m_Grass->m_Grass[0], sizeof(glm::vec3) * m_Grass->m_Grass.size(), m_Grass->m_Grass.size());
+		m_Renderer->commitInstance(&m_Grass->m_Grass[0], 3 * m_Grass->m_Grass.size(), m_Grass->m_Grass.size());
 	};
 private:
 	Render::Renderer* m_Renderer;

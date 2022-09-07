@@ -70,7 +70,7 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
 
     //Init pkm
     //Pkm test
-    MtLib::ThreadPool* pool = MtLib::ThreadPool::Fetch();
+    m_Pool = MtLib::ThreadPool::Fetch();
 
     PokemonDataBank::loadData(PkmDataType::BASE_STATS);
     PokemonDataBank::loadData(PkmDataType::MOVE_INFO);
@@ -102,10 +102,10 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     PokemonDataBank::LoadPokemonMoves(m_Data->playerParty[1]);
     PokemonDataBank::LoadPokemonMoves(enemy[0]);
 
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::MOVE_INFO);
-    pool->Run(PokemonDataBank::unloadData, PkmDataType::POKEMON_TYPES);
+    m_Pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
+    m_Pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
+    m_Pool->Run(PokemonDataBank::unloadData, PkmDataType::MOVE_INFO);
+    m_Pool->Run(PokemonDataBank::unloadData, PkmDataType::POKEMON_TYPES);
 
     EngineLog("Overworld loaded: ", (int)m_CurrentLevel);
 }
@@ -181,6 +181,8 @@ void Overworld::loadObjectData()
     walk->setSpriteData(m_PlayerPtr);
     m_LocationX = &m_PlayerPtr->m_Tile.x;
     m_LocationZ = &m_PlayerPtr->m_Tile.z;
+
+    m_Renderer.linkPlayerPtr(m_PlayerPtr);
 
     //Add companion test
     //OvSpr_SpriteData dataCompanion = { { m_PlayerPtr->m_Tile.x - 1, m_PlayerPtr->m_Tile.z}, World::WorldHeight::F0, m_Data->id, { 0, 0 } };
@@ -284,6 +286,8 @@ void Overworld::update(double deltaTime, double time) {
     {
         if (m_Renderer.transition(StateTrans::OVERWORLD_BATTLE).isEnded())
         {
+            //Await any pending tasks then start battle
+            m_Pool->Wait();
             this->startBattle();
         }
     }

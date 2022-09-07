@@ -6,6 +6,7 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.h"
 #include "game/objects/ModelObject.hpp"
+#include "game/objects/OverworldSprite.h"
 #include "renderer/ShadowMap.h"
 #include "renderer/Transition.hpp"
 #include "game/objects/ObjectTypes.hpp"
@@ -92,6 +93,7 @@ public:
 	void draw(); //Draw scene renderer
 	void mapModelTextures();
 	void signalMapModelTextures() { m_RemapModels = true; }
+	void linkPlayerPtr(std::shared_ptr<OvSpr_RunningSprite> ptr) { m_PlayerPtr = ptr; }
 
 	//Notifies renderer to wait until a level has been modified to change model mapping
 	void isModifyingLevel() { m_LevelsLeftLoading++; }
@@ -141,7 +143,10 @@ public:
 
 	//Test grass
 	Color_Quad m_Grass = CreateColorQuad(0, 10.0f, 0.8f, 10.0f, {0.125f, 0.627f, 0.439f, 1.0f});
-	glm::vec3 pos[3] = { { 0, 0, 0 }, { 2, 0, 0 } };
+
+	std::shared_ptr<OvSpr_RunningSprite> m_PlayerPtr;
+	glm::vec3 m_PlayerPos;
+	bool m_WasRunning = false; //Avoid flickering from non running frame
 
 private:
 	//Objects
@@ -163,7 +168,7 @@ private:
 	SegArray<TileMap, (int)StateTileMap::OVERWORLD_COUNT> tileMaps;
 
 	//Shadow map
-	ShadowMap shadowMap = ShadowMap(2048, 2048);
+	ShadowMap shadowMap;
 
 	unsigned int SCREEN_WIDTH; unsigned int SCREEN_HEIGHT;
 
