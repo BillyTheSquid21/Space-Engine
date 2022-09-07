@@ -14,8 +14,8 @@ void OverworldRenderer::initialiseRenderer(unsigned int width, unsigned int heig
 	camera.panYDegrees(45.0f);
 
 	//Shadow Map - Will improve moving object edge flickering TODO
-	float sWidth = pow(2, floor(log(width) / log(2)));
-	float sHeight = pow(2, floor(log(height) / log(2)));
+	float sWidth = 2048;
+	float sHeight = 2048;
 	shadowMap = ShadowMap(2*sWidth, 2*sHeight);
 	shadowMap.init();
 	glm::mat4 lightProj = glm::ortho(-sWidth, sWidth, -sHeight, sHeight, -100.0f, 750.0f);
