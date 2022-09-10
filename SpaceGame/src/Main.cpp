@@ -1,16 +1,16 @@
-#include "game/DemoGame.h"
+#include "core/Game.h"
 #include <cstdlib>
 #include <chrono>
 #include <thread>
 
 //Engine version tag
-const char SG_VERSION[]{ "0.4" };
+const char SG_VERSION[]{ "0.5" };
 
 //saves space
 using namespace std::chrono;
 
 //Pointer to game kept outside for key callback benifit - will auto destroy
-std::shared_ptr<DemoGame> game;
+std::shared_ptr<Game> game;
 
 int main(void) //TODO: get delta time working perfectly
 {   
