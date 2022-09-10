@@ -11,20 +11,20 @@
 
 //Class to pin all loading zones of a region to - eg all overworld, all inside building
 //Means you can prevent loading an overworld level while in a house
-class LoadingZone : public GameObject {};
+class LoadingZone : public SGObject::GObject {};
 
 //Loading zone "instance" - takes care of what rendering is carried out
-class LoadingZoneComponent : public RenderComponent
+class LoadingZoneComponent : public SGObject::RenderComponent
 {
 public:
-	LoadingZoneComponent(OvSpr_RunningSprite* spr, World::LevelID l1, World::LevelID l2) { m_PlayerPointer = spr; m_L1_ID = l1; m_L2_ID = l2; m_Pool = MtLib::ThreadPool::Fetch(); };
+	LoadingZoneComponent(Ov_Sprite::RunSprite* spr, World::LevelID l1, World::LevelID l2) { m_PlayerPointer = spr; m_L1_ID = l1; m_L2_ID = l2; m_Pool = MtLib::ThreadPool::Fetch(); };
 	
 	void setZoneBounds(float x, float z, float w, float h) { m_Origin.a = x; m_Origin.b = -1 * z; m_Bounds.a = w; m_Bounds.b = h; }
 	void setLoadingFuncs(std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld) { m_LoadLv = ld; m_UnloadLv = uld; };
 	void render();
 private:
 	//Player data
-	OvSpr_RunningSprite* m_PlayerPointer = nullptr;
+	Ov_Sprite::RunSprite* m_PlayerPointer = nullptr;
 
 	//Loading zone data
 	Struct2f m_Origin = {0.0f, 0.0f}; //Lower left

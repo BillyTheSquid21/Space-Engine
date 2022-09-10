@@ -8,13 +8,13 @@
 
 
 //Player walk uses exact data of TilePosition so inherit for this
-class PlayerMove : public TilePosition
+class PlayerMove : public Ov_Sprite::TilePosition
 {
 public:
-	using TilePosition::TilePosition;
+	using Ov_Sprite::TilePosition::TilePosition;
 	void update(double deltaTime);
 	void linkInput(GameInput* input) { m_Input = input; };
-	void setSpriteData(std::shared_ptr<OvSpr_RunningSprite> player) { m_PlayerData = player; }
+	void setSpriteData(std::shared_ptr<Ov_Sprite::RunSprite> player) { m_PlayerData = player; }
 private:
 	bool startWalk();
 	bool startRun();
@@ -26,25 +26,25 @@ private:
 
 	GameInput* m_Input = nullptr;
 
-	std::shared_ptr<OvSpr_RunningSprite> m_PlayerData;
+	std::shared_ptr<Ov_Sprite::RunSprite> m_PlayerData;
 
 	double m_Timer = 0.0; 
 };
 
-class PlayerCameraLock : public RenderComponent
+class PlayerCameraLock : public SGObject::RenderComponent
 {
 public:
 	PlayerCameraLock() = default;
-	PlayerCameraLock(float* x, float* y, float* z, Camera* cam) { m_XPos = x; m_YPos = y; m_ZPos = z; m_Camera = cam; }
+	PlayerCameraLock(float* x, float* y, float* z, SGRender::Camera* cam) { m_XPos = x; m_YPos = y; m_ZPos = z; m_Camera = cam; }
 	void render();
 private:
-	Camera* m_Camera = nullptr;
+	SGRender::Camera* m_Camera = nullptr;
 	float* m_XPos = nullptr;
 	float* m_YPos = nullptr;
 	float* m_ZPos = nullptr;
 };
 
-class PlayerEncounter : public UpdateComponent
+class PlayerEncounter : public SGObject::UpdateComponent
 {
 public:
 	PlayerEncounter(World::MovementPermissions* perm, World::Tile* tile, bool* battle) 
@@ -65,7 +65,7 @@ private:
 };
 
 //Updates level in global state (may soon be depreciated by just using sprite data)
-class UpdateGlobalLevel : public UpdateComponent
+class UpdateGlobalLevel : public SGObject::UpdateComponent
 {
 public:
 	UpdateGlobalLevel(World::LevelID* global, World::LevelID* sprite) : m_GlobalPtr(global), m_SpritePtr(sprite) {}

@@ -1,0 +1,59 @@
+\hypertarget{_pokemon_battle_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/pokemon/\+Pokemon\+Battle.h File Reference}
+\label{_pokemon_battle_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/PokemonBattle.h@{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/PokemonBattle.h}}
+{\ttfamily \#include \char`\"{}utility/\+SGUtil.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/utility/\+Game\+Text.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Pokemon.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Stat\+Stages.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Turn.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Move\+Effects.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utility/\+Random.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/gui/\+GUI.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}chrono\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}functional\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_move_queue}{Move\+Queue}}
+\item 
+struct \mbox{\hyperlink{struct_move_queue_1_1_turn}{Move\+Queue\+::\+Turn}}
+\item 
+class \mbox{\hyperlink{class_pokemon_battle}{Pokemon\+Battle}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_pokemon_battle_8h_a171e3a75a4a9e6745adc40d47c8cd385}{POKEMON\+\_\+\+BATTLE\+\_\+H}}
+\item 
+\#define \mbox{\hyperlink{_pokemon_battle_8h_a01ec68e4f48313272485e5a94a75ccbe}{MOVE\+\_\+\+QUEUE\+\_\+\+LENGTH}}~5
+\item 
+\#define \mbox{\hyperlink{_pokemon_battle_8h_afd1324a981b03318ae9224e1441f1f25}{BATTLE\+\_\+\+PROBABILITY\+\_\+\+MAX}}~10000
+\item 
+\#define \mbox{\hyperlink{_pokemon_battle_8h_a5aa140c2c2e64a57331d450a98077834}{TYPE\+\_\+\+COUNT}}~18
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_pokemon_battle_8h_afd1324a981b03318ae9224e1441f1f25}\label{_pokemon_battle_8h_afd1324a981b03318ae9224e1441f1f25}} 
+\index{PokemonBattle.h@{PokemonBattle.h}!BATTLE\_PROBABILITY\_MAX@{BATTLE\_PROBABILITY\_MAX}}
+\index{BATTLE\_PROBABILITY\_MAX@{BATTLE\_PROBABILITY\_MAX}!PokemonBattle.h@{PokemonBattle.h}}
+\doxysubsubsection{\texorpdfstring{BATTLE\_PROBABILITY\_MAX}{BATTLE\_PROBABILITY\_MAX}}
+{\footnotesize\ttfamily \#define BATTLE\+\_\+\+PROBABILITY\+\_\+\+MAX~10000}
+
+\mbox{\Hypertarget{_pokemon_battle_8h_a01ec68e4f48313272485e5a94a75ccbe}\label{_pokemon_battle_8h_a01ec68e4f48313272485e5a94a75ccbe}} 
+\index{PokemonBattle.h@{PokemonBattle.h}!MOVE\_QUEUE\_LENGTH@{MOVE\_QUEUE\_LENGTH}}
+\index{MOVE\_QUEUE\_LENGTH@{MOVE\_QUEUE\_LENGTH}!PokemonBattle.h@{PokemonBattle.h}}
+\doxysubsubsection{\texorpdfstring{MOVE\_QUEUE\_LENGTH}{MOVE\_QUEUE\_LENGTH}}
+{\footnotesize\ttfamily \#define MOVE\+\_\+\+QUEUE\+\_\+\+LENGTH~5}
+
+\mbox{\Hypertarget{_pokemon_battle_8h_a171e3a75a4a9e6745adc40d47c8cd385}\label{_pokemon_battle_8h_a171e3a75a4a9e6745adc40d47c8cd385}} 
+\index{PokemonBattle.h@{PokemonBattle.h}!POKEMON\_BATTLE\_H@{POKEMON\_BATTLE\_H}}
+\index{POKEMON\_BATTLE\_H@{POKEMON\_BATTLE\_H}!PokemonBattle.h@{PokemonBattle.h}}
+\doxysubsubsection{\texorpdfstring{POKEMON\_BATTLE\_H}{POKEMON\_BATTLE\_H}}
+{\footnotesize\ttfamily \#define POKEMON\+\_\+\+BATTLE\+\_\+H}
+
+\mbox{\Hypertarget{_pokemon_battle_8h_a5aa140c2c2e64a57331d450a98077834}\label{_pokemon_battle_8h_a5aa140c2c2e64a57331d450a98077834}} 
+\index{PokemonBattle.h@{PokemonBattle.h}!TYPE\_COUNT@{TYPE\_COUNT}}
+\index{TYPE\_COUNT@{TYPE\_COUNT}!PokemonBattle.h@{PokemonBattle.h}}
+\doxysubsubsection{\texorpdfstring{TYPE\_COUNT}{TYPE\_COUNT}}
+{\footnotesize\ttfamily \#define TYPE\+\_\+\+COUNT~18}
+

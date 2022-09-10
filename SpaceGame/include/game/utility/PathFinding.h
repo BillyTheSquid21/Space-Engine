@@ -34,9 +34,9 @@ namespace PathFinding
 		World::WorldHeight height;
 	};
 
-	Path GetPath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height);
-	std::vector<PathNode> FindPath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height);
-	void ValidatePath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height, Path& path);
+	Path GetPath(Ov_Sprite::WalkSprite* subject, World::Tile dest, World::WorldHeight height);
+	std::vector<PathNode> FindPath(Ov_Sprite::WalkSprite* subject, World::Tile dest, World::WorldHeight height);
+	void ValidatePath(Ov_Sprite::WalkSprite* subject, World::Tile dest, World::WorldHeight height, Path& path);
 	static bool CheckPermission(PathNode& lastNode, PathNode& nextNode, std::vector<Permission>& perm, World::LevelDimensions dim, World::LevelID id);
 }
 

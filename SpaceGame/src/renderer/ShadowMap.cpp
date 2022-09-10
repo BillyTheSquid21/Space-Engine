@@ -1,17 +1,17 @@
 #include "renderer/ShadowMap.h"
 
-ShadowMap::ShadowMap(unsigned int width, unsigned int height) 
+SGRender::ShadowMap::ShadowMap(unsigned int width, unsigned int height) 
 	: SHADOW_WIDTH(width), SHADOW_HEIGHT(height) 
 {
 	
 }
 
-void ShadowMap::init()
+void SGRender::ShadowMap::init()
 {
 	m_FBO.init(SHADOW_WIDTH, SHADOW_WIDTH);
 }
 
-void ShadowMap::bindForWriting()
+void SGRender::ShadowMap::bindForWriting()
 {
 	m_FBO.bindForWriting();
 	glClear(GL_DEPTH_BUFFER_BIT);

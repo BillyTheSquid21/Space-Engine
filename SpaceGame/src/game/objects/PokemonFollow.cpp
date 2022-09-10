@@ -2,6 +2,7 @@
 
 void PokemonFollow::update(double deltaTime)
 {
+	using namespace Geometry; using namespace SGRender;
 	TilePosition::update(deltaTime);
 
 	//Check if entering pointer mode
@@ -13,7 +14,7 @@ void PokemonFollow::update(double deltaTime)
 			{
 				m_PtrMode = true;
 				m_Player->m_Busy = true;
-				m_Pointer->messageAllRender((int)Message::ACTIVATE);
+				m_Pointer->messageAllRender((int)SGObject::Message::ACTIVATE);
 				m_Cooldown = 0.5;
 
 				//Put under pokemon
@@ -30,7 +31,7 @@ void PokemonFollow::update(double deltaTime)
 				Struct3f newPos = { m_Pointer->m_XPos, m_Pointer->m_YPos, m_Pointer->m_ZPos };
 
 				//Translate sprite
-				Position<NormalTextureVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
+				Position<NTVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
 			
 				m_LastPkmTile = m_Pkm->m_Tile;
 			}
@@ -41,7 +42,7 @@ void PokemonFollow::update(double deltaTime)
 			{
 				m_PtrMode = false;
 				m_Player->m_Busy = false;
-				m_Pointer->messageAllRender((int)Message::DEACTIVATE);
+				m_Pointer->messageAllRender((int)SGObject::Message::DEACTIVATE);
 				m_Cooldown = 0.5;
 
 				//Check if are where meant to be
@@ -72,7 +73,7 @@ void PokemonFollow::update(double deltaTime)
 				{
 					m_Pointer->m_ZPos -= World::TILE_SIZE;
 					Struct3f newPos = { m_Pointer->m_XPos, m_Pointer->m_YPos, m_Pointer->m_ZPos };
-					Position<NormalTextureVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
+					Position<NTVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
 					m_Cooldown = 0.2;
 				}
 			}
@@ -82,7 +83,7 @@ void PokemonFollow::update(double deltaTime)
 				{
 					m_Pointer->m_ZPos += World::TILE_SIZE;
 					Struct3f newPos = { m_Pointer->m_XPos, m_Pointer->m_YPos, m_Pointer->m_ZPos };
-					Position<NormalTextureVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
+					Position<NTVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
 					m_Cooldown = 0.2;
 				}
 			}
@@ -92,7 +93,7 @@ void PokemonFollow::update(double deltaTime)
 				{
 					m_Pointer->m_XPos -= World::TILE_SIZE;
 					Struct3f newPos = { m_Pointer->m_XPos, m_Pointer->m_YPos, m_Pointer->m_ZPos };
-					Position<NormalTextureVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
+					Position<NTVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
 					m_Cooldown = 0.2;
 				}
 			}
@@ -102,7 +103,7 @@ void PokemonFollow::update(double deltaTime)
 				{
 					m_Pointer->m_XPos += World::TILE_SIZE;
 					Struct3f newPos = { m_Pointer->m_XPos, m_Pointer->m_YPos, m_Pointer->m_ZPos };
-					Position<NormalTextureVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
+					Position<NTVertex>(&m_Pointer->m_Sprite, pos, newPos, Shape::QUAD);
 					m_Cooldown = 0.2;
 				}
 			}
@@ -209,20 +210,22 @@ void PokemonFollow::update(double deltaTime)
 	}
 }
 
-static void IncLevel(OvSpr_Sprite* ptr, Struct3f pos)
+static void IncLevel(Ov_Sprite::Sprite* ptr, Struct3f pos)
 {
+	using namespace Geometry;
 	ptr->m_WorldLevel = (World::WorldHeight)((int)ptr->m_WorldLevel + 1);
 	ptr->m_YPos = (((float)ptr->m_WorldLevel / sqrt(2)) * World::TILE_SIZE);
 	Struct3f newPos = { ptr->m_XPos, ptr->m_YPos, ptr->m_ZPos };
-	Position<NormalTextureVertex>(&ptr->m_Sprite, pos, newPos, Shape::QUAD);
+	Position<SGRender::NTVertex>(&ptr->m_Sprite, pos, newPos, Shape::QUAD);
 }
 
-static void DecrLevel(OvSpr_Sprite* ptr, Struct3f pos)
+static void DecrLevel(Ov_Sprite::Sprite* ptr, Struct3f pos)
 {
+	using namespace Geometry;
 	ptr->m_WorldLevel = (World::WorldHeight)((int)ptr->m_WorldLevel - 1);
 	ptr->m_YPos = (((float)ptr->m_WorldLevel / sqrt(2)) * World::TILE_SIZE);
 	Struct3f newPos = { ptr->m_XPos, ptr->m_YPos, ptr->m_ZPos };
-	Position<NormalTextureVertex>(&ptr->m_Sprite, pos, newPos, Shape::QUAD);
+	Position<SGRender::NTVertex>(&ptr->m_Sprite, pos, newPos, Shape::QUAD);
 }
 
 bool PokemonFollow::checkPerm(World::Direction direction, Struct3f pos)

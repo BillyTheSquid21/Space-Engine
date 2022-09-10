@@ -9,35 +9,40 @@
 #include "cmath"
 
 //Location
-class TallGrassObject : public GameObject
+class TallGrassObject : public SGObject::GObject
 {
 public:
 	//Sprites
-	std::vector<glm::vec3> m_Grass;
+	std::vector<glm::vec4> m_Pos;
+	std::vector<glm::vec4> m_CulledPos;
 	unsigned int m_PositionCount = 0;
+	unsigned int m_PositionCountCulled = 0;
 	World::LevelID m_LevelID;
 };
 
-//checks if any permissions have changed and therefore whether to trigger any animations
-#define GRASS_DENSITY 50.0f
-class TallGrassRenderComponent : public RenderComponent
+#define GRASS_DENSITY 40
+class TallGrassRenderComponent : public SGObject::RenderComponent
 {
 public:
-	TallGrassRenderComponent(Render::Renderer* ren, TallGrassObject* grass) { m_Renderer = ren; m_Grass = grass; }
+	TallGrassRenderComponent(SGRender::Renderer* ren, SGRender::Camera* cam, TallGrassObject* grass) { m_Renderer = ren; m_Camera = cam; m_Grass = grass; }
 	
-	void reserveGrass(unsigned int count) { m_Grass->m_Grass.resize(GRASS_DENSITY*GRASS_DENSITY*count); }
+	void reserveGrass(unsigned int count) { m_Grass->m_Pos.resize(GRASS_DENSITY*GRASS_DENSITY*count); m_Grass->m_CulledPos.resize(GRASS_DENSITY * GRASS_DENSITY * count);}
 	void addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID);
 
 	void render() 
 	{ 
-		if (m_Grass->m_Grass.size() == 0) 
+		frustumCull();
+		if (m_Grass->m_PositionCountCulled <= 0) 
 		{ 
 			return; 
 		} 
-		m_Renderer->commitInstance(&m_Grass->m_Grass[0], 3 * m_Grass->m_Grass.size(), m_Grass->m_Grass.size());
+		m_Renderer->commitInstance(&m_Grass->m_CulledPos[0], 4 * m_Grass->m_PositionCountCulled, m_Grass->m_PositionCountCulled);
 	};
 private:
-	Render::Renderer* m_Renderer;
+	void frustumCull();
+	bool checkInFrustum(glm::vec3 pos);
+	SGRender::Renderer* m_Renderer;
+	SGRender::Camera* m_Camera;
 	TallGrassObject* m_Grass = nullptr;
 };
 

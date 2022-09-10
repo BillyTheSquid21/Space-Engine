@@ -1,0 +1,193 @@
+\hypertarget{namespace_geometry}{}\doxysection{Geometry Namespace Reference}
+\label{namespace_geometry}\index{Geometry@{Geometry}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_geometry_1_1_plane}{Plane}}
+\item 
+struct \mbox{\hyperlink{struct_geometry_1_1_quad_array}{Quad\+Array}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} \{ \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8a38b464161bf5019798797584babd0433}{TRI}}
+, \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8ac88da92039291f825814816096db2ea2}{QUAD}}
+, \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8a17b8ef2c330f1430e00c9de5469fc7e7}{LINE}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_ab2bc885ba8c8f6925e1eaf9ec66826a4}{Generate\+Quad\+Array\+Indices}} (T \&quad\+Arr)
+\item 
+\mbox{\hyperlink{_geometry_8h_a7c63431bc0d1072e1b3397b59bbfd6cd}{Quad}} \mbox{\hyperlink{namespace_geometry_ac2c5e5e1fff34331eeac0c770442c28a}{Create\+Quad}} (float x, float y, float width, float height)
+\item 
+\mbox{\hyperlink{_geometry_8h_a5311113fe1e0d5f961f3fef4036e932a}{Color\+\_\+\+Quad}} \mbox{\hyperlink{namespace_geometry_a009c919f5810cb211de4cb29f25fd216}{Create\+Color\+Quad}} (float x, float y, float width, float height, glm\+::vec4 color)
+\item 
+\mbox{\hyperlink{_geometry_8h_ae5ee5dfa8be788fe5a303f9a73f26fdb}{Tex\+\_\+\+Quad}} \mbox{\hyperlink{namespace_geometry_a865db6fb7ba55729b323d8c19b7cf630}{Create\+Texture\+Quad}} (float x, float y, float width, float height, float uvX, float uvY, float uv\+Width, float uv\+Height)
+\item 
+\mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} \mbox{\hyperlink{namespace_geometry_a37f29200035a25bd246ed7be33070748}{Create\+Normal\+Texture\+Quad}} (float x, float y, float width, float height, float uvX, float uvY, float uv\+Width, float uv\+Height)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_af1f4ee361cea3f24bc76299bb1d412a5}{Set\+Quad\+UV}} (T $\ast$vertices\+Array, float u, float v, float width, float height)
+\item 
+void \mbox{\hyperlink{namespace_geometry_a1ed247b215cac622344b58d4832a7514}{Calculate\+Quad\+Normals}} (\mbox{\hyperlink{struct_s_g_render_1_1_n_t_vertex}{SGRender\+::\+NTVertex}} $\ast$vertices\+Array)
+\item 
+unsigned short int \mbox{\hyperlink{namespace_geometry_a7a8b1a40024caeae7378b48c95f3a94a}{Get\+Vertices\+Count}} (\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} type)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned short int \mbox{\hyperlink{namespace_geometry_af204d1c06aed774c2232b42725164334}{Get\+Float\+Count}} (\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} type)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_afebcd2ecaa254c715e9d5f6a410c28c9}{Translate}} (void $\ast$vertices\+Array, float deltaX, float deltaY, float deltaZ, \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} type)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_a63503b475316e098e5ea29aff71c4eeb}{Translate}} (void $\ast$vertices\+Array, float deltaX, float deltaY, float deltaZ, size\+\_\+t vertice\+Count)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_a87e3985dabb891adb34a1ecd67809264}{Translate\+Vertex}} (void $\ast$vertices\+Array, unsigned int index, float deltaX, float deltaY, float deltaZ)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_a9117c2c984fac08d116ec1f81fdfb1fc}{Position}} (void $\ast$vertices\+Array, \mbox{\hyperlink{struct_struct3f}{Struct3f}} current\+Position, \mbox{\hyperlink{struct_struct3f}{Struct3f}} new\+Position, \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} type)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_ae6f78235781c235bfd4b447462f2120c}{Axial\+Rotate}} (void $\ast$vertices\+Array, glm\+::vec3 rotation\+Centre, float angle, \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} type, \mbox{\hyperlink{namespace_s_g_render_a766abf8b20e51c19b56222230e2f2ae8}{SGRender\+::\+Axis}} axis)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_aa8cb016715557f7f69219db9add3022e}{Axial\+Rotate}} (void $\ast$vertices\+Array, glm\+::vec3 rotation\+Centre, float angle, size\+\_\+t vertice\+Count, \mbox{\hyperlink{namespace_s_g_render_a766abf8b20e51c19b56222230e2f2ae8}{SGRender\+::\+Axis}} axis)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_a50af62dcab67fb2aa225a122a8a7f7b5}{Simple\+Scale}} (void $\ast$vertices\+Array, glm\+::vec3 scale, \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}} type)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_geometry_a843a34b858f1e700f161efeb07e3f1a9}{Simple\+Scale}} (void $\ast$vertices\+Array, glm\+::vec3 scale, size\+\_\+t vertice\+Count)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}\label{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}} 
+\index{Geometry@{Geometry}!Shape@{Shape}}
+\index{Shape@{Shape}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{Shape}{Shape}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Geometry\+::\+Shape}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TRI@{TRI}!Geometry@{Geometry}}\index{Geometry@{Geometry}!TRI@{TRI}}}\mbox{\Hypertarget{namespace_geometry_a97f7d0292f7e53081385d091f621eff8a38b464161bf5019798797584babd0433}\label{namespace_geometry_a97f7d0292f7e53081385d091f621eff8a38b464161bf5019798797584babd0433}} 
+TRI&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUAD@{QUAD}!Geometry@{Geometry}}\index{Geometry@{Geometry}!QUAD@{QUAD}}}\mbox{\Hypertarget{namespace_geometry_a97f7d0292f7e53081385d091f621eff8ac88da92039291f825814816096db2ea2}\label{namespace_geometry_a97f7d0292f7e53081385d091f621eff8ac88da92039291f825814816096db2ea2}} 
+QUAD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LINE@{LINE}!Geometry@{Geometry}}\index{Geometry@{Geometry}!LINE@{LINE}}}\mbox{\Hypertarget{namespace_geometry_a97f7d0292f7e53081385d091f621eff8a17b8ef2c330f1430e00c9de5469fc7e7}\label{namespace_geometry_a97f7d0292f7e53081385d091f621eff8a17b8ef2c330f1430e00c9de5469fc7e7}} 
+LINE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_geometry_ae6f78235781c235bfd4b447462f2120c}\label{namespace_geometry_ae6f78235781c235bfd4b447462f2120c}} 
+\index{Geometry@{Geometry}!AxialRotate@{AxialRotate}}
+\index{AxialRotate@{AxialRotate}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{AxialRotate()}{AxialRotate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Axial\+Rotate (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{glm\+::vec3}]{rotation\+Centre,  }\item[{float}]{angle,  }\item[{\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}}}]{type,  }\item[{\mbox{\hyperlink{namespace_s_g_render_a766abf8b20e51c19b56222230e2f2ae8}{SGRender\+::\+Axis}}}]{axis }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_aa8cb016715557f7f69219db9add3022e}\label{namespace_geometry_aa8cb016715557f7f69219db9add3022e}} 
+\index{Geometry@{Geometry}!AxialRotate@{AxialRotate}}
+\index{AxialRotate@{AxialRotate}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{AxialRotate()}{AxialRotate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Axial\+Rotate (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{glm\+::vec3}]{rotation\+Centre,  }\item[{float}]{angle,  }\item[{size\+\_\+t}]{vertice\+Count,  }\item[{\mbox{\hyperlink{namespace_s_g_render_a766abf8b20e51c19b56222230e2f2ae8}{SGRender\+::\+Axis}}}]{axis }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a1ed247b215cac622344b58d4832a7514}\label{namespace_geometry_a1ed247b215cac622344b58d4832a7514}} 
+\index{Geometry@{Geometry}!CalculateQuadNormals@{CalculateQuadNormals}}
+\index{CalculateQuadNormals@{CalculateQuadNormals}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{CalculateQuadNormals()}{CalculateQuadNormals()}}
+{\footnotesize\ttfamily void Geometry\+::\+Calculate\+Quad\+Normals (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_g_render_1_1_n_t_vertex}{SGRender\+::\+NTVertex}} $\ast$}]{vertices\+Array }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a009c919f5810cb211de4cb29f25fd216}\label{namespace_geometry_a009c919f5810cb211de4cb29f25fd216}} 
+\index{Geometry@{Geometry}!CreateColorQuad@{CreateColorQuad}}
+\index{CreateColorQuad@{CreateColorQuad}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{CreateColorQuad()}{CreateColorQuad()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_geometry_8h_a5311113fe1e0d5f961f3fef4036e932a}{Color\+\_\+\+Quad}} Geometry\+::\+Create\+Color\+Quad (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{width,  }\item[{float}]{height,  }\item[{glm\+::vec4}]{color }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a37f29200035a25bd246ed7be33070748}\label{namespace_geometry_a37f29200035a25bd246ed7be33070748}} 
+\index{Geometry@{Geometry}!CreateNormalTextureQuad@{CreateNormalTextureQuad}}
+\index{CreateNormalTextureQuad@{CreateNormalTextureQuad}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{CreateNormalTextureQuad()}{CreateNormalTextureQuad()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} Geometry\+::\+Create\+Normal\+Texture\+Quad (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{width,  }\item[{float}]{height,  }\item[{float}]{uvX,  }\item[{float}]{uvY,  }\item[{float}]{uv\+Width,  }\item[{float}]{uv\+Height }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_ac2c5e5e1fff34331eeac0c770442c28a}\label{namespace_geometry_ac2c5e5e1fff34331eeac0c770442c28a}} 
+\index{Geometry@{Geometry}!CreateQuad@{CreateQuad}}
+\index{CreateQuad@{CreateQuad}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{CreateQuad()}{CreateQuad()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_geometry_8h_a7c63431bc0d1072e1b3397b59bbfd6cd}{Quad}} Geometry\+::\+Create\+Quad (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{width,  }\item[{float}]{height }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a865db6fb7ba55729b323d8c19b7cf630}\label{namespace_geometry_a865db6fb7ba55729b323d8c19b7cf630}} 
+\index{Geometry@{Geometry}!CreateTextureQuad@{CreateTextureQuad}}
+\index{CreateTextureQuad@{CreateTextureQuad}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{CreateTextureQuad()}{CreateTextureQuad()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_geometry_8h_ae5ee5dfa8be788fe5a303f9a73f26fdb}{Tex\+\_\+\+Quad}} Geometry\+::\+Create\+Texture\+Quad (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y,  }\item[{float}]{width,  }\item[{float}]{height,  }\item[{float}]{uvX,  }\item[{float}]{uvY,  }\item[{float}]{uv\+Width,  }\item[{float}]{uv\+Height }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_ab2bc885ba8c8f6925e1eaf9ec66826a4}\label{namespace_geometry_ab2bc885ba8c8f6925e1eaf9ec66826a4}} 
+\index{Geometry@{Geometry}!GenerateQuadArrayIndices@{GenerateQuadArrayIndices}}
+\index{GenerateQuadArrayIndices@{GenerateQuadArrayIndices}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{GenerateQuadArrayIndices()}{GenerateQuadArrayIndices()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Generate\+Quad\+Array\+Indices (\begin{DoxyParamCaption}\item[{T \&}]{quad\+Arr }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_af204d1c06aed774c2232b42725164334}\label{namespace_geometry_af204d1c06aed774c2232b42725164334}} 
+\index{Geometry@{Geometry}!GetFloatCount@{GetFloatCount}}
+\index{GetFloatCount@{GetFloatCount}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{GetFloatCount()}{GetFloatCount()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned short int Geometry\+::\+Get\+Float\+Count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}}}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a7a8b1a40024caeae7378b48c95f3a94a}\label{namespace_geometry_a7a8b1a40024caeae7378b48c95f3a94a}} 
+\index{Geometry@{Geometry}!GetVerticesCount@{GetVerticesCount}}
+\index{GetVerticesCount@{GetVerticesCount}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{GetVerticesCount()}{GetVerticesCount()}}
+{\footnotesize\ttfamily unsigned short int Geometry\+::\+Get\+Vertices\+Count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}}}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a9117c2c984fac08d116ec1f81fdfb1fc}\label{namespace_geometry_a9117c2c984fac08d116ec1f81fdfb1fc}} 
+\index{Geometry@{Geometry}!Position@{Position}}
+\index{Position@{Position}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{Position()}{Position()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Position (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{\mbox{\hyperlink{struct_struct3f}{Struct3f}}}]{current\+Position,  }\item[{\mbox{\hyperlink{struct_struct3f}{Struct3f}}}]{new\+Position,  }\item[{\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}}}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_af1f4ee361cea3f24bc76299bb1d412a5}\label{namespace_geometry_af1f4ee361cea3f24bc76299bb1d412a5}} 
+\index{Geometry@{Geometry}!SetQuadUV@{SetQuadUV}}
+\index{SetQuadUV@{SetQuadUV}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{SetQuadUV()}{SetQuadUV()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Set\+Quad\+UV (\begin{DoxyParamCaption}\item[{T $\ast$}]{vertices\+Array,  }\item[{float}]{u,  }\item[{float}]{v,  }\item[{float}]{width,  }\item[{float}]{height }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a50af62dcab67fb2aa225a122a8a7f7b5}\label{namespace_geometry_a50af62dcab67fb2aa225a122a8a7f7b5}} 
+\index{Geometry@{Geometry}!SimpleScale@{SimpleScale}}
+\index{SimpleScale@{SimpleScale}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{SimpleScale()}{SimpleScale()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Simple\+Scale (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{glm\+::vec3}]{scale,  }\item[{\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}}}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a843a34b858f1e700f161efeb07e3f1a9}\label{namespace_geometry_a843a34b858f1e700f161efeb07e3f1a9}} 
+\index{Geometry@{Geometry}!SimpleScale@{SimpleScale}}
+\index{SimpleScale@{SimpleScale}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{SimpleScale()}{SimpleScale()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Simple\+Scale (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{glm\+::vec3}]{scale,  }\item[{size\+\_\+t}]{vertice\+Count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_afebcd2ecaa254c715e9d5f6a410c28c9}\label{namespace_geometry_afebcd2ecaa254c715e9d5f6a410c28c9}} 
+\index{Geometry@{Geometry}!Translate@{Translate}}
+\index{Translate@{Translate}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{Translate()}{Translate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Translate (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{float}]{deltaX,  }\item[{float}]{deltaY,  }\item[{float}]{deltaZ,  }\item[{\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8}{Shape}}}]{type }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a63503b475316e098e5ea29aff71c4eeb}\label{namespace_geometry_a63503b475316e098e5ea29aff71c4eeb}} 
+\index{Geometry@{Geometry}!Translate@{Translate}}
+\index{Translate@{Translate}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{Translate()}{Translate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Translate (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{float}]{deltaX,  }\item[{float}]{deltaY,  }\item[{float}]{deltaZ,  }\item[{size\+\_\+t}]{vertice\+Count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_geometry_a87e3985dabb891adb34a1ecd67809264}\label{namespace_geometry_a87e3985dabb891adb34a1ecd67809264}} 
+\index{Geometry@{Geometry}!TranslateVertex@{TranslateVertex}}
+\index{TranslateVertex@{TranslateVertex}!Geometry@{Geometry}}
+\doxysubsubsection{\texorpdfstring{TranslateVertex()}{TranslateVertex()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Geometry\+::\+Translate\+Vertex (\begin{DoxyParamCaption}\item[{void $\ast$}]{vertices\+Array,  }\item[{unsigned int}]{index,  }\item[{float}]{deltaX,  }\item[{float}]{deltaY,  }\item[{float}]{deltaZ }\end{DoxyParamCaption})}
+

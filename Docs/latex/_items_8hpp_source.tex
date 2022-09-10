@@ -1,0 +1,39 @@
+\hypertarget{_items_8hpp_source}{}\doxysection{Items.\+hpp}
+\label{_items_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/items/Items.hpp@{D:/Repositories/Space Engine/SpaceGame/include/game/items/Items.hpp}}
+\mbox{\hyperlink{_items_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef ITEMS\_HPP}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define ITEMS\_HPP}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <array>}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#define MAX\_ITEM\_TYPES 1329}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{comment}{//Struct that defines an item for storage}}
+\DoxyCodeLine{12 \textcolor{comment}{//Functions that allow items to be used will be on a state by state basis}}
+\DoxyCodeLine{13 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_item}{Item}}}
+\DoxyCodeLine{14 \{}
+\DoxyCodeLine{15     uint16\_t \textcolor{keywordtype}{id} = 0;        \textcolor{comment}{//Zero is a null item}}
+\DoxyCodeLine{16     uint8\_t \mbox{\hyperlink{struct_item_a332ccc067ce1018dff861440772bd91f}{pocketId}} = 0;   \textcolor{comment}{//Pocket item resides in}}
+\DoxyCodeLine{17     uint8\_t \mbox{\hyperlink{struct_item_ace8bac71fa4657306c84bfbdface9921}{categoryId}} = 0;   \textcolor{comment}{//Type of item}}
+\DoxyCodeLine{18     std::string \mbox{\hyperlink{struct_item_a342b7a351c9ae1c5430aa3ef65b670bd}{name}} = \textcolor{stringliteral}{"{}debugItem"{}};}
+\DoxyCodeLine{19 \};}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_item_slot}{ItemSlot}}}
+\DoxyCodeLine{22 \{}
+\DoxyCodeLine{23     \mbox{\hyperlink{struct_item}{Item}} \mbox{\hyperlink{struct_item_slot_a495a369f0f42d1b3ab639223a7575b6a}{item}};}
+\DoxyCodeLine{24     uint16\_t \mbox{\hyperlink{struct_item_slot_ae78338da5cd27bc48daf8607fabcd93c}{count}} = 0;}
+\DoxyCodeLine{25 \};}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{comment}{//Each item has a defined slot based on its ID, and category}}
+\DoxyCodeLine{28 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_player_bag}{PlayerBag}}}
+\DoxyCodeLine{29 \{}
+\DoxyCodeLine{30     std::array<ItemSlot, MAX\_ITEM\_TYPES> \mbox{\hyperlink{struct_player_bag_a3819027909272887d661b7ad935f352c}{items}};}
+\DoxyCodeLine{31 \};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

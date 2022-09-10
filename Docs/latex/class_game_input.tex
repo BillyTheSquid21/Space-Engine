@@ -1,0 +1,87 @@
+\hypertarget{class_game_input}{}\doxysection{Game\+Input Class Reference}
+\label{class_game_input}\index{GameInput@{GameInput}}
+
+
+{\ttfamily \#include $<$Input.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_game_input_a22790e77c995b3f620edc25d7b9a54f1}{any\+Held}} ()
+\item 
+void \mbox{\hyperlink{class_game_input_a1dc971fa5c033753c1baa069d7d6509d}{clear}} ()
+\item 
+void \mbox{\hyperlink{class_game_input_a3eb90f882e125295356915679deee88a}{update}} (double delta\+Time)
+\item 
+void \mbox{\hyperlink{class_game_input_af08d0c680ab5f80653b6ec3c68011f1e}{handle\+Input}} (int key, int scancode, int action, int mods)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_game_input_ab440033e1f88e616374012b5660513d8}{m\+\_\+\+Persistent\+Input}} \mbox{[}\mbox{\hyperlink{_input_8hpp_a553b781b83313fb14253916dd4b4277b}{STORED\+\_\+\+INPUTS\+\_\+\+COUNT}}\mbox{]}
+\item 
+double \mbox{\hyperlink{class_game_input_aedb3dd1dc20260d9ae800258d9fefd6d}{m\+\_\+\+Time\+Held}} = 0.\+0
+\item 
+const double \mbox{\hyperlink{class_game_input_a4dc3208a82f03468192d92f0cd6bf8d6}{m\+\_\+\+Time\+To\+Hold}} = 0.\+313
+\item 
+bool \mbox{\hyperlink{class_game_input_ab42be41ed200dcf322930a8e90f5021f}{m\+\_\+\+Hold\+Timer\+Active}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_game_input_a22790e77c995b3f620edc25d7b9a54f1}\label{class_game_input_a22790e77c995b3f620edc25d7b9a54f1}} 
+\index{GameInput@{GameInput}!anyHeld@{anyHeld}}
+\index{anyHeld@{anyHeld}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{anyHeld()}{anyHeld()}}
+{\footnotesize\ttfamily bool Game\+Input\+::any\+Held (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_game_input_a1dc971fa5c033753c1baa069d7d6509d}\label{class_game_input_a1dc971fa5c033753c1baa069d7d6509d}} 
+\index{GameInput@{GameInput}!clear@{clear}}
+\index{clear@{clear}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Game\+Input\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_game_input_af08d0c680ab5f80653b6ec3c68011f1e}\label{class_game_input_af08d0c680ab5f80653b6ec3c68011f1e}} 
+\index{GameInput@{GameInput}!handleInput@{handleInput}}
+\index{handleInput@{handleInput}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{handleInput()}{handleInput()}}
+{\footnotesize\ttfamily void Game\+Input\+::handle\+Input (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{int}]{scancode,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_game_input_a3eb90f882e125295356915679deee88a}\label{class_game_input_a3eb90f882e125295356915679deee88a}} 
+\index{GameInput@{GameInput}!update@{update}}
+\index{update@{update}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Game\+Input\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_game_input_ab42be41ed200dcf322930a8e90f5021f}\label{class_game_input_ab42be41ed200dcf322930a8e90f5021f}} 
+\index{GameInput@{GameInput}!m\_HoldTimerActive@{m\_HoldTimerActive}}
+\index{m\_HoldTimerActive@{m\_HoldTimerActive}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{m\_HoldTimerActive}{m\_HoldTimerActive}}
+{\footnotesize\ttfamily bool Game\+Input\+::m\+\_\+\+Hold\+Timer\+Active = false}
+
+\mbox{\Hypertarget{class_game_input_ab440033e1f88e616374012b5660513d8}\label{class_game_input_ab440033e1f88e616374012b5660513d8}} 
+\index{GameInput@{GameInput}!m\_PersistentInput@{m\_PersistentInput}}
+\index{m\_PersistentInput@{m\_PersistentInput}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{m\_PersistentInput}{m\_PersistentInput}}
+{\footnotesize\ttfamily bool Game\+Input\+::m\+\_\+\+Persistent\+Input\mbox{[}\mbox{\hyperlink{_input_8hpp_a553b781b83313fb14253916dd4b4277b}{STORED\+\_\+\+INPUTS\+\_\+\+COUNT}}\mbox{]}}
+
+\mbox{\Hypertarget{class_game_input_aedb3dd1dc20260d9ae800258d9fefd6d}\label{class_game_input_aedb3dd1dc20260d9ae800258d9fefd6d}} 
+\index{GameInput@{GameInput}!m\_TimeHeld@{m\_TimeHeld}}
+\index{m\_TimeHeld@{m\_TimeHeld}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{m\_TimeHeld}{m\_TimeHeld}}
+{\footnotesize\ttfamily double Game\+Input\+::m\+\_\+\+Time\+Held = 0.\+0}
+
+\mbox{\Hypertarget{class_game_input_a4dc3208a82f03468192d92f0cd6bf8d6}\label{class_game_input_a4dc3208a82f03468192d92f0cd6bf8d6}} 
+\index{GameInput@{GameInput}!m\_TimeToHold@{m\_TimeToHold}}
+\index{m\_TimeToHold@{m\_TimeToHold}!GameInput@{GameInput}}
+\doxysubsubsection{\texorpdfstring{m\_TimeToHold}{m\_TimeToHold}}
+{\footnotesize\ttfamily const double Game\+Input\+::m\+\_\+\+Time\+To\+Hold = 0.\+313}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/utility/\mbox{\hyperlink{_input_8hpp}{Input.\+hpp}}\end{DoxyCompactItemize}

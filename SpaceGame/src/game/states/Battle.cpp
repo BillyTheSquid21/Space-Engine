@@ -2,6 +2,7 @@
 
 void BattleScene::init(float width, float height)
 {  
+    using namespace Geometry; using namespace SGRender;
     m_Width = width; m_Height = height;
 
     //Do things relative to screen size
@@ -10,11 +11,12 @@ void BattleScene::init(float width, float height)
     buildPlatformA(); buildPlatformB();
     float platform2Depth = -m_Height / 2.1f;
     background = CreateTextureQuad(0, 0, m_Width, m_Height, 0, 0, 1, 1);
-    Translate<TextureVertex>(&background[0], (float)m_Width / -2.1f, (float)m_Height / 4.0f, platform2Depth - 300, GetVerticesCount(Shape::QUAD));
+    Translate<TVertex>(&background[0], (float)m_Width / -2.1f, (float)m_Height / 4.0f, platform2Depth - 300, GetVerticesCount(Shape::QUAD));
 }
 
 void BattleScene::buildPlatformA()
 {
+    using namespace Geometry; using namespace SGRender;
     //Work out positioning
     platform1Data.depth = -m_Height / 4.2f;
     platform1Data.elevation = -m_Height / 27.5f;
@@ -22,12 +24,13 @@ void BattleScene::buildPlatformA()
     
     //Create
     platform1 = CreateTextureQuad(0, 0, m_SpriteWidth, m_SpriteWidth, 0, 0, 1, 1);
-    AxialRotate<TextureVertex>(&platform1[0], glm::vec3(m_SpriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&platform1[0], platform1Data.offset, platform1Data.elevation, platform1Data.depth, GetVerticesCount(Shape::QUAD));
+    AxialRotate<TVertex>(&platform1[0], glm::vec3(m_SpriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TVertex>(&platform1[0], platform1Data.offset, platform1Data.elevation, platform1Data.depth, GetVerticesCount(Shape::QUAD));
 }
 
 void BattleScene::buildPlatformB()
 {
+    using namespace Geometry; using namespace SGRender;
     //Work out data
     platform2Data.depth = -m_Height / 2.1f;
     platform2Data.elevation = -m_Height / 27.5f;
@@ -35,12 +38,13 @@ void BattleScene::buildPlatformB()
 
     //Create
     platform2 = CreateTextureQuad(0, 0, m_SpriteWidth, m_SpriteWidth, 0, 0, 1, 1);
-    AxialRotate<TextureVertex>(&platform2[0], glm::vec3(m_SpriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&platform2[0], platform2Data.offset, platform2Data.elevation, platform2Data.depth, GetVerticesCount(Shape::QUAD));
+    AxialRotate<TVertex>(&platform2[0], glm::vec3(m_SpriteWidth / 2.0f, 0, 0), -90, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TVertex>(&platform2[0], platform2Data.offset, platform2Data.elevation, platform2Data.depth, GetVerticesCount(Shape::QUAD));
 }
 
 void BattleScene::setPokemonA(std::string name)
 {
+    using namespace Geometry; using namespace SGRender;
     //Get sprite dim
     std::string path = "res/textures/pokemon/back/" + name +".png";
     GifData dim = GetImageData(path.c_str());
@@ -53,11 +57,11 @@ void BattleScene::setPokemonA(std::string name)
     float pokemonADepth = platform1Data.depth + (m_SpriteWidth / 2.0f) + pokemonAHeight / 5.0f; //For taller pokemon shifts them back a bit
 
     pokemonA = CreateTextureQuad(0, 0, pokemonAWidth, pokemonAHeight, 0, 0, 1.0f / dim.frames, 1);
-    AxialRotate<TextureVertex>(&pokemonA[0], { pokemonAWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&pokemonA[0], pokemonAOffset, pokemonAElevation, pokemonADepth, GetVerticesCount(Shape::QUAD));
+    AxialRotate<TVertex>(&pokemonA[0], { pokemonAWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TVertex>(&pokemonA[0], pokemonAOffset, pokemonAElevation, pokemonADepth, GetVerticesCount(Shape::QUAD));
 
     //Anim
-    pokemonAAnim = SpriteAnim<TextureVertex, Tex_Quad>(15, dim.frames);
+    pokemonAAnim = SpriteAnim<TVertex, Tex_Quad>(15, dim.frames);
     for (float i = 0; i < dim.frames; i += 1.0f)
     {
         TileUV frame = { i / dim.frames, 0, 1.0f / (dim.frames * 1.01f), 1 };
@@ -69,6 +73,7 @@ void BattleScene::setPokemonA(std::string name)
 
 void BattleScene::setPokemonB(std::string name)
 {
+    using namespace Geometry; using namespace SGRender;
     //Get sprite dim
     std::string path = "res/textures/pokemon/front/" + name + ".png";
     GifData dim = GetImageData(path.c_str());
@@ -81,10 +86,10 @@ void BattleScene::setPokemonB(std::string name)
     float pokemonBDepth = platform2Data.depth + (m_SpriteWidth / 2.0f) + pokemonBHeight / 5.0f; //For taller pokemon shifts them back a bit
 
     pokemonB = CreateTextureQuad(0, 0, pokemonBWidth, pokemonBHeight, 0, 0, 1.0f / (float)dim.frames, 1);
-    AxialRotate<TextureVertex>(&pokemonB[0], { pokemonBWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
-    Translate<TextureVertex>(&pokemonB[0], pokemonBOffset, pokemonBElevation, pokemonBDepth, GetVerticesCount(Shape::QUAD));
+    AxialRotate<TVertex>(&pokemonB[0], { pokemonBWidth / 2.0f, 0, 0 }, -15.0f, GetVerticesCount(Shape::QUAD), Axis::X);
+    Translate<TVertex>(&pokemonB[0], pokemonBOffset, pokemonBElevation, pokemonBDepth, GetVerticesCount(Shape::QUAD));
 
-    pokemonBAnim = SpriteAnim<TextureVertex, Tex_Quad>(15, dim.frames);
+    pokemonBAnim = SpriteAnim<TVertex, Tex_Quad>(15, dim.frames);
     for (float i = 0; i < dim.frames; i += 1.0f)
     {
         TileUV frame = { i / dim.frames, 0, 1.0f / (dim.frames * 1.01f), 1 };
@@ -94,13 +99,14 @@ void BattleScene::setPokemonB(std::string name)
     pokemonBAnim.loop = true;
 }
 
-void BattleScene::render(BattleRenderer& ren)
+void BattleScene::render(StateRender::Battle& ren)
 {
-    ren[StateRen::BATTLE_PLATFORM].commit(&platform1[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    ren[StateRen::BATTLE_PLATFORM].commit(&platform2[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    ren[StateRen::BATTLE_BACKGROUND].commit(&background[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    ren[StateRen::BATTLE_POKEMONA].commit(&pokemonA[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
-    ren[StateRen::BATTLE_POKEMONB].commit(&pokemonB[0], GetFloatCount<TextureVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    using namespace StateRender; using namespace Geometry; using namespace SGRender;
+    ren[StateRen::BATTLE_PLATFORM].commit(&platform1[0], GetFloatCount<TVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_PLATFORM].commit(&platform2[0], GetFloatCount<TVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_BACKGROUND].commit(&background[0], GetFloatCount<TVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_POKEMONA].commit(&pokemonA[0], GetFloatCount<TVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
+    ren[StateRen::BATTLE_POKEMONB].commit(&pokemonB[0], GetFloatCount<TVertex>(Shape::QUAD), &Primitive::Q_IND[0], Primitive::Q_IND_COUNT);
 }
 
 void BattleScene::update(double deltaTime)
@@ -191,6 +197,7 @@ void Battle::purgeRequiredData()
 
 void Battle::setPokemonA(uint16_t id)
 {
+    using namespace StateRender;
     std::string name = PokemonDataBank::GetPokemonName(id);
     m_Scene.setPokemonA(name);
     m_Renderer.texture(StateTex::BATTLE_POKEMONA).deleteTexture();
@@ -205,6 +212,7 @@ void Battle::setPokemonA(uint16_t id)
 
 void Battle::setPokemonB(uint16_t id)
 {
+    using namespace StateRender;
     std::string name = PokemonDataBank::GetPokemonName(id);
     m_Scene.setPokemonB(name);
     m_Renderer.texture(StateTex::BATTLE_POKEMONB).deleteTexture();

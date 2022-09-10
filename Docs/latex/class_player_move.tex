@@ -1,5 +1,9 @@
 \hypertarget{class_player_move}{}\doxysection{Player\+Move Class Reference}
 \label{class_player_move}\index{PlayerMove@{PlayerMove}}
+
+
+{\ttfamily \#include $<$Player\+Objects.\+h$>$}
+
 Inheritance diagram for Player\+Move\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -11,25 +15,26 @@ Inheritance diagram for Player\+Move\+:\begin{figure}[H]
 \item 
 void \mbox{\hyperlink{class_player_move_ac85fa00765dfc14b75f85f9964ac4d46}{update}} (double delta\+Time)
 \item 
-\mbox{\Hypertarget{class_player_move_afa79ac8d2bf23f5ce7c10770a827b66e}\label{class_player_move_afa79ac8d2bf23f5ce7c10770a827b66e}} 
-void {\bfseries set\+Persistent\+Input} (bool $\ast$shift, bool $\ast$up, bool $\ast$down, bool $\ast$left, bool $\ast$right)
+void \mbox{\hyperlink{class_player_move_a9fc7e3bd4d19e3bece93fc58ad92b341}{link\+Input}} (\mbox{\hyperlink{class_game_input}{Game\+Input}} $\ast$input)
 \item 
-\mbox{\Hypertarget{class_player_move_a5777a9e6f4261e6e9292c6c9e45e5458}\label{class_player_move_a5777a9e6f4261e6e9292c6c9e45e5458}} 
-void {\bfseries set\+Single\+Input} (bool $\ast$up, bool $\ast$down, bool $\ast$left, bool $\ast$right)
-\item 
-\mbox{\Hypertarget{class_player_move_a366242c888b29dc34b127967fedb7e32}\label{class_player_move_a366242c888b29dc34b127967fedb7e32}} 
-void {\bfseries set\+Sprite\+Data} (bool $\ast$walking, bool $\ast$running, World\+::\+Direction $\ast$direction, Texture\+Quad $\ast$sprite)
-\item 
-\mbox{\Hypertarget{class_player_move_a15e7b2934d1d5d76173851a65bf439c3}\label{class_player_move_a15e7b2934d1d5d76173851a65bf439c3}} 
-{\bfseries Tile\+Position} ()=default
-\item 
-\mbox{\Hypertarget{class_player_move_a6fd301cd44f1aa7524d7e6f5bce11566}\label{class_player_move_a6fd301cd44f1aa7524d7e6f5bce11566}} 
-{\bfseries Tile\+Position} (World\+::\+Level\+ID $\ast$level\+Ptr, float $\ast$x, float $\ast$z, unsigned int $\ast$x\+Tile, unsigned int $\ast$z\+Tile)
+void \mbox{\hyperlink{class_player_move_a3e03e2dc7d7ad34c64586350cbb755c7}{set\+Sprite\+Data}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $>$ player)
 \end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_player_move_a9fc7e3bd4d19e3bece93fc58ad92b341}\label{class_player_move_a9fc7e3bd4d19e3bece93fc58ad92b341}} 
+\index{PlayerMove@{PlayerMove}!linkInput@{linkInput}}
+\index{linkInput@{linkInput}!PlayerMove@{PlayerMove}}
+\doxysubsubsection{\texorpdfstring{linkInput()}{linkInput()}}
+{\footnotesize\ttfamily void Player\+Move\+::link\+Input (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_game_input}{Game\+Input}} $\ast$}]{input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_player_move_a3e03e2dc7d7ad34c64586350cbb755c7}\label{class_player_move_a3e03e2dc7d7ad34c64586350cbb755c7}} 
+\index{PlayerMove@{PlayerMove}!setSpriteData@{setSpriteData}}
+\index{setSpriteData@{setSpriteData}!PlayerMove@{PlayerMove}}
+\doxysubsubsection{\texorpdfstring{setSpriteData()}{setSpriteData()}}
+{\footnotesize\ttfamily void Player\+Move\+::set\+Sprite\+Data (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $>$}]{player }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
 \mbox{\Hypertarget{class_player_move_ac85fa00765dfc14b75f85f9964ac4d46}\label{class_player_move_ac85fa00765dfc14b75f85f9964ac4d46}} 
 \index{PlayerMove@{PlayerMove}!update@{update}}
 \index{update@{update}!PlayerMove@{PlayerMove}}
@@ -38,10 +43,10 @@ void {\bfseries set\+Sprite\+Data} (bool $\ast$walking, bool $\ast$running, Worl
 
 
 
-Reimplemented from \mbox{\hyperlink{class_tile_position}{Tile\+Position}}.
+Reimplemented from \mbox{\hyperlink{class_ov___sprite_1_1_tile_position_aa5256139b02e20cf69d5fb4ca74245fd}{Ov\+\_\+\+Sprite\+::\+Tile\+Position}}.
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/objects/Player\+Objects.\+h\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/objects/\mbox{\hyperlink{_player_objects_8h}{Player\+Objects.\+h}}\end{DoxyCompactItemize}

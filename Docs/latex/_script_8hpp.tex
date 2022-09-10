@@ -1,0 +1,259 @@
+\hypertarget{_script_8hpp}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/objects/\+Script.hpp File Reference}
+\label{_script_8hpp}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/Script.hpp@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/Script.hpp}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include \char`\"{}game/utility/\+Flags.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_m_s_g___i_n_f_o}{MSG\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_f_l_a_g___i_n_f_o}{FLAG\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_j_m_p___i_n_f_o}{JMP\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_j_m_p___i_f___i_n_f_o}{JMP\+\_\+\+IF\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_i_t_e_m___i_n_f_o}{ITEM\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_d_i_r_e_c_t_i_o_n___i_n_f_o}{DIRECTION\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_b_u_s_y___i_n_f_o}{BUSY\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_w_a_r_p___i_n_f_o}{WARP\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_t_i_l_e___i_n_f_o}{TILE\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_w_a_i_t___i_n_f_o}{WAIT\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_b_o_o_l___i_n_f_o}{BOOL\+\_\+\+INFO}}
+\item 
+struct \mbox{\hyperlink{struct_instruction_info}{Instruction\+Info}}
+\item 
+struct \mbox{\hyperlink{struct_script_element}{Script\+Element}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_script_8hpp_ac8439bedfc0def70dd958a93c3b9ad22}{GAME\+\_\+\+SCRIPT\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{struct_script_element}{Script\+Element}}\mbox{[}$\,$\mbox{]}$>$ \mbox{\hyperlink{_script_8hpp_a34d985efc444429aa36e0bb1b52458cf}{Script}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9}{Script\+Instruction}} \+: uint32\+\_\+t \{ \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a14b52fa379dea9171c3eb958d7fa5795}{NO\+\_\+\+OP}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a6b143195f0fe17b899326724b68b5d23}{BLANK\+\_\+\+OP}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a743abdb4bc9a375e86ab54fe0d90d66b}{SET\+\_\+\+FLAG}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a152b9af76a9e7dd95d9da277b69fdd95}{JMP}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8add2599424063ff9d7ba7595cb14827}{JMP\+\_\+\+IF}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a9c9ad095e8b0d79cd3b3486d0a65b268}{WAIT\+\_\+\+SEC}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9affd4739a0833093850fa6ff9f850dc80}{PLAYER\+\_\+\+LOCK}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a56ba3be278602cbf7880807897b01289}{PLAYER\+\_\+\+FACE}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ac5265dc84d0fcf2accab81d88264c95c}{PLAYER\+\_\+\+WALK}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a58c83f2f423f9985a2b839a06e2d42df}{PLAYER\+\_\+\+RUN}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8fbea8a82b99806b0847eaad5683096e}{OPEN\+\_\+\+MSG\+\_\+\+BOX}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a39eecc75f1c6cf98a120c0e413e74fb0}{CLOSE\+\_\+\+MSG\+\_\+\+BOX}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1b7ef95d69775316be10f7090f2d62fa}{MSG}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ac122f2a7ffb62a5af08e43ad72311df6}{CLEAR\+\_\+\+TEXT}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a46420d4e09ef6374c0331c043f680fe1}{GIVE\+\_\+\+ITEM}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1e9c26eb83a115dad8b0af4cf7f887b6}{TAKE\+\_\+\+ITEM}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8f07b62f911b7329baff7630add75a39}{WAIT\+\_\+\+INPUT}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a05deeba2b861de7a6dc74016831e3696}{WAIT\+\_\+\+FOR}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a0bcec9af87632efdb19fc366983f0c5b}{WARP\+\_\+\+PLAYER}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1025920b36ad533695401ab67f826e9b}{SET\+\_\+\+PLAYER\+\_\+\+TILE}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a850adf3e9f5b6b46865f1130be8f5714}{PLAYER\+\_\+\+WALK\+\_\+\+TO\+\_\+\+TILE}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a870548a6a085b182db46c735b0a0ef88}{PLAYER\+\_\+\+RUN\+\_\+\+TO\+\_\+\+TILE}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9af914f51cc7ee8adec013b4eaef2ac102}{CORE\+\_\+\+MAX}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a5a2f57139297fd324c77d0ad104203ea}{FREEZE\+\_\+\+OBJECT}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a9c71b5ee0a13d37c45111f78495189b9}{FACE\+\_\+\+PLAYER}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a87e9184a0c120d3b9f2f8e19fb7a435d}{FACE\+\_\+\+WITH\+\_\+\+PLAYER}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9abfa2d8af07156c8fed0bb39c04db8cb9}{NPC\+\_\+\+FACE}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a18912c6f1a4da5a42b3b6631d89db038}{NPC\+\_\+\+WALK}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ace08b8dc41785702ab180396a7b1c76e}{NPC\+\_\+\+RUN}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9aae27861e5bc8f4d621ccbca3ea0806de}{WAIT\+\_\+\+INTERACT}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1debb7b34f406d27a72e8c97565d662d}{NPC\+\_\+\+AND\+\_\+\+PLAYER\+\_\+\+WALK}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a5a92370c57098be106cf1d403348f687}{SHOW\+\_\+\+SPRITE}}
+, \newline
+\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a61b483d1fa903f7b5037e2bba020d717}{NPC\+\_\+\+WALK\+\_\+\+TO\+\_\+\+TILE}}
+, \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a2d01a191fa2cceeecca1eb5e8c3973c1}{NPC\+\_\+\+RUN\+\_\+\+TO\+\_\+\+TILE}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_script_8hpp_ac8439bedfc0def70dd958a93c3b9ad22}\label{_script_8hpp_ac8439bedfc0def70dd958a93c3b9ad22}} 
+\index{Script.hpp@{Script.hpp}!GAME\_SCRIPT\_H@{GAME\_SCRIPT\_H}}
+\index{GAME\_SCRIPT\_H@{GAME\_SCRIPT\_H}!Script.hpp@{Script.hpp}}
+\doxysubsubsection{\texorpdfstring{GAME\_SCRIPT\_H}{GAME\_SCRIPT\_H}}
+{\footnotesize\ttfamily \#define GAME\+\_\+\+SCRIPT\+\_\+H}
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{_script_8hpp_a34d985efc444429aa36e0bb1b52458cf}\label{_script_8hpp_a34d985efc444429aa36e0bb1b52458cf}} 
+\index{Script.hpp@{Script.hpp}!Script@{Script}}
+\index{Script@{Script}!Script.hpp@{Script.hpp}}
+\doxysubsubsection{\texorpdfstring{Script}{Script}}
+{\footnotesize\ttfamily typedef std\+::shared\+\_\+ptr$<$\mbox{\hyperlink{struct_script_element}{Script\+Element}}\mbox{[}$\,$\mbox{]}$>$ \mbox{\hyperlink{_script_8hpp_a34d985efc444429aa36e0bb1b52458cf}{Script}}}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9}} 
+\index{Script.hpp@{Script.hpp}!ScriptInstruction@{ScriptInstruction}}
+\index{ScriptInstruction@{ScriptInstruction}!Script.hpp@{Script.hpp}}
+\doxysubsubsection{\texorpdfstring{ScriptInstruction}{ScriptInstruction}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9}{Script\+Instruction}} \+: uint32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NO\_OP@{NO\_OP}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NO\_OP@{NO\_OP}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a14b52fa379dea9171c3eb958d7fa5795}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a14b52fa379dea9171c3eb958d7fa5795}} 
+NO\+\_\+\+OP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BLANK\_OP@{BLANK\_OP}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!BLANK\_OP@{BLANK\_OP}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a6b143195f0fe17b899326724b68b5d23}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a6b143195f0fe17b899326724b68b5d23}} 
+BLANK\+\_\+\+OP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SET\_FLAG@{SET\_FLAG}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!SET\_FLAG@{SET\_FLAG}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a743abdb4bc9a375e86ab54fe0d90d66b}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a743abdb4bc9a375e86ab54fe0d90d66b}} 
+SET\+\_\+\+FLAG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{JMP@{JMP}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!JMP@{JMP}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a152b9af76a9e7dd95d9da277b69fdd95}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a152b9af76a9e7dd95d9da277b69fdd95}} 
+JMP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{JMP\_IF@{JMP\_IF}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!JMP\_IF@{JMP\_IF}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8add2599424063ff9d7ba7595cb14827}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8add2599424063ff9d7ba7595cb14827}} 
+JMP\+\_\+\+IF&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_SEC@{WAIT\_SEC}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!WAIT\_SEC@{WAIT\_SEC}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a9c9ad095e8b0d79cd3b3486d0a65b268}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a9c9ad095e8b0d79cd3b3486d0a65b268}} 
+WAIT\+\_\+\+SEC&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLAYER\_LOCK@{PLAYER\_LOCK}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!PLAYER\_LOCK@{PLAYER\_LOCK}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9affd4739a0833093850fa6ff9f850dc80}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9affd4739a0833093850fa6ff9f850dc80}} 
+PLAYER\+\_\+\+LOCK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLAYER\_FACE@{PLAYER\_FACE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!PLAYER\_FACE@{PLAYER\_FACE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a56ba3be278602cbf7880807897b01289}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a56ba3be278602cbf7880807897b01289}} 
+PLAYER\+\_\+\+FACE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLAYER\_WALK@{PLAYER\_WALK}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!PLAYER\_WALK@{PLAYER\_WALK}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ac5265dc84d0fcf2accab81d88264c95c}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ac5265dc84d0fcf2accab81d88264c95c}} 
+PLAYER\+\_\+\+WALK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLAYER\_RUN@{PLAYER\_RUN}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!PLAYER\_RUN@{PLAYER\_RUN}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a58c83f2f423f9985a2b839a06e2d42df}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a58c83f2f423f9985a2b839a06e2d42df}} 
+PLAYER\+\_\+\+RUN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OPEN\_MSG\_BOX@{OPEN\_MSG\_BOX}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!OPEN\_MSG\_BOX@{OPEN\_MSG\_BOX}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8fbea8a82b99806b0847eaad5683096e}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8fbea8a82b99806b0847eaad5683096e}} 
+OPEN\+\_\+\+MSG\+\_\+\+BOX&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CLOSE\_MSG\_BOX@{CLOSE\_MSG\_BOX}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!CLOSE\_MSG\_BOX@{CLOSE\_MSG\_BOX}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a39eecc75f1c6cf98a120c0e413e74fb0}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a39eecc75f1c6cf98a120c0e413e74fb0}} 
+CLOSE\+\_\+\+MSG\+\_\+\+BOX&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MSG@{MSG}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!MSG@{MSG}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1b7ef95d69775316be10f7090f2d62fa}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1b7ef95d69775316be10f7090f2d62fa}} 
+MSG&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CLEAR\_TEXT@{CLEAR\_TEXT}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!CLEAR\_TEXT@{CLEAR\_TEXT}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ac122f2a7ffb62a5af08e43ad72311df6}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ac122f2a7ffb62a5af08e43ad72311df6}} 
+CLEAR\+\_\+\+TEXT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GIVE\_ITEM@{GIVE\_ITEM}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!GIVE\_ITEM@{GIVE\_ITEM}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a46420d4e09ef6374c0331c043f680fe1}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a46420d4e09ef6374c0331c043f680fe1}} 
+GIVE\+\_\+\+ITEM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TAKE\_ITEM@{TAKE\_ITEM}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!TAKE\_ITEM@{TAKE\_ITEM}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1e9c26eb83a115dad8b0af4cf7f887b6}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1e9c26eb83a115dad8b0af4cf7f887b6}} 
+TAKE\+\_\+\+ITEM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_INPUT@{WAIT\_INPUT}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!WAIT\_INPUT@{WAIT\_INPUT}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8f07b62f911b7329baff7630add75a39}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a8f07b62f911b7329baff7630add75a39}} 
+WAIT\+\_\+\+INPUT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_FOR@{WAIT\_FOR}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!WAIT\_FOR@{WAIT\_FOR}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a05deeba2b861de7a6dc74016831e3696}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a05deeba2b861de7a6dc74016831e3696}} 
+WAIT\+\_\+\+FOR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WARP\_PLAYER@{WARP\_PLAYER}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!WARP\_PLAYER@{WARP\_PLAYER}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a0bcec9af87632efdb19fc366983f0c5b}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a0bcec9af87632efdb19fc366983f0c5b}} 
+WARP\+\_\+\+PLAYER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SET\_PLAYER\_TILE@{SET\_PLAYER\_TILE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!SET\_PLAYER\_TILE@{SET\_PLAYER\_TILE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1025920b36ad533695401ab67f826e9b}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1025920b36ad533695401ab67f826e9b}} 
+SET\+\_\+\+PLAYER\+\_\+\+TILE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLAYER\_WALK\_TO\_TILE@{PLAYER\_WALK\_TO\_TILE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!PLAYER\_WALK\_TO\_TILE@{PLAYER\_WALK\_TO\_TILE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a850adf3e9f5b6b46865f1130be8f5714}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a850adf3e9f5b6b46865f1130be8f5714}} 
+PLAYER\+\_\+\+WALK\+\_\+\+TO\+\_\+\+TILE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PLAYER\_RUN\_TO\_TILE@{PLAYER\_RUN\_TO\_TILE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!PLAYER\_RUN\_TO\_TILE@{PLAYER\_RUN\_TO\_TILE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a870548a6a085b182db46c735b0a0ef88}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a870548a6a085b182db46c735b0a0ef88}} 
+PLAYER\+\_\+\+RUN\+\_\+\+TO\+\_\+\+TILE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CORE\_MAX@{CORE\_MAX}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!CORE\_MAX@{CORE\_MAX}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9af914f51cc7ee8adec013b4eaef2ac102}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9af914f51cc7ee8adec013b4eaef2ac102}} 
+CORE\+\_\+\+MAX&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FREEZE\_OBJECT@{FREEZE\_OBJECT}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!FREEZE\_OBJECT@{FREEZE\_OBJECT}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a5a2f57139297fd324c77d0ad104203ea}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a5a2f57139297fd324c77d0ad104203ea}} 
+FREEZE\+\_\+\+OBJECT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FACE\_PLAYER@{FACE\_PLAYER}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!FACE\_PLAYER@{FACE\_PLAYER}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a9c71b5ee0a13d37c45111f78495189b9}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a9c71b5ee0a13d37c45111f78495189b9}} 
+FACE\+\_\+\+PLAYER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FACE\_WITH\_PLAYER@{FACE\_WITH\_PLAYER}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!FACE\_WITH\_PLAYER@{FACE\_WITH\_PLAYER}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a87e9184a0c120d3b9f2f8e19fb7a435d}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a87e9184a0c120d3b9f2f8e19fb7a435d}} 
+FACE\+\_\+\+WITH\+\_\+\+PLAYER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NPC\_FACE@{NPC\_FACE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NPC\_FACE@{NPC\_FACE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9abfa2d8af07156c8fed0bb39c04db8cb9}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9abfa2d8af07156c8fed0bb39c04db8cb9}} 
+NPC\+\_\+\+FACE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NPC\_WALK@{NPC\_WALK}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NPC\_WALK@{NPC\_WALK}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a18912c6f1a4da5a42b3b6631d89db038}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a18912c6f1a4da5a42b3b6631d89db038}} 
+NPC\+\_\+\+WALK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NPC\_RUN@{NPC\_RUN}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NPC\_RUN@{NPC\_RUN}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ace08b8dc41785702ab180396a7b1c76e}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9ace08b8dc41785702ab180396a7b1c76e}} 
+NPC\+\_\+\+RUN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WAIT\_INTERACT@{WAIT\_INTERACT}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!WAIT\_INTERACT@{WAIT\_INTERACT}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9aae27861e5bc8f4d621ccbca3ea0806de}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9aae27861e5bc8f4d621ccbca3ea0806de}} 
+WAIT\+\_\+\+INTERACT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NPC\_AND\_PLAYER\_WALK@{NPC\_AND\_PLAYER\_WALK}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NPC\_AND\_PLAYER\_WALK@{NPC\_AND\_PLAYER\_WALK}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1debb7b34f406d27a72e8c97565d662d}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a1debb7b34f406d27a72e8c97565d662d}} 
+NPC\+\_\+\+AND\+\_\+\+PLAYER\+\_\+\+WALK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SHOW\_SPRITE@{SHOW\_SPRITE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!SHOW\_SPRITE@{SHOW\_SPRITE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a5a92370c57098be106cf1d403348f687}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a5a92370c57098be106cf1d403348f687}} 
+SHOW\+\_\+\+SPRITE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NPC\_WALK\_TO\_TILE@{NPC\_WALK\_TO\_TILE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NPC\_WALK\_TO\_TILE@{NPC\_WALK\_TO\_TILE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a61b483d1fa903f7b5037e2bba020d717}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a61b483d1fa903f7b5037e2bba020d717}} 
+NPC\+\_\+\+WALK\+\_\+\+TO\+\_\+\+TILE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NPC\_RUN\_TO\_TILE@{NPC\_RUN\_TO\_TILE}!Script.hpp@{Script.hpp}}\index{Script.hpp@{Script.hpp}!NPC\_RUN\_TO\_TILE@{NPC\_RUN\_TO\_TILE}}}\mbox{\Hypertarget{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a2d01a191fa2cceeecca1eb5e8c3973c1}\label{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9a2d01a191fa2cceeecca1eb5e8c3973c1}} 
+NPC\+\_\+\+RUN\+\_\+\+TO\+\_\+\+TILE&\\
+\hline
+
+\end{DoxyEnumFields}

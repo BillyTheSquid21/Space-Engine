@@ -1,0 +1,69 @@
+\hypertarget{class_s_g_object_1_1_update_comp_group}{}\doxysection{SGObject\+::Update\+Comp\+Group\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_s_g_object_1_1_update_comp_group}\index{SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Game\+Object.\+hpp$>$}
+
+Inheritance diagram for SGObject\+::Update\+Comp\+Group\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_s_g_object_1_1_update_comp_group}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group_ab115d7a857bace7d7285d50df0810590}{iterate}} (double delta\+Time)
+\item 
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group_a207aef5ed43f3e789eed32fbdccb2b43}{add\+Component}} (std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_component}{Update\+Component}} $\ast$ $>$ $\ast$comp\+Pointers, Args... args)
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group_a5fa4477464173065151c60e1d0e18cab}{add\+Existing\+Component}} (std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_component}{Update\+Component}} $\ast$ $>$ $\ast$comp\+Pointers, T obj)
+\item 
+\mbox{\hyperlink{class_s_g_object_1_1_update_comp_group_a81a1e9b408b1e4b5580e730367a90ccd}{Update\+Group\+Base}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class SGObject\+::\+Update\+Comp\+Group$<$ T $>$}
+Group of update components that are contiguous 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_g_object_1_1_update_comp_group_a207aef5ed43f3e789eed32fbdccb2b43}\label{class_s_g_object_1_1_update_comp_group_a207aef5ed43f3e789eed32fbdccb2b43}} 
+\index{SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}!addComponent@{addComponent}}
+\index{addComponent@{addComponent}!SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{addComponent()}{addComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+template$<$typename... Args$>$ \\
+void \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ T $>$\+::add\+Component (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_component}{Update\+Component}} $\ast$ $>$ $\ast$}]{comp\+Pointers,  }\item[{Args...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_update_comp_group_a5fa4477464173065151c60e1d0e18cab}\label{class_s_g_object_1_1_update_comp_group_a5fa4477464173065151c60e1d0e18cab}} 
+\index{SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}!addExistingComponent@{addExistingComponent}}
+\index{addExistingComponent@{addExistingComponent}!SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{addExistingComponent()}{addExistingComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ T $>$\+::add\+Existing\+Component (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_component}{Update\+Component}} $\ast$ $>$ $\ast$}]{comp\+Pointers,  }\item[{T}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_update_comp_group_ab115d7a857bace7d7285d50df0810590}\label{class_s_g_object_1_1_update_comp_group_ab115d7a857bace7d7285d50df0810590}} 
+\index{SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}!iterate@{iterate}}
+\index{iterate@{iterate}!SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{iterate()}{iterate()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ T $>$\+::iterate (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_s_g_object_1_1_update_group_base_a1ea836671b312d70cccf7489d5e57944}{SGObject\+::\+Update\+Group\+Base}}.
+
+\mbox{\Hypertarget{class_s_g_object_1_1_update_comp_group_a81a1e9b408b1e4b5580e730367a90ccd}\label{class_s_g_object_1_1_update_comp_group_a81a1e9b408b1e4b5580e730367a90ccd}} 
+\index{SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}!UpdateGroupBase@{UpdateGroupBase}}
+\index{UpdateGroupBase@{UpdateGroupBase}!SGObject::UpdateCompGroup$<$ T $>$@{SGObject::UpdateCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{UpdateGroupBase()}{UpdateGroupBase()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+SGObject\+::\+Update\+Group\+Base\+::\+Update\+Group\+Base (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/\mbox{\hyperlink{_game_object_8hpp}{Game\+Object.\+hpp}}\end{DoxyCompactItemize}

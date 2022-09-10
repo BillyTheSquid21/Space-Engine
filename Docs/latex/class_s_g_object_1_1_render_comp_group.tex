@@ -1,0 +1,69 @@
+\hypertarget{class_s_g_object_1_1_render_comp_group}{}\doxysection{SGObject\+::Render\+Comp\+Group\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_s_g_object_1_1_render_comp_group}\index{SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Game\+Object.\+hpp$>$}
+
+Inheritance diagram for SGObject\+::Render\+Comp\+Group\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_s_g_object_1_1_render_comp_group}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group_ac1dda7ef265cd5645b444fa84aed2c79}{iterate}} ()
+\item 
+{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group_a4eedfa44a6fb63842bed6cebd7aba652}{add\+Component}} (std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_component}{Render\+Component}} $\ast$ $>$ $\ast$comp\+Pointers, Args... args)
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group_a6d3ede94bca743479f26913c760c3d3b}{add\+Existing\+Component}} (std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_component}{Render\+Component}} $\ast$ $>$ $\ast$comp\+Pointers, T obj)
+\item 
+\mbox{\hyperlink{class_s_g_object_1_1_render_comp_group_afc3b0b08b3f0a9f576bdffad011633a6}{Render\+Group\+Base}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class SGObject\+::\+Render\+Comp\+Group$<$ T $>$}
+Group of render components that are contiguous 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_g_object_1_1_render_comp_group_a4eedfa44a6fb63842bed6cebd7aba652}\label{class_s_g_object_1_1_render_comp_group_a4eedfa44a6fb63842bed6cebd7aba652}} 
+\index{SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}!addComponent@{addComponent}}
+\index{addComponent@{addComponent}!SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{addComponent()}{addComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+template$<$typename... Args$>$ \\
+void \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ T $>$\+::add\+Component (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_component}{Render\+Component}} $\ast$ $>$ $\ast$}]{comp\+Pointers,  }\item[{Args...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_render_comp_group_a6d3ede94bca743479f26913c760c3d3b}\label{class_s_g_object_1_1_render_comp_group_a6d3ede94bca743479f26913c760c3d3b}} 
+\index{SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}!addExistingComponent@{addExistingComponent}}
+\index{addExistingComponent@{addExistingComponent}!SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{addExistingComponent()}{addExistingComponent()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ T $>$\+::add\+Existing\+Component (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_component}{Render\+Component}} $\ast$ $>$ $\ast$}]{comp\+Pointers,  }\item[{T}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_render_comp_group_ac1dda7ef265cd5645b444fa84aed2c79}\label{class_s_g_object_1_1_render_comp_group_ac1dda7ef265cd5645b444fa84aed2c79}} 
+\index{SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}!iterate@{iterate}}
+\index{iterate@{iterate}!SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{iterate()}{iterate()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ T $>$\+::iterate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_s_g_object_1_1_render_group_base_abdc0f47f4657fd058ad5a34ae79f75d1}{SGObject\+::\+Render\+Group\+Base}}.
+
+\mbox{\Hypertarget{class_s_g_object_1_1_render_comp_group_afc3b0b08b3f0a9f576bdffad011633a6}\label{class_s_g_object_1_1_render_comp_group_afc3b0b08b3f0a9f576bdffad011633a6}} 
+\index{SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}!RenderGroupBase@{RenderGroupBase}}
+\index{RenderGroupBase@{RenderGroupBase}!SGObject::RenderCompGroup$<$ T $>$@{SGObject::RenderCompGroup$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{RenderGroupBase()}{RenderGroupBase()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+SGObject\+::\+Render\+Group\+Base\+::\+Render\+Group\+Base (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/\mbox{\hyperlink{_game_object_8hpp}{Game\+Object.\+hpp}}\end{DoxyCompactItemize}

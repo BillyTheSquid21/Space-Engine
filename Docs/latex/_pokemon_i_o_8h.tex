@@ -1,0 +1,103 @@
+\hypertarget{_pokemon_i_o_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/pokemon/\+Pokemon\+IO.h File Reference}
+\label{_pokemon_i_o_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/PokemonIO.h@{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/PokemonIO.h}}
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+{\ttfamily \#include $<$memory$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$rapidxml/rapidxml.\+hpp$>$}\newline
+{\ttfamily \#include $<$rapidjson/document.\+h$>$}\newline
+{\ttfamily \#include $<$rapidjson/istreamwrapper.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}mtlib/\+Thread\+Pool.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Pokemon.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/items/\+Items.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/utility/\+Xml\+Wrapper.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utility/\+SGUtil.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_pokemon_data_bank}{Pokemon\+Data\+Bank}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_pokemon_i_o_8h_a226ce7e95c290516dab10a7ab44d6b3d}{POKEMON\+\_\+\+IO\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4}{Pkm\+Data\+Type}} \{ \newline
+\mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4abadc789d64efa09e2be666a687efeb5d}{NULL\+\_\+\+TYPE}} = -\/1
+, \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a2055c57cf303a707505df7f4ace39613}{SPECIES\+\_\+\+INFO}} = 0
+, \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a5a69f41b6a8c2cca88dd2ce0a72450a7}{BASE\+\_\+\+STATS}} = 1
+, \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4ac8f9e5809c8b83c1a66c7023e386c332}{MOVE\+\_\+\+INFO}} = 2
+, \newline
+\mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a73db7d40740a492d3c619273587491a3}{POKEMON\+\_\+\+TYPES}} = 3
+, \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a9a932d55199939bfa5c0df5a8830fc1d}{ITEMS}} = 4
+, \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a2ea0dedfd56a483fcbe7a30e9c50f32b}{ITEM\+\_\+\+CATEGORIES}} = 5
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_pokemon_i_o_8h_a9ac68c7864190cab3903e6e7e7790c74}{Generate\+Pokemon}} (uint16\+\_\+t id, \mbox{\hyperlink{struct_pokemon}{Pokemon}} \&pokemon)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_pokemon_i_o_8h_a226ce7e95c290516dab10a7ab44d6b3d}\label{_pokemon_i_o_8h_a226ce7e95c290516dab10a7ab44d6b3d}} 
+\index{PokemonIO.h@{PokemonIO.h}!POKEMON\_IO\_H@{POKEMON\_IO\_H}}
+\index{POKEMON\_IO\_H@{POKEMON\_IO\_H}!PokemonIO.h@{PokemonIO.h}}
+\doxysubsubsection{\texorpdfstring{POKEMON\_IO\_H}{POKEMON\_IO\_H}}
+{\footnotesize\ttfamily \#define POKEMON\+\_\+\+IO\+\_\+H}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4}} 
+\index{PokemonIO.h@{PokemonIO.h}!PkmDataType@{PkmDataType}}
+\index{PkmDataType@{PkmDataType}!PokemonIO.h@{PokemonIO.h}}
+\doxysubsubsection{\texorpdfstring{PkmDataType}{PkmDataType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4}{Pkm\+Data\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NULL\_TYPE@{NULL\_TYPE}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!NULL\_TYPE@{NULL\_TYPE}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4abadc789d64efa09e2be666a687efeb5d}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4abadc789d64efa09e2be666a687efeb5d}} 
+NULL\+\_\+\+TYPE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SPECIES\_INFO@{SPECIES\_INFO}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!SPECIES\_INFO@{SPECIES\_INFO}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a2055c57cf303a707505df7f4ace39613}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a2055c57cf303a707505df7f4ace39613}} 
+SPECIES\+\_\+\+INFO&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BASE\_STATS@{BASE\_STATS}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!BASE\_STATS@{BASE\_STATS}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a5a69f41b6a8c2cca88dd2ce0a72450a7}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a5a69f41b6a8c2cca88dd2ce0a72450a7}} 
+BASE\+\_\+\+STATS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{MOVE\_INFO@{MOVE\_INFO}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!MOVE\_INFO@{MOVE\_INFO}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4ac8f9e5809c8b83c1a66c7023e386c332}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4ac8f9e5809c8b83c1a66c7023e386c332}} 
+MOVE\+\_\+\+INFO&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{POKEMON\_TYPES@{POKEMON\_TYPES}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!POKEMON\_TYPES@{POKEMON\_TYPES}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a73db7d40740a492d3c619273587491a3}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a73db7d40740a492d3c619273587491a3}} 
+POKEMON\+\_\+\+TYPES&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ITEMS@{ITEMS}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!ITEMS@{ITEMS}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a9a932d55199939bfa5c0df5a8830fc1d}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a9a932d55199939bfa5c0df5a8830fc1d}} 
+ITEMS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ITEM\_CATEGORIES@{ITEM\_CATEGORIES}!PokemonIO.h@{PokemonIO.h}}\index{PokemonIO.h@{PokemonIO.h}!ITEM\_CATEGORIES@{ITEM\_CATEGORIES}}}\mbox{\Hypertarget{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a2ea0dedfd56a483fcbe7a30e9c50f32b}\label{_pokemon_i_o_8h_a919cd241b982cfa059184bf2f003bbf4a2ea0dedfd56a483fcbe7a30e9c50f32b}} 
+ITEM\+\_\+\+CATEGORIES&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_pokemon_i_o_8h_a9ac68c7864190cab3903e6e7e7790c74}\label{_pokemon_i_o_8h_a9ac68c7864190cab3903e6e7e7790c74}} 
+\index{PokemonIO.h@{PokemonIO.h}!GeneratePokemon@{GeneratePokemon}}
+\index{GeneratePokemon@{GeneratePokemon}!PokemonIO.h@{PokemonIO.h}}
+\doxysubsubsection{\texorpdfstring{GeneratePokemon()}{GeneratePokemon()}}
+{\footnotesize\ttfamily void Generate\+Pokemon (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{id,  }\item[{\mbox{\hyperlink{struct_pokemon}{Pokemon}} \&}]{pokemon }\end{DoxyParamCaption})}
+

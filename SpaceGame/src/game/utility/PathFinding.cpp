@@ -30,7 +30,7 @@ static void PrintPath(std::vector<PathFinding::PathNode>& vec, World::Level::Per
 	}
 }
 
-void PathFinding::ValidatePath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height, Path& path)
+void PathFinding::ValidatePath(Ov_Sprite::WalkSprite* subject, World::Tile dest, World::WorldHeight height, Path& path)
 {
 	using namespace World;
 	//Check each tile on path to ensure is still clear
@@ -64,7 +64,7 @@ void PathFinding::ValidatePath(OvSpr_WalkingSprite* subject, World::Tile dest, W
 	path = GetPath(subject, dest, height);
 }
 
-PathFinding::Path PathFinding::GetPath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height)
+PathFinding::Path PathFinding::GetPath(Ov_Sprite::WalkSprite* subject, World::Tile dest, World::WorldHeight height)
 {
 	std::vector<PathNode> nodes;
 	std::vector<World::Direction> directions;
@@ -107,7 +107,7 @@ PathFinding::Path PathFinding::GetPath(OvSpr_WalkingSprite* subject, World::Tile
 	return { nodes, directions, 0, dest };
 }
 
-std::vector<PathFinding::PathNode> PathFinding::FindPath(OvSpr_WalkingSprite* subject, World::Tile dest, World::WorldHeight height)
+std::vector<PathFinding::PathNode> PathFinding::FindPath(Ov_Sprite::WalkSprite* subject, World::Tile dest, World::WorldHeight height)
 {
 	using namespace World;
 	//Get permissions fragment of current layer

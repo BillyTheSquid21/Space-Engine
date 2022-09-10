@@ -1,0 +1,42 @@
+\hypertarget{_script_parse_8h_source}{}\doxysection{Script\+Parse.\+h}
+\label{_script_parse_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/ScriptParse.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/ScriptParse.h}}
+\mbox{\hyperlink{_script_parse_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef GAME\_SCRIPT\_PARSE}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define GAME\_SCRIPT\_PARSE}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_script_8hpp}{game/objects/script.hpp}}"{}}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_world_8h}{game/level/World.h}}"{}}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{comment}{//Script parser}}
+\DoxyCodeLine{25 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_script_parse}{ScriptParse}}}
+\DoxyCodeLine{26 \{}
+\DoxyCodeLine{27     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_script_parse_1_1_script_wrapper}{ScriptWrapper}}}
+\DoxyCodeLine{28     \{}
+\DoxyCodeLine{29         \mbox{\hyperlink{_script_8hpp_a34d985efc444429aa36e0bb1b52458cf}{Script}} \mbox{\hyperlink{struct_script_parse_1_1_script_wrapper_a4ee97290a67edbd4afe31cce256ab602}{script}};}
+\DoxyCodeLine{30         \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_script_parse_1_1_script_wrapper_ae39b75f337a72b16831e3bdde4b66e51}{size}};}
+\DoxyCodeLine{31     \};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     \mbox{\hyperlink{struct_script_parse_1_1_script_wrapper}{ScriptWrapper}} \mbox{\hyperlink{namespace_script_parse_af56121a4439b0a4d9216bf03e4ceac5d}{ParseScriptFromText}}(std::string scriptName);}
+\DoxyCodeLine{34     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{int} \mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}} = 4; \textcolor{comment}{//Most instructions that could be in the array}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     \textcolor{keyword}{inline} \textcolor{keyword}{static} \mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9}{ScriptInstruction}} GetInstruction(std::string instr);}
+\DoxyCodeLine{37     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} ProcessInstructionInfo(\mbox{\hyperlink{_script_8hpp_a46e7446a4955af0d27a3ba606bb9c7b9}{ScriptInstruction}} instr, std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39     \textcolor{comment}{//Process particular instrs -\/ not all instrs have info attatched}}
+\DoxyCodeLine{40     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_SET\_FLAG(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{41     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_JMP(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{42     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_JMP\_IF(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{43     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_BOOL(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{44     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_MSG(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{45     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_GIVE\_TAKE\_ITEM(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{46     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_CGE\_DIR(std::string (\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{47     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_WAIT(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{48     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_SET\_TILE(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{49     \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} PSS\_WARP(std::string(\&instrArr)[\mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\_INFO}}], \mbox{\hyperlink{struct_script_element}{ScriptElement}}\& element);}
+\DoxyCodeLine{50 \}}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

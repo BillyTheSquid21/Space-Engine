@@ -25,6 +25,7 @@ namespace Model
     bool LoadTextureVertexOBJ(const char* path, std::vector<VertexType>& verts, std::vector<unsigned int>& inds)
     {
         //Check is a valid vertex
+        using namespace SGRender;
         static_assert(std::is_base_of<Vertex, VertexType>::value, "Must be a vertex type!");
 
         auto start = EngineTimer::StartTimer();
@@ -60,7 +61,7 @@ namespace Model
         //Get uvs
         bool hasUVS = false;
         //Check if both mesh and vertices have UV
-        if (&mesh->mTextureCoords[0][0] != NULL && std::is_base_of<TextureVertex, VertexType>::value)
+        if (&mesh->mTextureCoords[0][0] != NULL && std::is_base_of<TVertex, VertexType>::value)
         {
             hasUVS = true;
         }
@@ -78,7 +79,7 @@ namespace Model
         //Get normals
         bool hasNormals = false;
         //Check if both mesh and vertex type have normals
-        if (&mesh->mNormals[0][0] != NULL && std::is_base_of<NormalTextureVertex, VertexType>::value)
+        if (&mesh->mNormals[0][0] != NULL && std::is_base_of<NTVertex, VertexType>::value)
         {
             hasNormals = true;
         }
@@ -137,8 +138,8 @@ namespace Model
     public:
         Model() = default;
 
-        void load(const char* path) { LoadTextureVertexOBJ<NormalTextureVertex>(path, m_Vertices, m_Indices); m_DataLoaded = true; }
-        void setRen(Render::Renderer* ren) { m_Ren = ren; }
+        void load(const char* path) { LoadTextureVertexOBJ<SGRender::NTVertex>(path, m_Vertices, m_Indices); m_DataLoaded = true; }
+        void setRen(SGRender::Renderer* ren) { m_Ren = ren; }
         void render()
         {
             if (!m_DataLoaded)
@@ -153,7 +154,7 @@ namespace Model
         bool isLoaded() const { return m_DataLoaded; }
 
     private:
-        Render::Renderer* m_Ren = nullptr;
+        SGRender::Renderer* m_Ren = nullptr;
         bool m_DataLoaded;
 
         //Data

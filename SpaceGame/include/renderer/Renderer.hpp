@@ -2,16 +2,20 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "ShapeFactory.h"
-#include "GLClasses.h"
+#include "renderer/Geometry.h"
+#include "renderer/GLClasses.h"
+#include "renderer/Camera.h"
 #include "utility/SegArray.hpp"
-#include "Camera.h"
 
-namespace Render
+namespace SGRender
 {
 	/**
-	* Renderer for when batching is more efficient than instancing.
-	* Useful for: primitives, sprites, small meshes, static geometry
+	* First you generate the renderer, and add instances if you want instanced rendering
+	* When you use the renderer, you submit:
+	* 1. The vertices and indices you wish to batch together
+	* 2. Then any additional instance variables for drawing the batched geometry multiple times
+	* 
+	* You then buffer video data and draw primitives
 	*/
 	class Renderer
 	{
@@ -81,17 +85,24 @@ namespace Render
 			m_VerticesIndex++;
 		}	
 
-		void commitInstance(void* vert, unsigned int vertSize, unsigned int count)
+		/**
+		* System for commiting vertices. Uses Segmented Array.
+		*
+		* @param data Pointer to instance data (eg array of position offsets)
+		* @param dataSize Amount of floats contained within the array (eg for array of vec3 - sizeof(vec3) * count)
+		* @param count Amount of instances to be drawn
+		*/
+		void commitInstance(void* data, unsigned int dataSize, unsigned int count)
 		{
 			if (m_InstanceIndex >= m_InstanceInstructions.size())
 			{
-				m_InstanceInstructions.emplaceBack(vert, vertSize);
+				m_InstanceInstructions.emplaceBack(data, dataSize);
 			}
 			else
 			{
-				m_InstanceInstructions[m_InstanceIndex] = InstanceInfo::InstanceInfo(vert, vertSize);
+				m_InstanceInstructions[m_InstanceIndex] = InstanceInfo::InstanceInfo(data, dataSize);
 			}
-			m_InstanceSize += vertSize;
+			m_InstanceSize += dataSize;
 			m_InstanceIndex++;
 			if (m_FirstInstance)
 			{
@@ -118,11 +129,15 @@ namespace Render
 			m_FirstInstance = true;
 		}
 
-		//Camera
+		/**
+		* Pointer to camera
+		*/
 		Camera* camera = nullptr;
 
-		//Single model matrix for renderer
-		glm::mat4 m_RendererModelMatrix = glm::mat4(1.0f);
+		/**
+		* Model Matrix - identity matrix by default
+		*/
+		glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 		/**
 		* Gathers vertice data into renderer buffers

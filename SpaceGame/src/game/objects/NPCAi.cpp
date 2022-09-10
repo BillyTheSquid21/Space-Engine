@@ -1,22 +1,22 @@
 #include "game/objects/NPCAi.h"
 
-std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player)
+std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<Ov_Sprite::Sprite> npc, std::shared_ptr<Ov_Sprite::RunSprite> player)
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
 	std::shared_ptr<NPC_OverworldScript> npcScript(new NPC_OverworldScript(script.script, script.size, player));
 	npcScript->linkText(textBuff);
-	npcScript->linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
+	npcScript->linkNPC(std::static_pointer_cast<Ov_Sprite::RunSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 	return npcScript;
 }
 
-NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player)
+NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<Ov_Sprite::Sprite> npc, std::shared_ptr<Ov_Sprite::RunSprite> player)
 {
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	ScriptParse::ScriptWrapper script = ScriptParse::ParseScriptFromText(filePath);
 	NPC_OverworldScript npcScript(script.script, script.size, player);
 	npcScript.linkText(textBuff);
-	npcScript.linkNPC(std::static_pointer_cast<OvSpr_RunningSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
+	npcScript.linkNPC(std::static_pointer_cast<Ov_Sprite::RunSprite>(npc)); //if sprite type doesnt support command, undefined behaviour - TODO fix
 	return npcScript;
 }
 

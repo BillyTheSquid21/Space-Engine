@@ -1,0 +1,138 @@
+\hypertarget{class_s_g_random_1_1_perlin2_d}{}\doxysection{SGRandom\+::Perlin2D\texorpdfstring{$<$}{<} T, data\+Dimension, resolution, size \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_s_g_random_1_1_perlin2_d}\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+
+
+{\ttfamily \#include $<$Random.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ab5ac418353e646fd16dabfce6bc634aa}{Perlin2D}} ()=default
+\item 
+{\footnotesize template$<$typename... Args$>$ }\\\mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a0f251772a56d2c86314b3cdeff38e5b1}{Perlin2D}} (bool share\+Random, Args \&\&... value\+Ranges)
+\item 
+T \& \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a56b7cd669b9cb47e0aa9128e6507f4cc}{at}} (int x, int y, int \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ae203f1f154c35c9509c1dc960a1f4593}{data}})
+\item 
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a56b8cd4070ff686f3337ba572e1473a0}{generate\+Field}} (int \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ae203f1f154c35c9509c1dc960a1f4593}{data}}, float noise\+Reduction)
+\item 
+bool \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a8a40bd4306af3823e11b97a8703247dc}{scroll\+Noise}} (int deltaX, int deltaY, float noise\+Reduction)
+\item 
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a474b47f8ce0bfa82c989858c69c23933}{randomize}} (float noise\+Reduction)
+\item 
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a442c1ec6e71ed087ef1da18c652db2aa}{randomize\+Gradients}} ()
+\item 
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a226604b11c6434ea33e60b7a0a9ff38c}{randomize\+Gradients}} (int \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ae203f1f154c35c9509c1dc960a1f4593}{data}})
+\item 
+void $\ast$ \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ae203f1f154c35c9509c1dc960a1f4593}{data}} ()
+\item 
+size\+\_\+t \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ab01850f30a8f8abfc3f929f8915d482c}{data\+Size}} ()
+\item 
+size\+\_\+t \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_aef9c58aa5a2101e5738af204cf6220ac}{data\+Size\+Bytes}} ()
+\item 
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_ae6f4b06c908c536bf8b1a1e152ae283c}{write\+As\+Png}} (const char $\ast$name)
+\item 
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d_a236cb55a8d9cea0ae708d4827ee9bbfc}{clear}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_ab5ac418353e646fd16dabfce6bc634aa}\label{class_s_g_random_1_1_perlin2_d_ab5ac418353e646fd16dabfce6bc634aa}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!Perlin2D@{Perlin2D}}
+\index{Perlin2D@{Perlin2D}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{Perlin2D()}{Perlin2D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+\mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::\+Perlin2D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a0f251772a56d2c86314b3cdeff38e5b1}\label{class_s_g_random_1_1_perlin2_d_a0f251772a56d2c86314b3cdeff38e5b1}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!Perlin2D@{Perlin2D}}
+\index{Perlin2D@{Perlin2D}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{Perlin2D()}{Perlin2D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+template$<$typename... Args$>$ \\
+\mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::\+Perlin2D (\begin{DoxyParamCaption}\item[{bool}]{share\+Random,  }\item[{Args \&\&...}]{value\+Ranges }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a56b7cd669b9cb47e0aa9128e6507f4cc}\label{class_s_g_random_1_1_perlin2_d_a56b7cd669b9cb47e0aa9128e6507f4cc}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!at@{at}}
+\index{at@{at}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{at()}{at()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+T \& \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::at (\begin{DoxyParamCaption}\item[{int}]{x,  }\item[{int}]{y,  }\item[{int}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a236cb55a8d9cea0ae708d4827ee9bbfc}\label{class_s_g_random_1_1_perlin2_d_a236cb55a8d9cea0ae708d4827ee9bbfc}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!clear@{clear}}
+\index{clear@{clear}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_ae203f1f154c35c9509c1dc960a1f4593}\label{class_s_g_random_1_1_perlin2_d_ae203f1f154c35c9509c1dc960a1f4593}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!data@{data}}
+\index{data@{data}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{data()}{data()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void $\ast$ \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_ab01850f30a8f8abfc3f929f8915d482c}\label{class_s_g_random_1_1_perlin2_d_ab01850f30a8f8abfc3f929f8915d482c}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!dataSize@{dataSize}}
+\index{dataSize@{dataSize}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{dataSize()}{dataSize()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+size\+\_\+t \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::data\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_aef9c58aa5a2101e5738af204cf6220ac}\label{class_s_g_random_1_1_perlin2_d_aef9c58aa5a2101e5738af204cf6220ac}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!dataSizeBytes@{dataSizeBytes}}
+\index{dataSizeBytes@{dataSizeBytes}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{dataSizeBytes()}{dataSizeBytes()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+size\+\_\+t \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::data\+Size\+Bytes (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a56b8cd4070ff686f3337ba572e1473a0}\label{class_s_g_random_1_1_perlin2_d_a56b8cd4070ff686f3337ba572e1473a0}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!generateField@{generateField}}
+\index{generateField@{generateField}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{generateField()}{generateField()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::generate\+Field (\begin{DoxyParamCaption}\item[{int}]{data,  }\item[{float}]{noise\+Reduction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a474b47f8ce0bfa82c989858c69c23933}\label{class_s_g_random_1_1_perlin2_d_a474b47f8ce0bfa82c989858c69c23933}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!randomize@{randomize}}
+\index{randomize@{randomize}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{randomize()}{randomize()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::randomize (\begin{DoxyParamCaption}\item[{float}]{noise\+Reduction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a442c1ec6e71ed087ef1da18c652db2aa}\label{class_s_g_random_1_1_perlin2_d_a442c1ec6e71ed087ef1da18c652db2aa}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!randomizeGradients@{randomizeGradients}}
+\index{randomizeGradients@{randomizeGradients}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{randomizeGradients()}{randomizeGradients()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::randomize\+Gradients (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a226604b11c6434ea33e60b7a0a9ff38c}\label{class_s_g_random_1_1_perlin2_d_a226604b11c6434ea33e60b7a0a9ff38c}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!randomizeGradients@{randomizeGradients}}
+\index{randomizeGradients@{randomizeGradients}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{randomizeGradients()}{randomizeGradients()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::randomize\+Gradients (\begin{DoxyParamCaption}\item[{int}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_a8a40bd4306af3823e11b97a8703247dc}\label{class_s_g_random_1_1_perlin2_d_a8a40bd4306af3823e11b97a8703247dc}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!scrollNoise@{scrollNoise}}
+\index{scrollNoise@{scrollNoise}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{scrollNoise()}{scrollNoise()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+bool \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::scroll\+Noise (\begin{DoxyParamCaption}\item[{int}]{deltaX,  }\item[{int}]{deltaY,  }\item[{float}]{noise\+Reduction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_random_1_1_perlin2_d_ae6f4b06c908c536bf8b1a1e152ae283c}\label{class_s_g_random_1_1_perlin2_d_ae6f4b06c908c536bf8b1a1e152ae283c}} 
+\index{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}!writeAsPng@{writeAsPng}}
+\index{writeAsPng@{writeAsPng}!SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$@{SGRandom::Perlin2D$<$ T, dataDimension, resolution, size $>$}}
+\doxysubsubsection{\texorpdfstring{writeAsPng()}{writeAsPng()}}
+{\footnotesize\ttfamily template$<$typename T , size\+\_\+t data\+Dimension, unsigned int resolution, size\+\_\+t size$>$ \\
+void \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom\+::\+Perlin2D}}$<$ T, data\+Dimension, resolution, size $>$\+::write\+As\+Png (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/utility/\mbox{\hyperlink{_random_8h}{Random.\+h}}\end{DoxyCompactItemize}

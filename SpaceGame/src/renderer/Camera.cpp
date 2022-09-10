@@ -1,6 +1,6 @@
 #include "renderer/Camera.h"
 //Camera
-Camera::Camera(float width, float height, glm::vec3 position)
+SGRender::Camera::Camera(float width, float height, glm::vec3 position)
 {
 	//Set width and height
 	m_CameraWidth = width; m_CameraHeight = height;
@@ -8,51 +8,77 @@ Camera::Camera(float width, float height, glm::vec3 position)
 
 }
 
-void Camera::sendCameraUniforms(Shader& shader) {
+void SGRender::Camera::sendCameraUniforms(Shader& shader) {
 
-	view = glm::lookAt(m_Position, m_Position + m_Direction, m_Up); 
+	m_View = glm::lookAt(m_Position, m_Position + m_Direction, m_Up); 
 
-	shader.setUniform("u_View", &view);
-	shader.setUniform("u_Proj", &proj);
+	shader.setUniform("u_View", &m_View);
+	shader.setUniform("u_Proj", &m_Proj);
 }
 
-void Camera::moveForwards(float speed) {
+void SGRender::Camera::moveForwards(float speed) {
 	m_Position += speed * m_Direction;
 }
 
-void Camera::moveUp(float speed) {
+void SGRender::Camera::moveUp(float speed) {
 	m_Position += speed * m_Up;
 }
 
-void Camera::moveSideways(float speed) {
+void SGRender::Camera::moveSideways(float speed) {
 	m_Position += speed * -glm::normalize(glm::cross(m_Direction, m_Up));
 }
 
-void Camera::panSideways(float speed) {
+void SGRender::Camera::panSideways(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
-void Camera::panUp(float speed) {
+void SGRender::Camera::panUp(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), -glm::normalize(glm::cross(m_Direction, m_Up)));
 }
 
-void Camera::panYDegrees(float angle) {
+void SGRender::Camera::panYDegrees(float angle) {
 	m_Direction = glm::rotate(m_Direction, glm::radians(angle), -glm::normalize(glm::cross(m_Direction, m_Up)));
 }
 
-void Camera::moveX(float speed) {
+void SGRender::Camera::moveX(float speed) {
 	m_Position += speed * glm::vec3(-1.0f, 0.0f, 0.0f);
 }
 
-void Camera::moveY(float speed) {
+void SGRender::Camera::moveY(float speed) {
 	m_Position += speed * glm::vec3(0.0f, -1.0f, 0.0f);
 }
 
-void Camera::moveZ(float speed) {
+void SGRender::Camera::moveZ(float speed) {
 	m_Position += speed * glm::vec3(0.0f, 0.0f, -1.0f);
 }
 
-void Camera::setPos(float x, float y, float z)
+void SGRender::Camera::setPos(float x, float y, float z)
 {
 	m_Position = { x,y,z };
+}
+
+void SGRender::Camera::updateFrustum()
+{
+	using namespace glm;
+
+	//Calc the vertical fov using distance to known near plane
+	float fovY = atan((m_CameraHeight / 2.0f) / m_NearPlane);
+
+	//Calculate the dimensions of the far plane
+	float halfVSide = m_FarPlane * tanf(fovY*0.25f);
+	float halfHSide = halfVSide * (m_CameraWidth / m_CameraHeight);
+	vec3 frontMultFar = m_FarPlane * m_Direction;
+	vec3 right = normalize(cross(m_Direction, m_Up));
+
+	//Calculate faces
+	m_Frustum.nearFace = { m_Position + m_NearPlane * m_Direction, m_Direction };
+	m_Frustum.farFace = { m_Position + frontMultFar, -m_Direction };
+	m_Frustum.rightFace = { m_Position,
+							cross(m_Up,frontMultFar + right * halfHSide) };
+	m_Frustum.leftFace = { m_Position,
+							cross(frontMultFar - right * halfHSide, m_Up) };
+	m_Frustum.topFace = { m_Position,
+							cross(right, frontMultFar - m_Up * halfVSide) };
+	m_Frustum.bottomFace = { m_Position,
+							cross(frontMultFar + m_Up * halfVSide, right) };
 }

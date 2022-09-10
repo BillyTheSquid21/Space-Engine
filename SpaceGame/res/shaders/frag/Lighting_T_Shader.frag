@@ -75,10 +75,11 @@ void main()
 	//Shadow
 	float shadow = calcShadowFactor();
 
-	//Total
-	color = vec4(ambientLight+((1.0f-shadow)*diffuse),1.0) * texColor;
 	if (u_LightsActive == 1)
 	{
-		color = texColor;
+		shadow = 0.0;
 	}
+
+	//Total
+	color = vec4(ambientLight+((1.0f-shadow)*diffuse),1.0) * texColor;
 }

@@ -1,37 +1,121 @@
 \hypertarget{struct_world_1_1_level_data}{}\doxysection{World\+::Level\+Data Struct Reference}
 \label{struct_world_1_1_level_data}\index{World::LevelData@{World::LevelData}}
+
+
+{\ttfamily \#include $<$World.\+h$>$}
+
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a629408399af3b36615e0221a4b790504}\label{struct_world_1_1_level_data_a629408399af3b36615e0221a4b790504}} 
-Level\+ID {\bfseries id}
+\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{Level\+ID}} \mbox{\hyperlink{struct_world_1_1_level_data_a629408399af3b36615e0221a4b790504}{id}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a6ff3234613038487f1b1749c14939d59}\label{struct_world_1_1_level_data_a6ff3234613038487f1b1749c14939d59}} 
-unsigned int {\bfseries width}
+unsigned int \mbox{\hyperlink{struct_world_1_1_level_data_a6ff3234613038487f1b1749c14939d59}{width}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a102a5dcec15b5586adb15db91ee750a1}\label{struct_world_1_1_level_data_a102a5dcec15b5586adb15db91ee750a1}} 
-unsigned int {\bfseries height}
+unsigned int \mbox{\hyperlink{struct_world_1_1_level_data_a102a5dcec15b5586adb15db91ee750a1}{height}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a10b23228e88e756806d014abeea62ca0}\label{struct_world_1_1_level_data_a10b23228e88e756806d014abeea62ca0}} 
-float {\bfseries originX}
+unsigned int \mbox{\hyperlink{struct_world_1_1_level_data_a720e4215846d5c4c88aa7ac00b67ee6a}{tileset}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_ab5e65f62538b978b78525373a6548cdd}\label{struct_world_1_1_level_data_ab5e65f62538b978b78525373a6548cdd}} 
-float {\bfseries originY}
+float \mbox{\hyperlink{struct_world_1_1_level_data_a10b23228e88e756806d014abeea62ca0}{originX}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a7395e805c574d593f9a646a77d804b4d}\label{struct_world_1_1_level_data_a7395e805c574d593f9a646a77d804b4d}} 
-std\+::vector$<$ World\+Level $>$ {\bfseries plane\+Heights}
+float \mbox{\hyperlink{struct_world_1_1_level_data_ab5e65f62538b978b78525373a6548cdd}{originY}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a4f0b1f69bcb54bf7c22950b382627b4b}\label{struct_world_1_1_level_data_a4f0b1f69bcb54bf7c22950b382627b4b}} 
-std\+::vector$<$ Direction $>$ {\bfseries plane\+Directions}
+glm\+::vec3 \mbox{\hyperlink{struct_world_1_1_level_data_a9f138e75e7c426881545af6f32f4fa9f}{light\+Color}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_a56d99db2c5bdb97fcd5668cf8536fb3f}\label{struct_world_1_1_level_data_a56d99db2c5bdb97fcd5668cf8536fb3f}} 
-std\+::vector$<$ Movement\+Permissions $>$ {\bfseries plane\+Permissions}
+glm\+::vec3 \mbox{\hyperlink{struct_world_1_1_level_data_ab518a822a210175513a629783892a9e9}{light\+Dir}}
 \item 
-\mbox{\Hypertarget{struct_world_1_1_level_data_abdef338447b18bb49f3806b252a1e455}\label{struct_world_1_1_level_data_abdef338447b18bb49f3806b252a1e455}} 
-std\+::vector$<$ \mbox{\hyperlink{struct_world_1_1_tile_texture}{Tile\+Texture}} $>$ {\bfseries plane\+Textures}
+std\+::vector$<$ \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+Height}} $>$ \mbox{\hyperlink{struct_world_1_1_level_data_a735b9702f8a2fa7bd02fa37506b2bc48}{plane\+Heights}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+Height}} $>$ \mbox{\hyperlink{struct_world_1_1_level_data_a8a85cde6db4e2144c6ab9b82c222790f}{present\+World\+Levels}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} $>$ \mbox{\hyperlink{struct_world_1_1_level_data_a4f0b1f69bcb54bf7c22950b382627b4b}{plane\+Directions}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{Movement\+Permissions}} $>$ \mbox{\hyperlink{struct_world_1_1_level_data_a56d99db2c5bdb97fcd5668cf8536fb3f}{plane\+Permissions}}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_world_1_1_tile_texture}{Tile\+Texture}} $>$ \mbox{\hyperlink{struct_world_1_1_level_data_abdef338447b18bb49f3806b252a1e455}{plane\+Textures}}
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_world_1_1_level_data_a102a5dcec15b5586adb15db91ee750a1}\label{struct_world_1_1_level_data_a102a5dcec15b5586adb15db91ee750a1}} 
+\index{World::LevelData@{World::LevelData}!height@{height}}
+\index{height@{height}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{height}{height}}
+{\footnotesize\ttfamily unsigned int World\+::\+Level\+Data\+::height}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a629408399af3b36615e0221a4b790504}\label{struct_world_1_1_level_data_a629408399af3b36615e0221a4b790504}} 
+\index{World::LevelData@{World::LevelData}!id@{id}}
+\index{id@{id}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{Level\+ID}} World\+::\+Level\+Data\+::id}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a9f138e75e7c426881545af6f32f4fa9f}\label{struct_world_1_1_level_data_a9f138e75e7c426881545af6f32f4fa9f}} 
+\index{World::LevelData@{World::LevelData}!lightColor@{lightColor}}
+\index{lightColor@{lightColor}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{lightColor}{lightColor}}
+{\footnotesize\ttfamily glm\+::vec3 World\+::\+Level\+Data\+::light\+Color}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_ab518a822a210175513a629783892a9e9}\label{struct_world_1_1_level_data_ab518a822a210175513a629783892a9e9}} 
+\index{World::LevelData@{World::LevelData}!lightDir@{lightDir}}
+\index{lightDir@{lightDir}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{lightDir}{lightDir}}
+{\footnotesize\ttfamily glm\+::vec3 World\+::\+Level\+Data\+::light\+Dir}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a10b23228e88e756806d014abeea62ca0}\label{struct_world_1_1_level_data_a10b23228e88e756806d014abeea62ca0}} 
+\index{World::LevelData@{World::LevelData}!originX@{originX}}
+\index{originX@{originX}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{originX}{originX}}
+{\footnotesize\ttfamily float World\+::\+Level\+Data\+::originX}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_ab5e65f62538b978b78525373a6548cdd}\label{struct_world_1_1_level_data_ab5e65f62538b978b78525373a6548cdd}} 
+\index{World::LevelData@{World::LevelData}!originY@{originY}}
+\index{originY@{originY}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{originY}{originY}}
+{\footnotesize\ttfamily float World\+::\+Level\+Data\+::originY}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a4f0b1f69bcb54bf7c22950b382627b4b}\label{struct_world_1_1_level_data_a4f0b1f69bcb54bf7c22950b382627b4b}} 
+\index{World::LevelData@{World::LevelData}!planeDirections@{planeDirections}}
+\index{planeDirections@{planeDirections}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{planeDirections}{planeDirections}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}}$>$ World\+::\+Level\+Data\+::plane\+Directions}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a735b9702f8a2fa7bd02fa37506b2bc48}\label{struct_world_1_1_level_data_a735b9702f8a2fa7bd02fa37506b2bc48}} 
+\index{World::LevelData@{World::LevelData}!planeHeights@{planeHeights}}
+\index{planeHeights@{planeHeights}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{planeHeights}{planeHeights}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+Height}}$>$ World\+::\+Level\+Data\+::plane\+Heights}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a56d99db2c5bdb97fcd5668cf8536fb3f}\label{struct_world_1_1_level_data_a56d99db2c5bdb97fcd5668cf8536fb3f}} 
+\index{World::LevelData@{World::LevelData}!planePermissions@{planePermissions}}
+\index{planePermissions@{planePermissions}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{planePermissions}{planePermissions}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{Movement\+Permissions}}$>$ World\+::\+Level\+Data\+::plane\+Permissions}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_abdef338447b18bb49f3806b252a1e455}\label{struct_world_1_1_level_data_abdef338447b18bb49f3806b252a1e455}} 
+\index{World::LevelData@{World::LevelData}!planeTextures@{planeTextures}}
+\index{planeTextures@{planeTextures}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{planeTextures}{planeTextures}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{struct_world_1_1_tile_texture}{Tile\+Texture}}$>$ World\+::\+Level\+Data\+::plane\+Textures}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a8a85cde6db4e2144c6ab9b82c222790f}\label{struct_world_1_1_level_data_a8a85cde6db4e2144c6ab9b82c222790f}} 
+\index{World::LevelData@{World::LevelData}!presentWorldLevels@{presentWorldLevels}}
+\index{presentWorldLevels@{presentWorldLevels}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{presentWorldLevels}{presentWorldLevels}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+Height}}$>$ World\+::\+Level\+Data\+::present\+World\+Levels}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a720e4215846d5c4c88aa7ac00b67ee6a}\label{struct_world_1_1_level_data_a720e4215846d5c4c88aa7ac00b67ee6a}} 
+\index{World::LevelData@{World::LevelData}!tileset@{tileset}}
+\index{tileset@{tileset}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{tileset}{tileset}}
+{\footnotesize\ttfamily unsigned int World\+::\+Level\+Data\+::tileset}
+
+\mbox{\Hypertarget{struct_world_1_1_level_data_a6ff3234613038487f1b1749c14939d59}\label{struct_world_1_1_level_data_a6ff3234613038487f1b1749c14939d59}} 
+\index{World::LevelData@{World::LevelData}!width@{width}}
+\index{width@{width}!World::LevelData@{World::LevelData}}
+\doxysubsubsection{\texorpdfstring{width}{width}}
+{\footnotesize\ttfamily unsigned int World\+::\+Level\+Data\+::width}
+
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/level/World.\+h\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/level/\mbox{\hyperlink{_world_8h}{World.\+h}}\end{DoxyCompactItemize}

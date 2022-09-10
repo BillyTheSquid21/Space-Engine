@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['npc_5frandwalk_0',['NPC_RandWalk',['../class_n_p_c___rand_walk.html',1,'']]],
-  ['npc_5fscript_1',['NPC_Script',['../class_n_p_c___script.html',1,'']]]
+  ['jmp_5fif_5finfo_0',['JMP_IF_INFO',['../struct_j_m_p___i_f___i_n_f_o.html',1,'']]],
+  ['jmp_5finfo_1',['JMP_INFO',['../struct_j_m_p___i_n_f_o.html',1,'']]]
 ];

@@ -1,0 +1,240 @@
+\hypertarget{_state_renderers_8h_source}{}\doxysection{State\+Renderers.\+h}
+\label{_state_renderers_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/states/StateRenderers.h@{D:/Repositories/Space Engine/SpaceGame/include/game/states/StateRenderers.h}}
+\mbox{\hyperlink{_state_renderers_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef STATE\_RENDERERS\_HPP}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define STATE\_RENDERERS\_HPP}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_obj_management_8h}{core/ObjManagement.h}}"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_renderer_8hpp}{renderer/Renderer.hpp}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_texture_8h}{renderer/Texture.h}}"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_model_object_8hpp}{game/objects/ModelObject.hpp}}"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_overworld_sprite_8h}{game/objects/OverworldSprite.h}}"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_shadow_map_8h}{renderer/ShadowMap.h}}"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_transition_8hpp}{renderer/Transition.hpp}}"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_object_types_8hpp}{game/objects/ObjectTypes.hpp}}"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_world_8h}{game/level/World.h}}"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_texture_slots_8hpp}{game/level/TextureSlots.hpp}}"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_tile_map_8h}{game/objects/TileMap.h}}"{}}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_seg_array_8hpp}{utility/SegArray.hpp}}"{}}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_random_8h}{utility/Random.h}}"{}}}
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}functional"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}atomic"{}}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include "{}mtlib/ThreadPool.h"{}}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{comment}{//In this file the renderers for each state with anything more than trivial is stored.}}
+\DoxyCodeLine{23 \textcolor{comment}{//I used SegArrays to store components as this ensures the address will not change while the state is running}}
+\DoxyCodeLine{24 \textcolor{comment}{//For dynamic resources, ensure you use push and pop if address is referenced}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_state_render}{StateRender}}}
+\DoxyCodeLine{27 \{}
+\DoxyCodeLine{28     \textcolor{comment}{//Stores index of specific reserved shaders in array}}
+\DoxyCodeLine{29     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{StateShader}}}
+\DoxyCodeLine{30     \{}
+\DoxyCodeLine{31         \textcolor{comment}{//Overworld}}
+\DoxyCodeLine{32         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca6eadcd76980d5c82a75e5e54fcb24ecb}{OVERWORLD}} = 0, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cacb11f150d6ae01f93750a988c0e95101}{OVERWORLD\_SHADOW}} = 1, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cab50a33f1ee554f8892420396bf41e741}{OVERWORLD\_GRASS}} = 2,}
+\DoxyCodeLine{33         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cac0c37b0517b7a9a1a25ba13cc3196fd9}{OVERWORLD\_GRASS\_SHADOW}} = 3, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca5e0992fef7a5e48e7fcf436b06a6d8e8}{OVERWORLD\_BATTLE}} = 4, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca2564737f0ef35b06342a7f8405caa6f1}{OVERWORLD\_FADE\_OUT}} = 5,}
+\DoxyCodeLine{34         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca39232c2aaceb9345ccee7a1fe432e156}{OVERWORLD\_FADE\_IN}} = 6, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cacae3273eafc838fbcc3cf96d70e0757a}{OVERWORLD\_TREE}} = 7, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96caba6aadfdc250199ed1906bf8608da733}{OVERWORLD\_TREE\_SHADOW}} = 8, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{OVERWORLD\_COUNT}} = 9,}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36         \textcolor{comment}{//Battle}}
+\DoxyCodeLine{37         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca14d0b0e872355d0bf01b18cc2d4eb670}{BATTLE}} = 0, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{BATTLE\_COUNT}} = 1}
+\DoxyCodeLine{38     \};}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40     \textcolor{comment}{//Stores index of specific reserved renderers in array}}
+\DoxyCodeLine{41     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{StateRen}}}
+\DoxyCodeLine{42     \{}
+\DoxyCodeLine{43         \textcolor{comment}{//Overworld}}
+\DoxyCodeLine{44         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca6eadcd76980d5c82a75e5e54fcb24ecb}{OVERWORLD}} = 0, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cab50a33f1ee554f8892420396bf41e741}{OVERWORLD\_GRASS}} = 1, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1b9c51d3094955d4c71f2904cedee4c6}{OVERWORLD\_SPRITE}} = 2,}
+\DoxyCodeLine{45         \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a3e1f4e733d252d5223c8fef616cc264f}{OVERWORLD\_POKEMON}} = 3, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a4d230b4be529787549345aabdce10051}{OVERWORLD\_MODEL}} = 4, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cacae3273eafc838fbcc3cf96d70e0757a}{OVERWORLD\_TREE}} = 5, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{OVERWORLD\_COUNT}} = 6,}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47         \textcolor{comment}{//Battle}}
+\DoxyCodeLine{48         \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a12ac66402a202d3aa114b57ed092302d}{BATTLE\_PLATFORM}} = 0, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a9defea1e64a3188e1544005636cbbaa8}{BATTLE\_BACKGROUND}} = 1, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a97db1fe2162c126d84530654d3701f49}{BATTLE\_POKEMONA}} = 2, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1c440888ddd21ea7bd8797e97a9f8238}{BATTLE\_POKEMONB}} = 3,}
+\DoxyCodeLine{49         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{BATTLE\_COUNT}} = 4}
+\DoxyCodeLine{50     \};}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52     \textcolor{comment}{//Stores index of specific reserved transitions in array}}
+\DoxyCodeLine{53     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09a}{StateTrans}}}
+\DoxyCodeLine{54     \{}
+\DoxyCodeLine{55         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca5e0992fef7a5e48e7fcf436b06a6d8e8}{OVERWORLD\_BATTLE}} = 0, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca2564737f0ef35b06342a7f8405caa6f1}{OVERWORLD\_FADE\_OUT}} = 1, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca39232c2aaceb9345ccee7a1fe432e156}{OVERWORLD\_FADE\_IN}} = 2,}
+\DoxyCodeLine{56         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{OVERWORLD\_COUNT}} = 3}
+\DoxyCodeLine{57     \};}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59     \textcolor{comment}{//Stores index of specific reserved textures in array}}
+\DoxyCodeLine{60     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{StateTex}}}
+\DoxyCodeLine{61     \{}
+\DoxyCodeLine{62         \textcolor{comment}{//Overworld}}
+\DoxyCodeLine{63         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca6eadcd76980d5c82a75e5e54fcb24ecb}{OVERWORLD}} = 0, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1b9c51d3094955d4c71f2904cedee4c6}{OVERWORLD\_SPRITE}} = 1, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a3e1f4e733d252d5223c8fef616cc264f}{OVERWORLD\_POKEMON}} = 2, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a07fa7a3e83cf334e5f601432e74827f1}{OVERWORLD\_WIND\_A}} = 3, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a460852a82943999f3eb11beaa92e1125}{OVERWORLD\_WIND\_B}} = 4,}
+\DoxyCodeLine{64         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{OVERWORLD\_COUNT}} = 5,}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66         \textcolor{comment}{//Battle}}
+\DoxyCodeLine{67         \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a12ac66402a202d3aa114b57ed092302d}{BATTLE\_PLATFORM}} = 0, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a9defea1e64a3188e1544005636cbbaa8}{BATTLE\_BACKGROUND}} = 1, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a97db1fe2162c126d84530654d3701f49}{BATTLE\_POKEMONA}} = 2, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1c440888ddd21ea7bd8797e97a9f8238}{BATTLE\_POKEMONB}} = 3,}
+\DoxyCodeLine{68         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{BATTLE\_COUNT}} = 4}
+\DoxyCodeLine{69     \};}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71     \textcolor{comment}{//Stores index of specific reserved tilemaps in array}}
+\DoxyCodeLine{72     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462}{StateTileMap}}}
+\DoxyCodeLine{73     \{}
+\DoxyCodeLine{74         \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca6eadcd76980d5c82a75e5e54fcb24ecb}{OVERWORLD}} = 0, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1b9c51d3094955d4c71f2904cedee4c6}{OVERWORLD\_SPRITE}} = 1, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a3e1f4e733d252d5223c8fef616cc264f}{OVERWORLD\_POKEMON}} = 2, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{OVERWORLD\_COUNT}} = 3}
+\DoxyCodeLine{75     \};}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{comment}{//Overworld renderer}}
+\DoxyCodeLine{78     \textcolor{keyword}{class }\mbox{\hyperlink{class_state_render_1_1_overworld}{Overworld}}}
+\DoxyCodeLine{79     \{}
+\DoxyCodeLine{80     \textcolor{keyword}{public}:}
+\DoxyCodeLine{81         \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender::Camera}} \mbox{\hyperlink{class_state_render_1_1_overworld_a3dfc4806590a22f575d0afd9f4a108dc}{camera}};}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83         \textcolor{comment}{//Test transition}}
+\DoxyCodeLine{84         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_state_render_1_1_overworld_a4604790b9964bde1cd47aa103b5c853d}{readyToShow}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86         \textcolor{comment}{//Setup renderer one time}}
+\DoxyCodeLine{87         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a0047991ea813a3324f594ef45dae4673}{initialiseRenderer}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} width, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} height, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* obj);}
+\DoxyCodeLine{88         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a9c713c2e964a9162941801d4db081980}{loadRendererData}}(); \textcolor{comment}{//Load data for renderer}}
+\DoxyCodeLine{89         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a730b382720ebc7ccdf3b66f146423d84}{generateAtlas}}(); \textcolor{comment}{//Generate atlas from loaded model textures}}
+\DoxyCodeLine{90         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a5361d98bd17fd5f7e76cef3cdf14569c}{purgeData}}();}
+\DoxyCodeLine{91         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a89c8c88e664a606faa71aa49972a96b4}{bufferRenderData}}();}
+\DoxyCodeLine{92         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a460069a8ee7ac06c8cb7cacf5da69e23}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{93         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a0f32f7ff88e80586261fcb35b9be01fc}{draw}}(); \textcolor{comment}{//Draw scene renderer}}
+\DoxyCodeLine{94         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a56297c93411a3d29af5f76eb00cbfaa9}{mapModelTextures}}();}
+\DoxyCodeLine{95         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a6078370696a1d34325757e4dfa05fec1}{signalMapModelTextures}}() \{ m\_RemapModels = \textcolor{keyword}{true}; \}}
+\DoxyCodeLine{96         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a65a06873b23076cfae775cd50c3d2607}{linkPlayerPtr}}(std::shared\_ptr<Ov\_Sprite::RunSprite> ptr) \{ m\_PlayerPtr = ptr; \}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98         \textcolor{comment}{//Notifies renderer to wait until a level has been modified to change model mapping}}
+\DoxyCodeLine{99         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_af7374247cb0053ff345233fdb0ac3000}{isModifyingLevel}}() \{ m\_LevelsLeftLoading++; \}}
+\DoxyCodeLine{100         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_adbce382505a7d1df685b3d407fe20d6e}{hasLevelModified}}() \{ m\_LevelsLeftLoading-\/-\/; \}}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102         \textcolor{comment}{//Getters}}
+\DoxyCodeLine{103         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_ad24eddb476f6af736aa0ca7a660218da}{operator[]}}(\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{StateRen}} slot) \{ \textcolor{keywordflow}{return} m\_Renderers[(int)slot]; \}}
+\DoxyCodeLine{104         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_ab593d241413a7d778162b25d5281504a}{at}}(\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{StateRen}} slot) \{ \textcolor{keywordflow}{return} m\_Renderers[(int)slot]; \}}
+\DoxyCodeLine{105         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a88b0f7eb5913a6be0fa1870c06a8f225}{operator[]}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} m\_Renderers[slot]; \}}
+\DoxyCodeLine{106         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a1cee5f85161622b9e905163d32d48c79}{at}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} m\_Renderers[slot]; \}}
+\DoxyCodeLine{107         \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a}{Tex::TextureAtlasRGBA}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_ac981d1f1c87068ef6ffe72340be57e47}{atlas}}() \{ \textcolor{keywordflow}{return} m\_TextureAtlas; \}}
+\DoxyCodeLine{108         \mbox{\hyperlink{class_texture}{Texture}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a8ceeace1c847d5b43c19390166b1d3af}{texture}}(\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{StateTex}} slot) \{ \textcolor{keywordflow}{return} m\_Textures[(int)slot]; \}}
+\DoxyCodeLine{109         \mbox{\hyperlink{class_texture}{Texture}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a06e75efe2eab7cee824648508ea06148}{texture}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} m\_Textures[slot]; \}}
+\DoxyCodeLine{110         \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a0670f8f3cd39e7b5599df6fd0cef9c36}{shader}}(\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{StateShader}} slot) \{ \textcolor{keywordflow}{return} m\_Shaders[(int)slot]; \}}
+\DoxyCodeLine{111         \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a0c7fbe165691bdaba8578350965045a5}{shader}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} m\_Shaders[slot]; \}}
+\DoxyCodeLine{112         \mbox{\hyperlink{class_transition}{Transition}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_a736af0dad5cc7785df1139a2ba0b5f83}{transition}}(\mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09a}{StateTrans}} slot) \{ \textcolor{keywordflow}{return} m\_Transitions[(int)slot]; \}}
+\DoxyCodeLine{113         \mbox{\hyperlink{class_transition}{Transition}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_aeb97399a2c51df833f79c9f9025ae41d}{transition}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} m\_Transitions[slot]; \}}
+\DoxyCodeLine{114         \mbox{\hyperlink{class_tile_map}{TileMap}}\& \mbox{\hyperlink{class_state_render_1_1_overworld_af319d892a112386e45cfb0cd10874b49}{tilemap}}(\mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462}{StateTileMap}} slot) \{ \textcolor{keywordflow}{return} m\_TileMaps[(int)slot]; \}}
+\DoxyCodeLine{115         glm::vec3\& \mbox{\hyperlink{class_state_render_1_1_overworld_a00965457ed14a82c95649add26a79bba}{lightDirection}}() \{ \textcolor{keywordflow}{return} m\_LightDir; \}}
+\DoxyCodeLine{116         glm::vec3\& \mbox{\hyperlink{class_state_render_1_1_overworld_a391ba514673cd3bb228b4a12a15cf838}{lightColor}}() \{ \textcolor{keywordflow}{return} m\_LightColor; \}}
+\DoxyCodeLine{117         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_state_render_1_1_overworld_aa31aa373159b79058e62086a7edd2eee}{showingShadows}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_HideShadows; \}}
+\DoxyCodeLine{118         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_overworld_a2a11ca4d49585ec0e8a69ff81ad47406}{showShadows}}(\textcolor{keywordtype}{bool} show) \{ m\_HideShadows = (int)show; \}}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120         \textcolor{comment}{//Start battle function}}
+\DoxyCodeLine{121         std::function<void()> \mbox{\hyperlink{class_state_render_1_1_overworld_a6dec3c4df04391d23743a147c9c5c8fe}{m\_StateToBattle}};}
+\DoxyCodeLine{122     \textcolor{keyword}{private}:}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124         \textcolor{comment}{//Helper functions}}
+\DoxyCodeLine{125         \textcolor{keywordtype}{void} shadowPass(glm::vec3 lightDir);}
+\DoxyCodeLine{126         \textcolor{keywordtype}{void} lightingPass(glm::vec3 lightDir);}
+\DoxyCodeLine{127         \textcolor{keywordtype}{void} handleTransition();}
+\DoxyCodeLine{128         \textcolor{keywordtype}{void} handleWind();}
+\DoxyCodeLine{129         \textcolor{keywordtype}{void} updatePlayerPos();}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{131         \textcolor{comment}{//Objects}}
+\DoxyCodeLine{132         \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* m\_Objects = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134         \textcolor{comment}{//Rendering}}
+\DoxyCodeLine{135         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}}, (int)\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{StateShader::OVERWORLD\_COUNT}}> m\_Shaders;}
+\DoxyCodeLine{136         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}, (int)\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a297fe9df074069f519ee7fc234989fc8}{StateRen::OVERWORLD\_COUNT}}> m\_Renderers;}
+\DoxyCodeLine{137         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_texture}{Texture}}, (int)\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a297fe9df074069f519ee7fc234989fc8}{StateTex::OVERWORLD\_COUNT}}> m\_Textures;}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139         \textcolor{comment}{//Textures}}
+\DoxyCodeLine{140         \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a}{Tex::TextureAtlasRGBA}} m\_TextureAtlas;}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142         \textcolor{comment}{//Transitions}}
+\DoxyCodeLine{143         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_transition}{Transition}}, (int)\mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09aa297fe9df074069f519ee7fc234989fc8}{StateTrans::OVERWORLD\_COUNT}}> m\_Transitions;}
+\DoxyCodeLine{144         \textcolor{keywordtype}{float} fadeTime = 0.5f;}
+\DoxyCodeLine{145 }
+\DoxyCodeLine{146         \textcolor{comment}{//Tilemaps}}
+\DoxyCodeLine{147         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_tile_map}{TileMap}}, (int)\mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462a297fe9df074069f519ee7fc234989fc8}{StateTileMap::OVERWORLD\_COUNT}}> m\_TileMaps;}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149         \textcolor{comment}{//Shadow map}}
+\DoxyCodeLine{150         \mbox{\hyperlink{class_s_g_render_1_1_shadow_map}{SGRender::ShadowMap}} m\_ShadowMap;}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152         \textcolor{comment}{//Lighting}}
+\DoxyCodeLine{153         glm::vec3 m\_LightDir = glm::vec3(0.6f, 0.5f, 0.52f);}
+\DoxyCodeLine{154         glm::vec3 m\_LightColor = glm::vec3(1.0f, 1.0f, 1.0f);}
+\DoxyCodeLine{155         glm::vec3 m\_LightScaled = glm::vec3(1.0f, 1.0f, 1.0f);}
+\DoxyCodeLine{156         glm::vec3 m\_LightScaleFactor = glm::vec3(0.5f, 0.5f, 0.5f);}
+\DoxyCodeLine{157         \textcolor{keywordtype}{int} m\_HideShadows = 0;}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159         \textcolor{comment}{//Perlin wind}}
+\DoxyCodeLine{160         \textcolor{comment}{//Have two buffers to interpolate between}}
+\DoxyCodeLine{161         \textcolor{comment}{//-\/1-\/>0-\/>1 is 0 -\/> 128 -\/> 256 as vectors}}
+\DoxyCodeLine{162         \mbox{\hyperlink{class_s_g_random_1_1_perlin2_d}{SGRandom::Perlin2D<uint8\_t, 3, 17, 512>}} m\_PerlinGenerator;}
+\DoxyCodeLine{163         std::vector<uint8\_t> m\_BufferA;}
+\DoxyCodeLine{164         std::vector<uint8\_t> m\_BufferB;}
+\DoxyCodeLine{165         std::function<bool(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{int}, \textcolor{keywordtype}{float})> m\_ScrollNoise;}
+\DoxyCodeLine{166         \textcolor{keywordtype}{bool} m\_CurrBuffer = 0; \textcolor{comment}{//0 is A, 1 is B}}
+\DoxyCodeLine{167         std::atomic\_bool m\_NoiseReady = \textcolor{keyword}{false};}
+\DoxyCodeLine{168         \textcolor{keywordtype}{double} m\_WindTimer = 0.0;}
+\DoxyCodeLine{169         MtLib::ThreadPool* m\_Pool;}
+\DoxyCodeLine{170         \textcolor{keywordtype}{double} m\_WindSampleInterval = 1.6;}
+\DoxyCodeLine{171         \textcolor{keywordtype}{float} m\_WindWeightA = 0.0f;}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173         \textcolor{comment}{//Grass}}
+\DoxyCodeLine{174         \mbox{\hyperlink{_geometry_8h_a5311113fe1e0d5f961f3fef4036e932a}{Color\_Quad}} m\_Grass = \mbox{\hyperlink{namespace_geometry_a009c919f5810cb211de4cb29f25fd216}{Geometry::CreateColorQuad}}(0, 10.0f, 0.8f, 10.0f, \{ 0.125f, 0.627f, 0.439f, 1.0f \});}
+\DoxyCodeLine{175         \textcolor{keywordtype}{bool} m\_WasRunning = \textcolor{keyword}{false}; \textcolor{comment}{//Avoid grass flickering from non running frame}}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177         \textcolor{comment}{//Player location}}
+\DoxyCodeLine{178         std::shared\_ptr<Ov\_Sprite::RunSprite> m\_PlayerPtr;}
+\DoxyCodeLine{179         glm::vec3 m\_PlayerPos;}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} SCREEN\_WIDTH; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} SCREEN\_HEIGHT;}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183         \textcolor{keywordtype}{bool} m\_RemapModels = \textcolor{keyword}{false};}
+\DoxyCodeLine{184         \textcolor{keywordtype}{int} m\_LevelsLeftLoading = 0;}
+\DoxyCodeLine{185         \textcolor{keywordtype}{double} m\_Time = 0.0f; \textcolor{comment}{//Time variable -\/ just keeps going up indefinately}}
+\DoxyCodeLine{186     \};}
+\DoxyCodeLine{187 }
+\DoxyCodeLine{188     \textcolor{comment}{//battle}}
+\DoxyCodeLine{189     \textcolor{keyword}{class }\mbox{\hyperlink{class_state_render_1_1_battle}{Battle}}}
+\DoxyCodeLine{190     \{}
+\DoxyCodeLine{191     \textcolor{keyword}{public}:}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193         \textcolor{comment}{//Rendering}}
+\DoxyCodeLine{194         \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}} \mbox{\hyperlink{class_state_render_1_1_battle_aadd46556d4953e044322346d21af0d11}{sceneShader}};}
+\DoxyCodeLine{195         \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender::Camera}} \mbox{\hyperlink{class_state_render_1_1_battle_adc2df19f4492f8cc9e30e2bd72f18025}{camera}};}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197         \textcolor{comment}{//Get renderer}}
+\DoxyCodeLine{198         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a848c6e50fbd53765274e574a4fab3819}{operator[]}}(\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{StateRen}} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}{renderers}}[(int)slot]; \}}
+\DoxyCodeLine{199         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a1ed5db601e6e9785e6b80e6f2260af4b}{at}}(\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{StateRen}} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}{renderers}}[(int)slot]; \}}
+\DoxyCodeLine{200         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a846e24e7860efe8949cbfc1d9521da8e}{operator[]}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}{renderers}}[slot]; \}}
+\DoxyCodeLine{201         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a17440261fd87926b234ecce10372531e}{at}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}{renderers}}[slot]; \}}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203         \textcolor{comment}{//Get texture}}
+\DoxyCodeLine{204         \mbox{\hyperlink{class_texture}{Texture}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a6ed5310085ef181a6578413b634f5484}{texture}}(\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{StateTex}} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}[(int)slot]; \}}
+\DoxyCodeLine{205         \mbox{\hyperlink{class_texture}{Texture}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a6e99b87d471669bf21c219cb17fd53bc}{texture}}(\textcolor{keywordtype}{int} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}[slot]; \}}
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207         \textcolor{comment}{//Get shader}}
+\DoxyCodeLine{208         \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}}\& \mbox{\hyperlink{class_state_render_1_1_battle_a312e25f5b5d90708efa78229b3467d68}{shader}}(\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{StateShader}} slot) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_state_render_1_1_battle_a869ea11dd7ed14691961cdddf3fa4b15}{shaders}}[(int)slot]; \}}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}, (int)\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a4d8684dd6260f8e8324734cf4102b97c}{StateRen::BATTLE\_COUNT}}> \mbox{\hyperlink{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}{renderers}};}
+\DoxyCodeLine{211         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_texture}{Texture}}, (int)\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a4d8684dd6260f8e8324734cf4102b97c}{StateTex::BATTLE\_COUNT}}> \mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}};}
+\DoxyCodeLine{212         \mbox{\hyperlink{class_seg_array}{SegArray}}<\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}}, (int)\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{StateShader::BATTLE\_COUNT}}> \mbox{\hyperlink{class_state_render_1_1_battle_a869ea11dd7ed14691961cdddf3fa4b15}{shaders}};}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_state_render_1_1_battle_a0712fbb282a39d5377ee99f70a130031}{SPRITE\_WIDTH}} = 96;}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216         \textcolor{comment}{//Setup renderer one time}}
+\DoxyCodeLine{217         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a8500336216254219b06fbb6209050fd2}{initialiseRenderer}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} width, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} height);}
+\DoxyCodeLine{218         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a7a84456a561e620851a936855ca5c034}{loadRendererData}}(); \textcolor{comment}{//Load data for renderer}}
+\DoxyCodeLine{219         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a31568d743b5d47950da68870f952e2b6}{purgeData}}();}
+\DoxyCodeLine{220         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a1ded61304a048de6acc405696df128dc}{bufferRenderData}}();}
+\DoxyCodeLine{221         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a210fcac8f049240a9d38c8d5f5b9fce7}{draw}}(); \textcolor{comment}{//Draw scene renderer}}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223         \textcolor{comment}{//Load texture for pokemon}}
+\DoxyCodeLine{224         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a8f77fa48ebd9f6008bbcfb69dae8c625}{loadPokemonTextureA}}(std::string name);}
+\DoxyCodeLine{225         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_state_render_1_1_battle_a57ab66c258adad22773decef417ca4d7}{loadPokemonTextureB}}(std::string name);}
+\DoxyCodeLine{226         \textcolor{keyword}{const} std::string \mbox{\hyperlink{class_state_render_1_1_battle_ae6a13d1f870c184f321433ee9b650696}{FRONT\_TEX\_PATH}} = \textcolor{stringliteral}{"{}res/textures/pokemon/front/"{}};}
+\DoxyCodeLine{227         \textcolor{keyword}{const} std::string \mbox{\hyperlink{class_state_render_1_1_battle_ab91ae49393a7853be95c91d28c733b43}{BACK\_TEX\_PATH}} = \textcolor{stringliteral}{"{}res/textures/pokemon/back/"{}};}
+\DoxyCodeLine{228         \textcolor{keyword}{const} std::string \mbox{\hyperlink{class_state_render_1_1_battle_a6927d88ce047e5fff015a9161b72f405}{PNG\_EXT}} = \textcolor{stringliteral}{"{}.png"{}};}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_state_render_1_1_battle_ade5895902b2e38d96101fdb300e13bdb}{SCREEN\_WIDTH}}; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_state_render_1_1_battle_a8e5efd2eb79fb13196c7f65de2b3047f}{SCREEN\_HEIGHT}};}
+\DoxyCodeLine{231     \};}
+\DoxyCodeLine{232 \}}
+\DoxyCodeLine{233 }
+\DoxyCodeLine{234 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

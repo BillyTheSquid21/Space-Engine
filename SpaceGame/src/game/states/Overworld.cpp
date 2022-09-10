@@ -136,20 +136,22 @@ void Overworld::purgeRequiredData() {
     m_DataLoaded = false;
 }
 
-void Overworld::loadObjectData()
+void Overworld::createGroups()
 {
+    using namespace StateRender; using namespace SGObject;
+
     //Create groups
     //Add component groups
-    std::shared_ptr<RenderComponentGroup<SpriteRender>> spriteGroup(new RenderComponentGroup<SpriteRender>());
-    std::shared_ptr<UpdateComponentGroup<TilePosition>> tileGroup(new UpdateComponentGroup<TilePosition>());
-    std::shared_ptr<UpdateComponentGroup<SpriteMap>> mapGroup(new UpdateComponentGroup<SpriteMap>());
-    std::shared_ptr<UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>> animGroup(new UpdateComponentGroup<SpriteAnim<NormalTextureVertex, Norm_Tex_Quad>>());
-    std::shared_ptr<UpdateComponentGroup<UpdateAnimationRunning>> runGroup(new UpdateComponentGroup<UpdateAnimationRunning>());
-    std::shared_ptr<UpdateComponentGroup<UpdateAnimationFacing>> faceGroup(new UpdateComponentGroup<UpdateAnimationFacing>());
-    std::shared_ptr<UpdateComponentGroup<UpdateAnimationWalking>> walkGroup(new UpdateComponentGroup<UpdateAnimationWalking>());
-    std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> randWGroup(new UpdateComponentGroup<NPC_RandWalk>());
-    std::shared_ptr<UpdateComponentGroup<WarpTileUpdateComponent>> warpGroup(new UpdateComponentGroup<WarpTileUpdateComponent>());
-    std::shared_ptr<RenderComponentGroup<ModelRender>> modRenGroup(new RenderComponentGroup<ModelRender>());
+    std::shared_ptr<UpdateCompGroup<Ov_Sprite::TilePosition>> tileGroup(new UpdateCompGroup<Ov_Sprite::TilePosition>());
+    std::shared_ptr<UpdateCompGroup<Ov_Sprite::SpriteMap>> mapGroup(new UpdateCompGroup<Ov_Sprite::SpriteMap>());
+    std::shared_ptr<UpdateCompGroup<SpriteAnim<SGRender::NTVertex, Norm_Tex_Quad>>> animGroup(new UpdateCompGroup<SpriteAnim<SGRender::NTVertex, Norm_Tex_Quad>>());
+    std::shared_ptr<UpdateCompGroup<Ov_Sprite::UpdateAnimationRunning>> runGroup(new UpdateCompGroup<Ov_Sprite::UpdateAnimationRunning>());
+    std::shared_ptr<UpdateCompGroup<Ov_Sprite::UpdateAnimationFacing>> faceGroup(new UpdateCompGroup<Ov_Sprite::UpdateAnimationFacing>());
+    std::shared_ptr<UpdateCompGroup<Ov_Sprite::UpdateAnimationWalking>> walkGroup(new UpdateCompGroup<Ov_Sprite::UpdateAnimationWalking>());
+    std::shared_ptr<UpdateCompGroup<NPC_RandWalk>> randWGroup(new UpdateCompGroup<NPC_RandWalk>());
+    std::shared_ptr<UpdateCompGroup<WarpTileUpdateComponent>> warpGroup(new UpdateCompGroup<WarpTileUpdateComponent>());
+    std::shared_ptr<RenderCompGroup<ModelRender>> modRenGroup(new RenderCompGroup<ModelRender>());
+    std::shared_ptr<RenderCompGroup<Ov_Sprite::SpriteRender>> spriteGroup(new RenderCompGroup<Ov_Sprite::SpriteRender>());
 
     //Add component groups
     m_ObjManager.pushRenderGroup(spriteGroup, "SpriteRender");
@@ -163,13 +165,33 @@ void Overworld::loadObjectData()
     m_ObjManager.pushUpdateGroup(randWGroup, "RandWalk");
     m_ObjManager.pushUpdateGroup(warpGroup, "WarpTile");
 
+    //Store
+    m_TileGroup = tileGroup.get();
+    m_MapGroup = mapGroup.get();
+    m_AnimGroup = animGroup.get();
+    m_RunGroup = runGroup.get();
+    m_FaceGroup = faceGroup.get();
+    m_WalkGroup = walkGroup.get();
+    m_RandWGroup = randWGroup.get();
+    m_WarpGroup = warpGroup.get();
+    m_ModRenGroup = modRenGroup.get();
+    m_SpriteGroup = spriteGroup.get();
+}
+
+void Overworld::loadObjectData()
+{
+    using namespace StateRender;
+
+    //Create bulk update/render groups
+    createGroups();
+
     //Load level data
     m_Levels.BuildFirstLevel(m_CurrentLevel);
 
     //Add player and link pos to lighting
-    OvSpr_SpriteData dataPlayer = { m_Data->tile,  m_Data->height, m_Data->id, {0, 4} };
-    m_PlayerPtr = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.tilemap(StateTileMap::OVERWORLD_SPRITE), spriteGroup.get(), mapGroup.get(), runGroup.get(), &m_Renderer[StateRen::OVERWORLD_SPRITE]);
-    spriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer[StateRen::OVERWORLD_SPRITE]);
+    Ov_Sprite::SpriteData dataPlayer = { m_Data->tile,  m_Data->height, m_Data->id, {0, 4} };
+    m_PlayerPtr = Ov_ObjCreation::BuildRunningSprite(dataPlayer, m_Renderer.tilemap(StateTileMap::OVERWORLD_SPRITE), m_SpriteGroup, m_MapGroup, m_RunGroup, &m_Renderer[StateRen::OVERWORLD_SPRITE]);
+    m_SpriteGroup->addComponent(&m_PlayerPtr->m_RenderComps, &m_PlayerPtr->m_Sprite, &m_Renderer[StateRen::OVERWORLD_SPRITE]);
     m_PlayerPtr->m_LastPermissionPtr = World::GetTilePermission(m_PlayerPtr->m_CurrentLevel, m_PlayerPtr->m_Tile, m_PlayerPtr->m_WorldLevel);
     m_PlayerPtr->setTag((uint16_t)ObjectType::RunningSprite);
 
@@ -231,6 +253,7 @@ void Overworld::loadObjectData()
 }
 
 void Overworld::update(double deltaTime, double time) {
+    using namespace StateRender;
     if (!m_Sample)
     {
         m_SampleTime += deltaTime;
@@ -291,7 +314,6 @@ void Overworld::update(double deltaTime, double time) {
             this->startBattle();
         }
     }
-    
 
     //End timer
     double timeTaken = EngineTimer::EndTimer(ts) * 1000.0;
@@ -331,8 +353,11 @@ void Overworld::render() {
     GameGUI::EndFrame();
 }
 
-void Overworld::handleInput(int key, int scancode, int action, int mods) {
-     m_Input->handleInput(key, scancode, action, mods);
+void Overworld::handleInput(int key, int scancode, int action, int mods) 
+{
+    using namespace StateRender;
+    
+    m_Input->handleInput(key, scancode, action, mods);
 
     //Debug
     if (key == GLFW_KEY_Y)
@@ -353,7 +378,7 @@ void Overworld::handleInput(int key, int scancode, int action, int mods) {
     {
         if (action == GLFW_PRESS)
         {
-            m_Renderer.lightScene = !m_Renderer.lightScene;
+            m_Renderer.showShadows(!m_Renderer.showingShadows());
         }
     }
     if (key == GLFW_KEY_F3)

@@ -9,7 +9,7 @@
 #include "game/states/Overworld.h"
 #include "core/Game.h"
 
-class MainMenu : public State
+class MainMenu : public SG::State
 {
 public:
 	void init(int width, int height, GLFWwindow* window, std::shared_ptr<Overworld> overworldPtr, FontContainer* fonts);
@@ -19,9 +19,9 @@ public:
 	void purgeRequiredData();
 private:
 	GLFWwindow* m_WindowPointer;
-	Render::Renderer m_Renderer;
-	Shader m_Shader;
-	Camera m_Camera;
+	SGRender::Renderer m_Renderer;
+	SGRender::Shader m_Shader;
+	SGRender::Camera m_Camera;
 	int m_Width; int m_Height;
 
 	FontContainer* m_Fonts;

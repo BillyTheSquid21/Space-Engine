@@ -25,9 +25,19 @@
 #include "mtlib/ThreadPool.h"
 #include "functional"
 
-class Overworld : public State
+class Overworld : public SG::State
 {
 public:
+	/**
+	* Initialise the Overworld state
+	* @param width width of the screen
+	* @param height height of the screen
+	* @param data pointer to the player data
+	* @param levelEntry first level to be loaded
+	* @param fonts pointer to the font container
+	* @param flags pointer to the flag array
+	* @param input pointer to the game input
+	*/
 	void init(
 		int width, 
 		int height, 
@@ -38,6 +48,9 @@ public:
 		GameInput* input
 	);
 
+	/**
+	* Link to the start battle function to be able to switch state
+	*/
 	void setBattleFunction(std::function<void(Party*, Party*)> battle);
 
 	void update(double deltaTime, double time);
@@ -50,19 +63,32 @@ private:
 	int m_Width; int m_Height;
 
 	void loadObjectData();
+	void createGroups();
+
+	//Group ptrs
+	SGObject::UpdateCompGroup<Ov_Sprite::TilePosition>* m_TileGroup;
+	SGObject::UpdateCompGroup<Ov_Sprite::SpriteMap>* m_MapGroup;
+	SGObject::UpdateCompGroup<SpriteAnim<SGRender::NTVertex, Norm_Tex_Quad>>* m_AnimGroup;
+	SGObject::UpdateCompGroup<Ov_Sprite::UpdateAnimationRunning>* m_RunGroup;
+	SGObject::UpdateCompGroup<Ov_Sprite::UpdateAnimationFacing>* m_FaceGroup;
+	SGObject::UpdateCompGroup<Ov_Sprite::UpdateAnimationWalking>* m_WalkGroup;
+	SGObject::UpdateCompGroup<NPC_RandWalk>* m_RandWGroup;
+	SGObject::UpdateCompGroup<WarpTileUpdateComponent>* m_WarpGroup;
+	SGObject::RenderCompGroup<ModelRender>* m_ModRenGroup;
+	SGObject::RenderCompGroup<Ov_Sprite::SpriteRender>* m_SpriteGroup;
 
 	//State renderer
-	OverworldRenderer m_Renderer;
+	StateRender::Overworld m_Renderer;
 
 	//Current level - defualts to the entry level
 	World::LevelID m_CurrentLevel = World::LevelID::LEVEL_ENTRY;
 
 	//Test level
 	World::LevelContainer m_Levels;
-	std::shared_ptr<OvSpr_RunningSprite> m_PlayerPtr;
+	std::shared_ptr<Ov_Sprite::RunSprite> m_PlayerPtr;
 
 	//Test obj mng
-	ObjectManager m_ObjManager;
+	SGObject::ObjectManager m_ObjManager;
 
 	//Test font
 	FontContainer* m_Fonts;

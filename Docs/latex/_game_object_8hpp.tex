@@ -1,0 +1,60 @@
+\hypertarget{_game_object_8hpp}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/\+Game\+Object.hpp File Reference}
+\label{_game_object_8hpp}\index{D:/Repositories/Space Engine/SpaceGame/include/core/GameObject.hpp@{D:/Repositories/Space Engine/SpaceGame/include/core/GameObject.hpp}}
+{\ttfamily \#include \char`\"{}stdint.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}random\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}queue\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}renderer/\+Renderer.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}core/\+Message.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_component}{SGObject\+::\+Component$<$ T $>$}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_render_component}{SGObject\+::\+Render\+Component}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject\+::\+Update\+Component}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_update_group_base}{SGObject\+::\+Update\+Group\+Base}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group$<$ T $>$}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_render_group_base}{SGObject\+::\+Render\+Group\+Base}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group$<$ T $>$}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_g_object}{SGObject\+::\+GObject}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_s_g_object}{SGObject}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_game_object_8hpp_afa48c34c7054dc4f2f179771985c4cf4}{GAME\+\_\+\+OBJECT\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6}{SGObject\+::\+Object\+Error}} \{ \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a9987d7929c5dba3fb098d2d03ed42865}{SGObject\+::\+VOID\+\_\+\+POINTER}}
+, \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6ae57060685adbbbf9ee61867fd34c8244}{SGObject\+::\+INDEX\+\_\+\+RANGE}}
+, \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a4a0e1e867f65ea96881ed8e6a7e83bbf}{SGObject\+::\+UNPAIRED\+\_\+\+COMPONENT}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_s_g_object_ac17c3d94a279e3f5b6b1f2f7e99f0e21}{SGObject\+::\+Iterate\+Render\+Comps}} (std\+::vector$<$ T $>$ \&render\+Comps)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_s_g_object_aecbb693751fb07503a1b2937f26e6393}{SGObject\+::\+Iterate\+Update\+Comps}} (std\+::vector$<$ T $>$ \&update\+Comps, double delta\+Time)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_game_object_8hpp_afa48c34c7054dc4f2f179771985c4cf4}\label{_game_object_8hpp_afa48c34c7054dc4f2f179771985c4cf4}} 
+\index{GameObject.hpp@{GameObject.hpp}!GAME\_OBJECT\_H@{GAME\_OBJECT\_H}}
+\index{GAME\_OBJECT\_H@{GAME\_OBJECT\_H}!GameObject.hpp@{GameObject.hpp}}
+\doxysubsubsection{\texorpdfstring{GAME\_OBJECT\_H}{GAME\_OBJECT\_H}}
+{\footnotesize\ttfamily \#define GAME\+\_\+\+OBJECT\+\_\+H}
+

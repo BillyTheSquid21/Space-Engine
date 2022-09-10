@@ -1,0 +1,30 @@
+\hypertarget{_action_tile_8h_source}{}\doxysection{Action\+Tile.\+h}
+\label{_action_tile_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/ActionTile.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/ActionTile.h}}
+\mbox{\hyperlink{_action_tile_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef ACTION\_TILE\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define ACTION\_TILE\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_game_object_8hpp}{core/GameObject.hpp}}"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_overworld_sprite_8h}{game/objects/OverworldSprite.h}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_world_8h}{game/level/World.h}}"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{comment}{//Base class used to sense if player is within specified tile}}
+\DoxyCodeLine{10 \textcolor{keyword}{class }\mbox{\hyperlink{class_action_tile_component}{ActionTileComponent}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject::UpdateComponent}}}
+\DoxyCodeLine{11 \{}
+\DoxyCodeLine{12 \textcolor{keyword}{public}:}
+\DoxyCodeLine{13     \mbox{\hyperlink{class_action_tile_component_a19b6f8bbbba6740a338ec3b71019874f}{ActionTileComponent}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{14     \mbox{\hyperlink{class_action_tile_component_a112f05b80f992f2e4ef3d95f13660aad}{ActionTileComponent}}(\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* player, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World::WorldHeight}} height, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id}) \{ \mbox{\hyperlink{class_action_tile_component_a45bd8fc0ec39dab65054d10304207c52}{m\_PlayerPointer}} = player; \mbox{\hyperlink{class_action_tile_component_a0e3635b27b2c005c4de2c570ee482b85}{m\_TileLocation}} = loc; \mbox{\hyperlink{class_action_tile_component_abe972989e3fb28c5c3d42c650238bc9d}{m\_CurrentHeight}} = height; \mbox{\hyperlink{class_action_tile_component_a3dd75a10fe76d0298387da6b5425fbc5}{m\_LevelCurrent}} = \mbox{\hyperlink{class_s_g_object_1_1_component_aeee1db5c94bf47960e8757309c15e555}{id}}; \};}
+\DoxyCodeLine{15     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_action_tile_component_a9e047d1bb4a1cb8f285ebe684d57b2ee}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{16 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{17     \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World::WorldHeight}} \mbox{\hyperlink{class_action_tile_component_abe972989e3fb28c5c3d42c650238bc9d}{m\_CurrentHeight}} = \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93faee0c8bd6520d8fb37a28c61189d0e821}{World::WorldHeight::F0}};}
+\DoxyCodeLine{18     \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} \mbox{\hyperlink{class_action_tile_component_a0e3635b27b2c005c4de2c570ee482b85}{m\_TileLocation}} = \{0,0\};}
+\DoxyCodeLine{19     \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \mbox{\hyperlink{class_action_tile_component_a3dd75a10fe76d0298387da6b5425fbc5}{m\_LevelCurrent}} = \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a675badcd96ab9718a444c76bdc330c7c}{World::LevelID::LEVEL\_NULL}};}
+\DoxyCodeLine{20     \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* \mbox{\hyperlink{class_action_tile_component_a45bd8fc0ec39dab65054d10304207c52}{m\_PlayerPointer}} = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{21     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_action_tile_component_ada59e8a2fe5a121b42a1bbe4f7366ad6}{m\_Occupied}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{22 \};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

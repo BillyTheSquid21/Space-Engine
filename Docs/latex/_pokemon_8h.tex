@@ -1,0 +1,419 @@
+\hypertarget{_pokemon_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/pokemon/\+Pokemon.h File Reference}
+\label{_pokemon_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/Pokemon.h@{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/Pokemon.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_pokemon_move}{Pokemon\+Move}}
+\item 
+struct \mbox{\hyperlink{struct_pokemon_stats}{Pokemon\+Stats}}
+\item 
+struct \mbox{\hyperlink{struct_pokemon}{Pokemon}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_pokemon_8h_abd6685d2ef6bf07a839ccc7552e1f1b5}{POKEMON\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::array$<$ \mbox{\hyperlink{struct_pokemon}{Pokemon}}, 6 $>$ \mbox{\hyperlink{_pokemon_8h_addae606221fd6d923aa4e675959f108a}{Party}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00e}{Pokemon\+Type}} \+: uint8\+\_\+t \{ \newline
+\mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea960b44c579bc2f6818d2daaf9e4c16f0}{Normal}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eabd2b7e5f85a6ea65065c4ebc6d7c95bb}{Fire}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea27634ff8002b12e75d98e07ccd005d18}{Water}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaaac9a63596f76a62bb9f61a5dd7c0d25}{Grass}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaa74711a0a27d5306d53f17771c2161cb}{Electric}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea583d6a9fe10d672474e2cdca476113b7}{Ice}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaef492f571a74192b637adada68fdd94a}{Fighting}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea3a9d1818d0d7f5646e63465baf7d366f}{Poison}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea3519d51443d41746a097cd54cd5c11cf}{Ground}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea444733081a578880ba8a563d3c59d22d}{Flying}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea1a0d4dfdb97302cb8ac802fd459ea37a}{Psychic}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eac83640c604dd5e0eacbf3de0a1181101}{Bug}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea4cfbb125e9878528bab91d12421134d8}{Rock}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea401357e57c765967393ba391a338e89b}{Ghost}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaa18366b217ebf811ad1886e4f4f865b2}{Dark}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea583f4be146b6127f9e4f3f036ce7df43}{Dragon}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea4668112d7c5f80a73a826dd8150989df}{Steel}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea436db107774b95e069c62fd0bacab134}{Fairy}}
+, \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea6adf97f83acf6453d4a6a4b1070f3754}{None}}
+ \}
+\item 
+enum class \mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153}{Status\+Condition}} \+: int8\+\_\+t \{ \newline
+\mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a6adf97f83acf6453d4a6a4b1070f3754}{None}}
+, \mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a3a9d1818d0d7f5646e63465baf7d366f}{Poison}}
+, \mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a243924bfd56a682be235638b53961e09}{Sleep}}
+, \mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a8244b6f24fdf45c12569d16abb3ffe48}{Paralysis}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a11635778f116ce6922f6068638a39028}{Burn}}
+, \mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a54894e44b2caf1104cfb21288a0e449e}{Confusion}}
+ \}
+\item 
+enum class \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33ee}{Pokemon\+Nature}} \+: int8\+\_\+t \{ \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea6adf97f83acf6453d4a6a4b1070f3754}{None}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea0f500956f995b17f0e573e313abc6160}{Hardy}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea114c3050111d8b8ddd830b99ccebd246}{Bold}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea11815346a10014705b1eee3a0b6bc614}{Modest}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea75b58bbe3ee47f6de301e7663eb01d23}{Calm}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea389d3b837367423be405240da03486a6}{Timid}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea33883ea5ecd023490d5febb826f2bc8e}{Lonely}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeab073fdbe74bec3c7c29e24d42fb7ef42}{Docile}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead14fbc1cc1bd7028cfbe856e7b15a784}{Mild}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae4396ac193533682ecb8558bde1311c9}{Gentle}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae682d292110937253b308e88c6b5dc43}{Hasty}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead25a9e7dd19453699a7e526247f8fa54}{Adamant}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea9da01d920a73035536318b785e0df7a7}{Impish}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea9426cc8404e31287fa4bc1cd5b6ad8f6}{Bashful}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeac73f9649a6da661b784a86a05ff6cdbb}{Careful}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae6ce508a986e973d021355656d2d09db}{Rash}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead4af7049dff995cbacedcb99f9583ca1}{Jolly}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea13a95ecf006f2b76bf374f37d0ac465f}{Naughty}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea6f0170fbfae85ec13f565665b8d74f3b}{Lax}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea2cf4b25c4b8f049dc985cb8478d437fe}{Quirky}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea512d6102506da4ae0c35312fafcf7376}{Naive}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea8d091597127cc044520e13fae3a3af59}{Brave}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea4160be5df3fc34c3b165f28616f1bd16}{Relaxed}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea098753f8980036f4b936e3d4b6997111}{Quiet}}
+, \newline
+\mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeaefd2fa0589d2c375eefd6af729f46963}{Sassy}}
+, \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea5ac37abb27822d9e97e825d6f026afbf}{Serious}}
+ \}
+\item 
+enum class \mbox{\hyperlink{_pokemon_8h_a5ae1794b67413c5c232b45534cef408c}{Damage\+Type}} \+: int8\+\_\+t \{ \mbox{\hyperlink{_pokemon_8h_a5ae1794b67413c5c232b45534cef408ca6311ae17c1ee52b36e68aaf4ad066387}{Other}} = 1
+, \mbox{\hyperlink{_pokemon_8h_a5ae1794b67413c5c232b45534cef408cace898d62ed9ca7653a01fe0c781e97e9}{Physical}} = 2
+, \mbox{\hyperlink{_pokemon_8h_a5ae1794b67413c5c232b45534cef408cab4c2b550635fe54fd29f2b64dfaca55d}{Special}} = 3
+ \}
+\item 
+enum class \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eb}{Move\+Slot}} \+: int8\+\_\+t \{ \newline
+\mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba90d71ec57b92ac66f93b7b0a658b8606}{SLOT\+\_\+1}} = 0
+, \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba7eccd0b49279bdde76135e56b98f6248}{SLOT\+\_\+2}} = 1
+, \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba6cbcb9543d25d2275c1a9b74375aa33b}{SLOT\+\_\+3}} = 2
+, \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8ebaa304879bcd18542735f49d708413ad57}{SLOT\+\_\+4}} = 3
+, \newline
+\mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba9e30073e8925f05d9854a0b65ba8dc0b}{SLOT\+\_\+\+NULL}} = 4
+, \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba8f14ad54072840223cb27229d732ff26}{SLOT\+\_\+\+ITEM}}
+, \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8ebac986e47c53ed4c81412baa5566034b29}{SLOT\+\_\+\+CHANGE}}
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_pokemon_8h_abd6685d2ef6bf07a839ccc7552e1f1b5}\label{_pokemon_8h_abd6685d2ef6bf07a839ccc7552e1f1b5}} 
+\index{Pokemon.h@{Pokemon.h}!POKEMON\_H@{POKEMON\_H}}
+\index{POKEMON\_H@{POKEMON\_H}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{POKEMON\_H}{POKEMON\_H}}
+{\footnotesize\ttfamily \#define POKEMON\+\_\+H}
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{_pokemon_8h_addae606221fd6d923aa4e675959f108a}\label{_pokemon_8h_addae606221fd6d923aa4e675959f108a}} 
+\index{Pokemon.h@{Pokemon.h}!Party@{Party}}
+\index{Party@{Party}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{Party}{Party}}
+{\footnotesize\ttfamily typedef std\+::array$<$\mbox{\hyperlink{struct_pokemon}{Pokemon}}, 6$>$ \mbox{\hyperlink{_pokemon_8h_addae606221fd6d923aa4e675959f108a}{Party}}}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_pokemon_8h_a5ae1794b67413c5c232b45534cef408c}\label{_pokemon_8h_a5ae1794b67413c5c232b45534cef408c}} 
+\index{Pokemon.h@{Pokemon.h}!DamageType@{DamageType}}
+\index{DamageType@{DamageType}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{DamageType}{DamageType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_pokemon_8h_a5ae1794b67413c5c232b45534cef408c}{Damage\+Type}} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Other@{Other}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Other@{Other}}}\mbox{\Hypertarget{_pokemon_8h_a5ae1794b67413c5c232b45534cef408ca6311ae17c1ee52b36e68aaf4ad066387}\label{_pokemon_8h_a5ae1794b67413c5c232b45534cef408ca6311ae17c1ee52b36e68aaf4ad066387}} 
+Other&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Physical@{Physical}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Physical@{Physical}}}\mbox{\Hypertarget{_pokemon_8h_a5ae1794b67413c5c232b45534cef408cace898d62ed9ca7653a01fe0c781e97e9}\label{_pokemon_8h_a5ae1794b67413c5c232b45534cef408cace898d62ed9ca7653a01fe0c781e97e9}} 
+Physical&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Special@{Special}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Special@{Special}}}\mbox{\Hypertarget{_pokemon_8h_a5ae1794b67413c5c232b45534cef408cab4c2b550635fe54fd29f2b64dfaca55d}\label{_pokemon_8h_a5ae1794b67413c5c232b45534cef408cab4c2b550635fe54fd29f2b64dfaca55d}} 
+Special&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eb}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eb}} 
+\index{Pokemon.h@{Pokemon.h}!MoveSlot@{MoveSlot}}
+\index{MoveSlot@{MoveSlot}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{MoveSlot}{MoveSlot}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eb}{Move\+Slot}} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_1@{SLOT\_1}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_1@{SLOT\_1}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba90d71ec57b92ac66f93b7b0a658b8606}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba90d71ec57b92ac66f93b7b0a658b8606}} 
+SLOT\+\_\+1&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_2@{SLOT\_2}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_2@{SLOT\_2}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba7eccd0b49279bdde76135e56b98f6248}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba7eccd0b49279bdde76135e56b98f6248}} 
+SLOT\+\_\+2&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_3@{SLOT\_3}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_3@{SLOT\_3}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba6cbcb9543d25d2275c1a9b74375aa33b}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba6cbcb9543d25d2275c1a9b74375aa33b}} 
+SLOT\+\_\+3&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_4@{SLOT\_4}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_4@{SLOT\_4}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8ebaa304879bcd18542735f49d708413ad57}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8ebaa304879bcd18542735f49d708413ad57}} 
+SLOT\+\_\+4&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_NULL@{SLOT\_NULL}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_NULL@{SLOT\_NULL}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba9e30073e8925f05d9854a0b65ba8dc0b}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba9e30073e8925f05d9854a0b65ba8dc0b}} 
+SLOT\+\_\+\+NULL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_ITEM@{SLOT\_ITEM}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_ITEM@{SLOT\_ITEM}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba8f14ad54072840223cb27229d732ff26}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8eba8f14ad54072840223cb27229d732ff26}} 
+SLOT\+\_\+\+ITEM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_CHANGE@{SLOT\_CHANGE}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!SLOT\_CHANGE@{SLOT\_CHANGE}}}\mbox{\Hypertarget{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8ebac986e47c53ed4c81412baa5566034b29}\label{_pokemon_8h_ad2356a66d6868851b4e5138fe917e8ebac986e47c53ed4c81412baa5566034b29}} 
+SLOT\+\_\+\+CHANGE&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33ee}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33ee}} 
+\index{Pokemon.h@{Pokemon.h}!PokemonNature@{PokemonNature}}
+\index{PokemonNature@{PokemonNature}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{PokemonNature}{PokemonNature}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_pokemon_8h_a816e92fcbc8af268539b251b042c33ee}{Pokemon\+Nature}} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{None@{None}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!None@{None}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea6adf97f83acf6453d4a6a4b1070f3754}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea6adf97f83acf6453d4a6a4b1070f3754}} 
+None&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Hardy@{Hardy}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Hardy@{Hardy}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea0f500956f995b17f0e573e313abc6160}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea0f500956f995b17f0e573e313abc6160}} 
+Hardy&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Bold@{Bold}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Bold@{Bold}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea114c3050111d8b8ddd830b99ccebd246}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea114c3050111d8b8ddd830b99ccebd246}} 
+Bold&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Modest@{Modest}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Modest@{Modest}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea11815346a10014705b1eee3a0b6bc614}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea11815346a10014705b1eee3a0b6bc614}} 
+Modest&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Calm@{Calm}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Calm@{Calm}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea75b58bbe3ee47f6de301e7663eb01d23}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea75b58bbe3ee47f6de301e7663eb01d23}} 
+Calm&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Timid@{Timid}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Timid@{Timid}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea389d3b837367423be405240da03486a6}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea389d3b837367423be405240da03486a6}} 
+Timid&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Lonely@{Lonely}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Lonely@{Lonely}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea33883ea5ecd023490d5febb826f2bc8e}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea33883ea5ecd023490d5febb826f2bc8e}} 
+Lonely&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Docile@{Docile}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Docile@{Docile}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeab073fdbe74bec3c7c29e24d42fb7ef42}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeab073fdbe74bec3c7c29e24d42fb7ef42}} 
+Docile&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Mild@{Mild}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Mild@{Mild}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead14fbc1cc1bd7028cfbe856e7b15a784}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead14fbc1cc1bd7028cfbe856e7b15a784}} 
+Mild&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Gentle@{Gentle}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Gentle@{Gentle}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae4396ac193533682ecb8558bde1311c9}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae4396ac193533682ecb8558bde1311c9}} 
+Gentle&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Hasty@{Hasty}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Hasty@{Hasty}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae682d292110937253b308e88c6b5dc43}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae682d292110937253b308e88c6b5dc43}} 
+Hasty&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Adamant@{Adamant}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Adamant@{Adamant}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead25a9e7dd19453699a7e526247f8fa54}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead25a9e7dd19453699a7e526247f8fa54}} 
+Adamant&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Impish@{Impish}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Impish@{Impish}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea9da01d920a73035536318b785e0df7a7}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea9da01d920a73035536318b785e0df7a7}} 
+Impish&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Bashful@{Bashful}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Bashful@{Bashful}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea9426cc8404e31287fa4bc1cd5b6ad8f6}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea9426cc8404e31287fa4bc1cd5b6ad8f6}} 
+Bashful&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Careful@{Careful}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Careful@{Careful}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeac73f9649a6da661b784a86a05ff6cdbb}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeac73f9649a6da661b784a86a05ff6cdbb}} 
+Careful&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Rash@{Rash}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Rash@{Rash}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae6ce508a986e973d021355656d2d09db}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeae6ce508a986e973d021355656d2d09db}} 
+Rash&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Jolly@{Jolly}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Jolly@{Jolly}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead4af7049dff995cbacedcb99f9583ca1}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eead4af7049dff995cbacedcb99f9583ca1}} 
+Jolly&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Naughty@{Naughty}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Naughty@{Naughty}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea13a95ecf006f2b76bf374f37d0ac465f}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea13a95ecf006f2b76bf374f37d0ac465f}} 
+Naughty&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Lax@{Lax}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Lax@{Lax}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea6f0170fbfae85ec13f565665b8d74f3b}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea6f0170fbfae85ec13f565665b8d74f3b}} 
+Lax&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Quirky@{Quirky}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Quirky@{Quirky}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea2cf4b25c4b8f049dc985cb8478d437fe}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea2cf4b25c4b8f049dc985cb8478d437fe}} 
+Quirky&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Naive@{Naive}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Naive@{Naive}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea512d6102506da4ae0c35312fafcf7376}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea512d6102506da4ae0c35312fafcf7376}} 
+Naive&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Brave@{Brave}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Brave@{Brave}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea8d091597127cc044520e13fae3a3af59}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea8d091597127cc044520e13fae3a3af59}} 
+Brave&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Relaxed@{Relaxed}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Relaxed@{Relaxed}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea4160be5df3fc34c3b165f28616f1bd16}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea4160be5df3fc34c3b165f28616f1bd16}} 
+Relaxed&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Quiet@{Quiet}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Quiet@{Quiet}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea098753f8980036f4b936e3d4b6997111}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea098753f8980036f4b936e3d4b6997111}} 
+Quiet&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Sassy@{Sassy}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Sassy@{Sassy}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeaefd2fa0589d2c375eefd6af729f46963}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eeaefd2fa0589d2c375eefd6af729f46963}} 
+Sassy&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Serious@{Serious}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Serious@{Serious}}}\mbox{\Hypertarget{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea5ac37abb27822d9e97e825d6f026afbf}\label{_pokemon_8h_a816e92fcbc8af268539b251b042c33eea5ac37abb27822d9e97e825d6f026afbf}} 
+Serious&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00e}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00e}} 
+\index{Pokemon.h@{Pokemon.h}!PokemonType@{PokemonType}}
+\index{PokemonType@{PokemonType}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{PokemonType}{PokemonType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00e}{Pokemon\+Type}} \+: uint8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Normal@{Normal}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Normal@{Normal}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea960b44c579bc2f6818d2daaf9e4c16f0}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea960b44c579bc2f6818d2daaf9e4c16f0}} 
+Normal&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Fire@{Fire}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Fire@{Fire}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eabd2b7e5f85a6ea65065c4ebc6d7c95bb}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eabd2b7e5f85a6ea65065c4ebc6d7c95bb}} 
+Fire&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Water@{Water}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Water@{Water}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea27634ff8002b12e75d98e07ccd005d18}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea27634ff8002b12e75d98e07ccd005d18}} 
+Water&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Grass@{Grass}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Grass@{Grass}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaaac9a63596f76a62bb9f61a5dd7c0d25}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaaac9a63596f76a62bb9f61a5dd7c0d25}} 
+Grass&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Electric@{Electric}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Electric@{Electric}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaa74711a0a27d5306d53f17771c2161cb}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaa74711a0a27d5306d53f17771c2161cb}} 
+Electric&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Ice@{Ice}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Ice@{Ice}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea583d6a9fe10d672474e2cdca476113b7}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea583d6a9fe10d672474e2cdca476113b7}} 
+Ice&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Fighting@{Fighting}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Fighting@{Fighting}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaef492f571a74192b637adada68fdd94a}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaef492f571a74192b637adada68fdd94a}} 
+Fighting&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Poison@{Poison}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Poison@{Poison}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea3a9d1818d0d7f5646e63465baf7d366f}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea3a9d1818d0d7f5646e63465baf7d366f}} 
+Poison&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Ground@{Ground}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Ground@{Ground}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea3519d51443d41746a097cd54cd5c11cf}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea3519d51443d41746a097cd54cd5c11cf}} 
+Ground&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Flying@{Flying}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Flying@{Flying}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea444733081a578880ba8a563d3c59d22d}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea444733081a578880ba8a563d3c59d22d}} 
+Flying&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Psychic@{Psychic}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Psychic@{Psychic}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea1a0d4dfdb97302cb8ac802fd459ea37a}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea1a0d4dfdb97302cb8ac802fd459ea37a}} 
+Psychic&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Bug@{Bug}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Bug@{Bug}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eac83640c604dd5e0eacbf3de0a1181101}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eac83640c604dd5e0eacbf3de0a1181101}} 
+Bug&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Rock@{Rock}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Rock@{Rock}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea4cfbb125e9878528bab91d12421134d8}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea4cfbb125e9878528bab91d12421134d8}} 
+Rock&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Ghost@{Ghost}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Ghost@{Ghost}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea401357e57c765967393ba391a338e89b}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea401357e57c765967393ba391a338e89b}} 
+Ghost&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Dark@{Dark}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Dark@{Dark}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaa18366b217ebf811ad1886e4f4f865b2}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaa18366b217ebf811ad1886e4f4f865b2}} 
+Dark&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Dragon@{Dragon}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Dragon@{Dragon}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea583f4be146b6127f9e4f3f036ce7df43}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea583f4be146b6127f9e4f3f036ce7df43}} 
+Dragon&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Steel@{Steel}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Steel@{Steel}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea4668112d7c5f80a73a826dd8150989df}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea4668112d7c5f80a73a826dd8150989df}} 
+Steel&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Fairy@{Fairy}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Fairy@{Fairy}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea436db107774b95e069c62fd0bacab134}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea436db107774b95e069c62fd0bacab134}} 
+Fairy&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{None@{None}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!None@{None}}}\mbox{\Hypertarget{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea6adf97f83acf6453d4a6a4b1070f3754}\label{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea6adf97f83acf6453d4a6a4b1070f3754}} 
+None&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153}} 
+\index{Pokemon.h@{Pokemon.h}!StatusCondition@{StatusCondition}}
+\index{StatusCondition@{StatusCondition}!Pokemon.h@{Pokemon.h}}
+\doxysubsubsection{\texorpdfstring{StatusCondition}{StatusCondition}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153}{Status\+Condition}} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{None@{None}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!None@{None}}}\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a6adf97f83acf6453d4a6a4b1070f3754}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a6adf97f83acf6453d4a6a4b1070f3754}} 
+None&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Poison@{Poison}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Poison@{Poison}}}\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a3a9d1818d0d7f5646e63465baf7d366f}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a3a9d1818d0d7f5646e63465baf7d366f}} 
+Poison&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Sleep@{Sleep}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Sleep@{Sleep}}}\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a243924bfd56a682be235638b53961e09}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a243924bfd56a682be235638b53961e09}} 
+Sleep&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Paralysis@{Paralysis}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Paralysis@{Paralysis}}}\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a8244b6f24fdf45c12569d16abb3ffe48}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a8244b6f24fdf45c12569d16abb3ffe48}} 
+Paralysis&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Burn@{Burn}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Burn@{Burn}}}\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a11635778f116ce6922f6068638a39028}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a11635778f116ce6922f6068638a39028}} 
+Burn&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Confusion@{Confusion}!Pokemon.h@{Pokemon.h}}\index{Pokemon.h@{Pokemon.h}!Confusion@{Confusion}}}\mbox{\Hypertarget{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a54894e44b2caf1104cfb21288a0e449e}\label{_pokemon_8h_a7a1c1a1d39455ded42b562e4a05fe153a54894e44b2caf1104cfb21288a0e449e}} 
+Confusion&\\
+\hline
+
+\end{DoxyEnumFields}

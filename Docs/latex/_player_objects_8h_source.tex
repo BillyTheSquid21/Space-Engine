@@ -1,58 +1,85 @@
 \hypertarget{_player_objects_8h_source}{}\doxysection{Player\+Objects.\+h}
 \label{_player_objects_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/PlayerObjects.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/PlayerObjects.h}}
-
+\mbox{\hyperlink{_player_objects_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef PLAYER\_OBJECTS\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define PLAYER\_OBJECTS\_H}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}game/objects/OverworldSprite.h"{}}}
-\DoxyCodeLine{6 }
-\DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{comment}{//Player walk uses exact data of TilePosition so inherit for this}}
-\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_player_move}{PlayerMove}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_tile_position}{TilePosition}}}
-\DoxyCodeLine{10 \{}
-\DoxyCodeLine{11 \textcolor{keyword}{public}:}
-\DoxyCodeLine{12     \textcolor{keyword}{using} TilePosition::TilePosition;}
-\DoxyCodeLine{13     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
-\DoxyCodeLine{14     \textcolor{keywordtype}{void} setPersistentInput(\textcolor{keywordtype}{bool}* shift, \textcolor{keywordtype}{bool}* up, \textcolor{keywordtype}{bool}* down, \textcolor{keywordtype}{bool}* left, \textcolor{keywordtype}{bool}* right) \{ m\_Shift = shift; m\_Up = up; m\_Down = down, m\_Left = left, m\_Right = right; \};}
-\DoxyCodeLine{15     \textcolor{keywordtype}{void} setSingleInput(\textcolor{keywordtype}{bool}* up, \textcolor{keywordtype}{bool}* down, \textcolor{keywordtype}{bool}* left, \textcolor{keywordtype}{bool}* right) \{ m\_UpSingle = up; m\_DownSingle = down; m\_LeftSingle = left; m\_RightSingle = right; \};}
-\DoxyCodeLine{16     \textcolor{keywordtype}{void} setSpriteData(\textcolor{keywordtype}{bool}* walking, \textcolor{keywordtype}{bool}* running, World::Direction* direction, TextureQuad* sprite) \{ m\_Walking = walking; m\_Running = running; m\_Direction = direction; m\_Sprite = sprite; \}}
-\DoxyCodeLine{17 \textcolor{keyword}{private}:}
-\DoxyCodeLine{18     \textcolor{keywordtype}{bool} canWalk();}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_overworld_sprite_8h}{game/objects/OverworldSprite.h}}"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_input_8hpp}{game/utility/Input.hpp}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_random_8h}{utility/Random.h}}"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{comment}{//Player walk uses exact data of TilePosition so inherit for this}}
+\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_player_move}{PlayerMove}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_ov___sprite_1_1_tile_position}{Ov\_Sprite::TilePosition}}}
+\DoxyCodeLine{12 \{}
+\DoxyCodeLine{13 \textcolor{keyword}{public}:}
+\DoxyCodeLine{14     \textcolor{keyword}{using }\mbox{\hyperlink{class_ov___sprite_1_1_tile_position_a63d8cf75d274c46e967c2cce2515a833}{Ov\_Sprite::TilePosition::TilePosition}};}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_move_ac85fa00765dfc14b75f85f9964ac4d46}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{16     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_move_a9fc7e3bd4d19e3bece93fc58ad92b341}{linkInput}}(\mbox{\hyperlink{class_game_input}{GameInput}}* input) \{ m\_Input = input; \};}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_move_a3e03e2dc7d7ad34c64586350cbb755c7}{setSpriteData}}(std::shared\_ptr<Ov\_Sprite::RunSprite> player) \{ m\_PlayerData = player; \}}
+\DoxyCodeLine{18 \textcolor{keyword}{private}:}
 \DoxyCodeLine{19     \textcolor{keywordtype}{bool} startWalk();}
 \DoxyCodeLine{20     \textcolor{keywordtype}{bool} startRun();}
 \DoxyCodeLine{21     \textcolor{keywordtype}{bool} checkInputs();}
-\DoxyCodeLine{22     \textcolor{keywordtype}{void} modifyTilePerm();}
-\DoxyCodeLine{23     \textcolor{keywordtype}{bool} walkPermHelper();}
-\DoxyCodeLine{24 }
-\DoxyCodeLine{25     \textcolor{comment}{//Modify}}
-\DoxyCodeLine{26     \textcolor{keywordtype}{void} faceDirection();}
-\DoxyCodeLine{27     \textcolor{keywordtype}{void} cycleEnd(\textcolor{keywordtype}{bool} anyHeld);}
+\DoxyCodeLine{22     \textcolor{keywordtype}{bool} walkPermHelper();}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24     \textcolor{comment}{//Modify}}
+\DoxyCodeLine{25     \textcolor{keywordtype}{void} faceDirection();}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \mbox{\hyperlink{class_game_input}{GameInput}}* m\_Input = \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{28 }
-\DoxyCodeLine{29     \textcolor{keywordtype}{bool}* m\_Up = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{bool}* m\_Down = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{30     \textcolor{keywordtype}{bool}* m\_Left = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{bool}* m\_Right = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{31     \textcolor{keywordtype}{bool}* m\_UpSingle = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{bool}* m\_DownSingle = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{32     \textcolor{keywordtype}{bool}* m\_LeftSingle = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{bool}* m\_RightSingle = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{33     \textcolor{keywordtype}{bool}* m\_Shift = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{34     \textcolor{keywordtype}{double} m\_Timer = 0.0; \textcolor{keywordtype}{bool}* m\_Walking = \textcolor{keyword}{nullptr}; \textcolor{keywordtype}{bool}* m\_Running = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{35     World::Direction* m\_Direction = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{36     TextureQuad* m\_Sprite;}
-\DoxyCodeLine{37 \};}
-\DoxyCodeLine{38 }
-\DoxyCodeLine{39 \textcolor{keyword}{class }\mbox{\hyperlink{class_player_camera_lock}{PlayerCameraLock}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_render_component}{RenderComponent}}}
-\DoxyCodeLine{40 \{}
-\DoxyCodeLine{41 \textcolor{keyword}{public}:}
-\DoxyCodeLine{42     \mbox{\hyperlink{class_player_camera_lock}{PlayerCameraLock}}() = \textcolor{keywordflow}{default};}
-\DoxyCodeLine{43     \mbox{\hyperlink{class_player_camera_lock}{PlayerCameraLock}}(\textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* y, \textcolor{keywordtype}{float}* z, \mbox{\hyperlink{class_camera}{Camera}}* cam) \{ m\_XPos = x; m\_YPos = y; m\_ZPos = z; m\_Camera = cam; \}}
-\DoxyCodeLine{44     \textcolor{keywordtype}{void} render();}
-\DoxyCodeLine{45 \textcolor{keyword}{private}:}
-\DoxyCodeLine{46     \mbox{\hyperlink{class_camera}{Camera}}* m\_Camera = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{47     \textcolor{keywordtype}{float}* m\_XPos = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{48     \textcolor{keywordtype}{float}* m\_YPos = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{49     \textcolor{keywordtype}{float}* m\_ZPos = \textcolor{keyword}{nullptr};}
-\DoxyCodeLine{50 \};}
-\DoxyCodeLine{51 }
-\DoxyCodeLine{52 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{29     std::shared\_ptr<Ov\_Sprite::RunSprite> m\_PlayerData;}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     \textcolor{keywordtype}{double} m\_Timer = 0.0; }
+\DoxyCodeLine{32 \};}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{keyword}{class }\mbox{\hyperlink{class_player_camera_lock}{PlayerCameraLock}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_render_component}{SGObject::RenderComponent}}}
+\DoxyCodeLine{35 \{}
+\DoxyCodeLine{36 \textcolor{keyword}{public}:}
+\DoxyCodeLine{37     \mbox{\hyperlink{class_player_camera_lock_a665d7ae3e814af5f9ca396bc309c4430}{PlayerCameraLock}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{38     \mbox{\hyperlink{class_player_camera_lock_a5ec4c10c7e853ab7145395ec8d02ce5c}{PlayerCameraLock}}(\textcolor{keywordtype}{float}* x, \textcolor{keywordtype}{float}* y, \textcolor{keywordtype}{float}* z, \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender::Camera}}* cam) \{ m\_XPos = x; m\_YPos = y; m\_ZPos = z; m\_Camera = cam; \}}
+\DoxyCodeLine{39     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_camera_lock_a945bd861c48ddd7468e3eac04702e25f}{render}}();}
+\DoxyCodeLine{40 \textcolor{keyword}{private}:}
+\DoxyCodeLine{41     \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender::Camera}}* m\_Camera = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{42     \textcolor{keywordtype}{float}* m\_XPos = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{43     \textcolor{keywordtype}{float}* m\_YPos = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{44     \textcolor{keywordtype}{float}* m\_ZPos = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{45 \};}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47 \textcolor{keyword}{class }\mbox{\hyperlink{class_player_encounter}{PlayerEncounter}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject::UpdateComponent}}}
+\DoxyCodeLine{48 \{}
+\DoxyCodeLine{49 \textcolor{keyword}{public}:}
+\DoxyCodeLine{50     \mbox{\hyperlink{class_player_encounter_a590bc6067e47fc428ecb3c78500774b3}{PlayerEncounter}}(\mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{World::MovementPermissions}}* perm, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}}* tile, \textcolor{keywordtype}{bool}* battle) }
+\DoxyCodeLine{51     \{ }
+\DoxyCodeLine{52         m\_Permission = perm; }
+\DoxyCodeLine{53         m\_Tile = tile;}
+\DoxyCodeLine{54         m\_Random.\mbox{\hyperlink{class_s_g_random_1_1_random_container_a79aa1ed11801db265e25b82961af8688}{seed}}(0.0f, 1000.0f); }
+\DoxyCodeLine{55         m\_StartBattle = battle;}
+\DoxyCodeLine{56     \};}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_encounter_ab9be1ec6d7cb9905930bfd578e24e45d}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{59 \textcolor{keyword}{private}:}
+\DoxyCodeLine{60     \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{World::MovementPermissions}}* m\_Permission = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{61     \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} m\_LastTile = \{ 0, 0 \};}
+\DoxyCodeLine{62     \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}}* m\_Tile = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{63     \textcolor{keywordtype}{bool}* m\_StartBattle = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{64     \mbox{\hyperlink{class_s_g_random_1_1_random_container}{SGRandom::RandomContainer}} m\_Random;}
+\DoxyCodeLine{65 \};}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 \textcolor{comment}{//Updates level in global state (may soon be depreciated by just using sprite data)}}
+\DoxyCodeLine{68 \textcolor{keyword}{class }\mbox{\hyperlink{class_update_global_level}{UpdateGlobalLevel}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject::UpdateComponent}}}
+\DoxyCodeLine{69 \{}
+\DoxyCodeLine{70 \textcolor{keyword}{public}:}
+\DoxyCodeLine{71     \mbox{\hyperlink{class_update_global_level_a9bf8c26f78f99af30e8e36a8d42ea4f9}{UpdateGlobalLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}}* global, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}}* sprite) : m\_GlobalPtr(global), m\_SpritePtr(sprite) \{\}}
+\DoxyCodeLine{72     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_update_global_level_a89e4350686fdec1c6cf239eba2f45f8a}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74 \textcolor{keyword}{private}:}
+\DoxyCodeLine{75     \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}}* m\_GlobalPtr; }
+\DoxyCodeLine{76     \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}}* m\_SpritePtr;}
+\DoxyCodeLine{77 \};}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79 \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

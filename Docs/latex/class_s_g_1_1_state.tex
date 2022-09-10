@@ -1,0 +1,148 @@
+\hypertarget{class_s_g_1_1_state}{}\doxysection{SG\+::State Class Reference}
+\label{class_s_g_1_1_state}\index{SG::State@{SG::State}}
+
+
+{\ttfamily \#include $<$State.\+hpp$>$}
+
+Inheritance diagram for SG\+::State\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_s_g_1_1_state}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_a17957af270e7b8d468f8f3dde766c21c}{update}} (double delta\+Time, double time)
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_a744e9c3980618a91f94bab5d48b0ad5b}{render}} ()
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_a2e679d3519dc4273c2ff189335688e56}{handle\+Input}} (int key, int scancode, int action, int mods)
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_a8438f4c8b22212c8b4543e03fa619129}{handle\+Scrolling}} (double x\+Offset, double y\+Offset)
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_a3fcf4b404a2ed28d316f0b7016e6a176}{handle\+Mouse}} (int button, int action, int mods)
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_acab4370caaa70732bddff4a43e54adcc}{load\+Required\+Data}} ()
+\item 
+virtual void \mbox{\hyperlink{class_s_g_1_1_state_a276022def1b00f5758a33fbdc02b6187}{purge\+Required\+Data}} ()
+\item 
+bool \mbox{\hyperlink{class_s_g_1_1_state_a7c7ee645bc1ba25e5c3f10134e9208c6}{active}} () const
+\item 
+void \mbox{\hyperlink{class_s_g_1_1_state_a1f936547f59900721a791d75b28ad5aa}{set\+Active}} (bool set)
+\item 
+bool \mbox{\hyperlink{class_s_g_1_1_state_a32cacd01eac7a9aa24e076d24d59119b}{has\+Data\+Loaded}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_s_g_1_1_state_ab2b7ea3b660e45341d17751900ffcf53}{m\+\_\+\+Active}} = false
+\item 
+bool \mbox{\hyperlink{class_s_g_1_1_state_a91973d52d93954ffef8b9e1adfe5fd9e}{m\+\_\+\+Data\+Loaded}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains more local, independant logic than the \mbox{\hyperlink{class_game}{Game}} class This is where things such as the game state, menu state etc should be defined 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_g_1_1_state_a7c7ee645bc1ba25e5c3f10134e9208c6}\label{class_s_g_1_1_state_a7c7ee645bc1ba25e5c3f10134e9208c6}} 
+\index{SG::State@{SG::State}!active@{active}}
+\index{active@{active}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{active()}{active()}}
+{\footnotesize\ttfamily bool SG\+::\+State\+::active (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a2e679d3519dc4273c2ff189335688e56}\label{class_s_g_1_1_state_a2e679d3519dc4273c2ff189335688e56}} 
+\index{SG::State@{SG::State}!handleInput@{handleInput}}
+\index{handleInput@{handleInput}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{handleInput()}{handleInput()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::handle\+Input (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{int}]{scancode,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_battle_a71a4cf6aae6122dd214d53875c4749d4}{Battle}}, and \mbox{\hyperlink{class_overworld_a5b91833040a7816b3ac38d19c47459bb}{Overworld}}.
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a3fcf4b404a2ed28d316f0b7016e6a176}\label{class_s_g_1_1_state_a3fcf4b404a2ed28d316f0b7016e6a176}} 
+\index{SG::State@{SG::State}!handleMouse@{handleMouse}}
+\index{handleMouse@{handleMouse}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{handleMouse()}{handleMouse()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::handle\+Mouse (\begin{DoxyParamCaption}\item[{int}]{button,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a8438f4c8b22212c8b4543e03fa619129}\label{class_s_g_1_1_state_a8438f4c8b22212c8b4543e03fa619129}} 
+\index{SG::State@{SG::State}!handleScrolling@{handleScrolling}}
+\index{handleScrolling@{handleScrolling}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{handleScrolling()}{handleScrolling()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::handle\+Scrolling (\begin{DoxyParamCaption}\item[{double}]{x\+Offset,  }\item[{double}]{y\+Offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a32cacd01eac7a9aa24e076d24d59119b}\label{class_s_g_1_1_state_a32cacd01eac7a9aa24e076d24d59119b}} 
+\index{SG::State@{SG::State}!hasDataLoaded@{hasDataLoaded}}
+\index{hasDataLoaded@{hasDataLoaded}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{hasDataLoaded()}{hasDataLoaded()}}
+{\footnotesize\ttfamily bool SG\+::\+State\+::has\+Data\+Loaded (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_1_1_state_acab4370caaa70732bddff4a43e54adcc}\label{class_s_g_1_1_state_acab4370caaa70732bddff4a43e54adcc}} 
+\index{SG::State@{SG::State}!loadRequiredData@{loadRequiredData}}
+\index{loadRequiredData@{loadRequiredData}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{loadRequiredData()}{loadRequiredData()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::load\+Required\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Load data for the state that doesn\textquotesingle{}t persist 
+
+Reimplemented in \mbox{\hyperlink{class_battle_ac82e357437842a45ac1e051a19c31c14}{Battle}}, \mbox{\hyperlink{class_main_menu_a15f3023e1a547b972d8e2b3525368eaf}{Main\+Menu}}, and \mbox{\hyperlink{class_overworld_ae27aac03c07681a79353e4350cdd8b99}{Overworld}}.
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a276022def1b00f5758a33fbdc02b6187}\label{class_s_g_1_1_state_a276022def1b00f5758a33fbdc02b6187}} 
+\index{SG::State@{SG::State}!purgeRequiredData@{purgeRequiredData}}
+\index{purgeRequiredData@{purgeRequiredData}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{purgeRequiredData()}{purgeRequiredData()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::purge\+Required\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Purge data for the state that doesn\textquotesingle{}t persist 
+
+Reimplemented in \mbox{\hyperlink{class_battle_aa02801982a2ae3515a45f4e601acee72}{Battle}}, \mbox{\hyperlink{class_main_menu_a31a0840f34109e8f96bffe4adf2496a6}{Main\+Menu}}, and \mbox{\hyperlink{class_overworld_a7cef44b24d4358619b5320de5ba6df55}{Overworld}}.
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a744e9c3980618a91f94bab5d48b0ad5b}\label{class_s_g_1_1_state_a744e9c3980618a91f94bab5d48b0ad5b}} 
+\index{SG::State@{SG::State}!render@{render}}
+\index{render@{render}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_battle_afabf6721d35b435d7b9751cf76517eb6}{Battle}}, \mbox{\hyperlink{class_main_menu_a5e44c4d074e73289a8f54455ae54418a}{Main\+Menu}}, and \mbox{\hyperlink{class_overworld_a91aafeaf3864e6fc79d4d941efa85f22}{Overworld}}.
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a1f936547f59900721a791d75b28ad5aa}\label{class_s_g_1_1_state_a1f936547f59900721a791d75b28ad5aa}} 
+\index{SG::State@{SG::State}!setActive@{setActive}}
+\index{setActive@{setActive}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{setActive()}{setActive()}}
+{\footnotesize\ttfamily void SG\+::\+State\+::set\+Active (\begin{DoxyParamCaption}\item[{bool}]{set }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a17957af270e7b8d468f8f3dde766c21c}\label{class_s_g_1_1_state_a17957af270e7b8d468f8f3dde766c21c}} 
+\index{SG::State@{SG::State}!update@{update}}
+\index{update@{update}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily virtual void SG\+::\+State\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time,  }\item[{double}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_battle_a07b1a376a38b4ad1fd714831a035ef13}{Battle}}, \mbox{\hyperlink{class_main_menu_abf4681550d4ee347071523207206d50b}{Main\+Menu}}, and \mbox{\hyperlink{class_overworld_a49234087878d47a2e78191b629f4ee8b}{Overworld}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_s_g_1_1_state_ab2b7ea3b660e45341d17751900ffcf53}\label{class_s_g_1_1_state_ab2b7ea3b660e45341d17751900ffcf53}} 
+\index{SG::State@{SG::State}!m\_Active@{m\_Active}}
+\index{m\_Active@{m\_Active}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{m\_Active}{m\_Active}}
+{\footnotesize\ttfamily bool SG\+::\+State\+::m\+\_\+\+Active = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_s_g_1_1_state_a91973d52d93954ffef8b9e1adfe5fd9e}\label{class_s_g_1_1_state_a91973d52d93954ffef8b9e1adfe5fd9e}} 
+\index{SG::State@{SG::State}!m\_DataLoaded@{m\_DataLoaded}}
+\index{m\_DataLoaded@{m\_DataLoaded}!SG::State@{SG::State}}
+\doxysubsubsection{\texorpdfstring{m\_DataLoaded}{m\_DataLoaded}}
+{\footnotesize\ttfamily bool SG\+::\+State\+::m\+\_\+\+Data\+Loaded = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/\mbox{\hyperlink{_state_8hpp}{State.\+hpp}}\end{DoxyCompactItemize}

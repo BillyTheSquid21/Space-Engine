@@ -1,0 +1,40 @@
+\hypertarget{_shadow_map_8h_source}{}\doxysection{Shadow\+Map.\+h}
+\label{_shadow_map_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/ShadowMap.h@{D:/Repositories/Space Engine/SpaceGame/include/renderer/ShadowMap.h}}
+\mbox{\hyperlink{_shadow_map_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SHADOW\_MAP\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define SHADOW\_MAP\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_g_l_classes_8h}{renderer/GLClasses.h}}"{}}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_s_g_render}{SGRender}}}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{9     \textcolor{keyword}{class }\mbox{\hyperlink{class_s_g_render_1_1_shadow_map}{ShadowMap}}}
+\DoxyCodeLine{10     \{}
+\DoxyCodeLine{11     \textcolor{keyword}{public}:}
+\DoxyCodeLine{12         \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a3aac1fea82a62a4cd3e2bbac3748ca50}{ShadowMap}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{13         \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a07da38c97cd8e31b5cb724b78545b8c6}{ShadowMap}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} width, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} height);}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a3d8d79e3b972ff15dc936ea5ecbc344c}{init}}();}
+\DoxyCodeLine{16         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a5567f465daec0a371a09cdcc42d50b26}{setProjection}}(glm::mat4 proj) \{ m\_Proj = proj; \}}
+\DoxyCodeLine{17         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a8c1c38fdbdf337356d61ef6e4d506023}{bindForWriting}}();}
+\DoxyCodeLine{18         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a89f34643c22ae347a688b6d308a31244}{bindForReading}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} slot) \{ m\_FBO.\mbox{\hyperlink{class_s_g_render_1_1_shadow_map_f_b_o_aadc6f6579d738c27d7be7530524c4f4b}{bindForReading}}(slot); \}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20         glm::mat4* \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a83644749af79dfc61dd7389955120beb}{calcMVP}}(glm::mat4 model, glm::mat4 lightView) \{ m\_MVP = m\_Proj * lightView * model; \textcolor{keywordflow}{return} \&m\_MVP; \}}
+\DoxyCodeLine{21         glm::mat4* \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a3020617118d7e2446c756b369f3908d0}{getMVP}}() \{ \textcolor{keywordflow}{return} \&m\_MVP; \}}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a0172a40e606a825958e018f24cb800b3}{startCapture}}()\textcolor{keyword}{ const }\{ glCullFace(GL\_FRONT); \};}
+\DoxyCodeLine{24         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_add7ed8c3afade8002c663d9273a95df1}{endCapture}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} width, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} height)\textcolor{keyword}{ const }\{ glCullFace(GL\_BACK); m\_FBO.\mbox{\hyperlink{class_s_g_render_1_1_shadow_map_f_b_o_a5a281eac5fb8b0352111ac04c9b752c0}{unbind}}(); glViewport(0, 0, width, height); \};}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26     \textcolor{keyword}{private}:}
+\DoxyCodeLine{27         \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_f_b_o}{SGRender::ShadowMapFBO}} m\_FBO;}
+\DoxyCodeLine{28         glm::mat4 m\_Proj;}
+\DoxyCodeLine{29         glm::mat4 m\_MVP;}
+\DoxyCodeLine{30         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} SHADOW\_WIDTH; \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} SHADOW\_HEIGHT;}
+\DoxyCodeLine{31     \};}
+\DoxyCodeLine{32 \}}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -40,11 +40,11 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	battle->setOverworldFunction(activateOverworld); overworld->setBattleFunction(activateBattle);
 
 	//Add states
-	std::shared_ptr<State> stateMainMenuScreen = std::static_pointer_cast<State>(mainMenuScreen);
+	std::shared_ptr<SG::State> stateMainMenuScreen = std::static_pointer_cast<SG::State>(mainMenuScreen);
 	m_States.push_back(stateMainMenuScreen);
-	std::shared_ptr<State> stateOverworld = std::static_pointer_cast<State>(overworld);
+	std::shared_ptr<SG::State> stateOverworld = std::static_pointer_cast<SG::State>(overworld);
 	m_States.push_back(overworld);
-	std::shared_ptr<State> stateBattle = std::static_pointer_cast<State>(battle);
+	std::shared_ptr<SG::State> stateBattle = std::static_pointer_cast<SG::State>(battle);
 	m_States.push_back(battle);
 	
 	return success;
@@ -101,7 +101,7 @@ void DemoGame::update(double deltaTime) {
 
 void DemoGame::render() {
 	//Clear
-	Render::Renderer::clearScreen();
+	SGRender::Renderer::clearScreen();
 
 	for (int i = 0; i < m_States.size(); i++) {
 		if (m_States[i]->active() && m_States[i]->hasDataLoaded()) {

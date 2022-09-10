@@ -1,0 +1,178 @@
+\hypertarget{_model_8hpp_source}{}\doxysection{Model.\+hpp}
+\label{_model_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Model.hpp@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Model.hpp}}
+\mbox{\hyperlink{_model_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SG\_MODEL\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define SG\_MODEL\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <iterator>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <future>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <chrono>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <future>}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_s_g_util_8h}{utility/SGUtil.h}}"{}}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_g_l_classes_8h}{renderer/GLClasses.h}}"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_vertex_8hpp}{renderer/Vertex.hpp}}"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_renderer_8hpp}{renderer/Renderer.hpp}}"{}}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_texture_8h}{renderer/Texture.h}}"{}}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include <assimp/Importer.hpp>}  }
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include <assimp/scene.h>}   }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include <assimp/postprocess.h>} }
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_model}{Model}}}
+\DoxyCodeLine{23 \{}
+\DoxyCodeLine{24     \textcolor{keyword}{template}<\textcolor{keyword}{typename} VertexType>}
+\DoxyCodeLine{25     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_model_a260e7c0c7b9352409b1e5b0ab68f13f7}{LoadTextureVertexOBJ}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path, std::vector<VertexType>\& verts, std::vector<unsigned int>\& inds)}
+\DoxyCodeLine{26     \{}
+\DoxyCodeLine{27         \textcolor{comment}{//Check is a valid vertex}}
+\DoxyCodeLine{28         \textcolor{keyword}{using namespace }\mbox{\hyperlink{namespace_s_g_render}{SGRender}};}
+\DoxyCodeLine{29         \textcolor{keyword}{static\_assert}(std::is\_base\_of<Vertex, VertexType>::value, \textcolor{stringliteral}{"{}Must be a vertex type!"{}});}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31         \textcolor{keyword}{auto} start = \mbox{\hyperlink{class_engine_timer_ae9fb8a5adef47fcca26e2b08d0c586b1}{EngineTimer::StartTimer}}();}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33         Assimp::Importer importer;}
+\DoxyCodeLine{34         \textcolor{keyword}{const} aiScene* scene = importer.ReadFile(path,}
+\DoxyCodeLine{35             aiProcess\_CalcTangentSpace |}
+\DoxyCodeLine{36             aiProcess\_Triangulate |}
+\DoxyCodeLine{37             aiProcess\_JoinIdenticalVertices |}
+\DoxyCodeLine{38             aiProcess\_SortByPType);}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40         \textcolor{keywordflow}{if} (scene == \textcolor{keyword}{nullptr}) \{}
+\DoxyCodeLine{41             \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(importer.GetErrorString());}
+\DoxyCodeLine{42             \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{43         \}}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45         \textcolor{comment}{//Temp data -\/ only written to if attribute exists}}
+\DoxyCodeLine{46         std::vector<glm::vec3> positionDataTemp;}
+\DoxyCodeLine{47         std::vector<glm::vec2> uvDataTemp;}
+\DoxyCodeLine{48         std::vector<glm::vec3> normalDataTemp;}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50         \textcolor{comment}{//Get vertices}}
+\DoxyCodeLine{51         \textcolor{keyword}{auto} mesh = scene-\/>mMeshes[0];}
+\DoxyCodeLine{52         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < mesh-\/>mNumVertices; i++)}
+\DoxyCodeLine{53         \{}
+\DoxyCodeLine{54             glm::vec3 vert;}
+\DoxyCodeLine{55             vert.x = mesh-\/>mVertices[i].x;}
+\DoxyCodeLine{56             vert.y = mesh-\/>mVertices[i].y;}
+\DoxyCodeLine{57             vert.z = mesh-\/>mVertices[i].z;}
+\DoxyCodeLine{58             positionDataTemp.push\_back(vert);}
+\DoxyCodeLine{59         \}}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61         \textcolor{comment}{//Get uvs}}
+\DoxyCodeLine{62         \textcolor{keywordtype}{bool} hasUVS = \textcolor{keyword}{false};}
+\DoxyCodeLine{63         \textcolor{comment}{//Check if both mesh and vertices have UV}}
+\DoxyCodeLine{64         \textcolor{keywordflow}{if} (\&mesh-\/>mTextureCoords[0][0] != NULL \&\& std::is\_base\_of<TVertex, VertexType>::value)}
+\DoxyCodeLine{65         \{}
+\DoxyCodeLine{66             hasUVS = \textcolor{keyword}{true};}
+\DoxyCodeLine{67         \}}
+\DoxyCodeLine{68         \textcolor{keywordflow}{if} (hasUVS)}
+\DoxyCodeLine{69         \{}
+\DoxyCodeLine{70             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < mesh-\/>mNumVertices; i++)}
+\DoxyCodeLine{71             \{}
+\DoxyCodeLine{72                 glm::vec2 uv;}
+\DoxyCodeLine{73                 uv.x = mesh-\/>mTextureCoords[0][i].x;}
+\DoxyCodeLine{74                 uv.y = mesh-\/>mTextureCoords[0][i].y;}
+\DoxyCodeLine{75                 uvDataTemp.push\_back(uv);}
+\DoxyCodeLine{76             \}}
+\DoxyCodeLine{77         \}}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79         \textcolor{comment}{//Get normals}}
+\DoxyCodeLine{80         \textcolor{keywordtype}{bool} hasNormals = \textcolor{keyword}{false};}
+\DoxyCodeLine{81         \textcolor{comment}{//Check if both mesh and vertex type have normals}}
+\DoxyCodeLine{82         \textcolor{keywordflow}{if} (\&mesh-\/>mNormals[0][0] != NULL \&\& std::is\_base\_of<NTVertex, VertexType>::value)}
+\DoxyCodeLine{83         \{}
+\DoxyCodeLine{84             hasNormals = \textcolor{keyword}{true};}
+\DoxyCodeLine{85         \}}
+\DoxyCodeLine{86         \textcolor{keywordflow}{if} (hasNormals)}
+\DoxyCodeLine{87         \{}
+\DoxyCodeLine{88             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < mesh-\/>mNumVertices; i++)}
+\DoxyCodeLine{89             \{}
+\DoxyCodeLine{90                 glm::vec3 normal;}
+\DoxyCodeLine{91                 normal.x = mesh-\/>mNormals[i].x;}
+\DoxyCodeLine{92                 normal.y = mesh-\/>mNormals[i].y;}
+\DoxyCodeLine{93                 normal.z = mesh-\/>mNormals[i].z;}
+\DoxyCodeLine{94                 normalDataTemp.push\_back(normal);}
+\DoxyCodeLine{95             \}}
+\DoxyCodeLine{96         \}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98         \textcolor{comment}{//Indices}}
+\DoxyCodeLine{99         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < mesh-\/>mNumFaces; i++)}
+\DoxyCodeLine{100         \{}
+\DoxyCodeLine{101             inds.push\_back(mesh-\/>mFaces[i].mIndices[0]);}
+\DoxyCodeLine{102             inds.push\_back(mesh-\/>mFaces[i].mIndices[1]);}
+\DoxyCodeLine{103             inds.push\_back(mesh-\/>mFaces[i].mIndices[2]);}
+\DoxyCodeLine{104         \}}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106         \textcolor{comment}{//Write to vertex}}
+\DoxyCodeLine{107         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < mesh-\/>mNumVertices; i++)}
+\DoxyCodeLine{108         \{}
+\DoxyCodeLine{109             VertexType vert;}
+\DoxyCodeLine{110             vert.position = positionDataTemp[i];}
+\DoxyCodeLine{111             \textcolor{keywordflow}{if} (hasUVS)}
+\DoxyCodeLine{112             \{}
+\DoxyCodeLine{113                 vert.uvCoords = uvDataTemp[i];}
+\DoxyCodeLine{114             \}}
+\DoxyCodeLine{115             \textcolor{keywordflow}{if} (hasNormals)}
+\DoxyCodeLine{116             \{}
+\DoxyCodeLine{117                 vert.normals = normalDataTemp[i];}
+\DoxyCodeLine{118                 vert.normals = glm::normalize(vert.normals);}
+\DoxyCodeLine{119             \}}
+\DoxyCodeLine{120             verts.push\_back(vert);}
+\DoxyCodeLine{121         \}}
+\DoxyCodeLine{122         \textcolor{keyword}{auto} time = \mbox{\hyperlink{class_engine_timer_a30f5e907782218dadd09d94d21d2925b}{EngineTimer::EndTimer}}(start);}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124         \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(\textcolor{stringliteral}{"{}Model loaded: "{}}, path);}
+\DoxyCodeLine{125         \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(\textcolor{stringliteral}{"{}Time elapsed: "{}}, time);}
+\DoxyCodeLine{126         \textcolor{keywordflow}{if} (time > 4)}
+\DoxyCodeLine{127         \{}
+\DoxyCodeLine{128             \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(\textcolor{stringliteral}{"{}Model took a LONG time to load"{}});}
+\DoxyCodeLine{129         \}}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{131         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{132     \}}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134     \textcolor{comment}{//Only supports one material -\/ cannot split between materials}}
+\DoxyCodeLine{135     \textcolor{keyword}{template} <\textcolor{keyword}{typename} VertexType>}
+\DoxyCodeLine{136     \textcolor{keyword}{class }\mbox{\hyperlink{namespace_model}{Model}}}
+\DoxyCodeLine{137     \{}
+\DoxyCodeLine{138     \textcolor{keyword}{public}:}
+\DoxyCodeLine{139         \mbox{\hyperlink{class_model_1_1_model_af036f55a07111f5f1668c25452ca8974}{Model}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_model_1_1_model_ab5d61b9b023762f496538c8656231688}{load}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path) \{ LoadTextureVertexOBJ<SGRender::NTVertex>(path, m\_Vertices, m\_Indices); m\_DataLoaded = \textcolor{keyword}{true}; \}}
+\DoxyCodeLine{142         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_model_1_1_model_a377c1f9ff90b9b499359bfe35039f969}{setRen}}(\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}* ren) \{ m\_Ren = ren; \}}
+\DoxyCodeLine{143         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_model_1_1_model_a12769bcc6aa5494cf81695416e055242}{render}}()}
+\DoxyCodeLine{144         \{}
+\DoxyCodeLine{145             \textcolor{keywordflow}{if} (!m\_DataLoaded)}
+\DoxyCodeLine{146             \{}
+\DoxyCodeLine{147                 \textcolor{keywordflow}{return};}
+\DoxyCodeLine{148             \}}
+\DoxyCodeLine{149             m\_Ren-\/>commit(\&m\_Vertices[0], m\_Vertices.size() * (\textcolor{keyword}{sizeof}(VertexType) / \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{float})), \&m\_Indices[0], m\_Indices.size());}
+\DoxyCodeLine{150         \}}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152         VertexType* \mbox{\hyperlink{class_model_1_1_model_af7ca6acdd97d9a4df1615465209fda22}{getVertices}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} (VertexType*)\&m\_Vertices[0]; \}}
+\DoxyCodeLine{153         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_model_1_1_model_aff0b809b69a03acdb54f22aba8c4b45d}{getVertCount}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Vertices.size(); \}}
+\DoxyCodeLine{154         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_model_1_1_model_a1552ebf7a825891fc8b344bd8c5d877c}{isLoaded}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_DataLoaded; \}}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156     \textcolor{keyword}{private}:}
+\DoxyCodeLine{157         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}* m\_Ren = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{158         \textcolor{keywordtype}{bool} m\_DataLoaded;}
+\DoxyCodeLine{159 }
+\DoxyCodeLine{160         \textcolor{comment}{//Data}}
+\DoxyCodeLine{161         std::vector<VertexType> m\_Vertices;}
+\DoxyCodeLine{162         std::vector<unsigned int> m\_Indices;}
+\DoxyCodeLine{163     \};}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165     \textcolor{keyword}{template}<\textcolor{keyword}{typename} VertexType>}
+\DoxyCodeLine{166     \textcolor{keyword}{class }\mbox{\hyperlink{class_model_1_1_morph_model}{MorphModel}} : \textcolor{keyword}{public} \mbox{\hyperlink{namespace_model}{Model}}<VertexType>}
+\DoxyCodeLine{167     \{}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169     \};}
+\DoxyCodeLine{170 \}}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

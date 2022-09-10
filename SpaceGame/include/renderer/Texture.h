@@ -17,6 +17,7 @@ public:
     //Generate texture into slot
     void generateTexture(unsigned int slot);
     void generateTexture(unsigned int slot, void* buffer);
+    void generateTextureWrap(unsigned int slot, void* buffer); //TODO have 1 func
     //Bind and Unbind texture
     void bind() const;
     void unbind() const;
@@ -95,7 +96,7 @@ namespace Tex
         template<typename T>
         UVTransform mapModelVerts(T* vertices, unsigned int vertCount, std::string texName)
         {
-            static_assert(std::is_base_of<TextureVertex, T>::value, "Must be a texture vertex!");
+            static_assert(std::is_base_of<SGRender::TVertex, T>::value, "Must be a texture vertex!");
             
             if (m_AtlasRequest.find(texName) == m_AtlasRequest.end())
             {
@@ -115,7 +116,7 @@ namespace Tex
         template<typename T>
         static void unmapModelVerts(T* vertices, unsigned int vertCount, std::string texName, UVTransform trans)
         {
-            static_assert(std::is_base_of<TextureVertex, T>::value, "Must be a texture vertex!");
+            static_assert(std::is_base_of<SGRender::TVertex, T>::value, "Must be a texture vertex!");
             for (int i = 0; i < vertCount; i++)
             {
                 vertices[i].uvCoords.y -= trans.deltaV;

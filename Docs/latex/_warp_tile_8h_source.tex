@@ -1,0 +1,62 @@
+\hypertarget{_warp_tile_8h_source}{}\doxysection{Warp\+Tile.\+h}
+\label{_warp_tile_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/WarpTile.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/WarpTile.h}}
+\mbox{\hyperlink{_warp_tile_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef WARP\_TILE\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define WARP\_TILE\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}functional"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_transition_8hpp}{renderer/Transition.hpp}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_action_tile_8h}{game/objects/ActionTile.h}}"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{class }\mbox{\hyperlink{class_warp_tile}{WarpTile}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_g_object}{SGObject::GObject}} \{\};}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_warp_tile_update_component}{WarpTileUpdateComponent}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_action_tile_component}{ActionTileComponent}}}
+\DoxyCodeLine{12 \{}
+\DoxyCodeLine{13 \textcolor{keyword}{public}:}
+\DoxyCodeLine{14     \mbox{\hyperlink{class_warp_tile_update_component_af932bdd1c2411f4dadaf9afdf190ab1e}{WarpTileUpdateComponent}}(\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* player, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World::WorldHeight}} height, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} currentLevel, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} dest, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World::WorldHeight}} destHeight, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelDest);}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_warp_tile_update_component_aef870775046e1f6fe880547aa7d92d9e}{setLoadingFuncs}}(std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> ld, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> uld) \{ m\_LoadLv = ld; m\_UnloadLv = uld; \};}
+\DoxyCodeLine{16     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_warp_tile_update_component_a86f432cb352e5b34a846077c9cd65dff}{linkFadeTransition}}(\mbox{\hyperlink{class_transition}{Transition}}* trans) \{ m\_Fade = trans; \}}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_warp_tile_update_component_a9dfd5569f0b271a2809987119066e57b}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19     \textcolor{comment}{//Overwrite message process so will only change level when being unloaded}}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_warp_tile_update_component_a5950d1389337d48d26851d6133f29b8c}{processMessages}}() \{}
+\DoxyCodeLine{21         \textcolor{keywordflow}{while} (\mbox{\hyperlink{class_s_g_object_1_1_component_af5bdcdde443e2440483f53f0f34cbc39}{m\_MessageQueue}}.size() > 0) \{}
+\DoxyCodeLine{22             uint32\_t message = \mbox{\hyperlink{class_s_g_object_1_1_component_af5bdcdde443e2440483f53f0f34cbc39}{m\_MessageQueue}}.front();}
+\DoxyCodeLine{23             \textcolor{keywordflow}{if} (message == (uint32\_t)\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92aa9409daa2beb494ef861efb51d5cd6bb}{SGObject::Message::ACTIVATE}}) \{ \mbox{\hyperlink{class_s_g_object_1_1_component_a7c888c8c94651f0772ca3c1fd4e30bd2}{setActive}}(\textcolor{keyword}{true}); \}}
+\DoxyCodeLine{24             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (message == (uint32\_t)\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a5810e63771fb03117a3e2bcf98d5b9f0}{SGObject::Message::DEACTIVATE}}) \{ \mbox{\hyperlink{class_s_g_object_1_1_component_a7c888c8c94651f0772ca3c1fd4e30bd2}{setActive}}(\textcolor{keyword}{false}); \}}
+\DoxyCodeLine{25             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (message == (uint32\_t)\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}{SGObject::Message::KILL}})}
+\DoxyCodeLine{26             \{}
+\DoxyCodeLine{27                 \textcolor{comment}{//Modify processing so once level is loaded then teleports}}
+\DoxyCodeLine{28                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_action_tile_component_ada59e8a2fe5a121b42a1bbe4f7366ad6}{m\_Occupied}})}
+\DoxyCodeLine{29                 \{}
+\DoxyCodeLine{30                     changeLevel();}
+\DoxyCodeLine{31                 \}}
+\DoxyCodeLine{32                 \mbox{\hyperlink{class_s_g_object_1_1_component_a7c888c8c94651f0772ca3c1fd4e30bd2}{setActive}}(\textcolor{keyword}{false});}
+\DoxyCodeLine{33             \}}
+\DoxyCodeLine{34             \mbox{\hyperlink{class_s_g_object_1_1_component_af5bdcdde443e2440483f53f0f34cbc39}{m\_MessageQueue}}.pop();}
+\DoxyCodeLine{35         \};}
+\DoxyCodeLine{36     \}}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 \textcolor{keyword}{private}:}
+\DoxyCodeLine{39     \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World::WorldHeight}} m\_DestHeight;}
+\DoxyCodeLine{40     \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} m\_TileDestination;}
+\DoxyCodeLine{41     \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} m\_LevelDestination;}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43     \textcolor{keywordtype}{void} changeLevel();}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45     \textcolor{comment}{//Only run once}}
+\DoxyCodeLine{46     \textcolor{keywordtype}{bool} m\_Triggered = \textcolor{keyword}{false};}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48     \textcolor{comment}{//Fade out render}}
+\DoxyCodeLine{49     \mbox{\hyperlink{class_transition}{Transition}}* m\_Fade = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51     \textcolor{comment}{//Loading funcs}}
+\DoxyCodeLine{52     std::function<void(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> m\_LoadLv;}
+\DoxyCodeLine{53     std::function<void(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> m\_UnloadLv;}
+\DoxyCodeLine{54 \};}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

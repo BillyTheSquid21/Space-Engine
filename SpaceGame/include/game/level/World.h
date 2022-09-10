@@ -142,7 +142,7 @@ namespace World
 	{
 	public:
 		//Load level data
-		bool buildLevel(Render::Renderer* planeRenderer, TileMap* tileMap, Texture* tileset, glm::vec3& lColor, glm::vec3& lDir);
+		bool buildLevel(SGRender::Renderer* planeRenderer, TileMap* tileMap, Texture* tileset, glm::vec3& lColor, glm::vec3& lDir);
 		void setID(World::LevelID id) { m_ID = id; }
 		void purgeLevel(); //Clears heap data
 		void render();
@@ -182,7 +182,7 @@ namespace World
 		LevelID m_ID = World::LevelID::LEVEL_NULL;
 
 		//All levels have a rendered plane and a grid of tiles
-		Plane m_Plane;
+		Geometry::Plane m_Plane;
 		std::vector<WorldHeight> m_AvailibleLevels;
 		std::vector<MovementPermissions> m_Permissions;
 		std::vector<WorldHeight> m_Heights;

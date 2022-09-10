@@ -1,101 +1,152 @@
 \hypertarget{_obj_management_8h_source}{}\doxysection{Obj\+Management.\+h}
 \label{_obj_management_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/ObjManagement.h@{D:/Repositories/Space Engine/SpaceGame/include/core/ObjManagement.h}}
-
+\mbox{\hyperlink{_obj_management_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef OBJ\_MANAGEMENT\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define OBJ\_MANAGEMENT\_H}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}core/GameObject.hpp"{}}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <algorithm>}}
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <unordered\_map>}}
-\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <future>}}
-\DoxyCodeLine{10 }
-\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_object_manager}{ObjectManager}}}
-\DoxyCodeLine{12 \{}
-\DoxyCodeLine{13 \textcolor{keyword}{public}:}
-\DoxyCodeLine{14     \textcolor{comment}{//Push -\/ returns where the group is, to be able to add components at runtime}}
-\DoxyCodeLine{15     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{16     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushUpdateGroup(T ptr) \{ ptr-\/>setID(m\_UpdateGroup.size()); m\_UpdateGroup.push\_back(std::static\_pointer\_cast<UpdateGroupBase>(ptr)); \textcolor{keywordflow}{return} m\_UpdateGroup.size() -\/ 1; \};}
-\DoxyCodeLine{17     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{18     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushRenderGroup(T ptr) \{ ptr-\/>setID(m\_RenderGroup.size()); m\_RenderGroup.push\_back(std::static\_pointer\_cast<RenderGroupBase>(ptr)); \textcolor{keywordflow}{return} m\_RenderGroup.size() -\/ 1; \};}
-\DoxyCodeLine{19     \textcolor{comment}{//Overload to allow querying id from given name}}
-\DoxyCodeLine{20     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{21     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushUpdateGroup(T ptr, std::string groupName) \{ m\_GroupIDMap[groupName] = m\_UpdateGroup.size(); \textcolor{keywordflow}{return} pushUpdateGroup(std::static\_pointer\_cast<UpdateGroupBase>(ptr)); \};}
-\DoxyCodeLine{22     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{23     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushRenderGroup(T ptr, std::string groupName) \{ m\_GroupIDMap[groupName] = m\_RenderGroup.size(); \textcolor{keywordflow}{return} pushRenderGroup(std::static\_pointer\_cast<RenderGroupBase>(ptr)); \};}
-\DoxyCodeLine{24     }
-\DoxyCodeLine{25     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{26     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushUpdateHeap(T ptr, std::vector<UpdateComponent*>* compPointers)}
-\DoxyCodeLine{27     \{}
-\DoxyCodeLine{28         ptr-\/>attachToObject(compPointers);}
-\DoxyCodeLine{29         std::static\_pointer\_cast<UpdateComponent>(ptr);}
-\DoxyCodeLine{30 }
-\DoxyCodeLine{31         \textcolor{comment}{//Check if any dead components to replace}}
-\DoxyCodeLine{32         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < m\_UpdateHeap.size(); i++)}
-\DoxyCodeLine{33         \{}
-\DoxyCodeLine{34             \textcolor{keywordflow}{if} (m\_UpdateHeap[i]-\/>isDead())}
-\DoxyCodeLine{35             \{}
-\DoxyCodeLine{36                 m\_UpdateHeap[i] = ptr;}
-\DoxyCodeLine{37                 \textcolor{keywordflow}{return} i;}
-\DoxyCodeLine{38             \}}
-\DoxyCodeLine{39         \}}
-\DoxyCodeLine{40 }
-\DoxyCodeLine{41         m\_UpdateHeap.push\_back(ptr);}
-\DoxyCodeLine{42         \textcolor{keywordflow}{return} m\_UpdateHeap.size() -\/ 1;}
-\DoxyCodeLine{43     \}}
-\DoxyCodeLine{44     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{45     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushRenderHeap(T ptr, std::vector<RenderComponent*>* compPointers)}
-\DoxyCodeLine{46     \{}
-\DoxyCodeLine{47         ptr-\/>attachToObject(compPointers);}
-\DoxyCodeLine{48         std::static\_pointer\_cast<RenderComponent>(ptr);}
-\DoxyCodeLine{49 }
-\DoxyCodeLine{50         \textcolor{comment}{//Check if any dead components to replace}}
-\DoxyCodeLine{51         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < m\_RenderHeap.size(); i++)}
-\DoxyCodeLine{52         \{}
-\DoxyCodeLine{53             \textcolor{keywordflow}{if} (m\_RenderHeap[i]-\/>isDead())}
-\DoxyCodeLine{54             \{}
-\DoxyCodeLine{55                 m\_RenderHeap[i] = ptr;}
-\DoxyCodeLine{56                 \textcolor{keywordflow}{return} i;}
-\DoxyCodeLine{57             \}}
-\DoxyCodeLine{58         \}}
-\DoxyCodeLine{59 }
-\DoxyCodeLine{60         m\_RenderHeap.push\_back(ptr);}
-\DoxyCodeLine{61         \textcolor{keywordflow}{return} m\_RenderHeap.size() -\/ 1;}
-\DoxyCodeLine{62     \}}
-\DoxyCodeLine{63     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{64     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pushGameObject(T ptr) \{ m\_Objects.push\_back(std::static\_pointer\_cast<GameObject>(ptr)); \textcolor{keywordflow}{return} m\_Objects.size() -\/ 1; \}}
-\DoxyCodeLine{65 }
-\DoxyCodeLine{66     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
-\DoxyCodeLine{67     \textcolor{keywordtype}{void} render();}
-\DoxyCodeLine{68     }
-\DoxyCodeLine{69     \textcolor{keyword}{template} <\textcolor{keyword}{typename} ExpectedT>}
-\DoxyCodeLine{70     std::shared\_ptr<UpdateComponentGroup<ExpectedT>> updateGroup(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id})\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_UpdateGroup[id]; \};}
-\DoxyCodeLine{71     std::shared\_ptr<RenderGroupBase> renderGroup(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id})\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_RenderGroup[id]; \};}
-\DoxyCodeLine{72 }
-\DoxyCodeLine{73     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} queryGroupID(std::string name) \{ \textcolor{keywordflow}{if} (m\_GroupIDMap.find(name) == m\_GroupIDMap.end()) \{ \textcolor{keywordflow}{return} m\_GroupIDMap.begin()-\/>second; \} \textcolor{keywordflow}{return} m\_GroupIDMap[name]; \}}
-\DoxyCodeLine{74 }
-\DoxyCodeLine{75 \textcolor{keyword}{private}:}
-\DoxyCodeLine{76     \textcolor{comment}{//Keep separate to allow to be called at different times}}
-\DoxyCodeLine{77     std::vector<std::shared\_ptr<UpdateGroupBase>> m\_UpdateGroup;}
-\DoxyCodeLine{78     std::vector<std::shared\_ptr<RenderGroupBase>> m\_RenderGroup;}
-\DoxyCodeLine{79 }
-\DoxyCodeLine{80     \textcolor{comment}{//Heap for when you don't need to warrant grouping -\/ simpler but results in unordered behavour}}
-\DoxyCodeLine{81     std::vector<std::shared\_ptr<UpdateComponent>> m\_UpdateHeap;}
-\DoxyCodeLine{82     std::vector<std::shared\_ptr<RenderComponent>> m\_RenderHeap;}
-\DoxyCodeLine{83 }
-\DoxyCodeLine{84     \textcolor{comment}{//Storage for Game objects -\/ object only removed after components deleted}}
-\DoxyCodeLine{85     \textcolor{comment}{//TODO -\/ make game objects check if all components are null in other thread}}
-\DoxyCodeLine{86     \textcolor{comment}{//Then lock vector and remove}}
-\DoxyCodeLine{87     std::vector<std::shared\_ptr<GameObject>> m\_Objects;}
-\DoxyCodeLine{88     std::unordered\_map<std::string, unsigned int> m\_GroupIDMap;}
-\DoxyCodeLine{89 }
-\DoxyCodeLine{90     \textcolor{comment}{//Check if objects can be removed -\/ carried out async}}
-\DoxyCodeLine{91     \textcolor{keywordtype}{void} cleanObjects();}
-\DoxyCodeLine{92     \textcolor{keywordtype}{double} m\_CheckCleanupTimer = 0.0;}
-\DoxyCodeLine{93 \};}
-\DoxyCodeLine{94 }
-\DoxyCodeLine{95 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_game_object_8hpp}{core/GameObject.hpp}}"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}vector"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}algorithm"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}unordered\_map"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}map"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}future"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}shared\_mutex"{}}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_s_g_object}{SGObject}}}
+\DoxyCodeLine{14 \{}
+\DoxyCodeLine{21     \textcolor{keyword}{class }\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{ObjectManager}}}
+\DoxyCodeLine{22     \{}
+\DoxyCodeLine{23     \textcolor{keyword}{public}:}
+\DoxyCodeLine{27         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{28         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a242c4076efcd2d0b3d17ff7a77fdea23}{pushUpdateGroup}}(T ptr) \{ ptr-\/>setID(m\_UpdateGroup.size()); m\_UpdateGroup.push\_back(std::static\_pointer\_cast<SGObject::UpdateGroupBase>(ptr)); \textcolor{keywordflow}{return} m\_UpdateGroup.size() -\/ 1; \};}
+\DoxyCodeLine{32         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{33         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a01a3147878e60cd669279c06c212c864}{pushRenderGroup}}(T ptr) \{ ptr-\/>setID(m\_RenderGroup.size()); m\_RenderGroup.push\_back(std::static\_pointer\_cast<SGObject::RenderGroupBase>(ptr)); \textcolor{keywordflow}{return} m\_RenderGroup.size() -\/ 1; \};}
+\DoxyCodeLine{37         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{38         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a486a845deddeafcebdbfab4819e9a11c}{pushUpdateGroup}}(T ptr, std::string groupName) \{ m\_GroupIDMap[groupName] = m\_UpdateGroup.size(); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a486a845deddeafcebdbfab4819e9a11c}{pushUpdateGroup}}(std::static\_pointer\_cast<SGObject::UpdateGroupBase>(ptr)); \};}
+\DoxyCodeLine{42         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{43         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a227e31c6445b9a902213f09dbc2c0e0c}{pushRenderGroup}}(T ptr, std::string groupName) \{ m\_GroupIDMap[groupName] = m\_RenderGroup.size(); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a227e31c6445b9a902213f09dbc2c0e0c}{pushRenderGroup}}(std::static\_pointer\_cast<SGObject::RenderGroupBase>(ptr)); \};}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{48         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{49         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a764291c03ad3187b6870c524bafdd19b}{pushUpdateHeap}}(T ptr, std::vector<SGObject::UpdateComponent*>* compPointers)}
+\DoxyCodeLine{50         \{}
+\DoxyCodeLine{51             std::static\_pointer\_cast<SGObject::UpdateComponent>(ptr);}
+\DoxyCodeLine{52             ptr-\/>attachToObject(compPointers);}
+\DoxyCodeLine{53             ptr-\/>updatePointer();}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55             \textcolor{comment}{//Check if any dead components to replace -\/ TODO make work proprly}}
+\DoxyCodeLine{56             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < m\_UpdateHeap.size(); i++)}
+\DoxyCodeLine{57             \{}
+\DoxyCodeLine{58                 \textcolor{keywordflow}{if} (m\_UpdateHeap[i]-\/>isDead())}
+\DoxyCodeLine{59                 \{}
+\DoxyCodeLine{60                     m\_UpdateHeap[i] = ptr;}
+\DoxyCodeLine{61                     \textcolor{keywordflow}{return} i;}
+\DoxyCodeLine{62                 \}}
+\DoxyCodeLine{63             \}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65             m\_UpdateHeap.push\_back(ptr);}
+\DoxyCodeLine{66             \textcolor{keywordflow}{return} m\_UpdateHeap.size() -\/ 1;}
+\DoxyCodeLine{67         \}}
+\DoxyCodeLine{68 }
+\DoxyCodeLine{72         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{73         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ad38618221e96cac39abe8d74dce11a3e}{pushRenderHeap}}(T ptr, std::vector<SGObject::RenderComponent*>* compPointers)}
+\DoxyCodeLine{74         \{}
+\DoxyCodeLine{75             std::static\_pointer\_cast<SGObject::RenderComponent>(ptr);}
+\DoxyCodeLine{76             ptr-\/>attachToObject(compPointers);}
+\DoxyCodeLine{77             ptr-\/>updatePointer();}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79             \textcolor{comment}{//Check if any dead components to replace}}
+\DoxyCodeLine{80             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < m\_RenderHeap.size(); i++)}
+\DoxyCodeLine{81             \{}
+\DoxyCodeLine{82                 \textcolor{keywordflow}{if} (m\_RenderHeap[i]-\/>isDead())}
+\DoxyCodeLine{83                 \{}
+\DoxyCodeLine{84                     m\_RenderHeap[i] = ptr;}
+\DoxyCodeLine{85                     \textcolor{keywordflow}{return} i;}
+\DoxyCodeLine{86                 \}}
+\DoxyCodeLine{87             \}}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89             m\_RenderHeap.push\_back(ptr);}
+\DoxyCodeLine{90             \textcolor{keywordflow}{return} m\_RenderHeap.size() -\/ 1;}
+\DoxyCodeLine{91         \}}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{96         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{97         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a56c4c76bc8021d93b79ee8194da1d675}{pushGameObject}}(T ptr) \{ m\_Objects.push\_back(\{ std::static\_pointer\_cast<SGObject::GObject>(ptr), \textcolor{stringliteral}{"{}"{}} \}); \textcolor{keywordflow}{return} m\_Objects.size() -\/ 1; \}}
+\DoxyCodeLine{101         \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{102         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a8bc2fe4440e347113023705c71ed7b08}{pushGameObject}}(T ptr, std::string name) \{ m\_Objects.push\_back(\{ std::static\_pointer\_cast<SGObject::GObject>(ptr), name \}); m\_ObjIDMap[name] = m\_Objects.size() -\/ 1; \textcolor{keywordflow}{return} m\_Objects.size() -\/ 1; \}}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{107         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ae88b33f67581bb58d91619dd26469e32}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{111         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_afc9af974b3a876c8a1f7929c909c51f9}{render}}();}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113         \textcolor{comment}{//Always request to lock access via pointers before starting}}
+\DoxyCodeLine{114         \textcolor{comment}{//Lock for scope of function called in INCLUDING SCOPE OF LATER CALLED FUNCTIONS}}
+\DoxyCodeLine{115         std::shared\_mutex\& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_af2ed5fa13f2d7194e4d4bf3894fa83f3}{getGroupMutex}}() \{ \textcolor{keywordflow}{return} m\_GroupMutex; \}}
+\DoxyCodeLine{116         std::shared\_mutex\& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a51800344924467afe7d79cb0edfe2ee3}{getHeapMutex}}() \{ \textcolor{keywordflow}{return} m\_HeapMutex; \}}
+\DoxyCodeLine{117         \textcolor{keyword}{template} <\textcolor{keyword}{typename} ExpectedT>}
+\DoxyCodeLine{118         std::shared\_ptr<SGObject::UpdateCompGroup<ExpectedT>> \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ad03f3c8cbc4112d20541c4f25228f5ed}{updateGroupAt}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id})\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} std::static\_pointer\_cast<SGObject::UpdateCompGroup<ExpectedT>>(m\_UpdateGroup[id]); \};}
+\DoxyCodeLine{119         \textcolor{keyword}{template} <\textcolor{keyword}{typename} ExpectedT>}
+\DoxyCodeLine{120         std::shared\_ptr<SGObject::RenderCompGroup<ExpectedT>> \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a10c892ebc208ab580d678a14e76fbecb}{renderGroupAt}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id})\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} std::static\_pointer\_cast<SGObject::RenderCompGroup<ExpectedT>>(m\_RenderGroup[id]); \};}
+\DoxyCodeLine{121         std::shared\_mutex\& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_adc4b479300fc34c259a91346b4ff3ea0}{getObjectMutex}}() \{ \textcolor{keywordflow}{return} m\_ObjMutex; \}}
+\DoxyCodeLine{122         \textcolor{keyword}{template} <\textcolor{keyword}{typename} ExpectedT>}
+\DoxyCodeLine{123         std::shared\_ptr<ExpectedT> \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a833d766510a0f38455d07f2b74faa783}{objectAt}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id})\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} std::static\_pointer\_cast<ExpectedT>(m\_Objects[\textcolor{keywordtype}{id}].obj); \}}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125         \textcolor{comment}{//Should also be locked in some capacity when accessed as can change even if not here}}
+\DoxyCodeLine{126         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a2b22e1951b8802794f99a5ae4d5b4bdd}{queryGroupID}}(std::string name) \{ \textcolor{keywordflow}{if} (m\_GroupIDMap.find(name) == m\_GroupIDMap.end()) \{ \textcolor{keywordflow}{return} m\_GroupIDMap.begin()-\/>second; \} \textcolor{keywordflow}{return} m\_GroupIDMap[name]; \}}
+\DoxyCodeLine{127         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a923767934e3fe217918233433faa5bd4}{queryObjectID}}(std::string name) \{ \textcolor{keywordflow}{if} (m\_ObjIDMap.find(name) == m\_ObjIDMap.end()) \{ \textcolor{keywordflow}{return} m\_ObjIDMap.begin()-\/>second; \} \textcolor{keywordflow}{return} m\_ObjIDMap[name]; \}}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{132         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_adf2aac5b03aa95d96ce58827bc4354ed}{removeObject}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id})}
+\DoxyCodeLine{133         \{}
+\DoxyCodeLine{134             \textcolor{keywordflow}{if} (\textcolor{keywordtype}{id} >= m\_Objects.size())}
+\DoxyCodeLine{135             \{}
+\DoxyCodeLine{136                 \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(\textcolor{stringliteral}{"{}Object does not exist: "{}}, \textcolor{keywordtype}{id});}
+\DoxyCodeLine{137                 \textcolor{keywordflow}{return};}
+\DoxyCodeLine{138             \}}
+\DoxyCodeLine{139             \textcolor{keywordflow}{if} (m\_Objects[\textcolor{keywordtype}{id}].obj-\/>isDead())}
+\DoxyCodeLine{140             \{}
+\DoxyCodeLine{141                 \textcolor{keywordflow}{return};}
+\DoxyCodeLine{142             \}}
+\DoxyCodeLine{143             m\_Objects[id].obj-\/>messageAll((uint32\_t)\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}{Message::KILL}});}
+\DoxyCodeLine{144         \};}
+\DoxyCodeLine{148         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_adbd5b8cadc74d7bf6b7cf9d01cbbb9c5}{removeObject}}(std::string name) \{ \textcolor{keywordflow}{if} (m\_ObjIDMap.find(name) == m\_ObjIDMap.end()) \{ \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(\textcolor{stringliteral}{"{}Object does not exist: "{}}, name); \textcolor{keywordflow}{return}; \} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \textcolor{keywordtype}{id} = m\_ObjIDMap[name]; \textcolor{keywordflow}{if} (m\_Objects[\textcolor{keywordtype}{id}].obj-\/>isDead()) \{ \textcolor{keywordflow}{return}; \} m\_Objects[id].obj-\/>messageAll((uint32\_t)\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}{Message::KILL}}); \}}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150         \textcolor{comment}{//Storage for Game objects -\/ object only removed after components deleted}}
+\DoxyCodeLine{151         \textcolor{keyword}{struct }\mbox{\hyperlink{struct_s_g_object_1_1_object_manager_1_1_game_object_container}{GameObjectContainer}}}
+\DoxyCodeLine{152         \{}
+\DoxyCodeLine{153             std::shared\_ptr<SGObject::GObject> \mbox{\hyperlink{struct_s_g_object_1_1_object_manager_1_1_game_object_container_a1d2cb72839cdc6c5640007e5bd60c847}{obj}};}
+\DoxyCodeLine{154             std::string \mbox{\hyperlink{struct_s_g_object_1_1_object_manager_1_1_game_object_container_a56b74326008ace99f321a0a8df6f2466}{name}};}
+\DoxyCodeLine{155         \};}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157         std::vector<GameObjectContainer>\& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a8e2bfdbfb6562fc07471458ffc30b629}{getObjects}}() \{ \textcolor{keywordflow}{return} m\_Objects; \}}
+\DoxyCodeLine{158         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_aa0ed1877e08e183ebfe14eb96800131e}{getObjectCount}}() \{ \textcolor{keywordflow}{return} m\_Objects.size(); \}}
+\DoxyCodeLine{159 }
+\DoxyCodeLine{163         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ad1bb89df980e8e6af082172b4bbd6e32}{reset}}();}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165     \textcolor{keyword}{private}:}
+\DoxyCodeLine{166         \textcolor{comment}{//Keep separate to allow to be called at different times}}
+\DoxyCodeLine{167         std::shared\_mutex m\_GroupMutex;}
+\DoxyCodeLine{168         std::vector<std::shared\_ptr<SGObject::UpdateGroupBase>> m\_UpdateGroup;}
+\DoxyCodeLine{169         std::vector<std::shared\_ptr<SGObject::RenderGroupBase>> m\_RenderGroup;}
+\DoxyCodeLine{170 }
+\DoxyCodeLine{171         \textcolor{comment}{//Heap for when you don't need to warrant grouping -\/ simpler but results in unordered behavour}}
+\DoxyCodeLine{172         std::shared\_mutex m\_HeapMutex;}
+\DoxyCodeLine{173         std::vector<std::shared\_ptr<SGObject::UpdateComponent>> m\_UpdateHeap;}
+\DoxyCodeLine{174         std::vector<std::shared\_ptr<SGObject::RenderComponent>> m\_RenderHeap;}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176         \textcolor{comment}{//Game object vector}}
+\DoxyCodeLine{177         std::shared\_mutex m\_ObjMutex; \textcolor{comment}{//used to lock access of object and ids as objects are removed in other thread}}
+\DoxyCodeLine{178         std::vector<GameObjectContainer> m\_Objects;}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180         \textcolor{comment}{//Id maps}}
+\DoxyCodeLine{181         std::unordered\_map<std::string, unsigned int> m\_GroupIDMap;}
+\DoxyCodeLine{182         std::unordered\_map<std::string, unsigned int> m\_ObjIDMap;}
+\DoxyCodeLine{183 }
+\DoxyCodeLine{184         \textcolor{comment}{//Check if objects can be removed -\/ carried out async}}
+\DoxyCodeLine{185         \textcolor{keywordtype}{void} cleanObjects();}
+\DoxyCodeLine{186         std::future<void> m\_CleanFtr;}
+\DoxyCodeLine{187         \textcolor{keywordtype}{double} m\_CheckCleanupTimer = 0.0;}
+\DoxyCodeLine{188     \};}
+\DoxyCodeLine{189 \}}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191 \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

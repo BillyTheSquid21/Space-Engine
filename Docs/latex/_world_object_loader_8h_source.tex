@@ -1,0 +1,199 @@
+\hypertarget{_world_object_loader_8h_source}{}\doxysection{World\+Object\+Loader.\+h}
+\label{_world_object_loader_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/level/WorldObjectLoader.h@{D:/Repositories/Space Engine/SpaceGame/include/game/level/WorldObjectLoader.h}}
+\mbox{\hyperlink{_world_object_loader_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef OBJECT\_LOADER\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define OBJECT\_LOADER\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}fstream"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}string"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}sstream"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}thread"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_obj_management_8h}{core/ObjManagement.h}}"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_world_8h}{game/level/World.h}}"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_texture_slots_8hpp}{game/level/TextureSlots.hpp}}"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_g_u_i_8h}{game/GUI/GUI.h}}"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_object_types_8hpp}{game/objects/ObjectTypes.hpp}}"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_player_objects_8h}{game/objects/PlayerObjects.h}}"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_n_p_c_ai_8h}{game/objects/NPCAi.h}}"{}}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_script_8hpp}{game/objects/Script.hpp}}"{}}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_script_parse_8h}{game/objects/ScriptParse.h}}"{}}}
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_script_tile_8hpp}{game/objects/ScriptTile.hpp}}"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_tile_map_8h}{game/objects/TileMap.h}}"{}}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_tree_8h}{game/objects/Tree.h}}"{}}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_tall_grass_8h}{game/objects/TallGrass.h}}"{}}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_loading_zone_8h}{game/objects/LoadingZone.h}}"{}}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_warp_tile_8h}{game/objects/WarpTile.h}}"{}}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_n_p_c_ai_8h}{game/objects/NPCAi.h}}"{}}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_bridge_8h}{game/objects/Bridge.h}}"{}}}
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_state_renderers_8h}{game/states/StateRenderers.h}}"{}}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_input_8hpp}{game/utility/Input.hpp}}"{}}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_xml_wrapper_8hpp}{game/utility/XmlWrapper.hpp}}"{}}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#include "{}mtlib/ThreadPool.h"{}}}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 \textcolor{comment}{//Root node of all objects is "{}objects"{}}}
+\DoxyCodeLine{32 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_world_parse}{WorldParse}} }
+\DoxyCodeLine{33 \{}
+\DoxyCodeLine{34     \textcolor{comment}{//Tree process is kept separate from objs as involves mainly reading data and packaging into only a single component}}
+\DoxyCodeLine{35     \textcolor{keyword}{inline} \mbox{\hyperlink{struct_x_m_l___doc___wrapper}{XML\_Doc\_Wrapper}} \mbox{\hyperlink{namespace_world_parse_a36e9993ebb458dfbf253a7c342749038}{ParseLevelXML}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id}, \textcolor{keywordtype}{bool} global);}
+\DoxyCodeLine{36     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_world_parse_a9ca8682888e8b953e3241642244061fa}{ParseLevelObjects}}(\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, \mbox{\hyperlink{struct_player_data}{PlayerData}}* pdata, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, std::shared\_mutex\& mutex, \mbox{\hyperlink{struct_x_m_l___doc___wrapper}{XML\_Doc\_Wrapper}} doc, \mbox{\hyperlink{class_game_input}{GameInput}}* input, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> ld, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> uld);}
+\DoxyCodeLine{37     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_world_parse_a4604b3ce2048b5e7ac62153dd08241ce}{ParseLevelTrees}}(\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, std::shared\_mutex\& mutex, \mbox{\hyperlink{struct_x_m_l___doc___wrapper}{XML\_Doc\_Wrapper}} doc);}
+\DoxyCodeLine{38     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_world_parse_a5918baa559bc3be7c522e7ebb37d78d2}{ParseLevelGrass}}(\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, std::shared\_mutex\& mutex, \mbox{\hyperlink{struct_x_m_l___doc___wrapper}{XML\_Doc\_Wrapper}} doc);}
+\DoxyCodeLine{39     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_world_parse_ad54b77dd4b86f430532a4fbbae7bb49c}{ParseGlobalObjects}}(\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{struct_x_m_l___doc___wrapper}{XML\_Doc\_Wrapper}} doc, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> ld, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> uld);}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \textcolor{comment}{//Sprite loading}}
+\DoxyCodeLine{42     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadSprite(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, \textcolor{keywordtype}{bool}* interaction);}
+\DoxyCodeLine{43     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadDirectionalSprite(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{struct_player_data}{PlayerData}}* pdata, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, \mbox{\hyperlink{class_game_input}{GameInput}}* input);}
+\DoxyCodeLine{44     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadWalkingSprite(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{struct_player_data}{PlayerData}}* pdata, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, \mbox{\hyperlink{class_game_input}{GameInput}}* input);}
+\DoxyCodeLine{45     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadRunningSprite(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{struct_player_data}{PlayerData}}* pdata, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, \mbox{\hyperlink{class_game_input}{GameInput}}* input);}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     \textcolor{comment}{//Other loading}}
+\DoxyCodeLine{48     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadBridge(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID);}
+\DoxyCodeLine{49     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadModel(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID);}
+\DoxyCodeLine{50     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadWarpTile(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> ld, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> uld);}
+\DoxyCodeLine{51     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadScriptTile(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID, \mbox{\hyperlink{struct_player_data}{PlayerData}}* data, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, \mbox{\hyperlink{class_game_input}{GameInput}}* input);}
+\DoxyCodeLine{52     \textcolor{keyword}{static} \textcolor{keywordtype}{void} LoadLoadingZone(std::string name, rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> ld, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> uld);}
+\DoxyCodeLine{53     }
+\DoxyCodeLine{54     \textcolor{comment}{//Sprite help}}
+\DoxyCodeLine{55     \textcolor{keyword}{inline} \mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\_Sprite::SpriteData}} \mbox{\hyperlink{namespace_world_parse_aaf7848c8ccdcd8417559e9bc209daf9f}{BuildSprDataFromXNode}}(rapidxml::xml\_node<>* node, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} levelID);}
+\DoxyCodeLine{56     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_parse_a0964e827f563c8fa510a98daf34a096e}{OverworldScriptOptionals}}(rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, \mbox{\hyperlink{struct_player_data}{PlayerData}}* data, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, std::shared\_ptr<Ov\_Sprite::Sprite> sprite, \mbox{\hyperlink{class_game_input}{GameInput}}* input);}
+\DoxyCodeLine{57     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_parse_a2bedc1c22ce693b6223d51e2bf249947}{DirectionalSpriteOptionals}}(rapidxml::xml\_node<>* node, std::shared\_ptr<Ov\_Sprite::DirectionSprite> sprite);}
+\DoxyCodeLine{58     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_parse_ad8800498552d8ca64ee0240903094224}{WalkingSpriteOptionals}}(rapidxml::xml\_node<>* node, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* manager, std::shared\_ptr<Ov\_Sprite::WalkSprite> sprite);}
+\DoxyCodeLine{59 \}}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_world}{World}}}
+\DoxyCodeLine{62 \{}
+\DoxyCodeLine{63     \textcolor{comment}{//Level storage -\/ heads of levels to be used to load in data}}
+\DoxyCodeLine{64     \textcolor{keyword}{class }\mbox{\hyperlink{class_world_1_1_level_container}{LevelContainer}}}
+\DoxyCodeLine{65     \{}
+\DoxyCodeLine{66     \textcolor{keyword}{public}:}
+\DoxyCodeLine{67         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_a87be47830ce3dfd481937f8dd588ed45}{InitialiseLevels}}(\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* obj, \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* ren, \mbox{\hyperlink{struct_player_data}{PlayerData}}* data, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* textBuff, \mbox{\hyperlink{class_game_input}{GameInput}}* input);}
+\DoxyCodeLine{68         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_a6b7aa5391dc1f29ce8866ecfaf1d9710}{InitialiseGlobalObjects}}();}
+\DoxyCodeLine{69         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_ac529327ea6aeca1b8f4d46a9682569ca}{BuildFirstLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id}); \textcolor{comment}{//Builds geometry and permissions first -\/ for use when no level has been initialised}}
+\DoxyCodeLine{70         }
+\DoxyCodeLine{71         \textcolor{comment}{//Level signals -\/ allows deferring start of level loading}}
+\DoxyCodeLine{72         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_a241500c15675400be5f37d44c8bfe5a6}{SignalLoadLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id}) \{ m\_Renderer-\/>\mbox{\hyperlink{class_state_render_1_1_overworld_af7374247cb0053ff345233fdb0ac3000}{isModifyingLevel}}(); m\_ChangeLevel.emplace\_back(\textcolor{keywordtype}{id}, 1); \};}
+\DoxyCodeLine{73         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_a4bae1ef753438de5ecdce3723bcb2eca}{SignalUnloadLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id}) \{ m\_Renderer-\/>\mbox{\hyperlink{class_state_render_1_1_overworld_af7374247cb0053ff345233fdb0ac3000}{isModifyingLevel}}(); m\_ChangeLevel.emplace\_back(\textcolor{keywordtype}{id}, 2); \};}
+\DoxyCodeLine{74         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_a00935be5cdee1ddfe757063ca253e8a1}{ChangeLevel}}();}
+\DoxyCodeLine{75         }
+\DoxyCodeLine{76         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_ab5ee3c843b6aaafefaa1f8724dc0b698}{LoadLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id});}
+\DoxyCodeLine{77         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_ab0e2b21c4b1ad18db8991c8f177e35f9}{UnloadLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id});}
+\DoxyCodeLine{78         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_af047cba224c95a283c115885aeddee88}{UnloadAll}}();}
+\DoxyCodeLine{79         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_container_aa8e342857831c4250dbb8ccbf5ba057a}{render}}();}
+\DoxyCodeLine{80         std::vector<Level> \mbox{\hyperlink{class_world_1_1_level_container_a3b2c67a4ee3829d878684592136c543c}{m\_Levels}};}
+\DoxyCodeLine{81         std::vector<std::mutex> \mbox{\hyperlink{class_world_1_1_level_container_ae114a6e9fccaa70a044f7877e2a4b8d8}{m\_LevelMutexes}}; \textcolor{comment}{//Access mutex array to make sure the same level can't load at the same time}}
+\DoxyCodeLine{82     \textcolor{keyword}{private}:}
+\DoxyCodeLine{83         \textcolor{comment}{//Load level        }}
+\DoxyCodeLine{84         \textcolor{keyword}{struct }LevelLoad}
+\DoxyCodeLine{85         \{}
+\DoxyCodeLine{86             \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} id;}
+\DoxyCodeLine{87             \textcolor{keywordtype}{char} state = 0;}
+\DoxyCodeLine{88         \};}
+\DoxyCodeLine{89         std::vector<LevelLoad> m\_ChangeLevel;}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91         \textcolor{comment}{//Pointer to rendering stuff}}
+\DoxyCodeLine{92         \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject::ObjectManager}}* m\_ObjManager;}
+\DoxyCodeLine{93         \mbox{\hyperlink{struct_player_data}{PlayerData}}* m\_Data;}
+\DoxyCodeLine{94         \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{GameGUI::TextBoxBuffer}}* m\_TextBuffer;}
+\DoxyCodeLine{95         \mbox{\hyperlink{class_state_render_1_1_overworld}{StateRender::Overworld}}* m\_Renderer;}
+\DoxyCodeLine{96         \mbox{\hyperlink{class_game_input}{GameInput}}* m\_Input;}
+\DoxyCodeLine{97         std::function<void(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> m\_LoadingPtr;}
+\DoxyCodeLine{98         std::function<void(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> m\_UnloadingPtr;}
+\DoxyCodeLine{99     \};}
+\DoxyCodeLine{100 \}}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103 \textcolor{comment}{//Format for xml file:}}
+\DoxyCodeLine{104 \textcolor{comment}{// }}
+\DoxyCodeLine{105 \textcolor{comment}{// <Trees name = "{}LevelX\_Trees"{}>}}
+\DoxyCodeLine{106 \textcolor{comment}{// <Count>count</Count>}}
+\DoxyCodeLine{107 \textcolor{comment}{// <Tree>}}
+\DoxyCodeLine{108 \textcolor{comment}{//      <TileX>x< / TileX >}}
+\DoxyCodeLine{109 \textcolor{comment}{//      < TileZ>z< / TileZ >}}
+\DoxyCodeLine{110 \textcolor{comment}{//      < WLevel>l< / WLevel >}}
+\DoxyCodeLine{111 \textcolor{comment}{//      < TX1>tx1 < / TX1 > //Location of bottom of texture}}
+\DoxyCodeLine{112 \textcolor{comment}{//      < TY1>ty1 < / TY1 >}}
+\DoxyCodeLine{113 \textcolor{comment}{//      < TX2>tx2 < / TX2 >}}
+\DoxyCodeLine{114 \textcolor{comment}{//      < TY2>ty2 < / TY2 >}}
+\DoxyCodeLine{115 \textcolor{comment}{//      < TW>width < / TW >}}
+\DoxyCodeLine{116 \textcolor{comment}{//      < TH>height < / TH >}}
+\DoxyCodeLine{117 \textcolor{comment}{//  < / Tree>}}
+\DoxyCodeLine{118 \textcolor{comment}{// }}
+\DoxyCodeLine{119 \textcolor{comment}{//  <TallGrass name = "{}Level0\_Grass"{}>}}
+\DoxyCodeLine{120 \textcolor{comment}{//  <Count>10 < / Count >}}
+\DoxyCodeLine{121 \textcolor{comment}{//  < TXFrame1>0 < / TXFrame1 > //Textures for each of the 3 frames}}
+\DoxyCodeLine{122 \textcolor{comment}{//  < TYFrame1>0 < / TYFrame1 >}}
+\DoxyCodeLine{123 \textcolor{comment}{//  < TXFrame2>0 < / TXFrame2 >}}
+\DoxyCodeLine{124 \textcolor{comment}{//  < TYFrame2>0 < / TYFrame2 >}}
+\DoxyCodeLine{125 \textcolor{comment}{//  < TXFrame3>0 < / TXFrame3 >}}
+\DoxyCodeLine{126 \textcolor{comment}{//  < TYFrame3>0 < / TYFrame3 >}}
+\DoxyCodeLine{127 \textcolor{comment}{//  <Grass>}}
+\DoxyCodeLine{128 \textcolor{comment}{//      <TileX>< / TileX>}}
+\DoxyCodeLine{129 \textcolor{comment}{//      <TileZ>< / TileZ>}}
+\DoxyCodeLine{130 \textcolor{comment}{//      <WLevel></WLevel>}}
+\DoxyCodeLine{131 \textcolor{comment}{//  < / Grass>}}
+\DoxyCodeLine{132 \textcolor{comment}{//  < / TallGrass>}}
+\DoxyCodeLine{133 \textcolor{comment}{// }}
+\DoxyCodeLine{134 \textcolor{comment}{//<Object name = "{}name here"{}> -\/> if name contains "{}levelx"{}, the object will be unloaded with level}}
+\DoxyCodeLine{135 \textcolor{comment}{//<Sprite type>}}
+\DoxyCodeLine{136 \textcolor{comment}{//<!-\/-\/REQ-\/-\/> //builds the data structure}}
+\DoxyCodeLine{137 \textcolor{comment}{//< TileX>3 < / TileX >}}
+\DoxyCodeLine{138 \textcolor{comment}{//< TileZ>3 < / TileZ >}}
+\DoxyCodeLine{139 \textcolor{comment}{//< WLevel>0 < / WLevel >}}
+\DoxyCodeLine{140 \textcolor{comment}{//< TX>0 < / TX >}}
+\DoxyCodeLine{141 \textcolor{comment}{//< TY>0 < / TY >}}
+\DoxyCodeLine{142 \textcolor{comment}{//<!-\/-\/Opt-\/-\/>}}
+\DoxyCodeLine{143 \textcolor{comment}{// insert optional here}}
+\DoxyCodeLine{144 \textcolor{comment}{//< / Sprite type>}}
+\DoxyCodeLine{145 \textcolor{comment}{//< / Object>}}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{147 \textcolor{comment}{//Sprite type tags:}}
+\DoxyCodeLine{148     \textcolor{comment}{//Sprite}}
+\DoxyCodeLine{149     \textcolor{comment}{//DirSprite}}
+\DoxyCodeLine{150     \textcolor{comment}{//WalkSprite}}
+\DoxyCodeLine{151     \textcolor{comment}{//RunSprite}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153 \textcolor{comment}{//Sprite optional tags:}}
+\DoxyCodeLine{154     \textcolor{comment}{//Dir}}
+\DoxyCodeLine{155     \textcolor{comment}{//RandWalk -\/ contains whether is active by default}}
+\DoxyCodeLine{156     \textcolor{comment}{//NPCScript -\/ path to script to run}}
+\DoxyCodeLine{157 }
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 \textcolor{comment}{//Other objects}}
+\DoxyCodeLine{160     \textcolor{comment}{//Bridge -\/ has dimensions and texture}}
+\DoxyCodeLine{161     \textcolor{comment}{//}}
+\DoxyCodeLine{162     \textcolor{comment}{//      <Object name="{}Level0\_ScriptTile"{}>}}
+\DoxyCodeLine{163     \textcolor{comment}{//          <ScriptTile>}}
+\DoxyCodeLine{164     \textcolor{comment}{//              < TileX>3 < / TileX >}}
+\DoxyCodeLine{165     \textcolor{comment}{//              < TileZ>3 < / TileZ >}}
+\DoxyCodeLine{166     \textcolor{comment}{//              < WLevel>0 < / WLevel >}}
+\DoxyCodeLine{167     \textcolor{comment}{//              < NPC\_Script>"{}test.sgs"{} < / NPC\_Script >}}
+\DoxyCodeLine{168     \textcolor{comment}{//              < NPC\_Target>"{}npc"{} < / NPC\_Target >}}
+\DoxyCodeLine{169     \textcolor{comment}{//              < Overworld\_Script>"{}test.sgs"{} < / Overworld\_Script >}}
+\DoxyCodeLine{170     \textcolor{comment}{//          < / ScriptTile>}}
+\DoxyCodeLine{171     \textcolor{comment}{//      < / Object>}}
+\DoxyCodeLine{172     \textcolor{comment}{// }}
+\DoxyCodeLine{173     \textcolor{comment}{// }}
+\DoxyCodeLine{174     \textcolor{comment}{//  <WarpTile>}}
+\DoxyCodeLine{175     \textcolor{comment}{//      <TileXCurr>10 < / TileXCurr >}}
+\DoxyCodeLine{176     \textcolor{comment}{//      < TileZCurr>2 < / TileZCurr >}}
+\DoxyCodeLine{177     \textcolor{comment}{//      < TileXDest>0 < / TileXDest >}}
+\DoxyCodeLine{178     \textcolor{comment}{//      < TileZDest>0 < / TileZDest >}}
+\DoxyCodeLine{179     \textcolor{comment}{//      < WLevelCurr>0 < / WLevelCurr >}}
+\DoxyCodeLine{180     \textcolor{comment}{//      < WLevelDest>0 < / WLevelDest >}}
+\DoxyCodeLine{181     \textcolor{comment}{//      < LevelIDDest>0 < / LevelIDDest >}}
+\DoxyCodeLine{182     \textcolor{comment}{//  < / WarpTile>}}
+\DoxyCodeLine{183     \textcolor{comment}{// }}
+\DoxyCodeLine{184     \textcolor{comment}{//  <Model>}}
+\DoxyCodeLine{185     \textcolor{comment}{//      < OffsetX>0 < / OffsetX >}}
+\DoxyCodeLine{186     \textcolor{comment}{//      < OffsetY>0 < / OffsetY >}}
+\DoxyCodeLine{187     \textcolor{comment}{//      < OffsetZ>0 < / OffsetZ >}}
+\DoxyCodeLine{188     \textcolor{comment}{//      < Scale>1.0 < / Scale >}}
+\DoxyCodeLine{189     \textcolor{comment}{//      <Model>untitled.obj< / Model>}}
+\DoxyCodeLine{190     \textcolor{comment}{//      <Texture>debug.png< / Texture>}}
+\DoxyCodeLine{191     \textcolor{comment}{//  < / Model>}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -13,7 +13,7 @@ class NPC_OverworldScript : public OverworldScript
 {
 public:
 	using OverworldScript::OverworldScript;
-	void linkNPC(std::shared_ptr<OvSpr_RunningSprite> npc) { m_NPC = npc; };
+	void linkNPC(std::shared_ptr<Ov_Sprite::RunSprite> npc) { m_NPC = npc; };
 
 	virtual bool process(double deltaTime)
 	{
@@ -134,22 +134,22 @@ public:
 				m_Player->m_Walking = false; m_NPC->m_Walking = false;
 				m_Player->m_Controlled = false;
 				m_Player->m_Timer = 0.0; m_NPC->m_Timer = 0.0;
-				Ov_Translation::CentreOnTileSprite(m_Player);
-				Ov_Translation::CentreOnTileSprite(m_NPC);
+				Ov_Translation::CentreOnTile(m_Player->m_CurrentLevel, m_Player->m_WorldLevel, &m_Player->m_XPos, &m_Player->m_YPos, &m_Player->m_ZPos, m_Player->m_Tile, &m_Player->m_Sprite, &m_Player->m_CurrentIsSlope);
+				Ov_Translation::CentreOnTile(m_NPC->m_CurrentLevel, m_NPC->m_WorldLevel, &m_NPC->m_XPos, &m_NPC->m_YPos, &m_NPC->m_ZPos, m_NPC->m_Tile, &m_NPC->m_Sprite, &m_NPC->m_CurrentIsSlope);
 				m_Index++;
 				return true;
 			}
-			Ov_Translation::WalkSprite(m_NPC, deltaTime);
-			Ov_Translation::WalkSprite(m_Player, deltaTime);
+			Ov_Translation::Walk(&m_NPC->m_Direction, &m_NPC->m_XPos, &m_NPC->m_ZPos, &m_NPC->m_Sprite, deltaTime, &m_NPC->m_Timer);
+			Ov_Translation::Walk(&m_Player->m_Direction, &m_Player->m_XPos, &m_Player->m_ZPos, &m_Player->m_Sprite, deltaTime, &m_Player->m_Timer);
 			return true;
 		case ScriptInstruction::SHOW_SPRITE:
 			if (el.info.boolInfo.state)
 			{
-				m_NPC->messageAllRender((uint32_t)Message::ACTIVATE);
+				m_NPC->messageAllRender((uint32_t)SGObject::Message::ACTIVATE);
 			}
 			else
 			{
-				m_NPC->messageAllRender((uint32_t)Message::DEACTIVATE);
+				m_NPC->messageAllRender((uint32_t)SGObject::Message::DEACTIVATE);
 			}
 			m_Index++;
 			return true;
@@ -159,18 +159,18 @@ public:
 	}
 
 private:
-	std::shared_ptr<OvSpr_RunningSprite> m_NPC;
+	std::shared_ptr<Ov_Sprite::RunSprite> m_NPC;
 };
 
 //Creates either a heap or stack allocated npc script
-std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player);
-NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> npc, std::shared_ptr<OvSpr_RunningSprite> player);
+std::shared_ptr<NPC_OverworldScript> AllocateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<Ov_Sprite::Sprite> npc, std::shared_ptr<Ov_Sprite::RunSprite> player);
+NPC_OverworldScript CreateNPCOvScript(std::string filePath, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<Ov_Sprite::Sprite> npc, std::shared_ptr<Ov_Sprite::RunSprite> player);
 
 
-class NPC_RandWalk : public TilePosition
+class NPC_RandWalk : public Ov_Sprite::TilePosition
 {
 public:
-	NPC_RandWalk(std::shared_ptr<OvSpr_WalkingSprite> npc) {
+	NPC_RandWalk(std::shared_ptr<Ov_Sprite::WalkSprite> npc) {
 		m_NPC = npc; m_CurrentLevel = &m_NPC->m_CurrentLevel; m_XPos = &m_NPC->m_XPos; m_ZPos = &m_NPC->m_ZPos; m_Tile = &m_NPC->m_Tile;
 	if (!s_Random.isSeeded()) { s_Random.seed(0.0f, MAX_SEED); } m_CoolDownTimer = s_Random.next() / 8.0f;};
 
@@ -179,7 +179,7 @@ public:
 private:
 	//Busy status is set by other components that carry out instructions - while busy the next instuction wont be read
 	//AI class must be updated first per frame
-	std::shared_ptr<OvSpr_WalkingSprite> m_NPC;
+	std::shared_ptr<Ov_Sprite::WalkSprite> m_NPC;
 	float m_CoolDownTimer = 0.0f;
 
 	//Moving helpers

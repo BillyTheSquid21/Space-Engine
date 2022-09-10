@@ -6,7 +6,7 @@
 #include "renderer/Camera.h"
 #include "renderer/Renderer.hpp"
 #include "renderer/GLClasses.h"
-#include "renderer/ShapeFactory.h"
+#include "renderer/Geometry.h"
 
 //All shaders used must have a "u_Time" float uniform
 class Transition
@@ -18,9 +18,9 @@ public:
 
 		m_Renderer.setLayout<float>(3);
 		m_Renderer.setDrawingMode(GL_TRIANGLES);
-		m_Renderer.generate(width, height, &m_Camera, sizeof(Vertex));
+		m_Renderer.generate(width, height, &m_Camera, sizeof(SGRender::Vertex));
 
-		m_Quad = CreateQuad(0, 0, width, height);
+		m_Quad = Geometry::CreateQuad(0, 0, width, height);
 		m_Camera.setProjection(glm::ortho(0.0f, width, -height, 0.0f, -1.0f, 1.0f));
 	}
 
@@ -75,14 +75,14 @@ public:
 		m_Uniforms.emplace_back(name, (void*)value, UniformType::TYPE_MAT4);
 	}
 
-	void render(Shader& shader)
+	void render(SGRender::Shader& shader)
 	{
 		if (!m_Started)
 		{
 			return;
 		}
 
-		m_Renderer.commit(&m_Quad[0], GetFloatCount<Vertex>(Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+		m_Renderer.commit(&m_Quad[0], Geometry::GetFloatCount<SGRender::Vertex>(Geometry::Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
 		m_Renderer.bufferVideoData();
 
 		shader.bind();
@@ -119,8 +119,8 @@ public:
 private:
 	//Render
 	Quad m_Quad;
-	Camera m_Camera;
-	Render::Renderer m_Renderer;
+	SGRender::Camera m_Camera;
+	SGRender::Renderer m_Renderer;
 
 	//Update
 	double m_Timer = 0.0;

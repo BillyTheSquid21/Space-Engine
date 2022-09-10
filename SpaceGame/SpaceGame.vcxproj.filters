@@ -120,7 +120,7 @@
     <ClCompile Include="src\renderer\GLClasses.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\ShapeFactory.cpp">
+    <ClCompile Include="src\renderer\Geometry.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\Texture.cpp">
@@ -278,7 +278,7 @@
     <ClInclude Include="include\renderer\Renderer.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\ShapeFactory.h">
+    <ClInclude Include="include\renderer\Geometry.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\renderer\Texture.h">

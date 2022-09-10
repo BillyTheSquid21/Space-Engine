@@ -1,0 +1,68 @@
+\hypertarget{_demo_game_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/\+Demo\+Game.h File Reference}
+\label{_demo_game_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/DemoGame.h@{D:/Repositories/Space Engine/SpaceGame/include/game/DemoGame.h}}
+{\ttfamily \#include \char`\"{}core/\+Game.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/states/\+Main\+Menu.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/states/\+Overworld.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/states/\+Battle.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/gui/\+GUI.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/data/\+Player\+Data.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}mtlib/\+Thread\+Pool.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_demo_game}{Demo\+Game}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_demo_game_8h_acc7bd51d5448c7875ab8fd604954e637}{DEMO\+\_\+\+GAME\+\_\+H}}
+\item 
+\#define \mbox{\hyperlink{_demo_game_8h_a4fc325e70c9ce60d7cb7dda3b7ecc3d8}{THREAD\+\_\+\+POOL\+\_\+\+SIZE}}~5
+\item 
+\#define \mbox{\hyperlink{_demo_game_8h_a0254ee0b52352012ca2f9f2b5a1ef2d3}{Splash\+Screen}}~m\+\_\+\+States\mbox{[}0\mbox{]}
+\item 
+\#define \mbox{\hyperlink{_demo_game_8h_a098925eaca3b815397969f539075811a}{Main\+Menu\+Screen}}~m\+\_\+\+States\mbox{[}1\mbox{]}
+\item 
+\#define \mbox{\hyperlink{_demo_game_8h_a5eb2cdef633c4a74878351d6463c13cd}{Overworld\+Screen}}~m\+\_\+\+States\mbox{[}2\mbox{]}
+\item 
+\#define \mbox{\hyperlink{_demo_game_8h_ae6456264a402b3cf16c268a9eb72231c}{Battle\+Screen}}~m\+\_\+\+States\mbox{[}3\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_demo_game_8h_ae6456264a402b3cf16c268a9eb72231c}\label{_demo_game_8h_ae6456264a402b3cf16c268a9eb72231c}} 
+\index{DemoGame.h@{DemoGame.h}!BattleScreen@{BattleScreen}}
+\index{BattleScreen@{BattleScreen}!DemoGame.h@{DemoGame.h}}
+\doxysubsubsection{\texorpdfstring{BattleScreen}{BattleScreen}}
+{\footnotesize\ttfamily \#define Battle\+Screen~m\+\_\+\+States\mbox{[}3\mbox{]}}
+
+\mbox{\Hypertarget{_demo_game_8h_acc7bd51d5448c7875ab8fd604954e637}\label{_demo_game_8h_acc7bd51d5448c7875ab8fd604954e637}} 
+\index{DemoGame.h@{DemoGame.h}!DEMO\_GAME\_H@{DEMO\_GAME\_H}}
+\index{DEMO\_GAME\_H@{DEMO\_GAME\_H}!DemoGame.h@{DemoGame.h}}
+\doxysubsubsection{\texorpdfstring{DEMO\_GAME\_H}{DEMO\_GAME\_H}}
+{\footnotesize\ttfamily \#define DEMO\+\_\+\+GAME\+\_\+H}
+
+\mbox{\Hypertarget{_demo_game_8h_a098925eaca3b815397969f539075811a}\label{_demo_game_8h_a098925eaca3b815397969f539075811a}} 
+\index{DemoGame.h@{DemoGame.h}!MainMenuScreen@{MainMenuScreen}}
+\index{MainMenuScreen@{MainMenuScreen}!DemoGame.h@{DemoGame.h}}
+\doxysubsubsection{\texorpdfstring{MainMenuScreen}{MainMenuScreen}}
+{\footnotesize\ttfamily \#define Main\+Menu\+Screen~m\+\_\+\+States\mbox{[}1\mbox{]}}
+
+\mbox{\Hypertarget{_demo_game_8h_a5eb2cdef633c4a74878351d6463c13cd}\label{_demo_game_8h_a5eb2cdef633c4a74878351d6463c13cd}} 
+\index{DemoGame.h@{DemoGame.h}!OverworldScreen@{OverworldScreen}}
+\index{OverworldScreen@{OverworldScreen}!DemoGame.h@{DemoGame.h}}
+\doxysubsubsection{\texorpdfstring{OverworldScreen}{OverworldScreen}}
+{\footnotesize\ttfamily \#define Overworld\+Screen~m\+\_\+\+States\mbox{[}2\mbox{]}}
+
+\mbox{\Hypertarget{_demo_game_8h_a0254ee0b52352012ca2f9f2b5a1ef2d3}\label{_demo_game_8h_a0254ee0b52352012ca2f9f2b5a1ef2d3}} 
+\index{DemoGame.h@{DemoGame.h}!SplashScreen@{SplashScreen}}
+\index{SplashScreen@{SplashScreen}!DemoGame.h@{DemoGame.h}}
+\doxysubsubsection{\texorpdfstring{SplashScreen}{SplashScreen}}
+{\footnotesize\ttfamily \#define Splash\+Screen~m\+\_\+\+States\mbox{[}0\mbox{]}}
+
+\mbox{\Hypertarget{_demo_game_8h_a4fc325e70c9ce60d7cb7dda3b7ecc3d8}\label{_demo_game_8h_a4fc325e70c9ce60d7cb7dda3b7ecc3d8}} 
+\index{DemoGame.h@{DemoGame.h}!THREAD\_POOL\_SIZE@{THREAD\_POOL\_SIZE}}
+\index{THREAD\_POOL\_SIZE@{THREAD\_POOL\_SIZE}!DemoGame.h@{DemoGame.h}}
+\doxysubsubsection{\texorpdfstring{THREAD\_POOL\_SIZE}{THREAD\_POOL\_SIZE}}
+{\footnotesize\ttfamily \#define THREAD\+\_\+\+POOL\+\_\+\+SIZE~5}
+

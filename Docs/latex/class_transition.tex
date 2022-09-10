@@ -1,0 +1,119 @@
+\hypertarget{class_transition}{}\doxysection{Transition Class Reference}
+\label{class_transition}\index{Transition@{Transition}}
+
+
+{\ttfamily \#include $<$Transition.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_transition_acb4d3a245ded9a338ced025714b737ca}{init}} (float width, float height)
+\item 
+void \mbox{\hyperlink{class_transition_a2003f6dd893be102eceb16443e353161}{update}} (double delta\+Time)
+\item 
+void \mbox{\hyperlink{class_transition_af7de9df2f72f7ce75beb0dcb409eaf4a}{set\+Cap}} (double cap)
+\item 
+void \mbox{\hyperlink{class_transition_ac15e2a7eaa29900ce5c1b36076411da5}{start}} ()
+\item 
+void \mbox{\hyperlink{class_transition_a381e33373f2a107287e64189cca74a7f}{stop}} ()
+\item 
+bool \mbox{\hyperlink{class_transition_a037767781c1888929a0467a702f95bc8}{is\+Started}} () const
+\item 
+bool \mbox{\hyperlink{class_transition_aada25b59820019e966851bbe056ae3d4}{is\+Ended}} ()
+\item 
+void \mbox{\hyperlink{class_transition_aa8c3d61937d037ff9de6135734bb10bd}{link\+Uniform}} (std\+::string name, float $\ast$value)
+\item 
+void \mbox{\hyperlink{class_transition_ac37f4814dd3b6aab72259f6bd781be87}{link\+Uniform}} (std\+::string name, glm\+::mat4 $\ast$value)
+\item 
+void \mbox{\hyperlink{class_transition_a6d570968bd5bc1062adbe91921bb4f60}{render}} (\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \&shader)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{class_transition_a32f6280814d5d531fe9c8ed73ec07538}{m\+\_\+\+Width}}
+\item 
+float \mbox{\hyperlink{class_transition_a40f88fbe2f2865a2aac6da7239212af7}{m\+\_\+\+Height}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_transition_acb4d3a245ded9a338ced025714b737ca}\label{class_transition_acb4d3a245ded9a338ced025714b737ca}} 
+\index{Transition@{Transition}!init@{init}}
+\index{init@{init}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void Transition\+::init (\begin{DoxyParamCaption}\item[{float}]{width,  }\item[{float}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_aada25b59820019e966851bbe056ae3d4}\label{class_transition_aada25b59820019e966851bbe056ae3d4}} 
+\index{Transition@{Transition}!isEnded@{isEnded}}
+\index{isEnded@{isEnded}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{isEnded()}{isEnded()}}
+{\footnotesize\ttfamily bool Transition\+::is\+Ended (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_a037767781c1888929a0467a702f95bc8}\label{class_transition_a037767781c1888929a0467a702f95bc8}} 
+\index{Transition@{Transition}!isStarted@{isStarted}}
+\index{isStarted@{isStarted}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{isStarted()}{isStarted()}}
+{\footnotesize\ttfamily bool Transition\+::is\+Started (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_aa8c3d61937d037ff9de6135734bb10bd}\label{class_transition_aa8c3d61937d037ff9de6135734bb10bd}} 
+\index{Transition@{Transition}!linkUniform@{linkUniform}}
+\index{linkUniform@{linkUniform}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{linkUniform()}{linkUniform()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Transition\+::link\+Uniform (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{float $\ast$}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_ac37f4814dd3b6aab72259f6bd781be87}\label{class_transition_ac37f4814dd3b6aab72259f6bd781be87}} 
+\index{Transition@{Transition}!linkUniform@{linkUniform}}
+\index{linkUniform@{linkUniform}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{linkUniform()}{linkUniform()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Transition\+::link\+Uniform (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{glm\+::mat4 $\ast$}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_a6d570968bd5bc1062adbe91921bb4f60}\label{class_transition_a6d570968bd5bc1062adbe91921bb4f60}} 
+\index{Transition@{Transition}!render@{render}}
+\index{render@{render}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void Transition\+::render (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \&}]{shader }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_af7de9df2f72f7ce75beb0dcb409eaf4a}\label{class_transition_af7de9df2f72f7ce75beb0dcb409eaf4a}} 
+\index{Transition@{Transition}!setCap@{setCap}}
+\index{setCap@{setCap}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{setCap()}{setCap()}}
+{\footnotesize\ttfamily void Transition\+::set\+Cap (\begin{DoxyParamCaption}\item[{double}]{cap }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_ac15e2a7eaa29900ce5c1b36076411da5}\label{class_transition_ac15e2a7eaa29900ce5c1b36076411da5}} 
+\index{Transition@{Transition}!start@{start}}
+\index{start@{start}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Transition\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_a381e33373f2a107287e64189cca74a7f}\label{class_transition_a381e33373f2a107287e64189cca74a7f}} 
+\index{Transition@{Transition}!stop@{stop}}
+\index{stop@{stop}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void Transition\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_transition_a2003f6dd893be102eceb16443e353161}\label{class_transition_a2003f6dd893be102eceb16443e353161}} 
+\index{Transition@{Transition}!update@{update}}
+\index{update@{update}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Transition\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_transition_a40f88fbe2f2865a2aac6da7239212af7}\label{class_transition_a40f88fbe2f2865a2aac6da7239212af7}} 
+\index{Transition@{Transition}!m\_Height@{m\_Height}}
+\index{m\_Height@{m\_Height}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{m\_Height}{m\_Height}}
+{\footnotesize\ttfamily float Transition\+::m\+\_\+\+Height}
+
+\mbox{\Hypertarget{class_transition_a32f6280814d5d531fe9c8ed73ec07538}\label{class_transition_a32f6280814d5d531fe9c8ed73ec07538}} 
+\index{Transition@{Transition}!m\_Width@{m\_Width}}
+\index{m\_Width@{m\_Width}!Transition@{Transition}}
+\doxysubsubsection{\texorpdfstring{m\_Width}{m\_Width}}
+{\footnotesize\ttfamily float Transition\+::m\+\_\+\+Width}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/\mbox{\hyperlink{_transition_8hpp}{Transition.\+hpp}}\end{DoxyCompactItemize}

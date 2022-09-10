@@ -48,6 +48,33 @@ void Texture::generateTexture(unsigned int slot, void* buffer) {
     m_Slot = slot;
 }
 
+void Texture::generateTextureWrap(unsigned int slot, void* buffer) {
+
+    //Generate texture
+    glGenTextures(1, &m_ID);
+
+    //Set active slot and bind
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, m_ID);
+
+    //Set params
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    //Assign to slot
+    if (m_BPP == 4)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    }
+    else if (m_BPP == 3)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+    }
+    m_Slot = slot;
+}
+
 void Texture::clearBuffer() {
     if (m_LocalBuffer) {
         stbi_image_free(m_LocalBuffer);

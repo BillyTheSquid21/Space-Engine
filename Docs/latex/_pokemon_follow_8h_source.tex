@@ -1,0 +1,56 @@
+\hypertarget{_pokemon_follow_8h_source}{}\doxysection{Pokemon\+Follow.\+h}
+\label{_pokemon_follow_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/PokemonFollow.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/PokemonFollow.h}}
+\mbox{\hyperlink{_pokemon_follow_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef POKEMON\_FOLLOW\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define POKEMON\_FOLLOW\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_game_object_8hpp}{core/GameObject.hpp}}"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_overworld_sprite_8h}{game/objects/OverworldSprite.h}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_n_p_c_ai_8h}{game/objects/NPCAI.h}}"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_path_finding_8h}{game/utility/PathFinding.h}}"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_input_8hpp}{game/utility/Input.hpp}}"{}}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_pokemon_follow}{PokemonFollow}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_ov___sprite_1_1_tile_position}{Ov\_Sprite::TilePosition}}}
+\DoxyCodeLine{12 \{}
+\DoxyCodeLine{13 \textcolor{keyword}{public}:}
+\DoxyCodeLine{14     \textcolor{keyword}{using }TilePosition::TilePosition;}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pokemon_follow_a34ffbe7a0ba250a1c4e6c9426997d9a1}{linkSprites}}(\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* player, \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* pkm, \mbox{\hyperlink{class_ov___sprite_1_1_sprite}{Ov\_Sprite::Sprite}}* ptr) \{ m\_Player = player; m\_Pkm = pkm; m\_LastDestTile = m\_Player-\/>\mbox{\hyperlink{class_ov___sprite_1_1_sprite_a95f6b07e3aca8a0a1915bf9a76610a2c}{m\_Tile}}; m\_Pointer = ptr; \}}
+\DoxyCodeLine{16     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pokemon_follow_a169f92f3ebcf797bf534be790887f997}{linkScript}}(\mbox{\hyperlink{class_overworld_script}{OverworldScript}}* script) \{ m\_Script = script; \}}
+\DoxyCodeLine{17     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pokemon_follow_ac7ea21de507e4c8d469ef9a62ca6cc2f}{linkInput}}(\mbox{\hyperlink{class_game_input}{GameInput}}* input) \{ m\_Input = input; \}}
+\DoxyCodeLine{18     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pokemon_follow_a7104b2f0678d2aa9c00bf5c562729733}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{19     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pokemon_follow_a329b09dae5f51de1221c8b5071276335}{checkPerm}}(\mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World::Direction}} direction, \mbox{\hyperlink{struct_struct3f}{Struct3f}} pos);}
+\DoxyCodeLine{20 \textcolor{keyword}{private}:}
+\DoxyCodeLine{21     \mbox{\hyperlink{class_overworld_script}{OverworldScript}}* m\_Script;}
+\DoxyCodeLine{22     \mbox{\hyperlink{class_game_input}{GameInput}}* m\_Input = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{23     \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* m\_Player = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{24     \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* m\_Pkm = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{25     \mbox{\hyperlink{class_ov___sprite_1_1_sprite}{Ov\_Sprite::Sprite}}* m\_Pointer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{26     \mbox{\hyperlink{struct_path_finding_1_1_path}{PathFinding::Path}} m\_Path;}
+\DoxyCodeLine{27     \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} m\_LastDestTile = \{ -\/1, -\/1 \};}
+\DoxyCodeLine{28     \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} m\_LastPkmTile;}
+\DoxyCodeLine{29     \textcolor{keywordtype}{bool} m\_WasWalking = \textcolor{keyword}{false};}
+\DoxyCodeLine{30     \textcolor{keywordtype}{bool} m\_WasRunning = \textcolor{keyword}{false};}
+\DoxyCodeLine{31     \textcolor{keywordtype}{bool} m\_PtrMode = \textcolor{keyword}{false};}
+\DoxyCodeLine{32     \textcolor{keywordtype}{double} m\_Cooldown = 0.0;}
+\DoxyCodeLine{33 \};}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \textcolor{comment}{//Class to handle pokemon animations -\/}}
+\DoxyCodeLine{36 \textcolor{keyword}{class }\mbox{\hyperlink{class_pokemon_animation}{PokemonAnimation}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject::UpdateComponent}}}
+\DoxyCodeLine{37 \{}
+\DoxyCodeLine{38 \textcolor{keyword}{public}:}
+\DoxyCodeLine{39     \mbox{\hyperlink{class_pokemon_animation_ab4ebd5b12daaf45b2b5ab28f420af375}{PokemonAnimation}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{40     \mbox{\hyperlink{class_pokemon_animation_a3b2c01c0293fa26bb41b73c419b0555f}{PokemonAnimation}}(\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* spr) \{ m\_Pkm = spr; \}}
+\DoxyCodeLine{41     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pokemon_animation_a7917cfd766c9907c7641838968963f7b}{update}}(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{42 \textcolor{keyword}{private}:}
+\DoxyCodeLine{43     \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* m\_Pkm;}
+\DoxyCodeLine{44     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_BaseY = 0;}
+\DoxyCodeLine{45     \textcolor{keywordtype}{double} m\_Timer = 0.0;}
+\DoxyCodeLine{46     \textcolor{keywordtype}{bool} m\_Frame = 0;}
+\DoxyCodeLine{47     \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World::Direction}} m\_LastDirection = \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8adcb19a7189dbeeb57ef37bd2ad2b9968}{World::Direction::DIRECTION\_NULL}};}
+\DoxyCodeLine{48 \};}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

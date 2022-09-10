@@ -1,5 +1,9 @@
 \hypertarget{class_overworld}{}\doxysection{Overworld Class Reference}
 \label{class_overworld}\index{Overworld@{Overworld}}
+
+
+{\ttfamily \#include $<$Overworld.\+h$>$}
+
 Inheritance diagram for Overworld\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -9,8 +13,9 @@ Inheritance diagram for Overworld\+:\begin{figure}[H]
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{class_overworld_a6f8ee9d0584f6e62b17dbe95cc80db0b}\label{class_overworld_a6f8ee9d0584f6e62b17dbe95cc80db0b}} 
-void {\bfseries init} (int width, int height, World\+::\+Level\+ID level\+Entry, \mbox{\hyperlink{class_font_container}{Font\+Container}} $\ast$fonts)
+void \mbox{\hyperlink{class_overworld_a31e5913420b8e5d3d24c90621cfe4bb5}{init}} (int width, int height, \mbox{\hyperlink{struct_player_data}{Player\+Data}} $\ast$data, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} level\+Entry, \mbox{\hyperlink{class_font_container}{Font\+Container}} $\ast$fonts, \mbox{\hyperlink{_flags_8hpp_a2ea50194cb3de89e680735d7ea665e99}{Flag\+Array}} $\ast$flags, \mbox{\hyperlink{class_game_input}{Game\+Input}} $\ast$input)
+\item 
+void \mbox{\hyperlink{class_overworld_a6f7107b345c40a83cf5bfa85b7f4b9b6}{set\+Battle\+Function}} (std\+::function$<$ void(\mbox{\hyperlink{_pokemon_8h_addae606221fd6d923aa4e675959f108a}{Party}} $\ast$, \mbox{\hyperlink{_pokemon_8h_addae606221fd6d923aa4e675959f108a}{Party}} $\ast$)$>$ battle)
 \item 
 void \mbox{\hyperlink{class_overworld_a49234087878d47a2e78191b629f4ee8b}{update}} (double delta\+Time, double time)
 \item 
@@ -34,17 +39,40 @@ void \mbox{\hyperlink{class_overworld_a5b91833040a7816b3ac38d19c47459bb}{handle\
 
 
 
-Reimplemented from \mbox{\hyperlink{class_state}{State}}.
+Reimplemented from \mbox{\hyperlink{class_s_g_1_1_state_a2e679d3519dc4273c2ff189335688e56}{SG\+::\+State}}.
 
+\mbox{\Hypertarget{class_overworld_a31e5913420b8e5d3d24c90621cfe4bb5}\label{class_overworld_a31e5913420b8e5d3d24c90621cfe4bb5}} 
+\index{Overworld@{Overworld}!init@{init}}
+\index{init@{init}!Overworld@{Overworld}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void Overworld\+::init (\begin{DoxyParamCaption}\item[{int}]{width,  }\item[{int}]{height,  }\item[{\mbox{\hyperlink{struct_player_data}{Player\+Data}} $\ast$}]{data,  }\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{level\+Entry,  }\item[{\mbox{\hyperlink{class_font_container}{Font\+Container}} $\ast$}]{fonts,  }\item[{\mbox{\hyperlink{_flags_8hpp_a2ea50194cb3de89e680735d7ea665e99}{Flag\+Array}} $\ast$}]{flags,  }\item[{\mbox{\hyperlink{class_game_input}{Game\+Input}} $\ast$}]{input }\end{DoxyParamCaption})}
+
+Initialise the \mbox{\hyperlink{class_overworld}{Overworld}} state 
+\begin{DoxyParams}{Parameters}
+{\em width} & width of the screen \\
+\hline
+{\em height} & height of the screen \\
+\hline
+{\em data} & pointer to the player data \\
+\hline
+{\em level\+Entry} & first level to be loaded \\
+\hline
+{\em fonts} & pointer to the font container \\
+\hline
+{\em flags} & pointer to the flag array \\
+\hline
+{\em input} & pointer to the game input \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_overworld_ae27aac03c07681a79353e4350cdd8b99}\label{class_overworld_ae27aac03c07681a79353e4350cdd8b99}} 
 \index{Overworld@{Overworld}!loadRequiredData@{loadRequiredData}}
 \index{loadRequiredData@{loadRequiredData}!Overworld@{Overworld}}
 \doxysubsubsection{\texorpdfstring{loadRequiredData()}{loadRequiredData()}}
 {\footnotesize\ttfamily void Overworld\+::load\+Required\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
+Load data for the state that doesn\textquotesingle{}t persist 
 
-
-Reimplemented from \mbox{\hyperlink{class_state}{State}}.
+Reimplemented from \mbox{\hyperlink{class_s_g_1_1_state_acab4370caaa70732bddff4a43e54adcc}{SG\+::\+State}}.
 
 \mbox{\Hypertarget{class_overworld_a7cef44b24d4358619b5320de5ba6df55}\label{class_overworld_a7cef44b24d4358619b5320de5ba6df55}} 
 \index{Overworld@{Overworld}!purgeRequiredData@{purgeRequiredData}}
@@ -52,9 +80,9 @@ Reimplemented from \mbox{\hyperlink{class_state}{State}}.
 \doxysubsubsection{\texorpdfstring{purgeRequiredData()}{purgeRequiredData()}}
 {\footnotesize\ttfamily void Overworld\+::purge\+Required\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
+Purge data for the state that doesn\textquotesingle{}t persist 
 
-
-Reimplemented from \mbox{\hyperlink{class_state}{State}}.
+Reimplemented from \mbox{\hyperlink{class_s_g_1_1_state_a276022def1b00f5758a33fbdc02b6187}{SG\+::\+State}}.
 
 \mbox{\Hypertarget{class_overworld_a91aafeaf3864e6fc79d4d941efa85f22}\label{class_overworld_a91aafeaf3864e6fc79d4d941efa85f22}} 
 \index{Overworld@{Overworld}!render@{render}}
@@ -64,9 +92,15 @@ Reimplemented from \mbox{\hyperlink{class_state}{State}}.
 
 
 
-Reimplemented from \mbox{\hyperlink{class_state}{State}}.
+Reimplemented from \mbox{\hyperlink{class_s_g_1_1_state_a744e9c3980618a91f94bab5d48b0ad5b}{SG\+::\+State}}.
 
-\mbox{\Hypertarget{class_overworld_a49234087878d47a2e78191b629f4ee8b}\label{class_overworld_a49234087878d47a2e78191b629f4ee8b}} 
+\mbox{\Hypertarget{class_overworld_a6f7107b345c40a83cf5bfa85b7f4b9b6}\label{class_overworld_a6f7107b345c40a83cf5bfa85b7f4b9b6}} 
+\index{Overworld@{Overworld}!setBattleFunction@{setBattleFunction}}
+\index{setBattleFunction@{setBattleFunction}!Overworld@{Overworld}}
+\doxysubsubsection{\texorpdfstring{setBattleFunction()}{setBattleFunction()}}
+{\footnotesize\ttfamily void Overworld\+::set\+Battle\+Function (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(\mbox{\hyperlink{_pokemon_8h_addae606221fd6d923aa4e675959f108a}{Party}} $\ast$, \mbox{\hyperlink{_pokemon_8h_addae606221fd6d923aa4e675959f108a}{Party}} $\ast$)$>$}]{battle }\end{DoxyParamCaption})}
+
+Link to the start battle function to be able to switch state \mbox{\Hypertarget{class_overworld_a49234087878d47a2e78191b629f4ee8b}\label{class_overworld_a49234087878d47a2e78191b629f4ee8b}} 
 \index{Overworld@{Overworld}!update@{update}}
 \index{update@{update}!Overworld@{Overworld}}
 \doxysubsubsection{\texorpdfstring{update()}{update()}}
@@ -74,10 +108,10 @@ Reimplemented from \mbox{\hyperlink{class_state}{State}}.
 
 
 
-Reimplemented from \mbox{\hyperlink{class_state}{State}}.
+Reimplemented from \mbox{\hyperlink{class_s_g_1_1_state_a17957af270e7b8d468f8f3dde766c21c}{SG\+::\+State}}.
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/states/Overworld.\+h\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/states/\mbox{\hyperlink{_overworld_8h}{Overworld.\+h}}\end{DoxyCompactItemize}

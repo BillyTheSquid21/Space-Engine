@@ -1,0 +1,44 @@
+\hypertarget{_path_finding_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/utility/\+Path\+Finding.h File Reference}
+\label{_path_finding_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/utility/PathFinding.h@{D:/Repositories/Space Engine/SpaceGame/include/game/utility/PathFinding.h}}
+{\ttfamily \#include \char`\"{}cmath\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}limits\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}functional\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/level/\+World.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/objects/\+Overworld\+Sprite.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_path_finding_1_1_path_node}{Path\+Finding\+::\+Path\+Node}}
+\item 
+struct \mbox{\hyperlink{struct_path_finding_1_1_path}{Path\+Finding\+::\+Path}}
+\item 
+struct \mbox{\hyperlink{struct_path_finding_1_1_permission}{Path\+Finding\+::\+Permission}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_path_finding}{Path\+Finding}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_path_finding_8h_a89a680f0bee8ada52a239fb1fc3fba0a}{PATH\+\_\+\+FINDING\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Path \mbox{\hyperlink{namespace_path_finding_acca623c9f1caa7430c8de20bc9d38ae6}{Path\+Finding\+::\+Get\+Path}} (\mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $\ast$subject, \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} dest, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} height)
+\item 
+std\+::vector$<$ Path\+Node $>$ \mbox{\hyperlink{namespace_path_finding_aa52d74032df1fddbc00ac298426cff49}{Path\+Finding\+::\+Find\+Path}} (\mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $\ast$subject, \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} dest, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} height)
+\item 
+void \mbox{\hyperlink{namespace_path_finding_a54e47b7868cbe87ab777eb3b04225df4}{Path\+Finding\+::\+Validate\+Path}} (\mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $\ast$subject, \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} dest, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} height, Path \&path)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_path_finding_8h_a89a680f0bee8ada52a239fb1fc3fba0a}\label{_path_finding_8h_a89a680f0bee8ada52a239fb1fc3fba0a}} 
+\index{PathFinding.h@{PathFinding.h}!PATH\_FINDING\_H@{PATH\_FINDING\_H}}
+\index{PATH\_FINDING\_H@{PATH\_FINDING\_H}!PathFinding.h@{PathFinding.h}}
+\doxysubsubsection{\texorpdfstring{PATH\_FINDING\_H}{PATH\_FINDING\_H}}
+{\footnotesize\ttfamily \#define PATH\+\_\+\+FINDING\+\_\+H}
+

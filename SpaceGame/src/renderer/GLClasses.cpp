@@ -3,32 +3,32 @@
 
 //count means number of, size is in bytes
 
-void VertexBuffer::create(size_t dataSize) {
+void SGRender::VertexBuffer::create(size_t dataSize) {
 	glGenBuffers(1, &m_ID);
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 	//tells how much data to set aside - size in bytes
 	glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_DYNAMIC_DRAW);
 }
 
-VertexBuffer::~VertexBuffer() {
+SGRender::VertexBuffer::~VertexBuffer() {
 	glDeleteBuffers(1, &m_ID);
 }
 
-void VertexBuffer::bind() const {
+void SGRender::VertexBuffer::bind() const {
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 }
 
-void VertexBuffer::unbind() const {
+void SGRender::VertexBuffer::unbind() const {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::bufferData(const void* data, unsigned int count) {
+void SGRender::VertexBuffer::bufferData(const void* data, unsigned int count) {
 	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, count * sizeof(float), data);
 }
 
-void IndexBuffer::create(unsigned int count)
+void SGRender::IndexBuffer::create(unsigned int count)
 {
 	m_IndicesCount = count;
 	glGenBuffers(1, &m_ID);
@@ -36,44 +36,44 @@ void IndexBuffer::create(unsigned int count)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
 }
 
-void IndexBuffer::bufferData(const void* data, unsigned int count) {
+void SGRender::IndexBuffer::bufferData(const void* data, unsigned int count) {
 	m_IndicesCount = count;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
 	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, count * sizeof(unsigned int), data);
 }
 
-IndexBuffer::~IndexBuffer() {
+SGRender::IndexBuffer::~IndexBuffer() {
 	glDeleteBuffers(1, &m_ID);
 }
 
-void IndexBuffer::bind() const {
+void SGRender::IndexBuffer::bind() const {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
 }
 
-void IndexBuffer::unbind() const {
+void SGRender::IndexBuffer::unbind() const {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 //Vertex Array
-VertexArray::~VertexArray() {
+SGRender::VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &m_ID);
 }
 
-void VertexArray::create() {
+void SGRender::VertexArray::create() {
 	glGenVertexArrays(1, &m_ID);
 	glBindVertexArray(m_ID);
 }
 
-void VertexArray::bind() const {
+void SGRender::VertexArray::bind() const {
 	glBindVertexArray(m_ID);
 }
 
-void VertexArray::unbind() const {
+void SGRender::VertexArray::unbind() const {
 	glBindVertexArray(0);
 }
 
-void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
+void SGRender::VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
 {
 	bind();
 	vb.bind();
@@ -90,7 +90,7 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 	}
 }
 
-void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout, int start)
+void SGRender::VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout, int start)
 {
 	bind();
 	vb.bind();
@@ -109,13 +109,13 @@ void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 	glBindVertexArray(0);
 }
 
-ShadowMapFBO::ShadowMapFBO()
+SGRender::ShadowMapFBO::ShadowMapFBO()
 {
 	m_fbo = 0;
 	m_shadowMap = 0;
 }
 
-ShadowMapFBO::~ShadowMapFBO()
+SGRender::ShadowMapFBO::~ShadowMapFBO()
 {
 	if (m_fbo != 0) {
 		glDeleteFramebuffers(1, &m_fbo);
@@ -126,7 +126,7 @@ ShadowMapFBO::~ShadowMapFBO()
 	}
 }
 
-bool ShadowMapFBO::init(unsigned int width, unsigned int height)
+bool SGRender::ShadowMapFBO::init(unsigned int width, unsigned int height)
 {
 	// Create the FBO
     glGenFramebuffers(1, &m_fbo);
@@ -161,31 +161,27 @@ bool ShadowMapFBO::init(unsigned int width, unsigned int height)
 }
 
 
-void ShadowMapFBO::bindForWriting()
+void SGRender::ShadowMapFBO::bindForWriting()
 {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 }
 
 
-void ShadowMapFBO::bindForReading(unsigned int slot)
+void SGRender::ShadowMapFBO::bindForReading(unsigned int slot)
 {
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, m_shadowMap);
 }
 
 //Shader
-static enum class ShaderType {
-	NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2
-};
-
-std::string Shader::parseShader(const std::string& filePath) {
+std::string SGRender::Shader::parseShader(const std::string& filePath) {
 	std::ifstream stream(filePath);
 	std::stringstream buff;
 	buff << stream.rdbuf();
 	return buff.str();
 }
 
-unsigned int Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
+unsigned int SGRender::Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
 	//returns id of shader program
 	unsigned int program = glCreateProgram();
 	unsigned int vs = compileShader(vertexShader, GL_VERTEX_SHADER);
@@ -202,7 +198,7 @@ unsigned int Shader::createShader(const std::string& vertexShader, const std::st
 	return program;
 }
 
-unsigned int Shader::createGeoShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) {
+unsigned int SGRender::Shader::createGeoShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader) {
 	//returns id of shader program
 	unsigned int program = glCreateProgram();
 	unsigned int vs = compileShader(vertexShader, GL_VERTEX_SHADER);
@@ -222,7 +218,7 @@ unsigned int Shader::createGeoShader(const std::string& vertexShader, const std:
 	return program;
 }
 
-unsigned int Shader::compileShader(const std::string& source, unsigned int type) {
+unsigned int SGRender::Shader::compileShader(const std::string& source, unsigned int type) {
 	unsigned int id = glCreateShader(type);
 	const char* src = source.c_str();
 	glShaderSource(id, 1, &src, nullptr); //end specifies length of array which the string is
@@ -248,11 +244,11 @@ unsigned int Shader::compileShader(const std::string& source, unsigned int type)
 }
 
 
-Shader::~Shader() {
+SGRender::Shader::~Shader() {
 	deleteShader();
 }
 
-void Shader::create(const std::string& vert, const std::string& frag) {
+void SGRender::Shader::create(const std::string& vert, const std::string& frag) {
 	ShaderProgramSource source =
 	{
 		parseShader(vert), 
@@ -261,7 +257,7 @@ void Shader::create(const std::string& vert, const std::string& frag) {
 	m_ID = createShader(source.VertexSource, source.FragmentSource);
 }
 
-void Shader::create(const std::string& vert, const std::string& geo, const std::string& frag) {
+void SGRender::Shader::create(const std::string& vert, const std::string& geo, const std::string& frag) {
 	GeoShaderProgramSource source =
 	{
 		parseShader(vert),
@@ -271,16 +267,16 @@ void Shader::create(const std::string& vert, const std::string& geo, const std::
 	m_ID = createGeoShader(source.VertexSource, source.FragmentSource, source.GeometrySource);
 }
 
-void Shader::bind() const {
+void SGRender::Shader::bind() const {
 	glUseProgram(m_ID);
 }
 
-void Shader::unbind() const {
+void SGRender::Shader::unbind() const {
 	glUseProgram(0);
 }
 
 //uniforms
-void Shader::setUniform(const std::string& name, int uniform) {
+void SGRender::Shader::setUniform(const std::string& name, int uniform) {
 	int location = getUniformLocation(name);
 	if (location == -1) {
 		return;
@@ -288,7 +284,7 @@ void Shader::setUniform(const std::string& name, int uniform) {
 	glUniform1i(location, uniform);
 }
 
-void Shader::setUniform(const std::string& name, float uniform) {
+void SGRender::Shader::setUniform(const std::string& name, float uniform) {
 	int location = getUniformLocation(name);
 	if (location == -1) {
 		return;
@@ -296,7 +292,7 @@ void Shader::setUniform(const std::string& name, float uniform) {
 	glUniform1f(location, uniform);
 }
 
-void Shader::setUniform(const std::string& name, const glm::mat4* uniform) {
+void SGRender::Shader::setUniform(const std::string& name, const glm::mat4* uniform) {
 	unsigned int location = getUniformLocation(name);
 	if (location == -1) {
 		return;
@@ -305,7 +301,7 @@ void Shader::setUniform(const std::string& name, const glm::mat4* uniform) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, pointer);
 }
 
-void Shader::setUniform(const std::string& name, const glm::vec3* uniform) {
+void SGRender::Shader::setUniform(const std::string& name, const glm::vec3* uniform) {
 	unsigned int location = getUniformLocation(name);
 	if (location == -1) {
 		return;
@@ -314,7 +310,7 @@ void Shader::setUniform(const std::string& name, const glm::vec3* uniform) {
 	glUniform3fv(location, 1, pointer);
 }
 
-int Shader::getUniformLocation(const std::string& name) {
+int SGRender::Shader::getUniformLocation(const std::string& name) {
 
 	if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end()) {
 		return m_UniformLocationCache[name];

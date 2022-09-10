@@ -1,0 +1,210 @@
+\hypertarget{class_game_g_u_i_1_1_g_u_i_element}{}\doxysection{Game\+GUI\+::GUIElement Class Reference}
+\label{class_game_g_u_i_1_1_g_u_i_element}\index{GameGUI::GUIElement@{GameGUI::GUIElement}}
+
+
+{\ttfamily \#include $<$GUI.\+h$>$}
+
+Inheritance diagram for Game\+GUI\+::GUIElement\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.976471cm]{class_game_g_u_i_1_1_g_u_i_element}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_ac8f42dfa471c0f65970ba00103060c25}{GUIElement}} ()=default
+\item 
+virtual void \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a15acfde207a40ae6a4771c5e1b6254aa}{open\+Nest}} ()
+\item 
+virtual void \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_adbc9deab1e3370a2480090d05c2cea0c}{close\+Nest}} ()
+\item 
+virtual void \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a1398500ba154956fc74242d6ed27163d}{set\+Nest}} (int nest)
+\item 
+int \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_af88b5ab7cc2d88c5aaa3131e3ae88d18}{get\+Nest}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_ad551dbbd24f8794162f82ed88d2d0819}{m\+\_\+\+Self\+Contained}} = true
+\item 
+bool \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_af68901bb8f8957cf4ba72f66059605b9}{m\+\_\+\+Render\+Cycle\+Complete}} = false
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a01948e7229a32ce6eb0d8682303f3444}{m\+\_\+\+Width}} = 0.\+0f
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a5d0097525b7b48e136a6736b38f19403}{m\+\_\+\+Height}} = 0.\+0f
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_aa9840152e7490dd7f0eed97fe41603aa}{m\+\_\+\+XPos}} = -\/1.\+0f
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a9b2927a2f8084f8dd5484fa72ab4f958}{m\+\_\+\+YPos}} = -\/1.\+0f
+\item 
+bool \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_ae08f93041996e6b77d629076f2611940}{m\+\_\+\+FillX}} = false
+\item 
+bool \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a32e9567618d1c9908257eb53dcecaaa9}{m\+\_\+\+FillY}} = false
+\item 
+bool \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_adac74cd0a076cb6791a221b57da9c084}{m\+\_\+\+Show}} = true
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_aa63f14fd0899bb3be30c2fae4847c2d4}{update\+Dimensions}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a71c5b988e3898581ffce4c50cb15223f}{m\+\_\+\+Nest\+Number}} = 0
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a8c4affc276f7a05fa822767afc457d2f}{m\+\_\+\+Window\+Width}} = 0
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a3574f78e3569392557602e83c8fdd1ef}{m\+\_\+\+Window\+Height}} = 0
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a8b17a6050450b72a3b3fd13a0d824f22}{m\+\_\+\+WindowX}} = 0
+\item 
+float \mbox{\hyperlink{class_game_g_u_i_1_1_g_u_i_element_a23a10185ba6f186bbe8a59bfb723420f}{m\+\_\+\+WindowY}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_ac8f42dfa471c0f65970ba00103060c25}\label{class_game_g_u_i_1_1_g_u_i_element_ac8f42dfa471c0f65970ba00103060c25}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!GUIElement@{GUIElement}}
+\index{GUIElement@{GUIElement}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{GUIElement()}{GUIElement()}}
+{\footnotesize\ttfamily Game\+GUI\+::\+GUIElement\+::\+GUIElement (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_adbc9deab1e3370a2480090d05c2cea0c}\label{class_game_g_u_i_1_1_g_u_i_element_adbc9deab1e3370a2480090d05c2cea0c}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!closeNest@{closeNest}}
+\index{closeNest@{closeNest}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{closeNest()}{closeNest()}}
+{\footnotesize\ttfamily virtual void Game\+GUI\+::\+GUIElement\+::close\+Nest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_battle_g_u_i_ad530a8251dd8e698fe62ace67b1d904d}{Battle\+GUI}}, \mbox{\hyperlink{class_game_g_u_i_1_1_h_u_d_a83a3022778146af808548a4f2d4c821a}{Game\+GUI\+::\+HUD}}, \mbox{\hyperlink{class_game_g_u_i_1_1_divider_a37e47e1fad07fdba413c16dc4bcd31ef}{Game\+GUI\+::\+Divider}}, \mbox{\hyperlink{class_game_g_u_i_1_1_text_display_a60ebce8619ef08a17c68eb7e5b568b3a}{Game\+GUI\+::\+Text\+Display}}, and \mbox{\hyperlink{class_overworld_menu_a0a06af3ab7bc39a44897e22964948008}{Overworld\+Menu}}.
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_af88b5ab7cc2d88c5aaa3131e3ae88d18}\label{class_game_g_u_i_1_1_g_u_i_element_af88b5ab7cc2d88c5aaa3131e3ae88d18}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!getNest@{getNest}}
+\index{getNest@{getNest}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{getNest()}{getNest()}}
+{\footnotesize\ttfamily int Game\+GUI\+::\+GUIElement\+::get\+Nest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a15acfde207a40ae6a4771c5e1b6254aa}\label{class_game_g_u_i_1_1_g_u_i_element_a15acfde207a40ae6a4771c5e1b6254aa}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!openNest@{openNest}}
+\index{openNest@{openNest}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{openNest()}{openNest()}}
+{\footnotesize\ttfamily virtual void Game\+GUI\+::\+GUIElement\+::open\+Nest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_battle_g_u_i_ac5b4c04c8728417c969fc2773ac63d70}{Battle\+GUI}}, \mbox{\hyperlink{class_game_g_u_i_1_1_text_box_a1799a913a04a5231afe722ddc1cd71b2}{Game\+GUI\+::\+Text\+Box}}, \mbox{\hyperlink{class_game_g_u_i_1_1_h_u_d_a14821b284f771b65672c8d2b55a46233}{Game\+GUI\+::\+HUD}}, \mbox{\hyperlink{class_game_g_u_i_1_1_divider_ab8344bf6ffdfbae3a898e6319aabb8bd}{Game\+GUI\+::\+Divider}}, \mbox{\hyperlink{class_game_g_u_i_1_1_button_affdcaf21124f901e10dc137c66a6f5f6}{Game\+GUI\+::\+Button}}, \mbox{\hyperlink{class_game_g_u_i_1_1_text_display_a1ad91b0e4cc4b585290012190eff53f8}{Game\+GUI\+::\+Text\+Display}}, and \mbox{\hyperlink{class_overworld_menu_a099df75d8c03414756df9021a705eded}{Overworld\+Menu}}.
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a1398500ba154956fc74242d6ed27163d}\label{class_game_g_u_i_1_1_g_u_i_element_a1398500ba154956fc74242d6ed27163d}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!setNest@{setNest}}
+\index{setNest@{setNest}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{setNest()}{setNest()}}
+{\footnotesize\ttfamily virtual void Game\+GUI\+::\+GUIElement\+::set\+Nest (\begin{DoxyParamCaption}\item[{int}]{nest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_game_g_u_i_1_1_divider_a27b9c2b2c0f0cca683a2d6c23c91486c}{Game\+GUI\+::\+Divider}}.
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_aa63f14fd0899bb3be30c2fae4847c2d4}\label{class_game_g_u_i_1_1_g_u_i_element_aa63f14fd0899bb3be30c2fae4847c2d4}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!updateDimensions@{updateDimensions}}
+\index{updateDimensions@{updateDimensions}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{updateDimensions()}{updateDimensions()}}
+{\footnotesize\ttfamily void Game\+GUI\+::\+GUIElement\+::update\+Dimensions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_ae08f93041996e6b77d629076f2611940}\label{class_game_g_u_i_1_1_g_u_i_element_ae08f93041996e6b77d629076f2611940}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_FillX@{m\_FillX}}
+\index{m\_FillX@{m\_FillX}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_FillX}{m\_FillX}}
+{\footnotesize\ttfamily bool Game\+GUI\+::\+GUIElement\+::m\+\_\+\+FillX = false}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a32e9567618d1c9908257eb53dcecaaa9}\label{class_game_g_u_i_1_1_g_u_i_element_a32e9567618d1c9908257eb53dcecaaa9}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_FillY@{m\_FillY}}
+\index{m\_FillY@{m\_FillY}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_FillY}{m\_FillY}}
+{\footnotesize\ttfamily bool Game\+GUI\+::\+GUIElement\+::m\+\_\+\+FillY = false}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a5d0097525b7b48e136a6736b38f19403}\label{class_game_g_u_i_1_1_g_u_i_element_a5d0097525b7b48e136a6736b38f19403}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_Height@{m\_Height}}
+\index{m\_Height@{m\_Height}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_Height}{m\_Height}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Height = 0.\+0f}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a71c5b988e3898581ffce4c50cb15223f}\label{class_game_g_u_i_1_1_g_u_i_element_a71c5b988e3898581ffce4c50cb15223f}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_NestNumber@{m\_NestNumber}}
+\index{m\_NestNumber@{m\_NestNumber}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_NestNumber}{m\_NestNumber}}
+{\footnotesize\ttfamily int Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Nest\+Number = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_af68901bb8f8957cf4ba72f66059605b9}\label{class_game_g_u_i_1_1_g_u_i_element_af68901bb8f8957cf4ba72f66059605b9}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_RenderCycleComplete@{m\_RenderCycleComplete}}
+\index{m\_RenderCycleComplete@{m\_RenderCycleComplete}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_RenderCycleComplete}{m\_RenderCycleComplete}}
+{\footnotesize\ttfamily bool Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Render\+Cycle\+Complete = false}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_ad551dbbd24f8794162f82ed88d2d0819}\label{class_game_g_u_i_1_1_g_u_i_element_ad551dbbd24f8794162f82ed88d2d0819}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_SelfContained@{m\_SelfContained}}
+\index{m\_SelfContained@{m\_SelfContained}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_SelfContained}{m\_SelfContained}}
+{\footnotesize\ttfamily bool Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Self\+Contained = true}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_adac74cd0a076cb6791a221b57da9c084}\label{class_game_g_u_i_1_1_g_u_i_element_adac74cd0a076cb6791a221b57da9c084}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_Show@{m\_Show}}
+\index{m\_Show@{m\_Show}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_Show}{m\_Show}}
+{\footnotesize\ttfamily bool Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Show = true}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a01948e7229a32ce6eb0d8682303f3444}\label{class_game_g_u_i_1_1_g_u_i_element_a01948e7229a32ce6eb0d8682303f3444}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_Width@{m\_Width}}
+\index{m\_Width@{m\_Width}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_Width}{m\_Width}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Width = 0.\+0f}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a3574f78e3569392557602e83c8fdd1ef}\label{class_game_g_u_i_1_1_g_u_i_element_a3574f78e3569392557602e83c8fdd1ef}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_WindowHeight@{m\_WindowHeight}}
+\index{m\_WindowHeight@{m\_WindowHeight}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_WindowHeight}{m\_WindowHeight}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Window\+Height = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a8c4affc276f7a05fa822767afc457d2f}\label{class_game_g_u_i_1_1_g_u_i_element_a8c4affc276f7a05fa822767afc457d2f}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_WindowWidth@{m\_WindowWidth}}
+\index{m\_WindowWidth@{m\_WindowWidth}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_WindowWidth}{m\_WindowWidth}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+Window\+Width = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a8b17a6050450b72a3b3fd13a0d824f22}\label{class_game_g_u_i_1_1_g_u_i_element_a8b17a6050450b72a3b3fd13a0d824f22}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_WindowX@{m\_WindowX}}
+\index{m\_WindowX@{m\_WindowX}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_WindowX}{m\_WindowX}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+WindowX = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a23a10185ba6f186bbe8a59bfb723420f}\label{class_game_g_u_i_1_1_g_u_i_element_a23a10185ba6f186bbe8a59bfb723420f}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_WindowY@{m\_WindowY}}
+\index{m\_WindowY@{m\_WindowY}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_WindowY}{m\_WindowY}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+WindowY = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_aa9840152e7490dd7f0eed97fe41603aa}\label{class_game_g_u_i_1_1_g_u_i_element_aa9840152e7490dd7f0eed97fe41603aa}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_XPos@{m\_XPos}}
+\index{m\_XPos@{m\_XPos}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_XPos}{m\_XPos}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+XPos = -\/1.\+0f}
+
+\mbox{\Hypertarget{class_game_g_u_i_1_1_g_u_i_element_a9b2927a2f8084f8dd5484fa72ab4f958}\label{class_game_g_u_i_1_1_g_u_i_element_a9b2927a2f8084f8dd5484fa72ab4f958}} 
+\index{GameGUI::GUIElement@{GameGUI::GUIElement}!m\_YPos@{m\_YPos}}
+\index{m\_YPos@{m\_YPos}!GameGUI::GUIElement@{GameGUI::GUIElement}}
+\doxysubsubsection{\texorpdfstring{m\_YPos}{m\_YPos}}
+{\footnotesize\ttfamily float Game\+GUI\+::\+GUIElement\+::m\+\_\+\+YPos = -\/1.\+0f}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/gui/\mbox{\hyperlink{_g_u_i_8h}{GUI.\+h}}\end{DoxyCompactItemize}

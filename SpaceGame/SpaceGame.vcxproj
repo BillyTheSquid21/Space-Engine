@@ -189,7 +189,7 @@
     <ClCompile Include="src\renderer\GLClasses.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
     <ClCompile Include="src\renderer\ShadowMap.cpp" />
-    <ClCompile Include="src\renderer\ShapeFactory.cpp" />
+    <ClCompile Include="src\renderer\Geometry.cpp" />
     <ClCompile Include="src\renderer\Texture.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\utility\Random.cpp" />
@@ -263,7 +263,7 @@
     <ClInclude Include="include\renderer\Plane.h" />
     <ClInclude Include="include\renderer\Renderer.hpp" />
     <ClInclude Include="include\renderer\ShadowMap.h" />
-    <ClInclude Include="include\renderer\ShapeFactory.h" />
+    <ClInclude Include="include\renderer\Geometry.h" />
     <ClInclude Include="include\renderer\Texture.h" />
     <ClInclude Include="include\renderer\Transition.hpp" />
     <ClInclude Include="include\renderer\Vertex.hpp" />

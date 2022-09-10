@@ -1,5 +1,9 @@
 \hypertarget{class_demo_game}{}\doxysection{Demo\+Game Class Reference}
 \label{class_demo_game}\index{DemoGame@{DemoGame}}
+
+
+{\ttfamily \#include $<$Demo\+Game.\+h$>$}
+
 Inheritance diagram for Demo\+Game\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -9,8 +13,9 @@ Inheritance diagram for Demo\+Game\+:\begin{figure}[H]
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{class_demo_game_afd669579ab350407877b1ea0d88d04c2}\label{class_demo_game_afd669579ab350407877b1ea0d88d04c2}} 
-bool {\bfseries init} (const char name\mbox{[}$\,$\mbox{]}, Key\+\_\+\+Callback k\+Callback, Mouse\+\_\+\+Callback m\+Callback, Scroll\+\_\+\+Callback s\+Callback)
+\mbox{\hyperlink{class_demo_game_a1149a68d9a1c423000449c217b86e305}{$\sim$\+Demo\+Game}} ()
+\item 
+bool \mbox{\hyperlink{class_demo_game_afd669579ab350407877b1ea0d88d04c2}{init}} (const char name\mbox{[}$\,$\mbox{]}, \mbox{\hyperlink{_callbacks_8hpp_a865e8ea12919c486f307441c2fc15540}{Key\+\_\+\+Callback}} k\+Callback, \mbox{\hyperlink{_callbacks_8hpp_ad430807ac21df706160bc5b56d5a9153}{Mouse\+\_\+\+Callback}} m\+Callback, \mbox{\hyperlink{_callbacks_8hpp_ac5ff64a3e2893b56ab073dbac5021e41}{Scroll\+\_\+\+Callback}} s\+Callback)
 \item 
 void \mbox{\hyperlink{class_demo_game_a00beeb8107e1bb13b038e20cd6a36ff8}{handle\+Input}} (int key, int scancode, int action, int mods)
 \item 
@@ -18,31 +23,59 @@ void \mbox{\hyperlink{class_demo_game_a4b0f70fa4eb021882c649a4983606777}{handle\
 \item 
 void \mbox{\hyperlink{class_demo_game_a8be81672e3bffa26071972cc926a5f67}{handle\+Scrolling}} (double x\+Offset, double y\+Offset)
 \item 
-\mbox{\Hypertarget{class_demo_game_a2b1c01f003ad94db5f5edc812faed37b}\label{class_demo_game_a2b1c01f003ad94db5f5edc812faed37b}} 
-void {\bfseries update} (double delta\+Time)
+void \mbox{\hyperlink{class_demo_game_a2b1c01f003ad94db5f5edc812faed37b}{update}} (double delta\+Time)
 \item 
-\mbox{\Hypertarget{class_demo_game_a11a30ffb5d87a71b4e2ad948c4e09b01}\label{class_demo_game_a11a30ffb5d87a71b4e2ad948c4e09b01}} 
-void {\bfseries render} ()
+void \mbox{\hyperlink{class_demo_game_a11a30ffb5d87a71b4e2ad948c4e09b01}{render}} ()
 \item 
-\mbox{\Hypertarget{class_demo_game_a4735989677c1cab18866f3ae4ee0aa1c}\label{class_demo_game_a4735989677c1cab18866f3ae4ee0aa1c}} 
-{\bfseries Game} ()=default
+\mbox{\hyperlink{class_demo_game_a4735989677c1cab18866f3ae4ee0aa1c}{Game}} ()=default
 \item 
-\mbox{\Hypertarget{class_demo_game_a5bc07cf8947858f32637943836cc6f8e}\label{class_demo_game_a5bc07cf8947858f32637943836cc6f8e}} 
-{\bfseries Game} (int width, int height)
+\mbox{\hyperlink{class_demo_game_a5bc07cf8947858f32637943836cc6f8e}{Game}} (int width, int height)
 \end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
 
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_demo_game_a1149a68d9a1c423000449c217b86e305}\label{class_demo_game_a1149a68d9a1c423000449c217b86e305}} 
+\index{DemoGame@{DemoGame}!````~DemoGame@{$\sim$DemoGame}}
+\index{````~DemoGame@{$\sim$DemoGame}!DemoGame@{DemoGame}}
+\doxysubsubsection{\texorpdfstring{$\sim$DemoGame()}{~DemoGame()}}
+{\footnotesize\ttfamily Demo\+Game\+::$\sim$\+Demo\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_demo_game_a00beeb8107e1bb13b038e20cd6a36ff8}\label{class_demo_game_a00beeb8107e1bb13b038e20cd6a36ff8}} 
+\mbox{\Hypertarget{class_demo_game_a4735989677c1cab18866f3ae4ee0aa1c}\label{class_demo_game_a4735989677c1cab18866f3ae4ee0aa1c}} 
+\index{DemoGame@{DemoGame}!Game@{Game}}
+\index{Game@{Game}!DemoGame@{DemoGame}}
+\doxysubsubsection{\texorpdfstring{Game()}{Game()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Game\+::\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{class_demo_game_a5bc07cf8947858f32637943836cc6f8e}\label{class_demo_game_a5bc07cf8947858f32637943836cc6f8e}} 
+\index{DemoGame@{DemoGame}!Game@{Game}}
+\index{Game@{Game}!DemoGame@{DemoGame}}
+\doxysubsubsection{\texorpdfstring{Game()}{Game()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Game\+::\+Game (\begin{DoxyParamCaption}\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})}
+
+Constructs the game instance with the given width and height \mbox{\Hypertarget{class_demo_game_a00beeb8107e1bb13b038e20cd6a36ff8}\label{class_demo_game_a00beeb8107e1bb13b038e20cd6a36ff8}} 
 \index{DemoGame@{DemoGame}!handleInput@{handleInput}}
 \index{handleInput@{handleInput}!DemoGame@{DemoGame}}
 \doxysubsubsection{\texorpdfstring{handleInput()}{handleInput()}}
 {\footnotesize\ttfamily void Demo\+Game\+::handle\+Input (\begin{DoxyParamCaption}\item[{int}]{key,  }\item[{int}]{scancode,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
+Overwrite to handle input in derived game class 
+\begin{DoxyParams}{Parameters}
+{\em key} & GLFW Key code \\
+\hline
+{\em scancode} & GLFW Scan code \\
+\hline
+{\em action} & GLFW Action code \\
+\hline
+{\em mods} & GLFW modifier \\
+\hline
+\end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_game}{Game}}.
+Reimplemented from \mbox{\hyperlink{class_game_a6acf9e00f74084d818d59698f870db4e}{Game}}.
 
 \mbox{\Hypertarget{class_demo_game_a4b0f70fa4eb021882c649a4983606777}\label{class_demo_game_a4b0f70fa4eb021882c649a4983606777}} 
 \index{DemoGame@{DemoGame}!handleMouse@{handleMouse}}
@@ -50,9 +83,18 @@ Reimplemented from \mbox{\hyperlink{class_game}{Game}}.
 \doxysubsubsection{\texorpdfstring{handleMouse()}{handleMouse()}}
 {\footnotesize\ttfamily void Demo\+Game\+::handle\+Mouse (\begin{DoxyParamCaption}\item[{int}]{button,  }\item[{int}]{action,  }\item[{int}]{mods }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
+Overwrite to handle input in derived game class 
+\begin{DoxyParams}{Parameters}
+{\em button} & GLFW Button code \\
+\hline
+{\em action} & GLFW Action code \\
+\hline
+{\em mods} & GLFW modifier \\
+\hline
+\end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_game}{Game}}.
+Reimplemented from \mbox{\hyperlink{class_game_a0d96a8ecaebff3412708e3d19a34cddc}{Game}}.
 
 \mbox{\Hypertarget{class_demo_game_a8be81672e3bffa26071972cc926a5f67}\label{class_demo_game_a8be81672e3bffa26071972cc926a5f67}} 
 \index{DemoGame@{DemoGame}!handleScrolling@{handleScrolling}}
@@ -60,12 +102,37 @@ Reimplemented from \mbox{\hyperlink{class_game}{Game}}.
 \doxysubsubsection{\texorpdfstring{handleScrolling()}{handleScrolling()}}
 {\footnotesize\ttfamily void Demo\+Game\+::handle\+Scrolling (\begin{DoxyParamCaption}\item[{double}]{x\+Offset,  }\item[{double}]{y\+Offset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
+Overwrite to handle input in derived game class 
+\begin{DoxyParams}{Parameters}
+{\em x\+Offset} & Scroll x offset \\
+\hline
+{\em y\+Offset} & Scroll y offset \\
+\hline
+\end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_game}{Game}}.
+Reimplemented from \mbox{\hyperlink{class_game_abe908bba68dfd3da6854aef344dadf2b}{Game}}.
+
+\mbox{\Hypertarget{class_demo_game_afd669579ab350407877b1ea0d88d04c2}\label{class_demo_game_afd669579ab350407877b1ea0d88d04c2}} 
+\index{DemoGame@{DemoGame}!init@{init}}
+\index{init@{init}!DemoGame@{DemoGame}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily bool Demo\+Game\+::init (\begin{DoxyParamCaption}\item[{const char}]{name\mbox{[}$\,$\mbox{]},  }\item[{\mbox{\hyperlink{_callbacks_8hpp_a865e8ea12919c486f307441c2fc15540}{Key\+\_\+\+Callback}}}]{k\+Callback,  }\item[{\mbox{\hyperlink{_callbacks_8hpp_ad430807ac21df706160bc5b56d5a9153}{Mouse\+\_\+\+Callback}}}]{m\+Callback,  }\item[{\mbox{\hyperlink{_callbacks_8hpp_ac5ff64a3e2893b56ab073dbac5021e41}{Scroll\+\_\+\+Callback}}}]{s\+Callback }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_demo_game_a11a30ffb5d87a71b4e2ad948c4e09b01}\label{class_demo_game_a11a30ffb5d87a71b4e2ad948c4e09b01}} 
+\index{DemoGame@{DemoGame}!render@{render}}
+\index{render@{render}!DemoGame@{DemoGame}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void Demo\+Game\+::render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_demo_game_a2b1c01f003ad94db5f5edc812faed37b}\label{class_demo_game_a2b1c01f003ad94db5f5edc812faed37b}} 
+\index{DemoGame@{DemoGame}!update@{update}}
+\index{update@{update}!DemoGame@{DemoGame}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Demo\+Game\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})}
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/Demo\+Game.\+h\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/\mbox{\hyperlink{_demo_game_8h}{Demo\+Game.\+h}}\end{DoxyCompactItemize}

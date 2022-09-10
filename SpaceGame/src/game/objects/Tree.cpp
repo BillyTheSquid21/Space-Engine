@@ -2,6 +2,7 @@
 
 void TreeRenderComponent::addTree(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, TileUV uv1, TileUV uv2)
 {
+	using namespace Geometry; using namespace SGRender;
 	if (m_Trees.quadCount >= m_Trees.quads.size())
 	{
 		EngineLog("Try reserving more space, tree count out of range!");
@@ -22,19 +23,19 @@ void TreeRenderComponent::addTree(Struct2f levelOrigin, World::Tile tile, World:
 	Norm_Tex_Quad tree4 = CreateNormalTextureQuad(xPos2, yPos + TREE_HEIGHT, (float)World::TILE_SIZE, TREE_HEIGHT + 10.0f, uv2.u, uv2.v, uv2.width, uv2.height);
 
 	//Position Sprite
-	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree1, 1.0f, 0.0f, -zPos, Shape::QUAD);
-	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree2, 1.0f, 0.0f, -zPos, Shape::QUAD);
+	Translate<NTVertex>((NTVertex*)&tree1, 1.0f, 0.0f, -zPos, Shape::QUAD);
+	Translate<NTVertex>((NTVertex*)&tree2, 1.0f, 0.0f, -zPos, Shape::QUAD);
 	
-	AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tree3, { xPos1 + World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
-	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree3, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
-	AxialRotate<NormalTextureVertex>((NormalTextureVertex*)&tree4, { xPos2 - World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
-	Translate<NormalTextureVertex>((NormalTextureVertex*)&tree4, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
+	AxialRotate<NTVertex>((NTVertex*)&tree3, { xPos1 + World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
+	Translate<NTVertex>((NTVertex*)&tree3, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
+	AxialRotate<NTVertex>((NTVertex*)&tree4, { xPos2 - World::TILE_SIZE / 2, yPos, 0.0f }, 90.0f, Shape::QUAD, Axis::Y);
+	Translate<NTVertex>((NTVertex*)&tree4, 1.0f + World::TILE_SIZE / 2, 0.0f, -zPos + (float)World::TILE_SIZE / 2.0f, Shape::QUAD);
 
 	//Gen normals
-	CalculateQuadNormals((NormalTextureVertex*)&tree1);
-	CalculateQuadNormals((NormalTextureVertex*)&tree2);
-	CalculateQuadNormals((NormalTextureVertex*)&tree3);
-	CalculateQuadNormals((NormalTextureVertex*)&tree4);
+	CalculateQuadNormals((NTVertex*)&tree1);
+	CalculateQuadNormals((NTVertex*)&tree2);
+	CalculateQuadNormals((NTVertex*)&tree3);
+	CalculateQuadNormals((NTVertex*)&tree4);
 	
 	m_Trees.quads[m_Trees.quadCount] = tree1;
 	m_Trees.quadCount++;

@@ -2,14 +2,16 @@
 
 //World functions
 static void RotateTileCorner(Norm_Tex_Quad* quad, float angle) {
-    NormalTextureVertex v0 = quad->at(0);
+    using namespace Geometry; using namespace SGRender;
+    NTVertex v0 = quad->at(0);
     float x = v0.position.x + (World::TILE_SIZE / 2);
     float z = v0.position.z + (World::TILE_SIZE / 2);
-    AxialRotate<NormalTextureVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
+    AxialRotate<NTVertex>(quad, { x, 0.0f, z }, angle, Shape::QUAD, Axis::Y);
 }
 
 void World::TileLevel(Norm_Tex_Quad* quad, WorldHeight level) {
-    Translate<NormalTextureVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
+    using namespace Geometry; using namespace SGRender;
+    Translate<NTVertex>((void*)quad, 0.0f, ((float)level / sqrt(2)) * World::TILE_SIZE, 0.0f, Shape::QUAD);
 }
 
 World::Direction World::GetDirection(std::string dir) 
@@ -247,6 +249,7 @@ std::vector<World::MovementPermissions>* World::Level::getPermissions(LevelID le
 }
 
 void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
+    using namespace Geometry; using namespace SGRender;
     //Get index's to slope - 3 is max
     unsigned int verticeIndex[3];
     unsigned int verticesToSlope = 0;
@@ -332,32 +335,32 @@ void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
         verticeIndex[0] = 0;
         verticeIndex[1] = 1;
         verticesToSlope = 2;
-        TranslateVertex<NormalTextureVertex>(quad, 0, 0.0f, 0.0f, World::TILE_SIZE);
-        TranslateVertex<NormalTextureVertex>(quad, 1, 0.0f, 0.0f, World::TILE_SIZE);
+        TranslateVertex<NTVertex>(quad, 0, 0.0f, 0.0f, World::TILE_SIZE);
+        TranslateVertex<NTVertex>(quad, 1, 0.0f, 0.0f, World::TILE_SIZE);
         break;
     case Direction::SOUTH_WALL:
         verticeIndex[0] = 0;
         verticeIndex[1] = 1;
         verticesToSlope = 2;
         RotateTileCorner(quad, -180.0f);
-        TranslateVertex<NormalTextureVertex>(quad, 0, 0.0f, 0.0f, -World::TILE_SIZE);
-        TranslateVertex<NormalTextureVertex>(quad, 1, 0.0f, 0.0f, -World::TILE_SIZE);
+        TranslateVertex<NTVertex>(quad, 0, 0.0f, 0.0f, -World::TILE_SIZE);
+        TranslateVertex<NTVertex>(quad, 1, 0.0f, 0.0f, -World::TILE_SIZE);
         break;
     case Direction::EAST_WALL:
         verticeIndex[0] = 0;
         verticeIndex[1] = 1;
         verticesToSlope = 2;
         RotateTileCorner(quad, -90.0f);
-        TranslateVertex<NormalTextureVertex>(quad, 0, -World::TILE_SIZE, 0.0f, 0.0f);
-        TranslateVertex<NormalTextureVertex>(quad, 1, -World::TILE_SIZE, 0.0f, 0.0f);
+        TranslateVertex<NTVertex>(quad, 0, -World::TILE_SIZE, 0.0f, 0.0f);
+        TranslateVertex<NTVertex>(quad, 1, -World::TILE_SIZE, 0.0f, 0.0f);
         break;
     case Direction::WEST_WALL:
         verticeIndex[0] = 0;
         verticeIndex[1] = 1;
         verticesToSlope = 2;
         RotateTileCorner(quad, -270.0f);
-        TranslateVertex<NormalTextureVertex>(quad, 0, World::TILE_SIZE, 0.0f, 0.0f);
-        TranslateVertex<NormalTextureVertex>(quad, 1, World::TILE_SIZE, 0.0f, 0.0f);
+        TranslateVertex<NTVertex>(quad, 0, World::TILE_SIZE, 0.0f, 0.0f);
+        TranslateVertex<NTVertex>(quad, 1, World::TILE_SIZE, 0.0f, 0.0f);
         break;
     default:
         verticesToSlope = 0;
@@ -365,12 +368,13 @@ void World::SlopeTile(Norm_Tex_Quad* quad, World::Direction direction) {
     }
 
     for (int i = 0; i < verticesToSlope; i++) {
-        TranslateVertex<NormalTextureVertex>((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
+        TranslateVertex<NTVertex>((void*)quad, verticeIndex[i], 0.0f, TILE_SIZE / sqrt(2), 0.0f);
     }
 }
 
 void World::StackWall(Norm_Tex_Quad* quad, std::vector<Direction>& dir, Tile tile, int width, int height)
 {
+    using namespace Geometry; using namespace SGRender;
     int yFirstIndex = tile.z * width + tile.x;
     Direction firstDir = dir[yFirstIndex];
 
@@ -419,16 +423,16 @@ void World::StackWall(Norm_Tex_Quad* quad, std::vector<Direction>& dir, Tile til
     switch (firstDir)
     {
     case Direction::NORTH_WALL:
-        Translate<NormalTextureVertex>(&quad[0], 0.0f, 0.0f, stackCount * World::TILE_SIZE, Shape::QUAD);
+        Translate<NTVertex>(&quad[0], 0.0f, 0.0f, stackCount * World::TILE_SIZE, Shape::QUAD);
         break;
     case Direction::SOUTH_WALL:
-        Translate<NormalTextureVertex>(&quad[0], 0.0f, 0.0f, stackCount * -World::TILE_SIZE, Shape::QUAD);
+        Translate<NTVertex>(&quad[0], 0.0f, 0.0f, stackCount * -World::TILE_SIZE, Shape::QUAD);
         break;
     case Direction::EAST_WALL:
-        Translate<NormalTextureVertex>(&quad[0], stackCount * -World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
+        Translate<NTVertex>(&quad[0], stackCount * -World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
         break;
     case Direction::WEST_WALL:
-        Translate<NormalTextureVertex>(&quad[0], stackCount * World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
+        Translate<NTVertex>(&quad[0], stackCount * World::TILE_SIZE, 0.0f, 0.0f, Shape::QUAD);
         break;
     default:
         break;
@@ -439,7 +443,7 @@ std::vector<World::Level::LevelPtrCache> World::Level::s_MovementPermissionsCach
 bool World::Level::s_CacheInit = false;
 
 //Level - data is defined back to front with top left being 0,0 not bottom left
-bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMap, Texture* tileset, glm::vec3& lColor, glm::vec3& lDir)
+bool World::Level::buildLevel(SGRender::Renderer* planeRenderer, TileMap* tileMap, Texture* tileset, glm::vec3& lColor, glm::vec3& lDir)
 {
     //Checks if the caches are setup - should happen on first load which shouldn't need to be atomic (not loading through loading zone)
     if (!s_CacheInit)
@@ -522,7 +526,7 @@ bool World::Level::buildLevel(Render::Renderer* planeRenderer, TileMap* tileMap,
             TileTexture tileTex = data.planeTextures[yFirstIndex];
             if (!(tileTex.textureX == 0 && tileTex.textureY == 0)) {
                 texData = m_TileMapPointer->uvTile(tileTex.textureX, tileTex.textureY);
-                SetQuadUV((NormalTextureVertex*)m_Plane.accessQuad(x, y), texData.u, texData.v, texData.width, texData.height);
+                Geometry::SetQuadUV((SGRender::NTVertex*)m_Plane.accessQuad(x, y), texData.u, texData.v, texData.width, texData.height);
             }
         }
     }

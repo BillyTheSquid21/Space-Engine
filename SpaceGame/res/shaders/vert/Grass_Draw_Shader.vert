@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec4 color;
-layout(location = 2) in vec3 offset;
+layout(location = 2) in vec4 offset;
 
 //MVP
 uniform mat4 u_Model;
@@ -22,8 +22,7 @@ out DATA
 
 float calcOffset()
 {
-	int i = gl_InstanceID;
-	return sin(i) + ((cos(i/5.0))/2.0) + (sin(i/10.0)/-4.0);
+	return sin(offset.w) + ((cos(offset.w/5.0))/2.0) + (sin(offset.w/10.0)/-4.0);
 }
 
 void main()
@@ -32,10 +31,10 @@ void main()
 	float heightVar = calcOffset();
 	data_out.v_HeightVariance = 2*heightVar;
 
-	float colorOff = 10/sin(gl_InstanceID);
+	float colorOff = 10/sin(offset.w);
 	data_out.v_Color = color + vec4(heightVar/colorOff, heightVar/colorOff, heightVar/colorOff,0.0);
 
-	gl_Position = u_Model * (position + vec4(offset,0.0));
+	gl_Position = u_Model * (position + vec4(offset.xyz,0.0));
 	data_out.v_Proj = u_Proj * u_View * u_Model;
 	data_out.v_Normal = vec3(0.0,0.0,1.0);
 }

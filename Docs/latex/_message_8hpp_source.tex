@@ -1,18 +1,22 @@
 \hypertarget{_message_8hpp_source}{}\doxysection{Message.\+hpp}
 \label{_message_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/Message.hpp@{D:/Repositories/Space Engine/SpaceGame/include/core/Message.hpp}}
-
+\mbox{\hyperlink{_message_8hpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef GAME\_MESSAGE\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define GAME\_MESSAGE\_H}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{comment}{//Message enum}}
-\DoxyCodeLine{6 \textcolor{keyword}{enum class} Message}
-\DoxyCodeLine{7 \{}
-\DoxyCodeLine{8     \textcolor{comment}{//CGE is shorthand for change}}
-\DoxyCodeLine{9     NO\_OP, ACTIVATE, DEACTIVATE, KILL, CGE\_BOOL, BUSY}
-\DoxyCodeLine{10 \};}
-\DoxyCodeLine{11 }
-\DoxyCodeLine{12 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_s_g_object}{SGObject}}}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{14     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92}{Message}} : uint32\_t}
+\DoxyCodeLine{15     \{}
+\DoxyCodeLine{16         \textcolor{comment}{//CGE is shorthand for change}}
+\DoxyCodeLine{17         \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a14b52fa379dea9171c3eb958d7fa5795}{NO\_OP}}, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92aa9409daa2beb494ef861efb51d5cd6bb}{ACTIVATE}}, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a5810e63771fb03117a3e2bcf98d5b9f0}{DEACTIVATE}}, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}{KILL}}, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a802706a9238e2928077f97736854bad4}{BUSY}},}
+\DoxyCodeLine{18     \};}
+\DoxyCodeLine{19 \}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

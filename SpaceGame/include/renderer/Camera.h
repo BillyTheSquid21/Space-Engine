@@ -2,62 +2,128 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "GLClasses.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-#include <glm/gtx/vector_angle.hpp>
+#include "renderer/GLClasses.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtx/vector_angle.hpp"
+#include "cmath"
 
-class Camera
+namespace SGRender
 {
-public:
-	Camera() = default;
-	Camera(float width, float height, glm::vec3 position);
-	~Camera() = default;
+	/**
+	* Mathmatical definition of a plane (Normal and distance)
+	* Not to be confused with the geometric plane
+	*/
+	struct Plane
+	{
+		Plane() = default;
 
-	//get data from camera
-	void sendCameraUniforms(Shader& shader);
-	void setProjection(glm::mat4 project) { proj = project; }
+		Plane(const glm::vec3& p1, const glm::vec3& norm)
+			: normal(glm::normalize(norm)),
+			distance(glm::dot(normal, p1))
+		{}
 
-	//move camera relative to orientation
-	void moveForwards(float speed);
-	void moveSideways(float speed);
-	void moveUp(float speed);
-	void panSideways(float speed);
-	void panUp(float speed);
+		inline float getSignedDistanceToPlane(const glm::vec3& point) const
+		{
+			return glm::dot(normal, point) - distance;
+		}
 
-	//move camera in absolute terms
-	void moveX(float speed);
-	void moveY(float speed);
-	void moveZ(float speed);
+		glm::vec3 normal = { 0.0f, 1.0f, 0.0f };
+		float distance = 0.0f;
+	};
 
-	//set pos
-	void setPos(float x, float y, float z);
-	glm::vec3 getPos() const { return m_Position; }
-	glm::mat4 getVP() { return proj * view; }
+	/**
+	* Contains the plane required to define a frustum
+	*/
+	struct Frustum
+	{
+		Plane topFace;
+		Plane bottomFace;
 
-	//set camera
-	void panYDegrees(float degrees);
+		Plane nearFace;
+		Plane farFace;
 
-	//getters and setters
-	void setNearAndFarPlane(float near, float far) { nearPlane = near; farPlane = far; }
-	float speed() const { return m_Speed; }
-	float width() const { return m_CameraWidth; }
-	float height() const { return m_CameraHeight; }
+		Plane leftFace;
+		Plane rightFace;
+	};
 
-private:
-	float m_CameraWidth; float m_CameraHeight;
+	/**
+	* Contains the projection, position, and other data required for a camera
+	* Supports simple (non quaternion) motion currently
+	*/
+	class Camera
+	{
+	public:
+		Camera() = default;
+		Camera(float width, float height, glm::vec3 position);
+		~Camera() = default;
 
-	//properties
-	glm::vec3 m_Position;
-	glm::vec3 m_Direction = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
-	float m_Speed = 0.1f;
-	float sensitivity = 100.0f;
-	float nearPlane = 0.1f; float farPlane = 1000.0f;
+		/**
+		* Send the uniforms for the camera to the given shader (ensure shader is bound first)
+		*/
+		void sendCameraUniforms(Shader& shader);
 
-	//mvp
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 proj = glm::mat4(1.0f);
-};
+		/**
+		* Set the projection of the camera to any mat4
+		*/
+		void setProjection(glm::mat4 project) { m_Proj = project; }
+
+		//move camera relative to orientation
+		void moveForwards(float speed);
+		void moveSideways(float speed);
+		void moveUp(float speed);
+		void panSideways(float speed);
+		void panUp(float speed);
+
+		//move camera in absolute terms
+		void moveX(float speed);
+		void moveY(float speed);
+		void moveZ(float speed);
+
+		/**
+		* Update the frustum for the camera in its current position/rotation
+		*/
+		void updateFrustum();
+
+		//set pos
+		void setPos(float x, float y, float z);
+		glm::vec3 getPos() const { return m_Position; }
+		glm::mat4 getVP() { return m_Proj * m_View; }
+
+		//set camera
+		void panYDegrees(float degrees);
+
+		//getters and setters
+		void setNearAndFarPlane(float near, float far) { m_NearPlane = near; m_FarPlane = far; }
+		void setFOV(float deg) { m_FOV = glm::radians(deg); }
+		float speed() const { return m_Speed; }
+		float width() const { return m_CameraWidth; }
+		float height() const { return m_CameraHeight; }
+
+		/**
+		* Get a reference to the camera frustum as it was when last updated
+		*/
+		Frustum& getFrustum() { return m_Frustum; }
+
+	private:
+		float m_CameraWidth = 0.0f; float m_CameraHeight = 0.0f;
+
+		//properties
+		glm::vec3 m_Position = {};
+		glm::vec3 m_Direction = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
+		float m_Speed = 0.1f;
+		float m_Sensitivity = 100.0f;
+		float m_NearPlane = 0.1f; float m_FarPlane = 1000.0f;
+		float m_FOV = 0.0f;
+
+		//mvp
+		glm::mat4 m_View = glm::mat4(1.0f);
+		glm::mat4 m_Proj = glm::mat4(1.0f);
+
+		//frustum
+		Frustum m_Frustum;
+	};
+}
 
 #endif

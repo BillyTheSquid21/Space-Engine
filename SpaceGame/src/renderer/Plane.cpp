@@ -1,10 +1,10 @@
 #include "renderer/Plane.h"
 
-Plane::~Plane() {
+Geometry::Plane::~Plane() {
 	purgeData();
 }
 
-void Plane::genQuads(float xPos, float yPos, float width, float height, float tileSize, Axis axis, float angle) {
+void Geometry::Plane::genQuads(float xPos, float yPos, float width, float height, float tileSize, SGRender::Axis axis, float angle) {
 	//If required, purge existing data
 	purgeData();
 	m_SafeToDraw = false;
@@ -26,7 +26,7 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 			float tileXPos = ((float)x * tileSize) + xPos;
 			float tileYPos = ((float)y * tileSize) + yPos;
 			Norm_Tex_Quad quad = CreateNormalTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.0f, 0.0f);
-			AxialRotate<NormalTextureVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
+			AxialRotate<SGRender::NTVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			unsigned int quadIndex = (x * m_YCount) + y;
 			m_Quads.at(quadIndex) = quad;
 		}
@@ -58,22 +58,22 @@ void Plane::genQuads(float xPos, float yPos, float width, float height, float ti
 	m_SafeToDraw = true;
 }
 
-void Plane::generatePlaneXY(float xPos, float yPos, float width, float height, float tileSize) 
+void Geometry::Plane::generatePlaneXY(float xPos, float yPos, float width, float height, float tileSize)
 {
-	genQuads(xPos, yPos, width, height, tileSize, Axis::Z, 0.0f);
+	genQuads(xPos, yPos, width, height, tileSize, SGRender::Axis::Z, 0.0f);
 }
 
-void Plane::generatePlaneXZ(float xPos, float zPos, float width, float height, float tileSize)
+void Geometry::Plane::generatePlaneXZ(float xPos, float zPos, float width, float height, float tileSize)
 {
-	genQuads(xPos, zPos, width, height, tileSize, Axis::X, -90.0f);
+	genQuads(xPos, zPos, width, height, tileSize, SGRender::Axis::X, -90.0f);
 }
 
-void Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, float tileSize)
+void Geometry::Plane::generatePlaneYZ(float yPos, float zPos, float width, float height, float tileSize)
 {
-	genQuads(yPos, zPos, width, height, tileSize, Axis::Y, 90.0f);
+	genQuads(yPos, zPos, width, height, tileSize, SGRender::Axis::Y, 90.0f);
 }
 
-void Plane::generatePlaneNormals()
+void Geometry::Plane::generatePlaneNormals()
 {
 	int total = m_XCount * m_YCount;
 	//set all normals to 0
@@ -114,16 +114,16 @@ void Plane::generatePlaneNormals()
 	}
 }
 
-void Plane::render() 
+void Geometry::Plane::render()
 {	
 	if (m_Quads.size() <= 0 || !m_SafeToDraw)
 	{
 		return;
 	}
-	m_Renderer->commit((NormalTextureVertex*)&m_Quads[0], GetFloatCount<NormalTextureVertex>(Shape::QUAD) * m_Quads.size(), (unsigned int*)&m_Indices[0], m_Indices.size());
+	m_Renderer->commit((SGRender::NTVertex*)&m_Quads[0], GetFloatCount<SGRender::NTVertex>(Shape::QUAD) * m_Quads.size(), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
-Norm_Tex_Quad* Plane::accessQuad(unsigned int x, unsigned int y) {
+Norm_Tex_Quad* Geometry::Plane::accessQuad(unsigned int x, unsigned int y) {
 	int index = x * m_YCount + y;
 	if (index < m_Quads.size()) {
 		return &m_Quads.at(index);
@@ -131,13 +131,13 @@ Norm_Tex_Quad* Plane::accessQuad(unsigned int x, unsigned int y) {
 	return &m_Quads[0];
 }
 
-void Plane::texturePlane(float u, float v, float width, float height) {
+void Geometry::Plane::texturePlane(float u, float v, float width, float height) {
 	for (int i = 0; i < m_XCount * m_YCount; i++) {
-		SetQuadUV((NormalTextureVertex*)&m_Quads[i], u, v, width, height);
+		SetQuadUV((SGRender::NTVertex*)&m_Quads[i], u, v, width, height);
 	}
 }
 
-void Plane::purgeData() {
+void Geometry::Plane::purgeData() {
 	if (m_Quads.size() > 0) {
 		m_Quads.clear();
 		m_Indices.clear();

@@ -1,160 +1,214 @@
 \hypertarget{_world_8h_source}{}\doxysection{World.\+h}
 \label{_world_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/level/World.h@{D:/Repositories/Space Engine/SpaceGame/include/game/level/World.h}}
-
+\mbox{\hyperlink{_world_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef WORLD\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define WORLD\_H}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}renderer/Plane.h"{}}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}renderer/Texture.h"{}}}
-\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}game/objects/TileMap.h"{}}}
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <rapidjson/document.h>}}
-\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <rapidjson/istreamwrapper.h>}}
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <fstream>}}
-\DoxyCodeLine{11 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{12 \textcolor{preprocessor}{\#include <sstream>}}
-\DoxyCodeLine{13 }
-\DoxyCodeLine{14 \textcolor{comment}{//Tiles}}
-\DoxyCodeLine{15 \textcolor{keyword}{namespace }World}
-\DoxyCodeLine{16 \{}
-\DoxyCodeLine{17     \textcolor{comment}{//Pixels in one tile}}
-\DoxyCodeLine{18     \textcolor{keyword}{const} \textcolor{keywordtype}{float} TILE\_SIZE = 32.0f;}
-\DoxyCodeLine{19 }
-\DoxyCodeLine{20     \textcolor{comment}{//Level data}}
-\DoxyCodeLine{21     \textcolor{keyword}{enum class} LevelID}
-\DoxyCodeLine{22     \{}
-\DoxyCodeLine{23         LEVEL\_ENTRY,}
-\DoxyCodeLine{24 }
-\DoxyCodeLine{25         \textcolor{comment}{//Null entry}}
-\DoxyCodeLine{26         LEVEL\_NULL}
-\DoxyCodeLine{27     \};}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}fstream"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}string"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}sstream"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}atomic"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}stdint.h"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_game_object_8hpp}{core/GameObject.hpp}}"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_plane_8h}{renderer/Plane.h}}"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_texture_8h}{renderer/Texture.h}}"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_tile_map_8h}{game/objects/TileMap.h}}"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}rapidjson/document.h"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}rapidjson/istreamwrapper.h"{}}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}rapidxml/rapidxml.hpp"{}}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{comment}{//Tiles}}
+\DoxyCodeLine{19 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_world}{World}}}
+\DoxyCodeLine{20 \{}
+\DoxyCodeLine{21     \textcolor{comment}{//Pixels in one tile}}
+\DoxyCodeLine{22     \textcolor{keyword}{const} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_a062a966d830d79a9dd218cb00afca658}{TILE\_SIZE}} = 32.0f;}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24     \textcolor{comment}{//Level data}}
+\DoxyCodeLine{25     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} : \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}}
+\DoxyCodeLine{26     \{}
+\DoxyCodeLine{27         \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a611f8e352ced3fbfb833ae9681ff66e7}{LEVEL\_ENTRY}} = 0, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a3ef37ae5881ddd676144a39406481388}{LEVEL\_TEST}} = 1, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a6ffbb984a80614f0c3c29466fe2b7bb0}{LEVEL\_TEST2}} = 2,}
 \DoxyCodeLine{28 }
-\DoxyCodeLine{29     \textcolor{comment}{//When level data is written, use int value the respective enum value evaluates to}}
-\DoxyCodeLine{30 }
-\DoxyCodeLine{31     \textcolor{comment}{//Directions -\/ north is +Z axis, south is -\/Z axis, west is +X axis, east is -\/X }}
-\DoxyCodeLine{32     \textcolor{keyword}{enum class} Direction : \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}}
-\DoxyCodeLine{33     \{}
-\DoxyCodeLine{34         DIRECTION\_NULL,}
-\DoxyCodeLine{35         NORTH, NORTHEAST, NORTHWEST,    \textcolor{comment}{//Quads are aligned with vertex 0 and 1 being north facing}}
-\DoxyCodeLine{36         SOUTH, SOUTHEAST, SOUTHWEST,    \textcolor{comment}{//Each level is TILE\_SIZE / sqrt(2) up due to geometry}}
-\DoxyCodeLine{37         EAST,}
-\DoxyCodeLine{38         WEST}
-\DoxyCodeLine{39     \};}
-\DoxyCodeLine{40 }
-\DoxyCodeLine{41     \textcolor{keyword}{enum class} WorldLevel}
-\DoxyCodeLine{42     \{}
-\DoxyCodeLine{43         \textcolor{comment}{//Above ground}}
-\DoxyCodeLine{44         F0 = 0, F1 = 1, F2 = 2, F3 = 3, F4 = 4, F5 = 5,}
-\DoxyCodeLine{45         F6 = 6, F7 = 7, F8 = 8, F9 = 9, F10 = 10,}
-\DoxyCodeLine{46         \textcolor{comment}{//Below ground}}
-\DoxyCodeLine{47         B1 = -\/1, B2 = -\/2, B3 = -\/3, B4 = -\/4, B5 = -\/5,}
-\DoxyCodeLine{48         B6 = -\/6, B7 = -\/7, B8 = -\/8, B9 = -\/9, B10 = -\/10,}
-\DoxyCodeLine{49     \};}
+\DoxyCodeLine{29         \textcolor{comment}{//Null entry -\/ keep at end for size purposes}}
+\DoxyCodeLine{30         \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a675badcd96ab9718a444c76bdc330c7c}{LEVEL\_NULL}} = 3}
+\DoxyCodeLine{31     \};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     \textcolor{comment}{//When level data is written, use int value the respective enum value evaluates to}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35     \textcolor{comment}{//Slope Directions -\/ north is -\/Z axis, south is +Z axis, west is +X axis, east is -\/X (taken from abs)}}
+\DoxyCodeLine{36     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} : uint8\_t}
+\DoxyCodeLine{37     \{}
+\DoxyCodeLine{38         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8adcb19a7189dbeeb57ef37bd2ad2b9968}{DIRECTION\_NULL}} = 0,}
+\DoxyCodeLine{39         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a2bf8f791695c70efa9c14e6f1c326403}{NORTH}} = 1, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a5a889abd3c291052e9dcce6adbc4092e}{NORTHEAST}} = 2, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a54486c15c75f9e0ada3484a7812252ff}{NORTHWEST}} = 3, \textcolor{comment}{//Quads are aligned with vertex 0 and 1 being north facing}}
+\DoxyCodeLine{40         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a96e44fa82e5a5263fb92337be422d3eb}{SOUTH}} = 4, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8ad8edaf2a35fe6e4eb32cc57b7d8fa270}{SOUTHEAST}} = 5, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a96f30aeb5638ae7ac40d90b5ebdde47e}{SOUTHWEST}} = 6, \textcolor{comment}{//Each level is TILE\_SIZE / sqrt(2) up due to geometry}}
+\DoxyCodeLine{41         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a45ac78bf3d4882ac520f4e7fb08d55c5}{EAST}} = 7,}
+\DoxyCodeLine{42         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a83c9f5692281bf59471b13dfddb3af91}{WEST}} = 8,}
+\DoxyCodeLine{43         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a917115997c3ca6db2149b5018383d7e1}{NORTHEAST\_WRAPPED}} = 9, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a162832d5847b1b36eabec91305faf0ef}{NORTHWEST\_WRAPPED}} = 10, }
+\DoxyCodeLine{44         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8aecf66f8382276a1c57a475063b606830}{SOUTHEAST\_WRAPPED}} = 11, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a699db4b3300e8b537e5d5a2e6386f59b}{SOUTHWEST\_WRAPPED}} = 12,       \textcolor{comment}{//Wraps slope around corner}}
+\DoxyCodeLine{45         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a8a99d24d86c8fc5603a216f713733825}{NORTH\_WALL}} = 13, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8ae522de604ddd432990871a881ed4574e}{SOUTH\_WALL}} = 14, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8ae24735130f1fae823cf2eb782c9d1585}{EAST\_WALL}} = 15,}
+\DoxyCodeLine{46         \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8a1c496ba70bd5cdd57c1ec3d5c6820e16}{WEST\_WALL}} = 16}
+\DoxyCodeLine{47     \};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World::Direction}} \mbox{\hyperlink{namespace_world_a48b666f070a070dff26ca170b2852d6e}{GetDirection}}(std::string dir);}
 \DoxyCodeLine{50 }
-\DoxyCodeLine{51     \textcolor{keyword}{enum class} MovementPermissions}
+\DoxyCodeLine{51     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} : int8\_t \textcolor{comment}{//Has been previously known as "{}WorldLevel"{} -\/ changed because of confusion with levelID}}
 \DoxyCodeLine{52     \{}
-\DoxyCodeLine{53         \textcolor{comment}{//Basic permission}}
-\DoxyCodeLine{54         CLEAR, WALL,}
-\DoxyCodeLine{55         \textcolor{comment}{//Slopes -\/ changes character y pos as moves through}}
-\DoxyCodeLine{56         STAIRS\_NORTH, STAIRS\_SOUTH, STAIRS\_EAST, STAIRS\_WEST,}
-\DoxyCodeLine{57         \textcolor{comment}{//Terrain}}
-\DoxyCodeLine{58         WATER, LEDGE\_SOUTH, LEDGE\_NORTH, LEDGE\_EAST, LEDGE\_WEST,}
-\DoxyCodeLine{59         \textcolor{comment}{//Level bridge -\/ lets walk into next level so don't need to check outside bounds}}
-\DoxyCodeLine{60         LEVEL\_BRIDGE,}
-\DoxyCodeLine{61         \textcolor{comment}{//Sprite blocking}}
-\DoxyCodeLine{62         SPRITE\_BLOCKING,}
-\DoxyCodeLine{63     \};}
-\DoxyCodeLine{64 }
-\DoxyCodeLine{65     \textcolor{comment}{//Tile arranging classes}}
-\DoxyCodeLine{66     \textcolor{keywordtype}{void} tileLevel(TextureQuad* quad, WorldLevel level);}
-\DoxyCodeLine{67     \textcolor{keywordtype}{void} SlopeTile(TextureQuad* quad, Direction direction);}
-\DoxyCodeLine{68 }
-\DoxyCodeLine{69     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_tile_texture}{TileTexture}}}
-\DoxyCodeLine{70     \{}
-\DoxyCodeLine{71         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} textureX;}
-\DoxyCodeLine{72         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} textureY;}
-\DoxyCodeLine{73     \};}
-\DoxyCodeLine{74 }
-\DoxyCodeLine{75     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_tile_loc}{TileLoc}}}
-\DoxyCodeLine{76     \{}
-\DoxyCodeLine{77         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} x;}
-\DoxyCodeLine{78         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} z;}
-\DoxyCodeLine{79     \};}
-\DoxyCodeLine{80 }
-\DoxyCodeLine{81     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_retrieve_permission}{RetrievePermission}}}
-\DoxyCodeLine{82     \{}
-\DoxyCodeLine{83         MovementPermissions perm;}
-\DoxyCodeLine{84         \textcolor{keywordtype}{bool} leaving = \textcolor{keyword}{false};}
-\DoxyCodeLine{85     \};}
-\DoxyCodeLine{86 }
-\DoxyCodeLine{87     \mbox{\hyperlink{struct_world_1_1_tile_loc}{TileLoc}} NextTileInInputDirection(Direction direct, \mbox{\hyperlink{struct_world_1_1_tile_loc}{TileLoc}} tile);}
-\DoxyCodeLine{88     \mbox{\hyperlink{struct_world_1_1_retrieve_permission}{RetrievePermission}} retrievePermission(World::LevelID level, World::Direction direction, \mbox{\hyperlink{struct_world_1_1_tile_loc}{World::TileLoc}} loc);}
-\DoxyCodeLine{89     \textcolor{keywordtype}{void} ModifyTilePerm(World::LevelID level, World::Direction direction, \mbox{\hyperlink{struct_world_1_1_tile_loc}{World::TileLoc}} loc);}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_dimensions}{LevelDimensions}}}
-\DoxyCodeLine{92     \{}
-\DoxyCodeLine{93         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} levelW;}
-\DoxyCodeLine{94         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} levelH;}
-\DoxyCodeLine{95     \};}
-\DoxyCodeLine{96 }
-\DoxyCodeLine{97     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_data}{LevelData}}}
-\DoxyCodeLine{98     \{}
-\DoxyCodeLine{99         \textcolor{comment}{//DATA HERE}}
-\DoxyCodeLine{100         LevelID id;}
-\DoxyCodeLine{101         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} width;}
-\DoxyCodeLine{102         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} height;}
-\DoxyCodeLine{103         \textcolor{keywordtype}{float} originX;}
-\DoxyCodeLine{104         \textcolor{keywordtype}{float} originY;}
-\DoxyCodeLine{105         std::vector<WorldLevel> planeHeights;}
-\DoxyCodeLine{106         std::vector<Direction> planeDirections;}
-\DoxyCodeLine{107         std::vector<MovementPermissions> planePermissions;}
-\DoxyCodeLine{108         std::vector<TileTexture> planeTextures;}
-\DoxyCodeLine{109     \};}
-\DoxyCodeLine{110 }
-\DoxyCodeLine{111     \mbox{\hyperlink{struct_world_1_1_level_data}{LevelData}} ParseLevel();}
-\DoxyCodeLine{112 }
-\DoxyCodeLine{113     \textcolor{keyword}{class }\mbox{\hyperlink{class_world_1_1_level}{Level}}}
-\DoxyCodeLine{114     \{}
-\DoxyCodeLine{115     \textcolor{keyword}{public}:}
-\DoxyCodeLine{116         \textcolor{comment}{//Load level data}}
-\DoxyCodeLine{117         \textcolor{keywordtype}{void} buildLevel(\mbox{\hyperlink{class_render_1_1_renderer}{Render::Renderer<TextureVertex>}}* planeRenderer, \mbox{\hyperlink{class_tile_map}{TileMap}}* tileMapPointer);}
-\DoxyCodeLine{118         \textcolor{keywordtype}{void} render();}
-\DoxyCodeLine{119 }
-\DoxyCodeLine{120         \textcolor{comment}{//Static methods}}
-\DoxyCodeLine{121         \textcolor{keyword}{static} \mbox{\hyperlink{struct_component2f}{Component2f}} queryOrigin(LevelID level) \{ \textcolor{keywordflow}{if} (s\_LevelOriginCache.find(level) != s\_LevelOriginCache.end()) \{ \textcolor{keywordflow}{return} s\_LevelOriginCache[level]; \} \textcolor{keywordflow}{return} s\_LevelOriginCache.begin()-\/>second; \} \textcolor{comment}{//If fails, return first level origin found}}
-\DoxyCodeLine{122         \textcolor{keyword}{static} \mbox{\hyperlink{struct_world_1_1_level_dimensions}{LevelDimensions}} queryDimensions(LevelID level) \{ \textcolor{keywordflow}{if} (s\_LevelDimensionCache.find(level) != s\_LevelDimensionCache.end()) \{ \textcolor{keywordflow}{return} s\_LevelDimensionCache[level]; \} \textcolor{keywordflow}{return} s\_LevelDimensionCache.begin()-\/>second; \} \textcolor{comment}{//If fails, return first level dim found}}
-\DoxyCodeLine{123         \textcolor{keyword}{static} std::vector<MovementPermissions>* queryPermissions(LevelID level) \{ \textcolor{keywordflow}{if} (s\_MovementPermissionsCache.find(level) != s\_MovementPermissionsCache.end()) \{ \textcolor{keywordflow}{return} s\_MovementPermissionsCache[level]; \} \textcolor{keywordflow}{return} s\_MovementPermissionsCache.begin()-\/>second; \} \textcolor{comment}{//If fails, return first level permis found}}
-\DoxyCodeLine{124         }
-\DoxyCodeLine{125         \textcolor{comment}{//Static caches}}
-\DoxyCodeLine{126         \textcolor{keyword}{static} std::unordered\_map<LevelID, Component2f> s\_LevelOriginCache;}
-\DoxyCodeLine{127         \textcolor{keyword}{static} std::unordered\_map<LevelID, LevelDimensions> s\_LevelDimensionCache;}
-\DoxyCodeLine{128         \textcolor{keyword}{static} std::unordered\_map<LevelID, std::vector<MovementPermissions>*> s\_MovementPermissionsCache;}
-\DoxyCodeLine{129     \textcolor{keyword}{private}:}
-\DoxyCodeLine{130         \textcolor{comment}{//ID}}
-\DoxyCodeLine{131         LevelID m\_ID;}
-\DoxyCodeLine{132 }
-\DoxyCodeLine{133         \textcolor{comment}{//All levels have a rendered plane and a grid of tiles}}
-\DoxyCodeLine{134         \mbox{\hyperlink{class_plane}{Plane}} m\_Plane;}
-\DoxyCodeLine{135         std::vector<MovementPermissions> m\_Permissions;}
-\DoxyCodeLine{136         std::vector<WorldLevel> m\_Heights;}
-\DoxyCodeLine{137         \mbox{\hyperlink{class_tile_map}{TileMap}}* m\_TileMapPointer;}
+\DoxyCodeLine{53         \textcolor{comment}{//Above ground}}
+\DoxyCodeLine{54         \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93faee0c8bd6520d8fb37a28c61189d0e821}{F0}} = 0, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fae1dffc8709f31a4987c8a88334107e89}{F1}} = 1, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fafe5c3684dce76cdd9f7f42430868aa74}{F2}} = 2, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa4b6bf4b531770872d4328ce69bef5627}{F3}} = 3, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fae7e0e72401a9f2718ed0f39f2861d702}{F4}} = 4, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa37f438df6a6d5ba4c17ef8ca58562f00}{F5}} = 5,}
+\DoxyCodeLine{55         \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa1faf42f2823f184eb2c9f0dffe5d73f2}{F6}} = 6, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa47489eb597b7db34caa24b1fc78fc839}{F7}} = 7, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa4787509ad9f9d747a81a30e9dde3d4a7}{F8}} = 8, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa892a245e287c163080b23db737d3c4c9}{F9}} = 9, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fab213ce22ca6ad4eda8db82966b9b6e5a}{F10}} = 10,}
+\DoxyCodeLine{56         \textcolor{comment}{//Below ground}}
+\DoxyCodeLine{57         \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fac9512565ef6194ca664dc41ec0de7a53}{B1}} = -\/1, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fabbd97b00c539801e32317ab550867ec4}{B2}} = -\/2, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa0c4ecd7b59ebc5b9f47974cb9845fd02}{B3}} = -\/3, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fad5d4cc7b09d1843517acc9361f8f665e}{B4}} = -\/4, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa2a1ab298edf0162a3305e599b47cbeee}{B5}} = -\/5,}
+\DoxyCodeLine{58         \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa68b1f1cc15d8987eafe633c9488bdc05}{B6}} = -\/6, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fad8498108dd603522047564a8da7be94c}{B7}} = -\/7, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fac897976b22b91e2937555adb85d779fc}{B8}} = -\/8, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa18fc90be5b8124af983421d29bfc4352}{B9}} = -\/9, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93fa5224d572f0d791f58c66e4dcd5e2c2d0}{B10}} = -\/10,}
+\DoxyCodeLine{59     \};}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61     \textcolor{keyword}{enum class} \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}}}
+\DoxyCodeLine{62     \{}
+\DoxyCodeLine{63         \textcolor{comment}{//Basic permission}}
+\DoxyCodeLine{64         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a813461e0c58e7ad59a2fd83ca2237fec}{CLEAR}} = 0, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a48d536b2de1195d0c9f6ea8ab884085e}{WALL}} = 1,}
+\DoxyCodeLine{65         \textcolor{comment}{//Slopes -\/ changes character y pos as moves through -\/ must be on both levels}}
+\DoxyCodeLine{66         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a5bb6dbf92f7f3ec166478a1b3e6d3526}{STAIRS\_NORTH}} = 2, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5ad3979482af44d8a2dc65c85a32f0851e}{STAIRS\_SOUTH}} = 3, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a682058973bedcc3121c022783b3d188d}{STAIRS\_EAST}} = 4, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a2209c1725d56833ae0701c5444288e69}{STAIRS\_WEST}} = 5,}
+\DoxyCodeLine{67         \textcolor{comment}{//Terrain}}
+\DoxyCodeLine{68         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a2add2964642f39099cb51edf4a4f5a70}{WATER}} = 6, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5aff7a4657f8a06e036e0bf00f2b849aab}{LEDGE\_NORTH}} = 7, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5af18e174d7a6e476bfd253a2d30e96f3b}{LEDGE\_SOUTH}} = 8, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5af9d0ebf09bc8156eb6030ead59a31026}{LEDGE\_EAST}} = 9, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5accd1a134f051aa0786e5d6727046be5e}{LEDGE\_WEST}} = 10,}
+\DoxyCodeLine{69         \textcolor{comment}{//Level bridge -\/ lets walk into next level so don't need to check outside bounds}}
+\DoxyCodeLine{70         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5ad3f071b175e898e09aae4c6f6f90fbe6}{LEVEL\_BRIDGE}} = 11,}
+\DoxyCodeLine{71         \textcolor{comment}{//Sprite blocking}}
+\DoxyCodeLine{72         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a11df85398d99640bf1ef94337f3af5fb}{SPRITE\_BLOCKING}} = 12,}
+\DoxyCodeLine{73         \textcolor{comment}{//Encounter}}
+\DoxyCodeLine{74         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a1782b7f4e7fd1367e105819ad35cd519}{TALL\_GRASS}} = 13, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5a14db90e75f1308d303d0bceb0be66ac1}{CAVE}} = 14,}
+\DoxyCodeLine{75     \};}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_tile_texture}{TileTexture}}}
+\DoxyCodeLine{78     \{}
+\DoxyCodeLine{79         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_tile_texture_a9d0b4603f2916e6086bf9d12e5b40823}{textureX}};}
+\DoxyCodeLine{80         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_tile_texture_af318924df67eaa256ffc54393033dfea}{textureY}};}
+\DoxyCodeLine{81     \};}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_tile}{Tile}}}
+\DoxyCodeLine{84     \{}
+\DoxyCodeLine{85         \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_tile_a6bcd638e387e04af3670aaf9e8b4d3c6}{x}};}
+\DoxyCodeLine{86         \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_tile_a23d517ec9a01a4d827c28b62a106c01e}{z}};}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88         \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_world_1_1_tile_a2048bccbd3c5a0fe8e0969521e5bdbcf}{operator==}}(\mbox{\hyperlink{struct_world_1_1_tile}{Tile}}\& tile) \{ \textcolor{keywordflow}{return} (this-\/>x == tile.\mbox{\hyperlink{struct_world_1_1_tile_a6bcd638e387e04af3670aaf9e8b4d3c6}{x}} \&\& this-\/>z == tile.\mbox{\hyperlink{struct_world_1_1_tile_a23d517ec9a01a4d827c28b62a106c01e}{z}}); \};}
+\DoxyCodeLine{89         \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} \mbox{\hyperlink{struct_world_1_1_tile_ae5f307e6dbbb3164b4b46f4bc84b7740}{operator-\/}}(\mbox{\hyperlink{struct_world_1_1_tile}{Tile}}\& tile) \{ \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} newTile; newTile.\mbox{\hyperlink{struct_world_1_1_tile_a6bcd638e387e04af3670aaf9e8b4d3c6}{x}} = this-\/>x -\/ tile.\mbox{\hyperlink{struct_world_1_1_tile_a6bcd638e387e04af3670aaf9e8b4d3c6}{x}}; newTile.\mbox{\hyperlink{struct_world_1_1_tile_a23d517ec9a01a4d827c28b62a106c01e}{z}} = this-\/>z -\/ tile.\mbox{\hyperlink{struct_world_1_1_tile_a23d517ec9a01a4d827c28b62a106c01e}{z}}; \textcolor{keywordflow}{return} newTile; \}}
+\DoxyCodeLine{90         \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} \mbox{\hyperlink{struct_world_1_1_tile_af356aec30c929e366b4fd25c72fd4891}{operator+}}(\mbox{\hyperlink{struct_world_1_1_tile}{Tile}}\& tile) \{ \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} newTile; newTile.\mbox{\hyperlink{struct_world_1_1_tile_a6bcd638e387e04af3670aaf9e8b4d3c6}{x}} = this-\/>x + tile.\mbox{\hyperlink{struct_world_1_1_tile_a6bcd638e387e04af3670aaf9e8b4d3c6}{x}}; newTile.\mbox{\hyperlink{struct_world_1_1_tile_a23d517ec9a01a4d827c28b62a106c01e}{z}} = this-\/>z + tile.\mbox{\hyperlink{struct_world_1_1_tile_a23d517ec9a01a4d827c28b62a106c01e}{z}}; \textcolor{keywordflow}{return} newTile; \}}
+\DoxyCodeLine{91     \};}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93     \textcolor{comment}{//Tile arranging classes}}
+\DoxyCodeLine{94     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_af156e63040b73f2e2029e7c7754052fb}{TileLevel}}(\mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\_Tex\_Quad}}* quad, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} level);}
+\DoxyCodeLine{95     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_a84e4a3e3191f21004239a83ccda441e4}{SlopeTile}}(\mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\_Tex\_Quad}}* quad, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} direction);}
+\DoxyCodeLine{96     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_af4cdeb98af9b769492bc6cadc6698bc7}{StackWall}}(\mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\_Tex\_Quad}}* quad, std::vector<Direction>\& dir, \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} tile, \textcolor{keywordtype}{int} width, \textcolor{keywordtype}{int} height);}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_permission}{LevelPermission}}}
+\DoxyCodeLine{99     \{}
+\DoxyCodeLine{100         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}} \mbox{\hyperlink{struct_world_1_1_level_permission_ad5c47a5e502f4bc0a9e56b0ab0046a93}{perm}};}
+\DoxyCodeLine{101         \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}}* \mbox{\hyperlink{struct_world_1_1_level_permission_a7060bbcd3cf8dc9192785f5cbbfc1523}{permPointer}};}
+\DoxyCodeLine{102         \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_world_1_1_level_permission_af6b302c75b2f3971f0fda27dc3bd0d60}{leaving}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{103     \};}
+\DoxyCodeLine{104 }
+\DoxyCodeLine{105     \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} \mbox{\hyperlink{namespace_world_a7eac9d5d36055de06500875ddb214823}{NextTileInDirection}}(\mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} direct, \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} tile);}
+\DoxyCodeLine{106     \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World::Direction}} \mbox{\hyperlink{namespace_world_a33b1283eb4a50f24d17e2583aef12247}{DirectionOfAdjacentTile}}(\mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} scr, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} dest);}
+\DoxyCodeLine{107     \mbox{\hyperlink{struct_world_1_1_level_permission}{LevelPermission}} \mbox{\hyperlink{namespace_world_ae711b2fe6945d0d21fd7726a55ca304e}{RetrievePermission}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} level, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World::Direction}} direction, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} height);}
+\DoxyCodeLine{108     \mbox{\hyperlink{struct_world_1_1_level_permission}{LevelPermission}} \mbox{\hyperlink{namespace_world_ae711b2fe6945d0d21fd7726a55ca304e}{RetrievePermission}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} level, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} height);}
+\DoxyCodeLine{109     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_world_a77f3dad2b6e8307658e639dd92d9a586}{ModifyTilePerm}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} level, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World::Direction}} direction, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} height, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}}\& lastPerm, \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}}*\& lastPermPtr);}
+\DoxyCodeLine{110     \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}}* \mbox{\hyperlink{namespace_world_aa1942443ea0e066d246fa3addc661c49}{GetTilePermission}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} level, \mbox{\hyperlink{struct_world_1_1_tile}{World::Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} height);}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_world_a2ed451eab19ea5ee589510030d274672}{CheckPlayerInteracting}}(\mbox{\hyperlink{struct_world_1_1_tile}{Tile}} player, \mbox{\hyperlink{struct_world_1_1_tile}{Tile}} script, \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} playerFacing);}
+\DoxyCodeLine{113     \mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} \mbox{\hyperlink{namespace_world_a1e77a1b3a0dd705b40bcdd6dce3677fb}{OppositeDirection}}(\mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{Direction}} dir);}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_dimensions}{LevelDimensions}}}
+\DoxyCodeLine{116     \{}
+\DoxyCodeLine{117         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_level_dimensions_ae645b1f30c4089be3fafdef3599283fd}{levelW}};}
+\DoxyCodeLine{118         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_level_dimensions_ac9ab6d11820393cea44c8b073243fb31}{levelH}};}
+\DoxyCodeLine{119     \};}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_data}{LevelData}}}
+\DoxyCodeLine{122     \{}
+\DoxyCodeLine{123         \textcolor{comment}{//DATA HERE}}
+\DoxyCodeLine{124         \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} \mbox{\hyperlink{struct_world_1_1_level_data_a629408399af3b36615e0221a4b790504}{id}};}
+\DoxyCodeLine{125         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_level_data_a6ff3234613038487f1b1749c14939d59}{width}};}
+\DoxyCodeLine{126         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_level_data_a102a5dcec15b5586adb15db91ee750a1}{height}};}
+\DoxyCodeLine{127         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_level_data_a720e4215846d5c4c88aa7ac00b67ee6a}{tileset}};}
+\DoxyCodeLine{128         \textcolor{keywordtype}{float} \mbox{\hyperlink{struct_world_1_1_level_data_a10b23228e88e756806d014abeea62ca0}{originX}};}
+\DoxyCodeLine{129         \textcolor{keywordtype}{float} \mbox{\hyperlink{struct_world_1_1_level_data_ab5e65f62538b978b78525373a6548cdd}{originY}};}
+\DoxyCodeLine{130         glm::vec3 \mbox{\hyperlink{struct_world_1_1_level_data_a9f138e75e7c426881545af6f32f4fa9f}{lightColor}};}
+\DoxyCodeLine{131         glm::vec3 \mbox{\hyperlink{struct_world_1_1_level_data_ab518a822a210175513a629783892a9e9}{lightDir}};}
+\DoxyCodeLine{132         std::vector<WorldHeight> \mbox{\hyperlink{struct_world_1_1_level_data_a735b9702f8a2fa7bd02fa37506b2bc48}{planeHeights}};}
+\DoxyCodeLine{133         std::vector<WorldHeight> \mbox{\hyperlink{struct_world_1_1_level_data_a8a85cde6db4e2144c6ab9b82c222790f}{presentWorldLevels}};}
+\DoxyCodeLine{134         std::vector<Direction> \mbox{\hyperlink{struct_world_1_1_level_data_a4f0b1f69bcb54bf7c22950b382627b4b}{planeDirections}};}
+\DoxyCodeLine{135         std::vector<MovementPermissions> \mbox{\hyperlink{struct_world_1_1_level_data_a56d99db2c5bdb97fcd5668cf8536fb3f}{planePermissions}};}
+\DoxyCodeLine{136         std::vector<TileTexture> \mbox{\hyperlink{struct_world_1_1_level_data_abdef338447b18bb49f3806b252a1e455}{planeTextures}};}
+\DoxyCodeLine{137     \};}
 \DoxyCodeLine{138 }
-\DoxyCodeLine{139         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LevelTilesX = 0;}
-\DoxyCodeLine{140         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LevelTilesY = 0;}
-\DoxyCodeLine{141         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LevelTotalTiles = 0;}
-\DoxyCodeLine{142 }
-\DoxyCodeLine{143 }
-\DoxyCodeLine{144         \textcolor{keywordtype}{float} m\_XOffset = 0.0f; \textcolor{keywordtype}{float} m\_YOffset = 0.0f;}
-\DoxyCodeLine{145     \};}
-\DoxyCodeLine{146 }
-\DoxyCodeLine{147     \textcolor{comment}{//Constants}}
-\DoxyCodeLine{148     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} WALK\_SPEED = 1.0f;}
-\DoxyCodeLine{149     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} RUN\_SPEED = 2.0f;}
-\DoxyCodeLine{150     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} WALK\_DURATION = 1.0f / WALK\_SPEED;}
-\DoxyCodeLine{151     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} RUN\_DURATION = 1.0f / RUN\_SPEED;}
-\DoxyCodeLine{152 \}}
-\DoxyCodeLine{153 }
-\DoxyCodeLine{154 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{139     \mbox{\hyperlink{struct_world_1_1_level_data}{LevelData}} \mbox{\hyperlink{namespace_world_a5f472c3242682be15ff1ca88c1abb07c}{ParseLevel}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id});}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141     \textcolor{keyword}{class }\mbox{\hyperlink{class_world_1_1_level}{Level}}}
+\DoxyCodeLine{142     \{}
+\DoxyCodeLine{143     \textcolor{keyword}{public}:}
+\DoxyCodeLine{144         \textcolor{comment}{//Load level data}}
+\DoxyCodeLine{145         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_world_1_1_level_a4b4fa1ae868e7b7c376312246d0b2e28}{buildLevel}}(\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}* planeRenderer, \mbox{\hyperlink{class_tile_map}{TileMap}}* tileMap, \mbox{\hyperlink{class_texture}{Texture}}* tileset, glm::vec3\& lColor, glm::vec3\& lDir);}
+\DoxyCodeLine{146         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_acb20d92b945ddb8611467574867d23ac}{setID}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} \textcolor{keywordtype}{id}) \{ m\_ID = id; \}}
+\DoxyCodeLine{147         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_a2a4a00ac4d441a7bddf49e68efbe396a}{purgeLevel}}(); \textcolor{comment}{//Clears heap data}}
+\DoxyCodeLine{148         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_a660d3f9c06c94ba566e467a3b5463be0}{render}}();}
+\DoxyCodeLine{149         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_world_1_1_level_ac67c4312ea58186fbc76187c8b96d7df}{loaded}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Loaded; \}}
+\DoxyCodeLine{150         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_world_1_1_level_ac4e95973422853de0020df3a5612cd35}{setLoaded}}(\textcolor{keywordtype}{bool} \mbox{\hyperlink{class_world_1_1_level_ac67c4312ea58186fbc76187c8b96d7df}{loaded}}) \{ m\_Loaded = \mbox{\hyperlink{class_world_1_1_level_ac67c4312ea58186fbc76187c8b96d7df}{loaded}}; \}}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152         \textcolor{comment}{//Static methods}}
+\DoxyCodeLine{153         \textcolor{keyword}{static} \mbox{\hyperlink{struct_struct2f}{Struct2f}} \mbox{\hyperlink{class_world_1_1_level_a51c587173a55b75738c19de413d8c16c}{queryOrigin}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} level) \{ \textcolor{keywordflow}{if} ((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})level < \mbox{\hyperlink{class_world_1_1_level_a68d9a36af77d250afa55422b67b1ff7a}{s\_LevelOriginCache}}.size()) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_world_1_1_level_a68d9a36af77d250afa55422b67b1ff7a}{s\_LevelOriginCache}}[(\textcolor{keywordtype}{unsigned} int)level]; \} \mbox{\hyperlink{_s_g_util_8h_a2c622e9c0f75f5dcfc0a761f0b9bf481}{EngineLog}}(\textcolor{stringliteral}{"{}Origin not found!"{}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_world_1_1_level_a68d9a36af77d250afa55422b67b1ff7a}{s\_LevelOriginCache}}[0]; \} \textcolor{comment}{//If fails, return first level origin found}}
+\DoxyCodeLine{154         \textcolor{keyword}{static} \mbox{\hyperlink{struct_world_1_1_level_dimensions}{LevelDimensions}} \mbox{\hyperlink{class_world_1_1_level_ad0c9915e9fbf5216ca87285053805b7e}{queryDimensions}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} level) \{ \textcolor{keywordflow}{if} ((\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int})level < \mbox{\hyperlink{class_world_1_1_level_a83dee4488a19f9ec77f198481cfb9a65}{s\_LevelDimensionCache}}.size()) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_world_1_1_level_a83dee4488a19f9ec77f198481cfb9a65}{s\_LevelDimensionCache}}[(\textcolor{keywordtype}{unsigned} int)level]; \} \textcolor{keywordflow}{return} \mbox{\hyperlink{class_world_1_1_level_a83dee4488a19f9ec77f198481cfb9a65}{s\_LevelDimensionCache}}[0]; \} \textcolor{comment}{//If fails, return first level dim found}}
+\DoxyCodeLine{155         }
+\DoxyCodeLine{156         \textcolor{comment}{//Allows returning a portion of the permission vector based on height}}
+\DoxyCodeLine{157         \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_1_1_perm_vector_fragment}{PermVectorFragment}}}
+\DoxyCodeLine{158         \{}
+\DoxyCodeLine{159             \mbox{\hyperlink{namespace_world_ab8f57614ba40913e752730e0a257a4f5}{MovementPermissions}}* \mbox{\hyperlink{struct_world_1_1_level_1_1_perm_vector_fragment_a9246b3ff3752cd08ae9cd3687e1c9739}{pointer}};}
+\DoxyCodeLine{160             \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_world_1_1_level_1_1_perm_vector_fragment_aea4f2c3c90bdf684fc4b05ac8becceca}{size}};}
+\DoxyCodeLine{161         \};}
+\DoxyCodeLine{162         }
+\DoxyCodeLine{163         \textcolor{keyword}{static} \mbox{\hyperlink{struct_world_1_1_level_1_1_perm_vector_fragment}{PermVectorFragment}} \mbox{\hyperlink{class_world_1_1_level_a7f74fbc21fdc7525240fc1b25e1159ab}{queryPermissions}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} level, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{WorldHeight}} height);}
+\DoxyCodeLine{164         \textcolor{keyword}{static} std::vector<MovementPermissions>* \mbox{\hyperlink{class_world_1_1_level_a3b0fd5137ced5f65a626ab33ce3eb982}{getPermissions}}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} level);}
+\DoxyCodeLine{165         \textcolor{comment}{//Static caches -\/ for data that won't change at runtime}}
+\DoxyCodeLine{166         \textcolor{keyword}{static} std::vector<Struct2f> \mbox{\hyperlink{class_world_1_1_level_a68d9a36af77d250afa55422b67b1ff7a}{s\_LevelOriginCache}};}
+\DoxyCodeLine{167         \textcolor{keyword}{static} std::vector<LevelDimensions> \mbox{\hyperlink{class_world_1_1_level_a83dee4488a19f9ec77f198481cfb9a65}{s\_LevelDimensionCache}};}
+\DoxyCodeLine{168         \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_world_1_1_level_a9e4e8c7e7b8548fbe1d2390cc8742867}{s\_CacheInit}};}
+\DoxyCodeLine{169 }
+\DoxyCodeLine{170         \textcolor{comment}{//Stores pointers to important data within level}}
+\DoxyCodeLine{171         \textcolor{keyword}{struct }\mbox{\hyperlink{struct_world_1_1_level_1_1_level_ptr_cache}{LevelPtrCache}}}
+\DoxyCodeLine{172         \{}
+\DoxyCodeLine{173             std::vector<MovementPermissions>* \mbox{\hyperlink{struct_world_1_1_level_1_1_level_ptr_cache_abf816b3c3bacbb26e6287d12a4ebb6ee}{perms}} = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{174             std::vector<WorldHeight>* \mbox{\hyperlink{struct_world_1_1_level_1_1_level_ptr_cache_acc4f2a40832bf1f5b1002b19c5ba99cf}{levels}} = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{175         \};}
+\DoxyCodeLine{176         }
+\DoxyCodeLine{177         \textcolor{comment}{//Static caches -\/ for data that needs to be accessed at source as can change at runtime}}
+\DoxyCodeLine{178         \textcolor{keyword}{static} std::vector<LevelPtrCache> \mbox{\hyperlink{class_world_1_1_level_a88c4d545da3b88a08fa9b09cb7980d9e}{s\_MovementPermissionsCache}};}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180     \textcolor{keyword}{private}:}
+\DoxyCodeLine{181         \textcolor{comment}{//ID}}
+\DoxyCodeLine{182         \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{LevelID}} m\_ID = \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a675badcd96ab9718a444c76bdc330c7c}{World::LevelID::LEVEL\_NULL}};}
+\DoxyCodeLine{183 }
+\DoxyCodeLine{184         \textcolor{comment}{//All levels have a rendered plane and a grid of tiles}}
+\DoxyCodeLine{185         \mbox{\hyperlink{class_geometry_1_1_plane}{Geometry::Plane}} m\_Plane;}
+\DoxyCodeLine{186         std::vector<WorldHeight> m\_AvailibleLevels;}
+\DoxyCodeLine{187         std::vector<MovementPermissions> m\_Permissions;}
+\DoxyCodeLine{188         std::vector<WorldHeight> m\_Heights;}
+\DoxyCodeLine{189         \mbox{\hyperlink{class_tile_map}{TileMap}}* m\_TileMapPointer;}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LevelTilesX = 0;}
+\DoxyCodeLine{192         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LevelTilesY = 0;}
+\DoxyCodeLine{193         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_LevelTotalTiles = 0;}
+\DoxyCodeLine{194 }
+\DoxyCodeLine{195         \textcolor{keywordtype}{float} m\_XOffset = 0.0f; \textcolor{keywordtype}{float} m\_YOffset = 0.0f;}
+\DoxyCodeLine{196         \textcolor{keywordtype}{bool} m\_Loaded = \textcolor{keyword}{false};}
+\DoxyCodeLine{197     \};}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{199     \textcolor{comment}{//Constants}}
+\DoxyCodeLine{200     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_ae5558158acc9a2f89cef34fdff4aaf6e}{WALK\_SPEED}} = 1.0f;}
+\DoxyCodeLine{201     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_a5bcadc2b7d0b209bf78f5906ad07f536}{RUN\_SPEED}} = 3.1f;}
+\DoxyCodeLine{202     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_a78c6b6d3d04c78928c6d11d5124fa292}{WALK\_DURATION}} = 1.0f / \mbox{\hyperlink{namespace_world_ae5558158acc9a2f89cef34fdff4aaf6e}{WALK\_SPEED}};}
+\DoxyCodeLine{203     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_a34239cf0aec41e410ecaebf6bd13ed97}{RUN\_DURATION}} = 1.0f / \mbox{\hyperlink{namespace_world_a5bcadc2b7d0b209bf78f5906ad07f536}{RUN\_SPEED}};}
+\DoxyCodeLine{204     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_ac3a35a7dec2d508028fa1f52f345d78c}{WALK\_FRAME\_DURATION}} = \mbox{\hyperlink{namespace_world_a78c6b6d3d04c78928c6d11d5124fa292}{WALK\_DURATION}} / 4.0f;}
+\DoxyCodeLine{205     \textcolor{keyword}{constexpr} \textcolor{keywordtype}{float} \mbox{\hyperlink{namespace_world_a009d18e5e5da81b8f9eb036a1b0f669d}{RUN\_FRAME\_DURATION}} = \mbox{\hyperlink{namespace_world_a34239cf0aec41e410ecaebf6bd13ed97}{RUN\_DURATION}} / 4.0f;}
+\DoxyCodeLine{206 \}}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208 \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

@@ -26,7 +26,7 @@ class BattleScene
 {
 public:
 	void init(float width, float height);
-	void render(BattleRenderer& ren);
+	void render(StateRender::Battle& ren);
 	void setPokemonA(std::string name);
 	void buildPlatformA();
 	void buildPlatformB();
@@ -49,12 +49,12 @@ private:
 	Tex_Quad background;
 	Tex_Quad pokemonA;
 	Tex_Quad pokemonB;
-	SpriteAnim<TextureVertex, Tex_Quad> pokemonAAnim;
-	SpriteAnim<TextureVertex, Tex_Quad> pokemonBAnim;
+	SpriteAnim<SGRender::TVertex, Tex_Quad> pokemonAAnim;
+	SpriteAnim<SGRender::TVertex, Tex_Quad> pokemonBAnim;
 	bool active = true;
 };
 
-class Battle : public State
+class Battle : public SG::State
 {
 public:
 	void init(
@@ -80,7 +80,7 @@ public:
 private:
 
 	//Rendering
-	BattleRenderer m_Renderer;
+	StateRender::Battle m_Renderer;
 	int m_Width; int m_Height;
 
 	//Font

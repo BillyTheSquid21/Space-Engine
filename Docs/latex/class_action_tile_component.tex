@@ -1,0 +1,104 @@
+\hypertarget{class_action_tile_component}{}\doxysection{Action\+Tile\+Component Class Reference}
+\label{class_action_tile_component}\index{ActionTileComponent@{ActionTileComponent}}
+
+
+{\ttfamily \#include $<$Action\+Tile.\+h$>$}
+
+Inheritance diagram for Action\+Tile\+Component\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_action_tile_component}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_action_tile_component_a19b6f8bbbba6740a338ec3b71019874f}{Action\+Tile\+Component}} ()=default
+\item 
+\mbox{\hyperlink{class_action_tile_component_a112f05b80f992f2e4ef3d95f13660aad}{Action\+Tile\+Component}} (\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $\ast$player, \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} loc, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} height, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} \mbox{\hyperlink{class_s_g_object_1_1_component_aeee1db5c94bf47960e8757309c15e555}{id}})
+\item 
+virtual void \mbox{\hyperlink{class_action_tile_component_a9e047d1bb4a1cb8f285ebe684d57b2ee}{update}} (double delta\+Time)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} \mbox{\hyperlink{class_action_tile_component_abe972989e3fb28c5c3d42c650238bc9d}{m\+\_\+\+Current\+Height}} = \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93faee0c8bd6520d8fb37a28c61189d0e821}{World\+::\+World\+Height\+::\+F0}}
+\item 
+\mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} \mbox{\hyperlink{class_action_tile_component_a0e3635b27b2c005c4de2c570ee482b85}{m\+\_\+\+Tile\+Location}} = \{0,0\}
+\item 
+\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} \mbox{\hyperlink{class_action_tile_component_a3dd75a10fe76d0298387da6b5425fbc5}{m\+\_\+\+Level\+Current}} = \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a675badcd96ab9718a444c76bdc330c7c}{World\+::\+Level\+ID\+::\+LEVEL\+\_\+\+NULL}}
+\item 
+\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $\ast$ \mbox{\hyperlink{class_action_tile_component_a45bd8fc0ec39dab65054d10304207c52}{m\+\_\+\+Player\+Pointer}} = nullptr
+\item 
+bool \mbox{\hyperlink{class_action_tile_component_ada59e8a2fe5a121b42a1bbe4f7366ad6}{m\+\_\+\+Occupied}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_action_tile_component_a19b6f8bbbba6740a338ec3b71019874f}\label{class_action_tile_component_a19b6f8bbbba6740a338ec3b71019874f}} 
+\index{ActionTileComponent@{ActionTileComponent}!ActionTileComponent@{ActionTileComponent}}
+\index{ActionTileComponent@{ActionTileComponent}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{ActionTileComponent()}{ActionTileComponent()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Action\+Tile\+Component\+::\+Action\+Tile\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{class_action_tile_component_a112f05b80f992f2e4ef3d95f13660aad}\label{class_action_tile_component_a112f05b80f992f2e4ef3d95f13660aad}} 
+\index{ActionTileComponent@{ActionTileComponent}!ActionTileComponent@{ActionTileComponent}}
+\index{ActionTileComponent@{ActionTileComponent}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{ActionTileComponent()}{ActionTileComponent()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Action\+Tile\+Component\+::\+Action\+Tile\+Component (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $\ast$}]{player,  }\item[{\mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}}}]{loc,  }\item[{\mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}}}]{height,  }\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_action_tile_component_a9e047d1bb4a1cb8f285ebe684d57b2ee}\label{class_action_tile_component_a9e047d1bb4a1cb8f285ebe684d57b2ee}} 
+\index{ActionTileComponent@{ActionTileComponent}!update@{update}}
+\index{update@{update}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily virtual void Action\+Tile\+Component\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_s_g_object_1_1_update_component_afdbeb6601d15cf92b738a360b6ca8764}{SGObject\+::\+Update\+Component}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{class_script_tile_update_component_ab9acb574ce04dfaa6e3fa6e5eb30bf55}{Script\+Tile\+Update\+Component$<$ Script\+Type $>$}}, and \mbox{\hyperlink{class_warp_tile_update_component_a9dfd5569f0b271a2809987119066e57b}{Warp\+Tile\+Update\+Component}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_action_tile_component_abe972989e3fb28c5c3d42c650238bc9d}\label{class_action_tile_component_abe972989e3fb28c5c3d42c650238bc9d}} 
+\index{ActionTileComponent@{ActionTileComponent}!m\_CurrentHeight@{m\_CurrentHeight}}
+\index{m\_CurrentHeight@{m\_CurrentHeight}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{m\_CurrentHeight}{m\_CurrentHeight}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} Action\+Tile\+Component\+::m\+\_\+\+Current\+Height = \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93faee0c8bd6520d8fb37a28c61189d0e821}{World\+::\+World\+Height\+::\+F0}}\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_action_tile_component_a3dd75a10fe76d0298387da6b5425fbc5}\label{class_action_tile_component_a3dd75a10fe76d0298387da6b5425fbc5}} 
+\index{ActionTileComponent@{ActionTileComponent}!m\_LevelCurrent@{m\_LevelCurrent}}
+\index{m\_LevelCurrent@{m\_LevelCurrent}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{m\_LevelCurrent}{m\_LevelCurrent}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} Action\+Tile\+Component\+::m\+\_\+\+Level\+Current = \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789a675badcd96ab9718a444c76bdc330c7c}{World\+::\+Level\+ID\+::\+LEVEL\+\_\+\+NULL}}\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_action_tile_component_ada59e8a2fe5a121b42a1bbe4f7366ad6}\label{class_action_tile_component_ada59e8a2fe5a121b42a1bbe4f7366ad6}} 
+\index{ActionTileComponent@{ActionTileComponent}!m\_Occupied@{m\_Occupied}}
+\index{m\_Occupied@{m\_Occupied}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{m\_Occupied}{m\_Occupied}}
+{\footnotesize\ttfamily bool Action\+Tile\+Component\+::m\+\_\+\+Occupied = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_action_tile_component_a45bd8fc0ec39dab65054d10304207c52}\label{class_action_tile_component_a45bd8fc0ec39dab65054d10304207c52}} 
+\index{ActionTileComponent@{ActionTileComponent}!m\_PlayerPointer@{m\_PlayerPointer}}
+\index{m\_PlayerPointer@{m\_PlayerPointer}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{m\_PlayerPointer}{m\_PlayerPointer}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}}$\ast$ Action\+Tile\+Component\+::m\+\_\+\+Player\+Pointer = nullptr\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_action_tile_component_a0e3635b27b2c005c4de2c570ee482b85}\label{class_action_tile_component_a0e3635b27b2c005c4de2c570ee482b85}} 
+\index{ActionTileComponent@{ActionTileComponent}!m\_TileLocation@{m\_TileLocation}}
+\index{m\_TileLocation@{m\_TileLocation}!ActionTileComponent@{ActionTileComponent}}
+\doxysubsubsection{\texorpdfstring{m\_TileLocation}{m\_TileLocation}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} Action\+Tile\+Component\+::m\+\_\+\+Tile\+Location = \{0,0\}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/objects/\mbox{\hyperlink{_action_tile_8h}{Action\+Tile.\+h}}\end{DoxyCompactItemize}

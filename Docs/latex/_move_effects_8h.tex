@@ -1,0 +1,139 @@
+\hypertarget{_move_effects_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/pokemon/\+Move\+Effects.h File Reference}
+\label{_move_effects_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/MoveEffects.h@{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/MoveEffects.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Turn.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/pokemon/\+Stat\+Stages.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/gui/\+GUI.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utility/\+Random.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_move_effects_8h_a0ffa7b0e98d40e2fc4e8785f053000a1}{MOVE\+\_\+\+EFFECTS\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29}{Move\+Effect\+ID}} \+: int16\+\_\+t \{ \newline
+\mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a6adf97f83acf6453d4a6a4b1070f3754}{None}} = 1
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a11635778f116ce6922f6068638a39028}{Burn}} = 5
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a8244b6f24fdf45c12569d16abb3ffe48}{Paralysis}} = 7
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a243924bfd56a682be235638b53961e09}{Sleep}} = 2
+, \newline
+\mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a3a9d1818d0d7f5646e63465baf7d366f}{Poison}} = 3
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a65467087a19145f43129bba42781aea0}{Freeze}} = 6
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a84636cca49eb3182b22cbec5722c77ff}{Badly\+\_\+\+Poisoned}} = 34
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29add23282751b312abda5c4f7eacb8b1d5}{Paralysis\+\_\+2}} = 68
+, \newline
+\mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a63706113ec210e431c7fae5154a32343}{Defense\+\_\+1\+\_\+\+Down}} = 20
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a7650474ab911ef6145f92e5ba5fc5593}{Attack\+\_\+1\+\_\+\+Down}} = 19
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a11c3eff89f16757c6f9bf785a488d544}{Dig}} = 257
+, \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29aac51deb7d2c3f9663a6df72c7c9b2b51}{Fly}} = 156
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_move_effects_8h_a733921a84b5c04a6d6aa71349c213e9b}{Queue\+Moves\+With\+Effects}} (std\+::function$<$ void(\mbox{\hyperlink{struct_turn_data}{Turn\+Data}}, int)$>$ \&queue, \mbox{\hyperlink{struct_pokemon_move}{Pokemon\+Move}} move, \mbox{\hyperlink{struct_pokemon}{Pokemon}} $\ast$origin, \mbox{\hyperlink{struct_pokemon}{Pokemon}} $\ast$target, \mbox{\hyperlink{struct_current_stages}{Current\+Stages}} $\ast$origin\+Stages, \mbox{\hyperlink{struct_current_stages}{Current\+Stages}} $\ast$target\+Stages, \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{Pokemon\+Move\+State}} $\ast$origin\+State, \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{Pokemon\+Move\+State}} $\ast$target\+State)
+\item 
+void \mbox{\hyperlink{_move_effects_8h_a2178845966b092f428900015f8de93c9}{Pre\+Move\+Effect}} (\mbox{\hyperlink{struct_turn_data}{Turn\+Data}} \&turn, \mbox{\hyperlink{class_s_g_random_1_1_random_container}{SGRandom\+::\+Random\+Container}} \&random, \mbox{\hyperlink{class_game_g_u_i_1_1_text_buffer}{Game\+GUI\+::\+Text\+Buffer}} \&text)
+\item 
+void \mbox{\hyperlink{_move_effects_8h_a0c1a434a7dfc517bb5212fcb30df10a1}{Post\+Move\+Effect}} (\mbox{\hyperlink{struct_turn_data}{Turn\+Data}} \&turn, \mbox{\hyperlink{class_s_g_random_1_1_random_container}{SGRandom\+::\+Random\+Container}} \&random, \mbox{\hyperlink{class_game_g_u_i_1_1_text_buffer}{Game\+GUI\+::\+Text\+Buffer}} \&text)
+\item 
+bool \mbox{\hyperlink{_move_effects_8h_aa7d3e22a4ee449c2e6c1bd53139e9d5e}{Check\+Pkm\+State\+Miss}} (\mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{Pokemon\+Move\+State}} state)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_move_effects_8h_a0ffa7b0e98d40e2fc4e8785f053000a1}\label{_move_effects_8h_a0ffa7b0e98d40e2fc4e8785f053000a1}} 
+\index{MoveEffects.h@{MoveEffects.h}!MOVE\_EFFECTS\_H@{MOVE\_EFFECTS\_H}}
+\index{MOVE\_EFFECTS\_H@{MOVE\_EFFECTS\_H}!MoveEffects.h@{MoveEffects.h}}
+\doxysubsubsection{\texorpdfstring{MOVE\_EFFECTS\_H}{MOVE\_EFFECTS\_H}}
+{\footnotesize\ttfamily \#define MOVE\+\_\+\+EFFECTS\+\_\+H}
+
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29}} 
+\index{MoveEffects.h@{MoveEffects.h}!MoveEffectID@{MoveEffectID}}
+\index{MoveEffectID@{MoveEffectID}!MoveEffects.h@{MoveEffects.h}}
+\doxysubsubsection{\texorpdfstring{MoveEffectID}{MoveEffectID}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29}{Move\+Effect\+ID}} \+: int16\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{None@{None}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!None@{None}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a6adf97f83acf6453d4a6a4b1070f3754}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a6adf97f83acf6453d4a6a4b1070f3754}} 
+None&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Burn@{Burn}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Burn@{Burn}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a11635778f116ce6922f6068638a39028}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a11635778f116ce6922f6068638a39028}} 
+Burn&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Paralysis@{Paralysis}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Paralysis@{Paralysis}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a8244b6f24fdf45c12569d16abb3ffe48}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a8244b6f24fdf45c12569d16abb3ffe48}} 
+Paralysis&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Sleep@{Sleep}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Sleep@{Sleep}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a243924bfd56a682be235638b53961e09}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a243924bfd56a682be235638b53961e09}} 
+Sleep&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Poison@{Poison}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Poison@{Poison}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a3a9d1818d0d7f5646e63465baf7d366f}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a3a9d1818d0d7f5646e63465baf7d366f}} 
+Poison&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Freeze@{Freeze}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Freeze@{Freeze}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a65467087a19145f43129bba42781aea0}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a65467087a19145f43129bba42781aea0}} 
+Freeze&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Badly\_Poisoned@{Badly\_Poisoned}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Badly\_Poisoned@{Badly\_Poisoned}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a84636cca49eb3182b22cbec5722c77ff}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a84636cca49eb3182b22cbec5722c77ff}} 
+Badly\+\_\+\+Poisoned&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Paralysis\_2@{Paralysis\_2}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Paralysis\_2@{Paralysis\_2}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29add23282751b312abda5c4f7eacb8b1d5}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29add23282751b312abda5c4f7eacb8b1d5}} 
+Paralysis\+\_\+2&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Defense\_1\_Down@{Defense\_1\_Down}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Defense\_1\_Down@{Defense\_1\_Down}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a63706113ec210e431c7fae5154a32343}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a63706113ec210e431c7fae5154a32343}} 
+Defense\+\_\+1\+\_\+\+Down&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Attack\_1\_Down@{Attack\_1\_Down}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Attack\_1\_Down@{Attack\_1\_Down}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a7650474ab911ef6145f92e5ba5fc5593}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a7650474ab911ef6145f92e5ba5fc5593}} 
+Attack\+\_\+1\+\_\+\+Down&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Dig@{Dig}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Dig@{Dig}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a11c3eff89f16757c6f9bf785a488d544}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29a11c3eff89f16757c6f9bf785a488d544}} 
+Dig&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Fly@{Fly}!MoveEffects.h@{MoveEffects.h}}\index{MoveEffects.h@{MoveEffects.h}!Fly@{Fly}}}\mbox{\Hypertarget{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29aac51deb7d2c3f9663a6df72c7c9b2b51}\label{_move_effects_8h_adeffac2e655025d5a59c5830ce0b8d29aac51deb7d2c3f9663a6df72c7c9b2b51}} 
+Fly&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_move_effects_8h_aa7d3e22a4ee449c2e6c1bd53139e9d5e}\label{_move_effects_8h_aa7d3e22a4ee449c2e6c1bd53139e9d5e}} 
+\index{MoveEffects.h@{MoveEffects.h}!CheckPkmStateMiss@{CheckPkmStateMiss}}
+\index{CheckPkmStateMiss@{CheckPkmStateMiss}!MoveEffects.h@{MoveEffects.h}}
+\doxysubsubsection{\texorpdfstring{CheckPkmStateMiss()}{CheckPkmStateMiss()}}
+{\footnotesize\ttfamily bool Check\+Pkm\+State\+Miss (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{Pokemon\+Move\+State}}}]{state }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{_move_effects_8h_a0c1a434a7dfc517bb5212fcb30df10a1}\label{_move_effects_8h_a0c1a434a7dfc517bb5212fcb30df10a1}} 
+\index{MoveEffects.h@{MoveEffects.h}!PostMoveEffect@{PostMoveEffect}}
+\index{PostMoveEffect@{PostMoveEffect}!MoveEffects.h@{MoveEffects.h}}
+\doxysubsubsection{\texorpdfstring{PostMoveEffect()}{PostMoveEffect()}}
+{\footnotesize\ttfamily void Post\+Move\+Effect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_turn_data}{Turn\+Data}} \&}]{turn,  }\item[{\mbox{\hyperlink{class_s_g_random_1_1_random_container}{SGRandom\+::\+Random\+Container}} \&}]{random,  }\item[{\mbox{\hyperlink{class_game_g_u_i_1_1_text_buffer}{Game\+GUI\+::\+Text\+Buffer}} \&}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{_move_effects_8h_a2178845966b092f428900015f8de93c9}\label{_move_effects_8h_a2178845966b092f428900015f8de93c9}} 
+\index{MoveEffects.h@{MoveEffects.h}!PreMoveEffect@{PreMoveEffect}}
+\index{PreMoveEffect@{PreMoveEffect}!MoveEffects.h@{MoveEffects.h}}
+\doxysubsubsection{\texorpdfstring{PreMoveEffect()}{PreMoveEffect()}}
+{\footnotesize\ttfamily void Pre\+Move\+Effect (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_turn_data}{Turn\+Data}} \&}]{turn,  }\item[{\mbox{\hyperlink{class_s_g_random_1_1_random_container}{SGRandom\+::\+Random\+Container}} \&}]{random,  }\item[{\mbox{\hyperlink{class_game_g_u_i_1_1_text_buffer}{Game\+GUI\+::\+Text\+Buffer}} \&}]{text }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{_move_effects_8h_a733921a84b5c04a6d6aa71349c213e9b}\label{_move_effects_8h_a733921a84b5c04a6d6aa71349c213e9b}} 
+\index{MoveEffects.h@{MoveEffects.h}!QueueMovesWithEffects@{QueueMovesWithEffects}}
+\index{QueueMovesWithEffects@{QueueMovesWithEffects}!MoveEffects.h@{MoveEffects.h}}
+\doxysubsubsection{\texorpdfstring{QueueMovesWithEffects()}{QueueMovesWithEffects()}}
+{\footnotesize\ttfamily void Queue\+Moves\+With\+Effects (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(\mbox{\hyperlink{struct_turn_data}{Turn\+Data}}, int)$>$ \&}]{queue,  }\item[{\mbox{\hyperlink{struct_pokemon_move}{Pokemon\+Move}}}]{move,  }\item[{\mbox{\hyperlink{struct_pokemon}{Pokemon}} $\ast$}]{origin,  }\item[{\mbox{\hyperlink{struct_pokemon}{Pokemon}} $\ast$}]{target,  }\item[{\mbox{\hyperlink{struct_current_stages}{Current\+Stages}} $\ast$}]{origin\+Stages,  }\item[{\mbox{\hyperlink{struct_current_stages}{Current\+Stages}} $\ast$}]{target\+Stages,  }\item[{\mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{Pokemon\+Move\+State}} $\ast$}]{origin\+State,  }\item[{\mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{Pokemon\+Move\+State}} $\ast$}]{target\+State }\end{DoxyParamCaption})}
+

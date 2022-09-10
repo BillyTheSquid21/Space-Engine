@@ -45,11 +45,11 @@ inline static int GetItemIndexInBag(PlayerBag& bag, int id)
 	return 0;
 }
 
-class OverworldScript : public UpdateComponent
+class OverworldScript : public SGObject::UpdateComponent
 {
 public:
 	OverworldScript() = default;
-	OverworldScript(Script script, uint16_t size, std::shared_ptr<OvSpr_RunningSprite> player) { m_Script = script; m_Size = size; m_Player = player; }
+	OverworldScript(Script script, uint16_t size, std::shared_ptr<Ov_Sprite::RunSprite> player) { m_Script = script; m_Size = size; m_Player = player; }
 	
 	static void init(PlayerData* data, GameInput* input, std::function<void(World::LevelID)> load, std::function<void(World::LevelID)> unload) { m_Data = data; m_Input = input; m_LoadLv = load; m_UnloadLv = unload; };
 	void setScript(Script script, uint16_t size) { m_Script = script; m_Size = size; m_Index = 0; }
@@ -258,7 +258,7 @@ public:
 
 				m_Player->m_XPos += distX * World::TILE_SIZE;
 				m_Player->m_ZPos -= distZ * World::TILE_SIZE;
-				Translate<NormalTextureVertex>(&m_Player->m_Sprite, distX * World::TILE_SIZE, 0.0f, -distZ * World::TILE_SIZE, Shape::QUAD);
+				Geometry::Translate<SGRender::NTVertex>(&m_Player->m_Sprite, distX * World::TILE_SIZE, 0.0f, -distZ * World::TILE_SIZE, Geometry::Shape::QUAD);
 			}
 
 			m_Index++;
@@ -273,7 +273,7 @@ public:
 				Struct2f destOrigin = World::Level::queryOrigin((World::LevelID)el.info.warpInfo.dest);
 				float newXPos = destOrigin.a + World::TILE_SIZE + World::TILE_SIZE / 2;
 				float newZPos = destOrigin.b - World::TILE_SIZE - World::TILE_SIZE / 2;
-				Position<NormalTextureVertex>(&m_Player->m_Sprite, { m_Player->m_XPos - World::TILE_SIZE / 2, m_Player->m_YPos, m_Player->m_ZPos }, { newXPos - World::TILE_SIZE / 2, m_Player->m_YPos, newZPos }, Shape::QUAD);
+				Geometry::Position<SGRender::NTVertex>(&m_Player->m_Sprite, { m_Player->m_XPos - World::TILE_SIZE / 2, m_Player->m_YPos, m_Player->m_ZPos }, { newXPos - World::TILE_SIZE / 2, m_Player->m_YPos, newZPos }, Geometry::Shape::QUAD);
 				m_Player->m_XPos = newXPos; m_Player->m_ZPos = newZPos;
 				m_Player->m_CurrentLevel = (World::LevelID)el.info.warpInfo.dest;
 				m_Player->m_Tile = { 0,0 };
@@ -288,7 +288,7 @@ public:
 public:
 
 	//Private helper functions
-	bool SpriteWalk(OvSpr_WalkingSprite* subject, bool& setBusy, double deltaTime)
+	bool SpriteWalk(Ov_Sprite::WalkSprite* subject, bool& setBusy, double deltaTime)
 	{
 		if (!subject->m_Walking)
 		{
@@ -308,7 +308,7 @@ public:
 		return false;
 	}
 
-	bool SpriteRun(OvSpr_RunningSprite* subject, bool& setBusy, double deltaTime)
+	bool SpriteRun(Ov_Sprite::RunSprite* subject, bool& setBusy, double deltaTime)
 	{
 		if (!subject->m_Running)
 		{
@@ -331,7 +331,7 @@ public:
 	Script m_Script;
 	uint16_t m_Index = 0;
 	uint16_t m_Size;
-	std::shared_ptr<OvSpr_RunningSprite> m_Player;
+	std::shared_ptr<Ov_Sprite::RunSprite> m_Player;
 	GameGUI::TextBoxBuffer* m_TextBuffer = nullptr;
 	bool m_Messaging = false;
 	PathFinding::Path m_Path; //TODO - store less variables here

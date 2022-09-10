@@ -1,0 +1,90 @@
+\hypertarget{_overworld_sprite_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/objects/\+Overworld\+Sprite.h File Reference}
+\label{_overworld_sprite_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/OverworldSprite.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/OverworldSprite.h}}
+{\ttfamily \#include \char`\"{}core/\+Game\+Object.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/level/\+World.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/objects/\+Tile\+Map.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_sprite_render}{Ov\+\_\+\+Sprite\+::\+Sprite\+Render}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_tile_position}{Ov\+\_\+\+Sprite\+::\+Tile\+Position}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_sprite_map}{Ov\+\_\+\+Sprite\+::\+Sprite\+Map}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_update_animation_facing}{Ov\+\_\+\+Sprite\+::\+Update\+Animation\+Facing}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_update_animation_walking}{Ov\+\_\+\+Sprite\+::\+Update\+Animation\+Walking}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_update_animation_running}{Ov\+\_\+\+Sprite\+::\+Update\+Animation\+Running}}
+\item 
+struct \mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\+\_\+\+Sprite\+::\+Sprite\+Data}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_sprite}{Ov\+\_\+\+Sprite\+::\+Sprite}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_direction_sprite}{Ov\+\_\+\+Sprite\+::\+Direction\+Sprite}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}}
+\item 
+class \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_ov___sprite}{Ov\+\_\+\+Sprite}}
+\item 
+namespace \mbox{\hyperlink{namespace_ov___translation}{Ov\+\_\+\+Translation}}
+\item 
+namespace \mbox{\hyperlink{namespace_ov___obj_creation}{Ov\+\_\+\+Obj\+Creation}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_overworld_sprite_8h_a065339e5a705f7d9b129a975279bd60f}{OVERWORLD\+\_\+\+SPRITE\+\_\+H}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_a61f1743192eb77ebe0a461a3cd8a61b8}{Ov\+\_\+\+Translation\+::\+Walk}} (\mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World\+::\+Direction}} $\ast$direction, float $\ast$x, float $\ast$z, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, double delta\+Time, double $\ast$walk\+Timer)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_a26bcf1bc99c25330c199183a77d3c37a}{Ov\+\_\+\+Translation\+::\+Run}} (\mbox{\hyperlink{namespace_world_ace8241ae560e8ae670f55dcb311246d8}{World\+::\+Direction}} $\ast$direction, float $\ast$x, float $\ast$z, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, double delta\+Time, double $\ast$walk\+Timer)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_ae99db00d66d3cc85b7c6f691ca959c41}{Ov\+\_\+\+Translation\+::\+Centre\+On\+Tile}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} current\+Level, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} world\+Level, float $\ast$x, float $\ast$y, float $\ast$z, \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} tile, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_ac52a0f12d414ac7faad4293788e6d55d}{Ov\+\_\+\+Translation\+::\+Centre\+On\+Tile}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} current\+Level, \mbox{\hyperlink{namespace_world_af67b2894bd6cf5e4e4375ca72cb5f93f}{World\+::\+World\+Height}} world\+Level, float $\ast$x, float $\ast$y, float $\ast$z, \mbox{\hyperlink{struct_world_1_1_tile}{World\+::\+Tile}} tile, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, bool on\+Slope)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_a1252ca35e3e6b1f9c64971906bc10ac5}{Ov\+\_\+\+Translation\+::\+Ascend\+Slope}} (float $\ast$y, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, double delta\+Time, bool running)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_a9dc0aa9f146414050efd88530b475c99}{Ov\+\_\+\+Translation\+::\+Ascend\+Slope}} (float $\ast$y, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, double delta\+Time, bool running, double timer, bool vertical\+First)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_a69b0f2c9e9f1cf23fb12702503bfc561}{Ov\+\_\+\+Translation\+::\+Descend\+Slope}} (float $\ast$y, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, double delta\+Time, bool running)
+\item 
+void \mbox{\hyperlink{namespace_ov___translation_a15f3e1a4675c583525a85665c8b4e6f7}{Ov\+\_\+\+Translation\+::\+Descend\+Slope}} (float $\ast$y, \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\+\_\+\+Tex\+\_\+\+Quad}} $\ast$sprite, double delta\+Time, bool running, double timer, bool vertical\+First)
+\item 
+bool \mbox{\hyperlink{namespace_ov___translation_a8228912c5ee9216206d6636c99f5cf10}{Ov\+\_\+\+Translation\+::\+Sprite\+Walk}} (\mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $\ast$spr, double delta\+Time)
+\item 
+bool \mbox{\hyperlink{namespace_ov___translation_a286546605cdf5984699d161f0ee91cc9}{Ov\+\_\+\+Translation\+::\+Sprite\+Run}} (\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $\ast$spr, double delta\+Time)
+\item 
+bool \mbox{\hyperlink{namespace_ov___translation_a2f70be013e00b7ef6cb0094ac363d764}{Ov\+\_\+\+Translation\+::\+Check\+Can\+Walk\+NPC}} (\mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $\ast$spr)
+\item 
+bool \mbox{\hyperlink{namespace_ov___translation_a24eb075b4811bbca151b3f9914f14c90}{Ov\+\_\+\+Translation\+::\+Check\+Can\+Walk}} (\mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $\ast$spr)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite}{Ov\+\_\+\+Sprite\+::\+Sprite}} $>$ \mbox{\hyperlink{namespace_ov___obj_creation_a8c708e2a059b477e44140a7c97e568e8}{Ov\+\_\+\+Obj\+Creation\+::\+Build\+Sprite}} (\mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\+\_\+\+Sprite\+::\+Sprite\+Data}} data, \mbox{\hyperlink{class_tile_map}{Tile\+Map}} \&map, \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_render}{Ov\+\_\+\+Sprite\+::\+Sprite\+Render}} $>$ $\ast$ren\+Grp, \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} $\ast$sprt\+Ren, bool block)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_direction_sprite}{Ov\+\_\+\+Sprite\+::\+Direction\+Sprite}} $>$ \mbox{\hyperlink{namespace_ov___obj_creation_a18093e7c4592b3d596692a6753ae7613}{Ov\+\_\+\+Obj\+Creation\+::\+Build\+Directional\+Sprite}} (\mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\+\_\+\+Sprite\+::\+Sprite\+Data}} data, \mbox{\hyperlink{class_tile_map}{Tile\+Map}} \&map, \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_render}{Ov\+\_\+\+Sprite\+::\+Sprite\+Render}} $>$ $\ast$ren\+Grp, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_map}{Ov\+\_\+\+Sprite\+::\+Sprite\+Map}} $>$ $\ast$spr\+Map, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_update_animation_facing}{Ov\+\_\+\+Sprite\+::\+Update\+Animation\+Facing}} $>$ $\ast$face\+Up, \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} $\ast$sprt\+Ren)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_walk_sprite}{Ov\+\_\+\+Sprite\+::\+Walk\+Sprite}} $>$ \mbox{\hyperlink{namespace_ov___obj_creation_abeb094fd4f9861a7e2b11cdff7c6d588}{Ov\+\_\+\+Obj\+Creation\+::\+Build\+Walking\+Sprite}} (\mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\+\_\+\+Sprite\+::\+Sprite\+Data}} data, \mbox{\hyperlink{class_tile_map}{Tile\+Map}} \&map, \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_render}{Ov\+\_\+\+Sprite\+::\+Sprite\+Render}} $>$ $\ast$ren\+Grp, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_map}{Ov\+\_\+\+Sprite\+::\+Sprite\+Map}} $>$ $\ast$spr\+Map, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_update_animation_walking}{Ov\+\_\+\+Sprite\+::\+Update\+Animation\+Walking}} $>$ $\ast$walk\+Up, \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} $\ast$sprt\+Ren)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $>$ \mbox{\hyperlink{namespace_ov___obj_creation_a67ea3e57c4ee0d668158dc0282fd4b3b}{Ov\+\_\+\+Obj\+Creation\+::\+Build\+Running\+Sprite}} (\mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\+\_\+\+Sprite\+::\+Sprite\+Data}} data, \mbox{\hyperlink{class_tile_map}{Tile\+Map}} \&map, \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_render}{Ov\+\_\+\+Sprite\+::\+Sprite\+Render}} $>$ $\ast$ren\+Grp, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_map}{Ov\+\_\+\+Sprite\+::\+Sprite\+Map}} $>$ $\ast$spr\+Map, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_update_animation_running}{Ov\+\_\+\+Sprite\+::\+Update\+Animation\+Running}} $>$ $\ast$run\+Up, \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} $\ast$sprt\+Ren)
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $>$ \mbox{\hyperlink{namespace_ov___obj_creation_a021aaf5389e756245f69a26c452ed777}{Ov\+\_\+\+Obj\+Creation\+::\+Build\+Running\+Sprite}} (\mbox{\hyperlink{struct_ov___sprite_1_1_sprite_data}{Ov\+\_\+\+Sprite\+::\+Sprite\+Data}} data, \mbox{\hyperlink{class_tile_map}{Tile\+Map}} \&map, \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_render}{Ov\+\_\+\+Sprite\+::\+Sprite\+Render}} $>$ $\ast$ren\+Grp, \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ \mbox{\hyperlink{class_ov___sprite_1_1_sprite_map}{Ov\+\_\+\+Sprite\+::\+Sprite\+Map}} $>$ $\ast$spr\+Map, \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} $\ast$sprt\+Ren)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_overworld_sprite_8h_a065339e5a705f7d9b129a975279bd60f}\label{_overworld_sprite_8h_a065339e5a705f7d9b129a975279bd60f}} 
+\index{OverworldSprite.h@{OverworldSprite.h}!OVERWORLD\_SPRITE\_H@{OVERWORLD\_SPRITE\_H}}
+\index{OVERWORLD\_SPRITE\_H@{OVERWORLD\_SPRITE\_H}!OverworldSprite.h@{OverworldSprite.h}}
+\doxysubsubsection{\texorpdfstring{OVERWORLD\_SPRITE\_H}{OVERWORLD\_SPRITE\_H}}
+{\footnotesize\ttfamily \#define OVERWORLD\+\_\+\+SPRITE\+\_\+H}
+

@@ -12,10 +12,10 @@ void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<O
     m_Fonts->loadFont("res\\fonts\\Newsgeek\\Newsgeek.ttf", "default", 25);
 
     //Renderer setup
-    m_Camera = Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
+    m_Camera = SGRender::Camera::Camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
     m_Renderer.setLayout<float>(3, 2, 4);
     m_Renderer.setDrawingMode(GL_TRIANGLES);
-    m_Renderer.generate((float)width, (float)height, &m_Camera, sizeof(TextureVertex));
+    m_Renderer.generate((float)width, (float)height, &m_Camera, sizeof(SGRender::TVertex));
 
     //Shader
     m_Shader.create(

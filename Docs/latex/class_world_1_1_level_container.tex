@@ -1,0 +1,119 @@
+\hypertarget{class_world_1_1_level_container}{}\doxysection{World\+::Level\+Container Class Reference}
+\label{class_world_1_1_level_container}\index{World::LevelContainer@{World::LevelContainer}}
+
+
+{\ttfamily \#include $<$World\+Object\+Loader.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_a87be47830ce3dfd481937f8dd588ed45}{Initialise\+Levels}} (\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject\+::\+Object\+Manager}} $\ast$obj, \mbox{\hyperlink{class_state_render_1_1_overworld}{State\+Render\+::\+Overworld}} $\ast$ren, \mbox{\hyperlink{struct_player_data}{Player\+Data}} $\ast$data, \mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{Game\+GUI\+::\+Text\+Box\+Buffer}} $\ast$text\+Buff, \mbox{\hyperlink{class_game_input}{Game\+Input}} $\ast$input)
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_a6b7aa5391dc1f29ce8866ecfaf1d9710}{Initialise\+Global\+Objects}} ()
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_ac529327ea6aeca1b8f4d46a9682569ca}{Build\+First\+Level}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} id)
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_a241500c15675400be5f37d44c8bfe5a6}{Signal\+Load\+Level}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} id)
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_a4bae1ef753438de5ecdce3723bcb2eca}{Signal\+Unload\+Level}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} id)
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_a00935be5cdee1ddfe757063ca253e8a1}{Change\+Level}} ()
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_ab5ee3c843b6aaafefaa1f8724dc0b698}{Load\+Level}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} id)
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_ab0e2b21c4b1ad18db8991c8f177e35f9}{Unload\+Level}} (\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}} id)
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_af047cba224c95a283c115885aeddee88}{Unload\+All}} ()
+\item 
+void \mbox{\hyperlink{class_world_1_1_level_container_aa8e342857831c4250dbb8ccbf5ba057a}{render}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ \mbox{\hyperlink{class_world_1_1_level}{Level}} $>$ \mbox{\hyperlink{class_world_1_1_level_container_a3b2c67a4ee3829d878684592136c543c}{m\+\_\+\+Levels}}
+\item 
+std\+::vector$<$ std\+::mutex $>$ \mbox{\hyperlink{class_world_1_1_level_container_ae114a6e9fccaa70a044f7877e2a4b8d8}{m\+\_\+\+Level\+Mutexes}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_world_1_1_level_container_ac529327ea6aeca1b8f4d46a9682569ca}\label{class_world_1_1_level_container_ac529327ea6aeca1b8f4d46a9682569ca}} 
+\index{World::LevelContainer@{World::LevelContainer}!BuildFirstLevel@{BuildFirstLevel}}
+\index{BuildFirstLevel@{BuildFirstLevel}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{BuildFirstLevel()}{BuildFirstLevel()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Build\+First\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{id }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_a00935be5cdee1ddfe757063ca253e8a1}\label{class_world_1_1_level_container_a00935be5cdee1ddfe757063ca253e8a1}} 
+\index{World::LevelContainer@{World::LevelContainer}!ChangeLevel@{ChangeLevel}}
+\index{ChangeLevel@{ChangeLevel}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{ChangeLevel()}{ChangeLevel()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Change\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_a6b7aa5391dc1f29ce8866ecfaf1d9710}\label{class_world_1_1_level_container_a6b7aa5391dc1f29ce8866ecfaf1d9710}} 
+\index{World::LevelContainer@{World::LevelContainer}!InitialiseGlobalObjects@{InitialiseGlobalObjects}}
+\index{InitialiseGlobalObjects@{InitialiseGlobalObjects}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{InitialiseGlobalObjects()}{InitialiseGlobalObjects()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Initialise\+Global\+Objects (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_a87be47830ce3dfd481937f8dd588ed45}\label{class_world_1_1_level_container_a87be47830ce3dfd481937f8dd588ed45}} 
+\index{World::LevelContainer@{World::LevelContainer}!InitialiseLevels@{InitialiseLevels}}
+\index{InitialiseLevels@{InitialiseLevels}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{InitialiseLevels()}{InitialiseLevels()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Initialise\+Levels (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject\+::\+Object\+Manager}} $\ast$}]{obj,  }\item[{\mbox{\hyperlink{class_state_render_1_1_overworld}{State\+Render\+::\+Overworld}} $\ast$}]{ren,  }\item[{\mbox{\hyperlink{struct_player_data}{Player\+Data}} $\ast$}]{data,  }\item[{\mbox{\hyperlink{struct_game_g_u_i_1_1_text_box_buffer}{Game\+GUI\+::\+Text\+Box\+Buffer}} $\ast$}]{text\+Buff,  }\item[{\mbox{\hyperlink{class_game_input}{Game\+Input}} $\ast$}]{input }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_ab5ee3c843b6aaafefaa1f8724dc0b698}\label{class_world_1_1_level_container_ab5ee3c843b6aaafefaa1f8724dc0b698}} 
+\index{World::LevelContainer@{World::LevelContainer}!LoadLevel@{LoadLevel}}
+\index{LoadLevel@{LoadLevel}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{LoadLevel()}{LoadLevel()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Load\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{id }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_aa8e342857831c4250dbb8ccbf5ba057a}\label{class_world_1_1_level_container_aa8e342857831c4250dbb8ccbf5ba057a}} 
+\index{World::LevelContainer@{World::LevelContainer}!render@{render}}
+\index{render@{render}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_a241500c15675400be5f37d44c8bfe5a6}\label{class_world_1_1_level_container_a241500c15675400be5f37d44c8bfe5a6}} 
+\index{World::LevelContainer@{World::LevelContainer}!SignalLoadLevel@{SignalLoadLevel}}
+\index{SignalLoadLevel@{SignalLoadLevel}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{SignalLoadLevel()}{SignalLoadLevel()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Signal\+Load\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_a4bae1ef753438de5ecdce3723bcb2eca}\label{class_world_1_1_level_container_a4bae1ef753438de5ecdce3723bcb2eca}} 
+\index{World::LevelContainer@{World::LevelContainer}!SignalUnloadLevel@{SignalUnloadLevel}}
+\index{SignalUnloadLevel@{SignalUnloadLevel}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{SignalUnloadLevel()}{SignalUnloadLevel()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Signal\+Unload\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_af047cba224c95a283c115885aeddee88}\label{class_world_1_1_level_container_af047cba224c95a283c115885aeddee88}} 
+\index{World::LevelContainer@{World::LevelContainer}!UnloadAll@{UnloadAll}}
+\index{UnloadAll@{UnloadAll}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{UnloadAll()}{UnloadAll()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Unload\+All (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_ab0e2b21c4b1ad18db8991c8f177e35f9}\label{class_world_1_1_level_container_ab0e2b21c4b1ad18db8991c8f177e35f9}} 
+\index{World::LevelContainer@{World::LevelContainer}!UnloadLevel@{UnloadLevel}}
+\index{UnloadLevel@{UnloadLevel}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{UnloadLevel()}{UnloadLevel()}}
+{\footnotesize\ttfamily void World\+::\+Level\+Container\+::\+Unload\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World\+::\+Level\+ID}}}]{id }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_world_1_1_level_container_ae114a6e9fccaa70a044f7877e2a4b8d8}\label{class_world_1_1_level_container_ae114a6e9fccaa70a044f7877e2a4b8d8}} 
+\index{World::LevelContainer@{World::LevelContainer}!m\_LevelMutexes@{m\_LevelMutexes}}
+\index{m\_LevelMutexes@{m\_LevelMutexes}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{m\_LevelMutexes}{m\_LevelMutexes}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::mutex$>$ World\+::\+Level\+Container\+::m\+\_\+\+Level\+Mutexes}
+
+\mbox{\Hypertarget{class_world_1_1_level_container_a3b2c67a4ee3829d878684592136c543c}\label{class_world_1_1_level_container_a3b2c67a4ee3829d878684592136c543c}} 
+\index{World::LevelContainer@{World::LevelContainer}!m\_Levels@{m\_Levels}}
+\index{m\_Levels@{m\_Levels}!World::LevelContainer@{World::LevelContainer}}
+\doxysubsubsection{\texorpdfstring{m\_Levels}{m\_Levels}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{class_world_1_1_level}{Level}}$>$ World\+::\+Level\+Container\+::m\+\_\+\+Levels}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/level/\mbox{\hyperlink{_world_object_loader_8h}{World\+Object\+Loader.\+h}}\end{DoxyCompactItemize}

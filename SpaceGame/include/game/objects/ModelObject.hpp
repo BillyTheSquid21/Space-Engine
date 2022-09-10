@@ -8,7 +8,7 @@
 static const std::string ModelPathBegin = "res/model/";
 static const std::string TexturePathBegin = "res/textures/";
 
-class ModelObject : public GameObject
+class ModelObject : public SGObject::GObject
 {
 public:
 	ModelObject(std::string texture, std::string modelPath, Tex::TextureAtlasRGBA& atlas) 
@@ -16,21 +16,21 @@ public:
 		m_Texture = texture; atlas.loadTexture(TexturePathBegin+texture, texture);
 		m_Model.load((ModelPathBegin + modelPath).c_str());
 	}
-	void setRen(Render::Renderer* ren) { m_Model.setRen(ren); }
+	void setRen(SGRender::Renderer* ren) { m_Model.setRen(ren); }
 
 	std::string m_Texture = "";
-	Model::Model<NormalTextureVertex> m_Model;
+	Model::Model<SGRender::NTVertex> m_Model;
 	Tex::UVTransform m_LastTransform = { 0.0f, 1.0f, 1.0f };
 };
 
-class ModelRender : public RenderComponent
+class ModelRender : public SGObject::RenderComponent
 {
 public:
 	ModelRender() = default;
-	ModelRender(Model::Model<NormalTextureVertex>* model) { m_Model = model; }
+	ModelRender(Model::Model<SGRender::NTVertex>* model) { m_Model = model; }
 	void render() { m_Model->render(); };
 private:
-	Model::Model<NormalTextureVertex>* m_Model = nullptr;
+	Model::Model<SGRender::NTVertex>* m_Model = nullptr;
 };
 
 #endif

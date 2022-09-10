@@ -48,6 +48,8 @@ static ObjectType GetType(std::string string)
 	}
 }
 
+using namespace StateRender;
+
 XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id, bool global)
 {
 	//Setup
@@ -79,7 +81,7 @@ XML_Doc_Wrapper WorldParse::ParseLevelXML(World::LevelID id, bool global)
 	return { tmp, doc };
 }
 
-bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+bool WorldParse::ParseLevelObjects(SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, std::shared_mutex& mutex, XML_Doc_Wrapper doc, GameInput* input, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
 	//Setup
 	using namespace rapidxml;
@@ -133,7 +135,7 @@ bool WorldParse::ParseLevelObjects(ObjectManager* manager, OverworldRenderer* re
 	return true;
 }
 
-bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
+bool WorldParse::ParseLevelTrees(SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
 {
 	//Setup
 	using namespace rapidxml;
@@ -196,7 +198,7 @@ bool WorldParse::ParseLevelTrees(ObjectManager* manager, OverworldRenderer* ren,
 	return true;
 }
 
-bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
+bool WorldParse::ParseLevelGrass(SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID, std::shared_mutex& mutex, XML_Doc_Wrapper doc)
 {
 	//Setup
 	using namespace rapidxml;
@@ -209,17 +211,10 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 		EngineTimer::EndTimer(ts);
 		return false;
 	}
-	//Get texture UVs
-	TileUV uv1 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(strtoul(tallGrassRoot->first_node("TXFrame1")->value(), nullptr, 10),
-		strtoul(tallGrassRoot->first_node("TYFrame1")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE );
-	TileUV uv2 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(strtoul(tallGrassRoot->first_node("TXFrame2")->value(), nullptr, 10),
-		strtoul(tallGrassRoot->first_node("TYFrame2")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
-	TileUV uv3 = ren->tilemap(StateTileMap::OVERWORLD).uvTile(strtoul(tallGrassRoot->first_node("TXFrame3")->value(), nullptr, 10),
-		strtoul(tallGrassRoot->first_node("TYFrame3")->value(), nullptr, 10), World::TILE_SIZE, World::TILE_SIZE);
 	std::shared_ptr<TallGrassObject> grass(new TallGrassObject());
 	grass->m_LevelID = levelID;
 	grass->setTag((uint16_t)ObjectType::Grass);
-	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->at(StateRen::OVERWORLD_GRASS), grass.get()));
+	std::shared_ptr<TallGrassRenderComponent> grassRen(new TallGrassRenderComponent(&ren->at(StateRen::OVERWORLD_GRASS), &ren->camera, grass.get()));
 	grassRen->reserveGrass(strtoul(tallGrassRoot->first_node("Count")->value(), nullptr, 10));
 
 	//Add grass
@@ -256,7 +251,7 @@ bool WorldParse::ParseLevelGrass(ObjectManager* manager, OverworldRenderer* ren,
 }
 
 
-bool WorldParse::ParseGlobalObjects(ObjectManager* manager, XML_Doc_Wrapper doc, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+bool WorldParse::ParseGlobalObjects(SGObject::ObjectManager* manager, XML_Doc_Wrapper doc, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
 	//Setup
 	using namespace rapidxml;
@@ -284,15 +279,15 @@ bool WorldParse::ParseGlobalObjects(ObjectManager* manager, XML_Doc_Wrapper doc,
 	return true;
 }
 
-void WorldParse::LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+void WorldParse::LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
-	using namespace rapidxml;
+	using namespace rapidxml; using namespace Ov_Sprite; using namespace SGObject;
 	std::shared_ptr<LoadingZone> zone(new LoadingZone());
 	zone->setTag((uint16_t)ObjectType::LoadingZone);
-	std::shared_ptr<RenderComponentGroup<LoadingZoneComponent>> group(new RenderComponentGroup<LoadingZoneComponent>());
+	std::shared_ptr<RenderCompGroup<LoadingZoneComponent>> group(new RenderCompGroup<LoadingZoneComponent>());
 	manager->pushRenderGroup(group, "LoadingZones");
 	//Load each zone
-	std::shared_ptr<OvSpr_RunningSprite> playerPtr = manager->objectAt<OvSpr_RunningSprite>(manager->queryObjectID("Player"));
+	std::shared_ptr<RunSprite> playerPtr = manager->objectAt<RunSprite>(manager->queryObjectID("Player"));
 	for (xml_node<>* zoneNode = node->first_node(); zoneNode; zoneNode = zoneNode->next_sibling())
 	{
 		//Get info
@@ -319,14 +314,14 @@ void WorldParse::LoadLoadingZone(std::string name, rapidxml::xml_node<>* node, O
 	manager->pushGameObject(zone, "LoadingZone");
 }
 
-void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, bool* interaction)
+void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID, bool* interaction)
 {
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
-	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
+	SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), 
+	std::shared_ptr<Sprite> sprite = Ov_ObjCreation::BuildSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), 
 		manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(), 
 		&ren->at(StateRen::OVERWORLD_SPRITE), true); //For now block for loaded sprites
 	//sprite->setTag((uint16_t)ObjectType::Sprite);
@@ -335,14 +330,14 @@ void WorldParse::LoadSprite(std::string name, rapidxml::xml_node<>* node, Object
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
+void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
 {
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
-	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
+	SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_DirectionalSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+	std::shared_ptr<DirectionSprite> sprite = Ov_ObjCreation::BuildDirectionalSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationFacing>(manager->queryGroupID("UpdateFacing")).get(), &ren->at(StateRen::OVERWORLD_SPRITE));
 	sprite->setTag((uint16_t)ObjectType::DirectionalSprite);
 
@@ -353,18 +348,18 @@ void WorldParse::LoadDirectionalSprite(std::string name, rapidxml::xml_node<>* n
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
+void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
 {
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
-	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
+	SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Permissions - done earlier to get before influence
 	World::MovementPermissions* permission = World::GetTilePermission(data.levelID, data.tile, data.height);
 	World::MovementPermissions permissionOriginal = *permission;
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_WalkingSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+	std::shared_ptr<WalkSprite> sprite = Ov_ObjCreation::BuildWalkingSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 			manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationWalking>(manager->queryGroupID("UpdateWalking")).get(), &ren->at(StateRen::OVERWORLD_SPRITE));
 	
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
@@ -378,18 +373,18 @@ void WorldParse::LoadWalkingSprite(std::string name, rapidxml::xml_node<>* node,
 	manager->pushGameObject(sprite, name);
 }
 
-void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
+void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, World::LevelID levelID, GameInput* input)
 {
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite;
 	//Check for nodes that MUST exist - those that make up the spritedata struct
-	OvSpr_SpriteData data = BuildSprDataFromXNode(node, levelID);
+	SpriteData data = BuildSprDataFromXNode(node, levelID);
 
 	//Permissions - done earlier to get before influence
 	World::MovementPermissions* permission = World::GetTilePermission(data.levelID, data.tile, data.height);
 	World::MovementPermissions permissionOriginal = *permission;
 
 	//Build base sprite
-	std::shared_ptr<OvSpr_RunningSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
+	std::shared_ptr<RunSprite> sprite = Ov_ObjCreation::BuildRunningSprite(data, ren->tilemap(StateTileMap::OVERWORLD_SPRITE), manager->renderGroupAt<SpriteRender>(manager->queryGroupID("SpriteRender")).get(),
 		manager->updateGroupAt<SpriteMap>(manager->queryGroupID("SpriteMap")).get(), manager->updateGroupAt<UpdateAnimationRunning>(manager->queryGroupID("UpdateRunning")).get(), &ren->at(StateRen::OVERWORLD_SPRITE));
 	sprite->setTag((uint16_t)ObjectType::RunningSprite);
 	sprite->m_LastPermissionPtr = permission; sprite->m_LastPermission = permissionOriginal;
@@ -403,19 +398,20 @@ void WorldParse::LoadRunningSprite(std::string name, rapidxml::xml_node<>* node,
 }
 
 //TODO - make scripts not heap
-void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<OvSpr_Sprite> sprite, GameInput* input)
-{
+void WorldParse::OverworldScriptOptionals(rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, PlayerData* pdata, GameGUI::TextBoxBuffer* textBuff, std::shared_ptr<Ov_Sprite::Sprite> sprite, GameInput* input)
+{ 
+	using namespace Ov_Sprite;
 	//Currently working on scripts - TODO - Make work for any sprite and access player properly
 	if (node->first_node("NPCScript"))
 	{
 		std::string filePath = node->first_node("NPCScript")->value();
-		std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite>(manager->getObjects()[0].obj);
+		std::shared_ptr<RunSprite> player = std::static_pointer_cast<RunSprite>(manager->getObjects()[0].obj);
 		std::shared_ptr<NPC_OverworldScript> npcScript = AllocateNPCOvScript(filePath, textBuff, sprite, player);
 		manager->pushUpdateHeap(npcScript, &sprite->m_UpdateComps);
 	}
 }
 
-void WorldParse::DirectionalSpriteOptionals(rapidxml::xml_node<>* node, std::shared_ptr<OvSpr_DirectionalSprite> sprite)
+void WorldParse::DirectionalSpriteOptionals(rapidxml::xml_node<>* node, std::shared_ptr<Ov_Sprite::DirectionSprite> sprite)
 {
 	//Optionals
 	using rapidxml::xml_node;
@@ -427,16 +423,16 @@ void WorldParse::DirectionalSpriteOptionals(rapidxml::xml_node<>* node, std::sha
 	}
 }
 
-void WorldParse::WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManager* manager, std::shared_ptr<OvSpr_WalkingSprite> sprite)
+void WorldParse::WalkingSpriteOptionals(rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, std::shared_ptr<Ov_Sprite::WalkSprite> sprite)
 {
 	//Optionals
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite; using namespace SGObject;
 	//Do optionals for directional which should be available to walking
-	WorldParse::DirectionalSpriteOptionals(node, std::static_pointer_cast<OvSpr_DirectionalSprite>(sprite));
+	WorldParse::DirectionalSpriteOptionals(node, std::static_pointer_cast<DirectionSprite>(sprite));
 	xml_node<>* randWNode = node->first_node("RandWalk");
 	if (randWNode)
 	{
-		std::shared_ptr<UpdateComponentGroup<NPC_RandWalk>> tmp = manager->updateGroupAt<NPC_RandWalk>(manager->queryGroupID("RandWalk"));
+		std::shared_ptr<UpdateCompGroup<NPC_RandWalk>> tmp = manager->updateGroupAt<NPC_RandWalk>(manager->queryGroupID("RandWalk"));
 		NPC_RandWalk rWalk(sprite);
 
 		//Check active and add
@@ -449,10 +445,10 @@ void WorldParse::WalkingSpriteOptionals(rapidxml::xml_node<>* node, ObjectManage
 	}
 }
 
-OvSpr_SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, World::LevelID levelID)
+Ov_Sprite::SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, World::LevelID levelID)
 {
-	using rapidxml::xml_node;
-	OvSpr_SpriteData data;
+	using rapidxml::xml_node; using namespace Ov_Sprite;
+	SpriteData data;
 
 	xml_node<>* worldLNode = node->first_node("WLevel");
 	World::WorldHeight worldLevel = (World::WorldHeight)strtol(worldLNode->value(), nullptr, 10);
@@ -500,9 +496,9 @@ OvSpr_SpriteData WorldParse::BuildSprDataFromXNode(rapidxml::xml_node<>* node, W
 }
 
 //Loaders
-void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
+void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID, std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld)
 {
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite;
 	//Get data
 	xml_node<>* tileXCurr = node->first_node("TileXCurr");
 	xml_node<>* tileZCurr = node->first_node("TileZCurr");
@@ -518,7 +514,7 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	World::LevelID levelIDDestination = (World::LevelID)strtoul(idDest->value(), nullptr, 10);
 
 	//Create object
-	OvSpr_RunningSprite* player = (OvSpr_RunningSprite*)manager->getObjects()[0].obj.get();
+	RunSprite* player = (RunSprite*)manager->getObjects()[0].obj.get();
 	
 	std::shared_ptr<WarpTile> warpTile(new WarpTile());
 	warpTile->setTag((uint16_t)ObjectType::WarpTile);
@@ -529,9 +525,9 @@ void WorldParse::LoadWarpTile(std::string name, rapidxml::xml_node<>* node, Obje
 	manager->pushGameObject(warpTile, name);
 }
 
-void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
+void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, World::LevelID levelID, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
 {
-	using rapidxml::xml_node;
+	using rapidxml::xml_node; using namespace Ov_Sprite; using namespace SGObject;
 	//Get data
 	xml_node<>* tileX = node->first_node("TileX");
 	xml_node<>* tileZ = node->first_node("TileZ");
@@ -544,7 +540,7 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 	scriptTile->setTag((uint16_t)ObjectType::ScriptTile);
 
 	//std::lock_guard<std::shared_mutex> objLock(manager->getObjectMutex());
-	std::shared_ptr<OvSpr_RunningSprite> player = std::static_pointer_cast<OvSpr_RunningSprite, GameObject>(manager->getObjects()[0].obj);
+	std::shared_ptr<RunSprite> player = std::static_pointer_cast<RunSprite, GObject>(manager->getObjects()[0].obj);
 
 	//See what type of script and do accordingly
 	xml_node<>* scriptType;
@@ -561,7 +557,7 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 		std::shared_ptr<ScriptTileUpdateComponent<NPC_OverworldScript>> scriptUpdate(new ScriptTileUpdateComponent<NPC_OverworldScript>(player.get(), tile, height, levelID));
 		xml_node<>* npcNode = node->first_node("NPC_Target");
 		std::string npcName = npcNode->value();
-		std::shared_ptr<OvSpr_RunningSprite> npc = manager->objectAt<OvSpr_RunningSprite>(manager->queryObjectID(npcName));
+		std::shared_ptr<RunSprite> npc = manager->objectAt<RunSprite>(manager->queryObjectID(npcName));
 		//get script
 		std::string scriptName = scriptType->value();
 		NPC_OverworldScript script = CreateNPCOvScript(scriptName, textBuff, npc, player);
@@ -572,22 +568,23 @@ void WorldParse::LoadScriptTile(std::string name, rapidxml::xml_node<>* node, Ob
 	}
 }
 
-static void LoadModelAsync(std::string name, std::string tex, std::string model, glm::vec3 offset, glm::vec3 scaleFactor, OverworldRenderer* ren, ObjectManager* manager)
+static void LoadModelAsync(std::string name, std::string tex, std::string model, glm::vec3 offset, glm::vec3 scaleFactor, Overworld* ren, SGObject::ObjectManager* manager)
 {
+	using namespace SGRender; using namespace Geometry;
 	std::shared_ptr<ModelObject> modelObj(new ModelObject(tex, model, ren->atlas()));
 	modelObj->setRen(&ren->at(StateRen::OVERWORLD_MODEL));
 	modelObj->setTag((uint16_t)ObjectType::Model);
 
 	//Scale then translate
-	SimpleScale<NormalTextureVertex>(modelObj->m_Model.getVertices(), scaleFactor, modelObj->m_Model.getVertCount());
-	Translate<NormalTextureVertex>(modelObj->m_Model.getVertices(), offset.x, offset.y, offset.z, modelObj->m_Model.getVertCount());
+	SimpleScale<NTVertex>(modelObj->m_Model.getVertices(), scaleFactor, modelObj->m_Model.getVertCount());
+	Translate<NTVertex>(modelObj->m_Model.getVertices(), offset.x, offset.y, offset.z, modelObj->m_Model.getVertCount());
 
 	//Add atlas update and render to groups
 	manager->renderGroupAt<ModelRender>(manager->queryGroupID("ModelRender"))->addComponent(&modelObj->m_RenderComps, &modelObj->m_Model);
 	manager->pushGameObject(modelObj, name);
 }
 
-static void WorldParse::LoadModel(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID)
+static void WorldParse::LoadModel(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID)
 {
 	using rapidxml::xml_node;
 
@@ -616,7 +613,7 @@ static void WorldParse::LoadModel(std::string name, rapidxml::xml_node<>* node, 
 	LoadModelAsync(name, texture, model, offset, scaleFactor, ren, manager);
 }
 
-void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, ObjectManager* manager, OverworldRenderer* ren, World::LevelID levelID)
+void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, SGObject::ObjectManager* manager, Overworld* ren, World::LevelID levelID)
 {
 	using rapidxml::xml_node;
 
@@ -662,7 +659,7 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, Object
 	manager->pushGameObject(bridge, name);
 }
 
-void World::LevelContainer::InitialiseLevels(ObjectManager* obj, OverworldRenderer* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
+void World::LevelContainer::InitialiseLevels(SGObject::ObjectManager* obj, Overworld* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
 {
 	m_Input = input; m_ObjManager = obj; m_Renderer = ren; m_Data = data; m_TextBuffer = textBuff;
 	m_Levels.resize((int)World::LevelID::LEVEL_NULL);
@@ -676,7 +673,7 @@ void World::LevelContainer::InitialiseLevels(ObjectManager* obj, OverworldRender
 
 void World::LevelContainer::BuildFirstLevel(World::LevelID id)
 {
-	m_Levels[(int)id].buildLevel(&m_Renderer->at(StateRen::OVERWORLD), &m_Renderer->tilemap(StateTileMap::OVERWORLD), &m_Renderer->texture(StateTex::OVERWORLD), m_Renderer->m_LightColor, m_Renderer->m_LightDir);
+	m_Levels[(int)id].buildLevel(&m_Renderer->at(StateRen::OVERWORLD), &m_Renderer->tilemap(StateTileMap::OVERWORLD), &m_Renderer->texture(StateTex::OVERWORLD), m_Renderer->lightColor(), m_Renderer->lightDirection());
 }
 
 void World::LevelContainer::InitialiseGlobalObjects()
@@ -721,7 +718,7 @@ void World::LevelContainer::LoadLevel(World::LevelID id)
 	}
 
 	using namespace rapidxml;
-	if (m_Levels[(int)id].buildLevel(&m_Renderer->at(StateRen::OVERWORLD), &m_Renderer->tilemap(StateTileMap::OVERWORLD_SPRITE), &m_Renderer->texture(StateTex::OVERWORLD), m_Renderer->m_LightColor, m_Renderer->m_LightDir))
+	if (m_Levels[(int)id].buildLevel(&m_Renderer->at(StateRen::OVERWORLD), &m_Renderer->tilemap(StateTileMap::OVERWORLD_SPRITE), &m_Renderer->texture(StateTex::OVERWORLD), m_Renderer->lightColor(), m_Renderer->lightDirection()))
 	{
 		using namespace  WorldParse;
 		xml_node<>* root;
@@ -784,7 +781,7 @@ void World::LevelContainer::UnloadLevel(World::LevelID id)
 	}
 	
 	//Purge all level tagged objects
-	std::vector<ObjectManager::GameObjectContainer>& objs = m_ObjManager->getObjects();
+	std::vector<SGObject::ObjectManager::GameObjectContainer>& objs = m_ObjManager->getObjects();
 	for (int i = 0; i < objs.size(); i++)
 	{
 		if (objs[i].name.find("Level" + std::to_string((int)id)) != std::string::npos)

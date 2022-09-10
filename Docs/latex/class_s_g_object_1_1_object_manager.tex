@@ -1,0 +1,220 @@
+\hypertarget{class_s_g_object_1_1_object_manager}{}\doxysection{SGObject\+::Object\+Manager Class Reference}
+\label{class_s_g_object_1_1_object_manager}\index{SGObject::ObjectManager@{SGObject::ObjectManager}}
+
+
+{\ttfamily \#include $<$Obj\+Management.\+h$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_s_g_object_1_1_object_manager_1_1_game_object_container}{Game\+Object\+Container}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a242c4076efcd2d0b3d17ff7a77fdea23}{push\+Update\+Group}} (T ptr)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a01a3147878e60cd669279c06c212c864}{push\+Render\+Group}} (T ptr)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a486a845deddeafcebdbfab4819e9a11c}{push\+Update\+Group}} (T ptr, std\+::string group\+Name)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a227e31c6445b9a902213f09dbc2c0e0c}{push\+Render\+Group}} (T ptr, std\+::string group\+Name)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a764291c03ad3187b6870c524bafdd19b}{push\+Update\+Heap}} (T ptr, std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject\+::\+Update\+Component}} $\ast$ $>$ $\ast$comp\+Pointers)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ad38618221e96cac39abe8d74dce11a3e}{push\+Render\+Heap}} (T ptr, std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_component}{SGObject\+::\+Render\+Component}} $\ast$ $>$ $\ast$comp\+Pointers)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a56c4c76bc8021d93b79ee8194da1d675}{push\+Game\+Object}} (T ptr)
+\item 
+{\footnotesize template$<$typename T $>$ }\\unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a8bc2fe4440e347113023705c71ed7b08}{push\+Game\+Object}} (T ptr, std\+::string name)
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ae88b33f67581bb58d91619dd26469e32}{update}} (double delta\+Time)
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_object_manager_afc9af974b3a876c8a1f7929c909c51f9}{render}} ()
+\item 
+std\+::shared\+\_\+mutex \& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_af2ed5fa13f2d7194e4d4bf3894fa83f3}{get\+Group\+Mutex}} ()
+\item 
+std\+::shared\+\_\+mutex \& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a51800344924467afe7d79cb0edfe2ee3}{get\+Heap\+Mutex}} ()
+\item 
+{\footnotesize template$<$typename ExpectedT $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ ExpectedT $>$ $>$ \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ad03f3c8cbc4112d20541c4f25228f5ed}{update\+Group\+At}} (unsigned int id) const
+\item 
+{\footnotesize template$<$typename ExpectedT $>$ }\\std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ ExpectedT $>$ $>$ \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a10c892ebc208ab580d678a14e76fbecb}{render\+Group\+At}} (unsigned int id) const
+\item 
+std\+::shared\+\_\+mutex \& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_adc4b479300fc34c259a91346b4ff3ea0}{get\+Object\+Mutex}} ()
+\item 
+{\footnotesize template$<$typename ExpectedT $>$ }\\std\+::shared\+\_\+ptr$<$ ExpectedT $>$ \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a833d766510a0f38455d07f2b74faa783}{object\+At}} (unsigned int id) const
+\item 
+unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a2b22e1951b8802794f99a5ae4d5b4bdd}{query\+Group\+ID}} (std\+::string name)
+\item 
+unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a923767934e3fe217918233433faa5bd4}{query\+Object\+ID}} (std\+::string name)
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_object_manager_adf2aac5b03aa95d96ce58827bc4354ed}{remove\+Object}} (unsigned int id)
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_object_manager_adbd5b8cadc74d7bf6b7cf9d01cbbb9c5}{remove\+Object}} (std\+::string name)
+\item 
+std\+::vector$<$ \mbox{\hyperlink{struct_s_g_object_1_1_object_manager_1_1_game_object_container}{Game\+Object\+Container}} $>$ \& \mbox{\hyperlink{class_s_g_object_1_1_object_manager_a8e2bfdbfb6562fc07471458ffc30b629}{get\+Objects}} ()
+\item 
+unsigned int \mbox{\hyperlink{class_s_g_object_1_1_object_manager_aa0ed1877e08e183ebfe14eb96800131e}{get\+Object\+Count}} ()
+\item 
+void \mbox{\hyperlink{class_s_g_object_1_1_object_manager_ad1bb89df980e8e6af082172b4bbd6e32}{reset}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Container to manage all objects in a scene -\/ will improve ID allocation in future Contains render and update groups, as well as a render and update heap for ungrouped components Heap components and game objects must be std\+::shared\+\_\+ptr objects Also contains mutexes for different data to ensure threaded capabilities 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_af2ed5fa13f2d7194e4d4bf3894fa83f3}\label{class_s_g_object_1_1_object_manager_af2ed5fa13f2d7194e4d4bf3894fa83f3}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!getGroupMutex@{getGroupMutex}}
+\index{getGroupMutex@{getGroupMutex}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{getGroupMutex()}{getGroupMutex()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+mutex \& SGObject\+::\+Object\+Manager\+::get\+Group\+Mutex (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a51800344924467afe7d79cb0edfe2ee3}\label{class_s_g_object_1_1_object_manager_a51800344924467afe7d79cb0edfe2ee3}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!getHeapMutex@{getHeapMutex}}
+\index{getHeapMutex@{getHeapMutex}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{getHeapMutex()}{getHeapMutex()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+mutex \& SGObject\+::\+Object\+Manager\+::get\+Heap\+Mutex (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_aa0ed1877e08e183ebfe14eb96800131e}\label{class_s_g_object_1_1_object_manager_aa0ed1877e08e183ebfe14eb96800131e}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!getObjectCount@{getObjectCount}}
+\index{getObjectCount@{getObjectCount}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{getObjectCount()}{getObjectCount()}}
+{\footnotesize\ttfamily unsigned int SGObject\+::\+Object\+Manager\+::get\+Object\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_adc4b479300fc34c259a91346b4ff3ea0}\label{class_s_g_object_1_1_object_manager_adc4b479300fc34c259a91346b4ff3ea0}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!getObjectMutex@{getObjectMutex}}
+\index{getObjectMutex@{getObjectMutex}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{getObjectMutex()}{getObjectMutex()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+mutex \& SGObject\+::\+Object\+Manager\+::get\+Object\+Mutex (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a8e2bfdbfb6562fc07471458ffc30b629}\label{class_s_g_object_1_1_object_manager_a8e2bfdbfb6562fc07471458ffc30b629}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!getObjects@{getObjects}}
+\index{getObjects@{getObjects}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{getObjects()}{getObjects()}}
+{\footnotesize\ttfamily std\+::vector$<$ \mbox{\hyperlink{struct_s_g_object_1_1_object_manager_1_1_game_object_container}{Game\+Object\+Container}} $>$ \& SGObject\+::\+Object\+Manager\+::get\+Objects (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a833d766510a0f38455d07f2b74faa783}\label{class_s_g_object_1_1_object_manager_a833d766510a0f38455d07f2b74faa783}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!objectAt@{objectAt}}
+\index{objectAt@{objectAt}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{objectAt()}{objectAt()}}
+{\footnotesize\ttfamily template$<$typename ExpectedT $>$ \\
+std\+::shared\+\_\+ptr$<$ ExpectedT $>$ SGObject\+::\+Object\+Manager\+::object\+At (\begin{DoxyParamCaption}\item[{unsigned int}]{id }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a56c4c76bc8021d93b79ee8194da1d675}\label{class_s_g_object_1_1_object_manager_a56c4c76bc8021d93b79ee8194da1d675}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushGameObject@{pushGameObject}}
+\index{pushGameObject@{pushGameObject}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushGameObject()}{pushGameObject()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Game\+Object (\begin{DoxyParamCaption}\item[{T}]{ptr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push a game object \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a8bc2fe4440e347113023705c71ed7b08}\label{class_s_g_object_1_1_object_manager_a8bc2fe4440e347113023705c71ed7b08}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushGameObject@{pushGameObject}}
+\index{pushGameObject@{pushGameObject}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushGameObject()}{pushGameObject()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Game\+Object (\begin{DoxyParamCaption}\item[{T}]{ptr,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push a game object with a name to identify \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a01a3147878e60cd669279c06c212c864}\label{class_s_g_object_1_1_object_manager_a01a3147878e60cd669279c06c212c864}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushRenderGroup@{pushRenderGroup}}
+\index{pushRenderGroup@{pushRenderGroup}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushRenderGroup()}{pushRenderGroup()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Render\+Group (\begin{DoxyParamCaption}\item[{T}]{ptr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push a render group to the manager \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a227e31c6445b9a902213f09dbc2c0e0c}\label{class_s_g_object_1_1_object_manager_a227e31c6445b9a902213f09dbc2c0e0c}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushRenderGroup@{pushRenderGroup}}
+\index{pushRenderGroup@{pushRenderGroup}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushRenderGroup()}{pushRenderGroup()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Render\+Group (\begin{DoxyParamCaption}\item[{T}]{ptr,  }\item[{std\+::string}]{group\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push a render group to the manager with a name to identify it \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_ad38618221e96cac39abe8d74dce11a3e}\label{class_s_g_object_1_1_object_manager_ad38618221e96cac39abe8d74dce11a3e}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushRenderHeap@{pushRenderHeap}}
+\index{pushRenderHeap@{pushRenderHeap}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushRenderHeap()}{pushRenderHeap()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Render\+Heap (\begin{DoxyParamCaption}\item[{T}]{ptr,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_component}{SGObject\+::\+Render\+Component}} $\ast$ $>$ $\ast$}]{comp\+Pointers }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push a render component to the render heap \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a242c4076efcd2d0b3d17ff7a77fdea23}\label{class_s_g_object_1_1_object_manager_a242c4076efcd2d0b3d17ff7a77fdea23}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushUpdateGroup@{pushUpdateGroup}}
+\index{pushUpdateGroup@{pushUpdateGroup}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushUpdateGroup()}{pushUpdateGroup()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Update\+Group (\begin{DoxyParamCaption}\item[{T}]{ptr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push an update group to the manager \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a486a845deddeafcebdbfab4819e9a11c}\label{class_s_g_object_1_1_object_manager_a486a845deddeafcebdbfab4819e9a11c}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushUpdateGroup@{pushUpdateGroup}}
+\index{pushUpdateGroup@{pushUpdateGroup}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushUpdateGroup()}{pushUpdateGroup()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Update\+Group (\begin{DoxyParamCaption}\item[{T}]{ptr,  }\item[{std\+::string}]{group\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push an update group to the manager with a name to identify it \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a764291c03ad3187b6870c524bafdd19b}\label{class_s_g_object_1_1_object_manager_a764291c03ad3187b6870c524bafdd19b}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!pushUpdateHeap@{pushUpdateHeap}}
+\index{pushUpdateHeap@{pushUpdateHeap}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{pushUpdateHeap()}{pushUpdateHeap()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+unsigned int SGObject\+::\+Object\+Manager\+::push\+Update\+Heap (\begin{DoxyParamCaption}\item[{T}]{ptr,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_component}{SGObject\+::\+Update\+Component}} $\ast$ $>$ $\ast$}]{comp\+Pointers }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Push an update component to the update heap \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a2b22e1951b8802794f99a5ae4d5b4bdd}\label{class_s_g_object_1_1_object_manager_a2b22e1951b8802794f99a5ae4d5b4bdd}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!queryGroupID@{queryGroupID}}
+\index{queryGroupID@{queryGroupID}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{queryGroupID()}{queryGroupID()}}
+{\footnotesize\ttfamily unsigned int SGObject\+::\+Object\+Manager\+::query\+Group\+ID (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a923767934e3fe217918233433faa5bd4}\label{class_s_g_object_1_1_object_manager_a923767934e3fe217918233433faa5bd4}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!queryObjectID@{queryObjectID}}
+\index{queryObjectID@{queryObjectID}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{queryObjectID()}{queryObjectID()}}
+{\footnotesize\ttfamily unsigned int SGObject\+::\+Object\+Manager\+::query\+Object\+ID (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_adbd5b8cadc74d7bf6b7cf9d01cbbb9c5}\label{class_s_g_object_1_1_object_manager_adbd5b8cadc74d7bf6b7cf9d01cbbb9c5}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!removeObject@{removeObject}}
+\index{removeObject@{removeObject}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{removeObject()}{removeObject()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void SGObject\+::\+Object\+Manager\+::remove\+Object (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Remove an object based on its name \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_adf2aac5b03aa95d96ce58827bc4354ed}\label{class_s_g_object_1_1_object_manager_adf2aac5b03aa95d96ce58827bc4354ed}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!removeObject@{removeObject}}
+\index{removeObject@{removeObject}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{removeObject()}{removeObject()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void SGObject\+::\+Object\+Manager\+::remove\+Object (\begin{DoxyParamCaption}\item[{unsigned int}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Remove an object based on its index \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_afc9af974b3a876c8a1f7929c909c51f9}\label{class_s_g_object_1_1_object_manager_afc9af974b3a876c8a1f7929c909c51f9}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!render@{render}}
+\index{render@{render}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void SGObject\+::\+Object\+Manager\+::render (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Render components \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_a10c892ebc208ab580d678a14e76fbecb}\label{class_s_g_object_1_1_object_manager_a10c892ebc208ab580d678a14e76fbecb}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!renderGroupAt@{renderGroupAt}}
+\index{renderGroupAt@{renderGroupAt}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{renderGroupAt()}{renderGroupAt()}}
+{\footnotesize\ttfamily template$<$typename ExpectedT $>$ \\
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{SGObject\+::\+Render\+Comp\+Group}}$<$ ExpectedT $>$ $>$ SGObject\+::\+Object\+Manager\+::render\+Group\+At (\begin{DoxyParamCaption}\item[{unsigned int}]{id }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_s_g_object_1_1_object_manager_ad1bb89df980e8e6af082172b4bbd6e32}\label{class_s_g_object_1_1_object_manager_ad1bb89df980e8e6af082172b4bbd6e32}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!reset@{reset}}
+\index{reset@{reset}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void SGObject\+::\+Object\+Manager\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reset object manager and remove all data \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_ae88b33f67581bb58d91619dd26469e32}\label{class_s_g_object_1_1_object_manager_ae88b33f67581bb58d91619dd26469e32}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!update@{update}}
+\index{update@{update}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void SGObject\+::\+Object\+Manager\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})}
+
+Update components \mbox{\Hypertarget{class_s_g_object_1_1_object_manager_ad03f3c8cbc4112d20541c4f25228f5ed}\label{class_s_g_object_1_1_object_manager_ad03f3c8cbc4112d20541c4f25228f5ed}} 
+\index{SGObject::ObjectManager@{SGObject::ObjectManager}!updateGroupAt@{updateGroupAt}}
+\index{updateGroupAt@{updateGroupAt}!SGObject::ObjectManager@{SGObject::ObjectManager}}
+\doxysubsubsection{\texorpdfstring{updateGroupAt()}{updateGroupAt()}}
+{\footnotesize\ttfamily template$<$typename ExpectedT $>$ \\
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{SGObject\+::\+Update\+Comp\+Group}}$<$ ExpectedT $>$ $>$ SGObject\+::\+Object\+Manager\+::update\+Group\+At (\begin{DoxyParamCaption}\item[{unsigned int}]{id }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/\mbox{\hyperlink{_obj_management_8h}{Obj\+Management.\+h}}\end{DoxyCompactItemize}

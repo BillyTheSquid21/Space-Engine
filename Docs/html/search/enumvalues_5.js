@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['f0_0',['F0',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93faee0c8bd6520d8fb37a28c61189d0e821',1,'World']]],
+  ['f1_1',['F1',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fae1dffc8709f31a4987c8a88334107e89',1,'World']]],
+  ['f10_2',['F10',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fab213ce22ca6ad4eda8db82966b9b6e5a',1,'World']]],
+  ['f2_3',['F2',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fafe5c3684dce76cdd9f7f42430868aa74',1,'World']]],
+  ['f3_4',['F3',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fa4b6bf4b531770872d4328ce69bef5627',1,'World']]],
+  ['f4_5',['F4',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fae7e0e72401a9f2718ed0f39f2861d702',1,'World']]],
+  ['f5_6',['F5',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fa37f438df6a6d5ba4c17ef8ca58562f00',1,'World']]],
+  ['f6_7',['F6',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fa1faf42f2823f184eb2c9f0dffe5d73f2',1,'World']]],
+  ['f7_8',['F7',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fa47489eb597b7db34caa24b1fc78fc839',1,'World']]],
+  ['f8_9',['F8',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fa4787509ad9f9d747a81a30e9dde3d4a7',1,'World']]],
+  ['f9_10',['F9',['../namespace_world.html#af67b2894bd6cf5e4e4375ca72cb5f93fa892a245e287c163080b23db737d3c4c9',1,'World']]],
+  ['face_5fplayer_11',['FACE_PLAYER',['../_script_8hpp.html#a46e7446a4955af0d27a3ba606bb9c7b9a9c71b5ee0a13d37c45111f78495189b9',1,'Script.hpp']]],
+  ['face_5fwith_5fplayer_12',['FACE_WITH_PLAYER',['../_script_8hpp.html#a46e7446a4955af0d27a3ba606bb9c7b9a87e9184a0c120d3b9f2f8e19fb7a435d',1,'Script.hpp']]],
+  ['fairy_13',['Fairy',['../_pokemon_8h.html#a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea436db107774b95e069c62fd0bacab134',1,'Pokemon.h']]],
+  ['fighting_14',['Fighting',['../_pokemon_8h.html#a7bbdcc7c1e33f6f1b89c3df7f6e3d00eaef492f571a74192b637adada68fdd94a',1,'Pokemon.h']]],
+  ['fire_15',['Fire',['../_pokemon_8h.html#a7bbdcc7c1e33f6f1b89c3df7f6e3d00eabd2b7e5f85a6ea65065c4ebc6d7c95bb',1,'Pokemon.h']]],
+  ['fly_16',['Fly',['../_move_effects_8h.html#adeffac2e655025d5a59c5830ce0b8d29aac51deb7d2c3f9663a6df72c7c9b2b51',1,'MoveEffects.h']]],
+  ['flying_17',['Flying',['../_pokemon_8h.html#a7bbdcc7c1e33f6f1b89c3df7f6e3d00ea444733081a578880ba8a563d3c59d22d',1,'Flying():&#160;Pokemon.h'],['../_turn_8hpp.html#ab0ed5a40f5c765a4fb52cfb859bd04f0a444733081a578880ba8a563d3c59d22d',1,'Flying():&#160;Turn.hpp']]],
+  ['freeze_18',['Freeze',['../_move_effects_8h.html#adeffac2e655025d5a59c5830ce0b8d29a65467087a19145f43129bba42781aea0',1,'MoveEffects.h']]],
+  ['freeze_5fobject_19',['FREEZE_OBJECT',['../_script_8hpp.html#a46e7446a4955af0d27a3ba606bb9c7b9a5a2f57139297fd324c77d0ad104203ea',1,'Script.hpp']]]
+];

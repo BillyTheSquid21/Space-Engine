@@ -23,14 +23,47 @@ public:
 	Game() = default;
 	~Game() = default;
 
-	//Main constructor
+	/**
+	* Constructs the game instance with the given width and height
+	*/
 	Game(int width, int height);
 
-	//Primary functions
+	/**
+	* Initialize the game
+	* @param name name of the game instance
+	* @param kCallback callback for key presses
+	* @param mCallback callback for mouse interactions
+	* @param sCallback callback for scroll interactions
+	*/
 	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback);
+	
+	/**
+	* Poll GLFW events
+	*/
 	void handleEvents();
+	
+	/**
+	* Overwrite to handle input in derived game class
+	* @param key GLFW Key code
+	* @param scancode GLFW Scan code
+	* @param action GLFW Action code
+	* @param mods GLFW modifier
+	*/
 	virtual void handleInput(int key, int scancode, int action, int mods) {};
+
+	/**
+	* Overwrite to handle input in derived game class
+	* @param button GLFW Button code
+	* @param action GLFW Action code
+	* @param mods GLFW modifier
+	*/
 	virtual void handleMouse(int button, int action, int mods) {};
+	
+	/**
+	* Overwrite to handle input in derived game class
+	* @param xOffset Scroll x offset
+	* @param yOffset Scroll y offset
+	*/
 	virtual void handleScrolling(double xOffset, double yOffset) {};
 	void update(double deltaTime);
 	void setTime(double time);
@@ -40,7 +73,9 @@ public:
 	//Secondary Functions
 	double secondsPerFrameCap() const { return m_SecondsPerFrameCap; }
 
-	//window
+	/**
+	* GLFW Window Pointer
+	*/
 	GLFWwindow* window = NULL;
 
 	//If this is set to true, game loop ends this cycle

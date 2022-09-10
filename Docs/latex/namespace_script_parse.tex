@@ -1,0 +1,44 @@
+\hypertarget{namespace_script_parse}{}\doxysection{Script\+Parse Namespace Reference}
+\label{namespace_script_parse}\index{ScriptParse@{ScriptParse}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_script_parse_1_1_script_wrapper}{Script\+Wrapper}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_script_parse_1_1_script_wrapper}{Script\+Wrapper}} \mbox{\hyperlink{namespace_script_parse_af56121a4439b0a4d9216bf03e4ceac5d}{Parse\+Script\+From\+Text}} (std\+::string script\+Name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr int \mbox{\hyperlink{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}{MAX\+\_\+\+INFO}} = 4
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Script parsing
+
+Structure (file ends in .sgs)
+
+\mbox{[}n\mbox{]} -\/INSTR -\/PARAM1 -\/PARAM2 ... \mbox{[}n+1\mbox{]} INSTR PARAM1 PARAM2 ... THIS IS A COMMENT
+
+Explained (should be easy)\+: \mbox{[}n\mbox{]} -\/ line number surrounded by square brackets to separate -\/INSTR -\/ String representative of desired instruction -\/PARAM -\/ String representative of parameter that is converted to number (not all params have a string equivalent) INSTR -\/ Number representative of desired instruction PARAM -\/ Number representative of desired parameter 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_script_parse_af56121a4439b0a4d9216bf03e4ceac5d}\label{namespace_script_parse_af56121a4439b0a4d9216bf03e4ceac5d}} 
+\index{ScriptParse@{ScriptParse}!ParseScriptFromText@{ParseScriptFromText}}
+\index{ParseScriptFromText@{ParseScriptFromText}!ScriptParse@{ScriptParse}}
+\doxysubsubsection{\texorpdfstring{ParseScriptFromText()}{ParseScriptFromText()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_script_parse_1_1_script_wrapper}{Script\+Wrapper}} Script\+Parse\+::\+Parse\+Script\+From\+Text (\begin{DoxyParamCaption}\item[{std\+::string}]{script\+Name }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}\label{namespace_script_parse_ad9e0d59c69b0797cee913bfdf35ae3b4}} 
+\index{ScriptParse@{ScriptParse}!MAX\_INFO@{MAX\_INFO}}
+\index{MAX\_INFO@{MAX\_INFO}!ScriptParse@{ScriptParse}}
+\doxysubsubsection{\texorpdfstring{MAX\_INFO}{MAX\_INFO}}
+{\footnotesize\ttfamily constexpr int Script\+Parse\+::\+MAX\+\_\+\+INFO = 4\hspace{0.3cm}{\ttfamily [constexpr]}}
+

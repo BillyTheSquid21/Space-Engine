@@ -1,0 +1,271 @@
+\hypertarget{class_state_render_1_1_overworld}{}\doxysection{State\+Render\+::Overworld Class Reference}
+\label{class_state_render_1_1_overworld}\index{StateRender::Overworld@{StateRender::Overworld}}
+
+
+{\ttfamily \#include $<$State\+Renderers.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a0047991ea813a3324f594ef45dae4673}{initialise\+Renderer}} (unsigned int width, unsigned int height, \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject\+::\+Object\+Manager}} $\ast$obj)
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a9c713c2e964a9162941801d4db081980}{load\+Renderer\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a730b382720ebc7ccdf3b66f146423d84}{generate\+Atlas}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a5361d98bd17fd5f7e76cef3cdf14569c}{purge\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a89c8c88e664a606faa71aa49972a96b4}{buffer\+Render\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a460069a8ee7ac06c8cb7cacf5da69e23}{update}} (double delta\+Time)
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a0f32f7ff88e80586261fcb35b9be01fc}{draw}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a56297c93411a3d29af5f76eb00cbfaa9}{map\+Model\+Textures}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a6078370696a1d34325757e4dfa05fec1}{signal\+Map\+Model\+Textures}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a65a06873b23076cfae775cd50c3d2607}{link\+Player\+Ptr}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $>$ ptr)
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_af7374247cb0053ff345233fdb0ac3000}{is\+Modifying\+Level}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_adbce382505a7d1df685b3d407fe20d6e}{has\+Level\+Modified}} ()
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_ad24eddb476f6af736aa0ca7a660218da}{operator\mbox{[}$\,$\mbox{]}}} (\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}} slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_ab593d241413a7d778162b25d5281504a}{at}} (\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}} slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a88b0f7eb5913a6be0fa1870c06a8f225}{operator\mbox{[}$\,$\mbox{]}}} (int slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a1cee5f85161622b9e905163d32d48c79}{at}} (int slot)
+\item 
+\mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a}{Tex\+::\+Texture\+Atlas\+RGBA}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_ac981d1f1c87068ef6ffe72340be57e47}{atlas}} ()
+\item 
+\mbox{\hyperlink{class_texture}{Texture}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a8ceeace1c847d5b43c19390166b1d3af}{texture}} (\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{State\+Tex}} slot)
+\item 
+\mbox{\hyperlink{class_texture}{Texture}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a06e75efe2eab7cee824648508ea06148}{texture}} (int slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a0670f8f3cd39e7b5599df6fd0cef9c36}{shader}} (\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{State\+Shader}} slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a0c7fbe165691bdaba8578350965045a5}{shader}} (int slot)
+\item 
+\mbox{\hyperlink{class_transition}{Transition}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_a736af0dad5cc7785df1139a2ba0b5f83}{transition}} (\mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09a}{State\+Trans}} slot)
+\item 
+\mbox{\hyperlink{class_transition}{Transition}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_aeb97399a2c51df833f79c9f9025ae41d}{transition}} (int slot)
+\item 
+\mbox{\hyperlink{class_tile_map}{Tile\+Map}} \& \mbox{\hyperlink{class_state_render_1_1_overworld_af319d892a112386e45cfb0cd10874b49}{tilemap}} (\mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462}{State\+Tile\+Map}} slot)
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_state_render_1_1_overworld_a00965457ed14a82c95649add26a79bba}{light\+Direction}} ()
+\item 
+glm\+::vec3 \& \mbox{\hyperlink{class_state_render_1_1_overworld_a391ba514673cd3bb228b4a12a15cf838}{light\+Color}} ()
+\item 
+bool \mbox{\hyperlink{class_state_render_1_1_overworld_aa31aa373159b79058e62086a7edd2eee}{showing\+Shadows}} () const
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_overworld_a2a11ca4d49585ec0e8a69ff81ad47406}{show\+Shadows}} (bool show)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender\+::\+Camera}} \mbox{\hyperlink{class_state_render_1_1_overworld_a3dfc4806590a22f575d0afd9f4a108dc}{camera}}
+\item 
+bool \mbox{\hyperlink{class_state_render_1_1_overworld_a4604790b9964bde1cd47aa103b5c853d}{ready\+To\+Show}} = false
+\item 
+std\+::function$<$ void()$>$ \mbox{\hyperlink{class_state_render_1_1_overworld_a6dec3c4df04391d23743a147c9c5c8fe}{m\+\_\+\+State\+To\+Battle}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a1cee5f85161622b9e905163d32d48c79}\label{class_state_render_1_1_overworld_a1cee5f85161622b9e905163d32d48c79}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!at@{at}}
+\index{at@{at}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{at()}{at()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Overworld\+::at (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_ab593d241413a7d778162b25d5281504a}\label{class_state_render_1_1_overworld_ab593d241413a7d778162b25d5281504a}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!at@{at}}
+\index{at@{at}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{at()}{at()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Overworld\+::at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_ac981d1f1c87068ef6ffe72340be57e47}\label{class_state_render_1_1_overworld_ac981d1f1c87068ef6ffe72340be57e47}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!atlas@{atlas}}
+\index{atlas@{atlas}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{atlas()}{atlas()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a}{Tex\+::\+Texture\+Atlas\+RGBA}} \& State\+Render\+::\+Overworld\+::atlas (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a89c8c88e664a606faa71aa49972a96b4}\label{class_state_render_1_1_overworld_a89c8c88e664a606faa71aa49972a96b4}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!bufferRenderData@{bufferRenderData}}
+\index{bufferRenderData@{bufferRenderData}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{bufferRenderData()}{bufferRenderData()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::buffer\+Render\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a0f32f7ff88e80586261fcb35b9be01fc}\label{class_state_render_1_1_overworld_a0f32f7ff88e80586261fcb35b9be01fc}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!draw@{draw}}
+\index{draw@{draw}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::draw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a730b382720ebc7ccdf3b66f146423d84}\label{class_state_render_1_1_overworld_a730b382720ebc7ccdf3b66f146423d84}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!generateAtlas@{generateAtlas}}
+\index{generateAtlas@{generateAtlas}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{generateAtlas()}{generateAtlas()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::generate\+Atlas (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_adbce382505a7d1df685b3d407fe20d6e}\label{class_state_render_1_1_overworld_adbce382505a7d1df685b3d407fe20d6e}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!hasLevelModified@{hasLevelModified}}
+\index{hasLevelModified@{hasLevelModified}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{hasLevelModified()}{hasLevelModified()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::has\+Level\+Modified (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a0047991ea813a3324f594ef45dae4673}\label{class_state_render_1_1_overworld_a0047991ea813a3324f594ef45dae4673}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!initialiseRenderer@{initialiseRenderer}}
+\index{initialiseRenderer@{initialiseRenderer}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{initialiseRenderer()}{initialiseRenderer()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::initialise\+Renderer (\begin{DoxyParamCaption}\item[{unsigned int}]{width,  }\item[{unsigned int}]{height,  }\item[{\mbox{\hyperlink{class_s_g_object_1_1_object_manager}{SGObject\+::\+Object\+Manager}} $\ast$}]{obj }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_af7374247cb0053ff345233fdb0ac3000}\label{class_state_render_1_1_overworld_af7374247cb0053ff345233fdb0ac3000}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!isModifyingLevel@{isModifyingLevel}}
+\index{isModifyingLevel@{isModifyingLevel}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{isModifyingLevel()}{isModifyingLevel()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::is\+Modifying\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a391ba514673cd3bb228b4a12a15cf838}\label{class_state_render_1_1_overworld_a391ba514673cd3bb228b4a12a15cf838}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!lightColor@{lightColor}}
+\index{lightColor@{lightColor}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{lightColor()}{lightColor()}}
+{\footnotesize\ttfamily glm\+::vec3 \& State\+Render\+::\+Overworld\+::light\+Color (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a00965457ed14a82c95649add26a79bba}\label{class_state_render_1_1_overworld_a00965457ed14a82c95649add26a79bba}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!lightDirection@{lightDirection}}
+\index{lightDirection@{lightDirection}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{lightDirection()}{lightDirection()}}
+{\footnotesize\ttfamily glm\+::vec3 \& State\+Render\+::\+Overworld\+::light\+Direction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a65a06873b23076cfae775cd50c3d2607}\label{class_state_render_1_1_overworld_a65a06873b23076cfae775cd50c3d2607}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!linkPlayerPtr@{linkPlayerPtr}}
+\index{linkPlayerPtr@{linkPlayerPtr}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{linkPlayerPtr()}{linkPlayerPtr()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::link\+Player\+Ptr (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\+\_\+\+Sprite\+::\+Run\+Sprite}} $>$}]{ptr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a9c713c2e964a9162941801d4db081980}\label{class_state_render_1_1_overworld_a9c713c2e964a9162941801d4db081980}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!loadRendererData@{loadRendererData}}
+\index{loadRendererData@{loadRendererData}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{loadRendererData()}{loadRendererData()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::load\+Renderer\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a56297c93411a3d29af5f76eb00cbfaa9}\label{class_state_render_1_1_overworld_a56297c93411a3d29af5f76eb00cbfaa9}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!mapModelTextures@{mapModelTextures}}
+\index{mapModelTextures@{mapModelTextures}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{mapModelTextures()}{mapModelTextures()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::map\+Model\+Textures (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a88b0f7eb5913a6be0fa1870c06a8f225}\label{class_state_render_1_1_overworld_a88b0f7eb5913a6be0fa1870c06a8f225}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Overworld\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_ad24eddb476f6af736aa0ca7a660218da}\label{class_state_render_1_1_overworld_ad24eddb476f6af736aa0ca7a660218da}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Overworld\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a5361d98bd17fd5f7e76cef3cdf14569c}\label{class_state_render_1_1_overworld_a5361d98bd17fd5f7e76cef3cdf14569c}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!purgeData@{purgeData}}
+\index{purgeData@{purgeData}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{purgeData()}{purgeData()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::purge\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a0c7fbe165691bdaba8578350965045a5}\label{class_state_render_1_1_overworld_a0c7fbe165691bdaba8578350965045a5}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!shader@{shader}}
+\index{shader@{shader}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{shader()}{shader()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \& State\+Render\+::\+Overworld\+::shader (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a0670f8f3cd39e7b5599df6fd0cef9c36}\label{class_state_render_1_1_overworld_a0670f8f3cd39e7b5599df6fd0cef9c36}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!shader@{shader}}
+\index{shader@{shader}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{shader()}{shader()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \& State\+Render\+::\+Overworld\+::shader (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{State\+Shader}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_aa31aa373159b79058e62086a7edd2eee}\label{class_state_render_1_1_overworld_aa31aa373159b79058e62086a7edd2eee}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!showingShadows@{showingShadows}}
+\index{showingShadows@{showingShadows}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{showingShadows()}{showingShadows()}}
+{\footnotesize\ttfamily bool State\+Render\+::\+Overworld\+::showing\+Shadows (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a2a11ca4d49585ec0e8a69ff81ad47406}\label{class_state_render_1_1_overworld_a2a11ca4d49585ec0e8a69ff81ad47406}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!showShadows@{showShadows}}
+\index{showShadows@{showShadows}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{showShadows()}{showShadows()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::show\+Shadows (\begin{DoxyParamCaption}\item[{bool}]{show }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a6078370696a1d34325757e4dfa05fec1}\label{class_state_render_1_1_overworld_a6078370696a1d34325757e4dfa05fec1}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!signalMapModelTextures@{signalMapModelTextures}}
+\index{signalMapModelTextures@{signalMapModelTextures}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{signalMapModelTextures()}{signalMapModelTextures()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::signal\+Map\+Model\+Textures (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a06e75efe2eab7cee824648508ea06148}\label{class_state_render_1_1_overworld_a06e75efe2eab7cee824648508ea06148}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!texture@{texture}}
+\index{texture@{texture}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{texture()}{texture()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_texture}{Texture}} \& State\+Render\+::\+Overworld\+::texture (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a8ceeace1c847d5b43c19390166b1d3af}\label{class_state_render_1_1_overworld_a8ceeace1c847d5b43c19390166b1d3af}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!texture@{texture}}
+\index{texture@{texture}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{texture()}{texture()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_texture}{Texture}} \& State\+Render\+::\+Overworld\+::texture (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{State\+Tex}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_af319d892a112386e45cfb0cd10874b49}\label{class_state_render_1_1_overworld_af319d892a112386e45cfb0cd10874b49}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!tilemap@{tilemap}}
+\index{tilemap@{tilemap}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{tilemap()}{tilemap()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_tile_map}{Tile\+Map}} \& State\+Render\+::\+Overworld\+::tilemap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462}{State\+Tile\+Map}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_aeb97399a2c51df833f79c9f9025ae41d}\label{class_state_render_1_1_overworld_aeb97399a2c51df833f79c9f9025ae41d}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!transition@{transition}}
+\index{transition@{transition}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{transition()}{transition()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_transition}{Transition}} \& State\+Render\+::\+Overworld\+::transition (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a736af0dad5cc7785df1139a2ba0b5f83}\label{class_state_render_1_1_overworld_a736af0dad5cc7785df1139a2ba0b5f83}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!transition@{transition}}
+\index{transition@{transition}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{transition()}{transition()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_transition}{Transition}} \& State\+Render\+::\+Overworld\+::transition (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09a}{State\+Trans}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a460069a8ee7ac06c8cb7cacf5da69e23}\label{class_state_render_1_1_overworld_a460069a8ee7ac06c8cb7cacf5da69e23}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!update@{update}}
+\index{update@{update}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Overworld\+::update (\begin{DoxyParamCaption}\item[{double}]{delta\+Time }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a3dfc4806590a22f575d0afd9f4a108dc}\label{class_state_render_1_1_overworld_a3dfc4806590a22f575d0afd9f4a108dc}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!camera@{camera}}
+\index{camera@{camera}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{camera}{camera}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender\+::\+Camera}} State\+Render\+::\+Overworld\+::camera}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a6dec3c4df04391d23743a147c9c5c8fe}\label{class_state_render_1_1_overworld_a6dec3c4df04391d23743a147c9c5c8fe}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!m\_StateToBattle@{m\_StateToBattle}}
+\index{m\_StateToBattle@{m\_StateToBattle}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{m\_StateToBattle}{m\_StateToBattle}}
+{\footnotesize\ttfamily std\+::function$<$void()$>$ State\+Render\+::\+Overworld\+::m\+\_\+\+State\+To\+Battle}
+
+\mbox{\Hypertarget{class_state_render_1_1_overworld_a4604790b9964bde1cd47aa103b5c853d}\label{class_state_render_1_1_overworld_a4604790b9964bde1cd47aa103b5c853d}} 
+\index{StateRender::Overworld@{StateRender::Overworld}!readyToShow@{readyToShow}}
+\index{readyToShow@{readyToShow}!StateRender::Overworld@{StateRender::Overworld}}
+\doxysubsubsection{\texorpdfstring{readyToShow}{readyToShow}}
+{\footnotesize\ttfamily bool State\+Render\+::\+Overworld\+::ready\+To\+Show = false}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/states/\mbox{\hyperlink{_state_renderers_8h}{State\+Renderers.\+h}}\end{DoxyCompactItemize}

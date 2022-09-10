@@ -27,7 +27,7 @@ public:
 
 private:
 	FontContainer m_Fonts;
-	std::vector<std::shared_ptr<State>> m_States;
+	std::vector<std::shared_ptr<SG::State>> m_States;
 	GameInput m_GameInput;
 	static PlayerData m_Data;
 };

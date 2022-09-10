@@ -1,0 +1,226 @@
+\hypertarget{class_state_render_1_1_battle}{}\doxysection{State\+Render\+::Battle Class Reference}
+\label{class_state_render_1_1_battle}\index{StateRender::Battle@{StateRender::Battle}}
+
+
+{\ttfamily \#include $<$State\+Renderers.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a848c6e50fbd53765274e574a4fab3819}{operator\mbox{[}$\,$\mbox{]}}} (\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}} slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a1ed5db601e6e9785e6b80e6f2260af4b}{at}} (\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}} slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a846e24e7860efe8949cbfc1d9521da8e}{operator\mbox{[}$\,$\mbox{]}}} (int slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a17440261fd87926b234ecce10372531e}{at}} (int slot)
+\item 
+\mbox{\hyperlink{class_texture}{Texture}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a6ed5310085ef181a6578413b634f5484}{texture}} (\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{State\+Tex}} slot)
+\item 
+\mbox{\hyperlink{class_texture}{Texture}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a6e99b87d471669bf21c219cb17fd53bc}{texture}} (int slot)
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \& \mbox{\hyperlink{class_state_render_1_1_battle_a312e25f5b5d90708efa78229b3467d68}{shader}} (\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{State\+Shader}} slot)
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a8500336216254219b06fbb6209050fd2}{initialise\+Renderer}} (unsigned int width, unsigned int height)
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a7a84456a561e620851a936855ca5c034}{load\+Renderer\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a31568d743b5d47950da68870f952e2b6}{purge\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a1ded61304a048de6acc405696df128dc}{buffer\+Render\+Data}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a210fcac8f049240a9d38c8d5f5b9fce7}{draw}} ()
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a8f77fa48ebd9f6008bbcfb69dae8c625}{load\+Pokemon\+TextureA}} (std\+::string name)
+\item 
+void \mbox{\hyperlink{class_state_render_1_1_battle_a57ab66c258adad22773decef417ca4d7}{load\+Pokemon\+TextureB}} (std\+::string name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \mbox{\hyperlink{class_state_render_1_1_battle_aadd46556d4953e044322346d21af0d11}{scene\+Shader}}
+\item 
+\mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender\+::\+Camera}} \mbox{\hyperlink{class_state_render_1_1_battle_adc2df19f4492f8cc9e30e2bd72f18025}{camera}}
+\item 
+\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}},(int) \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a4d8684dd6260f8e8324734cf4102b97c}{State\+Ren\+::\+BATTLE\+\_\+\+COUNT}} $>$ \mbox{\hyperlink{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}{renderers}}
+\item 
+\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{class_texture}{Texture}},(int) \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a4d8684dd6260f8e8324734cf4102b97c}{State\+Tex\+::\+BATTLE\+\_\+\+COUNT}} $>$ \mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}
+\item 
+\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}},(int) \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{State\+Shader\+::\+BATTLE\+\_\+\+COUNT}} $>$ \mbox{\hyperlink{class_state_render_1_1_battle_a869ea11dd7ed14691961cdddf3fa4b15}{shaders}}
+\item 
+const std\+::string \mbox{\hyperlink{class_state_render_1_1_battle_ae6a13d1f870c184f321433ee9b650696}{FRONT\+\_\+\+TEX\+\_\+\+PATH}} = \char`\"{}res/\mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}/pokemon/front/\char`\"{}
+\item 
+const std\+::string \mbox{\hyperlink{class_state_render_1_1_battle_ab91ae49393a7853be95c91d28c733b43}{BACK\+\_\+\+TEX\+\_\+\+PATH}} = \char`\"{}res/\mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}/pokemon/back/\char`\"{}
+\item 
+const std\+::string \mbox{\hyperlink{class_state_render_1_1_battle_a6927d88ce047e5fff015a9161b72f405}{PNG\+\_\+\+EXT}} = \char`\"{}.png\char`\"{}
+\item 
+unsigned int \mbox{\hyperlink{class_state_render_1_1_battle_ade5895902b2e38d96101fdb300e13bdb}{SCREEN\+\_\+\+WIDTH}}
+\item 
+unsigned int \mbox{\hyperlink{class_state_render_1_1_battle_a8e5efd2eb79fb13196c7f65de2b3047f}{SCREEN\+\_\+\+HEIGHT}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const int \mbox{\hyperlink{class_state_render_1_1_battle_a0712fbb282a39d5377ee99f70a130031}{SPRITE\+\_\+\+WIDTH}} = 96
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_state_render_1_1_battle_a17440261fd87926b234ecce10372531e}\label{class_state_render_1_1_battle_a17440261fd87926b234ecce10372531e}} 
+\index{StateRender::Battle@{StateRender::Battle}!at@{at}}
+\index{at@{at}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{at()}{at()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Battle\+::at (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a1ed5db601e6e9785e6b80e6f2260af4b}\label{class_state_render_1_1_battle_a1ed5db601e6e9785e6b80e6f2260af4b}} 
+\index{StateRender::Battle@{StateRender::Battle}!at@{at}}
+\index{at@{at}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{at()}{at()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Battle\+::at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a1ded61304a048de6acc405696df128dc}\label{class_state_render_1_1_battle_a1ded61304a048de6acc405696df128dc}} 
+\index{StateRender::Battle@{StateRender::Battle}!bufferRenderData@{bufferRenderData}}
+\index{bufferRenderData@{bufferRenderData}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{bufferRenderData()}{bufferRenderData()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::buffer\+Render\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a210fcac8f049240a9d38c8d5f5b9fce7}\label{class_state_render_1_1_battle_a210fcac8f049240a9d38c8d5f5b9fce7}} 
+\index{StateRender::Battle@{StateRender::Battle}!draw@{draw}}
+\index{draw@{draw}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::draw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a8500336216254219b06fbb6209050fd2}\label{class_state_render_1_1_battle_a8500336216254219b06fbb6209050fd2}} 
+\index{StateRender::Battle@{StateRender::Battle}!initialiseRenderer@{initialiseRenderer}}
+\index{initialiseRenderer@{initialiseRenderer}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{initialiseRenderer()}{initialiseRenderer()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::initialise\+Renderer (\begin{DoxyParamCaption}\item[{unsigned int}]{width,  }\item[{unsigned int}]{height }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a8f77fa48ebd9f6008bbcfb69dae8c625}\label{class_state_render_1_1_battle_a8f77fa48ebd9f6008bbcfb69dae8c625}} 
+\index{StateRender::Battle@{StateRender::Battle}!loadPokemonTextureA@{loadPokemonTextureA}}
+\index{loadPokemonTextureA@{loadPokemonTextureA}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{loadPokemonTextureA()}{loadPokemonTextureA()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::load\+Pokemon\+TextureA (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a57ab66c258adad22773decef417ca4d7}\label{class_state_render_1_1_battle_a57ab66c258adad22773decef417ca4d7}} 
+\index{StateRender::Battle@{StateRender::Battle}!loadPokemonTextureB@{loadPokemonTextureB}}
+\index{loadPokemonTextureB@{loadPokemonTextureB}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{loadPokemonTextureB()}{loadPokemonTextureB()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::load\+Pokemon\+TextureB (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a7a84456a561e620851a936855ca5c034}\label{class_state_render_1_1_battle_a7a84456a561e620851a936855ca5c034}} 
+\index{StateRender::Battle@{StateRender::Battle}!loadRendererData@{loadRendererData}}
+\index{loadRendererData@{loadRendererData}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{loadRendererData()}{loadRendererData()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::load\+Renderer\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a846e24e7860efe8949cbfc1d9521da8e}\label{class_state_render_1_1_battle_a846e24e7860efe8949cbfc1d9521da8e}} 
+\index{StateRender::Battle@{StateRender::Battle}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Battle\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a848c6e50fbd53765274e574a4fab3819}\label{class_state_render_1_1_battle_a848c6e50fbd53765274e574a4fab3819}} 
+\index{StateRender::Battle@{StateRender::Battle}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}} \& State\+Render\+::\+Battle\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Ren}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a31568d743b5d47950da68870f952e2b6}\label{class_state_render_1_1_battle_a31568d743b5d47950da68870f952e2b6}} 
+\index{StateRender::Battle@{StateRender::Battle}!purgeData@{purgeData}}
+\index{purgeData@{purgeData}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{purgeData()}{purgeData()}}
+{\footnotesize\ttfamily void State\+Render\+::\+Battle\+::purge\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a312e25f5b5d90708efa78229b3467d68}\label{class_state_render_1_1_battle_a312e25f5b5d90708efa78229b3467d68}} 
+\index{StateRender::Battle@{StateRender::Battle}!shader@{shader}}
+\index{shader@{shader}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{shader()}{shader()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} \& State\+Render\+::\+Battle\+::shader (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{State\+Shader}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a6e99b87d471669bf21c219cb17fd53bc}\label{class_state_render_1_1_battle_a6e99b87d471669bf21c219cb17fd53bc}} 
+\index{StateRender::Battle@{StateRender::Battle}!texture@{texture}}
+\index{texture@{texture}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{texture()}{texture()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_texture}{Texture}} \& State\+Render\+::\+Battle\+::texture (\begin{DoxyParamCaption}\item[{int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a6ed5310085ef181a6578413b634f5484}\label{class_state_render_1_1_battle_a6ed5310085ef181a6578413b634f5484}} 
+\index{StateRender::Battle@{StateRender::Battle}!texture@{texture}}
+\index{texture@{texture}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{texture()}{texture()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_texture}{Texture}} \& State\+Render\+::\+Battle\+::texture (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{State\+Tex}}}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_state_render_1_1_battle_ab91ae49393a7853be95c91d28c733b43}\label{class_state_render_1_1_battle_ab91ae49393a7853be95c91d28c733b43}} 
+\index{StateRender::Battle@{StateRender::Battle}!BACK\_TEX\_PATH@{BACK\_TEX\_PATH}}
+\index{BACK\_TEX\_PATH@{BACK\_TEX\_PATH}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{BACK\_TEX\_PATH}{BACK\_TEX\_PATH}}
+{\footnotesize\ttfamily const std\+::string State\+Render\+::\+Battle\+::\+BACK\+\_\+\+TEX\+\_\+\+PATH = \char`\"{}res/\mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}/pokemon/back/\char`\"{}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_adc2df19f4492f8cc9e30e2bd72f18025}\label{class_state_render_1_1_battle_adc2df19f4492f8cc9e30e2bd72f18025}} 
+\index{StateRender::Battle@{StateRender::Battle}!camera@{camera}}
+\index{camera@{camera}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{camera}{camera}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender\+::\+Camera}} State\+Render\+::\+Battle\+::camera}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_ae6a13d1f870c184f321433ee9b650696}\label{class_state_render_1_1_battle_ae6a13d1f870c184f321433ee9b650696}} 
+\index{StateRender::Battle@{StateRender::Battle}!FRONT\_TEX\_PATH@{FRONT\_TEX\_PATH}}
+\index{FRONT\_TEX\_PATH@{FRONT\_TEX\_PATH}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{FRONT\_TEX\_PATH}{FRONT\_TEX\_PATH}}
+{\footnotesize\ttfamily const std\+::string State\+Render\+::\+Battle\+::\+FRONT\+\_\+\+TEX\+\_\+\+PATH = \char`\"{}res/\mbox{\hyperlink{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}{textures}}/pokemon/front/\char`\"{}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a6927d88ce047e5fff015a9161b72f405}\label{class_state_render_1_1_battle_a6927d88ce047e5fff015a9161b72f405}} 
+\index{StateRender::Battle@{StateRender::Battle}!PNG\_EXT@{PNG\_EXT}}
+\index{PNG\_EXT@{PNG\_EXT}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{PNG\_EXT}{PNG\_EXT}}
+{\footnotesize\ttfamily const std\+::string State\+Render\+::\+Battle\+::\+PNG\+\_\+\+EXT = \char`\"{}.png\char`\"{}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}\label{class_state_render_1_1_battle_ad7e89585042c9b12a4364b3a14553a4f}} 
+\index{StateRender::Battle@{StateRender::Battle}!renderers@{renderers}}
+\index{renderers@{renderers}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{renderers}{renderers}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender\+::\+Renderer}}, (int)\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a4d8684dd6260f8e8324734cf4102b97c}{State\+Ren\+::\+BATTLE\+\_\+\+COUNT}}$>$ State\+Render\+::\+Battle\+::renderers}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_aadd46556d4953e044322346d21af0d11}\label{class_state_render_1_1_battle_aadd46556d4953e044322346d21af0d11}} 
+\index{StateRender::Battle@{StateRender::Battle}!sceneShader@{sceneShader}}
+\index{sceneShader@{sceneShader}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{sceneShader}{sceneShader}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}} State\+Render\+::\+Battle\+::scene\+Shader}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a8e5efd2eb79fb13196c7f65de2b3047f}\label{class_state_render_1_1_battle_a8e5efd2eb79fb13196c7f65de2b3047f}} 
+\index{StateRender::Battle@{StateRender::Battle}!SCREEN\_HEIGHT@{SCREEN\_HEIGHT}}
+\index{SCREEN\_HEIGHT@{SCREEN\_HEIGHT}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{SCREEN\_HEIGHT}{SCREEN\_HEIGHT}}
+{\footnotesize\ttfamily unsigned int State\+Render\+::\+Battle\+::\+SCREEN\+\_\+\+HEIGHT}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_ade5895902b2e38d96101fdb300e13bdb}\label{class_state_render_1_1_battle_ade5895902b2e38d96101fdb300e13bdb}} 
+\index{StateRender::Battle@{StateRender::Battle}!SCREEN\_WIDTH@{SCREEN\_WIDTH}}
+\index{SCREEN\_WIDTH@{SCREEN\_WIDTH}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{SCREEN\_WIDTH}{SCREEN\_WIDTH}}
+{\footnotesize\ttfamily unsigned int State\+Render\+::\+Battle\+::\+SCREEN\+\_\+\+WIDTH}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a869ea11dd7ed14691961cdddf3fa4b15}\label{class_state_render_1_1_battle_a869ea11dd7ed14691961cdddf3fa4b15}} 
+\index{StateRender::Battle@{StateRender::Battle}!shaders@{shaders}}
+\index{shaders@{shaders}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{shaders}{shaders}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender\+::\+Shader}}, (int)\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{State\+Shader\+::\+BATTLE\+\_\+\+COUNT}}$>$ State\+Render\+::\+Battle\+::shaders}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a0712fbb282a39d5377ee99f70a130031}\label{class_state_render_1_1_battle_a0712fbb282a39d5377ee99f70a130031}} 
+\index{StateRender::Battle@{StateRender::Battle}!SPRITE\_WIDTH@{SPRITE\_WIDTH}}
+\index{SPRITE\_WIDTH@{SPRITE\_WIDTH}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{SPRITE\_WIDTH}{SPRITE\_WIDTH}}
+{\footnotesize\ttfamily const int State\+Render\+::\+Battle\+::\+SPRITE\+\_\+\+WIDTH = 96\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}\label{class_state_render_1_1_battle_a62502f70ba4e6514add8760c2f10fb49}} 
+\index{StateRender::Battle@{StateRender::Battle}!textures@{textures}}
+\index{textures@{textures}!StateRender::Battle@{StateRender::Battle}}
+\doxysubsubsection{\texorpdfstring{textures}{textures}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$\mbox{\hyperlink{class_texture}{Texture}}, (int)\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a4d8684dd6260f8e8324734cf4102b97c}{State\+Tex\+::\+BATTLE\+\_\+\+COUNT}}$>$ State\+Render\+::\+Battle\+::textures}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/states/\mbox{\hyperlink{_state_renderers_8h}{State\+Renderers.\+h}}\end{DoxyCompactItemize}

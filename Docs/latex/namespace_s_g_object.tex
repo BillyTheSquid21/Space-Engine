@@ -1,0 +1,116 @@
+\hypertarget{namespace_s_g_object}{}\doxysection{SGObject Namespace Reference}
+\label{namespace_s_g_object}\index{SGObject@{SGObject}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_component}{Component}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_g_object}{GObject}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_object_manager}{Object\+Manager}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_render_comp_group}{Render\+Comp\+Group}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_render_component}{Render\+Component}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_render_group_base}{Render\+Group\+Base}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_update_comp_group}{Update\+Comp\+Group}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_update_component}{Update\+Component}}
+\item 
+class \mbox{\hyperlink{class_s_g_object_1_1_update_group_base}{Update\+Group\+Base}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6}{Object\+Error}} \{ \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a9987d7929c5dba3fb098d2d03ed42865}{VOID\+\_\+\+POINTER}}
+, \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6ae57060685adbbbf9ee61867fd34c8244}{INDEX\+\_\+\+RANGE}}
+, \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a4a0e1e867f65ea96881ed8e6a7e83bbf}{UNPAIRED\+\_\+\+COMPONENT}}
+ \}
+\item 
+enum class \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92}{Message}} \+: uint32\+\_\+t \{ \newline
+\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a14b52fa379dea9171c3eb958d7fa5795}{NO\+\_\+\+OP}}
+, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92aa9409daa2beb494ef861efb51d5cd6bb}{ACTIVATE}}
+, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a5810e63771fb03117a3e2bcf98d5b9f0}{DEACTIVATE}}
+, \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}{KILL}}
+, \newline
+\mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a802706a9238e2928077f97736854bad4}{BUSY}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_s_g_object_ac17c3d94a279e3f5b6b1f2f7e99f0e21}{Iterate\+Render\+Comps}} (std\+::vector$<$ T $>$ \&render\+Comps)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_s_g_object_aecbb693751fb07503a1b2937f26e6393}{Iterate\+Update\+Comps}} (std\+::vector$<$ T $>$ \&update\+Comps, double delta\+Time)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92}\label{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92}} 
+\index{SGObject@{SGObject}!Message@{Message}}
+\index{Message@{Message}!SGObject@{SGObject}}
+\doxysubsubsection{\texorpdfstring{Message}{Message}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92}{SGObject\+::\+Message}} \+: uint32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+Message enum that maps onto the uint32\+\_\+t type Provides some basic messages for use in object communication As are ints, can interpret however desired, and can create own codes if desired \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NO\_OP@{NO\_OP}!SGObject@{SGObject}}\index{SGObject@{SGObject}!NO\_OP@{NO\_OP}}}\mbox{\Hypertarget{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a14b52fa379dea9171c3eb958d7fa5795}\label{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a14b52fa379dea9171c3eb958d7fa5795}} 
+NO\+\_\+\+OP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ACTIVATE@{ACTIVATE}!SGObject@{SGObject}}\index{SGObject@{SGObject}!ACTIVATE@{ACTIVATE}}}\mbox{\Hypertarget{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92aa9409daa2beb494ef861efb51d5cd6bb}\label{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92aa9409daa2beb494ef861efb51d5cd6bb}} 
+ACTIVATE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DEACTIVATE@{DEACTIVATE}!SGObject@{SGObject}}\index{SGObject@{SGObject}!DEACTIVATE@{DEACTIVATE}}}\mbox{\Hypertarget{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a5810e63771fb03117a3e2bcf98d5b9f0}\label{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a5810e63771fb03117a3e2bcf98d5b9f0}} 
+DEACTIVATE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KILL@{KILL}!SGObject@{SGObject}}\index{SGObject@{SGObject}!KILL@{KILL}}}\mbox{\Hypertarget{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}\label{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a3986dd0914958ae2115e0ae7f10beef3}} 
+KILL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BUSY@{BUSY}!SGObject@{SGObject}}\index{SGObject@{SGObject}!BUSY@{BUSY}}}\mbox{\Hypertarget{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a802706a9238e2928077f97736854bad4}\label{namespace_s_g_object_a442fc7d9b302ed6ead15044f870f6f92a802706a9238e2928077f97736854bad4}} 
+BUSY&\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6}\label{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6}} 
+\index{SGObject@{SGObject}!ObjectError@{ObjectError}}
+\index{ObjectError@{ObjectError}!SGObject@{SGObject}}
+\doxysubsubsection{\texorpdfstring{ObjectError}{ObjectError}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6}{SGObject\+::\+Object\+Error}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+1.\+System is set up to keep similar components contiguous 2.\+Components are put in a group where they will be contiguous 3.\+Pointers to groups will be kept in a vector by the manager, and iterated over 4.\+Objects will store a vector of pointers to their components, and components a pointer to the vector to be able to update 4.\+a.\+Component id\textquotesingle{}s are their location in parent array -\/ will not change in runtime 4.\+b.\+Group id\textquotesingle{}s are their location in object manager array -\/ will not change in runtime 4.\+c.\+TLDR\+: Ids should not change in runtime, index\textquotesingle{}s and pointers may 5.\+Objects will contain shared data the components can make use of and a messaging system 6.\+Objects are not accessed by object manager often 7.\+Object manager should keep active components contiguous to increase cache hits \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{VOID\_POINTER@{VOID\_POINTER}!SGObject@{SGObject}}\index{SGObject@{SGObject}!VOID\_POINTER@{VOID\_POINTER}}}\mbox{\Hypertarget{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a9987d7929c5dba3fb098d2d03ed42865}\label{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a9987d7929c5dba3fb098d2d03ed42865}} 
+VOID\+\_\+\+POINTER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{INDEX\_RANGE@{INDEX\_RANGE}!SGObject@{SGObject}}\index{SGObject@{SGObject}!INDEX\_RANGE@{INDEX\_RANGE}}}\mbox{\Hypertarget{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6ae57060685adbbbf9ee61867fd34c8244}\label{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6ae57060685adbbbf9ee61867fd34c8244}} 
+INDEX\+\_\+\+RANGE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNPAIRED\_COMPONENT@{UNPAIRED\_COMPONENT}!SGObject@{SGObject}}\index{SGObject@{SGObject}!UNPAIRED\_COMPONENT@{UNPAIRED\_COMPONENT}}}\mbox{\Hypertarget{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a4a0e1e867f65ea96881ed8e6a7e83bbf}\label{namespace_s_g_object_a378b15e5ff9c47daa5ebc7dbb0b981c6a4a0e1e867f65ea96881ed8e6a7e83bbf}} 
+UNPAIRED\+\_\+\+COMPONENT&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_s_g_object_ac17c3d94a279e3f5b6b1f2f7e99f0e21}\label{namespace_s_g_object_ac17c3d94a279e3f5b6b1f2f7e99f0e21}} 
+\index{SGObject@{SGObject}!IterateRenderComps@{IterateRenderComps}}
+\index{IterateRenderComps@{IterateRenderComps}!SGObject@{SGObject}}
+\doxysubsubsection{\texorpdfstring{IterateRenderComps()}{IterateRenderComps()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void SGObject\+::\+Iterate\+Render\+Comps (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{render\+Comps }\end{DoxyParamCaption})}
+
+Iterates through render components so active objects are continuous \mbox{\Hypertarget{namespace_s_g_object_aecbb693751fb07503a1b2937f26e6393}\label{namespace_s_g_object_aecbb693751fb07503a1b2937f26e6393}} 
+\index{SGObject@{SGObject}!IterateUpdateComps@{IterateUpdateComps}}
+\index{IterateUpdateComps@{IterateUpdateComps}!SGObject@{SGObject}}
+\doxysubsubsection{\texorpdfstring{IterateUpdateComps()}{IterateUpdateComps()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void SGObject\+::\+Iterate\+Update\+Comps (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{update\+Comps,  }\item[{double}]{delta\+Time }\end{DoxyParamCaption})}
+
+Iterates through update components so active objects are continuous 

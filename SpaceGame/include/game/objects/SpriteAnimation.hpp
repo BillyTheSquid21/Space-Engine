@@ -6,10 +6,10 @@
 
 #include "core/GameObject.hpp"
 #include "game/objects/TileMap.h"
-#include "renderer/ShapeFactory.h"
+#include "renderer/Geometry.h"
 
 template<typename Vert, typename Q>
-class SpriteAnim : public UpdateComponent
+class SpriteAnim : public SGObject::UpdateComponent
 {
 public:
 	SpriteAnim() = default;
@@ -44,7 +44,7 @@ public:
 			{
 				m_CurrentFrame = 0;
 				TileUV uv = m_Frames[m_CurrentFrame];
-				SetQuadUV<Vert>((Vert*)m_Sprite, uv.u, uv.v, uv.width, uv.height);
+				Geometry::SetQuadUV<Vert>((Vert*)m_Sprite, uv.u, uv.v, uv.width, uv.height);
 				if (!loop)
 				{
 					*m_Active = false;
@@ -52,7 +52,7 @@ public:
 				}
 			}
 			TileUV uv = m_Frames[m_CurrentFrame];
-			SetQuadUV<Vert>((Vert*)m_Sprite, uv.u, uv.v, uv.width, uv.height);
+			Geometry::SetQuadUV<Vert>((Vert*)m_Sprite, uv.u, uv.v, uv.width, uv.height);
 		}
 
 		m_CurrentTime += deltaTime;

@@ -1,0 +1,109 @@
+\hypertarget{_state_renderers_8h}{}\doxysection{D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/game/states/\+State\+Renderers.h File Reference}
+\label{_state_renderers_8h}\index{D:/Repositories/Space Engine/SpaceGame/include/game/states/StateRenderers.h@{D:/Repositories/Space Engine/SpaceGame/include/game/states/StateRenderers.h}}
+{\ttfamily \#include \char`\"{}core/\+Obj\+Management.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}renderer/\+Renderer.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}renderer/\+Texture.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/objects/\+Model\+Object.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/objects/\+Overworld\+Sprite.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}renderer/\+Shadow\+Map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}renderer/\+Transition.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/objects/\+Object\+Types.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/level/\+World.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/level/\+Texture\+Slots.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}game/objects/\+Tile\+Map.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utility/\+Seg\+Array.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}utility/\+Random.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}functional\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}atomic\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}mtlib/\+Thread\+Pool.\+h\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_state_render_1_1_overworld}{State\+Render\+::\+Overworld}}
+\item 
+class \mbox{\hyperlink{class_state_render_1_1_battle}{State\+Render\+::\+Battle}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_state_render}{State\+Render}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_state_renderers_8h_a5c1dc6be22f068855b5a56c175977084}{STATE\+\_\+\+RENDERERS\+\_\+\+HPP}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96c}{State\+Render\+::\+State\+Shader}} \{ \newline
+\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca6eadcd76980d5c82a75e5e54fcb24ecb}{State\+Render\+::\+OVERWORLD}} = 0
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cacb11f150d6ae01f93750a988c0e95101}{State\+Render\+::\+OVERWORLD\+\_\+\+SHADOW}} = 1
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cab50a33f1ee554f8892420396bf41e741}{State\+Render\+::\+OVERWORLD\+\_\+\+GRASS}} = 2
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cac0c37b0517b7a9a1a25ba13cc3196fd9}{State\+Render\+::\+OVERWORLD\+\_\+\+GRASS\+\_\+\+SHADOW}} = 3
+, \newline
+\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca5e0992fef7a5e48e7fcf436b06a6d8e8}{State\+Render\+::\+OVERWORLD\+\_\+\+BATTLE}} = 4
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca2564737f0ef35b06342a7f8405caa6f1}{State\+Render\+::\+OVERWORLD\+\_\+\+FADE\+\_\+\+OUT}} = 5
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca39232c2aaceb9345ccee7a1fe432e156}{State\+Render\+::\+OVERWORLD\+\_\+\+FADE\+\_\+\+IN}} = 6
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96cacae3273eafc838fbcc3cf96d70e0757a}{State\+Render\+::\+OVERWORLD\+\_\+\+TREE}} = 7
+, \newline
+\mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96caba6aadfdc250199ed1906bf8608da733}{State\+Render\+::\+OVERWORLD\+\_\+\+TREE\+\_\+\+SHADOW}} = 8
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca297fe9df074069f519ee7fc234989fc8}{State\+Render\+::\+OVERWORLD\+\_\+\+COUNT}} = 9
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca14d0b0e872355d0bf01b18cc2d4eb670}{State\+Render\+::\+BATTLE}} = 0
+, \mbox{\hyperlink{namespace_state_render_a8ddb3c7c02536663f37febf3f99ca96ca4d8684dd6260f8e8324734cf4102b97c}{State\+Render\+::\+BATTLE\+\_\+\+COUNT}} = 1
+ \}
+\item 
+enum class \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456}{State\+Render\+::\+State\+Ren}} \{ \newline
+\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a6eadcd76980d5c82a75e5e54fcb24ecb}{State\+Render\+::\+OVERWORLD}} = 0
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456ab50a33f1ee554f8892420396bf41e741}{State\+Render\+::\+OVERWORLD\+\_\+\+GRASS}} = 1
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1b9c51d3094955d4c71f2904cedee4c6}{State\+Render\+::\+OVERWORLD\+\_\+\+SPRITE}} = 2
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a3e1f4e733d252d5223c8fef616cc264f}{State\+Render\+::\+OVERWORLD\+\_\+\+POKEMON}} = 3
+, \newline
+\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a4d230b4be529787549345aabdce10051}{State\+Render\+::\+OVERWORLD\+\_\+\+MODEL}} = 4
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456acae3273eafc838fbcc3cf96d70e0757a}{State\+Render\+::\+OVERWORLD\+\_\+\+TREE}} = 5
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a297fe9df074069f519ee7fc234989fc8}{State\+Render\+::\+OVERWORLD\+\_\+\+COUNT}} = 6
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a12ac66402a202d3aa114b57ed092302d}{State\+Render\+::\+BATTLE\+\_\+\+PLATFORM}} = 0
+, \newline
+\mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a9defea1e64a3188e1544005636cbbaa8}{State\+Render\+::\+BATTLE\+\_\+\+BACKGROUND}} = 1
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a97db1fe2162c126d84530654d3701f49}{State\+Render\+::\+BATTLE\+\_\+\+POKEMONA}} = 2
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a1c440888ddd21ea7bd8797e97a9f8238}{State\+Render\+::\+BATTLE\+\_\+\+POKEMONB}} = 3
+, \mbox{\hyperlink{namespace_state_render_a1664f7267587a0577cfeb9e99ae5a456a4d8684dd6260f8e8324734cf4102b97c}{State\+Render\+::\+BATTLE\+\_\+\+COUNT}} = 4
+ \}
+\item 
+enum class \mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09a}{State\+Render\+::\+State\+Trans}} \{ \mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09aa5e0992fef7a5e48e7fcf436b06a6d8e8}{State\+Render\+::\+OVERWORLD\+\_\+\+BATTLE}} = 0
+, \mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09aa2564737f0ef35b06342a7f8405caa6f1}{State\+Render\+::\+OVERWORLD\+\_\+\+FADE\+\_\+\+OUT}} = 1
+, \mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09aa39232c2aaceb9345ccee7a1fe432e156}{State\+Render\+::\+OVERWORLD\+\_\+\+FADE\+\_\+\+IN}} = 2
+, \mbox{\hyperlink{namespace_state_render_ac8ba3c7da16c93cf573e71859c34d09aa297fe9df074069f519ee7fc234989fc8}{State\+Render\+::\+OVERWORLD\+\_\+\+COUNT}} = 3
+ \}
+\item 
+enum class \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025}{State\+Render\+::\+State\+Tex}} \{ \newline
+\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a6eadcd76980d5c82a75e5e54fcb24ecb}{State\+Render\+::\+OVERWORLD}} = 0
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a1b9c51d3094955d4c71f2904cedee4c6}{State\+Render\+::\+OVERWORLD\+\_\+\+SPRITE}} = 1
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a3e1f4e733d252d5223c8fef616cc264f}{State\+Render\+::\+OVERWORLD\+\_\+\+POKEMON}} = 2
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a07fa7a3e83cf334e5f601432e74827f1}{State\+Render\+::\+OVERWORLD\+\_\+\+WIND\+\_\+A}} = 3
+, \newline
+\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a460852a82943999f3eb11beaa92e1125}{State\+Render\+::\+OVERWORLD\+\_\+\+WIND\+\_\+B}} = 4
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a297fe9df074069f519ee7fc234989fc8}{State\+Render\+::\+OVERWORLD\+\_\+\+COUNT}} = 5
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a12ac66402a202d3aa114b57ed092302d}{State\+Render\+::\+BATTLE\+\_\+\+PLATFORM}} = 0
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a9defea1e64a3188e1544005636cbbaa8}{State\+Render\+::\+BATTLE\+\_\+\+BACKGROUND}} = 1
+, \newline
+\mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a97db1fe2162c126d84530654d3701f49}{State\+Render\+::\+BATTLE\+\_\+\+POKEMONA}} = 2
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a1c440888ddd21ea7bd8797e97a9f8238}{State\+Render\+::\+BATTLE\+\_\+\+POKEMONB}} = 3
+, \mbox{\hyperlink{namespace_state_render_a6cea00d37371e2ef1009ab67879a4025a4d8684dd6260f8e8324734cf4102b97c}{State\+Render\+::\+BATTLE\+\_\+\+COUNT}} = 4
+ \}
+\item 
+enum class \mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462}{State\+Render\+::\+State\+Tile\+Map}} \{ \mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462a6eadcd76980d5c82a75e5e54fcb24ecb}{State\+Render\+::\+OVERWORLD}} = 0
+, \mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462a1b9c51d3094955d4c71f2904cedee4c6}{State\+Render\+::\+OVERWORLD\+\_\+\+SPRITE}} = 1
+, \mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462a3e1f4e733d252d5223c8fef616cc264f}{State\+Render\+::\+OVERWORLD\+\_\+\+POKEMON}} = 2
+, \mbox{\hyperlink{namespace_state_render_a3a74e08235f2434bba49ccf66f779462a297fe9df074069f519ee7fc234989fc8}{State\+Render\+::\+OVERWORLD\+\_\+\+COUNT}} = 3
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_state_renderers_8h_a5c1dc6be22f068855b5a56c175977084}\label{_state_renderers_8h_a5c1dc6be22f068855b5a56c175977084}} 
+\index{StateRenderers.h@{StateRenderers.h}!STATE\_RENDERERS\_HPP@{STATE\_RENDERERS\_HPP}}
+\index{STATE\_RENDERERS\_HPP@{STATE\_RENDERERS\_HPP}!StateRenderers.h@{StateRenderers.h}}
+\doxysubsubsection{\texorpdfstring{STATE\_RENDERERS\_HPP}{STATE\_RENDERERS\_HPP}}
+{\footnotesize\ttfamily \#define STATE\+\_\+\+RENDERERS\+\_\+\+HPP}
+

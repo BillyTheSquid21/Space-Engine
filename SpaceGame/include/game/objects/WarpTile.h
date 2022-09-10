@@ -6,12 +6,12 @@
 #include "renderer/Transition.hpp"
 #include "game/objects/ActionTile.h"
 
-class WarpTile : public GameObject {};
+class WarpTile : public SGObject::GObject {};
 
 class WarpTileUpdateComponent : public ActionTileComponent
 {
 public:
-	WarpTileUpdateComponent(OvSpr_RunningSprite* player, World::Tile loc, World::WorldHeight height, World::LevelID currentLevel, World::Tile dest, World::WorldHeight destHeight, World::LevelID levelDest);
+	WarpTileUpdateComponent(Ov_Sprite::RunSprite* player, World::Tile loc, World::WorldHeight height, World::LevelID currentLevel, World::Tile dest, World::WorldHeight destHeight, World::LevelID levelDest);
 	void setLoadingFuncs(std::function<void(World::LevelID)> ld, std::function<void(World::LevelID)> uld) { m_LoadLv = ld; m_UnloadLv = uld; };
 	void linkFadeTransition(Transition* trans) { m_Fade = trans; }
 	void update(double deltaTime);
@@ -20,9 +20,9 @@ public:
 	void processMessages() {
 		while (m_MessageQueue.size() > 0) {
 			uint32_t message = m_MessageQueue.front();
-			if (message == (uint32_t)Message::ACTIVATE) { setActive(true); }
-			else if (message == (uint32_t)Message::DEACTIVATE) { setActive(false); }
-			else if (message == (uint32_t)Message::KILL) 
+			if (message == (uint32_t)SGObject::Message::ACTIVATE) { setActive(true); }
+			else if (message == (uint32_t)SGObject::Message::DEACTIVATE) { setActive(false); }
+			else if (message == (uint32_t)SGObject::Message::KILL)
 			{
 				//Modify processing so once level is loaded then teleports
 				if (m_Occupied)

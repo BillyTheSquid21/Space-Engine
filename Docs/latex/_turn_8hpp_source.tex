@@ -1,0 +1,49 @@
+\hypertarget{_turn_8hpp_source}{}\doxysection{Turn.\+hpp}
+\label{_turn_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/Turn.hpp@{D:/Repositories/Space Engine/SpaceGame/include/game/pokemon/Turn.hpp}}
+\mbox{\hyperlink{_turn_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef TURN\_HPP}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define TURN\_HPP}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_pokemon_8h}{game/pokemon/Pokemon.h}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_stat_stages_8hpp}{game/pokemon/StatStages.hpp}}"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_turn_move}{TurnMove}}}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{11     \textcolor{comment}{//Move component}}
+\DoxyCodeLine{12     uint16\_t \textcolor{keywordtype}{id} = 0;}
+\DoxyCodeLine{13     \mbox{\hyperlink{_pokemon_8h_a7bbdcc7c1e33f6f1b89c3df7f6e3d00e}{PokemonType}} \mbox{\hyperlink{struct_turn_move_ad2be63dbb5037bbc4adee1bca99fefe0}{type}} = PokemonType::None;}
+\DoxyCodeLine{14     \mbox{\hyperlink{_pokemon_8h_a5ae1794b67413c5c232b45534cef408c}{DamageType}} \mbox{\hyperlink{struct_turn_move_a1e02a87c0452577354d6d6a0dc06e0ac}{damageType}};}
+\DoxyCodeLine{15     uint8\_t \mbox{\hyperlink{struct_turn_move_a7856e61254f705d5abdd3ed42a1073ef}{accuracy}} = 100;}
+\DoxyCodeLine{16     uint8\_t \mbox{\hyperlink{struct_turn_move_a420882857dbe6138abb7f2e557802978}{damage}} = 0;}
+\DoxyCodeLine{17     int16\_t \mbox{\hyperlink{struct_turn_move_ad7e83cedb27f1681ee250e20df3ca0da}{effectID}} = 1;}
+\DoxyCodeLine{18     int8\_t \mbox{\hyperlink{struct_turn_move_a686ffe887ca04829543992a4ba12afb1}{effectData}} = 0;}
+\DoxyCodeLine{19     \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_turn_move_ae5a84479d517a8e0690016b4a2cf9c6c}{skipAccuracy}} = \textcolor{keyword}{false}; \textcolor{comment}{//Skips the damage calculation}}
+\DoxyCodeLine{20 \};}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{comment}{//Determines if a pokemon is in a unique state (eg semi invulnerable from fly)}}
+\DoxyCodeLine{23 \textcolor{keyword}{enum class} \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{PokemonMoveState}}}
+\DoxyCodeLine{24 \{}
+\DoxyCodeLine{25     \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0a960b44c579bc2f6818d2daaf9e4c16f0}{Normal}}, \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0a444733081a578880ba8a563d3c59d22d}{Flying}}, \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0a5e858193c7e72ac7640035706fddae02}{Digging}}, \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0ab87d3bca03f0cc526ea8464dce49e22d}{Diving}}}
+\DoxyCodeLine{26 \};}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_turn_data}{TurnData}}}
+\DoxyCodeLine{29 \{}
+\DoxyCodeLine{30     \mbox{\hyperlink{struct_turn_move}{TurnMove}} \mbox{\hyperlink{struct_turn_data_a32641c3370f70223083d5f9433ce1907}{move}};}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32     \textcolor{comment}{//Attack component}}
+\DoxyCodeLine{33     \mbox{\hyperlink{struct_pokemon}{Pokemon}}* \mbox{\hyperlink{struct_turn_data_a191ea1044212626b77477b01ea098225}{origin}};}
+\DoxyCodeLine{34     \mbox{\hyperlink{struct_current_stages}{CurrentStages}}* \mbox{\hyperlink{struct_turn_data_a02b41938e25048e23514a4f5494146e0}{originStages}};}
+\DoxyCodeLine{35     \mbox{\hyperlink{struct_pokemon}{Pokemon}}* \mbox{\hyperlink{struct_turn_data_a9550d5723015d57cc89237cffefb7662}{target}};}
+\DoxyCodeLine{36     \mbox{\hyperlink{struct_current_stages}{CurrentStages}}* \mbox{\hyperlink{struct_turn_data_a4400671a81b02af686d1479d2889141b}{targetStages}};}
+\DoxyCodeLine{37     \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{PokemonMoveState}}* \mbox{\hyperlink{struct_turn_data_ac77e3a5a6ce61310ab1bd6182f7fbe69}{originState}};}
+\DoxyCodeLine{38     \mbox{\hyperlink{_turn_8hpp_ab0ed5a40f5c765a4fb52cfb859bd04f0}{PokemonMoveState}}* \mbox{\hyperlink{struct_turn_data_ad0a2a56e5ef1c1c74dbf1c7004b09c8c}{targetState}};}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40     std::string \mbox{\hyperlink{struct_turn_data_a16d7939b24d7839f9a76e7fb72eda86d}{message}};}
+\DoxyCodeLine{41 \};}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

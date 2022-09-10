@@ -2,7 +2,7 @@
 
 //Push to heap of components
 //Threads are currently disabled
-void ObjectManager::update(double deltaTime) {
+void SGObject::ObjectManager::update(double deltaTime) {
 	//Launch async cleanup task every 10 seconds to check for dead objects
 	if (m_CheckCleanupTimer > 10.0)
 	{
@@ -57,7 +57,7 @@ void ObjectManager::update(double deltaTime) {
 	m_CheckCleanupTimer += deltaTime;
 }
 
-void ObjectManager::render() {
+void SGObject::ObjectManager::render() {
 	for (int i = 0; i < m_RenderGroup.size(); i++) {
 		m_RenderGroup[i]->iterate();
 	}
@@ -102,7 +102,7 @@ void ObjectManager::render() {
 	}
 }
 
-void ObjectManager::cleanObjects()
+void SGObject::ObjectManager::cleanObjects()
 {
 	auto ts = EngineTimer::StartTimer();
 	int size = m_Objects.size();
@@ -132,7 +132,7 @@ void ObjectManager::cleanObjects()
 	EngineLog("Time to clean objects: ", EngineTimer::EndTimer(ts));
 }
 
-void ObjectManager::reset()
+void SGObject::ObjectManager::reset()
 {
 	//Clear absolutely everything
 

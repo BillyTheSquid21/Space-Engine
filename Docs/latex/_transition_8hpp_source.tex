@@ -1,0 +1,152 @@
+\hypertarget{_transition_8hpp_source}{}\doxysection{Transition.\+hpp}
+\label{_transition_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Transition.hpp@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Transition.hpp}}
+\mbox{\hyperlink{_transition_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef TRANSITION\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define TRANSITION\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}string"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_camera_8h}{renderer/Camera.h}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_renderer_8hpp}{renderer/Renderer.hpp}}"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_g_l_classes_8h}{renderer/GLClasses.h}}"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_geometry_8h}{renderer/Geometry.h}}"{}}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{comment}{//All shaders used must have a "{}u\_Time"{} float uniform}}
+\DoxyCodeLine{12 \textcolor{keyword}{class }\mbox{\hyperlink{class_transition}{Transition}}}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 \textcolor{keyword}{public}:}
+\DoxyCodeLine{15     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_acb4d3a245ded9a338ced025714b737ca}{init}}(\textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height)}
+\DoxyCodeLine{16     \{}
+\DoxyCodeLine{17         \mbox{\hyperlink{class_transition_a32f6280814d5d531fe9c8ed73ec07538}{m\_Width}} = width; \mbox{\hyperlink{class_transition_a40f88fbe2f2865a2aac6da7239212af7}{m\_Height}} = height;}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19         m\_Renderer.\mbox{\hyperlink{class_s_g_render_1_1_renderer_acb094ff22ca49d15985f1ac1fea48d0b}{setLayout}}<\textcolor{keywordtype}{float}>(3);}
+\DoxyCodeLine{20         m\_Renderer.\mbox{\hyperlink{class_s_g_render_1_1_renderer_acefb1b04c0770bfdfd1b6488a1068373}{setDrawingMode}}(GL\_TRIANGLES);}
+\DoxyCodeLine{21         m\_Renderer.\mbox{\hyperlink{class_s_g_render_1_1_renderer_a27d3962925d546f541a0510ef47e4529}{generate}}(width, height, \&m\_Camera, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_s_g_render_1_1_vertex}{SGRender::Vertex}}));}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23         m\_Quad = \mbox{\hyperlink{namespace_geometry_ac2c5e5e1fff34331eeac0c770442c28a}{Geometry::CreateQuad}}(0, 0, width, height);}
+\DoxyCodeLine{24         m\_Camera.\mbox{\hyperlink{class_s_g_render_1_1_camera_a4117e912ccbce5ae2e99592db5ee3573}{setProjection}}(glm::ortho(0.0f, width, -\/height, 0.0f, -\/1.0f, 1.0f));}
+\DoxyCodeLine{25     \}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_a2003f6dd893be102eceb16443e353161}{update}}(\textcolor{keywordtype}{double} deltaTime)}
+\DoxyCodeLine{28     \{}
+\DoxyCodeLine{29         \textcolor{keywordflow}{if} (!m\_Started)}
+\DoxyCodeLine{30         \{}
+\DoxyCodeLine{31             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{32         \}}
+\DoxyCodeLine{33         m\_Timer += deltaTime;}
+\DoxyCodeLine{34     \}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_af7de9df2f72f7ce75beb0dcb409eaf4a}{setCap}}(\textcolor{keywordtype}{double} cap)}
+\DoxyCodeLine{37     \{}
+\DoxyCodeLine{38         m\_Cap = cap;}
+\DoxyCodeLine{39     \}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_ac15e2a7eaa29900ce5c1b36076411da5}{start}}()}
+\DoxyCodeLine{42     \{}
+\DoxyCodeLine{43         m\_Started = \textcolor{keyword}{true};}
+\DoxyCodeLine{44     \}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_a381e33373f2a107287e64189cca74a7f}{stop}}()}
+\DoxyCodeLine{47     \{}
+\DoxyCodeLine{48         m\_Timer = 0.0;}
+\DoxyCodeLine{49         m\_Started = \textcolor{keyword}{false};}
+\DoxyCodeLine{50     \}}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_transition_a037767781c1888929a0467a702f95bc8}{isStarted}}()\textcolor{keyword}{ const }}
+\DoxyCodeLine{53 \textcolor{keyword}{    }\{ }
+\DoxyCodeLine{54         \textcolor{keywordflow}{return} m\_Started; }
+\DoxyCodeLine{55     \}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_transition_aada25b59820019e966851bbe056ae3d4}{isEnded}}()}
+\DoxyCodeLine{58     \{}
+\DoxyCodeLine{59         \textcolor{keywordflow}{if} (m\_Timer >= m\_Cap)}
+\DoxyCodeLine{60         \{}
+\DoxyCodeLine{61             m\_Timer = 0.0;}
+\DoxyCodeLine{62             m\_Started = \textcolor{keyword}{false};}
+\DoxyCodeLine{63             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{64         \}}
+\DoxyCodeLine{65         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{66     \}}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68     \textcolor{comment}{//Uniform links}}
+\DoxyCodeLine{69     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_aa8c3d61937d037ff9de6135734bb10bd}{linkUniform}}(std::string name, \textcolor{keywordtype}{float}* value)}
+\DoxyCodeLine{70     \{}
+\DoxyCodeLine{71         m\_Uniforms.emplace\_back(name, (\textcolor{keywordtype}{void}*)value, UniformType::TYPE\_FLOAT);}
+\DoxyCodeLine{72     \}}
+\DoxyCodeLine{73     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_ac37f4814dd3b6aab72259f6bd781be87}{linkUniform}}(std::string name, glm::mat4* value)}
+\DoxyCodeLine{74     \{}
+\DoxyCodeLine{75         m\_Uniforms.emplace\_back(name, (\textcolor{keywordtype}{void}*)value, UniformType::TYPE\_MAT4);}
+\DoxyCodeLine{76     \}}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_transition_a6d570968bd5bc1062adbe91921bb4f60}{render}}(\mbox{\hyperlink{class_s_g_render_1_1_shader}{SGRender::Shader}}\& shader)}
+\DoxyCodeLine{79     \{}
+\DoxyCodeLine{80         \textcolor{keywordflow}{if} (!m\_Started)}
+\DoxyCodeLine{81         \{}
+\DoxyCodeLine{82             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{83         \}}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85         m\_Renderer.\mbox{\hyperlink{class_s_g_render_1_1_renderer_ac5bdfb545d6ce8a359929cd77bacaa7f}{commit}}(\&m\_Quad[0], Geometry::GetFloatCount<SGRender::Vertex>(\mbox{\hyperlink{namespace_geometry_a97f7d0292f7e53081385d091f621eff8ac88da92039291f825814816096db2ea2}{Geometry::Shape::QUAD}}), \mbox{\hyperlink{namespace_primitive_a3b05dde6ae7179dde4fd116edb5306b4}{Primitive::Q\_IND}}, \mbox{\hyperlink{namespace_primitive_af1e31887d45bd221152de7ff4b5651ac}{Primitive::Q\_IND\_COUNT}});}
+\DoxyCodeLine{86         m\_Renderer.\mbox{\hyperlink{class_s_g_render_1_1_renderer_a28b051826c2d48acacad9785bab38551}{bufferVideoData}}();}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88         shader.\mbox{\hyperlink{class_s_g_render_1_1_shader_a00f3547da629550ea5758c2ce3db2654}{bind}}();}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90         \textcolor{comment}{//Set uniforms}}
+\DoxyCodeLine{91         m\_Camera.\mbox{\hyperlink{class_s_g_render_1_1_camera_a794d9f9ab8e6d86094b2385cb1419797}{sendCameraUniforms}}(shader);}
+\DoxyCodeLine{92         shader.\mbox{\hyperlink{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}{setUniform}}(\textcolor{stringliteral}{"{}u\_Time"{}}, (\textcolor{keywordtype}{float})m\_Timer);}
+\DoxyCodeLine{93         \textcolor{comment}{//shader.setUniform("{}u\_Height"{}, 1080.0f);}}
+\DoxyCodeLine{94         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < m\_Uniforms.size(); i++)}
+\DoxyCodeLine{95         \{}
+\DoxyCodeLine{96             Uniform uniform = m\_Uniforms[i];}
+\DoxyCodeLine{97             \textcolor{keywordflow}{switch} (uniform.type)}
+\DoxyCodeLine{98             \{}
+\DoxyCodeLine{99             \textcolor{keywordflow}{case} UniformType::TYPE\_FLOAT:}
+\DoxyCodeLine{100             \{}
+\DoxyCodeLine{101                 \textcolor{keywordtype}{float}* floatPtr = (\textcolor{keywordtype}{float}*)uniform.value;}
+\DoxyCodeLine{102                 shader.\mbox{\hyperlink{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}{setUniform}}(uniform.name, *floatPtr);}
+\DoxyCodeLine{103                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{104             \}}
+\DoxyCodeLine{105             \textcolor{keywordflow}{case} UniformType::TYPE\_MAT4:}
+\DoxyCodeLine{106             \{}
+\DoxyCodeLine{107                 glm::mat4* mat4Ptr = (glm::mat4*)uniform.value;}
+\DoxyCodeLine{108                 shader.\mbox{\hyperlink{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}{setUniform}}(uniform.name, mat4Ptr);}
+\DoxyCodeLine{109                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{110             \}}
+\DoxyCodeLine{111             \}}
+\DoxyCodeLine{112         \}}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{114         m\_Renderer.\mbox{\hyperlink{class_s_g_render_1_1_renderer_a592e47ea71474d03614744da52fd3e89}{drawPrimitives}}();}
+\DoxyCodeLine{115     \}}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117     \textcolor{keywordtype}{float} \mbox{\hyperlink{class_transition_a32f6280814d5d531fe9c8ed73ec07538}{m\_Width}}; \textcolor{keywordtype}{float} \mbox{\hyperlink{class_transition_a40f88fbe2f2865a2aac6da7239212af7}{m\_Height}};}
+\DoxyCodeLine{118 }
+\DoxyCodeLine{119 \textcolor{keyword}{private}:}
+\DoxyCodeLine{120     \textcolor{comment}{//Render}}
+\DoxyCodeLine{121     \mbox{\hyperlink{_geometry_8h_a7c63431bc0d1072e1b3397b59bbfd6cd}{Quad}} m\_Quad;}
+\DoxyCodeLine{122     \mbox{\hyperlink{class_s_g_render_1_1_camera}{SGRender::Camera}} m\_Camera;}
+\DoxyCodeLine{123     \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}} m\_Renderer;}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125     \textcolor{comment}{//Update}}
+\DoxyCodeLine{126     \textcolor{keywordtype}{double} m\_Timer = 0.0;}
+\DoxyCodeLine{127     \textcolor{keywordtype}{double} m\_Cap = 1.0;}
+\DoxyCodeLine{128     \textcolor{keywordtype}{bool} m\_Started = \textcolor{keyword}{false};}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130     \textcolor{comment}{//Uniforms}}
+\DoxyCodeLine{131     \textcolor{keyword}{enum class} UniformType}
+\DoxyCodeLine{132     \{}
+\DoxyCodeLine{133         TYPE\_FLOAT, TYPE\_MAT4}
+\DoxyCodeLine{134     \};}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136     \textcolor{keyword}{struct }Uniform}
+\DoxyCodeLine{137     \{}
+\DoxyCodeLine{138         std::string name;}
+\DoxyCodeLine{139         \textcolor{keywordtype}{void}* value;}
+\DoxyCodeLine{140         UniformType type;}
+\DoxyCodeLine{141     \};}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143     std::vector<Uniform> m\_Uniforms;}
+\DoxyCodeLine{144 \};}
+\DoxyCodeLine{145 }
+\DoxyCodeLine{146 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,47 @@
+\hypertarget{_loading_zone_8h_source}{}\doxysection{Loading\+Zone.\+h}
+\label{_loading_zone_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/game/objects/LoadingZone.h@{D:/Repositories/Space Engine/SpaceGame/include/game/objects/LoadingZone.h}}
+\mbox{\hyperlink{_loading_zone_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef LOADING\_ZONE\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define LOADING\_ZONE\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <functional>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_game_object_8hpp}{core/GameObject.hpp}}"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_overworld_sprite_8h}{game/objects/OverworldSprite.h}}"{}}}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}mtlib/ThreadPool.h"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{comment}{//Class to pin all loading zones of a region to -\/ eg all overworld, all inside building}}
+\DoxyCodeLine{13 \textcolor{comment}{//Means you can prevent loading an overworld level while in a house}}
+\DoxyCodeLine{14 \textcolor{keyword}{class }\mbox{\hyperlink{class_loading_zone}{LoadingZone}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_g_object}{SGObject::GObject}} \{\};}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{comment}{//Loading zone "{}instance"{} -\/ takes care of what rendering is carried out}}
+\DoxyCodeLine{17 \textcolor{keyword}{class }\mbox{\hyperlink{class_loading_zone_component}{LoadingZoneComponent}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_s_g_object_1_1_render_component}{SGObject::RenderComponent}}}
+\DoxyCodeLine{18 \{}
+\DoxyCodeLine{19 \textcolor{keyword}{public}:}
+\DoxyCodeLine{20     \mbox{\hyperlink{class_loading_zone_component_a3e4aaefab9d16a03232cd1946c8ca6a1}{LoadingZoneComponent}}(\mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* spr, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} l1, \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} l2) \{ m\_PlayerPointer = spr; m\_L1\_ID = l1; m\_L2\_ID = l2; m\_Pool = MtLib::ThreadPool::Fetch(); \};}
+\DoxyCodeLine{21     }
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_loading_zone_component_aff5b4f0224948dd9b319c0a679a18f0b}{setZoneBounds}}(\textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} z, \textcolor{keywordtype}{float} w, \textcolor{keywordtype}{float} h) \{ m\_Origin.\mbox{\hyperlink{struct_struct2f_a4ad759469e7682ac85d271fc6657c663}{a}} = x; m\_Origin.\mbox{\hyperlink{struct_struct2f_a28b1d82b228b7b6bbb6fa5eda36ffe3b}{b}} = -\/1 * z; m\_Bounds.\mbox{\hyperlink{struct_struct2f_a4ad759469e7682ac85d271fc6657c663}{a}} = w; m\_Bounds.\mbox{\hyperlink{struct_struct2f_a28b1d82b228b7b6bbb6fa5eda36ffe3b}{b}} = h; \}}
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_loading_zone_component_a959c3c33760cf78b3fcdda0a732b16ca}{setLoadingFuncs}}(std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> ld, std::function<\textcolor{keywordtype}{void}(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> uld) \{ m\_LoadLv = ld; m\_UnloadLv = uld; \};}
+\DoxyCodeLine{24     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_loading_zone_component_a10b110b7514378bc61067c773449b45c}{render}}();}
+\DoxyCodeLine{25 \textcolor{keyword}{private}:}
+\DoxyCodeLine{26     \textcolor{comment}{//Player data}}
+\DoxyCodeLine{27     \mbox{\hyperlink{class_ov___sprite_1_1_run_sprite}{Ov\_Sprite::RunSprite}}* m\_PlayerPointer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29     \textcolor{comment}{//Loading zone data}}
+\DoxyCodeLine{30     \mbox{\hyperlink{struct_struct2f}{Struct2f}} m\_Origin = \{0.0f, 0.0f\}; \textcolor{comment}{//Lower left}}
+\DoxyCodeLine{31     \mbox{\hyperlink{struct_struct2f}{Struct2f}} m\_Bounds = \{0.0f, 0.0f\}; \textcolor{comment}{//Width and height going out (stretch infinitely in y)}}
+\DoxyCodeLine{32     \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} m\_L1\_ID;}
+\DoxyCodeLine{33     \mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}} m\_L2\_ID;}
+\DoxyCodeLine{34     \textcolor{keywordtype}{bool} m\_PlayerInside = \textcolor{keyword}{false};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     std::function<void(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> m\_LoadLv; }
+\DoxyCodeLine{37     std::function<void(\mbox{\hyperlink{namespace_world_ae3367180e90c87aab093cdeb3eb2c789}{World::LevelID}})> m\_UnloadLv;}
+\DoxyCodeLine{38     MtLib::ThreadPool* m\_Pool;}
+\DoxyCodeLine{39 \};}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
