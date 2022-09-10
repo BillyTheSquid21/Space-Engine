@@ -23,7 +23,7 @@ int main(void) //TODO: get delta time working perfectly
     //Heap allocates to new game, creates with resolution and name on tag - 
     //replace with derived game class
     {
-        std::shared_ptr<DemoGame> gameInit(new DemoGame(640, 640));
+        std::shared_ptr<Game> gameInit(new Game(640, 640));
         game = gameInit;
     }
     if (!game->init("Space Game", KeyCallback, MouseCallback, ScrollCallback)) {
