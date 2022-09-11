@@ -2,17 +2,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "renderer/Renderer.hpp"
-#include "renderer/Texture.h"
-#include "renderer/Plane.h"
-#include <GLFW/glfw3.h>
-#include <fstream>
-#include <string>
-#include <sstream>
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
+#include "fstream"
+#include "string"
+#include "sstream"
 #include "utility/SGUtil.h"
 #include "core/GameObject.hpp"
 #include "core/ObjManagement.h"
 #include "Callbacks.hpp"
+#include "core/Sound.h"
 
 class Game 
 {
@@ -77,6 +76,11 @@ public:
 	* GLFW Window Pointer
 	*/
 	GLFWwindow* window = NULL;
+
+	/**
+	* Sound engine
+	*/
+	SGSound::System sound;
 
 	//If this is set to true, game loop ends this cycle
 	static bool s_Close;

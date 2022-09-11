@@ -8,7 +8,7 @@
 #include "game/states/Battle.h"
 #include "game/gui/GUI.h"
 #include "game/data/PlayerData.hpp"
-
+#include "game/data/Options.h"
 #include "mtlib/ThreadPool.h"
 
 #define THREAD_POOL_SIZE 5
@@ -24,6 +24,7 @@ public:
 	void handleScrolling(double xOffset, double yOffset);
 	void update(double deltaTime);
 	void render();
+	void clean();
 
 private:
 	FontContainer m_Fonts;

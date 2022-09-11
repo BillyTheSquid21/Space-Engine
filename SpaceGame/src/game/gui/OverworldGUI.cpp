@@ -21,6 +21,7 @@ void OverworldMenu::openNest()
 	ImGui::PushFont(m_Fonts->getFont("boxfont", 45));
 	if (ImGui::Button("Pokemon", ImVec2(ImGui::GetContentRegionAvail().x, 75.0f)))
 	{
+		clickSound();
 		m_ShowPkmMenu = !m_ShowPkmMenu;
 		m_ShowBag = false;
 		m_LastSelectedItem = -1;
@@ -28,6 +29,7 @@ void OverworldMenu::openNest()
 	}
 	if (ImGui::Button("Bag", ImVec2(ImGui::GetContentRegionAvail().x, 75.0f)))
 	{
+		clickSound();
 		m_ShowBag = !m_ShowBag;
 		m_ShowPkmMenu = false;
 		m_LastSelectedItem = -1;
@@ -300,6 +302,7 @@ void OverworldMenu::bagItems()
 			ImGui::SetCursorPosY(y);
 			if (ImGui::Button("Cancel", ImVec2(buttonWidth / 3.0f, 150.0f)))
 			{
+				clickSound();
 				m_LastSelectedItem = -1;
 			}
 		}
@@ -362,6 +365,7 @@ void OverworldMenu::bagButtons()
 	}
 	if (ImGui::Button("Items", ImVec2(ImGui::GetContentRegionAvail().x / 7.0f, 75.0f)) && m_Pocket != BagPocket::Items)
 	{
+		clickSound();
 		m_Pocket = BagPocket::Items;
 		m_JustClicked = true;
 	}
@@ -379,6 +383,7 @@ void OverworldMenu::bagButtons()
 	}
 	if (ImGui::Button("Medicine", ImVec2(ImGui::GetContentRegionAvail().x / 7.0f, 75.0f)) && m_Pocket != BagPocket::Medicine)
 	{
+		clickSound();
 		m_Pocket = BagPocket::Medicine;
 		m_JustClicked = true;
 	}
@@ -396,6 +401,7 @@ void OverworldMenu::bagButtons()
 	}
 	if (ImGui::Button("Pokeballs", ImVec2(ImGui::GetContentRegionAvail().x / 7.0f, 75.0f)) && m_Pocket != BagPocket::Pokeballs)
 	{
+		clickSound();
 		m_Pocket = BagPocket::Pokeballs;
 		m_JustClicked = true;
 	}
@@ -413,6 +419,7 @@ void OverworldMenu::bagButtons()
 	}
 	if (ImGui::Button("Berries", ImVec2(ImGui::GetContentRegionAvail().x / 7.0f, 75.0f)) && m_Pocket != BagPocket::Berries)
 	{
+		clickSound();
 		m_Pocket = BagPocket::Berries;
 		m_JustClicked = true;
 	}
@@ -430,6 +437,7 @@ void OverworldMenu::bagButtons()
 	}
 	if (ImGui::Button("TMs", ImVec2(ImGui::GetContentRegionAvail().x / 7.0f, 75.0f)) && m_Pocket != BagPocket::TMs)
 	{
+		clickSound();
 		m_Pocket = BagPocket::TMs;
 		m_JustClicked = true;
 	}
@@ -447,6 +455,7 @@ void OverworldMenu::bagButtons()
 	}
 	if (ImGui::Button("Key Items", ImVec2(ImGui::GetContentRegionAvail().x / 7.0f, 75.0f)) && m_Pocket != BagPocket::KeyItems)
 	{
+		clickSound();
 		m_Pocket = BagPocket::KeyItems;
 		m_JustClicked = true;
 	}

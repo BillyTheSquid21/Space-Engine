@@ -2,6 +2,7 @@
 #ifndef TALL_GRASS_H
 #define TALL_GRASS_H
 
+#include "game/data/Options.h"
 #include "game/objects/SpriteAnimation.hpp"
 #include "game/level/World.h"
 #include "utility/Random.h"
@@ -20,13 +21,12 @@ public:
 	World::LevelID m_LevelID;
 };
 
-#define GRASS_DENSITY 40
 class TallGrassRenderComponent : public SGObject::RenderComponent
 {
 public:
 	TallGrassRenderComponent(SGRender::Renderer* ren, SGRender::Camera* cam, TallGrassObject* grass) { m_Renderer = ren; m_Camera = cam; m_Grass = grass; }
 	
-	void reserveGrass(unsigned int count) { m_Grass->m_Pos.resize(GRASS_DENSITY*GRASS_DENSITY*count); m_Grass->m_CulledPos.resize(GRASS_DENSITY * GRASS_DENSITY * count);}
+	void reserveGrass(unsigned int count) { m_GrassDensity = Options::grassDensity; m_Grass->m_Pos.resize(m_GrassDensity * m_GrassDensity * count); m_Grass->m_CulledPos.resize(m_GrassDensity * m_GrassDensity * count); }
 	void addGrass(Struct2f levelOrigin, World::Tile tile, World::WorldHeight level, World::LevelID levelID);
 
 	void render() 
@@ -44,6 +44,7 @@ private:
 	SGRender::Renderer* m_Renderer;
 	SGRender::Camera* m_Camera;
 	TallGrassObject* m_Grass = nullptr;
+	float m_GrassDensity = 40.0f;
 };
 
 #endif

@@ -11,11 +11,11 @@ void TallGrassRenderComponent::addGrass(Struct2f levelOrigin, World::Tile tile, 
 
 	//Spread across tile
 	int i = 0; //Avoids changing instance number for color or height
-	for (int z = 0; z < GRASS_DENSITY; z++)
+	for (int z = 0; z < m_GrassDensity; z++)
 	{
-		for (int x = 0; x < GRASS_DENSITY; x++)
+		for (int x = 0; x < m_GrassDensity; x++)
 		{
-			glm::vec4 pos = { xPos + ((float)World::TILE_SIZE) * ((float)x/GRASS_DENSITY), yPos,  zPos - ((float)World::TILE_SIZE) * ((float)z / (float)GRASS_DENSITY), i };
+			glm::vec4 pos = { xPos + ((float)World::TILE_SIZE) * ((float)x/ m_GrassDensity), yPos,  zPos - ((float)World::TILE_SIZE) * ((float)z / (float)m_GrassDensity), i };
 			
 			//slightly offset
 			float dX = rand() % 100 - 50;
@@ -38,12 +38,12 @@ void TallGrassRenderComponent::frustumCull()
 	//Check for each tile whether middle is within frustum
 	//This method leaves grass being rendered offscreen
 	//However it massively improves performance over per blade methods
-	int perTileCount = GRASS_DENSITY * GRASS_DENSITY;
+	int perTileCount = m_GrassDensity * m_GrassDensity;
 	for (int i = 0; i < m_Grass->m_Pos.size(); i += perTileCount)
 	{
 		int corners[4] = {};
-		corners[0] = i; corners[1] = i + (int)GRASS_DENSITY;
-		corners[2] = i + (int)GRASS_DENSITY * (int)(GRASS_DENSITY-1);
+		corners[0] = i; corners[1] = i + (int)m_GrassDensity;
+		corners[2] = i + (int)m_GrassDensity * (int)(m_GrassDensity -1);
 		corners[3] = i + perTileCount -1;
 		for (int j = 0; j < 4; j++)
 		{

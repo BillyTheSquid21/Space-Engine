@@ -77,6 +77,13 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    //Init sound engine
+    success = sound.init();
+    if (!success)
+    {
+        return false;
+    }
+
     return success;
 }
 
@@ -94,7 +101,7 @@ void Game::handleEvents()
 
 //Update
 void Game::update(double deltaTime) {
-
+    sound.update();
 }
 
 //Clean
@@ -102,6 +109,7 @@ void Game::clean()
 {
     glfwDestroyWindow(window);
     glfwTerminate();
+    sound.clean();
 }
 
 void Game::setTime(double time) {

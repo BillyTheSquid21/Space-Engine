@@ -12,6 +12,14 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 330");
+	GameGUI::ResetStyle();
+
+	//Set channels in options
+	Options::effects = sound.getGroup(SGSound::ChannelGroup::EFFECTS);
+	Options::music = sound.getGroup(SGSound::ChannelGroup::MUSIC);
+
+	//Load options from file
+	Options::load();
 
 	//Init threadpool
 	MtLib::ThreadPool::Init(THREAD_POOL_SIZE);
@@ -29,10 +37,10 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	battle->init(m_Width, m_Height, &m_Data, &m_Fonts, &m_Data.flags, &m_GameInput);
 	battle->setActive(false);
 	std::shared_ptr<Overworld> overworld(new Overworld());
-	overworld->init(m_Width, m_Height, &m_Data, World::LevelID::LEVEL_ENTRY, &m_Fonts, &m_Data.flags, &m_GameInput);
+	overworld->init(m_Width, m_Height, &m_Data, World::LevelID::LEVEL_ENTRY, &m_Fonts, &m_Data.flags, &m_GameInput, &sound);
 	overworld->setActive(false);
 	std::shared_ptr<MainMenu> mainMenuScreen(new MainMenu());
-	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts);
+	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts, &sound);
 	mainMenuScreen->setActive(true);
 
 	std::function<void(Party*, Party*)> activateBattle = std::bind(&Battle::startBattle, battle.get(), std::placeholders::_1, std::placeholders::_2);
@@ -110,4 +118,10 @@ void DemoGame::render() {
 	}
 	//Inherited
 	Game::render();
+}
+
+void DemoGame::clean()
+{
+	Options::write();
+	Game::clean();
 }

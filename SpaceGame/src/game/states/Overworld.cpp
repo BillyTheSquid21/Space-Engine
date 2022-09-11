@@ -1,6 +1,6 @@
 #include "game/states/Overworld.h"
 
-void Overworld::init(int width, int height, PlayerData* data, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input) {
+void Overworld::init(int width, int height, PlayerData* data, World::LevelID levelEntry, FontContainer* fonts, FlagArray* flags, GameInput* input, SGSound::System* system) {
     //Width and height
     m_Width = width; m_Height = height;
 
@@ -12,6 +12,9 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
 
     //Data
     m_Data = data;
+
+    //Sound
+    m_System = system;
 
     //Fonts - TODO make load in loadRequiredData()
     m_Fonts = fonts;
@@ -65,6 +68,7 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     menu->m_YPos = 10.0f;
     menu->setFontContainer(m_Fonts);
     menu->setPlayerData(m_Data);
+    menu->linkSoundSystem(m_System);
 
     m_HUD.addElement(menu);
 

@@ -2,16 +2,19 @@
 #ifndef OVERWORLD_GUI_H
 #define OVERWORLD_GUI_H
 
+#include "core/Sound.h"
 #include "game/gui/GUI.h"
 #include "game/data/PlayerData.hpp"
 #include "renderer/Texture.h"
-#include <cctype>
+#include "cctype"
 
 class OverworldMenu : public GameGUI::Divider
 {
 public:
+	~OverworldMenu() { m_System->releaseSound(m_ClickEffect); }
 	void setFontContainer(FontContainer* font) { m_Fonts = font; }
 	void setPlayerData(PlayerData* data) { m_PlayerData = data; }
+	void linkSoundSystem(SGSound::System* system) { m_System = system; m_System->loadSound(m_ClickPath.c_str(), m_ClickEffect); }
 	void openNest();
 	void closeNest();
 private:
@@ -57,6 +60,16 @@ private:
 	bool m_ShowBag = false;
 	FontContainer* m_Fonts = nullptr;
 	PlayerData* m_PlayerData = nullptr;
+
+	//Sound effects
+	SGSound::System* m_System = nullptr;
+
+	//Click
+	std::string m_ClickPath = "res/sound/ui/select.wav";
+	FMOD::Sound* m_ClickEffect = NULL;
+	FMOD::Channel* m_ClickChannel = NULL;
+
+	void clickSound() { m_System->playSound(m_ClickEffect, m_ClickChannel, SGSound::ChannelGroup::EFFECTS); };
 };
 
 #endif

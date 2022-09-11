@@ -6,13 +6,23 @@
 #include "renderer/Texture.h"
 #include "core/State.hpp"
 #include "game/gui/GUI.h"
+#include "game/gui/OptionsGUI.h"
+#include "game/gui/MainMenuGUI.h"
 #include "game/states/Overworld.h"
 #include "core/Game.h"
+#include "core/Sound.h"
 
 class MainMenu : public SG::State
 {
 public:
-	void init(int width, int height, GLFWwindow* window, std::shared_ptr<Overworld> overworldPtr, FontContainer* fonts);
+	void init(
+		int width, 
+		int height, 
+		GLFWwindow* window, 
+		std::shared_ptr<Overworld> overworldPtr, 
+		FontContainer* fonts,
+		SGSound::System* system
+	);
 	void update(double deltaTime, double time);
 	void render();
 	void loadRequiredData();
@@ -25,6 +35,12 @@ private:
 	int m_Width; int m_Height;
 
 	FontContainer* m_Fonts;
+	SGSound::System* m_System;
+
+	//GUI
+	GameGUI::GUIContainer m_GUI;
+	bool m_ShowMenu = true;
+	bool m_ShowOptions = false;
 
 	//Pointers to states the main menu can activate
 	std::shared_ptr<Overworld> m_OverworldPtr;

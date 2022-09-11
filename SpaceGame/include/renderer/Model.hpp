@@ -2,11 +2,11 @@
 #ifndef SG_MODEL_H
 #define SG_MODEL_H
 
-#include <vector>
-#include <iterator>
-#include <future>
-#include <chrono>
-#include <future>
+#include "vector"
+#include "iterator"
+#include "future"
+#include "chrono"
+#include "future"
 
 #include "utility/SGUtil.h"
 
@@ -15,9 +15,9 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.h"
 
-#include <assimp/Importer.hpp>  
-#include <assimp/scene.h>   
-#include <assimp/postprocess.h> 
+#include "assimp/Importer.hpp"  
+#include "assimp/scene.h"
+#include "assimp/postprocess.h" 
 
 namespace Model
 {

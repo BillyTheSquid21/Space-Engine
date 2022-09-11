@@ -5,6 +5,7 @@
 #include "GL/glew.h"
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
+#include "core/Sound.h"
 #include "game/level/World.h"
 #include "game/level/WorldObjectLoader.h"
 #include "game/objects/Bridge.h"
@@ -45,7 +46,8 @@ public:
 		World::LevelID levelEntry, 
 		FontContainer* fonts, 
 		FlagArray* flags, 
-		GameInput* input
+		GameInput* input,
+		SGSound::System* system
 	);
 
 	/**
@@ -95,6 +97,9 @@ private:
 
 	//Test flags
 	FlagArray* m_Flags;
+
+	//Test sound
+	SGSound::System* m_System = nullptr;
 
 	//Data
 	PlayerData* m_Data;

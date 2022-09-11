@@ -1,8 +1,11 @@
 #include "game/states/MainMenu.h"
 
-void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<Overworld> overworldPtr, FontContainer* fonts) {
+void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<Overworld> overworldPtr, FontContainer* fonts, SGSound::System* system) {
     //Width and height
     m_Width = width; m_Height = height;
+
+    //Sound
+    m_System = system;
 
     m_OverworldPtr = overworldPtr;
 
@@ -30,10 +33,36 @@ void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<O
     GameGUI::SetColors(16, 16, 16, ImGuiCol_WindowBg);
     GameGUI::SetColors(24, 24, 24, ImGuiCol_ChildBg);
 
+    //GUI
+    std::shared_ptr<GameGUI::HUD> gui(new GameGUI::HUD(width, height, 0, 0));
+    m_GUI.setBase(gui);
+
+    //Main menu
+    std::shared_ptr<MainMenuGUI> menu(new MainMenuGUI());
+    menu->m_FillX = false; menu->m_FillY = true;
+    menu->m_Width = m_Width / 6.0f;
+    menu->setNest(0);
+    menu->setFontContainer(m_Fonts);
+    menu->setOverworldPtr(m_OverworldPtr);
+    menu->linkActiveFunc(std::bind(&Overworld::setActive, this, std::placeholders::_1));
+    menu->linkShowOptions(&m_ShowOptions);
+    m_GUI.addElement(menu);
+
+    //Options
+    std::shared_ptr<OptionsMenu> options(new OptionsMenu());
+    options->m_Width = (4.8f * m_Width) / 6.0f;
+    options->m_Height = m_Height - 20.0f;
+    options->setNest(1);
+    options->m_XPos = menu->m_Width + 15.0f;
+    options->m_YPos = 10.0f;
+    options->setFontContainer(m_Fonts);
+    m_GUI.addElement(options);
+
     EngineLog("Main Menu loaded");
 }
 
-void MainMenu::update(double deltaTime, double time) {
+void MainMenu::update(double deltaTime, double time) 
+{
 
 }
 
@@ -47,46 +76,12 @@ void MainMenu::purgeRequiredData()
     m_DataLoaded = false;
 }
 
-void MainMenu::render() {
+void MainMenu::render() 
+{
     //ImGUI
     GameGUI::StartFrame();
-
-    //Bind shader program
-    m_Shader.bind();
-
-    //Renders
-    m_Shader.setUniform("u_Texture", 0);
-    m_Camera.sendCameraUniforms(m_Shader);
-    m_Renderer.drawPrimitives();
-
-    //IMGui - All of this is shit and additionally testing right now
-    GameGUI::SetNextWindowSize(300.0f, m_Height);
-    GameGUI::SetNextWindowPos(0.0f, 0.0f);
-    ImGui::Begin("Menu", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-
-    //Side Menu
-    ImGui::BeginChild("##LeftSide", ImVec2(300, ImGui::GetContentRegionAvail().y), false);
-    
-    ImGui::PushFont(m_Fonts->getFont("default", 50));
-    ImGui::SetCursorPosX(8.0f);
-    ImGui::Text("Demo Game");
-    ImGui::PopFont();
-    
-
-    //Buttons
-    ImGui::PushFont(m_Fonts->getFont("default", 25));
-    if (ImGui::Button("Game", ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 50))) {
-        m_OverworldPtr->setActive(true);
-        m_OverworldPtr->loadRequiredData();
-        setActive(false);
-    }
-    if (ImGui::Button("Exit", ImVec2(ImGui::GetContentRegionAvail().x - 10.0f, 50))) {
-        Game::s_Close = true;
-    }
-    ImGui::PopFont();
-
-    ImGui::EndChild();
-
-    ImGui::End();
+    m_GUI.showNest(0, m_ShowMenu);
+    m_GUI.showNest(1, m_ShowOptions);
+    m_GUI.render();
     GameGUI::EndFrame();
 }
