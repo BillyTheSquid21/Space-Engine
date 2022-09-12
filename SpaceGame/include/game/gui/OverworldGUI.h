@@ -11,10 +11,10 @@
 class OverworldMenu : public GameGUI::Divider
 {
 public:
-	~OverworldMenu() { m_System->releaseSound(m_ClickEffect); }
 	void setFontContainer(FontContainer* font) { m_Fonts = font; }
 	void setPlayerData(PlayerData* data) { m_PlayerData = data; }
 	void linkSoundSystem(SGSound::System* system) { m_System = system; m_System->loadSound(m_ClickPath.c_str(), m_ClickEffect); }
+	void linkShowOptions(bool* set) { m_ShowOptions = set; }
 	void openNest();
 	void closeNest();
 private:
@@ -58,6 +58,7 @@ private:
 
 	bool m_ShowPkmMenu = false;
 	bool m_ShowBag = false;
+	bool* m_ShowOptions = nullptr;
 	FontContainer* m_Fonts = nullptr;
 	PlayerData* m_PlayerData = nullptr;
 

@@ -25,7 +25,7 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     m_Renderer.initialiseRenderer(width, height, &m_ObjManager);
 
     //Init levels and scripts
-    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Data, &m_TextBuff, m_Input);
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Data, &m_TextBuff, m_Input, m_System);
     std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::SignalLoadLevel, &m_Levels, std::placeholders::_1);
     std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::SignalUnloadLevel, &m_Levels, std::placeholders::_1);
     OverworldScript::init(m_Data, m_Input, ld, uld);
@@ -69,8 +69,19 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     menu->setFontContainer(m_Fonts);
     menu->setPlayerData(m_Data);
     menu->linkSoundSystem(m_System);
+    menu->linkShowOptions(&m_ShowOptions);
 
     m_HUD.addElement(menu);
+
+    //Options menu
+    std::shared_ptr<OptionsMenu> options(new OptionsMenu());
+    options->m_Width = (4.8f * m_Width) / 6.0f;
+    options->m_Height = m_Height - 20.0f;
+    options->setNest(3);
+    options->m_XPos = 10.0f;
+    options->m_YPos = 10.0f;
+    options->setFontContainer(m_Fonts);
+    m_HUD.addElement(options);
 
     //Init pkm
     //Pkm test
@@ -349,10 +360,12 @@ void Overworld::render() {
     }
 
     //IMGUI Test
+    GameGUI::ResetStyle();
     GameGUI::StartFrame();
     m_HUD.showNest(0, m_ShowDebug);
     m_HUD.showNest(1, m_TextBuff.showTextBox);
     m_HUD.showNest(2, m_ShowMenu);
+    m_HUD.showNest(3, m_ShowOptions);
     m_HUD.render();
     GameGUI::EndFrame();
 }
@@ -404,6 +417,7 @@ void Overworld::handleInput(int key, int scancode, int action, int mods)
             else if (m_ShowMenu)
             {
                 m_ShowMenu = false;
+                m_ShowOptions = false;
                 m_PlayerPtr->m_Busy = m_ShowMenu;
             }
         }

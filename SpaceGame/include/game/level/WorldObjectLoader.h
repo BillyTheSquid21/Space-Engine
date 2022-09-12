@@ -7,6 +7,7 @@
 #include "sstream"
 #include "thread"
 #include "core/ObjManagement.h"
+#include "core/Sound.h"
 #include "game/level/World.h"
 #include "game/level/TextureSlots.hpp"
 #include "game/GUI/GUI.h"
@@ -64,7 +65,7 @@ namespace World
 	class LevelContainer
 	{
 	public:
-		void InitialiseLevels(SGObject::ObjectManager* obj, StateRender::Overworld* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input);
+		void InitialiseLevels(SGObject::ObjectManager* obj, StateRender::Overworld* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input, SGSound::System* system);
 		void InitialiseGlobalObjects();
 		void BuildFirstLevel(World::LevelID id); //Builds geometry and permissions first - for use when no level has been initialised
 		
@@ -96,6 +97,12 @@ namespace World
 		GameInput* m_Input;
 		std::function<void(World::LevelID)> m_LoadingPtr;
 		std::function<void(World::LevelID)> m_UnloadingPtr;
+
+		//Sound
+		SGSound::System* m_System;
+		FMOD::Channel* m_Music[2] = { nullptr, nullptr }; //Allows music to be faded and swapped without creating too many channels
+		SGSound::sound_id m_IDS[2] = {};
+		char m_CurrentSlot = 0; 
 	};
 }
 

@@ -129,6 +129,7 @@ namespace World
 		float originY;
 		glm::vec3 lightColor;
 		glm::vec3 lightDir;
+		std::string music = "none";
 		std::vector<WorldHeight> planeHeights;
 		std::vector<WorldHeight> presentWorldLevels;
 		std::vector<Direction> planeDirections;
@@ -177,6 +178,8 @@ namespace World
 		//Static caches - for data that needs to be accessed at source as can change at runtime
 		static std::vector<LevelPtrCache> s_MovementPermissionsCache;
 
+		std::string getMusic() { return m_Music; }
+
 	private:
 		//ID
 		LevelID m_ID = World::LevelID::LEVEL_NULL;
@@ -187,6 +190,7 @@ namespace World
 		std::vector<MovementPermissions> m_Permissions;
 		std::vector<WorldHeight> m_Heights;
 		TileMap* m_TileMapPointer;
+		std::string m_Music;
 
 		unsigned int m_LevelTilesX = 0;
 		unsigned int m_LevelTilesY = 0;

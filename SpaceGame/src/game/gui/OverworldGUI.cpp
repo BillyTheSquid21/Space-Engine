@@ -24,6 +24,7 @@ void OverworldMenu::openNest()
 		clickSound();
 		m_ShowPkmMenu = !m_ShowPkmMenu;
 		m_ShowBag = false;
+		*m_ShowOptions = false;
 		m_LastSelectedItem = -1;
 		unloadAllIcons();
 	}
@@ -32,6 +33,16 @@ void OverworldMenu::openNest()
 		clickSound();
 		m_ShowBag = !m_ShowBag;
 		m_ShowPkmMenu = false;
+		*m_ShowOptions = false;
+		m_LastSelectedItem = -1;
+		unloadAllIcons();
+	}
+	if (ImGui::Button("Options", ImVec2(ImGui::GetContentRegionAvail().x, 75.0f)))
+	{
+		clickSound();
+		*m_ShowOptions = !(*m_ShowOptions);
+		m_ShowPkmMenu = false;
+		m_ShowBag = false;
 		m_LastSelectedItem = -1;
 		unloadAllIcons();
 	}

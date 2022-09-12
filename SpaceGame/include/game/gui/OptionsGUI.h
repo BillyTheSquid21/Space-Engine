@@ -13,6 +13,8 @@ public:
 	void openNest();
 	void closeNest();
 private:
+	void menuStyle();
+	void endMenuStyle();
 	float m_EffectVolume = 1.0f;
 	float m_MusicVolume = 1.0f;
 	float m_GrassDensity = 40.0f;

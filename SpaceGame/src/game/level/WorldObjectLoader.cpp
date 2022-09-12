@@ -659,9 +659,10 @@ void WorldParse::LoadBridge(std::string name, rapidxml::xml_node<>* node, SGObje
 	manager->pushGameObject(bridge, name);
 }
 
-void World::LevelContainer::InitialiseLevels(SGObject::ObjectManager* obj, Overworld* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input)
+void World::LevelContainer::InitialiseLevels(SGObject::ObjectManager* obj, Overworld* ren, PlayerData* data, GameGUI::TextBoxBuffer* textBuff, GameInput* input, SGSound::System* system)
 {
 	m_Input = input; m_ObjManager = obj; m_Renderer = ren; m_Data = data; m_TextBuffer = textBuff;
+	m_System = system;
 	m_Levels.resize((int)World::LevelID::LEVEL_NULL);
 	std::vector<std::mutex> mutexes((int)World::LevelID::LEVEL_NULL);
 	m_LevelMutexes.swap(mutexes);
@@ -709,6 +710,23 @@ void World::LevelContainer::ChangeLevel()
 
 void World::LevelContainer::LoadLevel(World::LevelID id)
 {
+	//Change music
+	//TODO - use different method
+	std::string music = m_Levels[(int)id].getMusic();
+	if (music != "none")
+	{
+		std::string path = "res/sound/music/" + music + ".wav";
+		m_IDS[m_CurrentSlot] = m_System->loadSound(path.c_str());
+		m_System->playSound(m_IDS[m_CurrentSlot], m_Music[m_CurrentSlot], SGSound::ChannelGroup::MUSIC);
+		m_CurrentSlot = (char)(!(bool)m_CurrentSlot);
+
+		//Fade other audio out if playing
+		if (m_Music[m_CurrentSlot] != nullptr)
+		{
+			m_Music[m_CurrentSlot]->setPaused(true);
+		}
+	}
+
 	//Locks if loading somewhere else, and then checks if has been loaded
 	std::lock_guard<std::mutex> levelAccessLock(m_LevelMutexes[(int)id]);
 	if (m_Levels[(int)id].loaded())

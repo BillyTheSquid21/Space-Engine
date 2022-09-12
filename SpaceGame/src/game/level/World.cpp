@@ -457,6 +457,9 @@ bool World::Level::buildLevel(SGRender::Renderer* planeRenderer, TileMap* tileMa
     LevelData data = ParseLevel(m_ID);
     m_TileMapPointer = tileMap;
 
+    //Set music
+    m_Music = data.music;
+
     //Set lighting
     lColor = data.lightColor; lDir = data.lightDir;
 
@@ -609,6 +612,13 @@ World::LevelData World::ParseLevel(World::LevelID id) {
         doc["lightDirZ"].GetFloat()
     );
 
+    //Get music info
+    std::string music = "none";
+    if (doc.HasMember("levelMusic"))
+    {
+        music = doc["levelMusic"].GetString();
+    }
+
     //Read in
 
     //const properties tags per row
@@ -713,6 +723,7 @@ World::LevelData World::ParseLevel(World::LevelID id) {
         levelOZ, 
         lightColor, 
         lightDir, 
+        music,
         planeHeights, 
         worldLevels, 
         planeDirections, 

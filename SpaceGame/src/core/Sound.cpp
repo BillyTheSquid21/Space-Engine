@@ -38,13 +38,62 @@ bool SGSound::System::init()
     return success;
 }
 
-bool SGSound::System::loadSound(const char* path, FMOD::Sound*& sound)
+size_t SGSound::System::loadSound(const char* path, FMOD::Sound*& sound)
 {
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
+    if (isSoundStored(std::string(path), sound))
+    {
+        return 0;
+    }
     FMOD_RESULT result = m_System->createSound(path, FMOD_NONBLOCKING, NULL, &sound);
-    return result == FMOD_OK;
+    std::hash<std::string> hash;
+    size_t hashedPath = hash(path);
+    m_Sounds.push_back({ hashedPath, sound, ChannelGroup::NONE, NULL, false, false });
+    return hashedPath;
+}
+
+size_t SGSound::System::loadSound(const char* path)
+{
+    FMOD::Sound* sound;
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
+    if (isSoundStored(std::string(path), sound))
+    {
+        return 0;
+    }
+    FMOD_RESULT result = m_System->createSound(path, FMOD_NONBLOCKING, NULL, &sound);
+    if (result != FMOD_OK)
+    {
+        EngineLog("Error loading sound: ", path);
+    }
+    //Create id and push
+    std::hash<std::string> hash;
+    size_t hashedPath = hash(path);
+    m_Sounds.push_back({ hashedPath, sound, ChannelGroup::NONE, NULL, false, false });
+    return hashedPath;
+}
+
+bool SGSound::System::isSoundStored(std::string path, FMOD::Sound*& sound)
+{
+    std::hash<std::string> hash;
+    size_t hashedPath = hash(path);
+    for (int i = 0; i < m_Sounds.size(); i++)
+    {
+        if (m_Sounds[i].id == hashedPath)
+        {
+            sound = m_Sounds[i].sound;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool SGSound::System::playSound(FMOD::Sound*& sound, FMOD::Channel*& channel, ChannelGroup group)
+{
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
+    return playSoundInternal(sound, channel, group);
+}
+
+bool SGSound::System::playSoundInternal(FMOD::Sound*& sound, FMOD::Channel*& channel, ChannelGroup group)
 {
     //If isn't ready, don't start playing yet
     FMOD_OPENSTATE state;
@@ -60,21 +109,24 @@ bool SGSound::System::playSound(FMOD::Sound*& sound, FMOD::Channel*& channel, Ch
     return true;
 }
 
-bool SGSound::System::setPauseSound(FMOD::Sound*& sound, FMOD::Channel*& channel, bool pause)
+void SGSound::System::playSound(sound_id sound, FMOD::Channel*& channel, ChannelGroup group)
 {
-    //If isn't ready, don't start playing yet
-    FMOD_OPENSTATE state;
-    sound->getOpenState(&state, NULL, NULL, NULL);
-    if (state != FMOD_OPENSTATE_READY)
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
+    //Find sound with id, set to shouldPlay
+    for (int i = 0; i < m_Sounds.size(); i++)
     {
-        return false;
+        if (m_Sounds[i].id == sound)
+        {
+           m_Sounds[i].shouldPlay = true;
+           m_Sounds[i].channel = channel;
+           m_Sounds[i].group = group;
+        }
     }
-    channel->setPaused(pause);
-    return true;
 }
 
 void SGSound::System::releaseSound(FMOD::Sound*& sound)
 {
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
     for (int i = 0; i < m_ReleaseQueue.size(); i++)
     {
         //Ensure no duplicates
@@ -84,9 +136,40 @@ void SGSound::System::releaseSound(FMOD::Sound*& sound)
         }
     }
     m_ReleaseQueue.push_back(sound);
+
+    //Remove from storage if present
+    for (int i = 0; i < m_Sounds.size(); i++)
+    {
+        if (m_Sounds[i].sound == sound)
+        {
+            m_Sounds.erase(m_Sounds.begin() + i);
+            return;
+        }
+    }
 }
 
-void SGSound::System::releaseQueuedSound(int index)
+void SGSound::System::releaseSound(sound_id sound)
+{
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
+    //Get sound pointer
+    FMOD::Sound* soundPtr = NULL;
+    for (int i = 0; i < m_Sounds.size(); i++)
+    {
+        if (m_Sounds[i].id == sound)
+        {
+            soundPtr = m_Sounds[i].sound;
+        }
+    }
+
+    //If found, release
+    if (soundPtr == NULL)
+    {
+        return;
+    }
+    releaseSound(soundPtr);
+}
+
+void SGSound::System::releaseQueuedSound(int& index)
 {
     FMOD_OPENSTATE state;
     m_ReleaseQueue[index]->getOpenState(&state, NULL, NULL, NULL);
@@ -96,31 +179,43 @@ void SGSound::System::releaseQueuedSound(int index)
     }
     m_ReleaseQueue[index]->release();
     m_ReleaseQueue.erase(m_ReleaseQueue.begin() + index);
+    index--;
 }
 
 void SGSound::System::update()
 {
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
     m_System->update();
     for (int i = 0; i < m_ReleaseQueue.size(); i++)
     {
         releaseQueuedSound(i);
     }
+
+    //Play sounds that should be played
+    for (int i = 0; i < m_Sounds.size(); i++)
+    {
+        if (m_Sounds[i].shouldPlay && !m_Sounds[i].isPlaying)
+        {
+            SoundData& data = m_Sounds[i];
+            if (playSoundInternal(data.sound, data.channel, data.group))
+            {
+                data.isPlaying = true;
+            }
+        }
+    }
 }
 
 void SGSound::System::clean()
 {
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
+    m_Sounds.clear();
+    m_ReleaseQueue.clear();
     m_System->release();
-    for (int i = 0; i < m_ReleaseQueue.size(); i++)
-    {
-        releaseQueuedSound(i);
-    }
-    for (int i = 0; i < m_ChannelGroups.size(); i++)
-    {
-        m_ChannelGroups[i]->release();
-    }
+    m_System->close();
 }
 
 void SGSound::System::setChannelGroupVolume(ChannelGroup group, float volume)
 {
+    std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
     m_ChannelGroups[(int)group]->setVolume(volume);
 }

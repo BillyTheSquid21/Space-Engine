@@ -12,6 +12,7 @@
 #include "game/objects/ObjectTypes.hpp"
 #include "game/gui/GUI.h"
 #include "game/gui/OverworldGUI.h"
+#include "game/gui/OptionsGUI.h"
 #include "game/utility/GameText.h"
 #include "game/states/StateRenderers.h"
 #include "game/utility/Input.hpp"
@@ -125,6 +126,7 @@ private:
 	bool m_Sample = false;
 	bool m_ShowDebug = false;
 	bool m_ShowMenu = false;
+	bool m_ShowOptions = false;
 
 	//Test battle
 	void startBattle();

@@ -31,7 +31,6 @@ void Options::write()
     ifs.close();
 
     float effVol; effects->getVolume(&effVol);
-    EngineLog("VOL: ", effVol);
     doc["effectsVol"].SetFloat(effVol);
 
     float musVol; effects->getVolume(&musVol);

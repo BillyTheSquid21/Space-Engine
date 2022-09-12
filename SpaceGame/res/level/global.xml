@@ -1,5 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Level>
-	<Objects>
-	</Objects>
+  <Objects>
+    <LoadingZones name="LoadingZones">
+      <Zone>
+        <X>-160</X>
+        <Z>0</Z>
+        <Width>544</Width>
+        <Height>672</Height>
+        <L1ID>0</L1ID>
+        <L2ID>1</L2ID>
+      </Zone>
+    </LoadingZones>
+  </Objects>
 </Level>
