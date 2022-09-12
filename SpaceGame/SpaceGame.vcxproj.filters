@@ -587,6 +587,9 @@
     <ClInclude Include="include\game\data\Options.h">
       <Filter>Header Files\Game\Data</Filter>
     </ClInclude>
+    <ClInclude Include="include\core\Run.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vert\Default_CT_Shader.vert">

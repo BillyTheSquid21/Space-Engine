@@ -216,6 +216,7 @@
     <ClInclude Include="include\core\GameObject.hpp" />
     <ClInclude Include="include\core\Message.hpp" />
     <ClInclude Include="include\core\ObjManagement.h" />
+    <ClInclude Include="include\core\Run.h" />
     <ClInclude Include="include\core\Sound.h" />
     <ClInclude Include="include\core\State.hpp" />
     <ClInclude Include="include\game\data\Options.h" />
