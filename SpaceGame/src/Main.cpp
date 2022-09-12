@@ -1,4 +1,5 @@
-#include "game/DemoGame.h"
+#include <utility/SGUtil.h>
+#include <core/Game.h>
 #include <cstdlib>
 #include <chrono>
 #include <thread>
@@ -8,7 +9,7 @@ const char SG_VERSION[]{ "0.6" };
 using namespace std::chrono;
 
 //Pointer to game kept outside for key callback benifit - will auto destroy
-std::shared_ptr<DemoGame> game;
+std::shared_ptr<Game> game;
 
 int main(void) //TODO: get delta time working perfectly
 {   
@@ -21,7 +22,7 @@ int main(void) //TODO: get delta time working perfectly
     //Heap allocates to new game, creates with resolution and name on tag - 
     //replace with derived game class
     {
-        std::shared_ptr<DemoGame> gameInit(new DemoGame(640, 640));
+        std::shared_ptr<Game> gameInit(new Game(640, 640));
         game = gameInit;
     }
     if (!game->init("Space Game", KeyCallback, MouseCallback, ScrollCallback)) {
