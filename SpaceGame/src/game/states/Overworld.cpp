@@ -324,7 +324,29 @@ void Overworld::update(double deltaTime, double time) {
            m_MusicChannels[m_Channel]->stop();
            m_MusicChannels[m_Channel] = nullptr;
            m_System->releaseSound(m_MusicIDS[m_Channel]);
+           m_MusicIDS[m_Channel] = 0;
            m_Song = musicPath;
+        }
+        else //Case if no music present
+        {
+            if (m_MusicIDS[0])
+            {
+                m_System->releaseSound(m_MusicIDS[0]);
+                m_MusicIDS[0] = 0;
+            }
+            if (m_MusicIDS[1])
+            {
+                m_System->releaseSound(m_MusicIDS[1]);
+                m_MusicIDS[1] = 0;
+            }
+            if (m_MusicChannels[0])
+            {
+                m_MusicChannels[0]->stop(); m_MusicChannels[0] = nullptr;
+            }
+            if (m_MusicChannels[1])
+            {
+                m_MusicChannels[1]->stop(); m_MusicChannels[1] = nullptr;
+            }
         }
     }
     
