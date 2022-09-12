@@ -4,7 +4,7 @@
 #include <thread>
 
 //Engine version tag
-const char SG_VERSION[]{ "0.5" };
+const char SG_VERSION[]{ "0.6" };
 using namespace std::chrono;
 
 //Pointer to game kept outside for key callback benifit - will auto destroy
