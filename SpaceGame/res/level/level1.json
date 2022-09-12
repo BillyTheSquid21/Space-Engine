@@ -11,7 +11,7 @@
   "lightDirY": 0.5,
   "lightDirZ": 0.52,
   "levelTileset": 0,
-  "levelMusic": "test",
+  "levelMusic": "sleepwalk",
   "worldLevels": "0",
   "planeHeightsR0": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
   "planeDirectionsR0": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
@@ -130,8 +130,8 @@
   "l0PlanePermissionsR24": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
   "l0PlanePermissionsR25": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
   "l0PlanePermissionsR26": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
-  "l0PlanePermissionsR27": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
-  "l0PlanePermissionsR28": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
-  "l0PlanePermissionsR29": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0",
+  "l0PlanePermissionsR27": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|11",
+  "l0PlanePermissionsR28": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|11",
+  "l0PlanePermissionsR29": "0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|11",
   "endTag": "end"
 }

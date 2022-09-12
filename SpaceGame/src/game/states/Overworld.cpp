@@ -25,7 +25,7 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     m_Renderer.initialiseRenderer(width, height, &m_ObjManager);
 
     //Init levels and scripts
-    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Data, &m_TextBuff, m_Input, m_System);
+    m_Levels.InitialiseLevels(&m_ObjManager, &m_Renderer, m_Data, &m_TextBuff, m_Input);
     std::function<void(World::LevelID)> ld = std::bind(&World::LevelContainer::SignalLoadLevel, &m_Levels, std::placeholders::_1);
     std::function<void(World::LevelID)> uld = std::bind(&World::LevelContainer::SignalUnloadLevel, &m_Levels, std::placeholders::_1);
     OverworldScript::init(m_Data, m_Input, ld, uld);
@@ -48,18 +48,21 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     std::shared_ptr<GameGUI::TextBox> tex3(new GameGUI::TextBox(m_CurrentLevelStr));
     std::shared_ptr<GameGUI::TextBox> tex4(new GameGUI::TextBox(m_CurrentTileStr));
     std::shared_ptr<GameGUI::TextBox> tex5(new GameGUI::TextBox(m_ObjectCountStr));
+    std::shared_ptr<GameGUI::TextBox> tex6(new GameGUI::TextBox(m_Song));
 
     tex->setNest(0);
     tex2->setNest(0);
     tex3->setNest(0);
     tex4->setNest(0);
     tex5->setNest(0);
+    tex6->setNest(0);
     
     m_HUD.addElement(tex);
     m_HUD.addElement(tex2);
     m_HUD.addElement(tex3);
     m_HUD.addElement(tex4);
     m_HUD.addElement(tex5);
+    m_HUD.addElement(tex6);
 
     std::shared_ptr<OverworldMenu> menu(new OverworldMenu());
     menu->m_Width = 300.0f; menu->m_Height = m_Height - 20.0f;
@@ -306,6 +309,26 @@ void Overworld::update(double deltaTime, double time) {
     m_CurrentTileStr = "Current Tile: " + std::to_string((int)*m_LocationX) + ", " + std::to_string((int)*m_LocationZ);
     m_ObjectCountStr = "Objects: " + std::to_string(m_ObjManager.getObjectCount());
    
+    //Update level
+    if (m_PlayerPtr->m_CurrentLevel != m_LastLevelID)
+    {
+        m_LastLevelID = m_PlayerPtr->m_CurrentLevel;
+
+        //Update music
+        std::string musicPath = m_Levels.getLevel(m_LastLevelID).getMusic();
+        if (musicPath != "none")
+        {
+           m_MusicIDS[m_Channel] = m_System->loadSound(("res/sound/music/" + musicPath + ".wav").c_str());
+           m_System->playSound(m_MusicIDS[m_Channel], &m_MusicChannels[m_Channel], SGSound::ChannelGroup::MUSIC);
+           m_Channel = (char)(!(bool)(m_Channel));
+           m_MusicChannels[m_Channel]->stop();
+           m_MusicChannels[m_Channel] = nullptr;
+           m_System->releaseSound(m_MusicIDS[m_Channel]);
+           m_Song = musicPath;
+        }
+    }
+    
+
     //Start battle
     if (m_StartBattle && (m_PlayerPtr->m_Walking || m_PlayerPtr->m_Running))
     {

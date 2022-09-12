@@ -89,6 +89,7 @@ private:
 	//Test level
 	World::LevelContainer m_Levels;
 	std::shared_ptr<Ov_Sprite::RunSprite> m_PlayerPtr;
+	World::LevelID m_LastLevelID = World::LevelID::LEVEL_NULL;
 
 	//Test obj mng
 	SGObject::ObjectManager m_ObjManager;
@@ -101,6 +102,9 @@ private:
 
 	//Test sound
 	SGSound::System* m_System = nullptr;
+	FMOD::Channel* m_MusicChannels[2]{ NULL, NULL };
+	SGSound::sound_id m_MusicIDS[2]{ };
+	char m_Channel = 0;
 
 	//Data
 	PlayerData* m_Data;
@@ -119,6 +123,7 @@ private:
 	std::string m_CurrentLevelStr = "";
 	std::string m_CurrentTileStr = ""; 
 	std::string m_ObjectCountStr = "";
+	std::string m_Song = "";
 	int* m_LocationX = nullptr;
 	int* m_LocationZ = nullptr;
 	GameGUI::TextBoxBuffer m_TextBuff;
