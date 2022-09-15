@@ -248,6 +248,16 @@ public:
 			}
 			m_Index++;
 			return true;
+		case ScriptInstruction::HEAL_PARTY:
+			{
+				Party& party = m_Data->playerParty;
+				for (int i = 0; i < party.size(); i++)
+				{
+					party[i].health = party[i].stats.hp;
+				}
+			}
+			m_Index++;
+			return true;
 		case ScriptInstruction::SET_PLAYER_TILE:
 			{
 				//Get current tile

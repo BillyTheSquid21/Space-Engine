@@ -126,6 +126,10 @@ ScriptInstruction ScriptParse::GetInstruction(std::string instr)
 	{
 		return ScriptInstruction::GIVE_ITEM;
 	}
+	else if (instr == "-HEAL_PARTY")
+	{
+		return ScriptInstruction::HEAL_PARTY;
+	}
 	else if (instr == "-TAKE_ITEM")
 	{
 		return ScriptInstruction::TAKE_ITEM;

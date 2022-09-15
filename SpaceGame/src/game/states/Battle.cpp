@@ -169,6 +169,12 @@ void Battle::startBattle(Party* partyA, Party* partyB)
     PokemonBattle::textBuffer.clear();
 }
 
+void Battle::startBattleOverworld(Party* partyA, Party* partyB)
+{
+    startBattle(partyA, partyB);
+    m_DeallocateEnemy = true;
+}
+
 void Battle::setOverworldFunction(std::function<void(bool)> overworld)
 {
     //Overworld
@@ -297,5 +303,12 @@ void Battle::handleInput(int key, int scancode, int action, int mods)
 void Battle::endBattle()
 {
     this->setActive(false);
+    if (m_DeallocateEnemy)
+    {
+        if (m_EnemyParty)
+        {
+            delete m_EnemyParty;
+        }
+    }
     m_OverworldEnable(true);
 }

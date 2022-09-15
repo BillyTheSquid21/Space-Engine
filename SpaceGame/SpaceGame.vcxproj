@@ -162,6 +162,7 @@
     <ClCompile Include="src\game\gui\MainMenuGUI.cpp" />
     <ClCompile Include="src\game\gui\OptionsGUI.cpp" />
     <ClCompile Include="src\game\gui\OverworldGUI.cpp" />
+    <ClCompile Include="src\game\level\BattleLoad.cpp" />
     <ClCompile Include="src\game\level\World.cpp" />
     <ClCompile Include="src\game\level\WorldObjectLoader.cpp" />
     <ClCompile Include="src\game\objects\ActionTile.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="include\game\gui\OptionsGUI.h" />
     <ClInclude Include="include\game\gui\OverworldGUI.h" />
     <ClInclude Include="include\game\items\Items.hpp" />
+    <ClInclude Include="include\game\level\BattleLoad.h" />
     <ClInclude Include="include\game\level\TextureSlots.hpp" />
     <ClInclude Include="include\game\level\World.h" />
     <ClInclude Include="include\game\level\WorldObjectLoader.h" />

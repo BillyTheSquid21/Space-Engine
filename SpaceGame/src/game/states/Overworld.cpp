@@ -101,13 +101,9 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     m_Data->playerParty[1].id = 9;
     GeneratePokemon(m_Data->playerParty[1].id, m_Data->playerParty[1]);
     SetPkmStatsFromLevel(m_Data->playerParty[1]);
-    enemy[0].id = 467;
-    GeneratePokemon(enemy[0].id, enemy[0]);
-    SetPkmStatsFromLevel(enemy[0]);
 
     m_Data->playerParty[0].nickname = PokemonDataBank::GetPokemonName(m_Data->playerParty[0].id);
     m_Data->playerParty[1].nickname = PokemonDataBank::GetPokemonName(m_Data->playerParty[1].id);
-    enemy[0].nickname = PokemonDataBank::GetPokemonName(467);
     m_Data->playerParty[0].moves[0].id = 33;
     m_Data->playerParty[0].moves[1].id = 77;
     m_Data->playerParty[0].moves[2].id = 22;
@@ -115,10 +111,8 @@ void Overworld::init(int width, int height, PlayerData* data, World::LevelID lev
     m_Data->playerParty[1].moves[1].id = 130;
     m_Data->playerParty[1].moves[2].id = 399;
     m_Data->playerParty[1].moves[2].id = 58;
-    enemy[0].moves[0].id = 7;
     PokemonDataBank::LoadPokemonMoves(m_Data->playerParty[0]);
     PokemonDataBank::LoadPokemonMoves(m_Data->playerParty[1]);
-    PokemonDataBank::LoadPokemonMoves(enemy[0]);
 
     m_Pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
     m_Pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
@@ -539,5 +533,18 @@ void Overworld::handleInput(int key, int scancode, int action, int mods)
 void Overworld::startBattle()
 {
     this->setActive(false);
-    m_BattleEnable(&m_Data->playerParty, &enemy);
+
+    //Steps to add
+    //1. Determine if is a wild or enemy encounter
+    //2. If wild, pick random pokemon and run
+    //2.a. Wild will load "level" + id + "_pok.xml", accumulate all pokemon and pick based on rate
+    //3. If enemy, load enemy team and run
+    //4. After battle has finished, deallocate enemy party memory from inside battle
+    Party* enemy = new Party();
+    
+    //Test
+    LoadWildEncounter(enemy, m_CurrentLevel);
+    
+    //Run battle
+    m_BattleEnable(&m_Data->playerParty, enemy);
 }

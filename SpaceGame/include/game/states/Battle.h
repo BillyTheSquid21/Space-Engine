@@ -73,6 +73,7 @@ public:
 	void purgeRequiredData();
 	void handleInput(int key, int scancode, int action, int mods);
 	void startBattle(Party* partyA, Party* partyB);
+	void startBattleOverworld(Party* partyA, Party* partyB);
 
 	//Set pokemon sprite in a given slot
 	void setPokemonA(uint16_t id);
@@ -106,12 +107,13 @@ private:
 	bool m_ChangePkm = false;
 	MoveSlot selectedMove = MoveSlot::SLOT_NULL;
 
-	Party* m_PlayerParty;
-	Party* m_EnemyParty;
+	Party* m_PlayerParty = nullptr;
+	Party* m_EnemyParty = nullptr;
 
 	void endBattle();
 
 	std::function<void(bool)> m_OverworldEnable;
+	bool m_DeallocateEnemy = false; //For if enemy is not stored
 
 	//Thread pool for keeping battle separate
 	MtLib::ThreadPool* m_Pool;

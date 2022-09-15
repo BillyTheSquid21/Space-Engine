@@ -9,6 +9,7 @@
 #include "core/Message.hpp"
 #include "game/level/World.h"
 #include "game/level/WorldObjectLoader.h"
+#include "game/level/BattleLoad.h"
 #include "game/objects/Bridge.h"
 #include "game/objects/ObjectTypes.hpp"
 #include "game/gui/GUI.h"
@@ -112,9 +113,6 @@ private:
 	//Data
 	PlayerData* m_Data;
 	bool m_StartBattle = false;
-
-	//Test battle
-	Party enemy;
 
 	//Test pointer
 	bool m_AnimatePointer = true;

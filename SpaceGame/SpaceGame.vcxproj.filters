@@ -282,6 +282,9 @@
     <ClCompile Include="src\game\data\Options.cpp">
       <Filter>Source Files\Game\Data</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\level\BattleLoad.cpp">
+      <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -589,6 +592,9 @@
     </ClInclude>
     <ClInclude Include="include\core\Run.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\level\BattleLoad.h">
+      <Filter>Header Files\Game\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

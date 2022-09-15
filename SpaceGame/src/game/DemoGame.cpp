@@ -46,7 +46,7 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	mainMenuScreen->init(m_Width, m_Height, window, overworld, &m_Fonts, &sound);
 	mainMenuScreen->setActive(true);
 
-	std::function<void(Party*, Party*)> activateBattle = std::bind(&Battle::startBattle, battle.get(), std::placeholders::_1, std::placeholders::_2);
+	std::function<void(Party*, Party*)> activateBattle = std::bind(&Battle::startBattleOverworld, battle.get(), std::placeholders::_1, std::placeholders::_2);
 	std::function<void(bool)> activateOverworld = std::bind(&Overworld::setActive, overworld.get(), std::placeholders::_1);
 	battle->setOverworldFunction(activateOverworld); overworld->setBattleFunction(activateBattle);
 
