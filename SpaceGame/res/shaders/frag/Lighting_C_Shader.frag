@@ -10,8 +10,9 @@ layout(location = 0) out vec4 color;
 uniform sampler2D u_Texture;
 uniform vec3 u_AmbLight;
 uniform vec3 u_LightDir;
-uniform sampler2D u_ShadowMap;
+uniform sampler2DShadow u_ShadowMap;
 uniform int u_LightsActive;
+uniform int u_Samples;
 
 vec2 poissonDisk[16] = vec2[]( 
    vec2( -0.94201624, -0.39906216 ), 
@@ -34,7 +35,8 @@ vec2 poissonDisk[16] = vec2[](
 
 float calcBias()
 {
-	float bias = 0.0027*tan(acos(dot(v_Normal, u_LightDir)));
+    float dotProd = clamp(dot(v_Normal, u_LightDir), 0, 1);
+	float bias = 0.27*tan(acos(dotProd));
 	bias = clamp(bias, 0, 0.01);
 	return bias;
 }
@@ -46,14 +48,27 @@ float calcShadowFactor()
 	ProjCoords.y = 0.5 * ProjCoords.y + 0.5;
 
     float z = 0.5 * ProjCoords.z + 0.5;
-    float Depth = texture(u_ShadowMap, ProjCoords.xy).x;
 
 	float shadowFac = 0.0;
-	float samples = 4.0;
-	float coeff = 1.0/samples;
-	for (int i=0;i<samples;i++)
+	float coeff = 1.0/float(u_Samples);
+
+	//For samples > 4, if first 4 samples are within threshold of each other
+	//Bail and assume fully lit or in dark
+	float cumulative = 0.0;
+	for (int i=0;i<u_Samples;i++)
 	{
-		shadowFac += coeff*float((texture(u_ShadowMap, ProjCoords.xy + poissonDisk[i]/2000.0).x < (z-calcBias())));
+		float result = float(1.0-(texture(u_ShadowMap, vec3(ProjCoords.xy + poissonDisk[i]/6000,z - calcBias()))));
+		shadowFac += coeff * result;
+		cumulative += float(u_Samples > 4) * result; 
+		if (i == 5)
+		{
+			cumulative /= 4.0;
+			bool bail = (cumulative == 0 || cumulative == 1);
+			if (bail)
+			{
+				return float(cumulative > 0.5);
+			}
+		}
 	}
 	return shadowFac;
 }
@@ -73,11 +88,11 @@ void main()
 	vec3 diffuse = diff * vec3(0.5,0.5,0.5);
 	
 	//Shadow
-	float shadow = calcShadowFactor();
+	float shadow = 0.0;
 
-	if (u_LightsActive == 1)
+	if (u_LightsActive == 0)
 	{
-		shadow = 0.0;
+	    shadow = calcShadowFactor();
 	}
 
 	//Total

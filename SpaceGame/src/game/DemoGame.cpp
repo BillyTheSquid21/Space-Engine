@@ -18,6 +18,9 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 	Options::effects = sound.getGroup(SGSound::ChannelGroup::EFFECTS);
 	Options::music = sound.getGroup(SGSound::ChannelGroup::MUSIC);
 
+	//Load core sounds
+	m_CoreSounds.push_back(sound.loadSound("res/sound/ui/select.wav"));
+
 	//Load options from file
 	Options::load();
 
@@ -122,6 +125,11 @@ void DemoGame::render() {
 
 void DemoGame::clean()
 {
-	Options::write();
+	//Unload all core sounds
+	for (int i = 0; i < m_CoreSounds.size(); i++)
+	{
+		sound.releaseSound(m_CoreSounds[i]);
+	}
+	m_CoreSounds.clear();
 	Game::clean();
 }

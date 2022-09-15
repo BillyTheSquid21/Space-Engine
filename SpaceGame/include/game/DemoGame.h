@@ -29,6 +29,7 @@ public:
 private:
 	FontContainer m_Fonts;
 	std::vector<std::shared_ptr<SG::State>> m_States;
+	std::vector<SGSound::sound_id> m_CoreSounds; //Sounds that are used accross whole game
 	GameInput m_GameInput;
 	static PlayerData m_Data;
 };

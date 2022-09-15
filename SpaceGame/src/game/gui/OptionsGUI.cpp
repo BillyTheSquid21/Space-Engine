@@ -11,20 +11,31 @@ void OptionsMenu::openNest()
 
 	ImGui::Text("Audio Settings");
 
+	bool anyChanges = false;
+
 	//Effect volume slider
 	Options::effects->getVolume(&m_EffectVolume);
-	ImGui::SliderFloat("Effects Volume", &m_EffectVolume, 0.0f, 1.0f);
+	anyChanges |= ImGui::SliderFloat("Effects Volume", &m_EffectVolume, 0.0f, 1.0f);
 	Options::effects->setVolume(m_EffectVolume);
 
 	//Music volume
 	Options::music->getVolume(&m_MusicVolume);
-	ImGui::SliderFloat("Music Volume", &m_MusicVolume, 0.0f, 1.0f);
+	anyChanges |= ImGui::SliderFloat("Music Volume", &m_MusicVolume, 0.0f, 1.0f);
 	Options::music->setVolume(m_MusicVolume);
 
 	ImGui::Text("Graphics Settings");
 
 	//Grass Density
-	ImGui::SliderInt("Grass Density", &Options::grassDensity, 10, 40);
+	anyChanges |= ImGui::SliderInt("Grass Density", &Options::grassDensity, 10, 40);
+
+	//Shadow samples
+	anyChanges |= ImGui::SliderInt("Shadow Samples", &Options::shadowSamples, 2, 32);
+
+	if (anyChanges)
+	{
+		Options::write();
+	}
+
 	endMenuStyle();
 }
 

@@ -13,7 +13,7 @@ class OverworldMenu : public GameGUI::Divider
 public:
 	void setFontContainer(FontContainer* font) { m_Fonts = font; }
 	void setPlayerData(PlayerData* data) { m_PlayerData = data; }
-	void linkSoundSystem(SGSound::System* system) { m_System = system; m_System->loadSound(m_ClickPath.c_str(), m_ClickEffect); }
+	void linkSoundSystem(SGSound::System* system) { m_System = system; m_Sound = m_System->loadSound("res/sound/ui/select.wav"); }
 	void linkShowOptions(bool* set) { m_ShowOptions = set; }
 	void openNest();
 	void closeNest();
@@ -66,11 +66,11 @@ private:
 	SGSound::System* m_System = nullptr;
 
 	//Click
-	std::string m_ClickPath = "res/sound/ui/select.wav";
-	FMOD::Sound* m_ClickEffect = NULL;
-	FMOD::Channel* m_ClickChannel = NULL;
+	SGSound::sound_id m_Sound;
+	FMOD::Channel* m_ClickChannel[2] = { nullptr, nullptr };
+	char m_CurrentChannel = 0;
 
-	void clickSound() { m_System->playSound(m_ClickEffect, m_ClickChannel, SGSound::ChannelGroup::EFFECTS); };
+	void clickSound();
 };
 
 #endif

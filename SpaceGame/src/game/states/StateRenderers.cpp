@@ -427,13 +427,14 @@ void StateRender::Overworld::lightingPass(glm::vec3 lightDir)
 	//Scale lighting color
 	m_LightScaled = m_LightColor * m_LightScaleFactor;
 
-	//Set universal uniforms
+	//Set Overworld shader uniforms
 	shader(StateShader::OVERWORLD).setUniform("u_AmbLight", &m_LightScaled);
 	shader(StateShader::OVERWORLD).setUniform("u_LightDir", &lightDir);
 	shader(StateShader::OVERWORLD).setUniform("u_LightMVP", m_ShadowMap.getMVP());
 	shader(StateShader::OVERWORLD).setUniform("u_ShadowMap", OVERWORLD_SHADOWS_SLOT);
 	shader(StateShader::OVERWORLD).setUniform("u_LightsActive", m_HideShadows);
 	shader(StateShader::OVERWORLD).setUniform("u_Texture", OVERWORLD_TEXTURE_SLOT);
+	shader(StateShader::OVERWORLD).setUniform("u_Samples", Options::shadowSamples);
 
 	//Sprites
 	texture(StateTex::OVERWORLD_SPRITE).bind();
@@ -477,6 +478,7 @@ void StateRender::Overworld::lightingPass(glm::vec3 lightDir)
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_PlayerPos", &m_PlayerPos);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	shader(StateShader::OVERWORLD_GRASS).setUniform("u_Model", &this->at(StateRen::OVERWORLD).modelMatrix);
+	shader(StateShader::OVERWORLD_GRASS).setUniform("u_Samples", Options::shadowSamples/4); //Has lower samples due to many blades slowdown
 	this->at(StateRen::OVERWORLD_GRASS).drawPrimitives();
 	shader(StateShader::OVERWORLD_GRASS).unbind();
 
@@ -494,6 +496,7 @@ void StateRender::Overworld::lightingPass(glm::vec3 lightDir)
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_WeightA", m_WindWeightA);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_InvTranspModel", &WorldInvTranspModel);
 	shader(StateShader::OVERWORLD_TREE).setUniform("u_Model", &this->at(StateRen::OVERWORLD_TREE).modelMatrix);
+	shader(StateShader::OVERWORLD_TREE).setUniform("u_Samples", Options::shadowSamples);
 	this->at(StateRen::OVERWORLD_TREE).drawPrimitives();
 	shader(StateShader::OVERWORLD_TREE).unbind();
 }

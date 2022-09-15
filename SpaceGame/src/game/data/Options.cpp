@@ -3,6 +3,7 @@
 FMOD::ChannelGroup* Options::effects = nullptr;
 FMOD::ChannelGroup* Options::music = nullptr;
 int Options::grassDensity = 40;
+int Options::shadowSamples = 16;
 
 void Options::load()
 {
@@ -19,6 +20,9 @@ void Options::load()
 
     //Grass Density
     grassDensity = doc["grassDensity"].GetInt();
+
+    //Shadow samples
+    shadowSamples = doc["shadowSamples"].GetInt();
 }
 
 void Options::write()
@@ -33,10 +37,12 @@ void Options::write()
     float effVol; effects->getVolume(&effVol);
     doc["effectsVol"].SetFloat(effVol);
 
-    float musVol; effects->getVolume(&musVol);
+    float musVol; music->getVolume(&musVol);
     doc["musicVol"].SetFloat(musVol);
 
     doc["grassDensity"].SetInt(grassDensity);
+
+    doc["shadowSamples"].SetInt(shadowSamples);
 
     std::ofstream ofs("options.json");
     rapidjson::OStreamWrapper osw(ofs);

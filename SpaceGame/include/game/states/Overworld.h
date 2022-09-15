@@ -6,6 +6,7 @@
 #include "core/State.hpp"
 #include "core/ObjManagement.h"
 #include "core/Sound.h"
+#include "core/Message.hpp"
 #include "game/level/World.h"
 #include "game/level/WorldObjectLoader.h"
 #include "game/objects/Bridge.h"
@@ -67,6 +68,8 @@ private:
 
 	void loadObjectData();
 	void createGroups();
+	void handleOverworldMusic();
+	void clearMusicChannels();
 
 	//Group ptrs
 	SGObject::UpdateCompGroup<Ov_Sprite::TilePosition>* m_TileGroup;
@@ -132,6 +135,7 @@ private:
 	bool m_ShowDebug = false;
 	bool m_ShowMenu = false;
 	bool m_ShowOptions = false;
+	bool m_Noclip = false;
 
 	//Test battle
 	void startBattle();

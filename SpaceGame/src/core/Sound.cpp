@@ -118,7 +118,7 @@ void SGSound::System::playSound(sound_id sound, FMOD::Channel** channel, Channel
             {
                 if (*m_Sounds[i].chl[j].channel == *channel)
                 {
-                    m_Sounds[i].chl[j] = { channel, true, false };
+                    m_Sounds[i].chl[j] = { channel, true, false, -1, 0.0f };
                     m_Sounds[i].group = group;
                     return;
                 }
@@ -170,6 +170,68 @@ void SGSound::System::stopSound(FMOD::Channel*& channel, sound_id sound)
             return;
         }
     }
+}
+
+void SGSound::System::fadeSound(sound_id id, FMOD::Channel*& channel, float fadeTime, bool fadeIn)
+{
+    //Find channel instance, set the fade
+    for (int i = 0; i < m_Sounds.size(); i++)
+    {
+        if (m_Sounds[i].id == id)
+        {
+            for (int j = 0; j < m_Sounds[i].chl.size(); j++)
+            {
+                if (channel == *m_Sounds[i].chl[j].channel)
+                {
+                    m_Sounds[i].chl[j].fade = (char)fadeIn;
+                    m_Sounds[i].chl[j].fadeTime = fadeTime;
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void SGSound::System::fadeSoundInternal(FMOD::Channel*& channel, float fadeTime, bool fadeIn)
+{
+    channel->setPaused(true);
+    channel->setVolumeRamp(true);
+    int rate = 0;
+    m_System->getSoftwareFormat(&rate, 0, 0);
+    unsigned long long dspclock = 0u;
+    unsigned long long parentclock = 0u;
+    channel->getDSPClock(&dspclock, &parentclock);
+
+    //Add fade points
+    float volume = 1.0f;
+    int samples = 64;
+    unsigned long long ratexTime = (unsigned long long)((float)rate * fadeTime);
+    if (fadeIn)
+    {
+        channel->removeFadePoints(0, parentclock + ratexTime);
+        parentclock += 8096;
+        channel->setDelay(parentclock, 0);
+        channel->addFadePoint(parentclock, 0.0f);
+        //Set points to follow power law
+        for (int x = 0; x < samples; x++)
+        {
+            channel->addFadePoint(parentclock + (((x*x)/samples*samples)*ratexTime), (volume*x)/samples);
+        }
+        channel->addFadePoint(parentclock + ratexTime, volume);
+    }
+    else
+    {
+        channel->removeFadePoints(0, parentclock + ratexTime);
+        channel->addFadePoint(parentclock, volume);
+        //Set points to follow power law
+        for (int x = 0; x < samples; x++)
+        {
+            channel->addFadePoint(parentclock + (((x * x) / samples * samples) * ratexTime), 1.0f - ((volume * x) / samples));
+        }
+        channel->addFadePoint(parentclock + ratexTime, 0.0f);
+        channel->setDelay(0, parentclock + ratexTime, true);
+    }
+    channel->setPaused(false);
 }
 
 void SGSound::System::releaseSound(FMOD::Sound*& sound)
@@ -250,20 +312,39 @@ void SGSound::System::update()
         SoundData& data = m_Sounds[i];
         for (int j = 0; j < data.chl.size(); j++)
         {
+            ChannelInstance& chl = data.chl[j];
             //If was playing and is no longer, remove instance
-            bool isPlaying; (*data.chl[j].channel)->isPlaying(&isPlaying);
-            if (!isPlaying && data.chl[j].isPlaying)
+            bool isPlaying; (*chl.channel)->isPlaying(&isPlaying);
+            if (!isPlaying && chl.isPlaying)
             {
                 data.chl.erase(data.chl.begin() + j);
                 j--;
             }
-            else if (data.chl[j].shouldPlay && !data.chl[j].isPlaying)
+            else if (chl.shouldPlay && !chl.isPlaying)
             {
                 FMOD::Channel* channel;
                 if (playSoundInternal(data.sound, channel, data.group))
                 {
-                    *data.chl[j].channel = channel;
-                    data.chl[j].isPlaying = true;
+                    *chl.channel = channel;
+                    chl.isPlaying = true;
+
+                    //If fade, run fade
+                    if (chl.fade != -1)
+                    {
+                        fadeSoundInternal(*chl.channel, chl.fadeTime, (bool)chl.fade);
+                        chl.fade = -1;
+                        chl.fadeTime = 0.0f;
+                    }
+                }
+            }
+            else if (chl.shouldPlay && chl.isPlaying)
+            {
+                //If fade, run fade
+                if (chl.fade != -1)
+                {
+                    fadeSoundInternal(*chl.channel, chl.fadeTime, (bool)chl.fade);
+                    chl.fade = -1;
+                    chl.fadeTime = 0.0f;
                 }
             }
         }

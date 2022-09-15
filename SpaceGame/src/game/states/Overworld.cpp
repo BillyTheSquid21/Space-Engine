@@ -270,6 +270,53 @@ void Overworld::loadObjectData()
     //m_ObjManager.pushGameObject(ptrSprite, "Pointer");
 }
 
+void Overworld::handleOverworldMusic()
+{
+    //Update music
+    std::string musicPath = m_Levels.getLevel(m_LastLevelID).getMusic();
+    if (musicPath != "none")
+    {
+        m_MusicIDS[m_Channel] = m_System->loadSound(("res/sound/music/" + musicPath + ".wav").c_str());
+        m_System->playSound(m_MusicIDS[m_Channel], &m_MusicChannels[m_Channel], SGSound::ChannelGroup::MUSIC);
+        m_System->fadeSound(m_MusicIDS[m_Channel], m_MusicChannels[m_Channel], 2.0f, true);
+        m_Channel = (char)(!(bool)(m_Channel));
+        //Fade out other channel if is not nullptr
+        if (m_MusicChannels[m_Channel] != nullptr)
+        {
+            m_System->fadeSound(m_MusicIDS[m_Channel], m_MusicChannels[m_Channel], 2.0f, false);
+        }
+        m_Song = "Audio track: " + musicPath;
+    }
+    else //Case if no music present
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (m_MusicChannels[i])
+            {
+                m_System->fadeSound(m_MusicIDS[i], m_MusicChannels[i], 2.0f, false);
+            }
+        }
+    }
+}
+
+void Overworld::clearMusicChannels()
+{
+    //Check if a music channel is not nullptr and has volume 0 - if so, release sound
+    for (int i = 0; i < 2; i++)
+    {
+        if (m_MusicChannels[i] != nullptr)
+        {
+            float volume = 0.0f; m_MusicChannels[i]->getVolume(&volume);
+            if (volume <= 0.0f)
+            {
+                m_System->releaseSound(m_MusicIDS[i]);
+                m_MusicIDS[i] = 0;
+                m_MusicChannels[i] = nullptr;
+            }
+        }
+    }
+}
+
 void Overworld::update(double deltaTime, double time) {
     using namespace StateRender;
     if (!m_Sample)
@@ -313,43 +360,38 @@ void Overworld::update(double deltaTime, double time) {
     if (m_PlayerPtr->m_CurrentLevel != m_LastLevelID)
     {
         m_LastLevelID = m_PlayerPtr->m_CurrentLevel;
+        handleOverworldMusic();
+    }
+    clearMusicChannels();
 
-        //Update music
-        std::string musicPath = m_Levels.getLevel(m_LastLevelID).getMusic();
-        if (musicPath != "none")
+    //If noclip
+    if (m_Noclip)
+    {
+        if (m_Input->HELD_A)
         {
-           m_MusicIDS[m_Channel] = m_System->loadSound(("res/sound/music/" + musicPath + ".wav").c_str());
-           m_System->playSound(m_MusicIDS[m_Channel], &m_MusicChannels[m_Channel], SGSound::ChannelGroup::MUSIC);
-           m_Channel = (char)(!(bool)(m_Channel));
-           m_MusicChannels[m_Channel]->stop();
-           m_MusicChannels[m_Channel] = nullptr;
-           m_System->releaseSound(m_MusicIDS[m_Channel]);
-           m_MusicIDS[m_Channel] = 0;
-           m_Song = musicPath;
+            m_Renderer.camera.moveX(100.0f * deltaTime);
         }
-        else //Case if no music present
+        if (m_Input->HELD_D)
         {
-            if (m_MusicIDS[0])
-            {
-                m_System->releaseSound(m_MusicIDS[0]);
-                m_MusicIDS[0] = 0;
-            }
-            if (m_MusicIDS[1])
-            {
-                m_System->releaseSound(m_MusicIDS[1]);
-                m_MusicIDS[1] = 0;
-            }
-            if (m_MusicChannels[0])
-            {
-                m_MusicChannels[0]->stop(); m_MusicChannels[0] = nullptr;
-            }
-            if (m_MusicChannels[1])
-            {
-                m_MusicChannels[1]->stop(); m_MusicChannels[1] = nullptr;
-            }
+            m_Renderer.camera.moveX(-100.0f * deltaTime);
+        }
+        if (m_Input->HELD_W)
+        {
+            m_Renderer.camera.moveZ(100.0f * deltaTime);
+        }
+        if (m_Input->HELD_S)
+        {
+            m_Renderer.camera.moveZ(-100.0f * deltaTime);
+        }
+        if (m_Input->HELD_E)
+        {
+            m_Renderer.camera.moveY(100.0f * deltaTime);
+        }
+        if (m_Input->HELD_Q)
+        {
+            m_Renderer.camera.moveY(-100.0f * deltaTime);
         }
     }
-    
 
     //Start battle
     if (m_StartBattle && (m_PlayerPtr->m_Walking || m_PlayerPtr->m_Running))
@@ -465,6 +507,31 @@ void Overworld::handleInput(int key, int scancode, int action, int mods)
                 m_ShowOptions = false;
                 m_PlayerPtr->m_Busy = m_ShowMenu;
             }
+        }
+    }
+    if (key == GLFW_KEY_HOME)
+    {
+        if (action == GLFW_PRESS)
+        {
+            if (!m_Noclip)
+            {
+                m_PlayerPtr->messageAll((uint32_t)SGObject::Message::DEACTIVATE);
+                m_Noclip = true;
+            }
+            else
+            {
+                m_PlayerPtr->messageAll((uint32_t)SGObject::Message::ACTIVATE);
+                m_Noclip = false;
+            }
+        }
+    }
+    //Reload current level
+    if (key == GLFW_KEY_F4)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_Levels.UnloadLevel(m_CurrentLevel);
+            m_Levels.LoadLevel(m_CurrentLevel);
         }
     }
 }

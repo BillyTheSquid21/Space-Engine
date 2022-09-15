@@ -122,7 +122,10 @@ void OverworldMenu::pkmDivider(int slot)
 		text += "Health: " + std::to_string(m_PlayerData->playerParty[slot].health) + "\n";
 		text += "Status: " + std::to_string((int)m_PlayerData->playerParty[slot].condition);
 
-		ImGui::Button(text.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, m_Height / 6.2f));
+		if (ImGui::Button(text.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, m_Height / 6.2f)))
+		{
+			clickSound();
+		}
 		ImGui::PopStyleColor();
 	}
 }
@@ -486,4 +489,10 @@ void OverworldMenu::closeNest()
 	}
 	ImGui::PopFont();
 	Divider::closeNest();
+}
+
+void OverworldMenu::clickSound()
+{
+	m_System->playSound(m_Sound, &m_ClickChannel[m_CurrentChannel], SGSound::ChannelGroup::EFFECTS);
+	m_CurrentChannel = !m_CurrentChannel;
 }

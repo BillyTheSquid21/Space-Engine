@@ -15,6 +15,7 @@ public:
 	void setOverworldPtr(std::shared_ptr<Overworld> ptr) { m_OverworldPtr = ptr; }
 	void linkActiveFunc(std::function<void(bool)> func) { m_SetActive = func; }
 	void linkShowOptions(bool* opt) { m_ShowOptions = opt; }
+	void linkSoundSystem(SGSound::System* system) { m_System = system; m_Sound = m_System->loadSound("res/sound/ui/select.wav"); }
 	void openNest();
 	void closeNest();
 private:
@@ -22,6 +23,16 @@ private:
 	std::shared_ptr<Overworld> m_OverworldPtr;
 	FontContainer* m_Fonts = nullptr;
 	bool* m_ShowOptions = nullptr;
+
+	//Sound effects
+	SGSound::System* m_System = nullptr;
+
+	//Click
+	SGSound::sound_id m_Sound;
+	FMOD::Channel* m_ClickChannel[2] = { nullptr, nullptr };
+	char m_CurrentChannel = 0;
+
+	void clickSound();
 };
 
 #endif

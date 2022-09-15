@@ -7,6 +7,7 @@
 #include "renderer/Texture.h"
 #include "game/objects/ModelObject.hpp"
 #include "game/objects/OverworldSprite.h"
+#include "game/data/Options.h"
 #include "renderer/ShadowMap.h"
 #include "renderer/Transition.hpp"
 #include "game/objects/ObjectTypes.hpp"

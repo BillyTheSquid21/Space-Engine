@@ -39,6 +39,7 @@ namespace SGSound
 		void playSound(sound_id sound, FMOD::Channel** channel, ChannelGroup group);
 		void pauseSound(FMOD::Channel*& channel, sound_id sound);
 		void stopSound(FMOD::Channel*& channel, sound_id sound);
+		void fadeSound(sound_id id, FMOD::Channel*& channel, float fadeTime, bool fadeIn);
 		//Returns play position when paused
 		void update();
 		void clean();
@@ -49,6 +50,8 @@ namespace SGSound
 	private:
 		bool playSoundInternal(FMOD::Sound*& sound, FMOD::Channel*& channel, ChannelGroup group);
 		void releaseSoundInternal(FMOD::Sound*& sound);
+		void fadeSoundInternal(FMOD::Channel*& channel, float fadeTime, bool fadeIn);
+
 		void releaseQueuedSound(int& index);
 		std::vector<FMOD::Sound*> m_ReleaseQueue; //Queue ensures that if a loading sound is cut off it is disposed of
 		FMOD::System* m_System = NULL;
@@ -63,6 +66,8 @@ namespace SGSound
 			//Playback for one sound at a time
 			bool shouldPlay = false;
 			bool isPlaying = false;
+			char fade = -1; //0 is fade in, 1 is fade out
+			float fadeTime = 0.0f;
 		};
 
 		struct SoundData

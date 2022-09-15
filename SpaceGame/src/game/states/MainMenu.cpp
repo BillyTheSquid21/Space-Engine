@@ -46,6 +46,7 @@ void MainMenu::init(int width, int height, GLFWwindow* window, std::shared_ptr<O
     menu->setOverworldPtr(m_OverworldPtr);
     menu->linkActiveFunc(std::bind(&Overworld::setActive, this, std::placeholders::_1));
     menu->linkShowOptions(&m_ShowOptions);
+    menu->linkSoundSystem(m_System);
     m_GUI.addElement(menu);
 
     //Options
