@@ -3,8 +3,11 @@ import json
 from multiprocessing.dummy import Pool as ThreadPool
 from threading import Lock
 
+#Edit this script to set the paths and ids properly
+
 #Mutex for threading
 mutex = Lock()
+pmutex = Lock()
 
 #Paths
 csvPath = "C:\\Users\\yoshi\\Downloads\\pokedex-master\\pokedex-master\\pokedex\\data\\csv\\pokemon_moves.csv"
@@ -16,26 +19,28 @@ mainID = 'pokemon_id'
 #ID to separate inner values from
 innerID = 'move_id'
 
-def processEntries(ids, data, csvf, csvReader):
+#Keep track of tasks
+tasksTotal = 0
+
+def processEntries(ids, data, path, tasksTotal):
     try:
-        csvf.seek(0)
-        for rows in csvReader:
-            key = rows[mainID]
-            if key == ids:
-                rows.pop(mainID)
-                mutex.acquire()
-                try:
-                    if key not in data:
-                        data[key] = dict()
-                    data[key][rows[innerID]] = rows
-                    data[key][rows[innerID]].pop(innerID)
-                finally:
-                    mutex.release()
-        mutex.acquire()
-        try:
-            print("ID finished: ", ids)
-        finally:
-            mutex.release()
+        with open(path, encoding='utf-8') as csvf:
+            csvReader = csv.DictReader(csvf)
+            for rows in csvReader:
+                key = rows[mainID]
+                if key == ids:
+                    rows.pop(mainID)
+                    mutex.acquire()
+                    try:
+                        if key not in data:
+                            data[key] = dict()
+                        data[key][rows[innerID]] = rows
+                        data[key][rows[innerID]].pop(innerID)  
+                    finally:
+                        mutex.release()
+        pmutex.acquire()
+        print(ids, "done!")
+        pmutex.release()
     except:
         print("Task has failed at: ", ids)
 
@@ -53,17 +58,23 @@ def csvRead(path):
 
         #1.
         pkmID = []
+        tasks = 0
         for rows in csvReader:
             key = rows[mainID]
+            tasks += 1
             if not key in pkmID:
                 pkmID.append(key)
-
+        tasksTotal = tasks * len(pkmID)
+        print("Tasks: ", tasksTotal)
+        print("Running...")
+        
         #2.
 
         #Run thread for each id
-        pool = ThreadPool(1)
+        pool = ThreadPool(4)
         
-        results = pool.starmap(processEntries, [(ids, data, csvf, csvReader) for ids in pkmID])
+        results = pool.starmap(processEntries, [(ids, data, path, tasksTotal) for ids in pkmID])
+
         pool.close()
             
     #Return data   
