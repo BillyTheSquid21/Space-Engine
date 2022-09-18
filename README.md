@@ -1,4 +1,7 @@
-# SpaceGame
-Simple Primitive Rendering Engine
+# Space Engine
 
-Provides support for simple 3D, sprites, object management with components.
+A simple framework to easily build games utilizing 2D/3D rendering and object management, among other features.
+Not intended for commercial use at this time, and is purely for educational purposes.
+
+# Get Started
+
