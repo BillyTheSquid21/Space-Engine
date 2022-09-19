@@ -16,7 +16,7 @@ namespace SG
 	template<typename T>
 	std::shared_ptr<T> game;
 
-    const char SG_VERSION[]{ "0.6" };
+    const char SG_VERSION[]{ "0.7" };
 
     template<typename T>
     void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
