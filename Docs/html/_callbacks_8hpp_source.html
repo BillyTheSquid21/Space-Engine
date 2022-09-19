@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: D:/Repositories/Space Engine/SpaceGame/include/core/Callbacks.hpp Source File</title>
+<title>Space Engine: D:/Repositories/Space Engine/SpaceGame/include/core/Callbacks.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -93,33 +93,27 @@ $(document).ready(function(){initNavTree('_callbacks_8hpp_source.html',''); init
   <div class="headertitle"><div class="title">Callbacks.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="_callbacks_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#ifndef CALLBACKS_H</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#a69ea08f87397f5444bfbf1f30a8ce3fd">    3</a></span><span class="preprocessor">#define CALLBACKS_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#define CALLBACKS_H</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//callback pointer definition</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#a865e8ea12919c486f307441c2fc15540">    6</a></span><span class="keyword">typedef</span> void (*<a class="code hl_typedef" href="_callbacks_8hpp.html#a865e8ea12919c486f307441c2fc15540">Key_Callback</a>)(GLFWwindow* window, <span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#ac5ff64a3e2893b56ab073dbac5021e41">    7</a></span><span class="keyword">typedef</span> void (*<a class="code hl_typedef" href="_callbacks_8hpp.html#ac5ff64a3e2893b56ab073dbac5021e41">Scroll_Callback</a>)(GLFWwindow* window, <span class="keywordtype">double</span> xoffset, <span class="keywordtype">double</span> yoffset);</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#ad430807ac21df706160bc5b56d5a9153">    8</a></span><span class="keyword">typedef</span> void (*<a class="code hl_typedef" href="_callbacks_8hpp.html#ad430807ac21df706160bc5b56d5a9153">Mouse_Callback</a>)(GLFWwindow* window, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">typedef</span> void (*Key_Callback)(GLFWwindow* window, <span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">typedef</span> void (*Scroll_Callback)(GLFWwindow* window, <span class="keywordtype">double</span> xoffset, <span class="keywordtype">double</span> yoffset);</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">typedef</span> void (*Mouse_Callback)(GLFWwindow* window, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">//Callback declaration</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#a86ce2f5d11d5db52cf734f7848de4ead">   11</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_callbacks_8hpp.html#a86ce2f5d11d5db52cf734f7848de4ead">KeyCallback</a>(GLFWwindow* window, <span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#ad3d99bc3183f199990383d303c5a09e4">   12</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_callbacks_8hpp.html#ad3d99bc3183f199990383d303c5a09e4">MouseCallback</a>(GLFWwindow* window, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="_callbacks_8hpp.html#a3146e6069035b2bbe3b826f2db3321c7">   13</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_callbacks_8hpp.html#a3146e6069035b2bbe3b826f2db3321c7">ScrollCallback</a>(GLFWwindow* window, <span class="keywordtype">double</span> xoffset, <span class="keywordtype">double</span> yoffset);</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keywordtype">void</span> KeyCallback(GLFWwindow* window, <span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keywordtype">void</span> MouseCallback(GLFWwindow* window, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods);</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keywordtype">void</span> ScrollCallback(GLFWwindow* window, <span class="keywordtype">double</span> xoffset, <span class="keywordtype">double</span> yoffset);</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="a_callbacks_8hpp_html_a3146e6069035b2bbe3b826f2db3321c7"><div class="ttname"><a href="_callbacks_8hpp.html#a3146e6069035b2bbe3b826f2db3321c7">ScrollCallback</a></div><div class="ttdeci">void ScrollCallback(GLFWwindow *window, double xoffset, double yoffset)</div></div>
-<div class="ttc" id="a_callbacks_8hpp_html_a865e8ea12919c486f307441c2fc15540"><div class="ttname"><a href="_callbacks_8hpp.html#a865e8ea12919c486f307441c2fc15540">Key_Callback</a></div><div class="ttdeci">void(* Key_Callback)(GLFWwindow *window, int key, int scancode, int action, int mods)</div><div class="ttdef"><b>Definition:</b> Callbacks.hpp:6</div></div>
-<div class="ttc" id="a_callbacks_8hpp_html_a86ce2f5d11d5db52cf734f7848de4ead"><div class="ttname"><a href="_callbacks_8hpp.html#a86ce2f5d11d5db52cf734f7848de4ead">KeyCallback</a></div><div class="ttdeci">void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)</div></div>
-<div class="ttc" id="a_callbacks_8hpp_html_ac5ff64a3e2893b56ab073dbac5021e41"><div class="ttname"><a href="_callbacks_8hpp.html#ac5ff64a3e2893b56ab073dbac5021e41">Scroll_Callback</a></div><div class="ttdeci">void(* Scroll_Callback)(GLFWwindow *window, double xoffset, double yoffset)</div><div class="ttdef"><b>Definition:</b> Callbacks.hpp:7</div></div>
-<div class="ttc" id="a_callbacks_8hpp_html_ad3d99bc3183f199990383d303c5a09e4"><div class="ttname"><a href="_callbacks_8hpp.html#ad3d99bc3183f199990383d303c5a09e4">MouseCallback</a></div><div class="ttdeci">void MouseCallback(GLFWwindow *window, int button, int action, int mods)</div></div>
-<div class="ttc" id="a_callbacks_8hpp_html_ad430807ac21df706160bc5b56d5a9153"><div class="ttname"><a href="_callbacks_8hpp.html#ad430807ac21df706160bc5b56d5a9153">Mouse_Callback</a></div><div class="ttdeci">void(* Mouse_Callback)(GLFWwindow *window, int button, int action, int mods)</div><div class="ttdef"><b>Definition:</b> Callbacks.hpp:8</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_5c97d50dc5e986a91c2215656d7436da.html">SpaceGame</a></li><li class="navelem"><a class="el" href="dir_e5e8edc4cdbf69631711bac8439d03a7.html">include</a></li><li class="navelem"><a class="el" href="dir_875877832afa2c1cec4fdc521136c2a9.html">core</a></li><li class="navelem"><a class="el" href="_callbacks_8hpp.html">Callbacks.hpp</a></li>
+    <li class="navelem"><a class="el" href="dir_5c97d50dc5e986a91c2215656d7436da.html">SpaceGame</a></li><li class="navelem"><a class="el" href="dir_e5e8edc4cdbf69631711bac8439d03a7.html">include</a></li><li class="navelem"><a class="el" href="dir_875877832afa2c1cec4fdc521136c2a9.html">core</a></li><li class="navelem"><b>Callbacks.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

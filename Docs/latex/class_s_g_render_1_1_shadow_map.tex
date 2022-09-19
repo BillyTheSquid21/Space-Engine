@@ -1,100 +1,37 @@
 \hypertarget{class_s_g_render_1_1_shadow_map}{}\doxysection{SGRender\+::Shadow\+Map Class Reference}
 \label{class_s_g_render_1_1_shadow_map}\index{SGRender::ShadowMap@{SGRender::ShadowMap}}
-
-
-{\ttfamily \#include $<$Shadow\+Map.\+h$>$}
-
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a3aac1fea82a62a4cd3e2bbac3748ca50}{Shadow\+Map}} ()=default
-\item 
-\mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a07da38c97cd8e31b5cb724b78545b8c6}{Shadow\+Map}} (unsigned int width, unsigned int height)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a3d8d79e3b972ff15dc936ea5ecbc344c}{init}} ()
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a5567f465daec0a371a09cdcc42d50b26}{set\+Projection}} (glm\+::mat4 proj)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a8c1c38fdbdf337356d61ef6e4d506023}{bind\+For\+Writing}} ()
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a89f34643c22ae347a688b6d308a31244}{bind\+For\+Reading}} (unsigned int slot)
-\item 
-glm\+::mat4 $\ast$ \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a83644749af79dfc61dd7389955120beb}{calc\+MVP}} (glm\+::mat4 model, glm\+::mat4 light\+View)
-\item 
-glm\+::mat4 $\ast$ \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a3020617118d7e2446c756b369f3908d0}{get\+MVP}} ()
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_a0172a40e606a825958e018f24cb800b3}{start\+Capture}} () const
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shadow_map_add7ed8c3afade8002c663d9273a95df1}{end\+Capture}} (unsigned int width, unsigned int height) const
-\end{DoxyCompactItemize}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a3aac1fea82a62a4cd3e2bbac3748ca50}\label{class_s_g_render_1_1_shadow_map_a3aac1fea82a62a4cd3e2bbac3748ca50}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!ShadowMap@{ShadowMap}}
-\index{ShadowMap@{ShadowMap}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{ShadowMap()}{ShadowMap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily SGRender\+::\+Shadow\+Map\+::\+Shadow\+Map (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
 \mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a07da38c97cd8e31b5cb724b78545b8c6}\label{class_s_g_render_1_1_shadow_map_a07da38c97cd8e31b5cb724b78545b8c6}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!ShadowMap@{ShadowMap}}
-\index{ShadowMap@{ShadowMap}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{ShadowMap()}{ShadowMap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily SGRender\+::\+Shadow\+Map\+::\+Shadow\+Map (\begin{DoxyParamCaption}\item[{unsigned int}]{width,  }\item[{unsigned int}]{height }\end{DoxyParamCaption})}
-
-
-
-\doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a89f34643c22ae347a688b6d308a31244}\label{class_s_g_render_1_1_shadow_map_a89f34643c22ae347a688b6d308a31244}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!bindForReading@{bindForReading}}
-\index{bindForReading@{bindForReading}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{bindForReading()}{bindForReading()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shadow\+Map\+::bind\+For\+Reading (\begin{DoxyParamCaption}\item[{unsigned int}]{slot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a8c1c38fdbdf337356d61ef6e4d506023}\label{class_s_g_render_1_1_shadow_map_a8c1c38fdbdf337356d61ef6e4d506023}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!bindForWriting@{bindForWriting}}
-\index{bindForWriting@{bindForWriting}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{bindForWriting()}{bindForWriting()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shadow\+Map\+::bind\+For\+Writing (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a83644749af79dfc61dd7389955120beb}\label{class_s_g_render_1_1_shadow_map_a83644749af79dfc61dd7389955120beb}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!calcMVP@{calcMVP}}
-\index{calcMVP@{calcMVP}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{calcMVP()}{calcMVP()}}
-{\footnotesize\ttfamily glm\+::mat4 $\ast$ SGRender\+::\+Shadow\+Map\+::calc\+MVP (\begin{DoxyParamCaption}\item[{glm\+::mat4}]{model,  }\item[{glm\+::mat4}]{light\+View }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_add7ed8c3afade8002c663d9273a95df1}\label{class_s_g_render_1_1_shadow_map_add7ed8c3afade8002c663d9273a95df1}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!endCapture@{endCapture}}
-\index{endCapture@{endCapture}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{endCapture()}{endCapture()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shadow\+Map\+::end\+Capture (\begin{DoxyParamCaption}\item[{unsigned int}]{width,  }\item[{unsigned int}]{height }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a3020617118d7e2446c756b369f3908d0}\label{class_s_g_render_1_1_shadow_map_a3020617118d7e2446c756b369f3908d0}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!getMVP@{getMVP}}
-\index{getMVP@{getMVP}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{getMVP()}{getMVP()}}
-{\footnotesize\ttfamily glm\+::mat4 $\ast$ SGRender\+::\+Shadow\+Map\+::get\+MVP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
+{\bfseries Shadow\+Map} (unsigned int width, unsigned int height)
+\item 
 \mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a3d8d79e3b972ff15dc936ea5ecbc344c}\label{class_s_g_render_1_1_shadow_map_a3d8d79e3b972ff15dc936ea5ecbc344c}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!init@{init}}
-\index{init@{init}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{init()}{init()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shadow\+Map\+::init (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
+void {\bfseries init} ()
+\item 
 \mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a5567f465daec0a371a09cdcc42d50b26}\label{class_s_g_render_1_1_shadow_map_a5567f465daec0a371a09cdcc42d50b26}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!setProjection@{setProjection}}
-\index{setProjection@{setProjection}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{setProjection()}{setProjection()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shadow\+Map\+::set\+Projection (\begin{DoxyParamCaption}\item[{glm\+::mat4}]{proj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
+void {\bfseries set\+Projection} (glm\+::mat4 proj)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a8c1c38fdbdf337356d61ef6e4d506023}\label{class_s_g_render_1_1_shadow_map_a8c1c38fdbdf337356d61ef6e4d506023}} 
+void {\bfseries bind\+For\+Writing} ()
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a89f34643c22ae347a688b6d308a31244}\label{class_s_g_render_1_1_shadow_map_a89f34643c22ae347a688b6d308a31244}} 
+void {\bfseries bind\+For\+Reading} (unsigned int slot)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a83644749af79dfc61dd7389955120beb}\label{class_s_g_render_1_1_shadow_map_a83644749af79dfc61dd7389955120beb}} 
+glm\+::mat4 $\ast$ {\bfseries calc\+MVP} (glm\+::mat4 model, glm\+::mat4 light\+View)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a3020617118d7e2446c756b369f3908d0}\label{class_s_g_render_1_1_shadow_map_a3020617118d7e2446c756b369f3908d0}} 
+glm\+::mat4 $\ast$ {\bfseries get\+MVP} ()
+\item 
 \mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_a0172a40e606a825958e018f24cb800b3}\label{class_s_g_render_1_1_shadow_map_a0172a40e606a825958e018f24cb800b3}} 
-\index{SGRender::ShadowMap@{SGRender::ShadowMap}!startCapture@{startCapture}}
-\index{startCapture@{startCapture}!SGRender::ShadowMap@{SGRender::ShadowMap}}
-\doxysubsubsection{\texorpdfstring{startCapture()}{startCapture()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shadow\+Map\+::start\+Capture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
+void {\bfseries start\+Capture} () const
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shadow_map_add7ed8c3afade8002c663d9273a95df1}\label{class_s_g_render_1_1_shadow_map_add7ed8c3afade8002c663d9273a95df1}} 
+void {\bfseries end\+Capture} (unsigned int width, unsigned int height) const
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/\mbox{\hyperlink{_shadow_map_8h}{Shadow\+Map.\+h}}\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Shadow\+Map.\+h\end{DoxyCompactItemize}

@@ -1,45 +1,45 @@
 \hypertarget{_plane_8h_source}{}\doxysection{Plane.\+h}
 \label{_plane_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/renderer/Plane.h@{D:/Repositories/Space Engine/SpaceGame/include/renderer/Plane.h}}
-\mbox{\hyperlink{_plane_8h}{Go to the documentation of this file.}}
+
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef PLANE\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define PLANE\_H}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_vertex_8hpp}{Vertex.hpp}}"{}}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}Vertex.hpp"{}}}
 \DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}vector"{}}}
-\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_renderer_8hpp}{Renderer.hpp}}"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}Renderer.hpp"{}}}
 \DoxyCodeLine{8 }
-\DoxyCodeLine{9 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_geometry}{Geometry}}}
+\DoxyCodeLine{9 \textcolor{keyword}{namespace }Geometry}
 \DoxyCodeLine{10 \{}
 \DoxyCodeLine{11     \textcolor{keyword}{class }\mbox{\hyperlink{class_geometry_1_1_plane}{Plane}}}
 \DoxyCodeLine{12     \{}
 \DoxyCodeLine{13     \textcolor{keyword}{public}:}
-\DoxyCodeLine{14         \mbox{\hyperlink{class_geometry_1_1_plane_a41e9ed160d5cbf974f91921b38820da4}{\string~Plane}}();}
+\DoxyCodeLine{14         \mbox{\hyperlink{class_geometry_1_1_plane}{\string~Plane}}();}
 \DoxyCodeLine{15 }
 \DoxyCodeLine{16         \textcolor{comment}{//Generate planes}}
-\DoxyCodeLine{17         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a88fe479faba7719959db80db9363f0e8}{generatePlaneXY}}(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
-\DoxyCodeLine{18         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a0af4cddd72883f3f94659ff5c8103136}{generatePlaneXZ}}(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} zPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
-\DoxyCodeLine{19         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a7dd266c0a6fea43614cd31906a4616ea}{generatePlaneYZ}}(\textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} zPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
-\DoxyCodeLine{20         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a8a51cb35322d72a99e326728448e4b24}{generatePlaneNormals}}();}
+\DoxyCodeLine{17         \textcolor{keywordtype}{void} generatePlaneXY(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
+\DoxyCodeLine{18         \textcolor{keywordtype}{void} generatePlaneXZ(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} zPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
+\DoxyCodeLine{19         \textcolor{keywordtype}{void} generatePlaneYZ(\textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} zPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize);}
+\DoxyCodeLine{20         \textcolor{keywordtype}{void} generatePlaneNormals();}
 \DoxyCodeLine{21 }
 \DoxyCodeLine{22         \textcolor{comment}{//Load plane vertices from file -\/ TODO: implement}}
-\DoxyCodeLine{23         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a658f17529283efbf7c3819596b4d681e}{loadPlane}}() \{\};}
+\DoxyCodeLine{23         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} loadPlane() \{\};}
 \DoxyCodeLine{24 }
 \DoxyCodeLine{25         \textcolor{comment}{//Render}}
-\DoxyCodeLine{26         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a481ab9509ab7b644fe955631dcb1b103}{render}}();}
-\DoxyCodeLine{27         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_abbfbfc8c5113cd88f36ed537b83fd3d8}{setRenderer}}(\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}* ren) \{ m\_Renderer = ren; \}}
+\DoxyCodeLine{26         \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{27         \textcolor{keywordtype}{void} setRenderer(\mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}* ren) \{ m\_Renderer = ren; \}}
 \DoxyCodeLine{28 }
 \DoxyCodeLine{29         \textcolor{comment}{//Access specific tile}}
-\DoxyCodeLine{30         \mbox{\hyperlink{_geometry_8h_ac008c814d6f655a3903a3473e761d529}{Norm\_Tex\_Quad}}* \mbox{\hyperlink{class_geometry_1_1_plane_a9e9516410fab2c33c6774a57d71834ab}{accessQuad}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} y);}
-\DoxyCodeLine{31         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_a8bfdaad2a56c14753761b58b5c0191f6}{texturePlane}}(\textcolor{keywordtype}{float} u, \textcolor{keywordtype}{float} v, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height);}
+\DoxyCodeLine{30         Norm\_Tex\_Quad* accessQuad(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} x, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} y);}
+\DoxyCodeLine{31         \textcolor{keywordtype}{void} texturePlane(\textcolor{keywordtype}{float} u, \textcolor{keywordtype}{float} v, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height);}
 \DoxyCodeLine{32 }
 \DoxyCodeLine{33         \textcolor{comment}{//Purges data not needed without destruction of class}}
-\DoxyCodeLine{34         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_geometry_1_1_plane_ab23120a6e933628d751c06708f9db0fd}{purgeData}}();}
+\DoxyCodeLine{34         \textcolor{keywordtype}{void} purgeData();}
 \DoxyCodeLine{35 }
 \DoxyCodeLine{36     \textcolor{keyword}{private}:}
 \DoxyCodeLine{37         \textcolor{comment}{//Helper}}
-\DoxyCodeLine{38         \textcolor{keywordtype}{void} genQuads(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize, \mbox{\hyperlink{namespace_s_g_render_a766abf8b20e51c19b56222230e2f2ae8}{SGRender::Axis}} axis, \textcolor{keywordtype}{float} angle);}
+\DoxyCodeLine{38         \textcolor{keywordtype}{void} genQuads(\textcolor{keywordtype}{float} xPos, \textcolor{keywordtype}{float} yPos, \textcolor{keywordtype}{float} width, \textcolor{keywordtype}{float} height, \textcolor{keywordtype}{float} tileSize, SGRender::Axis axis, \textcolor{keywordtype}{float} angle);}
 \DoxyCodeLine{39 }
 \DoxyCodeLine{40         \mbox{\hyperlink{class_s_g_render_1_1_renderer}{SGRender::Renderer}}* m\_Renderer = \textcolor{keyword}{nullptr};}
 \DoxyCodeLine{41         std::vector<Norm\_Tex\_Quad> m\_Quads;}

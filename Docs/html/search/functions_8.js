@@ -1,25 +1,4 @@
 var searchData=
 [
-  ['id_0',['id',['../class_s_g_object_1_1_component.html#aeee1db5c94bf47960e8757309c15e555',1,'SGObject::Component::id()'],['../class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a',1,'SGObject::GObject::id()']]],
-  ['indexbuffer_1',['IndexBuffer',['../class_s_g_render_1_1_index_buffer.html#a8bfe888e2a5937f5309809ae8d7aa528',1,'SGRender::IndexBuffer']]],
-  ['init_2',['init',['../class_game.html#ada9c7e3ee9f48ef5e7cb8e829103791c',1,'Game::init()'],['../class_demo_game.html#afd669579ab350407877b1ea0d88d04c2',1,'DemoGame::init()'],['../class_overworld_script.html#af1ec7c999908dbb45e07bb8289749d62',1,'OverworldScript::init()'],['../class_battle_scene.html#ab51b3d26cd33a1ac3fc60b88c74f07ee',1,'BattleScene::init()'],['../class_battle.html#a64e2eb7633ecce9e7979113d45013dc3',1,'Battle::init()'],['../class_main_menu.html#a18714e3a2ea724ac212d654341243036',1,'MainMenu::init()'],['../class_overworld.html#a31e5913420b8e5d3d24c90621cfe4bb5',1,'Overworld::init()'],['../class_s_g_render_1_1_shadow_map_f_b_o.html#aa471442c01582f52287901ae15e72b3a',1,'SGRender::ShadowMapFBO::init()'],['../class_s_g_render_1_1_shadow_map.html#a3d8d79e3b972ff15dc936ea5ecbc344c',1,'SGRender::ShadowMap::init()'],['../class_transition.html#acb4d3a245ded9a338ced025714b737ca',1,'Transition::init()']]],
-  ['initialiseglobalobjects_3',['InitialiseGlobalObjects',['../class_world_1_1_level_container.html#a6b7aa5391dc1f29ce8866ecfaf1d9710',1,'World::LevelContainer']]],
-  ['initialiselevels_4',['InitialiseLevels',['../class_world_1_1_level_container.html#a87be47830ce3dfd481937f8dd588ed45',1,'World::LevelContainer']]],
-  ['initialiserenderer_5',['initialiseRenderer',['../class_state_render_1_1_overworld.html#a0047991ea813a3324f594ef45dae4673',1,'StateRender::Overworld::initialiseRenderer()'],['../class_state_render_1_1_battle.html#a8500336216254219b06fbb6209050fd2',1,'StateRender::Battle::initialiseRenderer()']]],
-  ['initializebag_6',['InitializeBag',['../class_pokemon_data_bank.html#acd0d94c055930286faed8238234baff2',1,'PokemonDataBank']]],
-  ['instanceinfo_7',['InstanceInfo',['../struct_s_g_render_1_1_renderer_1_1_instance_info.html#ac57a906aaabf431ef1a89ed5b50bb6b1',1,'SGRender::Renderer::InstanceInfo::InstanceInfo()=default'],['../struct_s_g_render_1_1_renderer_1_1_instance_info.html#afd35f079147aac521254539831da77a2',1,'SGRender::Renderer::InstanceInfo::InstanceInfo(void *v, unsigned int vF)']]],
-  ['isactive_8',['isActive',['../class_s_g_object_1_1_component.html#aac72b8a1bad003cf65e7ec246d7de959',1,'SGObject::Component']]],
-  ['isdead_9',['isDead',['../class_s_g_object_1_1_component.html#a37687e52d543d5a43d380ef94b95f386',1,'SGObject::Component::isDead()'],['../class_s_g_object_1_1_g_object.html#a389aa00fba2b6e37484b5c8b3e8296f5',1,'SGObject::GObject::isDead()']]],
-  ['isended_10',['isEnded',['../class_transition.html#aada25b59820019e966851bbe056ae3d4',1,'Transition']]],
-  ['isloaded_11',['isLoaded',['../class_model_1_1_model.html#a1552ebf7a825891fc8b344bd8c5d877c',1,'Model::Model']]],
-  ['ismodifyinglevel_12',['isModifyingLevel',['../class_state_render_1_1_overworld.html#af7374247cb0053ff345233fdb0ac3000',1,'StateRender::Overworld']]],
-  ['isnextpageready_13',['isNextPageReady',['../class_game_g_u_i_1_1_text_buffer.html#adf413ec1c778e72c549b9aa6c0f82c28',1,'GameGUI::TextBuffer']]],
-  ['isover_14',['isOver',['../class_pokemon_battle.html#a777ed1fe9ff4585cec218fe9c8fcf907',1,'PokemonBattle']]],
-  ['isready_15',['isReady',['../class_game_g_u_i_1_1_text_buffer.html#ab1828db22fdcd18a70d4a2b9ee9eabaf',1,'GameGUI::TextBuffer']]],
-  ['isseeded_16',['isSeeded',['../class_s_g_random_1_1_random_container.html#a962dd0f9ff662c27352a8d738d99d9da',1,'SGRandom::RandomContainer']]],
-  ['isstarted_17',['isStarted',['../class_transition.html#a037767781c1888929a0467a702f95bc8',1,'Transition']]],
-  ['isupdating_18',['isUpdating',['../class_pokemon_battle.html#a31b6e09fa9112be512ae8dfc28819a7a',1,'PokemonBattle']]],
-  ['iterate_19',['iterate',['../class_s_g_object_1_1_update_group_base.html#a1ea836671b312d70cccf7489d5e57944',1,'SGObject::UpdateGroupBase::iterate()'],['../class_s_g_object_1_1_update_comp_group.html#ab115d7a857bace7d7285d50df0810590',1,'SGObject::UpdateCompGroup::iterate()'],['../class_s_g_object_1_1_render_group_base.html#abdc0f47f4657fd058ad5a34ae79f75d1',1,'SGObject::RenderGroupBase::iterate()'],['../class_s_g_object_1_1_render_comp_group.html#ac1dda7ef265cd5645b444fa84aed2c79',1,'SGObject::RenderCompGroup::iterate()']]],
-  ['iteraterendercomps_20',['IterateRenderComps',['../namespace_s_g_object.html#ac17c3d94a279e3f5b6b1f2f7e99f0e21',1,'SGObject']]],
-  ['iterateupdatecomps_21',['IterateUpdateComps',['../namespace_s_g_object.html#aecbb693751fb07503a1b2937f26e6393',1,'SGObject']]]
+  ['kill_0',['kill',['../class_s_g_object_1_1_component.html#a54b51e7144eb44309c9c8880fe198dfd',1,'SGObject::Component']]]
 ];

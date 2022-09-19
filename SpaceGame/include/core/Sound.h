@@ -13,11 +13,17 @@
 
 namespace SGSound
 {
+	/**
+	* Channel group to use, currently only music or effects
+	*/
 	enum class ChannelGroup
 	{
 		NONE = -1, EFFECTS = 0, MUSIC = 1, CHANNEL_GROUP_COUNT = 2
 	};
 
+	/**
+	* Is essentially the hashed form of the path, which identifies it in storage 
+	*/
 	typedef size_t sound_id;
 
 	/** 
@@ -27,24 +33,51 @@ namespace SGSound
 	{
 	public:
 		bool init();
-		//Returns if result is FMOD_OK
+		/**
+		* Loads sound from path and writes location to ptr reference, storing the sound pointer internally as well
+		*/
 		sound_id loadSound(const char* path, FMOD::Sound*& sound);
+		/**
+		* Loads sound from path , storing the sound pointer internally as well
+		* Returns the id for the sound
+		*/
 		sound_id loadSound(const char* path);
-		//Loads sound as new regardless of if it already is loaded
+
+		/**
+		* Directly releases sound from pointer
+		*/
 		void releaseSound(FMOD::Sound*& sound);
+		/**
+		* Releases sound from internal based on ID
+		*/
 		void releaseSound(sound_id sound);
-		//Returns whether the playback has properly started
+		/**
+		* Plays sound from pointer directly
+		*/
 		bool playSound(FMOD::Sound*& sound, FMOD::Channel*& channel, ChannelGroup group);
-		//Queues to be played so is handled by the audio update
+		/**
+		* Queues sound to be played immediately, once is loaded
+		*/
 		void playSound(sound_id sound, FMOD::Channel** channel, ChannelGroup group);
+		/**
+		* Queues the sound to be paused immediately
+		*/
 		void pauseSound(FMOD::Channel*& channel, sound_id sound);
+		/**
+		* Queues the sound to be stopped immediately
+		*/
 		void stopSound(FMOD::Channel*& channel, sound_id sound);
+		/**
+		* Queues the sound to be faded over a given period
+		*/
 		void fadeSound(sound_id id, FMOD::Channel*& channel, float fadeTime, bool fadeIn);
-		//Returns play position when paused
+		
 		void update();
 		void clean();
 
-		//Adjust volume for channel
+		/**
+		* Sets volume for channel
+		*/
 		void setChannelGroupVolume(ChannelGroup group, float volume);
 		FMOD::ChannelGroup* getGroup(ChannelGroup group) { return m_ChannelGroups[(int)group]; }
 	private:

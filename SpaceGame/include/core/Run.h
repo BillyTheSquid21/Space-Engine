@@ -53,7 +53,7 @@ namespace SG
             std::shared_ptr<T> gameInit(new T(width, height));
             game<T> = gameInit;
         }
-        if (!game<T>->init("Space Game", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>, windowed)) {
+        if (!game<T>->init("Space Engine", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>, windowed)) {
             //If game fails to initialise program will not run
             return -1;
         }

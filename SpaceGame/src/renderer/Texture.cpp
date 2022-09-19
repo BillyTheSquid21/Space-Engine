@@ -1,11 +1,11 @@
 #include "renderer/Texture.h"
 
-void Texture::loadTexture(const std::string& path)
+void Tex::Texture::loadTexture(const std::string& path)
 {
     loadTexture(path, true);
 }
 
-inline void Texture::loadTexture(const std::string& path, bool flip)
+inline void Tex::Texture::loadTexture(const std::string& path, bool flip)
 {
     stbi_set_flip_vertically_on_load(flip);
     //if texture has been previously generated don't generate until buffer cleared
@@ -16,12 +16,12 @@ inline void Texture::loadTexture(const std::string& path, bool flip)
     m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
 }
 
-void Texture::generateTexture(unsigned int slot) {
+void Tex::Texture::generateTexture(unsigned int slot) {
 
     generateTexture(slot, m_LocalBuffer);
 }
 
-void Texture::generateTexture(unsigned int slot, void* buffer) {
+void Tex::Texture::generateTexture(unsigned int slot, void* buffer) {
 
     //Generate texture
     glGenTextures(1, &m_ID);
@@ -48,7 +48,7 @@ void Texture::generateTexture(unsigned int slot, void* buffer) {
     m_Slot = slot;
 }
 
-void Texture::generateTextureWrap(unsigned int slot, void* buffer) {
+void Tex::Texture::generateTextureWrap(unsigned int slot, void* buffer) {
 
     //Generate texture
     glGenTextures(1, &m_ID);
@@ -75,7 +75,7 @@ void Texture::generateTextureWrap(unsigned int slot, void* buffer) {
     m_Slot = slot;
 }
 
-void Texture::clearBuffer() {
+void Tex::Texture::clearBuffer() {
     if (m_LocalBuffer) {
         stbi_image_free(m_LocalBuffer);
         m_LocalBuffer = nullptr;
@@ -83,18 +83,18 @@ void Texture::clearBuffer() {
     }
 }
 
-Texture::~Texture()
+Tex::Texture::~Texture()
 {
     deleteTexture();
 }
 
-void Texture::bind() const
+void Tex::Texture::bind() const
 {
     glActiveTexture(GL_TEXTURE0 + m_Slot);
     glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
-void Texture::unbind() const
+void Tex::Texture::unbind() const
 {   
     glActiveTexture(GL_TEXTURE0 + m_Slot);
     glBindTexture(GL_TEXTURE_2D, 0);

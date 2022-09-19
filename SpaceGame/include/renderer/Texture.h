@@ -5,44 +5,62 @@
 #include "stb/stb_image_write.h"
 #include "renderer/Vertex.hpp"
 
-class Texture
-{
-public:
-    Texture() : m_ID(0), m_FilePath("res/debug.png"), m_LocalBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0) {};
-    ~Texture();
-
-    //Load texture into buffer from file path
-    void loadTexture(const std::string& path);
-    inline void loadTexture(const std::string& path, bool flip);
-    //Generate texture into slot
-    void generateTexture(unsigned int slot);
-    void generateTexture(unsigned int slot, void* buffer);
-    void generateTextureWrap(unsigned int slot, void* buffer); //TODO have 1 func
-    //Bind and Unbind texture
-    void bind() const;
-    void unbind() const;
-    //Clear buffer image data is loaded into
-    void clearBuffer();
-    void deleteTexture() const { glDeleteTextures(1, &m_ID); }
-
-    unsigned int getID() const { return m_ID; }
-
-    void setWidth(int width) { m_Width = width; }
-    void setHeight(int height) { m_Height = height; }
-    void setBPP(int bpp) { m_BPP = bpp; }
-    int width() const { return m_Width; }
-    int height() const { return m_Height; }
-
-private:
-    unsigned int m_ID; unsigned int m_Slot = 0;
-    std::string m_FilePath;
-    unsigned char* m_LocalBuffer = nullptr;
-    int m_Width, m_Height, m_BPP;
-
-};
-
 namespace Tex
 {
+    class Texture
+    {
+    public:
+        Texture() : m_ID(0), m_FilePath("res/debug.png"), m_LocalBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0) {};
+        ~Texture();
+
+        /**
+        * Load texture from path
+        */
+        void loadTexture(const std::string& path);
+        /**
+        * Load texture from path, specify if flipped on load
+        */
+        inline void loadTexture(const std::string& path, bool flip);
+        /**
+        * Generate texture in a given slot
+        */
+        void generateTexture(unsigned int slot);
+        /**
+        * Generate texture in a given slot from an external buffer
+        */
+        void generateTexture(unsigned int slot, void* buffer);
+        /**
+        * Generate texture in a given slot from an external buffer that is wrapped instead of clamped to edge
+        */
+        void generateTextureWrap(unsigned int slot, void* buffer); //TODO have 1 func
+        void bind() const;
+        void unbind() const;
+        /**
+        * Clear the local buffer - should do after has been generated as a glTexture
+        */
+        void clearBuffer();
+
+        /**
+        * Deletes the texture on the GPU
+        */
+        void deleteTexture() const { glDeleteTextures(1, &m_ID); }
+
+        unsigned int getID() const { return m_ID; }
+
+        void setWidth(int width) { m_Width = width; }
+        void setHeight(int height) { m_Height = height; }
+        void setBPP(int bpp) { m_BPP = bpp; }
+        int width() const { return m_Width; }
+        int height() const { return m_Height; }
+
+    private:
+        unsigned int m_ID; unsigned int m_Slot = 0;
+        std::string m_FilePath;
+        unsigned char* m_LocalBuffer = nullptr;
+        int m_Width, m_Height, m_BPP;
+
+    };
+
     struct alignas(1) TexChannel_4
     {
         unsigned char r;

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: D:/Repositories/Space Engine/SpaceGame/include/renderer/Plane.h Source File</title>
+<title>Space Engine: D:/Repositories/Space Engine/SpaceGame/include/renderer/Plane.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -93,44 +93,44 @@ $(document).ready(function(){initNavTree('_plane_8h_source.html',''); initResiza
   <div class="headertitle"><div class="title">Plane.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="_plane_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#ifndef PLANE_H</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno"><a class="line" href="_plane_8h.html#ae776d1cee004a360a72f863efcbdd810">    3</a></span><span class="preprocessor">#define PLANE_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#define PLANE_H</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="_vertex_8hpp.html">Vertex.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;Vertex.hpp&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;vector&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="_renderer_8hpp.html">Renderer.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;Renderer.hpp&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_geometry.html">Geometry</a></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>Geometry</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html">   11</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_geometry_1_1_plane.html">Plane</a></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a41e9ed160d5cbf974f91921b38820da4">   14</a></span>        <a class="code hl_function" href="class_geometry_1_1_plane.html#a41e9ed160d5cbf974f91921b38820da4">~Plane</a>();</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <a class="code hl_class" href="class_geometry_1_1_plane.html">~Plane</a>();</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <span class="comment">//Generate planes</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a88fe479faba7719959db80db9363f0e8">   17</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a88fe479faba7719959db80db9363f0e8">generatePlaneXY</a>(<span class="keywordtype">float</span> xPos, <span class="keywordtype">float</span> yPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a0af4cddd72883f3f94659ff5c8103136">   18</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a0af4cddd72883f3f94659ff5c8103136">generatePlaneXZ</a>(<span class="keywordtype">float</span> xPos, <span class="keywordtype">float</span> zPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a7dd266c0a6fea43614cd31906a4616ea">   19</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a7dd266c0a6fea43614cd31906a4616ea">generatePlaneYZ</a>(<span class="keywordtype">float</span> yPos, <span class="keywordtype">float</span> zPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a8a51cb35322d72a99e326728448e4b24">   20</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a8a51cb35322d72a99e326728448e4b24">generatePlaneNormals</a>();</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keywordtype">void</span> generatePlaneXY(<span class="keywordtype">float</span> xPos, <span class="keywordtype">float</span> yPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordtype">void</span> generatePlaneXZ(<span class="keywordtype">float</span> xPos, <span class="keywordtype">float</span> zPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize);</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordtype">void</span> generatePlaneYZ(<span class="keywordtype">float</span> yPos, <span class="keywordtype">float</span> zPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordtype">void</span> generatePlaneNormals();</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="comment">//Load plane vertices from file - TODO: implement</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a658f17529283efbf7c3819596b4d681e">   23</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a658f17529283efbf7c3819596b4d681e">loadPlane</a>() {};</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> loadPlane() {};</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="comment">//Render</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a481ab9509ab7b644fe955631dcb1b103">   26</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a481ab9509ab7b644fe955631dcb1b103">render</a>();</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#abbfbfc8c5113cd88f36ed537b83fd3d8">   27</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#abbfbfc8c5113cd88f36ed537b83fd3d8">setRenderer</a>(<a class="code hl_class" href="class_s_g_render_1_1_renderer.html">SGRender::Renderer</a>* ren) { m_Renderer = ren; }</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keywordtype">void</span> render();</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keywordtype">void</span> setRenderer(<a class="code hl_class" href="class_s_g_render_1_1_renderer.html">SGRender::Renderer</a>* ren) { m_Renderer = ren; }</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="comment">//Access specific tile</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a9e9516410fab2c33c6774a57d71834ab">   30</a></span>        <a class="code hl_define" href="_geometry_8h.html#ac008c814d6f655a3903a3473e761d529">Norm_Tex_Quad</a>* <a class="code hl_function" href="class_geometry_1_1_plane.html#a9e9516410fab2c33c6774a57d71834ab">accessQuad</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> y);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#a8bfdaad2a56c14753761b58b5c0191f6">   31</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#a8bfdaad2a56c14753761b58b5c0191f6">texturePlane</a>(<span class="keywordtype">float</span> u, <span class="keywordtype">float</span> v, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        Norm_Tex_Quad* accessQuad(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> y);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keywordtype">void</span> texturePlane(<span class="keywordtype">float</span> u, <span class="keywordtype">float</span> v, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="comment">//Purges data not needed without destruction of class</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="class_geometry_1_1_plane.html#ab23120a6e933628d751c06708f9db0fd">   34</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_geometry_1_1_plane.html#ab23120a6e933628d751c06708f9db0fd">purgeData</a>();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keywordtype">void</span> purgeData();</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="comment">//Helper</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">void</span> genQuads(<span class="keywordtype">float</span> xPos, <span class="keywordtype">float</span> yPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize, <a class="code hl_enumeration" href="namespace_s_g_render.html#a766abf8b20e51c19b56222230e2f2ae8">SGRender::Axis</a> axis, <span class="keywordtype">float</span> angle);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">void</span> genQuads(<span class="keywordtype">float</span> xPos, <span class="keywordtype">float</span> yPos, <span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <span class="keywordtype">float</span> tileSize, SGRender::Axis axis, <span class="keywordtype">float</span> angle);</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <a class="code hl_class" href="class_s_g_render_1_1_renderer.html">SGRender::Renderer</a>* m_Renderer = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        std::vector&lt;Norm_Tex_Quad&gt; m_Quads;</div>
@@ -143,30 +143,14 @@ $(document).ready(function(){initNavTree('_plane_8h_source.html',''); initResiza
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="a_geometry_8h_html_ac008c814d6f655a3903a3473e761d529"><div class="ttname"><a href="_geometry_8h.html#ac008c814d6f655a3903a3473e761d529">Norm_Tex_Quad</a></div><div class="ttdeci">#define Norm_Tex_Quad</div><div class="ttdef"><b>Definition:</b> Geometry.h:39</div></div>
-<div class="ttc" id="a_renderer_8hpp_html"><div class="ttname"><a href="_renderer_8hpp.html">Renderer.hpp</a></div></div>
-<div class="ttc" id="a_vertex_8hpp_html"><div class="ttname"><a href="_vertex_8hpp.html">Vertex.hpp</a></div></div>
 <div class="ttc" id="aclass_geometry_1_1_plane_html"><div class="ttname"><a href="class_geometry_1_1_plane.html">Geometry::Plane</a></div><div class="ttdef"><b>Definition:</b> Plane.h:12</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a0af4cddd72883f3f94659ff5c8103136"><div class="ttname"><a href="class_geometry_1_1_plane.html#a0af4cddd72883f3f94659ff5c8103136">Geometry::Plane::generatePlaneXZ</a></div><div class="ttdeci">void generatePlaneXZ(float xPos, float zPos, float width, float height, float tileSize)</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a41e9ed160d5cbf974f91921b38820da4"><div class="ttname"><a href="class_geometry_1_1_plane.html#a41e9ed160d5cbf974f91921b38820da4">Geometry::Plane::~Plane</a></div><div class="ttdeci">~Plane()</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a481ab9509ab7b644fe955631dcb1b103"><div class="ttname"><a href="class_geometry_1_1_plane.html#a481ab9509ab7b644fe955631dcb1b103">Geometry::Plane::render</a></div><div class="ttdeci">void render()</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a658f17529283efbf7c3819596b4d681e"><div class="ttname"><a href="class_geometry_1_1_plane.html#a658f17529283efbf7c3819596b4d681e">Geometry::Plane::loadPlane</a></div><div class="ttdeci">virtual void loadPlane()</div><div class="ttdef"><b>Definition:</b> Plane.h:23</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a7dd266c0a6fea43614cd31906a4616ea"><div class="ttname"><a href="class_geometry_1_1_plane.html#a7dd266c0a6fea43614cd31906a4616ea">Geometry::Plane::generatePlaneYZ</a></div><div class="ttdeci">void generatePlaneYZ(float yPos, float zPos, float width, float height, float tileSize)</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a88fe479faba7719959db80db9363f0e8"><div class="ttname"><a href="class_geometry_1_1_plane.html#a88fe479faba7719959db80db9363f0e8">Geometry::Plane::generatePlaneXY</a></div><div class="ttdeci">void generatePlaneXY(float xPos, float yPos, float width, float height, float tileSize)</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a8a51cb35322d72a99e326728448e4b24"><div class="ttname"><a href="class_geometry_1_1_plane.html#a8a51cb35322d72a99e326728448e4b24">Geometry::Plane::generatePlaneNormals</a></div><div class="ttdeci">void generatePlaneNormals()</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a8bfdaad2a56c14753761b58b5c0191f6"><div class="ttname"><a href="class_geometry_1_1_plane.html#a8bfdaad2a56c14753761b58b5c0191f6">Geometry::Plane::texturePlane</a></div><div class="ttdeci">void texturePlane(float u, float v, float width, float height)</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_a9e9516410fab2c33c6774a57d71834ab"><div class="ttname"><a href="class_geometry_1_1_plane.html#a9e9516410fab2c33c6774a57d71834ab">Geometry::Plane::accessQuad</a></div><div class="ttdeci">Norm_Tex_Quad * accessQuad(unsigned int x, unsigned int y)</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_ab23120a6e933628d751c06708f9db0fd"><div class="ttname"><a href="class_geometry_1_1_plane.html#ab23120a6e933628d751c06708f9db0fd">Geometry::Plane::purgeData</a></div><div class="ttdeci">void purgeData()</div></div>
-<div class="ttc" id="aclass_geometry_1_1_plane_html_abbfbfc8c5113cd88f36ed537b83fd3d8"><div class="ttname"><a href="class_geometry_1_1_plane.html#abbfbfc8c5113cd88f36ed537b83fd3d8">Geometry::Plane::setRenderer</a></div><div class="ttdeci">void setRenderer(SGRender::Renderer *ren)</div><div class="ttdef"><b>Definition:</b> Plane.h:27</div></div>
 <div class="ttc" id="aclass_s_g_render_1_1_renderer_html"><div class="ttname"><a href="class_s_g_render_1_1_renderer.html">SGRender::Renderer</a></div><div class="ttdef"><b>Definition:</b> Renderer.hpp:21</div></div>
-<div class="ttc" id="anamespace_geometry_html"><div class="ttname"><a href="namespace_geometry.html">Geometry</a></div><div class="ttdef"><b>Definition:</b> Geometry.h:42</div></div>
-<div class="ttc" id="anamespace_s_g_render_html_a766abf8b20e51c19b56222230e2f2ae8"><div class="ttname"><a href="namespace_s_g_render.html#a766abf8b20e51c19b56222230e2f2ae8">SGRender::Axis</a></div><div class="ttdeci">Axis</div><div class="ttdef"><b>Definition:</b> Vertex.hpp:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_5c97d50dc5e986a91c2215656d7436da.html">SpaceGame</a></li><li class="navelem"><a class="el" href="dir_e5e8edc4cdbf69631711bac8439d03a7.html">include</a></li><li class="navelem"><a class="el" href="dir_47d8015b3b76655222cf840396039b03.html">renderer</a></li><li class="navelem"><a class="el" href="_plane_8h.html">Plane.h</a></li>
+    <li class="navelem"><a class="el" href="dir_5c97d50dc5e986a91c2215656d7436da.html">SpaceGame</a></li><li class="navelem"><a class="el" href="dir_e5e8edc4cdbf69631711bac8439d03a7.html">include</a></li><li class="navelem"><a class="el" href="dir_47d8015b3b76655222cf840396039b03.html">renderer</a></li><li class="navelem"><b>Plane.h</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

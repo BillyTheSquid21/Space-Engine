@@ -1,21 +1,5 @@
 var searchData=
 [
-  ['accessquad_0',['accessQuad',['../class_geometry_1_1_plane.html#a9e9516410fab2c33c6774a57d71834ab',1,'Geometry::Plane']]],
-  ['actiontilecomponent_1',['ActionTileComponent',['../class_action_tile_component.html#a19b6f8bbbba6740a338ec3b71019874f',1,'ActionTileComponent::ActionTileComponent()=default'],['../class_action_tile_component.html#a112f05b80f992f2e4ef3d95f13660aad',1,'ActionTileComponent::ActionTileComponent(Ov_Sprite::RunSprite *player, World::Tile loc, World::WorldHeight height, World::LevelID id)']]],
-  ['active_2',['active',['../class_s_g_object_1_1_g_object.html#a4a09d01e2272c7a8ab9baec105f82a2e',1,'SGObject::GObject::active()'],['../class_s_g_1_1_state.html#a7c7ee645bc1ba25e5c3f10134e9208c6',1,'SG::State::active()']]],
-  ['addbuffer_3',['addBuffer',['../class_s_g_render_1_1_vertex_array.html#a614dff7d8c9cd5ed52b0ac9efad33d3e',1,'SGRender::VertexArray::addBuffer(const VertexBuffer &amp;vb, const VertexBufferLayout &amp;layout)'],['../class_s_g_render_1_1_vertex_array.html#a3256e7f6dbed738d7553203c0409fbb6',1,'SGRender::VertexArray::addBuffer(const VertexBuffer &amp;vb, const VertexBufferLayout &amp;layout, int start)']]],
-  ['addcomponent_4',['addComponent',['../class_s_g_object_1_1_update_comp_group.html#a207aef5ed43f3e789eed32fbdccb2b43',1,'SGObject::UpdateCompGroup::addComponent()'],['../class_s_g_object_1_1_render_comp_group.html#a4eedfa44a6fb63842bed6cebd7aba652',1,'SGObject::RenderCompGroup::addComponent()']]],
-  ['addelement_5',['addElement',['../class_game_g_u_i_1_1_g_u_i_container.html#a4a5dbe272e073a3450351df00a77af38',1,'GameGUI::GUIContainer']]],
-  ['addexistingcomponent_6',['addExistingComponent',['../class_s_g_object_1_1_update_comp_group.html#a5fa4477464173065151c60e1d0e18cab',1,'SGObject::UpdateCompGroup::addExistingComponent()'],['../class_s_g_object_1_1_render_comp_group.html#a6d3ede94bca743479f26913c760c3d3b',1,'SGObject::RenderCompGroup::addExistingComponent()']]],
-  ['addgrass_7',['addGrass',['../class_tall_grass_render_component.html#a07815e5f0c95b657cab1c78f9a1e85da',1,'TallGrassRenderComponent']]],
-  ['addinstances_8',['addInstances',['../class_s_g_render_1_1_renderer.html#a2b881c8e474bdaad3ed478502eb254e5',1,'SGRender::Renderer']]],
-  ['addtree_9',['addTree',['../class_tree_render_component.html#a52d652913160c0ab6a7a1bbb07d8dc92',1,'TreeRenderComponent']]],
-  ['allocatenpcovscript_10',['AllocateNPCOvScript',['../_n_p_c_ai_8h.html#a3334243926aa0845e60d39211791bd4a',1,'NPCAi.h']]],
-  ['anyheld_11',['anyHeld',['../class_game_input.html#a22790e77c995b3f620edc25d7b9a54f1',1,'GameInput']]],
-  ['ascendslope_12',['AscendSlope',['../namespace_ov___translation.html#a1252ca35e3e6b1f9c64971906bc10ac5',1,'Ov_Translation::AscendSlope(float *y, Norm_Tex_Quad *sprite, double deltaTime, bool running)'],['../namespace_ov___translation.html#a9dc0aa9f146414050efd88530b475c99',1,'Ov_Translation::AscendSlope(float *y, Norm_Tex_Quad *sprite, double deltaTime, bool running, double timer, bool verticalFirst)']]],
-  ['at_13',['at',['../class_state_render_1_1_overworld.html#ab593d241413a7d778162b25d5281504a',1,'StateRender::Overworld::at(StateRen slot)'],['../class_state_render_1_1_overworld.html#a1cee5f85161622b9e905163d32d48c79',1,'StateRender::Overworld::at(int slot)'],['../class_state_render_1_1_battle.html#a1ed5db601e6e9785e6b80e6f2260af4b',1,'StateRender::Battle::at(StateRen slot)'],['../class_state_render_1_1_battle.html#a17440261fd87926b234ecce10372531e',1,'StateRender::Battle::at(int slot)'],['../class_s_g_random_1_1_perlin2_d.html#a56b7cd669b9cb47e0aa9128e6507f4cc',1,'SGRandom::Perlin2D::at()']]],
-  ['atlas_14',['atlas',['../class_state_render_1_1_overworld.html#ac981d1f1c87068ef6ffe72340be57e47',1,'StateRender::Overworld']]],
-  ['attachtoobject_15',['attachToObject',['../class_s_g_object_1_1_component.html#a692e0bd6e2a922c1cdcd58378cb37fb0',1,'SGObject::Component']]],
-  ['awaitinput_16',['awaitInput',['../class_pokemon_battle.html#a3dcfc4fadf0f5d2bbc3e0fc61dcb247f',1,'PokemonBattle']]],
-  ['axialrotate_17',['AxialRotate',['../namespace_geometry.html#ae6f78235781c235bfd4b447462f2120c',1,'Geometry::AxialRotate(void *verticesArray, glm::vec3 rotationCentre, float angle, Shape type, SGRender::Axis axis)'],['../namespace_geometry.html#aa8cb016715557f7f69219db9add3022e',1,'Geometry::AxialRotate(void *verticesArray, glm::vec3 rotationCentre, float angle, size_t verticeCount, SGRender::Axis axis)']]]
+  ['addinstances_0',['addInstances',['../class_s_g_render_1_1_renderer.html#a2b881c8e474bdaad3ed478502eb254e5',1,'SGRender::Renderer']]],
+  ['attachtoobject_1',['attachToObject',['../class_s_g_object_1_1_component.html#a692e0bd6e2a922c1cdcd58378cb37fb0',1,'SGObject::Component']]]
 ];

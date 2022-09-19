@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: SGObject::GObject Class Reference</title>
+<title>Space Engine: SGObject::GObject Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -101,50 +101,39 @@ $(document).ready(function(){initNavTree('class_s_g_object_1_1_g_object.html',''
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="_game_object_8hpp_source.html">GameObject.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for SGObject::GObject:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="class_s_g_object_1_1_g_object.png" usemap="#SGObject::GObject_map" alt=""/>
-  <map id="SGObject::GObject_map" name="SGObject::GObject_map">
-<area href="class_bridge.html" alt="Bridge" shape="rect" coords="128,56,246,80"/>
-<area href="class_loading_zone.html" alt="LoadingZone" shape="rect" coords="128,112,246,136"/>
-<area href="class_model_object.html" alt="ModelObject" shape="rect" coords="128,168,246,192"/>
-<area href="class_ov___sprite_1_1_sprite.html" alt="Ov_Sprite::Sprite" shape="rect" coords="128,224,246,248"/>
-<area href="class_script_tile.html" alt="ScriptTile" shape="rect" coords="128,280,246,304"/>
-<area href="class_tall_grass_object.html" alt="TallGrassObject" shape="rect" coords="128,336,246,360"/>
-<area href="class_tree_object.html" alt="TreeObject" shape="rect" coords="128,392,246,416"/>
-<area href="class_warp_tile.html" alt="WarpTile" shape="rect" coords="128,448,246,472"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a05280f3b6c6fa464f2a37a83dd634d65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a05280f3b6c6fa464f2a37a83dd634d65">setID</a> (unsigned int <a class="el" href="class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a">id</a>)</td></tr>
+<tr class="memitem:a05280f3b6c6fa464f2a37a83dd634d65"><td class="memItemLeft" align="right" valign="top"><a id="a05280f3b6c6fa464f2a37a83dd634d65" name="a05280f3b6c6fa464f2a37a83dd634d65"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setID</b> (unsigned int id)</td></tr>
 <tr class="separator:a05280f3b6c6fa464f2a37a83dd634d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fa18a129c086048fbd0b0e3ec05af0a"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a">id</a> () const</td></tr>
+<tr class="memitem:a3fa18a129c086048fbd0b0e3ec05af0a"><td class="memItemLeft" align="right" valign="top"><a id="a3fa18a129c086048fbd0b0e3ec05af0a" name="a3fa18a129c086048fbd0b0e3ec05af0a"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> () const</td></tr>
 <tr class="separator:a3fa18a129c086048fbd0b0e3ec05af0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a395a5a9417b58686370d1889fc09b554"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a395a5a9417b58686370d1889fc09b554">messageUpdateAt</a> (uint32_t message, unsigned int <a class="el" href="class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a">id</a>)</td></tr>
+<tr class="memitem:a395a5a9417b58686370d1889fc09b554"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a395a5a9417b58686370d1889fc09b554">messageUpdateAt</a> (uint32_t message, unsigned int id)</td></tr>
 <tr class="separator:a395a5a9417b58686370d1889fc09b554"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0918fa689109c3c5e043a6a749bfe9be"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a0918fa689109c3c5e043a6a749bfe9be">messageRenderAt</a> (uint32_t message, unsigned int <a class="el" href="class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a">id</a>)</td></tr>
+<tr class="memitem:a0918fa689109c3c5e043a6a749bfe9be"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a0918fa689109c3c5e043a6a749bfe9be">messageRenderAt</a> (uint32_t message, unsigned int id)</td></tr>
 <tr class="separator:a0918fa689109c3c5e043a6a749bfe9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab92e28fb4192cb56a9dfea921f4c3e3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#aab92e28fb4192cb56a9dfea921f4c3e3">messageAllUpdate</a> (uint32_t message)</td></tr>
 <tr class="separator:aab92e28fb4192cb56a9dfea921f4c3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad709cdc8414ecebda958b3f49d10acf1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#ad709cdc8414ecebda958b3f49d10acf1">messageAllRender</a> (uint32_t message)</td></tr>
 <tr class="separator:ad709cdc8414ecebda958b3f49d10acf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa44e3b5a9c704cf55b66ee429d699d2e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#aa44e3b5a9c704cf55b66ee429d699d2e">messageAllExceptUpdate</a> (uint32_t message, unsigned int <a class="el" href="class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a">id</a>)</td></tr>
+<tr class="memitem:aa44e3b5a9c704cf55b66ee429d699d2e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#aa44e3b5a9c704cf55b66ee429d699d2e">messageAllExceptUpdate</a> (uint32_t message, unsigned int id)</td></tr>
 <tr class="separator:aa44e3b5a9c704cf55b66ee429d699d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbd22e654c5b0676cab4f5e5d538e4f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#afbd22e654c5b0676cab4f5e5d538e4f4">messageAllExceptRender</a> (uint32_t message, unsigned int <a class="el" href="class_s_g_object_1_1_g_object.html#a3fa18a129c086048fbd0b0e3ec05af0a">id</a>)</td></tr>
+<tr class="memitem:afbd22e654c5b0676cab4f5e5d538e4f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#afbd22e654c5b0676cab4f5e5d538e4f4">messageAllExceptRender</a> (uint32_t message, unsigned int id)</td></tr>
 <tr class="separator:afbd22e654c5b0676cab4f5e5d538e4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dfcb2faa8f579d4d30aa0c9898ab6b2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a7dfcb2faa8f579d4d30aa0c9898ab6b2">messageAll</a> (uint32_t message)</td></tr>
 <tr class="separator:a7dfcb2faa8f579d4d30aa0c9898ab6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2c2f37db59bb862648dcbdf7b96941e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#ae2c2f37db59bb862648dcbdf7b96941e">safeToDelete</a> ()</td></tr>
 <tr class="separator:ae2c2f37db59bb862648dcbdf7b96941e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a389aa00fba2b6e37484b5c8b3e8296f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a389aa00fba2b6e37484b5c8b3e8296f5">isDead</a> () const</td></tr>
+<tr class="memitem:a389aa00fba2b6e37484b5c8b3e8296f5"><td class="memItemLeft" align="right" valign="top"><a id="a389aa00fba2b6e37484b5c8b3e8296f5" name="a389aa00fba2b6e37484b5c8b3e8296f5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isDead</b> () const</td></tr>
 <tr class="separator:a389aa00fba2b6e37484b5c8b3e8296f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a3f833dd0d67ba5f7ef0cd8acd3e008"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a2a3f833dd0d67ba5f7ef0cd8acd3e008">setTag</a> (uint16_t tag)</td></tr>
+<tr class="memitem:a2a3f833dd0d67ba5f7ef0cd8acd3e008"><td class="memItemLeft" align="right" valign="top"><a id="a2a3f833dd0d67ba5f7ef0cd8acd3e008" name="a2a3f833dd0d67ba5f7ef0cd8acd3e008"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTag</b> (uint16_t tag)</td></tr>
 <tr class="separator:a2a3f833dd0d67ba5f7ef0cd8acd3e008"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37a0f84bcfe9bdb61f194f564b548993"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a37a0f84bcfe9bdb61f194f564b548993">getTag</a> () const</td></tr>
+<tr class="memitem:a37a0f84bcfe9bdb61f194f564b548993"><td class="memItemLeft" align="right" valign="top"><a id="a37a0f84bcfe9bdb61f194f564b548993" name="a37a0f84bcfe9bdb61f194f564b548993"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>getTag</b> () const</td></tr>
 <tr class="separator:a37a0f84bcfe9bdb61f194f564b548993"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -156,125 +145,31 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a4a09d01e2272c7a8ab9baec105f82a2e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a4a09d01e2272c7a8ab9baec105f82a2e">active</a> () const</td></tr>
+<tr class="memitem:a4a09d01e2272c7a8ab9baec105f82a2e"><td class="memItemLeft" align="right" valign="top"><a id="a4a09d01e2272c7a8ab9baec105f82a2e" name="a4a09d01e2272c7a8ab9baec105f82a2e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>active</b> () const</td></tr>
 <tr class="separator:a4a09d01e2272c7a8ab9baec105f82a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18c354de774039fd934ff509dcc52bc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a18c354de774039fd934ff509dcc52bc3">setActive</a> (bool set)</td></tr>
+<tr class="memitem:a18c354de774039fd934ff509dcc52bc3"><td class="memItemLeft" align="right" valign="top"><a id="a18c354de774039fd934ff509dcc52bc3" name="a18c354de774039fd934ff509dcc52bc3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setActive</b> (bool set)</td></tr>
 <tr class="separator:a18c354de774039fd934ff509dcc52bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a60d83f0240d314c19e0eb25288336232"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a60d83f0240d314c19e0eb25288336232">m_ID</a></td></tr>
+<tr class="memitem:a60d83f0240d314c19e0eb25288336232"><td class="memItemLeft" align="right" valign="top"><a id="a60d83f0240d314c19e0eb25288336232" name="a60d83f0240d314c19e0eb25288336232"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>m_ID</b></td></tr>
 <tr class="separator:a60d83f0240d314c19e0eb25288336232"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87c57dc7b0cc3368888695c7af278bb1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a87c57dc7b0cc3368888695c7af278bb1">m_Active</a> = true</td></tr>
+<tr class="memitem:a87c57dc7b0cc3368888695c7af278bb1"><td class="memItemLeft" align="right" valign="top"><a id="a87c57dc7b0cc3368888695c7af278bb1" name="a87c57dc7b0cc3368888695c7af278bb1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_Active</b> = true</td></tr>
 <tr class="separator:a87c57dc7b0cc3368888695c7af278bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a306bd33b22e60dedfe9cfe8636dfec4a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#a306bd33b22e60dedfe9cfe8636dfec4a">m_Dead</a> = false</td></tr>
+<tr class="memitem:a306bd33b22e60dedfe9cfe8636dfec4a"><td class="memItemLeft" align="right" valign="top"><a id="a306bd33b22e60dedfe9cfe8636dfec4a" name="a306bd33b22e60dedfe9cfe8636dfec4a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_Dead</b> = false</td></tr>
 <tr class="separator:a306bd33b22e60dedfe9cfe8636dfec4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab5425be38bfac79088cd7871cec3d63"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_g_object.html#aab5425be38bfac79088cd7871cec3d63">m_Tag</a> = 0</td></tr>
+<tr class="memitem:aab5425be38bfac79088cd7871cec3d63"><td class="memItemLeft" align="right" valign="top"><a id="aab5425be38bfac79088cd7871cec3d63" name="aab5425be38bfac79088cd7871cec3d63"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_Tag</b> = 0</td></tr>
 <tr class="separator:aab5425be38bfac79088cd7871cec3d63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="class_game.html">Game</a> Object class </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4a09d01e2272c7a8ab9baec105f82a2e" name="a4a09d01e2272c7a8ab9baec105f82a2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a09d01e2272c7a8ab9baec105f82a2e">&#9670;&#160;</a></span>active()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SGObject::GObject::active </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a37a0f84bcfe9bdb61f194f564b548993" name="a37a0f84bcfe9bdb61f194f564b548993"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37a0f84bcfe9bdb61f194f564b548993">&#9670;&#160;</a></span>getTag()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint16_t SGObject::GObject::getTag </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3fa18a129c086048fbd0b0e3ec05af0a" name="a3fa18a129c086048fbd0b0e3ec05af0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fa18a129c086048fbd0b0e3ec05af0a">&#9670;&#160;</a></span>id()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int SGObject::GObject::id </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a389aa00fba2b6e37484b5c8b3e8296f5" name="a389aa00fba2b6e37484b5c8b3e8296f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a389aa00fba2b6e37484b5c8b3e8296f5">&#9670;&#160;</a></span>isDead()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SGObject::GObject::isDead </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7dfcb2faa8f579d4d30aa0c9898ab6b2" name="a7dfcb2faa8f579d4d30aa0c9898ab6b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7dfcb2faa8f579d4d30aa0c9898ab6b2">&#9670;&#160;</a></span>messageAll()</h2>
 
@@ -299,8 +194,6 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Message all components in component pointer array Messages all render, then update If message is kill, by default also mark object as dead </p>
-
-<p>Reimplemented in <a class="el" href="class_ov___sprite_1_1_walk_sprite.html#af1c013d2e8efff25eb08ee646758b625">Ov_Sprite::WalkSprite</a>.</p>
 
 </div>
 </div>
@@ -532,151 +425,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a18c354de774039fd934ff509dcc52bc3" name="a18c354de774039fd934ff509dcc52bc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18c354de774039fd934ff509dcc52bc3">&#9670;&#160;</a></span>setActive()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SGObject::GObject::setActive </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>set</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a05280f3b6c6fa464f2a37a83dd634d65" name="a05280f3b6c6fa464f2a37a83dd634d65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a05280f3b6c6fa464f2a37a83dd634d65">&#9670;&#160;</a></span>setID()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SGObject::GObject::setID </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2a3f833dd0d67ba5f7ef0cd8acd3e008" name="a2a3f833dd0d67ba5f7ef0cd8acd3e008"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a3f833dd0d67ba5f7ef0cd8acd3e008">&#9670;&#160;</a></span>setTag()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SGObject::GObject::setTag </td>
-          <td>(</td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>tag</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a87c57dc7b0cc3368888695c7af278bb1" name="a87c57dc7b0cc3368888695c7af278bb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87c57dc7b0cc3368888695c7af278bb1">&#9670;&#160;</a></span>m_Active</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SGObject::GObject::m_Active = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a306bd33b22e60dedfe9cfe8636dfec4a" name="a306bd33b22e60dedfe9cfe8636dfec4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a306bd33b22e60dedfe9cfe8636dfec4a">&#9670;&#160;</a></span>m_Dead</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SGObject::GObject::m_Dead = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a60d83f0240d314c19e0eb25288336232" name="a60d83f0240d314c19e0eb25288336232"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60d83f0240d314c19e0eb25288336232">&#9670;&#160;</a></span>m_ID</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int SGObject::GObject::m_ID</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa422f7010c327c8b115724839be8f57e" name="aa422f7010c327c8b115724839be8f57e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa422f7010c327c8b115724839be8f57e">&#9670;&#160;</a></span>m_RenderComps</h2>
 
@@ -689,28 +438,6 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p >Array of pointers to child render components </p>
-
-</div>
-</div>
-<a id="aab5425be38bfac79088cd7871cec3d63" name="aab5425be38bfac79088cd7871cec3d63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab5425be38bfac79088cd7871cec3d63">&#9670;&#160;</a></span>m_Tag</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint16_t SGObject::GObject::m_Tag = 0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -737,7 +464,7 @@ Protected Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_s_g_object.html">SGObject</a></li><li class="navelem"><a class="el" href="class_s_g_object_1_1_g_object.html">GObject</a></li>
+    <li class="navelem"><b>SGObject</b></li><li class="navelem"><a class="el" href="class_s_g_object_1_1_g_object.html">GObject</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

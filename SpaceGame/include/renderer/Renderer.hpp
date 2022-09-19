@@ -35,6 +35,11 @@ namespace SGRender
 			m_VA.bind(); m_VB.unbind(); m_IB.unbind();
 			m_VertBuffWidth = bufferWidth;
 		}
+
+		/**
+		* Adds parameters for instancing, and uses the data stride and the start location (aka the layout number)
+		* Currently does not support matrixes
+		*/
 		template<typename T>
 		void addInstances(unsigned int bufferWidth, unsigned int instanceDataStride, int startLocation)
 		{

@@ -1,6 +1,6 @@
 \hypertarget{_seg_array_8hpp_source}{}\doxysection{Seg\+Array.\+hpp}
 \label{_seg_array_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/utility/SegArray.hpp@{D:/Repositories/Space Engine/SpaceGame/include/utility/SegArray.hpp}}
-\mbox{\hyperlink{_seg_array_8hpp}{Go to the documentation of this file.}}
+
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SEG\_ARRAY\_H}}
@@ -18,12 +18,12 @@
 \DoxyCodeLine{14 \textcolor{keyword}{class }\mbox{\hyperlink{class_seg_array}{SegArray}}}
 \DoxyCodeLine{15 \{}
 \DoxyCodeLine{16 \textcolor{keyword}{public}:}
-\DoxyCodeLine{17     \mbox{\hyperlink{class_seg_array_adc3c87e5a810cf9b5f96f34b84b11cdd}{SegArray}}() }
+\DoxyCodeLine{17     \mbox{\hyperlink{class_seg_array}{SegArray}}() }
 \DoxyCodeLine{18     \{ }
 \DoxyCodeLine{19         m\_Stride = stride;}
 \DoxyCodeLine{20     \};}
 \DoxyCodeLine{21 }
-\DoxyCodeLine{22     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_a8679d82b89718693f78f1adf5685851f}{pushBack}}(T obj) }
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} pushBack(T obj) }
 \DoxyCodeLine{23     \{ }
 \DoxyCodeLine{24         \textcolor{comment}{//Check if over running}}
 \DoxyCodeLine{25         \textcolor{keywordflow}{if} (m\_Size == m\_Nodes.size() * m\_Stride || m\_Size == 0)}
@@ -39,7 +39,7 @@
 \DoxyCodeLine{35     \}}
 \DoxyCodeLine{36 }
 \DoxyCodeLine{37     \textcolor{keyword}{template}<\textcolor{keyword}{typename}... Args>}
-\DoxyCodeLine{38     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_a437f2b98411ae25acbfa5ab9b47fc277}{emplaceBack}}(Args... args)}
+\DoxyCodeLine{38     \textcolor{keywordtype}{void} emplaceBack(Args... args)}
 \DoxyCodeLine{39     \{}
 \DoxyCodeLine{40         \textcolor{comment}{//Check if over running}}
 \DoxyCodeLine{41         \textcolor{keywordflow}{if} (m\_Size == m\_Nodes.size() * m\_Stride)}
@@ -54,12 +54,12 @@
 \DoxyCodeLine{50         m\_Nodes[m\_Nodes.size() -\/ 1].size++;}
 \DoxyCodeLine{51     \}}
 \DoxyCodeLine{52 }
-\DoxyCodeLine{53     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_a005380cf75466a8f24a6440b2291eccc}{popBack}}()}
+\DoxyCodeLine{53     \textcolor{keywordtype}{void} popBack()}
 \DoxyCodeLine{54     \{}
-\DoxyCodeLine{55         \mbox{\hyperlink{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}{eraseAt}}(m\_Size -\/ 1);}
+\DoxyCodeLine{55         eraseAt(m\_Size -\/ 1);}
 \DoxyCodeLine{56     \}}
 \DoxyCodeLine{57 }
-\DoxyCodeLine{58     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}{eraseAt}}(\textcolor{keywordtype}{size\_t} index)}
+\DoxyCodeLine{58     \textcolor{keywordtype}{void} eraseAt(\textcolor{keywordtype}{size\_t} index)}
 \DoxyCodeLine{59     \{}
 \DoxyCodeLine{60         \textcolor{keywordflow}{if} (index >= m\_Size)}
 \DoxyCodeLine{61         \{}
@@ -99,20 +99,20 @@
 \DoxyCodeLine{95         \}}
 \DoxyCodeLine{96     \}}
 \DoxyCodeLine{97 }
-\DoxyCodeLine{98     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_aa594f4534e06e77f2890eabb463fc881}{shrinkTo}}(\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}})}
+\DoxyCodeLine{98     \textcolor{keywordtype}{void} shrinkTo(\textcolor{keywordtype}{size\_t} size)}
 \DoxyCodeLine{99     \{}
-\DoxyCodeLine{100         \textcolor{keywordtype}{int} nodeCount = getNode(\mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}} -\/ 1) + 1;}
-\DoxyCodeLine{101         \textcolor{keywordflow}{if} (!(\mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}} < m\_Stride))}
+\DoxyCodeLine{100         \textcolor{keywordtype}{int} nodeCount = getNode(size -\/ 1) + 1;}
+\DoxyCodeLine{101         \textcolor{keywordflow}{if} (!(size < m\_Stride))}
 \DoxyCodeLine{102         \{}
 \DoxyCodeLine{103             m\_Nodes.resize(nodeCount);}
 \DoxyCodeLine{104         \}}
-\DoxyCodeLine{105         m\_Nodes[m\_Nodes.size() -\/ 1].size = \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}} -\/ m\_Nodes.size() -\/ 1;}
-\DoxyCodeLine{106         m\_Size = \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}};}
+\DoxyCodeLine{105         m\_Nodes[m\_Nodes.size() -\/ 1].size = size -\/ m\_Nodes.size() -\/ 1;}
+\DoxyCodeLine{106         m\_Size = size;}
 \DoxyCodeLine{107     \}}
 \DoxyCodeLine{108 }
-\DoxyCodeLine{109     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_a394813799c64c107db5012064ddf29c5}{resize}}(\textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}})}
+\DoxyCodeLine{109     \textcolor{keywordtype}{void} resize(\textcolor{keywordtype}{size\_t} size)}
 \DoxyCodeLine{110     \{}
-\DoxyCodeLine{111         \textcolor{keywordtype}{int} nodeCount = getNode(\mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}} -\/ 1) + 1;}
+\DoxyCodeLine{111         \textcolor{keywordtype}{int} nodeCount = getNode(size -\/ 1) + 1;}
 \DoxyCodeLine{112         \textcolor{keywordtype}{int} currentNodeCount = m\_Nodes.size();}
 \DoxyCodeLine{113         \textcolor{keywordflow}{if} (nodeCount > currentNodeCount)}
 \DoxyCodeLine{114         \{}
@@ -126,24 +126,24 @@
 \DoxyCodeLine{122         \}}
 \DoxyCodeLine{123 }
 \DoxyCodeLine{124         \textcolor{comment}{//For last node, init and set size correctly}}
-\DoxyCodeLine{125         \textcolor{keywordtype}{size\_t} lastNodeSize = \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}} -\/ ((m\_Nodes.size() -\/ 1) * m\_Stride);}
+\DoxyCodeLine{125         \textcolor{keywordtype}{size\_t} lastNodeSize = size -\/ ((m\_Nodes.size() -\/ 1) * m\_Stride);}
 \DoxyCodeLine{126         m\_Nodes[m\_Nodes.size() -\/ 1] = \{ std::make\_shared<T[]>(m\_Stride), lastNodeSize \};}
-\DoxyCodeLine{127         m\_Size = \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}};}
+\DoxyCodeLine{127         m\_Size = size;}
 \DoxyCodeLine{128     \}}
 \DoxyCodeLine{129 }
-\DoxyCodeLine{130     T\& \mbox{\hyperlink{class_seg_array_af9e0c90ec16f4542adbd50cac8a80934}{operator[]}}(\textcolor{keywordtype}{size\_t} index) }
+\DoxyCodeLine{130     T\& operator[](\textcolor{keywordtype}{size\_t} index) }
 \DoxyCodeLine{131     \{ }
 \DoxyCodeLine{132         assert(!(index >= m\_Size));}
 \DoxyCodeLine{133         \textcolor{keywordflow}{return} getIndex(index);}
 \DoxyCodeLine{134     \}}
 \DoxyCodeLine{135 }
-\DoxyCodeLine{136     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_seg_array_ac9ba00a3f95685e38498dd13df47c463}{clear}}()}
+\DoxyCodeLine{136     \textcolor{keywordtype}{void} clear()}
 \DoxyCodeLine{137     \{}
 \DoxyCodeLine{138         m\_Nodes.clear();}
 \DoxyCodeLine{139         m\_Size = 0;}
 \DoxyCodeLine{140     \}}
 \DoxyCodeLine{141 }
-\DoxyCodeLine{142     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Size; \}}
+\DoxyCodeLine{142     \textcolor{keywordtype}{size\_t} size()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Size; \}}
 \DoxyCodeLine{143 }
 \DoxyCodeLine{144 \textcolor{keyword}{private}:}
 \DoxyCodeLine{145 }

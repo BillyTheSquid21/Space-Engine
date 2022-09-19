@@ -1,111 +1,37 @@
 \hypertarget{class_seg_array}{}\doxysection{Seg\+Array\texorpdfstring{$<$}{<} T, stride \texorpdfstring{$>$}{>} Class Template Reference}
 \label{class_seg_array}\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-
-
-{\ttfamily \#include $<$Seg\+Array.\+hpp$>$}
-
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_seg_array_adc3c87e5a810cf9b5f96f34b84b11cdd}{Seg\+Array}} ()
-\item 
-void \mbox{\hyperlink{class_seg_array_a8679d82b89718693f78f1adf5685851f}{push\+Back}} (T obj)
-\item 
-{\footnotesize template$<$typename... Args$>$ }\\void \mbox{\hyperlink{class_seg_array_a437f2b98411ae25acbfa5ab9b47fc277}{emplace\+Back}} (Args... args)
-\item 
-void \mbox{\hyperlink{class_seg_array_a005380cf75466a8f24a6440b2291eccc}{pop\+Back}} ()
-\item 
-void \mbox{\hyperlink{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}{erase\+At}} (size\+\_\+t index)
-\item 
-void \mbox{\hyperlink{class_seg_array_aa594f4534e06e77f2890eabb463fc881}{shrink\+To}} (size\+\_\+t \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}})
-\item 
-void \mbox{\hyperlink{class_seg_array_a394813799c64c107db5012064ddf29c5}{resize}} (size\+\_\+t \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}})
-\item 
-T \& \mbox{\hyperlink{class_seg_array_af9e0c90ec16f4542adbd50cac8a80934}{operator\mbox{[}$\,$\mbox{]}}} (size\+\_\+t index)
-\item 
-void \mbox{\hyperlink{class_seg_array_ac9ba00a3f95685e38498dd13df47c463}{clear}} ()
-\item 
-size\+\_\+t \mbox{\hyperlink{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}{size}} () const
-\end{DoxyCompactItemize}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_seg_array_adc3c87e5a810cf9b5f96f34b84b11cdd}\label{class_seg_array_adc3c87e5a810cf9b5f96f34b84b11cdd}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!SegArray@{SegArray}}
-\index{SegArray@{SegArray}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{SegArray()}{SegArray()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\mbox{\hyperlink{class_seg_array}{\+::\+Seg\+Array}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-\doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_seg_array_ac9ba00a3f95685e38498dd13df47c463}\label{class_seg_array_ac9ba00a3f95685e38498dd13df47c463}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!clear@{clear}}
-\index{clear@{clear}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_seg_array_a437f2b98411ae25acbfa5ab9b47fc277}\label{class_seg_array_a437f2b98411ae25acbfa5ab9b47fc277}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!emplaceBack@{emplaceBack}}
-\index{emplaceBack@{emplaceBack}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{emplaceBack()}{emplaceBack()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-template$<$typename... Args$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::emplace\+Back (\begin{DoxyParamCaption}\item[{Args...}]{args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}\label{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!eraseAt@{eraseAt}}
-\index{eraseAt@{eraseAt}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{eraseAt()}{eraseAt()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::erase\+At (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_seg_array_af9e0c90ec16f4542adbd50cac8a80934}\label{class_seg_array_af9e0c90ec16f4542adbd50cac8a80934}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
-\index{operator\mbox{[}\mbox{]}@{operator[]}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-T \& \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_seg_array_a005380cf75466a8f24a6440b2291eccc}\label{class_seg_array_a005380cf75466a8f24a6440b2291eccc}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!popBack@{popBack}}
-\index{popBack@{popBack}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{popBack()}{popBack()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::pop\+Back (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{class_seg_array_a8679d82b89718693f78f1adf5685851f}\label{class_seg_array_a8679d82b89718693f78f1adf5685851f}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!pushBack@{pushBack}}
-\index{pushBack@{pushBack}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{pushBack()}{pushBack()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::push\+Back (\begin{DoxyParamCaption}\item[{T}]{obj }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_seg_array_a394813799c64c107db5012064ddf29c5}\label{class_seg_array_a394813799c64c107db5012064ddf29c5}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!resize@{resize}}
-\index{resize@{resize}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{resize()}{resize()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::resize (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
+void {\bfseries push\+Back} (T obj)
+\item 
+\mbox{\Hypertarget{class_seg_array_a437f2b98411ae25acbfa5ab9b47fc277}\label{class_seg_array_a437f2b98411ae25acbfa5ab9b47fc277}} 
+{\footnotesize template$<$typename... Args$>$ }\\void {\bfseries emplace\+Back} (Args... args)
+\item 
+\mbox{\Hypertarget{class_seg_array_a005380cf75466a8f24a6440b2291eccc}\label{class_seg_array_a005380cf75466a8f24a6440b2291eccc}} 
+void {\bfseries pop\+Back} ()
+\item 
+\mbox{\Hypertarget{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}\label{class_seg_array_a49c48be8de670e7a3d4ea822d1f37ab3}} 
+void {\bfseries erase\+At} (size\+\_\+t index)
+\item 
 \mbox{\Hypertarget{class_seg_array_aa594f4534e06e77f2890eabb463fc881}\label{class_seg_array_aa594f4534e06e77f2890eabb463fc881}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!shrinkTo@{shrinkTo}}
-\index{shrinkTo@{shrinkTo}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{shrinkTo()}{shrinkTo()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-void \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::shrink\+To (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
+void {\bfseries shrink\+To} (size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{class_seg_array_a394813799c64c107db5012064ddf29c5}\label{class_seg_array_a394813799c64c107db5012064ddf29c5}} 
+void {\bfseries resize} (size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{class_seg_array_af9e0c90ec16f4542adbd50cac8a80934}\label{class_seg_array_af9e0c90ec16f4542adbd50cac8a80934}} 
+T \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (size\+\_\+t index)
+\item 
+\mbox{\Hypertarget{class_seg_array_ac9ba00a3f95685e38498dd13df47c463}\label{class_seg_array_ac9ba00a3f95685e38498dd13df47c463}} 
+void {\bfseries clear} ()
+\item 
 \mbox{\Hypertarget{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}\label{class_seg_array_a3f5522f7a71aa039597ec8df5c75bef7}} 
-\index{SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}!size@{size}}
-\index{size@{size}!SegArray$<$ T, stride $>$@{SegArray$<$ T, stride $>$}}
-\doxysubsubsection{\texorpdfstring{size()}{size()}}
-{\footnotesize\ttfamily template$<$typename T , size\+\_\+t stride$>$ \\
-size\+\_\+t \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ T, stride $>$\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
+size\+\_\+t {\bfseries size} () const
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/utility/\mbox{\hyperlink{_seg_array_8hpp}{Seg\+Array.\+hpp}}\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/utility/Seg\+Array.\+hpp\end{DoxyCompactItemize}

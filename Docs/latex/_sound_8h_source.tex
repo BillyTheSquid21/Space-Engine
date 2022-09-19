@@ -1,0 +1,87 @@
+\hypertarget{_sound_8h_source}{}\doxysection{Sound.\+h}
+\label{_sound_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/Sound.h@{D:/Repositories/Space Engine/SpaceGame/include/core/Sound.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SG\_SOUND\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define SG\_SOUND\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}fmod.hpp"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}vector"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}string"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}mutex"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}unordered\_map"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#define SOUND\_CHANNELS 512}}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 \textcolor{keyword}{namespace }SGSound}
+\DoxyCodeLine{15 \{}
+\DoxyCodeLine{19     \textcolor{keyword}{enum class} ChannelGroup}
+\DoxyCodeLine{20     \{}
+\DoxyCodeLine{21         NONE = -\/1, EFFECTS = 0, MUSIC = 1, CHANNEL\_GROUP\_COUNT = 2}
+\DoxyCodeLine{22     \};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{27     \textcolor{keyword}{typedef} \textcolor{keywordtype}{size\_t} sound\_id;}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{32     \textcolor{keyword}{class }\mbox{\hyperlink{class_s_g_sound_1_1_system}{System}}}
+\DoxyCodeLine{33     \{}
+\DoxyCodeLine{34     \textcolor{keyword}{public}:}
+\DoxyCodeLine{35         \textcolor{keywordtype}{bool} init();}
+\DoxyCodeLine{39         sound\_id \mbox{\hyperlink{class_s_g_sound_1_1_system_af48798c1aca9325eaff1abac590318c7}{loadSound}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path, FMOD::Sound*\& sound);}
+\DoxyCodeLine{44         sound\_id \mbox{\hyperlink{class_s_g_sound_1_1_system_ace28236b192a347ec10f89631da128c5}{loadSound}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* path);}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{49         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_ae183fbb9a3635947fa587aa99a4baaad}{releaseSound}}(FMOD::Sound*\& sound);}
+\DoxyCodeLine{53         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_a1a13d6b09ec3e7088ff6dd0cb4b58b2a}{releaseSound}}(sound\_id sound);}
+\DoxyCodeLine{57         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_s_g_sound_1_1_system_ae777cc04373b475d866bde41d7203b68}{playSound}}(FMOD::Sound*\& sound, FMOD::Channel*\& channel, ChannelGroup group);}
+\DoxyCodeLine{61         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_a9b4e3be04a464aebe2a539e9d3f47e92}{playSound}}(sound\_id sound, FMOD::Channel** channel, ChannelGroup group);}
+\DoxyCodeLine{65         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_a320c5989ce07dfdb2cbaf69c5ab88684}{pauseSound}}(FMOD::Channel*\& channel, sound\_id sound);}
+\DoxyCodeLine{69         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_ab4d57302ed4522376713f8015c754b49}{stopSound}}(FMOD::Channel*\& channel, sound\_id sound);}
+\DoxyCodeLine{73         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_a88e085d72a53c5116c06a04e4751e6c7}{fadeSound}}(sound\_id \textcolor{keywordtype}{id}, FMOD::Channel*\& channel, \textcolor{keywordtype}{float} fadeTime, \textcolor{keywordtype}{bool} fadeIn);}
+\DoxyCodeLine{74         }
+\DoxyCodeLine{75         \textcolor{keywordtype}{void} update();}
+\DoxyCodeLine{76         \textcolor{keywordtype}{void} clean();}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{81         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_sound_1_1_system_a9243d71d1be60765b6ccc342f9bc7a2f}{setChannelGroupVolume}}(ChannelGroup group, \textcolor{keywordtype}{float} volume);}
+\DoxyCodeLine{82         FMOD::ChannelGroup* getGroup(ChannelGroup group) \{ \textcolor{keywordflow}{return} m\_ChannelGroups[(int)group]; \}}
+\DoxyCodeLine{83     \textcolor{keyword}{private}:}
+\DoxyCodeLine{84         \textcolor{keywordtype}{bool} playSoundInternal(FMOD::Sound*\& sound, FMOD::Channel*\& channel, ChannelGroup group);}
+\DoxyCodeLine{85         \textcolor{keywordtype}{void} releaseSoundInternal(FMOD::Sound*\& sound);}
+\DoxyCodeLine{86         \textcolor{keywordtype}{void} fadeSoundInternal(FMOD::Channel*\& channel, \textcolor{keywordtype}{float} fadeTime, \textcolor{keywordtype}{bool} fadeIn);}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88         \textcolor{keywordtype}{void} releaseQueuedSound(\textcolor{keywordtype}{int}\& index);}
+\DoxyCodeLine{89         std::vector<FMOD::Sound*> m\_ReleaseQueue; \textcolor{comment}{//Queue ensures that if a loading sound is cut off it is disposed of}}
+\DoxyCodeLine{90         FMOD::System* m\_System = NULL;}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92         \textcolor{comment}{//Channels}}
+\DoxyCodeLine{93         std::vector<FMOD::ChannelGroup*> m\_ChannelGroups;}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95         \textcolor{comment}{//Sounds storage}}
+\DoxyCodeLine{96         \textcolor{keyword}{struct }ChannelInstance}
+\DoxyCodeLine{97         \{}
+\DoxyCodeLine{98             FMOD::Channel** channel = NULL;}
+\DoxyCodeLine{99             \textcolor{comment}{//Playback for one sound at a time}}
+\DoxyCodeLine{100             \textcolor{keywordtype}{bool} shouldPlay = \textcolor{keyword}{false};}
+\DoxyCodeLine{101             \textcolor{keywordtype}{bool} isPlaying = \textcolor{keyword}{false};}
+\DoxyCodeLine{102             \textcolor{keywordtype}{char} fade = -\/1; \textcolor{comment}{//0 is fade in, 1 is fade out}}
+\DoxyCodeLine{103             \textcolor{keywordtype}{float} fadeTime = 0.0f;}
+\DoxyCodeLine{104         \};}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106         \textcolor{keyword}{struct }SoundData}
+\DoxyCodeLine{107         \{}
+\DoxyCodeLine{108             sound\_id id; \textcolor{comment}{//Unique for a given path}}
+\DoxyCodeLine{109             FMOD::Sound* sound = NULL;}
+\DoxyCodeLine{110             ChannelGroup group;}
+\DoxyCodeLine{111             std::vector<ChannelInstance> chl; \textcolor{comment}{//Can fire off same sound in multiple instances}}
+\DoxyCodeLine{112         \};}
+\DoxyCodeLine{113         \textcolor{comment}{//Takes the path stored under, and a reference to the sound to overwrite if found}}
+\DoxyCodeLine{114         \textcolor{keywordtype}{int} isSoundStored(std::string path, FMOD::Sound*\& sound); \textcolor{comment}{//-\/1 if not}}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116         std::vector<SoundData> m\_Sounds;}
+\DoxyCodeLine{117         std::shared\_mutex m\_SoundAccessMutex;}
+\DoxyCodeLine{118     \};}
+\DoxyCodeLine{119 \}}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

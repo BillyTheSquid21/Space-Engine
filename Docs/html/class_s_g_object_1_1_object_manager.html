@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: SGObject::ObjectManager Class Reference</title>
+<title>Space Engine: SGObject::ObjectManager Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -135,32 +135,42 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae88b33f67581bb58d91619dd26469e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc9af974b3a876c8a1f7929c909c51f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#afc9af974b3a876c8a1f7929c909c51f9">render</a> ()</td></tr>
 <tr class="separator:afc9af974b3a876c8a1f7929c909c51f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2ed5fa13f2d7194e4d4bf3894fa83f3"><td class="memItemLeft" align="right" valign="top">std::shared_mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#af2ed5fa13f2d7194e4d4bf3894fa83f3">getGroupMutex</a> ()</td></tr>
+<tr class="memitem:af2ed5fa13f2d7194e4d4bf3894fa83f3"><td class="memItemLeft" align="right" valign="top"><a id="af2ed5fa13f2d7194e4d4bf3894fa83f3" name="af2ed5fa13f2d7194e4d4bf3894fa83f3"></a>
+std::shared_mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getGroupMutex</b> ()</td></tr>
 <tr class="separator:af2ed5fa13f2d7194e4d4bf3894fa83f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51800344924467afe7d79cb0edfe2ee3"><td class="memItemLeft" align="right" valign="top">std::shared_mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#a51800344924467afe7d79cb0edfe2ee3">getHeapMutex</a> ()</td></tr>
+<tr class="memitem:a51800344924467afe7d79cb0edfe2ee3"><td class="memItemLeft" align="right" valign="top"><a id="a51800344924467afe7d79cb0edfe2ee3" name="a51800344924467afe7d79cb0edfe2ee3"></a>
+std::shared_mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getHeapMutex</b> ()</td></tr>
 <tr class="separator:a51800344924467afe7d79cb0edfe2ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad03f3c8cbc4112d20541c4f25228f5ed"><td class="memTemplParams" colspan="2">template&lt;typename ExpectedT &gt; </td></tr>
-<tr class="memitem:ad03f3c8cbc4112d20541c4f25228f5ed"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_s_g_object_1_1_update_comp_group.html">SGObject::UpdateCompGroup</a>&lt; ExpectedT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#ad03f3c8cbc4112d20541c4f25228f5ed">updateGroupAt</a> (unsigned int id) const</td></tr>
+<tr class="memitem:ad03f3c8cbc4112d20541c4f25228f5ed"><td class="memTemplParams" colspan="2"><a id="ad03f3c8cbc4112d20541c4f25228f5ed" name="ad03f3c8cbc4112d20541c4f25228f5ed"></a>
+template&lt;typename ExpectedT &gt; </td></tr>
+<tr class="memitem:ad03f3c8cbc4112d20541c4f25228f5ed"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_s_g_object_1_1_update_comp_group.html">SGObject::UpdateCompGroup</a>&lt; ExpectedT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>updateGroupAt</b> (unsigned int id) const</td></tr>
 <tr class="separator:ad03f3c8cbc4112d20541c4f25228f5ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10c892ebc208ab580d678a14e76fbecb"><td class="memTemplParams" colspan="2">template&lt;typename ExpectedT &gt; </td></tr>
-<tr class="memitem:a10c892ebc208ab580d678a14e76fbecb"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_s_g_object_1_1_render_comp_group.html">SGObject::RenderCompGroup</a>&lt; ExpectedT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#a10c892ebc208ab580d678a14e76fbecb">renderGroupAt</a> (unsigned int id) const</td></tr>
+<tr class="memitem:a10c892ebc208ab580d678a14e76fbecb"><td class="memTemplParams" colspan="2"><a id="a10c892ebc208ab580d678a14e76fbecb" name="a10c892ebc208ab580d678a14e76fbecb"></a>
+template&lt;typename ExpectedT &gt; </td></tr>
+<tr class="memitem:a10c892ebc208ab580d678a14e76fbecb"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="class_s_g_object_1_1_render_comp_group.html">SGObject::RenderCompGroup</a>&lt; ExpectedT &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>renderGroupAt</b> (unsigned int id) const</td></tr>
 <tr class="separator:a10c892ebc208ab580d678a14e76fbecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc4b479300fc34c259a91346b4ff3ea0"><td class="memItemLeft" align="right" valign="top">std::shared_mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#adc4b479300fc34c259a91346b4ff3ea0">getObjectMutex</a> ()</td></tr>
+<tr class="memitem:adc4b479300fc34c259a91346b4ff3ea0"><td class="memItemLeft" align="right" valign="top"><a id="adc4b479300fc34c259a91346b4ff3ea0" name="adc4b479300fc34c259a91346b4ff3ea0"></a>
+std::shared_mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getObjectMutex</b> ()</td></tr>
 <tr class="separator:adc4b479300fc34c259a91346b4ff3ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a833d766510a0f38455d07f2b74faa783"><td class="memTemplParams" colspan="2">template&lt;typename ExpectedT &gt; </td></tr>
-<tr class="memitem:a833d766510a0f38455d07f2b74faa783"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; ExpectedT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#a833d766510a0f38455d07f2b74faa783">objectAt</a> (unsigned int id) const</td></tr>
+<tr class="memitem:a833d766510a0f38455d07f2b74faa783"><td class="memTemplParams" colspan="2"><a id="a833d766510a0f38455d07f2b74faa783" name="a833d766510a0f38455d07f2b74faa783"></a>
+template&lt;typename ExpectedT &gt; </td></tr>
+<tr class="memitem:a833d766510a0f38455d07f2b74faa783"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; ExpectedT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>objectAt</b> (unsigned int id) const</td></tr>
 <tr class="separator:a833d766510a0f38455d07f2b74faa783"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b22e1951b8802794f99a5ae4d5b4bdd"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#a2b22e1951b8802794f99a5ae4d5b4bdd">queryGroupID</a> (std::string name)</td></tr>
+<tr class="memitem:a2b22e1951b8802794f99a5ae4d5b4bdd"><td class="memItemLeft" align="right" valign="top"><a id="a2b22e1951b8802794f99a5ae4d5b4bdd" name="a2b22e1951b8802794f99a5ae4d5b4bdd"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>queryGroupID</b> (std::string name)</td></tr>
 <tr class="separator:a2b22e1951b8802794f99a5ae4d5b4bdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a923767934e3fe217918233433faa5bd4"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#a923767934e3fe217918233433faa5bd4">queryObjectID</a> (std::string name)</td></tr>
+<tr class="memitem:a923767934e3fe217918233433faa5bd4"><td class="memItemLeft" align="right" valign="top"><a id="a923767934e3fe217918233433faa5bd4" name="a923767934e3fe217918233433faa5bd4"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>queryObjectID</b> (std::string name)</td></tr>
 <tr class="separator:a923767934e3fe217918233433faa5bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf2aac5b03aa95d96ce58827bc4354ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#adf2aac5b03aa95d96ce58827bc4354ed">removeObject</a> (unsigned int id)</td></tr>
 <tr class="separator:adf2aac5b03aa95d96ce58827bc4354ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbd5b8cadc74d7bf6b7cf9d01cbbb9c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#adbd5b8cadc74d7bf6b7cf9d01cbbb9c5">removeObject</a> (std::string name)</td></tr>
 <tr class="separator:adbd5b8cadc74d7bf6b7cf9d01cbbb9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e2bfdbfb6562fc07471458ffc30b629"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_s_g_object_1_1_object_manager_1_1_game_object_container.html">GameObjectContainer</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#a8e2bfdbfb6562fc07471458ffc30b629">getObjects</a> ()</td></tr>
+<tr class="memitem:a8e2bfdbfb6562fc07471458ffc30b629"><td class="memItemLeft" align="right" valign="top"><a id="a8e2bfdbfb6562fc07471458ffc30b629" name="a8e2bfdbfb6562fc07471458ffc30b629"></a>
+std::vector&lt; <a class="el" href="struct_s_g_object_1_1_object_manager_1_1_game_object_container.html">GameObjectContainer</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getObjects</b> ()</td></tr>
 <tr class="separator:a8e2bfdbfb6562fc07471458ffc30b629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0ed1877e08e183ebfe14eb96800131e"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#aa0ed1877e08e183ebfe14eb96800131e">getObjectCount</a> ()</td></tr>
+<tr class="memitem:aa0ed1877e08e183ebfe14eb96800131e"><td class="memItemLeft" align="right" valign="top"><a id="aa0ed1877e08e183ebfe14eb96800131e" name="aa0ed1877e08e183ebfe14eb96800131e"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>getObjectCount</b> ()</td></tr>
 <tr class="separator:aa0ed1877e08e183ebfe14eb96800131e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1bb89df980e8e6af082172b4bbd6e32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_object_1_1_object_manager.html#ad1bb89df980e8e6af082172b4bbd6e32">reset</a> ()</td></tr>
 <tr class="separator:ad1bb89df980e8e6af082172b4bbd6e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,159 +178,6 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Container to manage all objects in a scene - will improve ID allocation in future Contains render and update groups, as well as a render and update heap for ungrouped components Heap components and game objects must be std::shared_ptr objects Also contains mutexes for different data to ensure threaded capabilities </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="af2ed5fa13f2d7194e4d4bf3894fa83f3" name="af2ed5fa13f2d7194e4d4bf3894fa83f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2ed5fa13f2d7194e4d4bf3894fa83f3">&#9670;&#160;</a></span>getGroupMutex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_mutex &amp; SGObject::ObjectManager::getGroupMutex </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a51800344924467afe7d79cb0edfe2ee3" name="a51800344924467afe7d79cb0edfe2ee3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51800344924467afe7d79cb0edfe2ee3">&#9670;&#160;</a></span>getHeapMutex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_mutex &amp; SGObject::ObjectManager::getHeapMutex </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa0ed1877e08e183ebfe14eb96800131e" name="aa0ed1877e08e183ebfe14eb96800131e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0ed1877e08e183ebfe14eb96800131e">&#9670;&#160;</a></span>getObjectCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int SGObject::ObjectManager::getObjectCount </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="adc4b479300fc34c259a91346b4ff3ea0" name="adc4b479300fc34c259a91346b4ff3ea0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc4b479300fc34c259a91346b4ff3ea0">&#9670;&#160;</a></span>getObjectMutex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_mutex &amp; SGObject::ObjectManager::getObjectMutex </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8e2bfdbfb6562fc07471458ffc30b629" name="a8e2bfdbfb6562fc07471458ffc30b629"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e2bfdbfb6562fc07471458ffc30b629">&#9670;&#160;</a></span>getObjects()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="struct_s_g_object_1_1_object_manager_1_1_game_object_container.html">GameObjectContainer</a> &gt; &amp; SGObject::ObjectManager::getObjects </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a833d766510a0f38455d07f2b74faa783" name="a833d766510a0f38455d07f2b74faa783"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a833d766510a0f38455d07f2b74faa783">&#9670;&#160;</a></span>objectAt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ExpectedT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; ExpectedT &gt; SGObject::ObjectManager::objectAt </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a56c4c76bc8021d93b79ee8194da1d675" name="a56c4c76bc8021d93b79ee8194da1d675"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56c4c76bc8021d93b79ee8194da1d675">&#9670;&#160;</a></span>pushGameObject() <span class="overload">[1/2]</span></h2>
 
@@ -603,58 +460,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a2b22e1951b8802794f99a5ae4d5b4bdd" name="a2b22e1951b8802794f99a5ae4d5b4bdd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b22e1951b8802794f99a5ae4d5b4bdd">&#9670;&#160;</a></span>queryGroupID()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int SGObject::ObjectManager::queryGroupID </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a923767934e3fe217918233433faa5bd4" name="a923767934e3fe217918233433faa5bd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a923767934e3fe217918233433faa5bd4">&#9670;&#160;</a></span>queryObjectID()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int SGObject::ObjectManager::queryObjectID </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="adbd5b8cadc74d7bf6b7cf9d01cbbb9c5" name="adbd5b8cadc74d7bf6b7cf9d01cbbb9c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adbd5b8cadc74d7bf6b7cf9d01cbbb9c5">&#9670;&#160;</a></span>removeObject() <span class="overload">[1/2]</span></h2>
 
@@ -727,34 +532,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a10c892ebc208ab580d678a14e76fbecb" name="a10c892ebc208ab580d678a14e76fbecb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10c892ebc208ab580d678a14e76fbecb">&#9670;&#160;</a></span>renderGroupAt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ExpectedT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="class_s_g_object_1_1_render_comp_group.html">SGObject::RenderCompGroup</a>&lt; ExpectedT &gt; &gt; SGObject::ObjectManager::renderGroupAt </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ad1bb89df980e8e6af082172b4bbd6e32" name="ad1bb89df980e8e6af082172b4bbd6e32"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad1bb89df980e8e6af082172b4bbd6e32">&#9670;&#160;</a></span>reset()</h2>
 
@@ -792,34 +569,6 @@ template&lt;typename ExpectedT &gt; </div>
 
 </div>
 </div>
-<a id="ad03f3c8cbc4112d20541c4f25228f5ed" name="ad03f3c8cbc4112d20541c4f25228f5ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad03f3c8cbc4112d20541c4f25228f5ed">&#9670;&#160;</a></span>updateGroupAt()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ExpectedT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt; <a class="el" href="class_s_g_object_1_1_update_comp_group.html">SGObject::UpdateCompGroup</a>&lt; ExpectedT &gt; &gt; SGObject::ObjectManager::updateGroupAt </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>D:/Repositories/Space Engine/SpaceGame/include/core/<a class="el" href="_obj_management_8h_source.html">ObjManagement.h</a></li>
 </ul>
@@ -828,7 +577,7 @@ template&lt;typename ExpectedT &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_s_g_object.html">SGObject</a></li><li class="navelem"><a class="el" href="class_s_g_object_1_1_object_manager.html">ObjectManager</a></li>
+    <li class="navelem"><b>SGObject</b></li><li class="navelem"><a class="el" href="class_s_g_object_1_1_object_manager.html">ObjectManager</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>
