@@ -37,7 +37,7 @@ namespace SG
     }
 
 	template<typename T>
-	int Run()
+	int Run(int width, int height)
     {
         using namespace std::chrono;
         static_assert(std::is_base_of<Game, T>());
@@ -50,7 +50,7 @@ namespace SG
         //Heap allocates to new game, creates with resolution and name on tag - 
         //replace with derived game class
         {
-            std::shared_ptr<T> gameInit(new T(640, 640));
+            std::shared_ptr<T> gameInit(new T(width, height));
             game<T> = gameInit;
         }
         if (!game<T>->init("Space Game", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>)) {

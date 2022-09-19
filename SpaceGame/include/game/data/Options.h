@@ -21,6 +21,9 @@ struct Options
 	//Graphic Settings
 	static int grassDensity;
 	static int shadowSamples;
+	static bool windowed;
+	static int width;
+	static int height;
 
 	static void load();
 	static void write();

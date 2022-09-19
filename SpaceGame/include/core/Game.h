@@ -33,8 +33,9 @@ public:
 	* @param kCallback callback for key presses
 	* @param mCallback callback for mouse interactions
 	* @param sCallback callback for scroll interactions
+	* @param windowed sets if is windowed or not - allows derived game class to specify
 	*/
-	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback);
+	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback, bool windowed);
 	
 	/**
 	* Poll GLFW events

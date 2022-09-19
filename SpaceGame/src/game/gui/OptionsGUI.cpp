@@ -31,6 +31,35 @@ void OptionsMenu::openNest()
 	//Shadow samples
 	anyChanges |= ImGui::SliderInt("Shadow Samples", &Options::shadowSamples, 2, 32);
 
+	ImGui::Text("Settings requiring restart");
+
+	//Windowed
+	anyChanges |= ImGui::Checkbox("Windowed", &Options::windowed);
+
+	//Resolution
+	ImGui::Text("Resolution");
+	if (ImGui::BeginCombo("##combo", currentRes)) 
+	{
+		for (int i = 0; i < IM_ARRAYSIZE(resolutions); i++)
+		{
+			bool wasSelected = (currentRes == resolutions[i]); 
+			if (ImGui::Selectable(resolutions[i], wasSelected))
+			{
+				currentRes = resolutions[i];
+				if (!wasSelected)
+				{
+					anyChanges = true;
+
+					//Get resolution parts
+					Options::width = widths[i];
+					Options::height = heights[i];
+					ImGui::SetItemDefaultFocus();   
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
 	if (anyChanges)
 	{
 		Options::write();

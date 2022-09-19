@@ -3,8 +3,9 @@
 //Initialise data
 PlayerData DemoGame::m_Data;
 
-bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback) {
-	bool success = Game::init(name, kCallback, mCallback, sCallback);
+bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback) {	
+	//Options are loaded in main.cpp
+	bool success = Game::init(name, kCallback, mCallback, sCallback, Options::windowed);
 
 	//IMGUi
 	IMGUI_CHECKVERSION();
@@ -20,9 +21,6 @@ bool DemoGame::init(const char name[], Key_Callback kCallback, Mouse_Callback mC
 
 	//Load core sounds
 	m_CoreSounds.push_back(sound.loadSound("res/sound/ui/select.wav"));
-
-	//Load options from file
-	Options::load();
 
 	//Init threadpool
 	MtLib::ThreadPool::Init(THREAD_POOL_SIZE);

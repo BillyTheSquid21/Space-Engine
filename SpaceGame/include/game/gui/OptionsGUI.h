@@ -18,6 +18,10 @@ private:
 	float m_EffectVolume = 1.0f;
 	float m_MusicVolume = 1.0f;
 	float m_GrassDensity = 40.0f;
+	const char* resolutions[3] = { "800x600", "1024x768", "1280x720"};
+	const int widths[3] = { 800, 1024, 1280 };
+	const int heights[3] = { 600, 768, 720 };
+	const char* currentRes = NULL;
 	FontContainer* m_Fonts = nullptr;
 };
 

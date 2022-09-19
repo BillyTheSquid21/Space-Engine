@@ -11,7 +11,7 @@ Game::Game(int width, int height)
 }
 
 //Init
-bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback)
+bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback, bool windowed)
 {
     bool success = true;
 
@@ -21,25 +21,36 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
         success = false;
     }
 
-    //Sets up monitor
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-    m_Width = mode->width;
-    m_Height = mode->height;
-
     //Set version of openGl
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    //set non resizable
+    //Set non resizable
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);    
 
-    //set sampling for msaa
+    //Set sampling for msaa
     glfwWindowHint(GLFW_SAMPLES, 8);
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(m_Width, m_Height, name, monitor, nullptr);
+    //Sets up monitor
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    if (!windowed)
+    {
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        m_Width = mode->width;
+        m_Height = mode->height;
+    }
+
+    //Create a windowed mode window and its OpenGL context
+    if (!windowed)
+    {
+        window = glfwCreateWindow(m_Width, m_Height, name, monitor, nullptr);
+    }
+    else
+    {
+        window = glfwCreateWindow(m_Width, m_Height, name, nullptr, nullptr);
+    }
+
     if (!window)
     {
         glfwTerminate();
