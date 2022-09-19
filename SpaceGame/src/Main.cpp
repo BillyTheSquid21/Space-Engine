@@ -1,11 +1,10 @@
-#include "game/data/Options.h"
-#include "game/DemoGame.h"
+#include "core/Game.h"
 #include "core/Run.h"
 
+//Example main
 int main(void)
 {   
 	//Load options from file
-	Options::load();
-	return SG::Run<DemoGame>(Options::width, Options::height);
+	return SG::Run<Game>(640, 640, true);
 }
 

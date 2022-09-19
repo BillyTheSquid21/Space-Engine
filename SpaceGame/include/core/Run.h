@@ -37,7 +37,7 @@ namespace SG
     }
 
 	template<typename T>
-	int Run(int width, int height)
+	int Run(int width, int height, bool windowed)
     {
         using namespace std::chrono;
         static_assert(std::is_base_of<Game, T>());
@@ -53,7 +53,7 @@ namespace SG
             std::shared_ptr<T> gameInit(new T(width, height));
             game<T> = gameInit;
         }
-        if (!game<T>->init("Space Game", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>)) {
+        if (!game<T>->init("Space Game", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>, windowed)) {
             //If game fails to initialise program will not run
             return -1;
         }

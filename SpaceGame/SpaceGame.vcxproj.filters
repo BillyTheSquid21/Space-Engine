@@ -28,50 +28,11 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{28d37786-b364-4deb-92f5-034cabfc9d36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game">
-      <UniqueIdentifier>{5226ad15-d155-49ee-9236-071c4364f2d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{6992e372-097e-417a-b7b0-f904ebfd871f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\States">
-      <UniqueIdentifier>{c6905fdf-1698-4b2a-9901-da23c67ab226}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\States">
-      <UniqueIdentifier>{9785e0d0-7821-4257-bcf1-c6ad3f83161b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vendor\imgui">
       <UniqueIdentifier>{8bae98ba-d60f-46e5-9247-6409e3cc8382}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game\GUI">
-      <UniqueIdentifier>{2c2dcccf-3ff6-46d6-8053-bbf5156bd66c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\GUI">
-      <UniqueIdentifier>{b9902fff-051e-4b66-86fd-43b979d419c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Objects">
-      <UniqueIdentifier>{ad4c6619-7e22-4ed8-96fc-5065abc25d5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Objects">
-      <UniqueIdentifier>{c1c11035-bfb2-45a8-a520-c7a37d1ed6c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Level">
-      <UniqueIdentifier>{5584f667-d2e7-4718-8bea-a62514db4225}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Level">
-      <UniqueIdentifier>{6ea8a11c-d8cb-49f5-9e9b-6b84cb9baeac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vendor\rapidjson">
       <UniqueIdentifier>{3c02482a-c0c9-4ebe-b863-ad5903f7aa0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Utility">
-      <UniqueIdentifier>{57b77bc9-6da9-4f3f-8789-1a67a29f7527}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Utility">
-      <UniqueIdentifier>{84f2e582-2b1f-4d90-b79f-e33409b12572}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Data">
-      <UniqueIdentifier>{bfd7246c-6195-4be7-aeb1-63ba23acbcce}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{0d9caaff-0346-4177-a8b0-f8537d9b6f1d}</UniqueIdentifier>
@@ -85,29 +46,8 @@
     <Filter Include="Source Files\Vendor\mtlib">
       <UniqueIdentifier>{36438ec0-a26f-4609-a1b6-b9c6c2a20da5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game\Pokemon">
-      <UniqueIdentifier>{3b7693cf-bd48-4c01-ab4a-212dffbcf029}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Pokemon">
-      <UniqueIdentifier>{0c75cfba-4e3b-497b-b611-2d5661aebea0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vendor\spaceimage">
       <UniqueIdentifier>{2e5bdab6-8870-4de1-8fbb-c4b3b162988e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Items">
-      <UniqueIdentifier>{d082c991-160a-4da6-ae63-853c82cf0e31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\vert">
-      <UniqueIdentifier>{72ea5c30-7efc-4bbc-b399-25360095a4e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\frag">
-      <UniqueIdentifier>{8556a76d-93c9-429e-a37c-3626e3df9d4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\geo">
-      <UniqueIdentifier>{ff29be8e-4996-490e-9a93-071cdf24df0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Data">
-      <UniqueIdentifier>{c362da00-6a61-4aa3-bd6a-8e99cdfb63b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +78,6 @@
     <ClCompile Include="src\core\ObjManagement.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\DemoGame.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\vendor\imgui\imgui.cpp">
       <Filter>Source Files\Vendor\imgui</Filter>
     </ClCompile>
@@ -162,56 +99,11 @@
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp">
       <Filter>Source Files\Vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\states\MainMenu.cpp">
-      <Filter>Source Files\Game\States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\gui\GUI.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\states\Overworld.cpp">
-      <Filter>Source Files\Game\States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\PlayerObjects.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\level\World.cpp">
-      <Filter>Source Files\Game\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\TileMap.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\OverworldSprite.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\NPCAi.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\utility\GameText.cpp">
-      <Filter>Source Files\Game\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="src\utility\SGUtil.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="src\vendor\stb\stb_image_write.cpp">
       <Filter>Source Files\Vendor</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\LoadingZone.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\Tree.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\level\WorldObjectLoader.cpp">
-      <Filter>Source Files\Game\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\ScriptParse.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\Bridge.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\states\StateRenderers.cpp">
-      <Filter>Source Files\Game\States</Filter>
     </ClCompile>
     <ClCompile Include="src\vendor\mtlib\ThreadPool.cpp">
       <Filter>Source Files\Vendor\mtlib</Filter>
@@ -219,71 +111,14 @@
     <ClCompile Include="src\renderer\ShadowMap.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\objects\TallGrass.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\WarpTile.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\ActionTile.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\pokemon\Pokemon.cpp">
-      <Filter>Source Files\Game\Pokemon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\pokemon\PokemonBattle.cpp">
-      <Filter>Source Files\Game\Pokemon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\states\Battle.cpp">
-      <Filter>Source Files\Game\States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\utility\ImageRead.cpp">
-      <Filter>Source Files\Game\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\pokemon\PokemonIO.cpp">
-      <Filter>Source Files\Game\Pokemon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\pokemon\PokemonLevel.cpp">
-      <Filter>Source Files\Game\Pokemon</Filter>
-    </ClCompile>
     <ClCompile Include="src\vendor\spaceimage\SpaceImage.cpp">
       <Filter>Source Files\Vendor\spaceimage</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\gui\OverworldGUI.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\gui\BattleGUI.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\pokemon\MoveEffects.cpp">
-      <Filter>Source Files\Game\Pokemon</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\OverworldScript.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\utility\PathFinding.cpp">
-      <Filter>Source Files\Game\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\objects\PokemonFollow.cpp">
-      <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\utility\Random.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Sound.cpp">
       <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\gui\OptionsGUI.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\gui\MainMenuGUI.cpp">
-      <Filter>Source Files\Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\data\Options.cpp">
-      <Filter>Source Files\Game\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game\level\BattleLoad.cpp">
-      <Filter>Source Files\Game\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,9 +158,6 @@
     <ClInclude Include="include\core\State.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\DemoGame.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\vendor\imgui\imconfig.h">
       <Filter>Source Files\Vendor\imgui</Filter>
     </ClInclude>
@@ -352,24 +184,6 @@
     </ClInclude>
     <ClInclude Include="src\vendor\imgui\imgui_impl_opengl3_loader.h">
       <Filter>Source Files\Vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\states\MainMenu.h">
-      <Filter>Header Files\Game\States</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\gui\GUI.h">
-      <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\states\Overworld.h">
-      <Filter>Header Files\Game\States</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\PlayerObjects.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\level\World.h">
-      <Filter>Header Files\Game\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\TileMap.h">
-      <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\vendor\rapidjson\allocators.h">
       <Filter>Source Files\Vendor\rapidjson</Filter>
@@ -437,47 +251,14 @@
     <ClInclude Include="include\core\Message.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\objects\OverworldSprite.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\NPCAi.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\Script.hpp">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\utility\GameText.h">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\data\PlayerData.hpp">
-      <Filter>Header Files\Game\Data</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\Model.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\utility\SGUtil.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\objects\LoadingZone.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\Tree.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="src\vendor\rapidxml\rapidxml.hpp">
       <Filter>Source Files\Vendor\rapidxml</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\level\WorldObjectLoader.h">
-      <Filter>Header Files\Game\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\ScriptParse.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\Bridge.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\states\StateRenderers.h">
-      <Filter>Header Files\Game\States</Filter>
     </ClInclude>
     <ClInclude Include="src\vendor\mtlib\FunctionBinding.h">
       <Filter>Source Files\Vendor\mtlib</Filter>
@@ -485,95 +266,17 @@
     <ClInclude Include="src\vendor\mtlib\ThreadPool.h">
       <Filter>Source Files\Vendor\mtlib</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\utility\Input.hpp">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\ShadowMap.h">
       <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\SpriteAnimation.hpp">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\TallGrass.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\WarpTile.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\ActionTile.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\ScriptTile.hpp">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\OverworldScript.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\ModelObject.hpp">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\Pokemon.h">
-      <Filter>Header Files\Game\Pokemon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\PokemonBattle.h">
-      <Filter>Header Files\Game\Pokemon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\states\Battle.h">
-      <Filter>Header Files\Game\States</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\utility\Flags.hpp">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\utility\ImageRead.h">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\PokemonIO.h">
-      <Filter>Header Files\Game\Pokemon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\utility\XmlWrapper.hpp">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\PokemonLevel.h">
-      <Filter>Header Files\Game\Pokemon</Filter>
     </ClInclude>
     <ClInclude Include="src\vendor\spaceimage\SpaceImage.hpp">
       <Filter>Source Files\Vendor\spaceimage</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\gui\OverworldGUI.h">
-      <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\Transition.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\gui\BattleGUI.h">
-      <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\MoveEffects.h">
-      <Filter>Header Files\Game\Pokemon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\Turn.hpp">
-      <Filter>Header Files\Game\Pokemon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\pokemon\StatStages.hpp">
-      <Filter>Header Files\Game\Pokemon</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\items\Items.hpp">
-      <Filter>Header Files\Game\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\utility\PathFinding.h">
-      <Filter>Header Files\Game\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\PokemonFollow.h">
-      <Filter>Header Files\Game\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="include\utility\SegArray.hpp">
       <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\level\TextureSlots.hpp">
-      <Filter>Header Files\Game\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\objects\ObjectTypes.hpp">
-      <Filter>Header Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="include\utility\Random.h">
       <Filter>Header Files\Utility</Filter>
@@ -581,85 +284,8 @@
     <ClInclude Include="include\core\Sound.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\gui\OptionsGUI.h">
-      <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\gui\MainMenuGUI.h">
-      <Filter>Header Files\Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="include\game\data\Options.h">
-      <Filter>Header Files\Game\Data</Filter>
-    </ClInclude>
     <ClInclude Include="include\core\Run.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\game\level\BattleLoad.h">
-      <Filter>Header Files\Game\Level</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\vert\Default_CT_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\Default_T_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\Lighting_T_Geom_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\Geom_Shadow_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\Lighting_T_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\Shadow_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\Transition.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\geo\Grass_Shadow_Shader.geom">
-      <Filter>Resource Files\geo</Filter>
-    </None>
-    <None Include="res\shaders\frag\Battle_Transition.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\Default_CT_Shader.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\Default_T_Shader.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\Fade_In_Transition.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\Fade_Out_Transition.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\Lighting_T_Shader.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\Shadow_Shader.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\geo\Tree_Draw_Shader.geom">
-      <Filter>Resource Files\geo</Filter>
-    </None>
-    <None Include="res\shaders\geo\Tree_Shadow_Shader.geom">
-      <Filter>Resource Files\geo</Filter>
-    </None>
-    <None Include="res\shaders\vert\Grass_Draw_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\frag\Lighting_C_Shader.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\geo\Grass_Draw_Shader.geom">
-      <Filter>Resource Files\geo</Filter>
-    </None>
-    <None Include="res\shaders\vert\Grass_Shadow_Shader.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
   </ItemGroup>
 </Project>
