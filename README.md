@@ -96,4 +96,42 @@ manager.update(deltaTime);
 manager.render();
 ```
 
+# Renderer
 
+- Located in the SGRender namespace
+- Used to batch geometry together into one buffer
+- Can be instanced
+
+A pointer to the renderer can be stored in a render component to a game object, that can then send the vertex data accross. You create a camera, set the projection and can then generate the renderer, which after setting the buffer layout can be used. Before each draw call, the renderer data must be buffered. An example of usage is provided below:
+
+```
+using namespace SGRender;
+	
+//Create renderer and camera
+Renderer renderer;
+Camera cam; cam.setProjection(glm::perspective(fov, width / height / 0.1f, 1000.0f));
+	
+//Generate renderer for a vertex with 3 floats for position and 2 floats for uv coords
+renderer.generate(width, height, &cam, 0);
+renderer.setLayout<float>(3, 2);
+	
+//Example here uses a simple quad from the "Geometry" namespace, where the data is then committed
+//Data should be commited each frame is shown
+Tex_Quad quadData = Geometry::CreateTextureQuad(0, 0, 10.0f, 10.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+renderer.commit(&quadData, Geometry::GetFloatCount<TVertex>(Geometry::Shape::QUAD), Primitive::Q_IND, Primitive::Q_IND_COUNT);
+
+...
+
+//Buffer data as VBO
+renderer.bufferVideoData();
+
+...
+	
+//Clear screen and draw
+renderer.clearScreen();
+renderer.drawPrimitives();
+```
+
+# Additional notes
+
+There is much more functionality within the framework, which is further documented in the "Docs" folder of the repository. This code is under the MIT License and is for educational purposes.
