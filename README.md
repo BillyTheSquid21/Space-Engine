@@ -9,7 +9,7 @@ Not intended for commercial use at this time, and is purely for educational purp
 
 To get started, first follow the below instructions:
 
-1. Fork and clone the repository using the "v0.7-Core" branch
+1. Fork and/or clone the repository using the "v0.7-Core" branch
 2. Open the "SpaceEngine.sln" file in Visual Studio 2019
 3. Create your "main.cpp" file in the root of the src directory
 
