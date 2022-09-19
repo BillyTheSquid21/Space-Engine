@@ -1,6 +1,6 @@
 # SpaceGame
 
-For Core Engine, Branch 0.6-Core is the most up to date
+For Core Engine, Branch 0.7-Core is the correct branch
 
 For Demo Game, Branch Demo Game is the most up to date
 
