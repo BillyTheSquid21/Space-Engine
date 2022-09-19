@@ -3,8 +3,6 @@
 A simple framework to easily build games utilizing 2D/3D rendering and object management, among other features.
 Not intended for commercial use at this time, and is purely for educational purposes.
 
-(This file is being written for the v0.7-Core version which does not have a branch yet)
-
 # Get Started
 
 To get started, first follow the below instructions:
