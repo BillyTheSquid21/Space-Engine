@@ -9,10 +9,13 @@
 #include "vector"
 #include "functional"
 #include "algorithm"
+
 #include "rapidxml/rapidxml.hpp"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
+
 #include "mtlib/ThreadPool.h"
+
 #include "game/pokemon/Pokemon.h"
 #include "game/items/Items.hpp"
 #include "game/utility/XmlWrapper.hpp"
