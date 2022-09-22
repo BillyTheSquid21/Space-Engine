@@ -89,6 +89,7 @@ void LoadWildEncounter(Party* party, World::LevelID id)
 	PokemonDataBank::loadData(PkmDataType::MOVE_INFO);
 	PokemonDataBank::loadData(PkmDataType::POKEMON_TYPES);
 	PokemonDataBank::loadData(PkmDataType::SPECIES_INFO);
+	PokemonDataBank::loadData(PkmDataType::PERMITTED_MOVES);
 
 	party->at(0).id = rates[encounterIndex].id;
 	party->at(0).level = level;
@@ -97,11 +98,14 @@ void LoadWildEncounter(Party* party, World::LevelID id)
 	SetPkmStatsFromLevel(party->at(0));
 
 	party->at(0).nickname = PokemonDataBank::GetPokemonName(party->at(0).id);
-	party->at(0).moves[0].id = 7;
-
+	
+	//Set move IDs
+	SetPkmMovesFromLevel(party->at(0));
 	PokemonDataBank::LoadPokemonMoves(party->at(0));
+
 	pool->Run(PokemonDataBank::unloadData, PkmDataType::SPECIES_INFO);
 	pool->Run(PokemonDataBank::unloadData, PkmDataType::BASE_STATS);
 	pool->Run(PokemonDataBank::unloadData, PkmDataType::MOVE_INFO);
 	pool->Run(PokemonDataBank::unloadData, PkmDataType::POKEMON_TYPES);
+	pool->Run(PokemonDataBank::unloadData, PkmDataType::PERMITTED_MOVES);
 }

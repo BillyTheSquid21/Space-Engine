@@ -11,6 +11,7 @@
 #include "renderer/Plane.h"
 #include "renderer/Texture.h"
 #include "game/objects/TileMap.h"
+#include "game/data/mio_implementation.h"
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include "rapidxml/rapidxml.hpp"

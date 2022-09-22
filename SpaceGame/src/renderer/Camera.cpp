@@ -57,6 +57,11 @@ void SGRender::Camera::setPos(float x, float y, float z)
 	m_Position = { x,y,z };
 }
 
+void SGRender::Camera::setNearAndFarPlane(float near, float far)
+{
+	m_NearPlane = near; m_FarPlane = far;
+}
+
 void SGRender::Camera::updateFrustum()
 {
 	using namespace glm;

@@ -38,6 +38,46 @@ void SetPkmStatsFromLevel(Pokemon& pokemon)
 	StatRaiseFormula(pokemon, pokemon.stats.speed, baseStats.speed);
 }
 
+static bool SortByLevel(const rapidjson::Value::ConstValueIterator& lhs, const rapidjson::Value::ConstValueIterator& rhs)
+{
+	return (*lhs)["level"].GetInt() > (*rhs)["level"].GetInt();
+}
+
+void SetPkmMovesFromLevel(Pokemon& pokemon)
+{
+	using namespace rapidjson;
+
+	//Get moves for pokemon ID
+	const Value& moves = PokemonDataBank::GetPermittedMoves(pokemon.id);
+
+	//Find latest level up move pokemon can learn
+	std::vector<Value::ConstValueIterator> validIndexes;
+	for (Value::ConstValueIterator i = moves.Begin(); i != moves.End(); i++)
+	{
+		const Value& move = *i;
+		//If method isn't level up, continue
+		if (move["pokemon_move_method_id"].GetInt() != 1)
+		{
+			continue;
+		}
+
+		//If level learned <= pokemon level, note index
+		if (move["level"].GetInt() <= pokemon.level)
+		{
+			validIndexes.push_back(i);
+		}
+	}
+
+	//Sort array by level, then take from top value to next 4 or min
+	std::sort(std::begin(validIndexes), std::end(validIndexes), SortByLevel);
+	int movesIndex = 0;
+	for (int i = 0; i < validIndexes.size() && movesIndex < 4; i++)
+	{
+		pokemon.moves[movesIndex].id = (*(validIndexes[i]))["move_id"].GetInt();
+		movesIndex++;
+	}
+}
+
 void LevelUpPkm(Pokemon& pokemon)
 {
 	if (pokemon.level >= 100)

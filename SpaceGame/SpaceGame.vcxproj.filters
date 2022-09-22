@@ -109,6 +109,9 @@
     <Filter Include="Source Files\Game\Data">
       <UniqueIdentifier>{c362da00-6a61-4aa3-bd6a-8e99cdfb63b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\mio">
+      <UniqueIdentifier>{adf6dca8-ef51-444f-9f3d-7cd6440e891d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -284,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="src\game\level\BattleLoad.cpp">
       <Filter>Source Files\Game\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\data\mio_implementation.cpp">
+      <Filter>Source Files\Game\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -595,6 +601,12 @@
     </ClInclude>
     <ClInclude Include="include\game\level\BattleLoad.h">
       <Filter>Header Files\Game\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game\data\mio_implementation.h">
+      <Filter>Header Files\Game\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\mio\mio.hpp">
+      <Filter>Source Files\Vendor\mio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

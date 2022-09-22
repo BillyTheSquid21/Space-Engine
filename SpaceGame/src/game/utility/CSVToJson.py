@@ -7,11 +7,10 @@ from threading import Lock
 
 #Mutex for threading
 mutex = Lock()
-pmutex = Lock()
 
 #Paths
-csvPath = "C:\\Users\\yoshi\\Downloads\\pokedex-master\\pokedex-master\\pokedex\\data\\csv\\pokemon_moves.csv"
-jsonPath = "C:\\Users\\yoshi\\Downloads\\pokemon_moves.json"
+csvPath = "C:\\Users\\yoshi\\Downloads\\pokemon_moves.csv"
+jsonPath = "C:\\Users\\yoshi\\Downloads\\pokemon_moves2.json"
 
 #ID to make main key from
 mainID = 'pokemon_id'
@@ -23,24 +22,37 @@ innerID = 'move_id'
 tasksTotal = 0
 
 def processEntries(ids, data, path, tasksTotal):
+    mutex.acquire()
+    try:
+        data[ids] = list()
+    finally:
+        mutex.release()
+    
     try:
         with open(path, encoding='utf-8') as csvf:
             csvReader = csv.DictReader(csvf)
+            moveList = list()
             for rows in csvReader:
                 key = rows[mainID]
                 if key == ids:
                     rows.pop(mainID)
-                    mutex.acquire()
-                    try:
-                        if key not in data:
-                            data[key] = dict()
-                        data[key][rows[innerID]] = rows
-                        data[key][rows[innerID]].pop(innerID)  
-                    finally:
-                        mutex.release()
-        pmutex.acquire()
-        print(ids, "done!")
-        pmutex.release()
+
+                    #Check rows and convert to int if needed
+                    for rowKey in rows:
+                        string = rows[rowKey]
+                        if string.isnumeric():
+                            rows[rowKey] = int()
+                            rows[rowKey] = int(string)
+                    moveList.append(rows)
+                    #Pop any unwated fields for this data
+                    moveList[-1].pop("version_group_id")
+                    moveList[-1].pop("order")
+        mutex.acquire()
+        try:  
+            data[ids] = moveList
+            print(ids, "done!")
+        finally:
+            mutex.release()
     except:
         print("Task has failed at: ", ids)
 
@@ -71,7 +83,7 @@ def csvRead(path):
         #2.
 
         #Run thread for each id
-        pool = ThreadPool(4)
+        pool = ThreadPool(64)
         
         results = pool.starmap(processEntries, [(ids, data, path, tasksTotal) for ids in pkmID])
 

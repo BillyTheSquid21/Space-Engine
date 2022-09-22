@@ -88,7 +88,8 @@ const std::string PokemonDataBank::filenames[fileCount] =
 	"pokemon/moves.json",
 	"pokemon/pokemon_types.json",
 	"items/items.json",
-	"items/item_categories.json"
+	"items/item_categories.json",
+	"pokemon/pokemon_moves.json"
 };
 std::vector<PokemonDataBank::PkmData> PokemonDataBank::data;
 const std::string PokemonDataBank::filePathStart = "res/data/";
@@ -109,17 +110,20 @@ void PokemonDataBank::loadJson(std::string path, PkmDataType type)
 	//Parse and store
 	using namespace rapidjson;
 	std::lock_guard lock(mutex);
-	std::ifstream ifs((filePathStart + path).c_str());
-	rapidjson::IStreamWrapper isw(ifs);
+	auto ts = EngineTimer::StartTimer();
+	mio::mmap_source map;
+	MemmapRead((filePathStart + path).c_str(), map);
+	std::string json(&map[0], map.size());
+	Unmap(map);
 
 	//Emplace data
 	data.emplace_back();
-	data.back().document.ParseStream(isw);
-
-	ifs.close();
+	data.back().document.Parse<0>(json.c_str());
+	json.clear();
 
 	//Set type
 	data.back().type = type;
+	EngineLog("Time taken to load ", path, ": ", EngineTimer::EndTimer(ts));
 }
 
 void PokemonDataBank::loadData(PkmDataType type)
@@ -337,6 +341,16 @@ void PokemonDataBank::LoadPokemonMoves(Pokemon& pokemon)
 	{
 		LoadMoveData(pokemon, doc, idString,3);
 	}
+}
+
+const rapidjson::Value& PokemonDataBank::GetPermittedMoves(uint16_t id)
+{
+	using namespace rapidjson;
+	assert(PokemonDataBank::checkData(PkmDataType::PERMITTED_MOVES));
+	rapidjson::Document& doc = getData(PkmDataType::PERMITTED_MOVES);
+	char idstr[5] = {'1', '\0'};
+	ID_To_String<4>(idstr, id);
+	return doc[idstr];
 }
 
 void PokemonDataBank::LoadPokemonType(Pokemon& pokemon)

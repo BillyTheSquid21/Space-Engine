@@ -94,7 +94,7 @@ namespace SGRender
 		void panYDegrees(float degrees);
 
 		//getters and setters
-		void setNearAndFarPlane(float near, float far) { m_NearPlane = near; m_FarPlane = far; }
+		void setNearAndFarPlane(float near, float far);
 		void setFOV(float deg) { m_FOV = glm::radians(deg); }
 		float speed() const { return m_Speed; }
 		float width() const { return m_CameraWidth; }

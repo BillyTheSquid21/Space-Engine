@@ -562,11 +562,13 @@ World::LevelData World::ParseLevel(World::LevelID id) {
     const std::string path = "res/level/level";
     const std::string ext = ".json";
 
-    std::ifstream ifs(path + std::to_string((int)id) + ext);
-    rapidjson::IStreamWrapper isw(ifs);
+    mio::mmap_source map;
+    MemmapRead((path + std::to_string((int)id) + ext).c_str(), map);
+    std::string json(&map[0], map.size());
+    Unmap(map);
     rapidjson::Document doc;
-    doc.ParseStream(isw);
-    ifs.close();
+    doc.Parse<0>(json.c_str());
+    json.clear();
 
     //Info
     unsigned int width; unsigned int height;
