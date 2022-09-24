@@ -36,7 +36,6 @@ class DemoGame : public Game
 {
 public:
 	using Game::Game;
-	~DemoGame() {ImGui_ImplOpenGL3_Shutdown();ImGui_ImplGlfw_Shutdown();ImGui::DestroyContext();}
 	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback);
 	void handleInput(int key, int scancode, int action, int mods);
 	void handleMouse(int button, int action, int mods);
