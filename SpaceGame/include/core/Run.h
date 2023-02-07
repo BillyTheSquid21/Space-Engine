@@ -9,6 +9,7 @@
 #include "cstdlib"
 #include "chrono"
 #include "thread"
+#include "core/Root.h"
 
 namespace SG
 {
@@ -16,7 +17,7 @@ namespace SG
 	template<typename T>
 	std::shared_ptr<T> game;
 
-    const char SG_VERSION[]{ "0.9.1" };
+    const char SG_VERSION[] = "0.9.1" ;
 
     template<typename T>
     void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -79,20 +80,20 @@ namespace SG
         double previousTime = glfwGetTime();
         unsigned int framecount = 0;
 
-        /* Loop until the user closes the window */
-        while (!glfwWindowShouldClose(game<T>->window) && !T::s_Close)
+        while (!glfwWindowShouldClose(game<T>->window) && SGRoot::CheckShouldRun())
         {
-            // Measure speed
+            //Measure speed
             double currentTime = glfwGetTime();
             game<T>->setTime(currentTime);
             framecount++;
 
-            // If a second has passed.
+            //If a second has passed.
             if (currentTime - previousTime >= 1.0)
             {
-                // Display the frame count here any way you want.
                 EngineLog("FPS: ", framecount);
                 EngineLog(deltaTime);
+
+                SGRoot::FRAMERATE = framecount;
 
                 framecount = 0;
                 previousTime = currentTime;

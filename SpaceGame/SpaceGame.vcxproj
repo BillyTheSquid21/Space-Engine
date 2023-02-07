@@ -155,6 +155,7 @@
     <ClCompile Include="src\core\Game.cpp" />
     <ClCompile Include="src\core\GUI.cpp" />
     <ClCompile Include="src\core\ObjManagement.cpp" />
+    <ClCompile Include="src\core\Root.cpp" />
     <ClCompile Include="src\core\Sound.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
@@ -166,6 +167,8 @@
     <ClCompile Include="src\renderer\Texture.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\renderer\TextureAtlas.cpp" />
+    <ClCompile Include="src\utility\Console.cpp" />
+    <ClCompile Include="src\utility\Options.cpp" />
     <ClCompile Include="src\utility\Random.cpp" />
     <ClCompile Include="src\utility\SGUtil.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
@@ -182,12 +185,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\Callbacks.hpp" />
-    <ClInclude Include="include\core\ColorPalette.hpp" />
     <ClInclude Include="include\core\Game.h" />
     <ClInclude Include="include\core\GameObject.hpp" />
     <ClInclude Include="include\core\GUI.h" />
     <ClInclude Include="include\core\Message.hpp" />
     <ClInclude Include="include\core\ObjManagement.h" />
+    <ClInclude Include="include\core\Root.h" />
     <ClInclude Include="include\core\Run.h" />
     <ClInclude Include="include\core\Sound.h" />
     <ClInclude Include="include\core\State.hpp" />
@@ -206,6 +209,8 @@
     <ClInclude Include="include\renderer\TextureAtlas.h" />
     <ClInclude Include="include\renderer\Transition.hpp" />
     <ClInclude Include="include\renderer\Vertex.hpp" />
+    <ClInclude Include="include\utility\Console.h" />
+    <ClInclude Include="include\utility\Options.h" />
     <ClInclude Include="include\utility\Random.h" />
     <ClInclude Include="include\utility\SegArray.hpp" />
     <ClInclude Include="include\utility\SGUtil.h" />

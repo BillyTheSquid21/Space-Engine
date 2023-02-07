@@ -18,6 +18,8 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "core/GUI.h"
+#include "core/Root.h"
+#include "utility/Console.h"
 
 class Game 
 {
@@ -91,9 +93,6 @@ public:
 	* GLFW Window Pointer
 	*/
 	GLFWwindow* window = NULL;
-
-	//If this is set to true, game loop ends this cycle
-	static bool s_Close;
 
 protected:
 

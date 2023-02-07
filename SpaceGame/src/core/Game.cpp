@@ -1,7 +1,5 @@
 #include "core/Game.h"
 
-bool Game::s_Close = false;
-
 //Main constructor
 Game::Game(int width, int height) 
 {
@@ -92,16 +90,6 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     //gamma - TODO - add control
     //glEnable(GL_FRAMEBUFFER_SRGB);
 
-    //Init static engines
-    success = SGRender::System::init(m_Width, m_Height);
-    success = SGObject::System::init();
-    success = SGSound::System::init();
-
-    //Init thread pool
-    const auto process_count = std::thread::hardware_concurrency();
-    MtLib::ThreadPool::Init(process_count);
-    EngineLogOk("Thread Pool:", process_count);
-
     //Init imgui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -110,9 +98,25 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     ImGui_ImplOpenGL3_Init("#version 330");
     EngineLogOk("ImGui");
 
+    //Init static engines
+    success = SGRender::System::init(m_Width, m_Height);
+    success = SGObject::System::init();
+    success = SGSound::System::init();
+    success = SGGUI::System::init(m_Width, m_Height);
+
+    //Init console
+    std::shared_ptr<SGRoot::ConsoleWindow> console(new SGRoot::ConsoleWindow());
+    auto console_id = SGGUI::System::addGUI(console);
+    SGGUI::System::setShowGUI(console_id, true);
+
+    //Init thread pool
+    const auto process_count = std::thread::hardware_concurrency();
+    MtLib::ThreadPool::Init(process_count);
+    EngineLogOk("Thread Pool:", process_count);
+
     //Init fonts
-    GUI::FontContainer::init();
-    GUI::GameGUI::LoadDefaultFonts();
+    SGGUI::FontStorage::init();
+    SGGUI::System::loadDefaultFonts();
 
     if (!success)
     {
@@ -138,10 +142,7 @@ void Game::render()
     SGRender::System::render();
 
     //Draw Gui
-    GUI::GameGUI::PushDefault();
-    GUI::GameGUI::GUIStart(m_Width, m_Height);
-    GUI::GameGUI::GUIEnd();
-    GUI::GameGUI::PopDefault();
+    SGGUI::System::render();
 }
 
 void Game::handleEvents() 
@@ -165,9 +166,8 @@ void Game::clean()
     SGSound::System::clean();
     SGObject::System::clean();
     SGRender::System::clean();
-
-    //Clear fonts
-    GUI::FontContainer::clear();
+    SGGUI::System::clean();
+    SGGUI::FontStorage::clear();
 
     //Clean ImGui
     ImGui_ImplOpenGL3_Shutdown();
