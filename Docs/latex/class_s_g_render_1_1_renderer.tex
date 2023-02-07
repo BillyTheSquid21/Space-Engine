@@ -14,17 +14,17 @@ struct \mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_render_info}{Render\+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_renderer_af1bb0cf625feddb71c1b755efeaa62ee}{Renderer}} ()
-\item 
 void \mbox{\hyperlink{class_s_g_render_1_1_renderer_a27d3962925d546f541a0510ef47e4529}{generate}} (float width, float height, \mbox{\hyperlink{class_s_g_render_1_1_camera}{Camera}} $\ast$cam, size\+\_\+t buffer\+Width)
 \item 
 {\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{class_s_g_render_1_1_renderer_a2b881c8e474bdaad3ed478502eb254e5}{add\+Instances}} (unsigned int buffer\+Width, unsigned int instance\+Data\+Stride, int start\+Location)
 \item 
 {\footnotesize template$<$typename Type $>$ }\\void \mbox{\hyperlink{class_s_g_render_1_1_renderer_acb094ff22ca49d15985f1ac1fea48d0b}{set\+Layout}} (unsigned char stride)
 \item 
-{\footnotesize template$<$typename Type $>$ }\\void \mbox{\hyperlink{class_s_g_render_1_1_renderer_ac3c4bb4de42deca876e4cd412d2ecaa8}{set\+Layout}} (unsigned char stride1, unsigned char stride2)
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac3c4bb4de42deca876e4cd412d2ecaa8}\label{class_s_g_render_1_1_renderer_ac3c4bb4de42deca876e4cd412d2ecaa8}} 
+{\footnotesize template$<$typename Type $>$ }\\void {\bfseries set\+Layout} (unsigned char stride1, unsigned char stride2)
 \item 
-{\footnotesize template$<$typename Type $>$ }\\void \mbox{\hyperlink{class_s_g_render_1_1_renderer_a2ec5f2af4710299517a2d345a5a5d1d6}{set\+Layout}} (unsigned char stride1, unsigned char stride2, unsigned char stride3)
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a2ec5f2af4710299517a2d345a5a5d1d6}\label{class_s_g_render_1_1_renderer_a2ec5f2af4710299517a2d345a5a5d1d6}} 
+{\footnotesize template$<$typename Type $>$ }\\void {\bfseries set\+Layout} (unsigned char stride1, unsigned char stride2, unsigned char stride3)
 \item 
 void \mbox{\hyperlink{class_s_g_render_1_1_renderer_acefb1b04c0770bfdfd1b6488a1068373}{set\+Drawing\+Mode}} (GLenum type)
 \item 
@@ -39,7 +39,8 @@ void \mbox{\hyperlink{class_s_g_render_1_1_renderer_a28b051826c2d48acacad9785bab
 \doxysubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-static void \mbox{\hyperlink{class_s_g_render_1_1_renderer_ad36f9c8c98c4b72170d4e7032db985d9}{clear\+Screen}} ()
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ad36f9c8c98c4b72170d4e7032db985d9}\label{class_s_g_render_1_1_renderer_ad36f9c8c98c4b72170d4e7032db985d9}} 
+static void {\bfseries clear\+Screen} ()
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -51,46 +52,65 @@ glm\+::mat4 \mbox{\hyperlink{class_s_g_render_1_1_renderer_a900de03e2e775d2b16a0
 \doxysubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{class_s_g_render_1_1_renderer_a5b6c901838d899ccb351716e31af0871}{bind\+All}} ()
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a5b6c901838d899ccb351716e31af0871}\label{class_s_g_render_1_1_renderer_a5b6c901838d899ccb351716e31af0871}} 
+void {\bfseries bind\+All} ()
 \end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-GLenum \mbox{\hyperlink{class_s_g_render_1_1_renderer_ac864edf665d66f9326d0b94888802410}{m\+\_\+\+Primitive\+Type}} = GL\+\_\+\+TRIANGLES
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac864edf665d66f9326d0b94888802410}\label{class_s_g_render_1_1_renderer_ac864edf665d66f9326d0b94888802410}} 
+GLenum {\bfseries m\+\_\+\+Primitive\+Type} = GL\+\_\+\+TRIANGLES
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer}{Vertex\+Buffer}} \mbox{\hyperlink{class_s_g_render_1_1_renderer_a4bf8423d598df18a1fbe30afdc5edd66}{m\+\_\+\+VB}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4bf8423d598df18a1fbe30afdc5edd66}\label{class_s_g_render_1_1_renderer_a4bf8423d598df18a1fbe30afdc5edd66}} 
+\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer}{Vertex\+Buffer}} {\bfseries m\+\_\+\+VB}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer}{Vertex\+Buffer}} \mbox{\hyperlink{class_s_g_render_1_1_renderer_a6efe7566c6d6067c9be4d778b10ab8de}{m\+\_\+\+VBInstances}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a6efe7566c6d6067c9be4d778b10ab8de}\label{class_s_g_render_1_1_renderer_a6efe7566c6d6067c9be4d778b10ab8de}} 
+\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer}{Vertex\+Buffer}} {\bfseries m\+\_\+\+VBInstances}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_index_buffer}{Index\+Buffer}} \mbox{\hyperlink{class_s_g_render_1_1_renderer_ac81a362dff03c78a76a62f2beb963ea0}{m\+\_\+\+IB}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac81a362dff03c78a76a62f2beb963ea0}\label{class_s_g_render_1_1_renderer_ac81a362dff03c78a76a62f2beb963ea0}} 
+\mbox{\hyperlink{class_s_g_render_1_1_index_buffer}{Index\+Buffer}} {\bfseries m\+\_\+\+IB}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_vertex_array}{Vertex\+Array}} \mbox{\hyperlink{class_s_g_render_1_1_renderer_a2777f63e8387b678bbcf8de428ca6ae7}{m\+\_\+\+VA}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a2777f63e8387b678bbcf8de428ca6ae7}\label{class_s_g_render_1_1_renderer_a2777f63e8387b678bbcf8de428ca6ae7}} 
+\mbox{\hyperlink{class_s_g_render_1_1_vertex_array}{Vertex\+Array}} {\bfseries m\+\_\+\+VA}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} \mbox{\hyperlink{class_s_g_render_1_1_renderer_a4a5f2d7fbabf6db99967cc8511ac7a1a}{m\+\_\+\+VBL}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4a5f2d7fbabf6db99967cc8511ac7a1a}\label{class_s_g_render_1_1_renderer_a4a5f2d7fbabf6db99967cc8511ac7a1a}} 
+\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} {\bfseries m\+\_\+\+VBL}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} \mbox{\hyperlink{class_s_g_render_1_1_renderer_a4450b6ecaabad7d6c87c98bbc31825fd}{m\+\_\+\+VBLInstances}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4450b6ecaabad7d6c87c98bbc31825fd}\label{class_s_g_render_1_1_renderer_a4450b6ecaabad7d6c87c98bbc31825fd}} 
+\mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} {\bfseries m\+\_\+\+VBLInstances}
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_a703e04c4c278ba613f5d8ea3970be612}{m\+\_\+\+Vert\+Buff\+Width}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a703e04c4c278ba613f5d8ea3970be612}\label{class_s_g_render_1_1_renderer_a703e04c4c278ba613f5d8ea3970be612}} 
+unsigned int {\bfseries m\+\_\+\+Vert\+Buff\+Width} = 0
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_aa7f15fdb980cf57f2b9a5b379cacfc6f}{m\+\_\+\+Inst\+Buff\+Width}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_aa7f15fdb980cf57f2b9a5b379cacfc6f}\label{class_s_g_render_1_1_renderer_aa7f15fdb980cf57f2b9a5b379cacfc6f}} 
+unsigned int {\bfseries m\+\_\+\+Inst\+Buff\+Width} = 0
 \item 
-\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_render_info}{Render\+Info}}, 96 $>$ \mbox{\hyperlink{class_s_g_render_1_1_renderer_a77b443192dbaecffa5fed3d3ffaf5dc8}{m\+\_\+\+Render\+Instructions}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a77b443192dbaecffa5fed3d3ffaf5dc8}\label{class_s_g_render_1_1_renderer_a77b443192dbaecffa5fed3d3ffaf5dc8}} 
+\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_render_info}{Render\+Info}}, 96 $>$ {\bfseries m\+\_\+\+Render\+Instructions}
 \item 
-\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_instance_info}{Instance\+Info}}, 96 $>$ \mbox{\hyperlink{class_s_g_render_1_1_renderer_a543f9d15ca8ca843d4b2dc1a0034ca59}{m\+\_\+\+Instance\+Instructions}}
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a543f9d15ca8ca843d4b2dc1a0034ca59}\label{class_s_g_render_1_1_renderer_a543f9d15ca8ca843d4b2dc1a0034ca59}} 
+\mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$ \mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_instance_info}{Instance\+Info}}, 96 $>$ {\bfseries m\+\_\+\+Instance\+Instructions}
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_a5e8f39513492c56368bbdc7801442906}{m\+\_\+\+Vert\+Size}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a5e8f39513492c56368bbdc7801442906}\label{class_s_g_render_1_1_renderer_a5e8f39513492c56368bbdc7801442906}} 
+unsigned int {\bfseries m\+\_\+\+Vert\+Size} = 0
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_acb2d50d9dfff70155e03a9ed31a4ccd0}{m\+\_\+\+Ind\+Size}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_acb2d50d9dfff70155e03a9ed31a4ccd0}\label{class_s_g_render_1_1_renderer_acb2d50d9dfff70155e03a9ed31a4ccd0}} 
+unsigned int {\bfseries m\+\_\+\+Ind\+Size} = 0
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_a1e74bb9d7997519388c22153fc750c1c}{m\+\_\+\+Instance\+Size}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a1e74bb9d7997519388c22153fc750c1c}\label{class_s_g_render_1_1_renderer_a1e74bb9d7997519388c22153fc750c1c}} 
+unsigned int {\bfseries m\+\_\+\+Instance\+Size} = 0
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_af414eed291ad94372f6690289354e955}{m\+\_\+\+Vertices\+Index}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_af414eed291ad94372f6690289354e955}\label{class_s_g_render_1_1_renderer_af414eed291ad94372f6690289354e955}} 
+unsigned int {\bfseries m\+\_\+\+Vertices\+Index} = 0
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_a324f18822e612d42378e5597c32b2897}{m\+\_\+\+Instance\+Index}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a324f18822e612d42378e5597c32b2897}\label{class_s_g_render_1_1_renderer_a324f18822e612d42378e5597c32b2897}} 
+unsigned int {\bfseries m\+\_\+\+Instance\+Index} = 0
 \item 
-unsigned int \mbox{\hyperlink{class_s_g_render_1_1_renderer_a4d690fffa3aeef3b2351a2fb816441d2}{m\+\_\+\+Instance\+Count}} = 0
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4d690fffa3aeef3b2351a2fb816441d2}\label{class_s_g_render_1_1_renderer_a4d690fffa3aeef3b2351a2fb816441d2}} 
+unsigned int {\bfseries m\+\_\+\+Instance\+Count} = 0
 \item 
-bool \mbox{\hyperlink{class_s_g_render_1_1_renderer_a065c98f308caa87a62e5bb3ebf1ec64e}{m\+\_\+\+First\+Instance}} = true
+\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a065c98f308caa87a62e5bb3ebf1ec64e}\label{class_s_g_render_1_1_renderer_a065c98f308caa87a62e5bb3ebf1ec64e}} 
+bool {\bfseries m\+\_\+\+First\+Instance} = true
 \end{DoxyCompactItemize}
 
 
@@ -103,15 +123,6 @@ First you generate the renderer, and add instances if you want instanced renderi
 
 You then buffer video data and draw primitives 
 
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_af1bb0cf625feddb71c1b755efeaa62ee}\label{class_s_g_render_1_1_renderer_af1bb0cf625feddb71c1b755efeaa62ee}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!Renderer@{Renderer}}
-\index{Renderer@{Renderer}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{Renderer()}{Renderer()}}
-{\footnotesize\ttfamily SGRender\+::\+Renderer\+::\+Renderer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
 \doxysubsection{Member Function Documentation}
 \mbox{\Hypertarget{class_s_g_render_1_1_renderer_a2b881c8e474bdaad3ed478502eb254e5}\label{class_s_g_render_1_1_renderer_a2b881c8e474bdaad3ed478502eb254e5}} 
 \index{SGRender::Renderer@{SGRender::Renderer}!addInstances@{addInstances}}
@@ -120,25 +131,13 @@ You then buffer video data and draw primitives
 {\footnotesize\ttfamily template$<$typename T $>$ \\
 void SGRender\+::\+Renderer\+::add\+Instances (\begin{DoxyParamCaption}\item[{unsigned int}]{buffer\+Width,  }\item[{unsigned int}]{instance\+Data\+Stride,  }\item[{int}]{start\+Location }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a5b6c901838d899ccb351716e31af0871}\label{class_s_g_render_1_1_renderer_a5b6c901838d899ccb351716e31af0871}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!bindAll@{bindAll}}
-\index{bindAll@{bindAll}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{bindAll()}{bindAll()}}
-{\footnotesize\ttfamily void SGRender\+::\+Renderer\+::bind\+All (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a28b051826c2d48acacad9785bab38551}\label{class_s_g_render_1_1_renderer_a28b051826c2d48acacad9785bab38551}} 
+Adds parameters for instancing, and uses the data stride and the start location (aka the layout number) Currently does not support matrixes \mbox{\Hypertarget{class_s_g_render_1_1_renderer_a28b051826c2d48acacad9785bab38551}\label{class_s_g_render_1_1_renderer_a28b051826c2d48acacad9785bab38551}} 
 \index{SGRender::Renderer@{SGRender::Renderer}!bufferVideoData@{bufferVideoData}}
 \index{bufferVideoData@{bufferVideoData}!SGRender::Renderer@{SGRender::Renderer}}
 \doxysubsubsection{\texorpdfstring{bufferVideoData()}{bufferVideoData()}}
 {\footnotesize\ttfamily void SGRender\+::\+Renderer\+::buffer\+Video\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-Gathers vertice data into renderer buffers \mbox{\Hypertarget{class_s_g_render_1_1_renderer_ad36f9c8c98c4b72170d4e7032db985d9}\label{class_s_g_render_1_1_renderer_ad36f9c8c98c4b72170d4e7032db985d9}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!clearScreen@{clearScreen}}
-\index{clearScreen@{clearScreen}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{clearScreen()}{clearScreen()}}
-{\footnotesize\ttfamily static void SGRender\+::\+Renderer\+::clear\+Screen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac5bdfb545d6ce8a359929cd77bacaa7f}\label{class_s_g_render_1_1_renderer_ac5bdfb545d6ce8a359929cd77bacaa7f}} 
+Gathers vertice data into renderer buffers \mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac5bdfb545d6ce8a359929cd77bacaa7f}\label{class_s_g_render_1_1_renderer_ac5bdfb545d6ce8a359929cd77bacaa7f}} 
 \index{SGRender::Renderer@{SGRender::Renderer}!commit@{commit}}
 \index{commit@{commit}!SGRender::Renderer@{SGRender::Renderer}}
 \doxysubsubsection{\texorpdfstring{commit()}{commit()}}
@@ -195,7 +194,7 @@ Generates the parameters for the renderer, setting up the camera, buffers and bi
 Sets the drawing mode, defaulting to GLTriangles. \mbox{\Hypertarget{class_s_g_render_1_1_renderer_acb094ff22ca49d15985f1ac1fea48d0b}\label{class_s_g_render_1_1_renderer_acb094ff22ca49d15985f1ac1fea48d0b}} 
 \index{SGRender::Renderer@{SGRender::Renderer}!setLayout@{setLayout}}
 \index{setLayout@{setLayout}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{setLayout()}{setLayout()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+\doxysubsubsection{\texorpdfstring{setLayout()}{setLayout()}}
 {\footnotesize\ttfamily template$<$typename Type $>$ \\
 void SGRender\+::\+Renderer\+::set\+Layout (\begin{DoxyParamCaption}\item[{unsigned char}]{stride }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
@@ -206,20 +205,6 @@ Sets the vertex layout, pushing to the buffer layout object. Floats are recommen
 {\em stride} & Stride (width) of attribute (Eg for position -\/ x, y, z is 3) \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac3c4bb4de42deca876e4cd412d2ecaa8}\label{class_s_g_render_1_1_renderer_ac3c4bb4de42deca876e4cd412d2ecaa8}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!setLayout@{setLayout}}
-\index{setLayout@{setLayout}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{setLayout()}{setLayout()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
-{\footnotesize\ttfamily template$<$typename Type $>$ \\
-void SGRender\+::\+Renderer\+::set\+Layout (\begin{DoxyParamCaption}\item[{unsigned char}]{stride1,  }\item[{unsigned char}]{stride2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a2ec5f2af4710299517a2d345a5a5d1d6}\label{class_s_g_render_1_1_renderer_a2ec5f2af4710299517a2d345a5a5d1d6}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!setLayout@{setLayout}}
-\index{setLayout@{setLayout}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{setLayout()}{setLayout()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
-{\footnotesize\ttfamily template$<$typename Type $>$ \\
-void SGRender\+::\+Renderer\+::set\+Layout (\begin{DoxyParamCaption}\item[{unsigned char}]{stride1,  }\item[{unsigned char}]{stride2,  }\item[{unsigned char}]{stride3 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 
 
 \doxysubsection{Member Data Documentation}
@@ -229,122 +214,14 @@ void SGRender\+::\+Renderer\+::set\+Layout (\begin{DoxyParamCaption}\item[{unsig
 \doxysubsubsection{\texorpdfstring{camera}{camera}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_camera}{Camera}}$\ast$ SGRender\+::\+Renderer\+::camera = nullptr}
 
-Pointer to camera \mbox{\Hypertarget{class_s_g_render_1_1_renderer_a065c98f308caa87a62e5bb3ebf1ec64e}\label{class_s_g_render_1_1_renderer_a065c98f308caa87a62e5bb3ebf1ec64e}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_FirstInstance@{m\_FirstInstance}}
-\index{m\_FirstInstance@{m\_FirstInstance}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_FirstInstance}{m\_FirstInstance}}
-{\footnotesize\ttfamily bool SGRender\+::\+Renderer\+::m\+\_\+\+First\+Instance = true\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac81a362dff03c78a76a62f2beb963ea0}\label{class_s_g_render_1_1_renderer_ac81a362dff03c78a76a62f2beb963ea0}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_IB@{m\_IB}}
-\index{m\_IB@{m\_IB}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_IB}{m\_IB}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_index_buffer}{Index\+Buffer}} SGRender\+::\+Renderer\+::m\+\_\+\+IB\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_acb2d50d9dfff70155e03a9ed31a4ccd0}\label{class_s_g_render_1_1_renderer_acb2d50d9dfff70155e03a9ed31a4ccd0}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_IndSize@{m\_IndSize}}
-\index{m\_IndSize@{m\_IndSize}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_IndSize}{m\_IndSize}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Ind\+Size = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4d690fffa3aeef3b2351a2fb816441d2}\label{class_s_g_render_1_1_renderer_a4d690fffa3aeef3b2351a2fb816441d2}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_InstanceCount@{m\_InstanceCount}}
-\index{m\_InstanceCount@{m\_InstanceCount}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_InstanceCount}{m\_InstanceCount}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Instance\+Count = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a324f18822e612d42378e5597c32b2897}\label{class_s_g_render_1_1_renderer_a324f18822e612d42378e5597c32b2897}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_InstanceIndex@{m\_InstanceIndex}}
-\index{m\_InstanceIndex@{m\_InstanceIndex}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_InstanceIndex}{m\_InstanceIndex}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Instance\+Index = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a543f9d15ca8ca843d4b2dc1a0034ca59}\label{class_s_g_render_1_1_renderer_a543f9d15ca8ca843d4b2dc1a0034ca59}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_InstanceInstructions@{m\_InstanceInstructions}}
-\index{m\_InstanceInstructions@{m\_InstanceInstructions}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_InstanceInstructions}{m\_InstanceInstructions}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$\mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_instance_info}{Instance\+Info}}, 96$>$ SGRender\+::\+Renderer\+::m\+\_\+\+Instance\+Instructions\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a1e74bb9d7997519388c22153fc750c1c}\label{class_s_g_render_1_1_renderer_a1e74bb9d7997519388c22153fc750c1c}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_InstanceSize@{m\_InstanceSize}}
-\index{m\_InstanceSize@{m\_InstanceSize}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_InstanceSize}{m\_InstanceSize}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Instance\+Size = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_aa7f15fdb980cf57f2b9a5b379cacfc6f}\label{class_s_g_render_1_1_renderer_aa7f15fdb980cf57f2b9a5b379cacfc6f}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_InstBuffWidth@{m\_InstBuffWidth}}
-\index{m\_InstBuffWidth@{m\_InstBuffWidth}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_InstBuffWidth}{m\_InstBuffWidth}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Inst\+Buff\+Width = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_ac864edf665d66f9326d0b94888802410}\label{class_s_g_render_1_1_renderer_ac864edf665d66f9326d0b94888802410}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_PrimitiveType@{m\_PrimitiveType}}
-\index{m\_PrimitiveType@{m\_PrimitiveType}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_PrimitiveType}{m\_PrimitiveType}}
-{\footnotesize\ttfamily GLenum SGRender\+::\+Renderer\+::m\+\_\+\+Primitive\+Type = GL\+\_\+\+TRIANGLES\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a77b443192dbaecffa5fed3d3ffaf5dc8}\label{class_s_g_render_1_1_renderer_a77b443192dbaecffa5fed3d3ffaf5dc8}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_RenderInstructions@{m\_RenderInstructions}}
-\index{m\_RenderInstructions@{m\_RenderInstructions}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_RenderInstructions}{m\_RenderInstructions}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_seg_array}{Seg\+Array}}$<$\mbox{\hyperlink{struct_s_g_render_1_1_renderer_1_1_render_info}{Render\+Info}}, 96$>$ SGRender\+::\+Renderer\+::m\+\_\+\+Render\+Instructions\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a2777f63e8387b678bbcf8de428ca6ae7}\label{class_s_g_render_1_1_renderer_a2777f63e8387b678bbcf8de428ca6ae7}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VA@{m\_VA}}
-\index{m\_VA@{m\_VA}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VA}{m\_VA}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_vertex_array}{Vertex\+Array}} SGRender\+::\+Renderer\+::m\+\_\+\+VA\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4bf8423d598df18a1fbe30afdc5edd66}\label{class_s_g_render_1_1_renderer_a4bf8423d598df18a1fbe30afdc5edd66}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VB@{m\_VB}}
-\index{m\_VB@{m\_VB}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VB}{m\_VB}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer}{Vertex\+Buffer}} SGRender\+::\+Renderer\+::m\+\_\+\+VB\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a6efe7566c6d6067c9be4d778b10ab8de}\label{class_s_g_render_1_1_renderer_a6efe7566c6d6067c9be4d778b10ab8de}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VBInstances@{m\_VBInstances}}
-\index{m\_VBInstances@{m\_VBInstances}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VBInstances}{m\_VBInstances}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer}{Vertex\+Buffer}} SGRender\+::\+Renderer\+::m\+\_\+\+VBInstances\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4a5f2d7fbabf6db99967cc8511ac7a1a}\label{class_s_g_render_1_1_renderer_a4a5f2d7fbabf6db99967cc8511ac7a1a}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VBL@{m\_VBL}}
-\index{m\_VBL@{m\_VBL}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VBL}{m\_VBL}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} SGRender\+::\+Renderer\+::m\+\_\+\+VBL\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a4450b6ecaabad7d6c87c98bbc31825fd}\label{class_s_g_render_1_1_renderer_a4450b6ecaabad7d6c87c98bbc31825fd}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VBLInstances@{m\_VBLInstances}}
-\index{m\_VBLInstances@{m\_VBLInstances}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VBLInstances}{m\_VBLInstances}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_s_g_render_1_1_vertex_buffer_layout}{Vertex\+Buffer\+Layout}} SGRender\+::\+Renderer\+::m\+\_\+\+VBLInstances\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a703e04c4c278ba613f5d8ea3970be612}\label{class_s_g_render_1_1_renderer_a703e04c4c278ba613f5d8ea3970be612}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VertBuffWidth@{m\_VertBuffWidth}}
-\index{m\_VertBuffWidth@{m\_VertBuffWidth}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VertBuffWidth}{m\_VertBuffWidth}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Vert\+Buff\+Width = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_af414eed291ad94372f6690289354e955}\label{class_s_g_render_1_1_renderer_af414eed291ad94372f6690289354e955}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VerticesIndex@{m\_VerticesIndex}}
-\index{m\_VerticesIndex@{m\_VerticesIndex}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VerticesIndex}{m\_VerticesIndex}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Vertices\+Index = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a5e8f39513492c56368bbdc7801442906}\label{class_s_g_render_1_1_renderer_a5e8f39513492c56368bbdc7801442906}} 
-\index{SGRender::Renderer@{SGRender::Renderer}!m\_VertSize@{m\_VertSize}}
-\index{m\_VertSize@{m\_VertSize}!SGRender::Renderer@{SGRender::Renderer}}
-\doxysubsubsection{\texorpdfstring{m\_VertSize}{m\_VertSize}}
-{\footnotesize\ttfamily unsigned int SGRender\+::\+Renderer\+::m\+\_\+\+Vert\+Size = 0\hspace{0.3cm}{\ttfamily [protected]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_renderer_a900de03e2e775d2b16a0f6f258789024}\label{class_s_g_render_1_1_renderer_a900de03e2e775d2b16a0f6f258789024}} 
+Pointer to camera \mbox{\Hypertarget{class_s_g_render_1_1_renderer_a900de03e2e775d2b16a0f6f258789024}\label{class_s_g_render_1_1_renderer_a900de03e2e775d2b16a0f6f258789024}} 
 \index{SGRender::Renderer@{SGRender::Renderer}!modelMatrix@{modelMatrix}}
 \index{modelMatrix@{modelMatrix}!SGRender::Renderer@{SGRender::Renderer}}
 \doxysubsubsection{\texorpdfstring{modelMatrix}{modelMatrix}}
 {\footnotesize\ttfamily glm\+::mat4 SGRender\+::\+Renderer\+::model\+Matrix = glm\+::mat4(1.\+0f)}
 
-\mbox{\hyperlink{namespace_model}{Model}} Matrix -\/ identity matrix by default 
+Model Matrix -\/ identity matrix by default 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/\mbox{\hyperlink{_renderer_8hpp}{Renderer.\+hpp}}\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Renderer.\+hpp\end{DoxyCompactItemize}

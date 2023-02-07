@@ -1,5 +1,73 @@
 #include "renderer/Geometry.h"
 
+//batch
+void Geometry::BatchMeshes(MeshData& destMesh, std::vector<MeshMeta>& meshes)
+{
+	BatchMeshes(destMesh.vertices, destMesh.indices, meshes);
+}
+
+void Geometry::BatchMeshes(std::vector<float>& destVerts, std::vector<unsigned int>& destInds, std::vector<MeshMeta>& meshes)
+{
+	if (meshes.size() <= 0)
+	{
+		EngineLog("No meshes to batch!");
+		return;
+	}
+
+	//Get total verts and inds
+	int vertSize = 0;
+	int indSize = 0;
+	for (auto& mesh : meshes)
+	{
+		vertSize += mesh.vertexMeta.count;
+		indSize += mesh.indiceMeta.count;
+	}
+
+	//Then create buffer with space for that many floats
+	std::vector<float> vertices; std::vector<unsigned int> indices;		//Buffer declaration
+	vertices.resize(vertSize); indices.resize(indSize);				//Buffer resizing
+	auto verticesIterator = vertices.begin(); auto indicesIterator = indices.begin();
+
+	//Indexes
+	unsigned int vertIndex = 0; unsigned int indIndex = 0;
+	int indiceSizeIndex = 0;
+	unsigned int largestInd = 0;
+
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		//Get instructions from render queue
+		MeshMeta instructions = meshes[i];
+
+		//VERTICES
+		const float* dataPointer = instructions.vertexMeta.verts;
+		unsigned int dataSize = instructions.vertexMeta.count;
+
+		//Copy vertices into vector		
+		std::copy(&dataPointer[0], &dataPointer[dataSize], verticesIterator + vertIndex);
+		vertIndex += dataSize;
+
+		//INDICES
+		const unsigned int* indDataPointer = instructions.indiceMeta.inds;
+		unsigned int indDataSize = instructions.indiceMeta.count;
+
+		//Add to vector one by one
+		int currentLargest = 0;
+		for (int j = 0; j < indDataSize; j++) {
+			int newValue = indDataPointer[j] + largestInd;
+			indices[indIndex] = newValue + indiceSizeIndex;
+			indIndex++;
+			if (newValue > currentLargest) {
+				currentLargest = newValue;
+			}
+		}
+		largestInd = currentLargest;
+
+		indiceSizeIndex++;
+
+	}
+	destVerts = vertices; destInds = indices;
+}
+
 //Creation
 Quad Geometry::CreateQuad(float x, float y, float width, float height) 
 {

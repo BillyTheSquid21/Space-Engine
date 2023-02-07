@@ -1,108 +1,37 @@
 \hypertarget{class_s_g_render_1_1_shader}{}\doxysection{SGRender\+::Shader Class Reference}
 \label{class_s_g_render_1_1_shader}\index{SGRender::Shader@{SGRender::Shader}}
-
-
-{\ttfamily \#include $<$GLClasses.\+h$>$}
-
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_s_g_render_1_1_shader_ab60063c1eb1ba27bc38f9fbd414e2346}{Shader}} ()=default
-\item 
-\mbox{\hyperlink{class_s_g_render_1_1_shader_ad3c8bdf2e792409b3325745fcc88b0ca}{$\sim$\+Shader}} ()
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a591002e9542e600a311ba139751b453c}{create}} (const std\+::string \&vert, const std\+::string \&frag)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a0547fbd61b4ff4c68b19a9d5328bbd55}{create}} (const std\+::string \&vert, const std\+::string \&geo, const std\+::string \&frag)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a00f3547da629550ea5758c2ce3db2654}{bind}} () const
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a659ae254ca6ce24ed95f05929d9d2f0d}{unbind}} () const
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a4342ea7c28095a142a61afc3a23df38e}{delete\+Shader}} ()
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}{set\+Uniform}} (const std\+::string \&name, int uniform)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a2c6571ac6d4bf3f148bd9117af49f9c8}{set\+Uniform}} (const std\+::string \&name, float uniform)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_a531a6860ae0b6cbd3b2ac2eebe01c451}{set\+Uniform}} (const std\+::string \&name, const glm\+::vec3 $\ast$uniform)
-\item 
-void \mbox{\hyperlink{class_s_g_render_1_1_shader_ac13d4bf257779d1d68a8b061cc06077a}{set\+Uniform}} (const std\+::string \&name, const glm\+::mat4 $\ast$uniform)
-\end{DoxyCompactItemize}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_ab60063c1eb1ba27bc38f9fbd414e2346}\label{class_s_g_render_1_1_shader_ab60063c1eb1ba27bc38f9fbd414e2346}} 
-\index{SGRender::Shader@{SGRender::Shader}!Shader@{Shader}}
-\index{Shader@{Shader}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{Shader()}{Shader()}}
-{\footnotesize\ttfamily SGRender\+::\+Shader\+::\+Shader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_ad3c8bdf2e792409b3325745fcc88b0ca}\label{class_s_g_render_1_1_shader_ad3c8bdf2e792409b3325745fcc88b0ca}} 
-\index{SGRender::Shader@{SGRender::Shader}!````~Shader@{$\sim$Shader}}
-\index{````~Shader@{$\sim$Shader}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{$\sim$Shader()}{~Shader()}}
-{\footnotesize\ttfamily SGRender\+::\+Shader\+::$\sim$\+Shader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-
-
-\doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_a00f3547da629550ea5758c2ce3db2654}\label{class_s_g_render_1_1_shader_a00f3547da629550ea5758c2ce3db2654}} 
-\index{SGRender::Shader@{SGRender::Shader}!bind@{bind}}
-\index{bind@{bind}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::bind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
-
 \mbox{\Hypertarget{class_s_g_render_1_1_shader_a591002e9542e600a311ba139751b453c}\label{class_s_g_render_1_1_shader_a591002e9542e600a311ba139751b453c}} 
-\index{SGRender::Shader@{SGRender::Shader}!create@{create}}
-\index{create@{create}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::create (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{vert,  }\item[{const std\+::string \&}]{frag }\end{DoxyParamCaption})}
-
+void {\bfseries create} (const std\+::string \&vert, const std\+::string \&frag)
+\item 
 \mbox{\Hypertarget{class_s_g_render_1_1_shader_a0547fbd61b4ff4c68b19a9d5328bbd55}\label{class_s_g_render_1_1_shader_a0547fbd61b4ff4c68b19a9d5328bbd55}} 
-\index{SGRender::Shader@{SGRender::Shader}!create@{create}}
-\index{create@{create}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{create()}{create()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::create (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{vert,  }\item[{const std\+::string \&}]{geo,  }\item[{const std\+::string \&}]{frag }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_a4342ea7c28095a142a61afc3a23df38e}\label{class_s_g_render_1_1_shader_a4342ea7c28095a142a61afc3a23df38e}} 
-\index{SGRender::Shader@{SGRender::Shader}!deleteShader@{deleteShader}}
-\index{deleteShader@{deleteShader}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{deleteShader()}{deleteShader()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::delete\+Shader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_ac13d4bf257779d1d68a8b061cc06077a}\label{class_s_g_render_1_1_shader_ac13d4bf257779d1d68a8b061cc06077a}} 
-\index{SGRender::Shader@{SGRender::Shader}!setUniform@{setUniform}}
-\index{setUniform@{setUniform}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{setUniform()}{setUniform()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::set\+Uniform (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const glm\+::mat4 $\ast$}]{uniform }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_a531a6860ae0b6cbd3b2ac2eebe01c451}\label{class_s_g_render_1_1_shader_a531a6860ae0b6cbd3b2ac2eebe01c451}} 
-\index{SGRender::Shader@{SGRender::Shader}!setUniform@{setUniform}}
-\index{setUniform@{setUniform}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{setUniform()}{setUniform()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::set\+Uniform (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{const glm\+::vec3 $\ast$}]{uniform }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_a2c6571ac6d4bf3f148bd9117af49f9c8}\label{class_s_g_render_1_1_shader_a2c6571ac6d4bf3f148bd9117af49f9c8}} 
-\index{SGRender::Shader@{SGRender::Shader}!setUniform@{setUniform}}
-\index{setUniform@{setUniform}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{setUniform()}{setUniform()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::set\+Uniform (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{float}]{uniform }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}\label{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}} 
-\index{SGRender::Shader@{SGRender::Shader}!setUniform@{setUniform}}
-\index{setUniform@{setUniform}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{setUniform()}{setUniform()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::set\+Uniform (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name,  }\item[{int}]{uniform }\end{DoxyParamCaption})}
-
+void {\bfseries create} (const std\+::string \&vert, const std\+::string \&geo, const std\+::string \&frag)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shader_a00f3547da629550ea5758c2ce3db2654}\label{class_s_g_render_1_1_shader_a00f3547da629550ea5758c2ce3db2654}} 
+void {\bfseries bind} () const
+\item 
 \mbox{\Hypertarget{class_s_g_render_1_1_shader_a659ae254ca6ce24ed95f05929d9d2f0d}\label{class_s_g_render_1_1_shader_a659ae254ca6ce24ed95f05929d9d2f0d}} 
-\index{SGRender::Shader@{SGRender::Shader}!unbind@{unbind}}
-\index{unbind@{unbind}!SGRender::Shader@{SGRender::Shader}}
-\doxysubsubsection{\texorpdfstring{unbind()}{unbind()}}
-{\footnotesize\ttfamily void SGRender\+::\+Shader\+::unbind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
-
+void {\bfseries unbind} () const
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shader_a4342ea7c28095a142a61afc3a23df38e}\label{class_s_g_render_1_1_shader_a4342ea7c28095a142a61afc3a23df38e}} 
+void {\bfseries delete\+Shader} ()
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}\label{class_s_g_render_1_1_shader_a959bec64c9ced8f7018ea623f075a66b}} 
+void {\bfseries set\+Uniform} (const std\+::string \&name, int uniform)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shader_a2c6571ac6d4bf3f148bd9117af49f9c8}\label{class_s_g_render_1_1_shader_a2c6571ac6d4bf3f148bd9117af49f9c8}} 
+void {\bfseries set\+Uniform} (const std\+::string \&name, float uniform)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shader_a531a6860ae0b6cbd3b2ac2eebe01c451}\label{class_s_g_render_1_1_shader_a531a6860ae0b6cbd3b2ac2eebe01c451}} 
+void {\bfseries set\+Uniform} (const std\+::string \&name, const glm\+::vec3 $\ast$uniform)
+\item 
+\mbox{\Hypertarget{class_s_g_render_1_1_shader_ac13d4bf257779d1d68a8b061cc06077a}\label{class_s_g_render_1_1_shader_ac13d4bf257779d1d68a8b061cc06077a}} 
+void {\bfseries set\+Uniform} (const std\+::string \&name, const glm\+::mat4 $\ast$uniform)
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/\mbox{\hyperlink{_g_l_classes_8h}{GLClasses.\+h}}\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/GLClasses.\+h\end{DoxyCompactItemize}

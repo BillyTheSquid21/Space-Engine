@@ -1,5 +1,12 @@
 #include "core/Sound.h"
 
+std::vector<FMOD::Sound*> SGSound::System::m_ReleaseQueue;
+FMOD::System* SGSound::System::m_System = NULL;
+std::vector<FMOD::ChannelGroup*> SGSound::System::m_ChannelGroups;
+std::vector<SGSound::System::SoundData> SGSound::System::m_Sounds;
+std::shared_mutex SGSound::System::m_SoundAccessMutex;
+bool SGSound::System::s_Set = false;
+
 bool SGSound::System::init()
 {
 	bool success = true;
@@ -8,34 +15,44 @@ bool SGSound::System::init()
     result = FMOD::System_Create(&m_System);
     if (result != FMOD_OK)
     {
-        EngineLog("FMOD Failed to create!");
-        success = false;
+        EngineLogFail("FMOD Create");
+        return false;
     }
+    EngineLogOk("FMOD Create");
 
     result = m_System->init(SOUND_CHANNELS, FMOD_INIT_NORMAL, 0);
     if (result != FMOD_OK)
     {
-        EngineLog("FMOD Failed to initalize!");
-        success = false;
+        EngineLogFail("FMOD Init");
+        return false;
     }
+    EngineLogOk("FMOD Init");
 
     //Init channel groups
     m_ChannelGroups.resize((int)ChannelGroup::CHANNEL_GROUP_COUNT);
     result = m_System->createChannelGroup("effects", &m_ChannelGroups[(int)ChannelGroup::EFFECTS]);
     if (result != FMOD_OK)
     {
-        EngineLog("Effect channel failed to initialize!");
-        success = false;
+        EngineLogFail("Effect Channel");
+        return false;
     }
+    EngineLogOk("Effect Channel");
 
     result = m_System->createChannelGroup("music", &m_ChannelGroups[(int)ChannelGroup::MUSIC]);
     if (result != FMOD_OK)
     {
-        EngineLog("Music channel failed to initialize!");
-        success = false;
+        EngineLogFail("Music Channel");
+        return false;
     }
+    EngineLogOk("Music Channel");
 
+    EngineLogOk("Sound System");
     return success;
+}
+
+void SGSound::System::set()
+{
+    s_Set = true;
 }
 
 size_t SGSound::System::loadSound(const char* path, FMOD::Sound*& sound)
@@ -299,6 +316,11 @@ void SGSound::System::releaseQueuedSound(int& index)
 
 void SGSound::System::update()
 {
+    if (!s_Set)
+    {
+        return;
+    }
+
     std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
     m_System->update();
     for (int i = 0; i < m_ReleaseQueue.size(); i++)
@@ -357,8 +379,10 @@ void SGSound::System::clean()
     std::lock_guard<std::shared_mutex> lock(m_SoundAccessMutex);
     m_Sounds.clear();
     m_ReleaseQueue.clear();
+    m_ChannelGroups.clear();
     m_System->release();
     m_System->close();
+    s_Set = false;
 }
 
 void SGSound::System::setChannelGroupVolume(ChannelGroup group, float volume)

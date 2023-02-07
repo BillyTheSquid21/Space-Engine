@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: D:/Repositories/Space Engine/SpaceGame/include/core/State.hpp Source File</title>
+<title>Space Engine: D:/Repositories/Space Engine/SpaceGame/include/core/State.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -93,61 +93,49 @@ $(document).ready(function(){initNavTree('_state_8hpp_source.html',''); initResi
   <div class="headertitle"><div class="title">State.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="_state_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#ifndef STATE_H</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno"><a class="line" href="_state_8hpp.html#a37e6e3fdf875b2d9551359bc749c71fd">    3</a></span><span class="preprocessor">#define STATE_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#define STATE_H</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;GLFW/glfw3.h&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="_obj_management_8h.html">ObjManagement.h</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;ObjManagement.h&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="namespace_s_g.html">    8</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_s_g.html">SG</a></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>SG</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>{</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html">   14</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_s_g_1_1_state.html">State</a></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    {</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="comment">//Universal functions</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a17957af270e7b8d468f8f3dde766c21c">   18</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a17957af270e7b8d468f8f3dde766c21c">update</a>(<span class="keywordtype">double</span> deltaTime, <span class="keywordtype">double</span> time) {};</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a744e9c3980618a91f94bab5d48b0ad5b">   19</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a744e9c3980618a91f94bab5d48b0ad5b">render</a>() {};</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a2e679d3519dc4273c2ff189335688e56">   20</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a2e679d3519dc4273c2ff189335688e56">handleInput</a>(<span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods) {};</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a8438f4c8b22212c8b4543e03fa619129">   21</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a8438f4c8b22212c8b4543e03fa619129">handleScrolling</a>(<span class="keywordtype">double</span> xOffset, <span class="keywordtype">double</span> yOffset) {};</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a3fcf4b404a2ed28d316f0b7016e6a176">   22</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a3fcf4b404a2ed28d316f0b7016e6a176">handleMouse</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods) {};</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> update(<span class="keywordtype">double</span> deltaTime, <span class="keywordtype">double</span> time) {};</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> render() {};</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> handleInput(<span class="keywordtype">int</span> key, <span class="keywordtype">int</span> scancode, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods) {};</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> handleScrolling(<span class="keywordtype">double</span> xOffset, <span class="keywordtype">double</span> yOffset) {};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> handleMouse(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> action, <span class="keywordtype">int</span> mods) {};</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#acab4370caaa70732bddff4a43e54adcc">   27</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#acab4370caaa70732bddff4a43e54adcc">loadRequiredData</a>() {};</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a276022def1b00f5758a33fbdc02b6187">   31</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a276022def1b00f5758a33fbdc02b6187">purgeRequiredData</a>() {};</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="comment">//Getters and setters</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a7c7ee645bc1ba25e5c3f10134e9208c6">   34</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a7c7ee645bc1ba25e5c3f10134e9208c6">active</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="class_s_g_1_1_state.html#ab2b7ea3b660e45341d17751900ffcf53">m_Active</a>; }</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a1f936547f59900721a791d75b28ad5aa">   35</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a1f936547f59900721a791d75b28ad5aa">setActive</a>(<span class="keywordtype">bool</span> set) { <a class="code hl_variable" href="class_s_g_1_1_state.html#ab2b7ea3b660e45341d17751900ffcf53">m_Active</a> = set; }</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a32cacd01eac7a9aa24e076d24d59119b">   36</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="class_s_g_1_1_state.html#a32cacd01eac7a9aa24e076d24d59119b">hasDataLoaded</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="class_s_g_1_1_state.html#a91973d52d93954ffef8b9e1adfe5fd9e">m_DataLoaded</a>; }</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keywordtype">bool</span> active()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_Active; }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordtype">void</span> setActive(<span class="keywordtype">bool</span> set) { m_Active = set; }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keywordtype">bool</span> hasDataLoaded()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_DataLoaded; }</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#ab2b7ea3b660e45341d17751900ffcf53">   39</a></span>        <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_s_g_1_1_state.html#ab2b7ea3b660e45341d17751900ffcf53">m_Active</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="class_s_g_1_1_state.html#a91973d52d93954ffef8b9e1adfe5fd9e">   40</a></span>        <span class="keywordtype">bool</span> <a class="code hl_variable" href="class_s_g_1_1_state.html#a91973d52d93954ffef8b9e1adfe5fd9e">m_DataLoaded</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keywordtype">bool</span> m_Active = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">bool</span> m_DataLoaded = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    };</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="a_obj_management_8h_html"><div class="ttname"><a href="_obj_management_8h.html">ObjManagement.h</a></div></div>
 <div class="ttc" id="aclass_s_g_1_1_state_html"><div class="ttname"><a href="class_s_g_1_1_state.html">SG::State</a></div><div class="ttdef"><b>Definition:</b> State.hpp:15</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a17957af270e7b8d468f8f3dde766c21c"><div class="ttname"><a href="class_s_g_1_1_state.html#a17957af270e7b8d468f8f3dde766c21c">SG::State::update</a></div><div class="ttdeci">virtual void update(double deltaTime, double time)</div><div class="ttdef"><b>Definition:</b> State.hpp:18</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a1f936547f59900721a791d75b28ad5aa"><div class="ttname"><a href="class_s_g_1_1_state.html#a1f936547f59900721a791d75b28ad5aa">SG::State::setActive</a></div><div class="ttdeci">void setActive(bool set)</div><div class="ttdef"><b>Definition:</b> State.hpp:35</div></div>
 <div class="ttc" id="aclass_s_g_1_1_state_html_a276022def1b00f5758a33fbdc02b6187"><div class="ttname"><a href="class_s_g_1_1_state.html#a276022def1b00f5758a33fbdc02b6187">SG::State::purgeRequiredData</a></div><div class="ttdeci">virtual void purgeRequiredData()</div><div class="ttdef"><b>Definition:</b> State.hpp:31</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a2e679d3519dc4273c2ff189335688e56"><div class="ttname"><a href="class_s_g_1_1_state.html#a2e679d3519dc4273c2ff189335688e56">SG::State::handleInput</a></div><div class="ttdeci">virtual void handleInput(int key, int scancode, int action, int mods)</div><div class="ttdef"><b>Definition:</b> State.hpp:20</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a32cacd01eac7a9aa24e076d24d59119b"><div class="ttname"><a href="class_s_g_1_1_state.html#a32cacd01eac7a9aa24e076d24d59119b">SG::State::hasDataLoaded</a></div><div class="ttdeci">bool hasDataLoaded() const</div><div class="ttdef"><b>Definition:</b> State.hpp:36</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a3fcf4b404a2ed28d316f0b7016e6a176"><div class="ttname"><a href="class_s_g_1_1_state.html#a3fcf4b404a2ed28d316f0b7016e6a176">SG::State::handleMouse</a></div><div class="ttdeci">virtual void handleMouse(int button, int action, int mods)</div><div class="ttdef"><b>Definition:</b> State.hpp:22</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a744e9c3980618a91f94bab5d48b0ad5b"><div class="ttname"><a href="class_s_g_1_1_state.html#a744e9c3980618a91f94bab5d48b0ad5b">SG::State::render</a></div><div class="ttdeci">virtual void render()</div><div class="ttdef"><b>Definition:</b> State.hpp:19</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a7c7ee645bc1ba25e5c3f10134e9208c6"><div class="ttname"><a href="class_s_g_1_1_state.html#a7c7ee645bc1ba25e5c3f10134e9208c6">SG::State::active</a></div><div class="ttdeci">bool active() const</div><div class="ttdef"><b>Definition:</b> State.hpp:34</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a8438f4c8b22212c8b4543e03fa619129"><div class="ttname"><a href="class_s_g_1_1_state.html#a8438f4c8b22212c8b4543e03fa619129">SG::State::handleScrolling</a></div><div class="ttdeci">virtual void handleScrolling(double xOffset, double yOffset)</div><div class="ttdef"><b>Definition:</b> State.hpp:21</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_a91973d52d93954ffef8b9e1adfe5fd9e"><div class="ttname"><a href="class_s_g_1_1_state.html#a91973d52d93954ffef8b9e1adfe5fd9e">SG::State::m_DataLoaded</a></div><div class="ttdeci">bool m_DataLoaded</div><div class="ttdef"><b>Definition:</b> State.hpp:40</div></div>
-<div class="ttc" id="aclass_s_g_1_1_state_html_ab2b7ea3b660e45341d17751900ffcf53"><div class="ttname"><a href="class_s_g_1_1_state.html#ab2b7ea3b660e45341d17751900ffcf53">SG::State::m_Active</a></div><div class="ttdeci">bool m_Active</div><div class="ttdef"><b>Definition:</b> State.hpp:39</div></div>
 <div class="ttc" id="aclass_s_g_1_1_state_html_acab4370caaa70732bddff4a43e54adcc"><div class="ttname"><a href="class_s_g_1_1_state.html#acab4370caaa70732bddff4a43e54adcc">SG::State::loadRequiredData</a></div><div class="ttdeci">virtual void loadRequiredData()</div><div class="ttdef"><b>Definition:</b> State.hpp:27</div></div>
-<div class="ttc" id="anamespace_s_g_html"><div class="ttname"><a href="namespace_s_g.html">SG</a></div><div class="ttdef"><b>Definition:</b> State.hpp:9</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_5c97d50dc5e986a91c2215656d7436da.html">SpaceGame</a></li><li class="navelem"><a class="el" href="dir_e5e8edc4cdbf69631711bac8439d03a7.html">include</a></li><li class="navelem"><a class="el" href="dir_875877832afa2c1cec4fdc521136c2a9.html">core</a></li><li class="navelem"><a class="el" href="_state_8hpp.html">State.hpp</a></li>
+    <li class="navelem"><a class="el" href="dir_5c97d50dc5e986a91c2215656d7436da.html">SpaceGame</a></li><li class="navelem"><a class="el" href="dir_e5e8edc4cdbf69631711bac8439d03a7.html">include</a></li><li class="navelem"><a class="el" href="dir_875877832afa2c1cec4fdc521136c2a9.html">core</a></li><li class="navelem"><b>State.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

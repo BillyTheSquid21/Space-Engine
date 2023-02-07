@@ -2,12 +2,14 @@
 #ifndef SGUTIL_H
 #define SGUTIL_H
 
-#include <iostream>
-#include <math.h>
-#include <chrono>
-#include <mutex>
-#include <vector>
-#include <syncstream>
+#include "iostream"
+#include "math.h"
+#include "chrono"
+#include "mutex"
+#include "vector"
+#include "syncstream"
+#include "assert.h"
+#include "string"
 
 static const char ENGINE_TAG[]{ "[Space Engine] " };
 
@@ -26,28 +28,16 @@ static void Log(args && ... inputs)
 #if _DEBUG
 
 #define EngineLog(vars, ...) Log(vars, ##__VA_ARGS__)
+#define EngineLogOk(vars, ...) Log(vars, ##__VA_ARGS__, "[", "\033[1;32mOK\033[0m", "]")
+#define EngineLogFail(vars, ...) Log(vars, ##__VA_ARGS__, "[", "\033[1;31mFAIL\033[0m", "]")
 
 #else
 
 #define EngineLog(vars, ...)
+#define EngineLogOk(vars, ...)
+#define EngineLogFail(vars, ...)
 
 #endif
-
-//return structs
-struct Struct2f
-{
-	float a, b;
-};
-
-struct Struct3f
-{
-	float a, b, c;
-};
-
-struct Struct4f
-{
-	float a, b, c, d;
-};
 
 //For logging times and so is not fully secure
 class EngineTimer

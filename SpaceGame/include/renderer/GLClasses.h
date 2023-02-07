@@ -9,11 +9,44 @@
 #include <unordered_map>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <stdint.h>
 #include "utility/SGUtil.h"
 
 namespace SGRender
 {
+	enum class UniformType
+	{
+		INT, FLOAT, VEC2, VEC3, MAT4, TEXTURE
+	};
+
+	/**
+	* Classes that are sampled as texture 2D textures can derive this
+	*/
+	class TextureBase
+	{
+	public:
+		/**
+		* Generate texture in a given slot from an external buffer that is wrapped instead of clamped to edge
+		*/
+		void bind() const
+		{
+			glActiveTexture(GL_TEXTURE0 + m_Slot);
+			glBindTexture(GL_TEXTURE_2D, m_ID);
+		};
+
+		void unbind() const
+		{
+			glActiveTexture(GL_TEXTURE0 + m_Slot);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		};
+
+		int32_t& getSlot() { return m_Slot; };
+
+	protected:
+		int32_t m_Slot = 0;
+		GLuint m_ID = 0;
+	};
+
 	class VertexBuffer
 	{
 	public:
@@ -21,12 +54,12 @@ namespace SGRender
 		~VertexBuffer();
 
 		void create(size_t dataSize);
-		void bufferData(const void* data, unsigned int count);
+		void bufferData(const void* data, int count);
 		void bind() const;
 		void unbind() const;
 
 	private:
-		unsigned int m_ID = 0;
+		GLuint m_ID = 0;
 	};
 
 	class IndexBuffer
@@ -35,8 +68,8 @@ namespace SGRender
 		IndexBuffer() = default;
 		~IndexBuffer();
 
-		void create(unsigned int count);
-		void bufferData(const void* data, unsigned int count);
+		void create(int count);
+		void bufferData(const void* data, int count);
 		void bind() const;
 		void unbind() const;
 
@@ -44,8 +77,50 @@ namespace SGRender
 		inline unsigned int GetCount() const { return m_IndicesCount; }
 
 	private:
-		unsigned int m_ID = 0;
-		unsigned int m_IndicesCount = 0;
+		GLuint m_ID = 0;
+		int32_t m_IndicesCount = 0;
+	};
+
+	//Binding point for either uniform buffer or SSBO
+	static GLuint GL_Binding_Point = 1;
+
+	class UniformBuffer
+	{
+	public:
+		UniformBuffer() = default;
+		~UniformBuffer();
+
+		void create();
+		void reserveData(GLsizeiptr size);
+		void bufferData(void* data, GLsizeiptr size);
+		void bufferData(void* data, int offset, GLsizeiptr size);
+		void bind() const;
+		void unbind() const;
+		GLuint bindingPoint() const { return m_BindingPoint; }
+
+	private:
+		GLuint m_ID = 0;
+		GLuint m_BindingPoint = 0;
+		GLsizeiptr m_ReservedSize = 0;
+	};
+
+	class SSBO
+	{
+	public:
+		SSBO() = default;
+		~SSBO();
+
+		void create();
+		void bufferData(void* data, int offset, GLsizeiptr size);
+		void bufferData(void* data, int offset, GLsizeiptr size, GLenum drawtype);
+		void bind() const;
+		void unbind() const;
+		GLuint bindingPoint() const { return m_BindingPoint; }
+
+	private:
+		GLuint m_ID = 0;
+		GLuint m_BindingPoint = 0;
+		GLsizeiptr m_Size = 0;
 	};
 
 	//Credit OGLDev for ShadowMapFBO layout
@@ -56,26 +131,26 @@ namespace SGRender
 
 		~ShadowMapFBO();
 
-		bool init(unsigned int width, unsigned int height);
+		bool init(int width, int height);
 
 		void bindForWriting();
-		void bindForReading(unsigned int slot);
+		void bindForReading(uint32_t slot);
 		void unbind() const { glBindFramebuffer(GL_FRAMEBUFFER, 0); };
 
 	private:
-		unsigned int m_fbo;
-		unsigned int m_shadowMap;
+		GLuint m_fbo;
+		GLuint m_shadowMap;
 	};
 
 	//Buffer layout abstraction layer
 	struct VertexBufferElement
 	{
-		unsigned int count;
-		unsigned int type;
-		unsigned int normalized;
+		uint32_t count;
+		uint32_t type;
+		uint32_t normalized;
 		bool instanced;
 
-		static unsigned int getTypeSize(unsigned int type) {
+		static size_t getTypeSize(GLuint type) {
 			switch (type) {
 			case GL_FLOAT: return 4;
 			case GL_UNSIGNED_INT: return 4; //can extend for more data types
@@ -84,7 +159,7 @@ namespace SGRender
 			}
 		}
 
-		static unsigned int getTypeSize(unsigned int type, size_t count) {
+		static size_t getTypeSize(GLuint type, size_t count) {
 			return getTypeSize(type) * count;
 		}
 	};
@@ -96,25 +171,25 @@ namespace SGRender
 		~VertexBufferLayout() = default;
 
 		template<typename T>
-		void push(unsigned int count, bool instance) { //default
+		void push(int count, bool instance) { //default
 			static_assert(false, "Unknown type pushed to VBL");
 		}
 
 		template<>
-		void push<float>(unsigned int count, bool instance) { //push float
-			m_Elements.push_back({ count, GL_FLOAT, GL_FALSE, instance });
+		void push<float>(int count, bool instance) { //push float
+			m_Elements.emplace_back(count, GL_FLOAT, GL_FALSE, instance );
 			m_Stride += count * VertexBufferElement::getTypeSize(GL_FLOAT);
 		}
 
 		template<>
-		void push<unsigned int>(unsigned int count, bool instance) {  //push uint
-			m_Elements.push_back({ count, GL_UNSIGNED_INT, GL_FALSE, instance });
+		void push<unsigned int>(int count, bool instance) {  //push uint
+			m_Elements.emplace_back(count, GL_UNSIGNED_INT, GL_FALSE, instance );
 			m_Stride += count * VertexBufferElement::getTypeSize(GL_UNSIGNED_INT);
 		}
 
 		template<>
-		void push<unsigned char>(unsigned int count, bool instance) {  //push char
-			m_Elements.push_back({ count, GL_UNSIGNED_BYTE, GL_TRUE, instance });
+		void push<unsigned char>(int count, bool instance) {  //push char
+			m_Elements.emplace_back(count, GL_UNSIGNED_BYTE, GL_TRUE, instance);
 			m_Stride += count * VertexBufferElement::getTypeSize(GL_UNSIGNED_BYTE);
 		}
 
@@ -126,7 +201,7 @@ namespace SGRender
 
 	private:
 		std::vector<VertexBufferElement> m_Elements;
-		unsigned int m_Stride = 0;
+		int32_t m_Stride = 0;
 	};
 
 	class VertexArray
@@ -143,7 +218,7 @@ namespace SGRender
 		void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout, int start);
 
 	private:
-		unsigned int m_ID;
+		GLuint m_ID;
 	};
 
 	struct ShaderProgramSource {
@@ -171,19 +246,62 @@ namespace SGRender
 		void deleteShader() { glDeleteProgram(m_ID); }
 
 		//set uniforms - overload for each data type
+		void setUniform(const std::string& name, void* uniform, UniformType type);
 		void setUniform(const std::string& name, int uniform);
 		void setUniform(const std::string& name, float uniform);
+		void setUniform(const std::string& name, const glm::vec2* uniform);
 		void setUniform(const std::string& name, const glm::vec3* uniform);
 		void setUniform(const std::string& name, const glm::mat4* uniform);
 
+		//Set uniforms from direct location
+		void setUniform(const GLint location, int uniform);
+		void setUniform(const GLint location, float uniform);
+		void setUniform(const GLint location, const glm::vec2* uniform);
+		void setUniform(const GLint location, const glm::vec3* uniform);
+		void setUniform(const GLint location, const glm::mat4* uniform);
+
+		template<typename T>
+		void setUniform(const T id, void* uniform, UniformType type)
+		{
+			static_assert(std::is_same<T, GLint>::value || std::is_same<T, std::string>::value, "Incorrect uniform type passed!");
+
+			switch (type)
+			{
+			case UniformType::INT:
+				setUniform(id, *(int*)uniform);
+				break;
+			case UniformType::FLOAT:
+				setUniform(id, *(float*)uniform);
+				break;
+			case UniformType::MAT4:
+				setUniform(id, (glm::mat4*)uniform);
+				break;
+			case UniformType::VEC2:
+				setUniform(id, (glm::vec2*)uniform);
+				break;
+			case UniformType::VEC3:
+				setUniform(id, (glm::vec3*)uniform);
+				break;
+			case UniformType::TEXTURE:
+				((TextureBase*)uniform)->bind();
+				setUniform(id, ((TextureBase*)uniform)->getSlot());
+				break;
+			default:
+				break;
+			}
+		}
+
+		void bindToUniformBlock(const std::string& name, GLuint binding);
+
+		GLint getUniformLocation(const std::string& name);
+
 	private:
-		unsigned int m_ID = 0;
+		GLuint m_ID = 0;
 		std::unordered_map<std::string, int> m_UniformLocationCache;
-		unsigned int compileShader(const std::string& source, unsigned int type);
-		unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
-		unsigned int createGeoShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader);
+		GLuint compileShader(const std::string& source, unsigned int type);
+		GLuint createShader(const std::string& vertexShader, const std::string& fragmentShader);
+		GLuint createGeoShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader);
 		std::string parseShader(const std::string& filePath);
-		int getUniformLocation(const std::string& name);
 	};
 }
 

@@ -17,6 +17,7 @@ namespace SG
 		//Universal functions
 		virtual void update(double deltaTime, double time) {};
 		virtual void render() {};
+		virtual void renderGUI() {};
 		virtual void handleInput(int key, int scancode, int action, int mods) {};
 		virtual void handleScrolling(double xOffset, double yOffset) {};
 		virtual void handleMouse(int button, int action, int mods) {};

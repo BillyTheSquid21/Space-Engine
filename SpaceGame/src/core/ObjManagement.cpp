@@ -1,13 +1,52 @@
 #include "core/ObjManagement.h"
 
+std::shared_mutex SGObject::System::m_GroupMutex;
+std::vector<std::shared_ptr<SGObject::UpdateGroupBase>> SGObject::System::m_UpdateGroup;
+std::vector<std::shared_ptr<SGObject::RenderGroupBase>> SGObject::System::m_RenderGroup;
+std::shared_mutex SGObject::System::m_HeapMutex;
+std::vector<std::shared_ptr<SGObject::UpdateComponent>> SGObject::System::m_UpdateHeap;
+std::vector<std::shared_ptr<SGObject::RenderComponent>> SGObject::System::m_RenderHeap;
+std::shared_mutex SGObject::System::m_ObjMutex;
+std::vector<SGObject::System::GameObjectContainer> SGObject::System::m_Objects;
+std::unique_ptr<std::unordered_map<std::string, unsigned int>> SGObject::System::m_GroupIDMap;
+std::unique_ptr<std::unordered_map<std::string, unsigned int>> SGObject::System::m_ObjIDMap;
+std::future<void> SGObject::System::m_CleanFtr;
+double SGObject::System::m_CheckCleanupTimer = 0.0;
+bool SGObject::System::s_Set = false;
+
+bool SGObject::System::init()
+{
+	EngineLogOk("Object System");
+	return true;
+}
+
+void SGObject::System::set()
+{
+	if (s_Set)
+	{
+		return;
+	}
+
+	clean();
+	m_GroupIDMap = std::unique_ptr<std::unordered_map<std::string, unsigned int>>(new std::unordered_map<std::string, unsigned int>());
+	m_ObjIDMap = std::unique_ptr<std::unordered_map<std::string, unsigned int>>(new std::unordered_map<std::string, unsigned int>());
+	s_Set = true;
+}
+
 //Push to heap of components
 //Threads are currently disabled
-void SGObject::ObjectManager::update(double deltaTime) {
+void SGObject::System::update(double deltaTime) {
+	
+	if (!s_Set)
+	{
+		return;
+	}
+	
 	//Launch async cleanup task every 10 seconds to check for dead objects
 	if (m_CheckCleanupTimer > 10.0)
 	{
 		EngineLog("Cleaning objects...");
-		this->cleanObjects();
+		cleanObjects();
 		m_CheckCleanupTimer = 0.0;
 	}
 
@@ -57,7 +96,13 @@ void SGObject::ObjectManager::update(double deltaTime) {
 	m_CheckCleanupTimer += deltaTime;
 }
 
-void SGObject::ObjectManager::render() {
+void SGObject::System::render() {
+
+	if (!s_Set)
+	{
+		return;
+	}
+
 	for (int i = 0; i < m_RenderGroup.size(); i++) {
 		m_RenderGroup[i]->iterate();
 	}
@@ -102,14 +147,14 @@ void SGObject::ObjectManager::render() {
 	}
 }
 
-void SGObject::ObjectManager::cleanObjects()
+void SGObject::System::cleanObjects()
 {
 	auto ts = EngineTimer::StartTimer();
 	int size = m_Objects.size();
 	int cleanedTotal = 0;
 	for (int i = 0; i < size; i++)
 	{
-		if (!m_Objects[i].obj->isDead())
+		if (m_Objects[i].obj->isAlive())
 		{
 			continue;
 		}
@@ -124,7 +169,7 @@ void SGObject::ObjectManager::cleanObjects()
 			for (int i = 0; i < size; i++)
 			{
 				m_Objects[i].obj->setID(i);
-				m_ObjIDMap[m_Objects[i].name] = i;
+				(*m_ObjIDMap)[m_Objects[i].name] = i;
 			}
 		}
 	}
@@ -132,9 +177,12 @@ void SGObject::ObjectManager::cleanObjects()
 	EngineLog("Time to clean objects: ", EngineTimer::EndTimer(ts));
 }
 
-void SGObject::ObjectManager::reset()
+void SGObject::System::clean()
 {
-	//Clear absolutely everything
+	if (!s_Set)
+	{
+		return;
+	}
 
 	//Clear
 	m_UpdateGroup.clear();
@@ -142,6 +190,8 @@ void SGObject::ObjectManager::reset()
 	m_UpdateHeap.clear();
 	m_RenderHeap.clear();
 	m_Objects.clear();
-	m_GroupIDMap.clear();
-	m_ObjIDMap.clear();
+	m_GroupIDMap.reset();
+	m_ObjIDMap.reset();
+
+	s_Set = false;
 }

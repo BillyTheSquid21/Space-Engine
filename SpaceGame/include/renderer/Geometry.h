@@ -22,7 +22,15 @@ namespace Primitive
 		0, 1, 2,
 		0, 2, 3
 	};
+	const unsigned int Q_LINE_IND[8]
+	{
+		0,1,
+		1,2,
+		2,3,
+		3,0
+	};
 	const char Q_IND_COUNT = 6;
+	const char Q_LINE_IND_COUNT = 8;
 
 	//Tris
 	const char TRI_VERT = 3;
@@ -40,6 +48,112 @@ namespace Primitive
 
 namespace Geometry
 {
+	//Contains the core data of a mesh (verts and inds)
+	struct MeshData
+	{
+		MeshData() = default;
+		MeshData(std::vector<float>& verts, std::vector<unsigned int>& inds) { vertices = verts; indices = inds; }
+
+		std::vector<float> vertices;
+		std::vector<unsigned int> indices;
+		void clear() { vertices.clear(); indices.clear(); }
+	};
+
+	//Mesh - wrapper for mesh data
+	class Mesh
+	{
+	public:
+		template<typename VertexType>
+		void load(std::vector<float>& verts, std::vector<unsigned int>& inds) { if (m_DataLoaded) { EngineLog("Data already loaded!"); return; } m_Mesh = { verts, inds }; m_DataLoaded = true; m_Properties = VertexType::properties(); }
+		void unload() { if (!m_DataLoaded) { return; } m_Mesh.clear(); m_DataLoaded = false; m_Properties = false; }
+		void copyInto(MeshData& mesh) 
+		{ 
+			m_Mesh.vertices.resize(mesh.vertices.size());
+			std::copy(mesh.vertices.begin(), mesh.vertices.end(), m_Mesh.vertices.begin()); 
+			m_Mesh.indices.resize(mesh.indices.size());
+			std::copy(mesh.indices.begin(), mesh.indices.end(), m_Mesh.indices.begin());
+		};
+
+		float* getVertices() { return &m_Mesh.vertices[0]; };
+		unsigned int* getIndices() { return &m_Mesh.indices[0]; };
+		MeshData& getMesh() { return m_Mesh; }
+
+		int getVertSize() const { return m_Mesh.vertices.size(); };
+		int getIndicesCount() const { return m_Mesh.indices.size(); };
+		bool isLoaded() const { return m_DataLoaded; }
+		void setLoaded(bool loaded) { m_DataLoaded = loaded; }
+		int properties() const { return m_Properties; }
+		void setProperties(int properties) { m_Properties = properties; }
+		void clear() { m_Mesh.clear(); }
+
+	private:
+		MeshData m_Mesh;
+		bool m_DataLoaded;
+		int m_Properties = 0;
+	};
+
+	//Struct to combine separate meshes
+	struct VertexMeta
+	{
+		VertexMeta(float* v, int32_t f) { verts = v; count = f; }
+		float* verts = nullptr;
+		int32_t count = 0;
+	};
+
+	struct IndiceMeta
+	{
+		IndiceMeta(const uint32_t* i, int32_t c) { inds = i; count = c; }
+		const uint32_t* inds = nullptr;
+		int32_t count = 0;
+	};
+
+	struct MeshMeta
+	{
+		MeshMeta() = default;
+		MeshMeta(void* src, float* v, unsigned int vF, const unsigned int* i, unsigned short int iC) : vertexMeta(v, vF), indiceMeta(i, iC), source(src) {}
+		void* source = nullptr;
+		VertexMeta vertexMeta;
+		IndiceMeta indiceMeta;
+	};
+
+	void BatchMeshes(std::vector<float>& destVerts, std::vector<unsigned int>& destInds, std::vector<MeshMeta>& meshes);
+	void BatchMeshes(MeshData& destMesh, std::vector<MeshMeta>& meshes);
+
+	template<typename VertexType>
+	void ApplyTransform(VertexMeta mesh, glm::mat4 tranform)
+	{
+		int stride = VertexType::stride();
+		int properties = VertexType::properties();
+		for (int i = 0; i < mesh.count; i += stride)
+		{
+			glm::vec3* pos = (glm::vec3*)&mesh.verts[i];
+			glm::vec4 pos4f = glm::vec4(*pos, 1.0f);
+			pos4f = tranform * pos4f;
+			*pos = glm::vec3(pos4f);
+		}
+
+		glm::mat3 noTranslation = glm::mat3(tranform);
+		if (properties & SGRender::hasNormals)
+		{
+			int normalOffset = VertexType::normalOffset();
+			for (int i = normalOffset; i < mesh.count; i += stride)
+			{
+				glm::vec3* norm = (glm::vec3*)&mesh.verts[i];
+				*norm = noTranslation * (*norm);
+			}
+		}
+
+		if (properties & SGRender::hasTangents)
+		{
+			int tangentOffset = VertexType::tangentOffset();
+			for (int i = tangentOffset; i < mesh.count; i += stride)
+			{
+				glm::vec3* tan = (glm::vec3*)&mesh.verts[i];
+				*tan = noTranslation * (*tan);
+			}
+		}
+	}
+
 	template<typename T>
 	struct QuadArray
 	{
@@ -106,61 +220,6 @@ namespace Geometry
 		return (sizeof(T) / sizeof(float)) * GetVerticesCount(type);
 	}
 
-	//Shape translation - all shapes are defined relative to centre
-	static void TranslateVertexInternal(void* vertexPointer, float deltaX, float deltaY, float deltaZ) {
-		using namespace SGRender;
-		Vertex* vertex = (Vertex*)(void*)vertexPointer;
-		vertex->position.x += deltaX;
-		vertex->position.y += deltaY;
-		vertex->position.z += deltaZ;
-	}
-
-	template<typename T>
-	void Translate(void* verticesArray, float deltaX, float deltaY, float deltaZ, Shape type)
-	{
-		T* vertexPointer = (T*)verticesArray;
-
-		//Set number of vertices to translate
-		unsigned short int numberOfVertices = GetVerticesCount(type);
-
-		//Translate for each vertice
-		for (int i = 0; i < numberOfVertices; i++) {
-			TranslateVertexInternal(&vertexPointer[i], deltaX, deltaY, deltaZ);
-		}
-	}
-
-	template<typename T>
-	void Translate(void* verticesArray, float deltaX, float deltaY, float deltaZ, size_t verticeCount)
-	{
-		T* vertexPointer = (T*)verticesArray;
-
-		//Translate for each vertice
-		for (int i = 0; i < verticeCount; i++) {
-			TranslateVertexInternal(&vertexPointer[i], deltaX, deltaY, deltaZ);
-		}
-	}
-
-	template<typename T>
-	void TranslateVertex(void* verticesArray, unsigned int index, float deltaX, float deltaY, float deltaZ)
-	{
-		T* vertexPointer = (T*)verticesArray;
-
-		//Translate for each vertice
-		TranslateVertexInternal(&vertexPointer[index], deltaX, deltaY, deltaZ);
-	}
-
-	//Position shapes
-	template<typename T>
-	void Position(void* verticesArray, Struct3f currentPosition, Struct3f newPosition, Shape type)
-	{
-		//get amount to translate by
-		float deltaX = newPosition.a - currentPosition.a;
-		float deltaY = newPosition.b - currentPosition.b;
-		float deltaZ = newPosition.c - currentPosition.c;
-
-		Translate<T>(verticesArray, deltaX, deltaY, deltaZ, type);
-	}
-
 	//Rotation
 	template<typename T>
 	static void AxialRotateInternal(void* verticesArray, glm::vec3 rotationCentre, float angle, size_t verticeCount, SGRender::Axis axis)
@@ -202,29 +261,6 @@ namespace Geometry
 	void AxialRotate(void* verticesArray, glm::vec3 rotationCentre, float angle, size_t verticeCount, SGRender::Axis axis)
 	{
 		AxialRotateInternal<T>(verticesArray, rotationCentre, angle, verticeCount, axis);
-	}
-
-	template<typename T>
-	static void SimpleScaleInternal(void* verticesArray, glm::vec3 scale, size_t verticeCount)
-	{
-		T* vertexPointer = (T*)verticesArray;
-		for (int i = 0; i < verticeCount; i++)
-		{
-			vertexPointer[i].position *= scale;
-		}
-	}
-
-	template<typename T>
-	void SimpleScale(void* verticesArray, glm::vec3 scale, Shape type)
-	{
-		size_t numberOfVertices = GetVerticesCount(type);
-		SimpleScaleInternal<T>(verticesArray, scale, numberOfVertices);
-	}
-
-	template<typename T>
-	void SimpleScale(void* verticesArray, glm::vec3 scale, size_t verticeCount)
-	{
-		SimpleScaleInternal<T>(verticesArray, scale, verticeCount);
 	}
 }
 

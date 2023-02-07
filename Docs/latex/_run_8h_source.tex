@@ -1,0 +1,154 @@
+\hypertarget{_run_8h_source}{}\doxysection{Run.\+h}
+\label{_run_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/Run.h@{D:/Repositories/Space Engine/SpaceGame/include/core/Run.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef SG\_RUN\_H}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define SG\_RUN\_H}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}GL/glew.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}GLFW/glfw3.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}core/Game.h"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}cstdlib"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}chrono"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}thread"{}}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{keyword}{namespace }SG}
+\DoxyCodeLine{14 \{}
+\DoxyCodeLine{15     \textcolor{comment}{//Pointer to game kept outside for key callback benifit}}
+\DoxyCodeLine{16     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{17     std::shared\_ptr<T> game;}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19     \textcolor{keyword}{const} \textcolor{keywordtype}{char} SG\_VERSION[]\{ \textcolor{stringliteral}{"{}0.6"{}} \};}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{22     \textcolor{keywordtype}{void} KeyCallback(GLFWwindow* window, \textcolor{keywordtype}{int} key, \textcolor{keywordtype}{int} scancode, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods)}
+\DoxyCodeLine{23     \{}
+\DoxyCodeLine{24         game<T>-\/>handleInput(key, scancode, action, mods);}
+\DoxyCodeLine{25     \}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{28     \textcolor{keywordtype}{void} MouseCallback(GLFWwindow* window, \textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods)}
+\DoxyCodeLine{29     \{}
+\DoxyCodeLine{30         game<T>-\/>handleMouse(button, action, mods);}
+\DoxyCodeLine{31     \}}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{34     \textcolor{keywordtype}{void} ScrollCallback(GLFWwindow* window, \textcolor{keywordtype}{double} xOffset, \textcolor{keywordtype}{double} yOffset)}
+\DoxyCodeLine{35     \{}
+\DoxyCodeLine{36         game<T>-\/>handleScrolling(xOffset, yOffset);}
+\DoxyCodeLine{37     \}}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{40     \textcolor{keywordtype}{int} Run(\textcolor{keywordtype}{int} width, \textcolor{keywordtype}{int} height, \textcolor{keywordtype}{bool} windowed)}
+\DoxyCodeLine{41     \{}
+\DoxyCodeLine{42         \textcolor{keyword}{using namespace }std::chrono;}
+\DoxyCodeLine{43         \textcolor{keyword}{static\_assert}(std::is\_base\_of<Game, T>());}
+\DoxyCodeLine{44         EngineLog(\textcolor{stringliteral}{"{}Space Engine Version "{}}, SG\_VERSION);}
+\DoxyCodeLine{45         \textcolor{comment}{//Init time -\/ start and end, with delta time being the time between each run of the loop}}
+\DoxyCodeLine{46         system\_clock::time\_point startTime = system\_clock::now();}
+\DoxyCodeLine{47         system\_clock::time\_point endTime = system\_clock::now();}
+\DoxyCodeLine{48         \textcolor{keywordtype}{double} deltaTime = 0.0f;}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50         \textcolor{comment}{//Heap allocates to new game, creates with resolution and name on tag -\/ }}
+\DoxyCodeLine{51         \textcolor{comment}{//replace with derived game class}}
+\DoxyCodeLine{52         \{}
+\DoxyCodeLine{53             std::shared\_ptr<T> gameInit(\textcolor{keyword}{new} T(width, height));}
+\DoxyCodeLine{54             game<T> = gameInit;}
+\DoxyCodeLine{55         \}}
+\DoxyCodeLine{56         \textcolor{keywordflow}{if} (!game<T>-\/>init(\textcolor{stringliteral}{"{}Space Engine"{}}, KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>, windowed)) \{}
+\DoxyCodeLine{57             \textcolor{comment}{//If game fails to initialise program will not run}}
+\DoxyCodeLine{58             \textcolor{keywordflow}{return} -\/1;}
+\DoxyCodeLine{59         \}}
+\DoxyCodeLine{60         EngineLog(\textcolor{stringliteral}{"{}Game initialized successfully"{}});}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62         \textcolor{comment}{//make delta time take average over 16 frames}}
+\DoxyCodeLine{63         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} deltaFrameCountLong = 1;}
+\DoxyCodeLine{64         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} meanPeriodLong = 11;}
+\DoxyCodeLine{65         \textcolor{keywordtype}{double} deltaTimeLong = 0.0f;}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67         \textcolor{comment}{//make delta time take average over 6 frames}}
+\DoxyCodeLine{68         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} deltaFrameCountShort = 1;}
+\DoxyCodeLine{69         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} meanPeriodShort = 7;}
+\DoxyCodeLine{70         \textcolor{keywordtype}{double} deltaTimeShort = 0.0f;}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72         \textcolor{comment}{//FPS Measure}}
+\DoxyCodeLine{73         \textcolor{keywordtype}{double} previousTime = glfwGetTime();}
+\DoxyCodeLine{74         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} framecount = 0;}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76         \textcolor{comment}{/* Loop until the user closes the window */}}
+\DoxyCodeLine{77         \textcolor{keywordflow}{while} (!glfwWindowShouldClose(game<T>-\/>window) \&\& !T::s\_Close)}
+\DoxyCodeLine{78         \{}
+\DoxyCodeLine{79             \textcolor{comment}{// Measure speed}}
+\DoxyCodeLine{80             \textcolor{keywordtype}{double} currentTime = glfwGetTime();}
+\DoxyCodeLine{81             game<T>-\/>setTime(currentTime);}
+\DoxyCodeLine{82             framecount++;}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{84             \textcolor{comment}{// If a second has passed.}}
+\DoxyCodeLine{85             \textcolor{keywordflow}{if} (currentTime -\/ previousTime >= 1.0)}
+\DoxyCodeLine{86             \{}
+\DoxyCodeLine{87                 \textcolor{comment}{// Display the frame count here any way you want.}}
+\DoxyCodeLine{88                 EngineLog(\textcolor{stringliteral}{"{}FPS: "{}}, framecount);}
+\DoxyCodeLine{89                 EngineLog(deltaTime);}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91                 framecount = 0;}
+\DoxyCodeLine{92                 previousTime = currentTime;}
+\DoxyCodeLine{93             \}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95             \textcolor{comment}{//Takes time at start of loop}}
+\DoxyCodeLine{96             startTime = system\_clock::now();}
+\DoxyCodeLine{97             deltaFrameCountLong++;}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99             \textcolor{comment}{//Handle game processes}}
+\DoxyCodeLine{100             game<T>-\/>handleEvents();}
+\DoxyCodeLine{101             game<T>-\/>update(deltaTime);}
+\DoxyCodeLine{102             game<T>-\/>render();}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104             \textcolor{comment}{//Get time at end of loop}}
+\DoxyCodeLine{105             endTime = system\_clock::now();}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107             \textcolor{comment}{//Take time during work period}}
+\DoxyCodeLine{108             duration<double, std::milli> workTime = endTime -\/ startTime;}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110             \textcolor{comment}{//Check if program took less time to work than the cap}}
+\DoxyCodeLine{111             \textcolor{keywordflow}{if} (workTime.count() < game<T>-\/>secondsPerFrameCap())}
+\DoxyCodeLine{112             \{}
+\DoxyCodeLine{113                 \textcolor{comment}{//Works out time to sleep for by casting to double}}
+\DoxyCodeLine{114                 duration<double, std::milli> sleepDurationMS(game<T>-\/>secondsPerFrameCap() -\/ workTime.count());}
+\DoxyCodeLine{115                 \textcolor{comment}{//Casts back to chrono type to get sleep time}}
+\DoxyCodeLine{116                 \textcolor{keyword}{auto} sleepDuration = duration\_cast<milliseconds>(sleepDurationMS);}
+\DoxyCodeLine{117                 \textcolor{comment}{//Sleeps this thread for calculated duration}}
+\DoxyCodeLine{118                 std::this\_thread::sleep\_for(milliseconds(sleepDuration.count()));}
+\DoxyCodeLine{119             \}}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121             \textcolor{comment}{//Check to reset mean of frames}}
+\DoxyCodeLine{122             \textcolor{keywordflow}{if} (deltaFrameCountLong == meanPeriodLong) \{}
+\DoxyCodeLine{123                 deltaFrameCountLong = 1;}
+\DoxyCodeLine{124                 deltaTimeLong = 0.0f;}
+\DoxyCodeLine{125             \}}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127             \textcolor{keywordflow}{if} (deltaFrameCountShort == meanPeriodShort) \{}
+\DoxyCodeLine{128                 deltaFrameCountShort = 1;}
+\DoxyCodeLine{129                 deltaTimeShort = 0.0f;}
+\DoxyCodeLine{130             \}}
+\DoxyCodeLine{131 }
+\DoxyCodeLine{132             \textcolor{comment}{//get time at end of all processes -\/ time for one whole cycle}}
+\DoxyCodeLine{133             endTime = system\_clock::now();}
+\DoxyCodeLine{134             duration<double, std::milli> totalTime = endTime -\/ startTime;}
+\DoxyCodeLine{135             deltaTimeLong = deltaTimeLong + (((totalTime).count() / 1000.0) -\/ deltaTimeLong) / deltaFrameCountLong;}
+\DoxyCodeLine{136             deltaTimeShort = deltaTimeShort + (((totalTime).count() / 1000.0) -\/ deltaTimeShort) / deltaFrameCountShort;}
+\DoxyCodeLine{137             deltaTime = (deltaTimeLong + deltaTimeShort) / 2.0f;}
+\DoxyCodeLine{138         \}}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140         \textcolor{comment}{//clean and delete game}}
+\DoxyCodeLine{141         game<T>-\/>clean();}
+\DoxyCodeLine{142         game<T>.reset();}
+\DoxyCodeLine{143 }
+\DoxyCodeLine{144         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{145     \}}
+\DoxyCodeLine{146 \}}
+\DoxyCodeLine{147 }
+\DoxyCodeLine{148 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

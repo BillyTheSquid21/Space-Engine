@@ -15,9 +15,8 @@ namespace SGObject
 	*2.Components are put in a group where they will be contiguous
 	*3.Pointers to groups will be kept in a vector by the manager, and iterated over
 	*4.Objects will store a vector of pointers to their components, and components a pointer to the vector to be able to update
-	*	4.a.Component id's are their location in parent array - will not change in runtime
+	*	4.a.Component id's are their location in parent array
 	*	4.b.Group id's are their location in object manager array - will not change in runtime
-	*	4.c.TLDR: Ids should not change in runtime, index's and pointers may
 	*5.Objects will contain shared data the components can make use of and a messaging system
 	*6.Objects are not accessed by object manager often
 	*7.Object manager should keep active components contiguous to increase cache hits
@@ -56,6 +55,16 @@ namespace SGObject
 		}
 	}
 
+#if _DEBUG
+
+#define InternalErrorLog(errorcode, additionalInfo) SGObject::ObjectErrorLog(errorcode, additionalInfo)
+
+#else
+
+#define InternalErrorLog(errorcode, additionalInfo)
+
+#endif
+
 	/**
 	* Classes derived from components are used to perform operations on data stored in a game object or derived
 	*/
@@ -70,13 +79,13 @@ namespace SGObject
 		* Recieves messages from parent object, pushes into message queue
 		*/
 		void recieve(uint32_t message) { m_MessageQueue.push(message); };
-		bool isActive() const { return m_Active; }
-		void setActive(bool set) { m_Active = set; }
-		bool isDead() const { return m_Dead; }
+		bool isActive() const { return m_State > 1; }
+		void setActive(bool set) { m_State |= set << 1; }
+		bool isAlive() const { return (bool)m_State; }
 		/**
 		* Kills the component and detaches from parent
 		*/
-		void kill() { m_Dead = true; m_ParentPointers = nullptr; }
+		void kill() { m_State = 0; (*m_ParentPointers)[m_ID] = nullptr; m_ParentPointers = nullptr; }
 
 		/**
 		* Default message processing - Reads message queue and if overwritten must be fully defined
@@ -85,10 +94,20 @@ namespace SGObject
 		virtual void processMessages() {
 			while (m_MessageQueue.size() > 0) {
 				uint32_t message = m_MessageQueue.front();
-				if (message == (uint32_t)Message::ACTIVATE) { setActive(true); }
-				else if (message == (uint32_t)Message::DEACTIVATE) { setActive(false); }
-				else if (message == (uint32_t)Message::KILL) {
-					setActive(false);
+				switch (message)
+				{
+					case (uint32_t)Message::ACTIVATE:
+						setActive(true);
+						break;
+					case (uint32_t)Message::DEACTIVATE:
+						setActive(false);
+						break;
+					case (uint32_t)Message::KILL:
+						setActive(false);
+						kill();
+						break;
+					default:
+						break;
 				}
 				m_MessageQueue.pop();
 			};
@@ -106,23 +125,23 @@ namespace SGObject
 		void updatePointer()
 		{
 			//Needs to return if dead as the object it is tied to may no longer exist in memory at all
-			if (m_Dead)
+			if (!m_State)
 			{
 				return;
 			}
 			if (!m_ParentPointers)
 			{
-				ObjectErrorLog(ObjectError::UNPAIRED_COMPONENT, 0);
+				InternalErrorLog(ObjectError::UNPAIRED_COMPONENT, 0);
 				return;
 			}
 			if (m_ID >= m_ParentPointers->size())
 			{
-				ObjectErrorLog(ObjectError::INDEX_RANGE, m_ID);
+				InternalErrorLog(ObjectError::INDEX_RANGE, m_ID);
 				return;
 			}
 			if (!(*m_ParentPointers)[m_ID])
 			{
-				ObjectErrorLog(ObjectError::VOID_POINTER, m_ID);
+				InternalErrorLog(ObjectError::VOID_POINTER, m_ID);
 				return;
 			}
 			(*m_ParentPointers)[m_ID] = (T*)this;
@@ -135,8 +154,7 @@ namespace SGObject
 
 	protected:
 		uint16_t m_ID = 0;
-		bool m_Active = true;
-		bool m_Dead = false;
+		uint8_t m_State = 3;
 		std::vector<T*>* m_ParentPointers = nullptr;
 		std::queue<uint32_t> m_MessageQueue;
 	};
@@ -177,7 +195,7 @@ namespace SGObject
 		bool inactiveFound = false;
 		bool activeAfterInactive = false;
 
-		for (unsigned int i = 0; i < renderComps.size(); i++) {
+		for (int i = 0; i < renderComps.size(); i++) {
 			//Process messages
 			renderComps[i].processMessages();
 			if (renderComps[i].isActive()) {
@@ -224,7 +242,7 @@ namespace SGObject
 		bool inactiveFound = false;
 		bool activeAfterInactive = false;
 
-		for (unsigned int i = 0; i < updateComps.size(); i++) {
+		for (int i = 0; i < updateComps.size(); i++) {
 			updateComps[i].processMessages();
 			if (updateComps[i].isActive()) {
 				updateComps[i].update(deltaTime);
@@ -260,10 +278,10 @@ namespace SGObject
 	{
 	public:
 		UpdateGroupBase() {}
-		void setID(unsigned int id) { m_ID = id; }
+		void setID(uint16_t id) { m_ID = id; }
 		virtual void iterate(double deltaTime) {};
 	private:
-		unsigned int m_ID = 0;
+		uint16_t m_ID = 0;
 	};
 
 	/**
@@ -322,7 +340,7 @@ namespace SGObject
 			}
 		}
 	private:
-		unsigned int m_ID = 0;
+		uint16_t m_ID = 0;
 		std::vector<T> m_Components;
 	};
 
@@ -330,10 +348,10 @@ namespace SGObject
 	{
 	public:
 		RenderGroupBase() {}
-		void setID(unsigned int id) { m_ID = id; }
+		void setID(uint16_t id) { m_ID = id; }
 		virtual void iterate() {};
 	private:
-		unsigned int m_ID = 0;
+		uint16_t m_ID = 0;
 	};
 
 	/**
@@ -392,7 +410,7 @@ namespace SGObject
 			}
 		}
 	private:
-		unsigned int m_ID = 0;
+		uint16_t m_ID = 0;
 		std::vector<T> m_Components;
 	};
 
@@ -402,8 +420,8 @@ namespace SGObject
 	class GObject
 	{
 	public:
-		void setID(unsigned int id) { m_ID = id; }
-		unsigned int id() const { return m_ID; }
+		void setID(uint32_t id) { m_ID = id; }
+		uint32_t id() const { return m_ID; }
 
 		/**
 		* Message an update component at a specified index in the component pointer array
@@ -446,7 +464,7 @@ namespace SGObject
 		*/
 		virtual void messageAll(uint32_t message) {
 			messageAllRender(message); messageAllUpdate(message);
-			if (message == (uint32_t)Message::KILL) { m_Dead = true; }
+			if (message == (uint32_t)Message::KILL) { m_State = 0; }
 		};
 
 		/**
@@ -480,11 +498,7 @@ namespace SGObject
 			return true;
 		}
 
-		bool isDead() const { return m_Dead; }
-
-		//Set object tag/type to be able to view object type when cast to GameObject
-		void setTag(uint16_t tag) { m_Tag = tag; }
-		uint16_t getTag() const { return m_Tag; }
+		bool isAlive() const { return (bool)m_State; }
 
 		/**
 		* Array of pointers to child update components
@@ -497,12 +511,10 @@ namespace SGObject
 
 	protected:
 		//Activation
-		bool active() const { return m_Active; }
-		void setActive(bool set) { m_Active = set; }
-		unsigned int m_ID;
-		bool m_Active = true;
-		bool m_Dead = false;
-		uint16_t m_Tag = 0; //Tag for user defined type
+		bool active() const { return (bool)(m_State > 1); }
+		void setActive(bool set) { m_State |= set << 1; }
+		uint32_t m_ID = 0;
+		uint8_t m_State = 3; //Bit 0 = alive, bit 1 = active (if > 0 is alive, if > 1 is active)
 	};
 }
 

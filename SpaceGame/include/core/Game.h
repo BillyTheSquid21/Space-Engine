@@ -10,8 +10,14 @@
 #include "utility/SGUtil.h"
 #include "core/GameObject.hpp"
 #include "core/ObjManagement.h"
+#include "renderer/RenderSys.h"
 #include "Callbacks.hpp"
 #include "core/Sound.h"
+#include "mtlib/ThreadPool.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "core/GUI.h"
 
 class Game 
 {
@@ -35,7 +41,7 @@ public:
 	* @param sCallback callback for scroll interactions
 	* @param windowed sets if is windowed or not - allows derived game class to specify
 	*/
-	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback, bool windowed);
+	bool init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback, MousePos_Callback mpCallback, bool windowed);
 	
 	/**
 	* Poll GLFW events
@@ -65,6 +71,14 @@ public:
 	* @param yOffset Scroll y offset
 	*/
 	virtual void handleScrolling(double xOffset, double yOffset) {};
+
+	/**
+	* Overwrite to handle input in derived game class
+	* @param xPos cursor x offset
+	* @param yPos cursor y offset
+	*/
+	virtual void handleMousePos(double xPos, double yPos) {};
+
 	void update(double deltaTime);
 	void setTime(double time);
 	void render();
@@ -77,11 +91,6 @@ public:
 	* GLFW Window Pointer
 	*/
 	GLFWwindow* window = NULL;
-
-	/**
-	* Sound engine
-	*/
-	SGSound::System sound;
 
 	//If this is set to true, game loop ends this cycle
 	static bool s_Close;

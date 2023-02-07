@@ -59,16 +59,12 @@ namespace SGRender
 		~Camera() = default;
 
 		/**
-		* Send the uniforms for the camera to the given shader (ensure shader is bound first)
-		*/
-		void sendCameraUniforms(Shader& shader);
-
-		/**
 		* Set the projection of the camera to any mat4
 		*/
 		void setProjection(glm::mat4 project) { m_Proj = project; }
 
 		//move camera relative to orientation
+		void moveInCurrentDirection(float speed);
 		void moveForwards(float speed);
 		void moveSideways(float speed);
 		void moveUp(float speed);
@@ -85,10 +81,19 @@ namespace SGRender
 		*/
 		void updateFrustum();
 
-		//set pos
+		/**
+		* Get the world space position of a click on the screen
+		*/
+		glm::vec3 getWorldSpaceClick(float xPos, float yPos);
+
 		void setPos(float x, float y, float z);
+		void setDir(glm::vec3& dir) { m_Direction = dir; }
 		glm::vec3 getPos() const { return m_Position; }
-		glm::mat4 getVP() { return m_Proj * m_View; }
+		glm::vec3 getDir() const { return m_Direction; }
+		glm::vec3 getRight() const { return m_Right; }
+		void calcVP();
+		glm::mat4 getVP() { return m_VP; }
+		glm::vec3 unprojectWindow(glm::vec3 pos);
 
 		//set camera
 		void panYDegrees(float degrees);
@@ -99,6 +104,8 @@ namespace SGRender
 		float speed() const { return m_Speed; }
 		float width() const { return m_CameraWidth; }
 		float height() const { return m_CameraHeight; }
+		float FOV() const { return m_FOV; }
+		float aspect() const { return m_CameraHeight / m_CameraWidth; }
 
 		/**
 		* Get a reference to the camera frustum as it was when last updated
@@ -112,6 +119,7 @@ namespace SGRender
 		glm::vec3 m_Position = {};
 		glm::vec3 m_Direction = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 m_Right = glm::vec3(1.0f, 0.0f, 0.0f);
 		float m_Speed = 0.1f;
 		float m_Sensitivity = 100.0f;
 		float m_NearPlane = 0.1f; float m_FarPlane = 1000.0f;
@@ -120,6 +128,8 @@ namespace SGRender
 		//mvp
 		glm::mat4 m_View = glm::mat4(1.0f);
 		glm::mat4 m_Proj = glm::mat4(1.0f);
+		glm::mat4 m_VP = glm::mat4(1.0f);
+		glm::mat4 m_InverseVP = glm::mat4(1.0f);
 
 		//frustum
 		Frustum m_Frustum;

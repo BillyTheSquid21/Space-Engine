@@ -21,107 +21,105 @@
 
 namespace Model
 {
+    //TODO - optimise to avoid vertice duplicates
     template<typename VertexType>
-    bool LoadTextureVertexOBJ(const char* path, std::vector<VertexType>& verts, std::vector<unsigned int>& inds)
+    bool LoadModel(const char* path, Geometry::Mesh& mesh)
     {
-        //Check is a valid vertex
         using namespace SGRender;
-        static_assert(std::is_base_of<Vertex, VertexType>::value, "Must be a vertex type!");
+
+        int properties = VertexType::properties();
+
+        //Access mesh
+        mesh.unload();
+        Geometry::MeshData& meshData = mesh.getMesh();
 
         auto start = EngineTimer::StartTimer();
 
         Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path,
-            aiProcess_CalcTangentSpace |
+        const aiScene* tree = importer.ReadFile(path, 
             aiProcess_Triangulate |
             aiProcess_JoinIdenticalVertices |
-            aiProcess_SortByPType);
+            aiProcess_SortByPType |
+            aiProcess_CalcTangentSpace * ((properties & SGRender::hasTangents) != 0) //Only bother if present
+        );
 
-        if (scene == nullptr) {
+        if (tree == nullptr) {
             EngineLog(importer.GetErrorString());
             return false;
         }
 
-        //Temp data - only written to if attribute exists
-        std::vector<glm::vec3> positionDataTemp;
-        std::vector<glm::vec2> uvDataTemp;
-        std::vector<glm::vec3> normalDataTemp;
+        //Stores floats in order of normal reading (pos -> uv -> norm -> color - > tangent)
+        std::vector<float> rawDataTemp;
 
-        //Get vertices
-        auto mesh = scene->mMeshes[0];
-        for (int i = 0; i < mesh->mNumVertices; i++)
-        {
-            glm::vec3 vert;
-            vert.x = mesh->mVertices[i].x;
-            vert.y = mesh->mVertices[i].y;
-            vert.z = mesh->mVertices[i].z;
-            positionDataTemp.push_back(vert);
-        }
+        //Iterate over all meshes in this scene
+        for (int m = 0; m < tree->mNumMeshes; m++) {
+            
+            const aiMesh* mesh = tree->mMeshes[m];
+            //Iterate over all faces in this mesh
+            for (int j = 0; j < mesh->mNumFaces; j++) {
 
-        //Get uvs
-        bool hasUVS = false;
-        //Check if both mesh and vertices have UV
-        if (&mesh->mTextureCoords[0][0] != NULL && std::is_base_of<TVertex, VertexType>::value)
-        {
-            hasUVS = true;
-        }
-        if (hasUVS)
-        {
-            for (int i = 0; i < mesh->mNumVertices; i++)
-            {
-                glm::vec2 uv;
-                uv.x = mesh->mTextureCoords[0][i].x;
-                uv.y = mesh->mTextureCoords[0][i].y;
-                uvDataTemp.push_back(uv);
+                auto const& face = mesh->mFaces[j];
+                //Iterate face vertices
+                for (int k = 0; k < 3; ++k) {
+
+                    //Get indice
+                    unsigned int indice = face.mIndices[k];
+
+                    //Assume always has position
+                    auto const& vertex = mesh->mVertices[indice];
+                    rawDataTemp.push_back(vertex.x);
+                    rawDataTemp.push_back(vertex.y);
+                    rawDataTemp.push_back(vertex.z);
+
+                    //Next do UV
+                    if (mesh->HasTextureCoords(0) && (properties & SGRender::hasUVs)) {
+                        // The following line fixed the issue for me now:
+                        auto const& uv = mesh->mTextureCoords[0][indice];
+                        rawDataTemp.push_back(uv.x);
+                        rawDataTemp.push_back(uv.y);
+                    }
+
+                    //Next Normal
+                    if (mesh->HasNormals() && (properties & SGRender::hasNormals))
+                    {
+                        auto const& normal = mesh->mNormals[indice];
+                        rawDataTemp.push_back(normal.x);
+                        rawDataTemp.push_back(normal.y);
+                        rawDataTemp.push_back(normal.z);
+                    }
+
+                    //Next Color
+                    if (mesh->HasVertexColors(0) && (SGRender::hasColor))
+                    {
+                        auto const& color = mesh->mColors[indice];
+                        rawDataTemp.push_back(color->r);
+                        rawDataTemp.push_back(color->g);
+                        rawDataTemp.push_back(color->b);
+                        rawDataTemp.push_back(color->a);
+                    }
+
+                    //Next Tangents
+                    if (mesh->HasTangentsAndBitangents() && (SGRender::hasTangents))
+                    {
+                        auto const& tangent = mesh->mTangents[indice];
+                        rawDataTemp.push_back(tangent.x);
+                        rawDataTemp.push_back(tangent.y);
+                        rawDataTemp.push_back(tangent.z);
+                    }
+
+                    //Now push back indice
+                    meshData.indices.push_back(meshData.indices.size());
+                }
             }
         }
 
-        //Get normals
-        bool hasNormals = false;
-        //Check if both mesh and vertex type have normals
-        if (&mesh->mNormals[0][0] != NULL && std::is_base_of<NTVertex, VertexType>::value)
-        {
-            hasNormals = true;
-        }
-        if (hasNormals)
-        {
-            for (int i = 0; i < mesh->mNumVertices; i++)
-            {
-                glm::vec3 normal;
-                normal.x = mesh->mNormals[i].x;
-                normal.y = mesh->mNormals[i].y;
-                normal.z = mesh->mNormals[i].z;
-                normalDataTemp.push_back(normal);
-            }
-        }
+        meshData.vertices = rawDataTemp;
+        mesh.setLoaded(true);
+        mesh.setProperties(properties);
 
-        //Indices
-        for (int i = 0; i < mesh->mNumFaces; i++)
-        {
-            inds.push_back(mesh->mFaces[i].mIndices[0]);
-            inds.push_back(mesh->mFaces[i].mIndices[1]);
-            inds.push_back(mesh->mFaces[i].mIndices[2]);
-        }
-
-        //Write to vertex
-        for (int i = 0; i < mesh->mNumVertices; i++)
-        {
-            VertexType vert;
-            vert.position = positionDataTemp[i];
-            if (hasUVS)
-            {
-                vert.uvCoords = uvDataTemp[i];
-            }
-            if (hasNormals)
-            {
-                vert.normals = normalDataTemp[i];
-                vert.normals = glm::normalize(vert.normals);
-            }
-            verts.push_back(vert);
-        }
         auto time = EngineTimer::EndTimer(start);
 
-        EngineLog("Model loaded: ", path);
+        EngineLog("Model loaded: ", path, " ", meshData.vertices.size() * sizeof(float), " bytes - currently not optimising for duplicates");
         EngineLog("Time elapsed: ", time);
         if (time > 4)
         {
@@ -130,43 +128,6 @@ namespace Model
 
         return true;
     }
-
-    //Only supports one material - cannot split between materials
-    template <typename VertexType>
-    class Model
-    {
-    public:
-        Model() = default;
-
-        void load(const char* path) { LoadTextureVertexOBJ<SGRender::NTVertex>(path, m_Vertices, m_Indices); m_DataLoaded = true; }
-        void setRen(SGRender::Renderer* ren) { m_Ren = ren; }
-        void render()
-        {
-            if (!m_DataLoaded)
-            {
-                return;
-            }
-            m_Ren->commit(&m_Vertices[0], m_Vertices.size() * (sizeof(VertexType) / sizeof(float)), &m_Indices[0], m_Indices.size());
-        }
-
-        VertexType* getVertices() const { return (VertexType*)&m_Vertices[0]; }
-        unsigned int getVertCount() const { return m_Vertices.size(); }
-        bool isLoaded() const { return m_DataLoaded; }
-
-    private:
-        SGRender::Renderer* m_Ren = nullptr;
-        bool m_DataLoaded;
-
-        //Data
-        std::vector<VertexType> m_Vertices;
-        std::vector<unsigned int> m_Indices;
-    };
-
-    template<typename VertexType>
-    class MorphModel : public Model<VertexType>
-    {
-
-    };
 }
 
 #endif

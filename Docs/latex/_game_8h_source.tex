@@ -1,35 +1,34 @@
 \hypertarget{_game_8h_source}{}\doxysection{Game.\+h}
 \label{_game_8h_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/Game.h@{D:/Repositories/Space Engine/SpaceGame/include/core/Game.h}}
-\mbox{\hyperlink{_game_8h}{Go to the documentation of this file.}}
+
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef GAME\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define GAME\_H}}
 \DoxyCodeLine{4 }
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_renderer_8hpp}{renderer/Renderer.hpp}}"{}}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_texture_8h}{renderer/Texture.h}}"{}}}
-\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_plane_8h}{renderer/Plane.h}}"{}}}
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <GLFW/glfw3.h>}}
-\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <fstream>}}
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{11 \textcolor{preprocessor}{\#include <sstream>}}
-\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_s_g_util_8h}{utility/SGUtil.h}}"{}}}
-\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_game_object_8hpp}{core/GameObject.hpp}}"{}}}
-\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_obj_management_8h}{core/ObjManagement.h}}"{}}}
-\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_callbacks_8hpp}{Callbacks.hpp}}"{}}}
-\DoxyCodeLine{16 }
-\DoxyCodeLine{17 \textcolor{keyword}{class }\mbox{\hyperlink{class_game}{Game}} }
-\DoxyCodeLine{18 \{}
-\DoxyCodeLine{19 }
-\DoxyCodeLine{20 \textcolor{keyword}{public}:}
-\DoxyCodeLine{21 }
-\DoxyCodeLine{22     \textcolor{comment}{//Default constructor and destructor}}
-\DoxyCodeLine{23     \mbox{\hyperlink{class_game_a4735989677c1cab18866f3ae4ee0aa1c}{Game}}() = \textcolor{keywordflow}{default};}
-\DoxyCodeLine{24     \mbox{\hyperlink{class_game_a3d09cd0b68ef69107d36360ca903e023}{\string~Game}}() = \textcolor{keywordflow}{default};}
-\DoxyCodeLine{25 }
-\DoxyCodeLine{29     \mbox{\hyperlink{class_game_a5bc07cf8947858f32637943836cc6f8e}{Game}}(\textcolor{keywordtype}{int} width, \textcolor{keywordtype}{int} height);}
-\DoxyCodeLine{30 }
-\DoxyCodeLine{38     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_game_ada9c7e3ee9f48ef5e7cb8e829103791c}{init}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} name[], \mbox{\hyperlink{_callbacks_8hpp_a865e8ea12919c486f307441c2fc15540}{Key\_Callback}} kCallback, \mbox{\hyperlink{_callbacks_8hpp_ad430807ac21df706160bc5b56d5a9153}{Mouse\_Callback}} mCallback, \mbox{\hyperlink{_callbacks_8hpp_ac5ff64a3e2893b56ab073dbac5021e41}{Scroll\_Callback}} sCallback);}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include "{}GL/glew.h"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}GLFW/glfw3.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}fstream"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}string"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}sstream"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}utility/SGUtil.h"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}core/GameObject.hpp"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}core/ObjManagement.h"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}Callbacks.hpp"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}core/Sound.h"{}}}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{keyword}{class }\mbox{\hyperlink{class_game}{Game}} }
+\DoxyCodeLine{17 \{}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19 \textcolor{keyword}{public}:}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21     \textcolor{comment}{//Default constructor and destructor}}
+\DoxyCodeLine{22     \mbox{\hyperlink{class_game}{Game}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{23     \mbox{\hyperlink{class_game}{\string~Game}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{28     \mbox{\hyperlink{class_game_a5bc07cf8947858f32637943836cc6f8e}{Game}}(\textcolor{keywordtype}{int} width, \textcolor{keywordtype}{int} height);}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{38     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_game_a3d4a7c774fe1334a2475e8a4c9f4c94a}{init}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} name[], Key\_Callback kCallback, Mouse\_Callback mCallback, Scroll\_Callback sCallback, \textcolor{keywordtype}{bool} windowed);}
 \DoxyCodeLine{39     }
 \DoxyCodeLine{43     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_adb5563f62c0c82e3e42ec36501aa5698}{handleEvents}}();}
 \DoxyCodeLine{44     }
@@ -38,28 +37,30 @@
 \DoxyCodeLine{60     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_a0d96a8ecaebff3412708e3d19a34cddc}{handleMouse}}(\textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
 \DoxyCodeLine{61     }
 \DoxyCodeLine{67     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_abe908bba68dfd3da6854aef344dadf2b}{handleScrolling}}(\textcolor{keywordtype}{double} xOffset, \textcolor{keywordtype}{double} yOffset) \{\};}
-\DoxyCodeLine{68     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_a07535a06e0962dfdfcade57d767aae2d}{update}}(\textcolor{keywordtype}{double} deltaTime);}
-\DoxyCodeLine{69     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_a7d7db80157c7612a182a807634cda96b}{setTime}}(\textcolor{keywordtype}{double} time);}
-\DoxyCodeLine{70     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_a15ddd769261d923827a3cdf41499c843}{render}}();}
-\DoxyCodeLine{71     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_game_ad4f36a72a2d06696f7973788606f57fc}{clean}}();}
+\DoxyCodeLine{68     \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime);}
+\DoxyCodeLine{69     \textcolor{keywordtype}{void} setTime(\textcolor{keywordtype}{double} time);}
+\DoxyCodeLine{70     \textcolor{keywordtype}{void} render();}
+\DoxyCodeLine{71     \textcolor{keywordtype}{void} clean();}
 \DoxyCodeLine{72 }
 \DoxyCodeLine{73     \textcolor{comment}{//Secondary Functions}}
-\DoxyCodeLine{74     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_game_a9d75d33cc48b4e7d80dbed569d3154b5}{secondsPerFrameCap}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_game_a21777a9cd899aa80f17ce50f23ae22a7}{m\_SecondsPerFrameCap}}; \}}
+\DoxyCodeLine{74     \textcolor{keywordtype}{double} secondsPerFrameCap()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_SecondsPerFrameCap; \}}
 \DoxyCodeLine{75 }
 \DoxyCodeLine{79     GLFWwindow* \mbox{\hyperlink{class_game_ad9bc7cf39168a1ceaf77d6177116aa94}{window}} = NULL;}
 \DoxyCodeLine{80 }
-\DoxyCodeLine{81     \textcolor{comment}{//If this is set to true, game loop ends this cycle}}
-\DoxyCodeLine{82     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_game_a6f85f1ffe0f7127a887fd1f2f7ce5a45}{s\_Close}};}
-\DoxyCodeLine{83 }
-\DoxyCodeLine{84 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{84     \mbox{\hyperlink{class_s_g_sound_1_1_system}{SGSound::System}} \mbox{\hyperlink{class_game_a3712b0ae772481b71c8282d708ad880a}{sound}};}
 \DoxyCodeLine{85 }
-\DoxyCodeLine{86     \textcolor{keywordtype}{int} \mbox{\hyperlink{class_game_a88e8779f762bea6ff5b1542afb1a3048}{m\_Width}};}
-\DoxyCodeLine{87     \textcolor{keywordtype}{int} \mbox{\hyperlink{class_game_a98eccdcb435a33511328f318fce83e8a}{m\_Height}};}
+\DoxyCodeLine{86     \textcolor{comment}{//If this is set to true, game loop ends this cycle}}
+\DoxyCodeLine{87     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} s\_Close;}
 \DoxyCodeLine{88 }
-\DoxyCodeLine{89     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_game_a1cace9901aa94437ffc526bfd9345be1}{m\_GlfwTime}};}
+\DoxyCodeLine{89 \textcolor{keyword}{protected}:}
 \DoxyCodeLine{90 }
-\DoxyCodeLine{91     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_game_a21777a9cd899aa80f17ce50f23ae22a7}{m\_SecondsPerFrameCap}} = (1.0 / 2000.0) * 1000.0; \textcolor{comment}{//Init to 2000, can be changed}}
-\DoxyCodeLine{92 \};}
-\DoxyCodeLine{93 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{91     \textcolor{keywordtype}{int} m\_Width;}
+\DoxyCodeLine{92     \textcolor{keywordtype}{int} m\_Height;}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94     \textcolor{keywordtype}{double} m\_GlfwTime;}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{96     \textcolor{keywordtype}{double} m\_SecondsPerFrameCap = (1.0 / 2000.0) * 1000.0; \textcolor{comment}{//Init to 2000, can be changed}}
+\DoxyCodeLine{97 \};}
+\DoxyCodeLine{98 \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

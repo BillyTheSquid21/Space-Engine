@@ -8,20 +8,23 @@ SGRender::Camera::Camera(float width, float height, glm::vec3 position)
 
 }
 
-void SGRender::Camera::sendCameraUniforms(Shader& shader) {
+void SGRender::Camera::calcVP() {
 
 	m_View = glm::lookAt(m_Position, m_Position + m_Direction, m_Up); 
-
-	shader.setUniform("u_View", &m_View);
-	shader.setUniform("u_Proj", &m_Proj);
+	m_VP = m_Proj * m_View;				//Avoid GPU calculation
+	m_InverseVP = glm::inverse(m_VP);	//Keep for unmapping purposes
 }
 
-void SGRender::Camera::moveForwards(float speed) {
+void SGRender::Camera::moveInCurrentDirection(float speed) {
 	m_Position += speed * m_Direction;
 }
 
 void SGRender::Camera::moveUp(float speed) {
 	m_Position += speed * m_Up;
+}
+
+void SGRender::Camera::moveForwards(float speed) {
+	m_Position += speed * glm::vec3(m_Direction.x, 0.0f, m_Direction.z);
 }
 
 void SGRender::Camera::moveSideways(float speed) {
@@ -57,6 +60,17 @@ void SGRender::Camera::setPos(float x, float y, float z)
 	m_Position = { x,y,z };
 }
 
+glm::vec3 SGRender::Camera::getWorldSpaceClick(float xPos, float yPos)
+{
+	return unprojectWindow(glm::vec3(xPos, m_CameraHeight - yPos, 0.0f));
+}
+
+glm::vec3 SGRender::Camera::unprojectWindow(glm::vec3 pos)
+{
+	using namespace glm;
+	return unProject(pos, m_View, m_Proj, vec4(0.0f, 0.0f, m_CameraWidth, m_CameraHeight));
+}
+
 void SGRender::Camera::updateFrustum()
 {
 	using namespace glm;
@@ -69,6 +83,7 @@ void SGRender::Camera::updateFrustum()
 	float halfHSide = halfVSide * (m_CameraWidth / m_CameraHeight);
 	vec3 frontMultFar = m_FarPlane * m_Direction;
 	vec3 right = normalize(cross(m_Direction, m_Up));
+	m_Right = right;
 
 	//Calculate faces
 	m_Frustum.nearFace = { m_Position + m_NearPlane * m_Direction, m_Direction };

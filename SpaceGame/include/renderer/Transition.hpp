@@ -120,7 +120,7 @@ private:
 	//Render
 	Quad m_Quad;
 	SGRender::Camera m_Camera;
-	SGRender::Renderer m_Renderer;
+	SGRender::Batcher m_Renderer;
 
 	//Update
 	double m_Timer = 0.0;

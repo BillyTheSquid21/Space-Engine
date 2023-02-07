@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: SG::State Class Reference</title>
+<title>Space Engine: SG::State Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -99,229 +99,50 @@ $(document).ready(function(){initNavTree('class_s_g_1_1_state.html',''); initRes
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="_state_8hpp_source.html">State.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for SG::State:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="class_s_g_1_1_state.png" usemap="#SG::State_map" alt=""/>
-  <map id="SG::State_map" name="SG::State_map">
-<area href="class_battle.html" alt="Battle" shape="rect" coords="0,56,72,80"/>
-<area href="class_main_menu.html" alt="MainMenu" shape="rect" coords="82,56,154,80"/>
-<area href="class_overworld.html" alt="Overworld" shape="rect" coords="164,56,236,80"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a17957af270e7b8d468f8f3dde766c21c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a17957af270e7b8d468f8f3dde766c21c">update</a> (double deltaTime, double time)</td></tr>
+<tr class="memitem:a17957af270e7b8d468f8f3dde766c21c"><td class="memItemLeft" align="right" valign="top"><a id="a17957af270e7b8d468f8f3dde766c21c" name="a17957af270e7b8d468f8f3dde766c21c"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (double deltaTime, double time)</td></tr>
 <tr class="separator:a17957af270e7b8d468f8f3dde766c21c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a744e9c3980618a91f94bab5d48b0ad5b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a744e9c3980618a91f94bab5d48b0ad5b">render</a> ()</td></tr>
+<tr class="memitem:a744e9c3980618a91f94bab5d48b0ad5b"><td class="memItemLeft" align="right" valign="top"><a id="a744e9c3980618a91f94bab5d48b0ad5b" name="a744e9c3980618a91f94bab5d48b0ad5b"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> ()</td></tr>
 <tr class="separator:a744e9c3980618a91f94bab5d48b0ad5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e679d3519dc4273c2ff189335688e56"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a2e679d3519dc4273c2ff189335688e56">handleInput</a> (int key, int scancode, int action, int mods)</td></tr>
+<tr class="memitem:a2e679d3519dc4273c2ff189335688e56"><td class="memItemLeft" align="right" valign="top"><a id="a2e679d3519dc4273c2ff189335688e56" name="a2e679d3519dc4273c2ff189335688e56"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleInput</b> (int key, int scancode, int action, int mods)</td></tr>
 <tr class="separator:a2e679d3519dc4273c2ff189335688e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8438f4c8b22212c8b4543e03fa619129"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a8438f4c8b22212c8b4543e03fa619129">handleScrolling</a> (double xOffset, double yOffset)</td></tr>
+<tr class="memitem:a8438f4c8b22212c8b4543e03fa619129"><td class="memItemLeft" align="right" valign="top"><a id="a8438f4c8b22212c8b4543e03fa619129" name="a8438f4c8b22212c8b4543e03fa619129"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleScrolling</b> (double xOffset, double yOffset)</td></tr>
 <tr class="separator:a8438f4c8b22212c8b4543e03fa619129"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fcf4b404a2ed28d316f0b7016e6a176"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a3fcf4b404a2ed28d316f0b7016e6a176">handleMouse</a> (int button, int action, int mods)</td></tr>
+<tr class="memitem:a3fcf4b404a2ed28d316f0b7016e6a176"><td class="memItemLeft" align="right" valign="top"><a id="a3fcf4b404a2ed28d316f0b7016e6a176" name="a3fcf4b404a2ed28d316f0b7016e6a176"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleMouse</b> (int button, int action, int mods)</td></tr>
 <tr class="separator:a3fcf4b404a2ed28d316f0b7016e6a176"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acab4370caaa70732bddff4a43e54adcc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#acab4370caaa70732bddff4a43e54adcc">loadRequiredData</a> ()</td></tr>
 <tr class="separator:acab4370caaa70732bddff4a43e54adcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a276022def1b00f5758a33fbdc02b6187"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a276022def1b00f5758a33fbdc02b6187">purgeRequiredData</a> ()</td></tr>
 <tr class="separator:a276022def1b00f5758a33fbdc02b6187"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c7ee645bc1ba25e5c3f10134e9208c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a7c7ee645bc1ba25e5c3f10134e9208c6">active</a> () const</td></tr>
+<tr class="memitem:a7c7ee645bc1ba25e5c3f10134e9208c6"><td class="memItemLeft" align="right" valign="top"><a id="a7c7ee645bc1ba25e5c3f10134e9208c6" name="a7c7ee645bc1ba25e5c3f10134e9208c6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>active</b> () const</td></tr>
 <tr class="separator:a7c7ee645bc1ba25e5c3f10134e9208c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f936547f59900721a791d75b28ad5aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a1f936547f59900721a791d75b28ad5aa">setActive</a> (bool set)</td></tr>
+<tr class="memitem:a1f936547f59900721a791d75b28ad5aa"><td class="memItemLeft" align="right" valign="top"><a id="a1f936547f59900721a791d75b28ad5aa" name="a1f936547f59900721a791d75b28ad5aa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setActive</b> (bool set)</td></tr>
 <tr class="separator:a1f936547f59900721a791d75b28ad5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32cacd01eac7a9aa24e076d24d59119b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a32cacd01eac7a9aa24e076d24d59119b">hasDataLoaded</a> () const</td></tr>
+<tr class="memitem:a32cacd01eac7a9aa24e076d24d59119b"><td class="memItemLeft" align="right" valign="top"><a id="a32cacd01eac7a9aa24e076d24d59119b" name="a32cacd01eac7a9aa24e076d24d59119b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasDataLoaded</b> () const</td></tr>
 <tr class="separator:a32cacd01eac7a9aa24e076d24d59119b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:ab2b7ea3b660e45341d17751900ffcf53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#ab2b7ea3b660e45341d17751900ffcf53">m_Active</a> = false</td></tr>
+<tr class="memitem:ab2b7ea3b660e45341d17751900ffcf53"><td class="memItemLeft" align="right" valign="top"><a id="ab2b7ea3b660e45341d17751900ffcf53" name="ab2b7ea3b660e45341d17751900ffcf53"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_Active</b> = false</td></tr>
 <tr class="separator:ab2b7ea3b660e45341d17751900ffcf53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91973d52d93954ffef8b9e1adfe5fd9e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_1_1_state.html#a91973d52d93954ffef8b9e1adfe5fd9e">m_DataLoaded</a> = false</td></tr>
+<tr class="memitem:a91973d52d93954ffef8b9e1adfe5fd9e"><td class="memItemLeft" align="right" valign="top"><a id="a91973d52d93954ffef8b9e1adfe5fd9e" name="a91973d52d93954ffef8b9e1adfe5fd9e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_DataLoaded</b> = false</td></tr>
 <tr class="separator:a91973d52d93954ffef8b9e1adfe5fd9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Contains more local, independant logic than the <a class="el" href="class_game.html">Game</a> class This is where things such as the game state, menu state etc should be defined </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7c7ee645bc1ba25e5c3f10134e9208c6" name="a7c7ee645bc1ba25e5c3f10134e9208c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c7ee645bc1ba25e5c3f10134e9208c6">&#9670;&#160;</a></span>active()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SG::State::active </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2e679d3519dc4273c2ff189335688e56" name="a2e679d3519dc4273c2ff189335688e56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e679d3519dc4273c2ff189335688e56">&#9670;&#160;</a></span>handleInput()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void SG::State::handleInput </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>key</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>scancode</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>action</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>mods</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="class_battle.html#a71a4cf6aae6122dd214d53875c4749d4">Battle</a>, and <a class="el" href="class_overworld.html#a5b91833040a7816b3ac38d19c47459bb">Overworld</a>.</p>
-
-</div>
-</div>
-<a id="a3fcf4b404a2ed28d316f0b7016e6a176" name="a3fcf4b404a2ed28d316f0b7016e6a176"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fcf4b404a2ed28d316f0b7016e6a176">&#9670;&#160;</a></span>handleMouse()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void SG::State::handleMouse </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>button</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>action</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>mods</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8438f4c8b22212c8b4543e03fa619129" name="a8438f4c8b22212c8b4543e03fa619129"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8438f4c8b22212c8b4543e03fa619129">&#9670;&#160;</a></span>handleScrolling()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void SG::State::handleScrolling </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>xOffset</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>yOffset</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a32cacd01eac7a9aa24e076d24d59119b" name="a32cacd01eac7a9aa24e076d24d59119b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32cacd01eac7a9aa24e076d24d59119b">&#9670;&#160;</a></span>hasDataLoaded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SG::State::hasDataLoaded </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="acab4370caaa70732bddff4a43e54adcc" name="acab4370caaa70732bddff4a43e54adcc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acab4370caaa70732bddff4a43e54adcc">&#9670;&#160;</a></span>loadRequiredData()</h2>
 
@@ -345,8 +166,6 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p >Load data for the state that doesn't persist </p>
-
-<p>Reimplemented in <a class="el" href="class_battle.html#ac82e357437842a45ac1e051a19c31c14">Battle</a>, <a class="el" href="class_main_menu.html#a15f3023e1a547b972d8e2b3525368eaf">MainMenu</a>, and <a class="el" href="class_overworld.html#ae27aac03c07681a79353e4350cdd8b99">Overworld</a>.</p>
 
 </div>
 </div>
@@ -374,144 +193,6 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p >Purge data for the state that doesn't persist </p>
 
-<p>Reimplemented in <a class="el" href="class_battle.html#aa02801982a2ae3515a45f4e601acee72">Battle</a>, <a class="el" href="class_main_menu.html#a31a0840f34109e8f96bffe4adf2496a6">MainMenu</a>, and <a class="el" href="class_overworld.html#a7cef44b24d4358619b5320de5ba6df55">Overworld</a>.</p>
-
-</div>
-</div>
-<a id="a744e9c3980618a91f94bab5d48b0ad5b" name="a744e9c3980618a91f94bab5d48b0ad5b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a744e9c3980618a91f94bab5d48b0ad5b">&#9670;&#160;</a></span>render()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void SG::State::render </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="class_battle.html#afabf6721d35b435d7b9751cf76517eb6">Battle</a>, <a class="el" href="class_main_menu.html#a5e44c4d074e73289a8f54455ae54418a">MainMenu</a>, and <a class="el" href="class_overworld.html#a91aafeaf3864e6fc79d4d941efa85f22">Overworld</a>.</p>
-
-</div>
-</div>
-<a id="a1f936547f59900721a791d75b28ad5aa" name="a1f936547f59900721a791d75b28ad5aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f936547f59900721a791d75b28ad5aa">&#9670;&#160;</a></span>setActive()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SG::State::setActive </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>set</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a17957af270e7b8d468f8f3dde766c21c" name="a17957af270e7b8d468f8f3dde766c21c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17957af270e7b8d468f8f3dde766c21c">&#9670;&#160;</a></span>update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void SG::State::update </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>deltaTime</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>time</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="class_battle.html#a07b1a376a38b4ad1fd714831a035ef13">Battle</a>, <a class="el" href="class_main_menu.html#abf4681550d4ee347071523207206d50b">MainMenu</a>, and <a class="el" href="class_overworld.html#a49234087878d47a2e78191b629f4ee8b">Overworld</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ab2b7ea3b660e45341d17751900ffcf53" name="ab2b7ea3b660e45341d17751900ffcf53"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab2b7ea3b660e45341d17751900ffcf53">&#9670;&#160;</a></span>m_Active</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SG::State::m_Active = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a91973d52d93954ffef8b9e1adfe5fd9e" name="a91973d52d93954ffef8b9e1adfe5fd9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91973d52d93954ffef8b9e1adfe5fd9e">&#9670;&#160;</a></span>m_DataLoaded</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool SG::State::m_DataLoaded = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
@@ -522,7 +203,7 @@ Protected Attributes</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_s_g.html">SG</a></li><li class="navelem"><a class="el" href="class_s_g_1_1_state.html">State</a></li>
+    <li class="navelem"><b>SG</b></li><li class="navelem"><a class="el" href="class_s_g_1_1_state.html">State</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

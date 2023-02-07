@@ -1,37 +1,37 @@
 \hypertarget{_state_8hpp_source}{}\doxysection{State.\+hpp}
 \label{_state_8hpp_source}\index{D:/Repositories/Space Engine/SpaceGame/include/core/State.hpp@{D:/Repositories/Space Engine/SpaceGame/include/core/State.hpp}}
-\mbox{\hyperlink{_state_8hpp}{Go to the documentation of this file.}}
+
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#ifndef STATE\_H}}
 \DoxyCodeLine{3 \textcolor{preprocessor}{\#define STATE\_H}}
 \DoxyCodeLine{4 }
 \DoxyCodeLine{5 \textcolor{preprocessor}{\#include <GLFW/glfw3.h>}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_obj_management_8h}{ObjManagement.h}}"{}}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}ObjManagement.h"{}}}
 \DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_s_g}{SG}}}
+\DoxyCodeLine{8 \textcolor{keyword}{namespace }SG}
 \DoxyCodeLine{9 \{}
 \DoxyCodeLine{14     \textcolor{keyword}{class }\mbox{\hyperlink{class_s_g_1_1_state}{State}}}
 \DoxyCodeLine{15     \{}
 \DoxyCodeLine{16     \textcolor{keyword}{public}:}
 \DoxyCodeLine{17         \textcolor{comment}{//Universal functions}}
-\DoxyCodeLine{18         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a17957af270e7b8d468f8f3dde766c21c}{update}}(\textcolor{keywordtype}{double} deltaTime, \textcolor{keywordtype}{double} time) \{\};}
-\DoxyCodeLine{19         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a744e9c3980618a91f94bab5d48b0ad5b}{render}}() \{\};}
-\DoxyCodeLine{20         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a2e679d3519dc4273c2ff189335688e56}{handleInput}}(\textcolor{keywordtype}{int} key, \textcolor{keywordtype}{int} scancode, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
-\DoxyCodeLine{21         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a8438f4c8b22212c8b4543e03fa619129}{handleScrolling}}(\textcolor{keywordtype}{double} xOffset, \textcolor{keywordtype}{double} yOffset) \{\};}
-\DoxyCodeLine{22         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a3fcf4b404a2ed28d316f0b7016e6a176}{handleMouse}}(\textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
+\DoxyCodeLine{18         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} update(\textcolor{keywordtype}{double} deltaTime, \textcolor{keywordtype}{double} time) \{\};}
+\DoxyCodeLine{19         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} render() \{\};}
+\DoxyCodeLine{20         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} handleInput(\textcolor{keywordtype}{int} key, \textcolor{keywordtype}{int} scancode, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
+\DoxyCodeLine{21         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} handleScrolling(\textcolor{keywordtype}{double} xOffset, \textcolor{keywordtype}{double} yOffset) \{\};}
+\DoxyCodeLine{22         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} handleMouse(\textcolor{keywordtype}{int} button, \textcolor{keywordtype}{int} action, \textcolor{keywordtype}{int} mods) \{\};}
 \DoxyCodeLine{23 }
 \DoxyCodeLine{27         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_acab4370caaa70732bddff4a43e54adcc}{loadRequiredData}}() \{\};}
 \DoxyCodeLine{31         \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a276022def1b00f5758a33fbdc02b6187}{purgeRequiredData}}() \{\};}
 \DoxyCodeLine{32 }
 \DoxyCodeLine{33         \textcolor{comment}{//Getters and setters}}
-\DoxyCodeLine{34         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_s_g_1_1_state_a7c7ee645bc1ba25e5c3f10134e9208c6}{active}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_s_g_1_1_state_ab2b7ea3b660e45341d17751900ffcf53}{m\_Active}}; \}}
-\DoxyCodeLine{35         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_g_1_1_state_a1f936547f59900721a791d75b28ad5aa}{setActive}}(\textcolor{keywordtype}{bool} set) \{ \mbox{\hyperlink{class_s_g_1_1_state_ab2b7ea3b660e45341d17751900ffcf53}{m\_Active}} = set; \}}
-\DoxyCodeLine{36         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_s_g_1_1_state_a32cacd01eac7a9aa24e076d24d59119b}{hasDataLoaded}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_s_g_1_1_state_a91973d52d93954ffef8b9e1adfe5fd9e}{m\_DataLoaded}}; \}}
+\DoxyCodeLine{34         \textcolor{keywordtype}{bool} active()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_Active; \}}
+\DoxyCodeLine{35         \textcolor{keywordtype}{void} setActive(\textcolor{keywordtype}{bool} set) \{ m\_Active = set; \}}
+\DoxyCodeLine{36         \textcolor{keywordtype}{bool} hasDataLoaded()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} m\_DataLoaded; \}}
 \DoxyCodeLine{37 }
 \DoxyCodeLine{38     \textcolor{keyword}{protected}:}
-\DoxyCodeLine{39         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_s_g_1_1_state_ab2b7ea3b660e45341d17751900ffcf53}{m\_Active}} = \textcolor{keyword}{false};}
-\DoxyCodeLine{40         \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_s_g_1_1_state_a91973d52d93954ffef8b9e1adfe5fd9e}{m\_DataLoaded}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{39         \textcolor{keywordtype}{bool} m\_Active = \textcolor{keyword}{false};}
+\DoxyCodeLine{40         \textcolor{keywordtype}{bool} m\_DataLoaded = \textcolor{keyword}{false};}
 \DoxyCodeLine{41     \};}
 \DoxyCodeLine{42 \}}
 \DoxyCodeLine{43 }

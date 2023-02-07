@@ -1,6 +1,11 @@
 #include "renderer/Plane.h"
 
 Geometry::Plane::~Plane() {
+	if (m_Linked)
+	{
+		SGRender::System::removeFromBatcher(m_Renderer, this, &m_Quads[0]);
+		SGRender::System::unlinkFromBatcher(m_Renderer);
+	}
 	purgeData();
 }
 
@@ -120,7 +125,6 @@ void Geometry::Plane::render()
 	{
 		return;
 	}
-	m_Renderer->commit((SGRender::NTVertex*)&m_Quads[0], GetFloatCount<SGRender::NTVertex>(Shape::QUAD) * m_Quads.size(), (unsigned int*)&m_Indices[0], m_Indices.size());
 }
 
 Norm_Tex_Quad* Geometry::Plane::accessQuad(unsigned int x, unsigned int y) {
@@ -143,4 +147,5 @@ void Geometry::Plane::purgeData() {
 		m_Indices.clear();
 		m_SafeToDraw = false;
 	}
+	m_Renderer = 0;
 }

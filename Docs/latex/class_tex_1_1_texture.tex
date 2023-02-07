@@ -1,0 +1,93 @@
+\hypertarget{class_tex_1_1_texture}{}\doxysection{Tex\+::Texture Class Reference}
+\label{class_tex_1_1_texture}\index{Tex::Texture@{Tex::Texture}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_adf1cbc6f5f37b4f83e0b49615b3b988e}{load\+Texture}} (const std\+::string \&path)
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_a93fa8b77e0301d4957f0f57e4f4e747f}{load\+Texture}} (const std\+::string \&path, bool flip)
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_ad85d6f1df867355a3ae44a8d3975420f}{generate\+Texture}} (unsigned int slot)
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_af748e1aec4f2dc0f9817712839316a8f}{generate\+Texture}} (unsigned int slot, void $\ast$buffer)
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_a3eb130e7ac7a98c6ea39e2a2b16aee01}{generate\+Texture\+Wrap}} (unsigned int slot, void $\ast$buffer)
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_a858db1b4d3674cfda1aec5b0a1972e80}\label{class_tex_1_1_texture_a858db1b4d3674cfda1aec5b0a1972e80}} 
+void {\bfseries bind} () const
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_acdb7d55a3a98ba50b08b58af09832a27}\label{class_tex_1_1_texture_acdb7d55a3a98ba50b08b58af09832a27}} 
+void {\bfseries unbind} () const
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_a8a0da25af18e472646c94718c31d2b99}{clear\+Buffer}} ()
+\item 
+void \mbox{\hyperlink{class_tex_1_1_texture_a17454e8a78cd4e2fbb4ea57bedb8a8b4}{delete\+Texture}} () const
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_a29c17f548dfaf6a4d5ccca9382195bb4}\label{class_tex_1_1_texture_a29c17f548dfaf6a4d5ccca9382195bb4}} 
+unsigned int {\bfseries get\+ID} () const
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_ad25842057db21588feb5161d53019538}\label{class_tex_1_1_texture_ad25842057db21588feb5161d53019538}} 
+void {\bfseries set\+Width} (int width)
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_a3a3b883666afe2baeadabae64e0b5dee}\label{class_tex_1_1_texture_a3a3b883666afe2baeadabae64e0b5dee}} 
+void {\bfseries set\+Height} (int height)
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_a6a0962f63146f2b0dcc2acd2c3d424b5}\label{class_tex_1_1_texture_a6a0962f63146f2b0dcc2acd2c3d424b5}} 
+void {\bfseries set\+BPP} (int bpp)
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_ab3c0ddcd435c10420935bdb51edb6570}\label{class_tex_1_1_texture_ab3c0ddcd435c10420935bdb51edb6570}} 
+int {\bfseries width} () const
+\item 
+\mbox{\Hypertarget{class_tex_1_1_texture_a1d72d4cd14b8c0c478d3c47e40287900}\label{class_tex_1_1_texture_a1d72d4cd14b8c0c478d3c47e40287900}} 
+int {\bfseries height} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_tex_1_1_texture_a8a0da25af18e472646c94718c31d2b99}\label{class_tex_1_1_texture_a8a0da25af18e472646c94718c31d2b99}} 
+\index{Tex::Texture@{Tex::Texture}!clearBuffer@{clearBuffer}}
+\index{clearBuffer@{clearBuffer}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{clearBuffer()}{clearBuffer()}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::clear\+Buffer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Clear the local buffer -\/ should do after has been generated as a gl\+Texture \mbox{\Hypertarget{class_tex_1_1_texture_a17454e8a78cd4e2fbb4ea57bedb8a8b4}\label{class_tex_1_1_texture_a17454e8a78cd4e2fbb4ea57bedb8a8b4}} 
+\index{Tex::Texture@{Tex::Texture}!deleteTexture@{deleteTexture}}
+\index{deleteTexture@{deleteTexture}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{deleteTexture()}{deleteTexture()}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::delete\+Texture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Deletes the texture on the GPU \mbox{\Hypertarget{class_tex_1_1_texture_ad85d6f1df867355a3ae44a8d3975420f}\label{class_tex_1_1_texture_ad85d6f1df867355a3ae44a8d3975420f}} 
+\index{Tex::Texture@{Tex::Texture}!generateTexture@{generateTexture}}
+\index{generateTexture@{generateTexture}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{generateTexture()}{generateTexture()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::generate\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{slot }\end{DoxyParamCaption})}
+
+Generate texture in a given slot \mbox{\Hypertarget{class_tex_1_1_texture_af748e1aec4f2dc0f9817712839316a8f}\label{class_tex_1_1_texture_af748e1aec4f2dc0f9817712839316a8f}} 
+\index{Tex::Texture@{Tex::Texture}!generateTexture@{generateTexture}}
+\index{generateTexture@{generateTexture}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{generateTexture()}{generateTexture()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::generate\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{slot,  }\item[{void $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+Generate texture in a given slot from an external buffer \mbox{\Hypertarget{class_tex_1_1_texture_a3eb130e7ac7a98c6ea39e2a2b16aee01}\label{class_tex_1_1_texture_a3eb130e7ac7a98c6ea39e2a2b16aee01}} 
+\index{Tex::Texture@{Tex::Texture}!generateTextureWrap@{generateTextureWrap}}
+\index{generateTextureWrap@{generateTextureWrap}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{generateTextureWrap()}{generateTextureWrap()}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::generate\+Texture\+Wrap (\begin{DoxyParamCaption}\item[{unsigned int}]{slot,  }\item[{void $\ast$}]{buffer }\end{DoxyParamCaption})}
+
+Generate texture in a given slot from an external buffer that is wrapped instead of clamped to edge \mbox{\Hypertarget{class_tex_1_1_texture_adf1cbc6f5f37b4f83e0b49615b3b988e}\label{class_tex_1_1_texture_adf1cbc6f5f37b4f83e0b49615b3b988e}} 
+\index{Tex::Texture@{Tex::Texture}!loadTexture@{loadTexture}}
+\index{loadTexture@{loadTexture}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{loadTexture()}{loadTexture()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::load\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+Load texture from path \mbox{\Hypertarget{class_tex_1_1_texture_a93fa8b77e0301d4957f0f57e4f4e747f}\label{class_tex_1_1_texture_a93fa8b77e0301d4957f0f57e4f4e747f}} 
+\index{Tex::Texture@{Tex::Texture}!loadTexture@{loadTexture}}
+\index{loadTexture@{loadTexture}!Tex::Texture@{Tex::Texture}}
+\doxysubsubsection{\texorpdfstring{loadTexture()}{loadTexture()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Tex\+::\+Texture\+::load\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{bool}]{flip }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Load texture from path, specify if flipped on load 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Texture.\+h\end{DoxyCompactItemize}

@@ -19,7 +19,12 @@ public:
 		m_Stride = stride;
 	};
 
-	void pushBack(T obj) 
+	~SegArray()
+	{
+		this->clear();
+	}
+
+	T* push_back(T obj) 
 	{ 
 		//Check if over running
 		if (m_Size == m_Nodes.size() * m_Stride || m_Size == 0)
@@ -30,12 +35,13 @@ public:
 		T& ind = getIndex(m_Size);
 		ind = obj;
 		m_Size++;
+		m_Nodes.back().size++;
 
-		m_Nodes[m_Nodes.size()-1].size++;
+		return &getIndex(m_Size - 1);
 	}
 
 	template<typename... Args>
-	void emplaceBack(Args... args)
+	T* emplace_back(Args... args)
 	{
 		//Check if over running
 		if (m_Size == m_Nodes.size() * m_Stride)
@@ -46,16 +52,17 @@ public:
 		T& ind = getIndex(m_Size);
 		ind = T(args...);
 		m_Size++;
+		m_Nodes.back().size++;
 
-		m_Nodes[m_Nodes.size() - 1].size++;
+		return &getIndex(m_Size - 1);
 	}
 
-	void popBack()
+	void pop_back()
 	{
-		eraseAt(m_Size - 1);
+		erase(m_Size - 1);
 	}
 
-	void eraseAt(size_t index)
+	void erase(size_t index)
 	{
 		if (index >= m_Size)
 		{
@@ -133,6 +140,12 @@ public:
 		return getIndex(index);
 	}
 
+	T& back()
+	{
+		assert(m_Size > 0);
+		return getIndex(m_Size-1);
+	}
+
 	void clear()
 	{
 		m_Nodes.clear();
@@ -143,7 +156,7 @@ public:
 
 private:
 
-	inline T& getIndex(size_t index)
+	T& getIndex(size_t index)
 	{
 		//Get rounded down node number
 		int node = getNode(index);
@@ -155,7 +168,7 @@ private:
 		return m_Nodes[node].data[loc];
 	}
 
-	inline int getNode(size_t index)
+	size_t getNode(size_t index)
 	{
 		return index / m_Stride;
 	}

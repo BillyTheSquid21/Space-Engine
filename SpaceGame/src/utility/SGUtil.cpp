@@ -28,5 +28,6 @@ double EngineTimer::EndTimer(unsigned int id)
 			return elapsedSeconds.count();
 		}
 	}
+	return -1.0;
 }
 

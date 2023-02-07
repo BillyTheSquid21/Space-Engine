@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Demo Game: SGRandom::Perlin2D&lt; T, dataDimension, resolution, size &gt; Class Template Reference</title>
+<title>Space Engine: SGRandom::Perlin2D&lt; T, dataDimension, resolution, size &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Demo Game<span id="projectnumber">&#160;v0.4</span>
+   <div id="projectname">Space Engine<span id="projectnumber">&#160;v0.7</span>
    </div>
-   <div id="projectbrief">Demo Game for the Space Engine</div>
+   <div id="projectbrief">A simple C++ framework for creating games</div>
   </td>
  </tr>
  </tbody>
@@ -97,453 +97,47 @@ $(document).ready(function(){initNavTree('class_s_g_random_1_1_perlin2_d.html','
   <div class="headertitle"><div class="title">SGRandom::Perlin2D&lt; T, dataDimension, resolution, size &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p><code>#include &lt;<a class="el" href="_random_8h_source.html">Random.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab5ac418353e646fd16dabfce6bc634aa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#ab5ac418353e646fd16dabfce6bc634aa">Perlin2D</a> ()=default</td></tr>
-<tr class="separator:ab5ac418353e646fd16dabfce6bc634aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f251772a56d2c86314b3cdeff38e5b1"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a0f251772a56d2c86314b3cdeff38e5b1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a0f251772a56d2c86314b3cdeff38e5b1">Perlin2D</a> (bool shareRandom, Args &amp;&amp;... valueRanges)</td></tr>
+<tr class="memitem:a0f251772a56d2c86314b3cdeff38e5b1"><td class="memTemplParams" colspan="2"><a id="a0f251772a56d2c86314b3cdeff38e5b1" name="a0f251772a56d2c86314b3cdeff38e5b1"></a>
+template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a0f251772a56d2c86314b3cdeff38e5b1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Perlin2D</b> (bool shareRandom, Args &amp;&amp;... valueRanges)</td></tr>
 <tr class="separator:a0f251772a56d2c86314b3cdeff38e5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56b7cd669b9cb47e0aa9128e6507f4cc"><td class="memItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a56b7cd669b9cb47e0aa9128e6507f4cc">at</a> (int x, int y, int <a class="el" href="class_s_g_random_1_1_perlin2_d.html#ae203f1f154c35c9509c1dc960a1f4593">data</a>)</td></tr>
+<tr class="memitem:a56b7cd669b9cb47e0aa9128e6507f4cc"><td class="memItemLeft" align="right" valign="top"><a id="a56b7cd669b9cb47e0aa9128e6507f4cc" name="a56b7cd669b9cb47e0aa9128e6507f4cc"></a>
+T &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (int x, int y, int data)</td></tr>
 <tr class="separator:a56b7cd669b9cb47e0aa9128e6507f4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56b8cd4070ff686f3337ba572e1473a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a56b8cd4070ff686f3337ba572e1473a0">generateField</a> (int <a class="el" href="class_s_g_random_1_1_perlin2_d.html#ae203f1f154c35c9509c1dc960a1f4593">data</a>, float noiseReduction)</td></tr>
+<tr class="memitem:a56b8cd4070ff686f3337ba572e1473a0"><td class="memItemLeft" align="right" valign="top"><a id="a56b8cd4070ff686f3337ba572e1473a0" name="a56b8cd4070ff686f3337ba572e1473a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>generateField</b> (int data, float noiseReduction)</td></tr>
 <tr class="separator:a56b8cd4070ff686f3337ba572e1473a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a40bd4306af3823e11b97a8703247dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a8a40bd4306af3823e11b97a8703247dc">scrollNoise</a> (int deltaX, int deltaY, float noiseReduction)</td></tr>
+<tr class="memitem:a8a40bd4306af3823e11b97a8703247dc"><td class="memItemLeft" align="right" valign="top"><a id="a8a40bd4306af3823e11b97a8703247dc" name="a8a40bd4306af3823e11b97a8703247dc"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>scrollNoise</b> (int deltaX, int deltaY, float noiseReduction)</td></tr>
 <tr class="separator:a8a40bd4306af3823e11b97a8703247dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a474b47f8ce0bfa82c989858c69c23933"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a474b47f8ce0bfa82c989858c69c23933">randomize</a> (float noiseReduction)</td></tr>
+<tr class="memitem:a474b47f8ce0bfa82c989858c69c23933"><td class="memItemLeft" align="right" valign="top"><a id="a474b47f8ce0bfa82c989858c69c23933" name="a474b47f8ce0bfa82c989858c69c23933"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>randomize</b> (float noiseReduction)</td></tr>
 <tr class="separator:a474b47f8ce0bfa82c989858c69c23933"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a442c1ec6e71ed087ef1da18c652db2aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a442c1ec6e71ed087ef1da18c652db2aa">randomizeGradients</a> ()</td></tr>
+<tr class="memitem:a442c1ec6e71ed087ef1da18c652db2aa"><td class="memItemLeft" align="right" valign="top"><a id="a442c1ec6e71ed087ef1da18c652db2aa" name="a442c1ec6e71ed087ef1da18c652db2aa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>randomizeGradients</b> ()</td></tr>
 <tr class="separator:a442c1ec6e71ed087ef1da18c652db2aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a226604b11c6434ea33e60b7a0a9ff38c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a226604b11c6434ea33e60b7a0a9ff38c">randomizeGradients</a> (int <a class="el" href="class_s_g_random_1_1_perlin2_d.html#ae203f1f154c35c9509c1dc960a1f4593">data</a>)</td></tr>
+<tr class="memitem:a226604b11c6434ea33e60b7a0a9ff38c"><td class="memItemLeft" align="right" valign="top"><a id="a226604b11c6434ea33e60b7a0a9ff38c" name="a226604b11c6434ea33e60b7a0a9ff38c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>randomizeGradients</b> (int data)</td></tr>
 <tr class="separator:a226604b11c6434ea33e60b7a0a9ff38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae203f1f154c35c9509c1dc960a1f4593"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#ae203f1f154c35c9509c1dc960a1f4593">data</a> ()</td></tr>
+<tr class="memitem:ae203f1f154c35c9509c1dc960a1f4593"><td class="memItemLeft" align="right" valign="top"><a id="ae203f1f154c35c9509c1dc960a1f4593" name="ae203f1f154c35c9509c1dc960a1f4593"></a>
+void *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> ()</td></tr>
 <tr class="separator:ae203f1f154c35c9509c1dc960a1f4593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab01850f30a8f8abfc3f929f8915d482c"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#ab01850f30a8f8abfc3f929f8915d482c">dataSize</a> ()</td></tr>
+<tr class="memitem:ab01850f30a8f8abfc3f929f8915d482c"><td class="memItemLeft" align="right" valign="top"><a id="ab01850f30a8f8abfc3f929f8915d482c" name="ab01850f30a8f8abfc3f929f8915d482c"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dataSize</b> ()</td></tr>
 <tr class="separator:ab01850f30a8f8abfc3f929f8915d482c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef9c58aa5a2101e5738af204cf6220ac"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#aef9c58aa5a2101e5738af204cf6220ac">dataSizeBytes</a> ()</td></tr>
+<tr class="memitem:aef9c58aa5a2101e5738af204cf6220ac"><td class="memItemLeft" align="right" valign="top"><a id="aef9c58aa5a2101e5738af204cf6220ac" name="aef9c58aa5a2101e5738af204cf6220ac"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dataSizeBytes</b> ()</td></tr>
 <tr class="separator:aef9c58aa5a2101e5738af204cf6220ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6f4b06c908c536bf8b1a1e152ae283c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#ae6f4b06c908c536bf8b1a1e152ae283c">writeAsPng</a> (const char *name)</td></tr>
+<tr class="memitem:ae6f4b06c908c536bf8b1a1e152ae283c"><td class="memItemLeft" align="right" valign="top"><a id="ae6f4b06c908c536bf8b1a1e152ae283c" name="ae6f4b06c908c536bf8b1a1e152ae283c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>writeAsPng</b> (const char *name)</td></tr>
 <tr class="separator:ae6f4b06c908c536bf8b1a1e152ae283c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a236cb55a8d9cea0ae708d4827ee9bbfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_g_random_1_1_perlin2_d.html#a236cb55a8d9cea0ae708d4827ee9bbfc">clear</a> ()</td></tr>
+<tr class="memitem:a236cb55a8d9cea0ae708d4827ee9bbfc"><td class="memItemLeft" align="right" valign="top"><a id="a236cb55a8d9cea0ae708d4827ee9bbfc" name="a236cb55a8d9cea0ae708d4827ee9bbfc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="separator:a236cb55a8d9cea0ae708d4827ee9bbfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab5ac418353e646fd16dabfce6bc634aa" name="ab5ac418353e646fd16dabfce6bc634aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5ac418353e646fd16dabfce6bc634aa">&#9670;&#160;</a></span>Perlin2D() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::Perlin2D </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0f251772a56d2c86314b3cdeff38e5b1" name="a0f251772a56d2c86314b3cdeff38e5b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f251772a56d2c86314b3cdeff38e5b1">&#9670;&#160;</a></span>Perlin2D() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::Perlin2D </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>shareRandom</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>valueRanges</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a56b7cd669b9cb47e0aa9128e6507f4cc" name="a56b7cd669b9cb47e0aa9128e6507f4cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56b7cd669b9cb47e0aa9128e6507f4cc">&#9670;&#160;</a></span>at()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">T &amp; <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::at </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>data</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a236cb55a8d9cea0ae708d4827ee9bbfc" name="a236cb55a8d9cea0ae708d4827ee9bbfc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a236cb55a8d9cea0ae708d4827ee9bbfc">&#9670;&#160;</a></span>clear()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::clear </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae203f1f154c35c9509c1dc960a1f4593" name="ae203f1f154c35c9509c1dc960a1f4593"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae203f1f154c35c9509c1dc960a1f4593">&#9670;&#160;</a></span>data()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void * <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::data </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab01850f30a8f8abfc3f929f8915d482c" name="ab01850f30a8f8abfc3f929f8915d482c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab01850f30a8f8abfc3f929f8915d482c">&#9670;&#160;</a></span>dataSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::dataSize </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aef9c58aa5a2101e5738af204cf6220ac" name="aef9c58aa5a2101e5738af204cf6220ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef9c58aa5a2101e5738af204cf6220ac">&#9670;&#160;</a></span>dataSizeBytes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::dataSizeBytes </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a56b8cd4070ff686f3337ba572e1473a0" name="a56b8cd4070ff686f3337ba572e1473a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56b8cd4070ff686f3337ba572e1473a0">&#9670;&#160;</a></span>generateField()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::generateField </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>noiseReduction</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a474b47f8ce0bfa82c989858c69c23933" name="a474b47f8ce0bfa82c989858c69c23933"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a474b47f8ce0bfa82c989858c69c23933">&#9670;&#160;</a></span>randomize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::randomize </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>noiseReduction</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a442c1ec6e71ed087ef1da18c652db2aa" name="a442c1ec6e71ed087ef1da18c652db2aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a442c1ec6e71ed087ef1da18c652db2aa">&#9670;&#160;</a></span>randomizeGradients() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::randomizeGradients </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a226604b11c6434ea33e60b7a0a9ff38c" name="a226604b11c6434ea33e60b7a0a9ff38c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a226604b11c6434ea33e60b7a0a9ff38c">&#9670;&#160;</a></span>randomizeGradients() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::randomizeGradients </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>data</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8a40bd4306af3823e11b97a8703247dc" name="a8a40bd4306af3823e11b97a8703247dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a40bd4306af3823e11b97a8703247dc">&#9670;&#160;</a></span>scrollNoise()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::scrollNoise </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>deltaX</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>deltaY</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>noiseReduction</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae6f4b06c908c536bf8b1a1e152ae283c" name="ae6f4b06c908c536bf8b1a1e152ae283c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6f4b06c908c536bf8b1a1e152ae283c">&#9670;&#160;</a></span>writeAsPng()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t size&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_s_g_random_1_1_perlin2_d.html">SGRandom::Perlin2D</a>&lt; T, dataDimension, resolution, size &gt;::writeAsPng </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>D:/Repositories/Space Engine/SpaceGame/include/utility/<a class="el" href="_random_8h_source.html">Random.h</a></li>
 </ul>
@@ -552,7 +146,7 @@ template&lt;typename T , size_t dataDimension, unsigned int resolution, size_t s
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespace_s_g_random.html">SGRandom</a></li><li class="navelem"><a class="el" href="class_s_g_random_1_1_perlin2_d.html">Perlin2D</a></li>
+    <li class="navelem"><b>SGRandom</b></li><li class="navelem"><a class="el" href="class_s_g_random_1_1_perlin2_d.html">Perlin2D</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5 </li>
   </ul>
 </div>

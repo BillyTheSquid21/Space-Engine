@@ -1,137 +1,66 @@
 #pragma once
 
+#include "stdint.h"
 #include "GLClasses.h"
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
 #include "renderer/Vertex.hpp"
 
-class Texture
-{
-public:
-    Texture() : m_ID(0), m_FilePath("res/debug.png"), m_LocalBuffer(nullptr), m_Width(0), m_Height(0), m_BPP(0) {};
-    ~Texture();
-
-    //Load texture into buffer from file path
-    void loadTexture(const std::string& path);
-    inline void loadTexture(const std::string& path, bool flip);
-    //Generate texture into slot
-    void generateTexture(unsigned int slot);
-    void generateTexture(unsigned int slot, void* buffer);
-    void generateTextureWrap(unsigned int slot, void* buffer); //TODO have 1 func
-    //Bind and Unbind texture
-    void bind() const;
-    void unbind() const;
-    //Clear buffer image data is loaded into
-    void clearBuffer();
-    void deleteTexture() const { glDeleteTextures(1, &m_ID); }
-
-    unsigned int getID() const { return m_ID; }
-
-    void setWidth(int width) { m_Width = width; }
-    void setHeight(int height) { m_Height = height; }
-    void setBPP(int bpp) { m_BPP = bpp; }
-    int width() const { return m_Width; }
-    int height() const { return m_Height; }
-
-private:
-    unsigned int m_ID; unsigned int m_Slot = 0;
-    std::string m_FilePath;
-    unsigned char* m_LocalBuffer = nullptr;
-    int m_Width, m_Height, m_BPP;
-
-};
-
 namespace Tex
 {
-    struct alignas(1) TexChannel_4
+    //Has prefix T_
+    enum TFlag
     {
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-        unsigned char a;
+        T_FILTER_LINEAR =       0b00000001,
+        T_WRAP_TEXTURE =        0b00000010,
+        T_GAMMA_CORRECT =       0b00000100,
+        T_GENERATE_MIPMAPS =    0b00001000
     };
 
-    struct alignas(1) TexChannel_3
-    {
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-    };
-
-    struct TexBuffer
-    {
-        int width;
-        int height;
-        int bpp;
-        TexChannel_4* buffer = nullptr;
-        std::string name;
-    };
-
-    struct UVTransform
-    {
-        float deltaV;
-        float scaleU; float scaleV;
-    };
-
-    class TextureAtlasRGBA
+    class Texture : public SGRender::TextureBase
     {
     public:
-        TextureAtlasRGBA() = default;
-        ~TextureAtlasRGBA() { clearBuffers(); deleteTextures(); };
-        void loadTexture(const std::string& path, const std::string& name);
-        void generateAtlas();
-        void generateTexture(unsigned int slot);
-        void clearBuffers();
-        void clearTextureBuffers();
-        void clearAtlasBuffers();
-        void deleteTextures() const { glDeleteTextures(1, &m_ID); }
-        void requestNewTextures() { m_RequestNewTextures = true; clearBuffers(); }
-        bool shouldRequestNewTextures() const { return m_RequestNewTextures; }
+        Texture() : m_Width(0), m_Height(0), m_BPP(0) {};
+        ~Texture();
 
-        void bind() const { glActiveTexture(GL_TEXTURE0 + m_Slot); glBindTexture(GL_TEXTURE_2D, m_ID); }
-        void unbind() const {glActiveTexture(GL_TEXTURE0 + m_Slot); glBindTexture(GL_TEXTURE_2D, 0);}
+        /**
+        * Load texture from path
+        */
+        void loadTexture(const std::string& path);
+        /**
+        * Load texture from path, specify if flipped on load
+        */
+        inline void loadTexture(const std::string& path, int bpp, bool flip);
+        /**
+        * Generate texture in a given slot
+        */
+        void generateTexture(int slot, int flag);
+        /**
+        * Generate texture in a given slot from an external buffer
+        */
+        void generateTexture(int slot, void* buffer, int flag);
+        /**
+        * Clear the local buffer - should do after has been generated as a glTexture
+        */
+        void clearBuffer();
 
-        unsigned char currentTextureCycle() { return m_AtlasGenCycle; }
+        /**
+        * Deletes the texture on the GPU
+        */
+        void deleteTexture() const { glDeleteTextures(1, &m_ID); }
 
-        template<typename T>
-        UVTransform mapModelVerts(T* vertices, unsigned int vertCount, std::string texName)
-        {
-            static_assert(std::is_base_of<SGRender::TVertex, T>::value, "Must be a texture vertex!");
-            
-            if (m_AtlasRequest.find(texName) == m_AtlasRequest.end())
-            {
-                EngineLog("Requested texture is not in atlas! ", texName);
-                return { 0.0f, 0.0f, 0.0f };
-            }
-            UVTransform trans = m_AtlasRequest.at(texName);
-            for (int i = 0; i < vertCount; i++)
-            {
-                vertices[i].uvCoords.x *= trans.scaleU;
-                vertices[i].uvCoords.y *= trans.scaleV;
-                vertices[i].uvCoords.y += trans.deltaV;
-            }
-            return trans;
-        }
-
-        template<typename T>
-        static void unmapModelVerts(T* vertices, unsigned int vertCount, std::string texName, UVTransform trans)
-        {
-            static_assert(std::is_base_of<SGRender::TVertex, T>::value, "Must be a texture vertex!");
-            for (int i = 0; i < vertCount; i++)
-            {
-                vertices[i].uvCoords.y -= trans.deltaV;
-                vertices[i].uvCoords.x /= trans.scaleU;
-                vertices[i].uvCoords.y /= trans.scaleV;
-            }
-        }
+        GLuint getID() const { return m_ID; }
+        int32_t& getSlot() { return m_Slot; }
+        void setWidth(int width) { m_Width = width; }
+        void setHeight(int height) { m_Height = height; }
+        void setBPP(int bpp) { m_BPP = bpp; }
+        int width() const { return m_Width; }
+        int height() const { return m_Height; }
+        uint8_t* buffer() const { return m_LocalBuffer; }
+        int bufferSize() const { return m_Width * m_Height * m_BPP; }
 
     private:
-        std::vector<TexBuffer> m_LocalBuffers;
-        TexChannel_4* m_AtlasBuffer = nullptr;
-        std::unordered_map<std::string, UVTransform> m_AtlasRequest;
-        unsigned int m_Slot; unsigned int m_ID;
-        unsigned int m_Width; unsigned int m_Height;
-        unsigned char m_AtlasGenCycle = 0; //Goes up each time a new texture is generated - should let models know to remap
-        bool m_RequestNewTextures = false; //Checks whether objects linked to atlas should load their textures again - means only textures in buffer should be textures needed
+        uint8_t* m_LocalBuffer = nullptr;
+        int32_t m_Width, m_Height, m_BPP;
     };
 }

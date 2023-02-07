@@ -1,0 +1,112 @@
+\hypertarget{class_s_g_sound_1_1_system}{}\doxysection{SGSound\+::System Class Reference}
+\label{class_s_g_sound_1_1_system}\index{SGSound::System@{SGSound::System}}
+
+
+{\ttfamily \#include $<$Sound.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_s_g_sound_1_1_system_ad8a5e77e63e67a55491310d3a6699441}\label{class_s_g_sound_1_1_system_ad8a5e77e63e67a55491310d3a6699441}} 
+bool {\bfseries init} ()
+\item 
+sound\+\_\+id \mbox{\hyperlink{class_s_g_sound_1_1_system_af48798c1aca9325eaff1abac590318c7}{load\+Sound}} (const char $\ast$path, FMOD\+::\+Sound $\ast$\&sound)
+\item 
+sound\+\_\+id \mbox{\hyperlink{class_s_g_sound_1_1_system_ace28236b192a347ec10f89631da128c5}{load\+Sound}} (const char $\ast$path)
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_ae183fbb9a3635947fa587aa99a4baaad}{release\+Sound}} (FMOD\+::\+Sound $\ast$\&sound)
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_a1a13d6b09ec3e7088ff6dd0cb4b58b2a}{release\+Sound}} (sound\+\_\+id sound)
+\item 
+bool \mbox{\hyperlink{class_s_g_sound_1_1_system_ae777cc04373b475d866bde41d7203b68}{play\+Sound}} (FMOD\+::\+Sound $\ast$\&sound, FMOD\+::\+Channel $\ast$\&channel, Channel\+Group group)
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_a9b4e3be04a464aebe2a539e9d3f47e92}{play\+Sound}} (sound\+\_\+id sound, FMOD\+::\+Channel $\ast$$\ast$channel, Channel\+Group group)
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_a320c5989ce07dfdb2cbaf69c5ab88684}{pause\+Sound}} (FMOD\+::\+Channel $\ast$\&channel, sound\+\_\+id sound)
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_ab4d57302ed4522376713f8015c754b49}{stop\+Sound}} (FMOD\+::\+Channel $\ast$\&channel, sound\+\_\+id sound)
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_a88e085d72a53c5116c06a04e4751e6c7}{fade\+Sound}} (sound\+\_\+id id, FMOD\+::\+Channel $\ast$\&channel, float fade\+Time, bool fade\+In)
+\item 
+\mbox{\Hypertarget{class_s_g_sound_1_1_system_a6fd75ff8c72d5bd382210379a58ce3f2}\label{class_s_g_sound_1_1_system_a6fd75ff8c72d5bd382210379a58ce3f2}} 
+void {\bfseries update} ()
+\item 
+\mbox{\Hypertarget{class_s_g_sound_1_1_system_a39412785600dab27d1dc92108d807bd3}\label{class_s_g_sound_1_1_system_a39412785600dab27d1dc92108d807bd3}} 
+void {\bfseries clean} ()
+\item 
+void \mbox{\hyperlink{class_s_g_sound_1_1_system_a9243d71d1be60765b6ccc342f9bc7a2f}{set\+Channel\+Group\+Volume}} (Channel\+Group group, float volume)
+\item 
+\mbox{\Hypertarget{class_s_g_sound_1_1_system_aaeb254d3d77941c78f2b429f744d6051}\label{class_s_g_sound_1_1_system_aaeb254d3d77941c78f2b429f744d6051}} 
+FMOD\+::\+Channel\+Group $\ast$ {\bfseries get\+Group} (Channel\+Group group)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Simple non directional FMOD wrapper 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_g_sound_1_1_system_a88e085d72a53c5116c06a04e4751e6c7}\label{class_s_g_sound_1_1_system_a88e085d72a53c5116c06a04e4751e6c7}} 
+\index{SGSound::System@{SGSound::System}!fadeSound@{fadeSound}}
+\index{fadeSound@{fadeSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{fadeSound()}{fadeSound()}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::fade\+Sound (\begin{DoxyParamCaption}\item[{sound\+\_\+id}]{id,  }\item[{FMOD\+::\+Channel $\ast$\&}]{channel,  }\item[{float}]{fade\+Time,  }\item[{bool}]{fade\+In }\end{DoxyParamCaption})}
+
+Queues the sound to be faded over a given period \mbox{\Hypertarget{class_s_g_sound_1_1_system_ace28236b192a347ec10f89631da128c5}\label{class_s_g_sound_1_1_system_ace28236b192a347ec10f89631da128c5}} 
+\index{SGSound::System@{SGSound::System}!loadSound@{loadSound}}
+\index{loadSound@{loadSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{loadSound()}{loadSound()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily sound\+\_\+id SGSound\+::\+System\+::load\+Sound (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path }\end{DoxyParamCaption})}
+
+Loads sound from path , storing the sound pointer internally as well Returns the id for the sound \mbox{\Hypertarget{class_s_g_sound_1_1_system_af48798c1aca9325eaff1abac590318c7}\label{class_s_g_sound_1_1_system_af48798c1aca9325eaff1abac590318c7}} 
+\index{SGSound::System@{SGSound::System}!loadSound@{loadSound}}
+\index{loadSound@{loadSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{loadSound()}{loadSound()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily sound\+\_\+id SGSound\+::\+System\+::load\+Sound (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{FMOD\+::\+Sound $\ast$\&}]{sound }\end{DoxyParamCaption})}
+
+Loads sound from path and writes location to ptr reference, storing the sound pointer internally as well \mbox{\Hypertarget{class_s_g_sound_1_1_system_a320c5989ce07dfdb2cbaf69c5ab88684}\label{class_s_g_sound_1_1_system_a320c5989ce07dfdb2cbaf69c5ab88684}} 
+\index{SGSound::System@{SGSound::System}!pauseSound@{pauseSound}}
+\index{pauseSound@{pauseSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{pauseSound()}{pauseSound()}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::pause\+Sound (\begin{DoxyParamCaption}\item[{FMOD\+::\+Channel $\ast$\&}]{channel,  }\item[{sound\+\_\+id}]{sound }\end{DoxyParamCaption})}
+
+Queues the sound to be paused immediately \mbox{\Hypertarget{class_s_g_sound_1_1_system_ae777cc04373b475d866bde41d7203b68}\label{class_s_g_sound_1_1_system_ae777cc04373b475d866bde41d7203b68}} 
+\index{SGSound::System@{SGSound::System}!playSound@{playSound}}
+\index{playSound@{playSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{playSound()}{playSound()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool SGSound\+::\+System\+::play\+Sound (\begin{DoxyParamCaption}\item[{FMOD\+::\+Sound $\ast$\&}]{sound,  }\item[{FMOD\+::\+Channel $\ast$\&}]{channel,  }\item[{Channel\+Group}]{group }\end{DoxyParamCaption})}
+
+Plays sound from pointer directly \mbox{\Hypertarget{class_s_g_sound_1_1_system_a9b4e3be04a464aebe2a539e9d3f47e92}\label{class_s_g_sound_1_1_system_a9b4e3be04a464aebe2a539e9d3f47e92}} 
+\index{SGSound::System@{SGSound::System}!playSound@{playSound}}
+\index{playSound@{playSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{playSound()}{playSound()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::play\+Sound (\begin{DoxyParamCaption}\item[{sound\+\_\+id}]{sound,  }\item[{FMOD\+::\+Channel $\ast$$\ast$}]{channel,  }\item[{Channel\+Group}]{group }\end{DoxyParamCaption})}
+
+Queues sound to be played immediately, once is loaded \mbox{\Hypertarget{class_s_g_sound_1_1_system_ae183fbb9a3635947fa587aa99a4baaad}\label{class_s_g_sound_1_1_system_ae183fbb9a3635947fa587aa99a4baaad}} 
+\index{SGSound::System@{SGSound::System}!releaseSound@{releaseSound}}
+\index{releaseSound@{releaseSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{releaseSound()}{releaseSound()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::release\+Sound (\begin{DoxyParamCaption}\item[{FMOD\+::\+Sound $\ast$\&}]{sound }\end{DoxyParamCaption})}
+
+Directly releases sound from pointer \mbox{\Hypertarget{class_s_g_sound_1_1_system_a1a13d6b09ec3e7088ff6dd0cb4b58b2a}\label{class_s_g_sound_1_1_system_a1a13d6b09ec3e7088ff6dd0cb4b58b2a}} 
+\index{SGSound::System@{SGSound::System}!releaseSound@{releaseSound}}
+\index{releaseSound@{releaseSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{releaseSound()}{releaseSound()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::release\+Sound (\begin{DoxyParamCaption}\item[{sound\+\_\+id}]{sound }\end{DoxyParamCaption})}
+
+Releases sound from internal based on ID \mbox{\Hypertarget{class_s_g_sound_1_1_system_a9243d71d1be60765b6ccc342f9bc7a2f}\label{class_s_g_sound_1_1_system_a9243d71d1be60765b6ccc342f9bc7a2f}} 
+\index{SGSound::System@{SGSound::System}!setChannelGroupVolume@{setChannelGroupVolume}}
+\index{setChannelGroupVolume@{setChannelGroupVolume}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{setChannelGroupVolume()}{setChannelGroupVolume()}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::set\+Channel\+Group\+Volume (\begin{DoxyParamCaption}\item[{Channel\+Group}]{group,  }\item[{float}]{volume }\end{DoxyParamCaption})}
+
+Sets volume for channel \mbox{\Hypertarget{class_s_g_sound_1_1_system_ab4d57302ed4522376713f8015c754b49}\label{class_s_g_sound_1_1_system_ab4d57302ed4522376713f8015c754b49}} 
+\index{SGSound::System@{SGSound::System}!stopSound@{stopSound}}
+\index{stopSound@{stopSound}!SGSound::System@{SGSound::System}}
+\doxysubsubsection{\texorpdfstring{stopSound()}{stopSound()}}
+{\footnotesize\ttfamily void SGSound\+::\+System\+::stop\+Sound (\begin{DoxyParamCaption}\item[{FMOD\+::\+Channel $\ast$\&}]{channel,  }\item[{sound\+\_\+id}]{sound }\end{DoxyParamCaption})}
+
+Queues the sound to be stopped immediately 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/core/Sound.\+h\end{DoxyCompactItemize}

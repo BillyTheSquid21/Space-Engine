@@ -1,153 +1,55 @@
 \hypertarget{class_tex_1_1_texture_atlas_r_g_b_a}{}\doxysection{Tex\+::Texture\+Atlas\+RGBA Class Reference}
 \label{class_tex_1_1_texture_atlas_r_g_b_a}\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-
-
-{\ttfamily \#include $<$Texture.\+h$>$}
-
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a906b64df75c12183a38670ae586a7583}{Texture\+Atlas\+RGBA}} ()=default
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a80e9aa2e3fcb2a44d290a2744a557874}\label{class_tex_1_1_texture_atlas_r_g_b_a_a80e9aa2e3fcb2a44d290a2744a557874}} 
+void {\bfseries load\+Texture} (const std\+::string \&path, const std\+::string \&name)
 \item 
-\mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a70813c2f397b8790471c75778dd268d1}{$\sim$\+Texture\+Atlas\+RGBA}} ()
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a5841cdf9a03048e86fb8664d1687945c}\label{class_tex_1_1_texture_atlas_r_g_b_a_a5841cdf9a03048e86fb8664d1687945c}} 
+void {\bfseries generate\+Atlas} ()
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a80e9aa2e3fcb2a44d290a2744a557874}{load\+Texture}} (const std\+::string \&path, const std\+::string \&name)
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a0771b354374055f76242443fd000e00f}\label{class_tex_1_1_texture_atlas_r_g_b_a_a0771b354374055f76242443fd000e00f}} 
+void {\bfseries generate\+Texture} (unsigned int slot)
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a5841cdf9a03048e86fb8664d1687945c}{generate\+Atlas}} ()
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a2452c6d0b4271dc77cfb6844bbdb6375}\label{class_tex_1_1_texture_atlas_r_g_b_a_a2452c6d0b4271dc77cfb6844bbdb6375}} 
+void {\bfseries clear\+Buffers} ()
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a0771b354374055f76242443fd000e00f}{generate\+Texture}} (unsigned int slot)
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_ac62475c96ad10bc2a3b9d8a80c11ea4c}\label{class_tex_1_1_texture_atlas_r_g_b_a_ac62475c96ad10bc2a3b9d8a80c11ea4c}} 
+void {\bfseries clear\+Texture\+Buffers} ()
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a2452c6d0b4271dc77cfb6844bbdb6375}{clear\+Buffers}} ()
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_ac060e02684226e3d68f7a28b7ea78db8}\label{class_tex_1_1_texture_atlas_r_g_b_a_ac060e02684226e3d68f7a28b7ea78db8}} 
+void {\bfseries clear\+Atlas\+Buffers} ()
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_ac62475c96ad10bc2a3b9d8a80c11ea4c}{clear\+Texture\+Buffers}} ()
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a305c30e66e60d1a66dc9e7adace03fcf}\label{class_tex_1_1_texture_atlas_r_g_b_a_a305c30e66e60d1a66dc9e7adace03fcf}} 
+void {\bfseries delete\+Textures} () const
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_ac060e02684226e3d68f7a28b7ea78db8}{clear\+Atlas\+Buffers}} ()
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a5538de257007cf509623122d831d29c6}\label{class_tex_1_1_texture_atlas_r_g_b_a_a5538de257007cf509623122d831d29c6}} 
+void {\bfseries request\+New\+Textures} ()
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a305c30e66e60d1a66dc9e7adace03fcf}{delete\+Textures}} () const
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_acf93a00c7dff42d9c4f70515577e2991}\label{class_tex_1_1_texture_atlas_r_g_b_a_acf93a00c7dff42d9c4f70515577e2991}} 
+bool {\bfseries should\+Request\+New\+Textures} () const
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a5538de257007cf509623122d831d29c6}{request\+New\+Textures}} ()
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a364f0839ea71a99b789cb06f73fc2265}\label{class_tex_1_1_texture_atlas_r_g_b_a_a364f0839ea71a99b789cb06f73fc2265}} 
+void {\bfseries bind} () const
 \item 
-bool \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_acf93a00c7dff42d9c4f70515577e2991}{should\+Request\+New\+Textures}} () const
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_aee1e19416fbd72fd5b60eb2be5ab1390}\label{class_tex_1_1_texture_atlas_r_g_b_a_aee1e19416fbd72fd5b60eb2be5ab1390}} 
+void {\bfseries unbind} () const
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a364f0839ea71a99b789cb06f73fc2265}{bind}} () const
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a0c3a3abf3ec95478499d506152cffec9}\label{class_tex_1_1_texture_atlas_r_g_b_a_a0c3a3abf3ec95478499d506152cffec9}} 
+unsigned char {\bfseries current\+Texture\+Cycle} ()
 \item 
-void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_aee1e19416fbd72fd5b60eb2be5ab1390}{unbind}} () const
-\item 
-unsigned char \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a0c3a3abf3ec95478499d506152cffec9}{current\+Texture\+Cycle}} ()
-\item 
-{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{struct_tex_1_1_u_v_transform}{UVTransform}} \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_af8e5f97313a57ed3191edc28bcf2b474}{map\+Model\+Verts}} (T $\ast$vertices, unsigned int vert\+Count, std\+::string tex\+Name)
+\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_af8e5f97313a57ed3191edc28bcf2b474}\label{class_tex_1_1_texture_atlas_r_g_b_a_af8e5f97313a57ed3191edc28bcf2b474}} 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{struct_tex_1_1_u_v_transform}{UVTransform}} {\bfseries map\+Model\+Verts} (T $\ast$vertices, unsigned int vert\+Count, std\+::string tex\+Name)
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$typename T $>$ }\\static void \mbox{\hyperlink{class_tex_1_1_texture_atlas_r_g_b_a_a19aff6cb9448fcdb4abbf31183d624d0}{unmap\+Model\+Verts}} (T $\ast$vertices, unsigned int vert\+Count, std\+::string tex\+Name, \mbox{\hyperlink{struct_tex_1_1_u_v_transform}{UVTransform}} trans)
-\end{DoxyCompactItemize}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a906b64df75c12183a38670ae586a7583}\label{class_tex_1_1_texture_atlas_r_g_b_a_a906b64df75c12183a38670ae586a7583}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!TextureAtlasRGBA@{TextureAtlasRGBA}}
-\index{TextureAtlasRGBA@{TextureAtlasRGBA}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{TextureAtlasRGBA()}{TextureAtlasRGBA()}}
-{\footnotesize\ttfamily Tex\+::\+Texture\+Atlas\+RGBA\+::\+Texture\+Atlas\+RGBA (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a70813c2f397b8790471c75778dd268d1}\label{class_tex_1_1_texture_atlas_r_g_b_a_a70813c2f397b8790471c75778dd268d1}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!````~TextureAtlasRGBA@{$\sim$TextureAtlasRGBA}}
-\index{````~TextureAtlasRGBA@{$\sim$TextureAtlasRGBA}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{$\sim$TextureAtlasRGBA()}{~TextureAtlasRGBA()}}
-{\footnotesize\ttfamily Tex\+::\+Texture\+Atlas\+RGBA\+::$\sim$\+Texture\+Atlas\+RGBA (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-\doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a364f0839ea71a99b789cb06f73fc2265}\label{class_tex_1_1_texture_atlas_r_g_b_a_a364f0839ea71a99b789cb06f73fc2265}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!bind@{bind}}
-\index{bind@{bind}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{bind()}{bind()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::bind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_ac060e02684226e3d68f7a28b7ea78db8}\label{class_tex_1_1_texture_atlas_r_g_b_a_ac060e02684226e3d68f7a28b7ea78db8}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!clearAtlasBuffers@{clearAtlasBuffers}}
-\index{clearAtlasBuffers@{clearAtlasBuffers}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{clearAtlasBuffers()}{clearAtlasBuffers()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::clear\+Atlas\+Buffers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a2452c6d0b4271dc77cfb6844bbdb6375}\label{class_tex_1_1_texture_atlas_r_g_b_a_a2452c6d0b4271dc77cfb6844bbdb6375}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!clearBuffers@{clearBuffers}}
-\index{clearBuffers@{clearBuffers}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{clearBuffers()}{clearBuffers()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::clear\+Buffers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_ac62475c96ad10bc2a3b9d8a80c11ea4c}\label{class_tex_1_1_texture_atlas_r_g_b_a_ac62475c96ad10bc2a3b9d8a80c11ea4c}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!clearTextureBuffers@{clearTextureBuffers}}
-\index{clearTextureBuffers@{clearTextureBuffers}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{clearTextureBuffers()}{clearTextureBuffers()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::clear\+Texture\+Buffers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a0c3a3abf3ec95478499d506152cffec9}\label{class_tex_1_1_texture_atlas_r_g_b_a_a0c3a3abf3ec95478499d506152cffec9}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!currentTextureCycle@{currentTextureCycle}}
-\index{currentTextureCycle@{currentTextureCycle}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{currentTextureCycle()}{currentTextureCycle()}}
-{\footnotesize\ttfamily unsigned char Tex\+::\+Texture\+Atlas\+RGBA\+::current\+Texture\+Cycle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a305c30e66e60d1a66dc9e7adace03fcf}\label{class_tex_1_1_texture_atlas_r_g_b_a_a305c30e66e60d1a66dc9e7adace03fcf}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!deleteTextures@{deleteTextures}}
-\index{deleteTextures@{deleteTextures}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{deleteTextures()}{deleteTextures()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::delete\+Textures (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a5841cdf9a03048e86fb8664d1687945c}\label{class_tex_1_1_texture_atlas_r_g_b_a_a5841cdf9a03048e86fb8664d1687945c}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!generateAtlas@{generateAtlas}}
-\index{generateAtlas@{generateAtlas}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{generateAtlas()}{generateAtlas()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::generate\+Atlas (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a0771b354374055f76242443fd000e00f}\label{class_tex_1_1_texture_atlas_r_g_b_a_a0771b354374055f76242443fd000e00f}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!generateTexture@{generateTexture}}
-\index{generateTexture@{generateTexture}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{generateTexture()}{generateTexture()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::generate\+Texture (\begin{DoxyParamCaption}\item[{unsigned int}]{slot }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a80e9aa2e3fcb2a44d290a2744a557874}\label{class_tex_1_1_texture_atlas_r_g_b_a_a80e9aa2e3fcb2a44d290a2744a557874}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!loadTexture@{loadTexture}}
-\index{loadTexture@{loadTexture}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{loadTexture()}{loadTexture()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::load\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_af8e5f97313a57ed3191edc28bcf2b474}\label{class_tex_1_1_texture_atlas_r_g_b_a_af8e5f97313a57ed3191edc28bcf2b474}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!mapModelVerts@{mapModelVerts}}
-\index{mapModelVerts@{mapModelVerts}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{mapModelVerts()}{mapModelVerts()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{struct_tex_1_1_u_v_transform}{UVTransform}} Tex\+::\+Texture\+Atlas\+RGBA\+::map\+Model\+Verts (\begin{DoxyParamCaption}\item[{T $\ast$}]{vertices,  }\item[{unsigned int}]{vert\+Count,  }\item[{std\+::string}]{tex\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a5538de257007cf509623122d831d29c6}\label{class_tex_1_1_texture_atlas_r_g_b_a_a5538de257007cf509623122d831d29c6}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!requestNewTextures@{requestNewTextures}}
-\index{requestNewTextures@{requestNewTextures}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{requestNewTextures()}{requestNewTextures()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::request\+New\+Textures (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_acf93a00c7dff42d9c4f70515577e2991}\label{class_tex_1_1_texture_atlas_r_g_b_a_acf93a00c7dff42d9c4f70515577e2991}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!shouldRequestNewTextures@{shouldRequestNewTextures}}
-\index{shouldRequestNewTextures@{shouldRequestNewTextures}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{shouldRequestNewTextures()}{shouldRequestNewTextures()}}
-{\footnotesize\ttfamily bool Tex\+::\+Texture\+Atlas\+RGBA\+::should\+Request\+New\+Textures (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_aee1e19416fbd72fd5b60eb2be5ab1390}\label{class_tex_1_1_texture_atlas_r_g_b_a_aee1e19416fbd72fd5b60eb2be5ab1390}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!unbind@{unbind}}
-\index{unbind@{unbind}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{unbind()}{unbind()}}
-{\footnotesize\ttfamily void Tex\+::\+Texture\+Atlas\+RGBA\+::unbind (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{class_tex_1_1_texture_atlas_r_g_b_a_a19aff6cb9448fcdb4abbf31183d624d0}\label{class_tex_1_1_texture_atlas_r_g_b_a_a19aff6cb9448fcdb4abbf31183d624d0}} 
-\index{Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}!unmapModelVerts@{unmapModelVerts}}
-\index{unmapModelVerts@{unmapModelVerts}!Tex::TextureAtlasRGBA@{Tex::TextureAtlasRGBA}}
-\doxysubsubsection{\texorpdfstring{unmapModelVerts()}{unmapModelVerts()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-static void Tex\+::\+Texture\+Atlas\+RGBA\+::unmap\+Model\+Verts (\begin{DoxyParamCaption}\item[{T $\ast$}]{vertices,  }\item[{unsigned int}]{vert\+Count,  }\item[{std\+::string}]{tex\+Name,  }\item[{\mbox{\hyperlink{struct_tex_1_1_u_v_transform}{UVTransform}}}]{trans }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
+{\footnotesize template$<$typename T $>$ }\\static void {\bfseries unmap\+Model\+Verts} (T $\ast$vertices, unsigned int vert\+Count, std\+::string tex\+Name, \mbox{\hyperlink{struct_tex_1_1_u_v_transform}{UVTransform}} trans)
+\end{DoxyCompactItemize}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/\mbox{\hyperlink{_texture_8h}{Texture.\+h}}\end{DoxyCompactItemize}
+D\+:/\+Repositories/\+Space Engine/\+Space\+Game/include/renderer/Texture.\+h\end{DoxyCompactItemize}

@@ -16,7 +16,7 @@ namespace SG
 	template<typename T>
 	std::shared_ptr<T> game;
 
-    const char SG_VERSION[]{ "0.6" };
+    const char SG_VERSION[]{ "0.9.1" };
 
     template<typename T>
     void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -36,8 +36,14 @@ namespace SG
         game<T>->handleScrolling(xOffset, yOffset);
     }
 
+    template<typename T>
+    void MousePosCallback(GLFWwindow* window, double xPos, double yPos)
+    {
+        game<T>->handleMousePos(xPos, yPos);
+    }
+
 	template<typename T>
-	int Run(int width, int height)
+	int Run(int width, int height, bool windowed)
     {
         using namespace std::chrono;
         static_assert(std::is_base_of<Game, T>());
@@ -53,7 +59,7 @@ namespace SG
             std::shared_ptr<T> gameInit(new T(width, height));
             game<T> = gameInit;
         }
-        if (!game<T>->init("Space Game", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>)) {
+        if (!game<T>->init("Space Engine", KeyCallback<T>, MouseCallback<T>, ScrollCallback<T>, MousePosCallback<T>, windowed)) {
             //If game fails to initialise program will not run
             return -1;
         }
