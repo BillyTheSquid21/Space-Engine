@@ -6,8 +6,8 @@ int SGOptions::HEIGHT = 720;
 const char HEIGHT_NAME[] = "height";
 bool SGOptions::VSYNC_ENABLED = false;
 const char VSYNC_NAME[] = "vsync";
-bool SGOptions::FULLSCREEN = true;
-const char FULLSCREEN_NAME[] = "fullscreen";
+bool SGOptions::WINDOWED = true;
+const char WINDOWED_NAME[] = "windowed";
 
 const char OPTIONS_PATH[] = "options.json";
 
@@ -21,7 +21,7 @@ bool SGOptions::SaveOptions()
 	doc.AddMember(WIDTH_NAME, WIDTH, doc.GetAllocator());
 	doc.AddMember(HEIGHT_NAME, HEIGHT, doc.GetAllocator());
 	doc.AddMember(VSYNC_NAME, VSYNC_ENABLED, doc.GetAllocator());
-	doc.AddMember(FULLSCREEN_NAME, FULLSCREEN, doc.GetAllocator());
+	doc.AddMember(WINDOWED_NAME, WINDOWED, doc.GetAllocator());
 
 	//Serialize
 	EngineLog("Writing options...");
@@ -85,7 +85,7 @@ bool SGOptions::LoadOptions()
 	valid &= doc.HasMember(WIDTH_NAME);
 	valid &= doc.HasMember(HEIGHT_NAME);
 	valid &= doc.HasMember(VSYNC_NAME);
-	valid &= doc.HasMember(FULLSCREEN_NAME);
+	valid &= doc.HasMember(WINDOWED_NAME);
 
 	if (!valid)
 	{
@@ -98,7 +98,7 @@ bool SGOptions::LoadOptions()
 	WIDTH = doc.FindMember(WIDTH_NAME)->value.GetInt();
 	HEIGHT = doc.FindMember(HEIGHT_NAME)->value.GetInt();
 	VSYNC_ENABLED = doc.FindMember(VSYNC_NAME)->value.GetBool();
-	FULLSCREEN = doc.FindMember(FULLSCREEN_NAME)->value.GetBool();
+	WINDOWED = doc.FindMember(WINDOWED_NAME)->value.GetBool();
 
 	EngineLogOk("Options Load");
 	return true;

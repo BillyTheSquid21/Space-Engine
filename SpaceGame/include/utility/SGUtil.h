@@ -56,4 +56,7 @@ private:
 	static std::vector<Clock> m_TimerRequests;
 };
 
+//Takes a given string and fits to a given width
+std::string EstimateStringFit(std::string input, int boxWidth, int pt);
+
 #endif

@@ -4,13 +4,14 @@
 
 int main(void)
 {   
-	int p = 0;
-	
-	//Run loop to be able to be restarted
+	int p;
 	do
 	{
+		//Load options 
 		SGOptions::LoadOptions();
-		p = SG::Run<Game>(1280, 720, false);
+
+		//Run program loop
+		p = SG::Run<Game>(SGOptions::WIDTH, SGOptions::HEIGHT, SGOptions::WINDOWED);
 	} 
 	while (SGRoot::CheckShouldRestart());
 

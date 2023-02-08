@@ -42,6 +42,7 @@ namespace SGGUI
 		static int32_t addGUI(std::shared_ptr<GUIBase> gui);
 		static bool removeGUI(int32_t id);
 		static void setShowGUI(int32_t id, bool show);
+		static bool accessGUI(int32_t id, GUIBase** gui);
 
 		//Loads fonts that are always present
 		static void loadDefaultFonts();

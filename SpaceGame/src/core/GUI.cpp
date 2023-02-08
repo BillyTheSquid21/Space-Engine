@@ -30,6 +30,11 @@ void SGGUI::System::clean()
 
 int32_t SGGUI::System::addGUI(std::shared_ptr<GUIBase> gui)
 {
+	if (!s_Set)
+	{
+		return -1;
+	}
+
 	int32_t id = s_NextGUIID;
 	s_GUIList.emplace_back(id, gui, false);
 
@@ -39,6 +44,11 @@ int32_t SGGUI::System::addGUI(std::shared_ptr<GUIBase> gui)
 
 bool SGGUI::System::removeGUI(int32_t id)
 {
+	if (!s_Set)
+	{
+		return false;
+	}
+
 	for (int i = 0; i < s_GUIList.size(); i++)
 	{
 		if (s_GUIList[i].id == id)
@@ -52,6 +62,11 @@ bool SGGUI::System::removeGUI(int32_t id)
 
 void SGGUI::System::setShowGUI(int32_t id, bool show)
 {
+	if (!s_Set)
+	{
+		return;
+	}
+
 	for (auto& gui : s_GUIList)
 	{
 		if (gui.id == id)
@@ -62,8 +77,31 @@ void SGGUI::System::setShowGUI(int32_t id, bool show)
 	}
 }
 
+bool SGGUI::System::accessGUI(int32_t id, GUIBase** gui)
+{
+	if (!s_Set)
+	{
+		return false;
+	}
+
+	for (int i = 0; i < s_GUIList.size(); i++)
+	{
+		if (s_GUIList[i].id == id)
+		{
+			*gui = s_GUIList[i].ptr.get();
+			return true;
+		}
+	}
+	return false;
+}
+
 void SGGUI::System::start()
 {
+	if (!s_Set)
+	{
+		return;
+	}
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -76,6 +114,11 @@ void SGGUI::System::start()
 
 void SGGUI::System::end()
 {
+	if (!s_Set)
+	{
+		return;
+	}
+
 	ImGui::End();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

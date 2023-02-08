@@ -19,6 +19,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "core/GUI.h"
 #include "core/Root.h"
+#include "utility/Options.h"
 #include "utility/Console.h"
 
 class Game 
@@ -57,7 +58,7 @@ public:
 	* @param action GLFW Action code
 	* @param mods GLFW modifier
 	*/
-	virtual void handleInput(int key, int scancode, int action, int mods) {};
+	virtual void handleInput(int key, int scancode, int action, int mods);
 
 	/**
 	* Overwrite to handle input in derived game class
@@ -100,7 +101,10 @@ protected:
 	int m_Height;
 
 	double m_GlfwTime;
-
 	double m_SecondsPerFrameCap = (1.0 / 2000.0) * 1000.0; //Init to 2000, can be changed
+
+	//Console
+	bool m_ShowConsole = false;
+	int32_t m_ConsoleGUIID = -1;
 };
 #endif

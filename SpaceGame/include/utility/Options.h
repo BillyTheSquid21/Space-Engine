@@ -17,7 +17,7 @@ namespace SGOptions
 	extern int WIDTH;
 	extern int HEIGHT;
 	extern bool VSYNC_ENABLED;
-	extern bool FULLSCREEN;
+	extern bool WINDOWED;
 
 	bool LoadOptions();
 	bool SaveOptions();

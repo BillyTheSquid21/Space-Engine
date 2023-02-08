@@ -62,7 +62,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     glfwMakeContextCurrent(window);
 
     //enable vsync
-    glfwSwapInterval(0);
+    glfwSwapInterval(SGOptions::VSYNC_ENABLED);
 
     //Callbacks
     glfwSetKeyCallback(window, kCallback);
@@ -104,10 +104,10 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     success = SGSound::System::init();
     success = SGGUI::System::init(m_Width, m_Height);
 
-    //Init console
+    //Init console - TODO make separate from other GUIs
+    SGGUI::System::set();
     std::shared_ptr<SGRoot::ConsoleWindow> console(new SGRoot::ConsoleWindow());
-    auto console_id = SGGUI::System::addGUI(console);
-    SGGUI::System::setShowGUI(console_id, true);
+    m_ConsoleGUIID = SGGUI::System::addGUI(console);
 
     //Init thread pool
     const auto process_count = std::thread::hardware_concurrency();
@@ -179,4 +179,27 @@ void Game::clean()
 
 void Game::setTime(double time) {
     m_GlfwTime = time;
+}
+
+void Game::handleInput(int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_APOSTROPHE)
+    {
+        if (action == GLFW_PRESS)
+        {
+            m_ShowConsole = !m_ShowConsole;
+            SGGUI::System::setShowGUI(m_ConsoleGUIID, m_ShowConsole);
+            return;
+        }
+    }
+
+    //If console is active, handle key input
+    if (m_ShowConsole)
+    {
+        SGGUI::GUIBase* console = nullptr;
+        if (SGGUI::System::accessGUI(m_ConsoleGUIID, &console))
+        {
+            ((SGRoot::ConsoleWindow*)console)->handleInput(key, scancode, action, mods);
+        }
+    }
 }
