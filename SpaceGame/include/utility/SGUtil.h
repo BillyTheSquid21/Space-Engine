@@ -10,6 +10,7 @@
 #include "syncstream"
 #include "assert.h"
 #include "string"
+#include "textflow/TextFlow.hpp"
 
 static const char ENGINE_TAG[]{ "[Space Engine] " };
 
@@ -56,7 +57,16 @@ private:
 	static std::vector<Clock> m_TimerRequests;
 };
 
-//Takes a given string and fits to a given width
-std::string EstimateStringFit(std::string input, int boxWidth, int pt);
+//Uses TextFlow fitting to fit string to text box
+std::string WrapTextbox(std::string input, int width, int pt);
+
+//Uses TextFlow fitting to fit string to text box
+std::string WrapTextbox(std::string input, int width, int pt, float fontRatio);
+
+//Uses TextFlow to create columns of text
+std::string WrapTextColumns(std::string col1, std::string col2, int width, int pt, int spacing);
+
+//Splits string into a vector of words
+bool SplitStringToWords(std::string& input, std::vector<std::string>& wordsArray);
 
 #endif

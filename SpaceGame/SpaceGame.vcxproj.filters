@@ -58,6 +58,9 @@
     <Filter Include="Resource Files\geo">
       <UniqueIdentifier>{89349d1c-b4dd-48d1-8fa0-4f7f5ff55479}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendor\textflow">
+      <UniqueIdentifier>{a31f0323-d523-4424-8296-002442bfcc1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -343,6 +346,9 @@
     </ClInclude>
     <ClInclude Include="include\utility\Console.h">
       <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\textflow\TextFlow.hpp">
+      <Filter>Source Files\Vendor\textflow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

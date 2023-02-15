@@ -1,7 +1,5 @@
 #include "core/Root.h"
 
-#define MAX_RESTARTS 5 //Avoid potential loop
-
 int currentRestarts = 0;
 bool shouldRun = true;
 bool restart = false;
@@ -52,20 +50,50 @@ void SGRoot::RestartProgram()
 	EngineLogOk("Restart");
 }
 
-#define COMMAND_COUNT 2
-
-std::string COMMANDS[]
+bool SGRoot::Resolution(std::vector<std::string>& args)
 {
-	"kill",		//0
-	"restart",	//1
-};
+	//Ensure 3 arguments (command, w, h)
+	if (args.size() != 3)
+	{
+		EngineLog("Invalid parameters!");
+		return false;
+	}
 
-bool SGRoot::ExecuteCommand(std::string command)
+	//Try to convert to ints, if valid string
+	try
+	{
+		int w = std::stoi(args[1], nullptr, 10);
+		int h = std::stoi(args[2], nullptr, 10);
+
+		if (w > MAX_WIDTH || h > MAX_HEIGHT || w < MIN_WIDTH || h < MIN_HEIGHT)
+		{
+			EngineLog("Invalid dimensions!");
+			return false;
+		}
+
+		SGOptions::WIDTH = w;
+		SGOptions::HEIGHT = h;
+		EngineLogOk("Set resolution: ", w, " ", h);
+		return true;
+	}
+	catch (std::invalid_argument const& ex)
+	{
+		EngineLog("Invalid argument!", ex.what());
+		return false;
+	}
+	catch (std::out_of_range const& ex)
+	{
+		EngineLog("Out of range!", ex.what());
+		return false;
+	}
+}
+
+bool SGRoot::ExecuteCommand(std::vector<std::string>& args)
 {
 	int c = -1;
 	for (int i = 0; i < COMMAND_COUNT; i++)
 	{
-		if (COMMANDS[i] == command)
+		if (COMMANDS[i] == args[0])
 		{
 			c = i;
 			break;
@@ -74,22 +102,29 @@ bool SGRoot::ExecuteCommand(std::string command)
 
 	if (c == -1)
 	{
+		EngineLog(args[0]);
 		EngineLog("Command not recognised!");
 		return false;
 	}
 
-	return ExecuteCommand(c);
+	return ExecuteCommand((COMMAND_CODE)c, args);
 }
 
-bool SGRoot::ExecuteCommand(int command)
+bool SGRoot::ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args)
 {
 	switch (command)
 	{
-	case 0:
+	case COMMAND_CODE::KILL:
 		KillProgram();
 		return true;
-	case 1:
+	case COMMAND_CODE::RESTART:
 		RestartProgram();
+		return true;
+	case COMMAND_CODE::RESOLUTION:
+		Resolution(args);
+		return true;
+	case COMMAND_CODE::SAVE_OPTIONS:
+		SGOptions::SaveOptions();
 		return true;
 	default:
 		EngineLog("Command not recognised!");

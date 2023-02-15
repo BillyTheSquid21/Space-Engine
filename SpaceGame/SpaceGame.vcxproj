@@ -248,6 +248,7 @@
     <ClInclude Include="src\vendor\rapidjson\writer.h" />
     <ClInclude Include="src\vendor\rapidxml\rapidxml.hpp" />
     <ClInclude Include="src\vendor\spaceimage\SpaceImage.hpp" />
+    <ClInclude Include="src\vendor\textflow\TextFlow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\frag\cube.frag%40" />

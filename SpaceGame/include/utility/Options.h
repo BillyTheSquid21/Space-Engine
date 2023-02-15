@@ -11,6 +11,11 @@
 #include "SGUtil.h"
 #include "fstream"
 
+#define MAX_WIDTH 4096
+#define MAX_HEIGHT 4096
+#define MIN_WIDTH 640
+#define MIN_HEIGHT 640
+
 namespace SGOptions
 {
 	//Here be the global data, initialised to defaults

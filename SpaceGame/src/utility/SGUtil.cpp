@@ -31,57 +31,68 @@ double EngineTimer::EndTimer(unsigned int id)
 	return -1.0;
 }
 
-std::string EstimateStringFit(std::string input, int boxWidth, int pt)
+std::string WrapTextbox(std::string input, int width, int pt)
 {
-	float CHAR_WIDTH = 0.5f * (float)pt;
-	int CHAR_COUNT_PER_LINE = boxWidth / (int)CHAR_WIDTH;
+	//Assume char w is 0.55*pt size
+	return WrapTextbox(input, width, pt, 0.55f);
+}
 
-	std::string output = "";
+std::string WrapTextbox(std::string input, int width, int pt, float fontRatio)
+{
+	//Assume char w is 0.65*pt size
+	auto txt = TextFlow::Column(input).width(width / (fontRatio * pt));
+	return txt.toString();
+}
 
-	//Find white space before max count per line, add to output with \n
-	//Keep going per line
-	int currentChar = 0;
-	int lastChar = 0;
-	
-	//Ensure string doesn't go over, otherwise don't need to perform any operations
-	if (input.length() < CHAR_COUNT_PER_LINE)
+std::string WrapTextColumns(std::string col1, std::string col2, int width, int pt, int spacing)
+{
+	using namespace TextFlow;
+	size_t colWidth = ((size_t)width / 2u) - (size_t)spacing;
+	auto l = Column(col1).width(colWidth);
+	auto r = Column(col2).width(colWidth);
+	auto layout = l + Spacer(spacing) + r;
+	return layout.toString();
+}
+
+bool SplitStringToWords(std::string& input, std::vector<std::string>& wordsArray)
+{
+	//Move along string, finding next instance of " " or "\n" or at string.length()
+	//Then extract substring to that point, add to array
+	//If string is empty or invalid, return false
+
+	//Check cases where string is 1 letter or none
+	if (input.length() == 0)
 	{
-		return input;
+		return false;
 	}
 
-	currentChar = CHAR_COUNT_PER_LINE;
-	while (lastChar < input.length())
+	if (input.length() == 1)
 	{
-		bool fits = false;
-		for (int i = currentChar; i >= lastChar; i--)
-		{
-			if (i < input.length() - 1 && input[i] == ' ')
-			{
-				//Extract the string between last location and before white space
-				output += input.substr(lastChar, i - lastChar) + "\n";
-				lastChar = i + 1; //Start next string after white space
-				currentChar = i + CHAR_COUNT_PER_LINE;
-
-				//If the currentChar is seeking past end, split rest of string
-				//and return
-				if (currentChar >= input.length())
-				{
-					output += input.substr(lastChar, input.length() - currentChar);
-					return output;
-				}
-				fits = true;
-				break;
-			}
-		}
-		if (!fits)
-		{
-			//If no whole word will fit, just extract max
-			output += input.substr(lastChar, CHAR_COUNT_PER_LINE) + "\n";
-			lastChar += CHAR_COUNT_PER_LINE; //Start next string after white space
-			currentChar = lastChar + CHAR_COUNT_PER_LINE;
-		}
+		wordsArray.push_back(input);
+		return true;
 	}
 
-	return output;
+	size_t lastStartIndex = 0;
+	for (size_t i = 0; i < input.length() - 1u; i++)
+	{
+		char c = input[i + 1u]; //Find next char
+		size_t size = 0;
+		if (c == ' ' || c == '\n')
+		{
+			size = (size_t)(i - lastStartIndex + 1u);
+		}
+		else if (i + 2u == input.length())
+		{
+			size = (size_t)(i - lastStartIndex + 2u); //Need to go further if end
+		}
+
+		//If a word end was found push word back
+		if (size > 0)
+		{
+			wordsArray.push_back(input.substr(lastStartIndex, size));
+			lastStartIndex = i + 2u;
+		}
+	}
+	return true;
 }
 

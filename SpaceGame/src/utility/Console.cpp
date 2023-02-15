@@ -4,7 +4,14 @@ void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float s
 {
 	ImGui::SetCursorPos(ImVec2(xOff, yOff));
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(PALETTE2_BLACK_CORAL, 0.45f));
-	ImGui::BeginChild("root_window", ImVec2(400, 700), false);
+	if (m_ShowConsole)
+	{
+		ImGui::BeginChild("root_window", ImVec2(400, MIN_HEIGHT), false);
+	}
+	else
+	{
+		ImGui::BeginChild("root_window", ImVec2(400, 128), false);
+	}
 
 	//Font
 	auto font = SGGUI::FontStorage::getFont("menu", 24);
@@ -15,22 +22,29 @@ void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float s
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(PALETTE2_ORANGE_WEB, 0.75f));
 	ImGui::BeginChild("info_window", ImVec2(ImGui::GetContentRegionAvail().x, 128));
 	ImGui::Text(("FPS: " + std::to_string((int)SGRoot::FRAMERATE)).c_str());
-	ImGui::EndChild();
-	ImGui::PopStyleColor();
-
-	//Console window
-	const float textEntryHeight = 60.0f;
-	//Invisible child to hold text
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
-	ImGui::BeginChild("console_output", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - textEntryHeight));
-	ImGui::Text((EstimateStringFit(m_ConsoleBuffer, 400, 24)).c_str());
-	ImGui::EndChild();
-	ImGui::PopStyleColor();
-
-	//Button to act as pressable text entry
-	if (ImGui::Button((">" + EstimateStringFit(m_CurrentLineBuffer, 400, 24)).c_str(), ImGui::GetContentRegionAvail()))
+	if (ImGui::Button("Show Console", ImVec2(150, 40)))
 	{
-		m_Typing = !m_Typing;
+		m_ShowConsole = !m_ShowConsole;
+	}
+	ImGui::EndChild();
+	ImGui::PopStyleColor();
+
+	if (m_ShowConsole)
+	{
+		//Console window
+		const float textEntryHeight = 60.0f;
+		//Invisible child to hold text
+		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+		ImGui::BeginChild("console_output", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - textEntryHeight));
+		ImGui::Text(m_ConsoleBufferWrapped.c_str());
+		ImGui::EndChild();
+		ImGui::PopStyleColor();
+
+		//Button to act as pressable text entry
+		if (ImGui::Button((">" + m_LineBufferWrapped).c_str(), ImGui::GetContentRegionAvail()))
+		{
+			m_Typing = !m_Typing;
+		}
 	}
 	
 	ImGui::PopStyleColor();
@@ -51,6 +65,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 		if (action == GLFW_PRESS)
 		{
 			m_CurrentLineBuffer += character;
+			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, 400, 24);
 		}
 	}
 	else if (character >= 65 && character < 90)
@@ -58,6 +73,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 		if (action == GLFW_PRESS)
 		{
 			m_CurrentLineBuffer += (character + 32);
+			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, 400, 24);
 		}
 	}
 	else if (key == GLFW_KEY_BACKSPACE)
@@ -65,16 +81,33 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 		if (action == GLFW_PRESS && m_CurrentLineBuffer.length() > 0)
 		{
 			m_CurrentLineBuffer = m_CurrentLineBuffer.substr(0, m_CurrentLineBuffer.size() -1);
+			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, 400, 24);
 		}
 	}
 	else if (key == GLFW_KEY_ENTER)
 	{
 		if (action == GLFW_PRESS)
 		{
-			//Execute
-			SGRoot::ExecuteCommand(m_CurrentLineBuffer);
+			//Check if just want to clear
+			if (m_CurrentLineBuffer == "clear")
+			{
+				m_ConsoleBuffer = ">Console Begin\n";
+				m_CurrentLineBuffer = "";
+				m_ConsoleBufferWrapped = m_ConsoleBuffer;
+				m_LineBufferWrapped = "";
+				m_Typing = false;
+				return;
+			}
 
-			m_ConsoleBuffer += "\n" + m_CurrentLineBuffer;
+			//Split into arguments as well as possible, then execute
+			std::vector<std::string> args;
+			if (SplitStringToWords(m_CurrentLineBuffer, args))
+			{
+				SGRoot::ExecuteCommand(args);
+			}
+
+			m_ConsoleBuffer += "\n>" + m_CurrentLineBuffer;
+			m_ConsoleBufferWrapped = WrapTextbox(m_ConsoleBuffer, 400, 24);
 			m_CurrentLineBuffer = "";
 			m_Typing = false;
 		}
