@@ -6,7 +6,7 @@
 #include "string"
 #include "utility/Options.h"
 
-#define COMMAND_COUNT 4
+#define COMMAND_COUNT 7
 #define MAX_RESTARTS 5 //Avoid potential loop
 
 namespace SGRoot
@@ -27,7 +27,13 @@ namespace SGRoot
 	void RestartProgram();
 
 	//Changes resolution for next restart
-	bool Resolution(std::vector<std::string>& args);
+	bool Resolution(std::vector<std::string>& args, std::string& output);
+
+	//Changes vsync status for next restart
+	void ChangeBool(bool& b, std::vector<std::string>& args, std::string& output);
+
+	//Lists all commands
+	void Help(std::string& output);
 
 	static std::string COMMANDS[]
 	{
@@ -35,6 +41,9 @@ namespace SGRoot
 		"restart",		//1
 		"resolution",	//2
 		"save-options",	//3
+		"windowed",		//4
+		"vsync",		//5
+		"help",			//6
 	};
 
 	static enum class COMMAND_CODE : int
@@ -43,11 +52,14 @@ namespace SGRoot
 		RESTART = 1,
 		RESOLUTION = 2,
 		SAVE_OPTIONS = 3,
+		WINDOWED = 4,
+		VSYNC = 5,
+		HELP = 6,
 	};
 
 	//Allows converting text to commands
-	bool ExecuteCommand(std::vector<std::string>& args);
-	bool ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args);
+	bool ExecuteCommand(std::vector<std::string>& args, std::string& output);
+	bool ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args, std::string& output);
 }
 
 #endif

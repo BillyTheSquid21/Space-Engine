@@ -50,12 +50,12 @@ void SGRoot::RestartProgram()
 	EngineLogOk("Restart");
 }
 
-bool SGRoot::Resolution(std::vector<std::string>& args)
+bool SGRoot::Resolution(std::vector<std::string>& args, std::string& output)
 {
 	//Ensure 3 arguments (command, w, h)
 	if (args.size() != 3)
 	{
-		EngineLog("Invalid parameters!");
+		output = "invalid parameters!";
 		return false;
 	}
 
@@ -67,29 +67,67 @@ bool SGRoot::Resolution(std::vector<std::string>& args)
 
 		if (w > MAX_WIDTH || h > MAX_HEIGHT || w < MIN_WIDTH || h < MIN_HEIGHT)
 		{
-			EngineLog("Invalid dimensions!");
+			output = "invalid dimensions!";
 			return false;
 		}
 
 		SGOptions::WIDTH = w;
 		SGOptions::HEIGHT = h;
-		EngineLogOk("Set resolution: ", w, " ", h);
+		output = "set resolution: " + args[1] + " " + args[2];
 		return true;
 	}
 	catch (std::invalid_argument const& ex)
 	{
-		EngineLog("Invalid argument!", ex.what());
+		output = "invalid argument!" + std::string(ex.what());
 		return false;
 	}
 	catch (std::out_of_range const& ex)
 	{
-		EngineLog("Out of range!", ex.what());
+		output = "out of range!" + std::string(ex.what());
 		return false;
 	}
 }
 
-bool SGRoot::ExecuteCommand(std::vector<std::string>& args)
+void SGRoot::ChangeBool(bool& b, std::vector<std::string>& args, std::string& output)
 {
+	if (args.size() != 2)
+	{
+		output = "invalid parameters!";
+		return;
+	}
+
+	if (args[1] == "enable" || args[1] == "true")
+	{
+		b = true;
+		output = "enabled";
+	}
+	else if (args[1] == "disable" || args[1] == "false")
+	{
+		b = false;
+		output = "disabled";
+	}
+	else
+	{
+		output = "invalid parameter!";
+	}
+}
+
+void SGRoot::Help(std::string& output)
+{
+	output += COMMANDS[0] + "\n";
+	for (int i = 1; i < COMMAND_COUNT; i++)
+	{
+		output += " " + COMMANDS[i] + "\n";
+	}
+}
+
+bool SGRoot::ExecuteCommand(std::vector<std::string>& args, std::string& output)
+{
+	if (args.size() == 0)
+	{
+		return false;
+	}
+
 	int c = -1;
 	for (int i = 0; i < COMMAND_COUNT; i++)
 	{
@@ -102,15 +140,14 @@ bool SGRoot::ExecuteCommand(std::vector<std::string>& args)
 
 	if (c == -1)
 	{
-		EngineLog(args[0]);
-		EngineLog("Command not recognised!");
+		output = "command not recognised: " + args[0];
 		return false;
 	}
 
-	return ExecuteCommand((COMMAND_CODE)c, args);
+	return ExecuteCommand((COMMAND_CODE)c, args, output);
 }
 
-bool SGRoot::ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args)
+bool SGRoot::ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args, std::string& output)
 {
 	switch (command)
 	{
@@ -121,10 +158,20 @@ bool SGRoot::ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args
 		RestartProgram();
 		return true;
 	case COMMAND_CODE::RESOLUTION:
-		Resolution(args);
+		Resolution(args, output);
 		return true;
 	case COMMAND_CODE::SAVE_OPTIONS:
 		SGOptions::SaveOptions();
+		output = "saving options";
+		return true;
+	case COMMAND_CODE::WINDOWED:
+		ChangeBool(SGOptions::WINDOWED, args, output);
+		return true;
+	case COMMAND_CODE::VSYNC:
+		ChangeBool(SGOptions::VSYNC_ENABLED, args, output);
+		return true;
+	case COMMAND_CODE::HELP:
+		Help(output);
 		return true;
 	default:
 		EngineLog("Command not recognised!");

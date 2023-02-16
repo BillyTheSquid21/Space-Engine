@@ -22,12 +22,13 @@
 #include "utility/Options.h"
 #include "utility/Console.h"
 
+#define CONSOLE_ENABLE 1
+
 class Game 
 {
 
 public:
 
-	//Default constructor and destructor
 	Game() = default;
 	~Game() = default;
 

@@ -91,7 +91,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 			//Check if just want to clear
 			if (m_CurrentLineBuffer == "clear")
 			{
-				m_ConsoleBuffer = ">Console Begin\n";
+				m_ConsoleBuffer = ">console begin\n";
 				m_CurrentLineBuffer = "";
 				m_ConsoleBufferWrapped = m_ConsoleBuffer;
 				m_LineBufferWrapped = "";
@@ -101,12 +101,14 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 
 			//Split into arguments as well as possible, then execute
 			std::vector<std::string> args;
+			std::string output;
 			if (SplitStringToWords(m_CurrentLineBuffer, args))
 			{
-				SGRoot::ExecuteCommand(args);
+				SGRoot::ExecuteCommand(args, output);
 			}
 
 			m_ConsoleBuffer += "\n>" + m_CurrentLineBuffer;
+			m_ConsoleBuffer += "\n>" + output;
 			m_ConsoleBufferWrapped = WrapTextbox(m_ConsoleBuffer, 400, 24);
 			m_CurrentLineBuffer = "";
 			m_Typing = false;

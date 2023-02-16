@@ -104,10 +104,11 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     success = SGSound::System::init();
     success = SGGUI::System::init(m_Width, m_Height);
 
-    //Init console - TODO make separate from other GUIs
+#if CONSOLE_ENABLE
     SGGUI::System::set();
     std::shared_ptr<SGRoot::ConsoleWindow> console(new SGRoot::ConsoleWindow());
     m_ConsoleGUIID = SGGUI::System::addGUI(console);
+#endif
 
     //Init thread pool
     const auto process_count = std::thread::hardware_concurrency();

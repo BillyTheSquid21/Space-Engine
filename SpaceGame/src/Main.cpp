@@ -4,17 +4,21 @@
 
 int main(void)
 {   
-	int p;
-	do
+	int status;
+	
+	//Load options 
+	SGOptions::LoadOptions();
+
+	//Run program loop
+	status = SG::Run<Game>(SGOptions::WIDTH, SGOptions::HEIGHT, SGOptions::WINDOWED);
+	
+	//If signalled to restart, repeat
+	while (SGRoot::CheckShouldRestart())
 	{
-		//Load options 
 		SGOptions::LoadOptions();
+		status = SG::Run<Game>(SGOptions::WIDTH, SGOptions::HEIGHT, SGOptions::WINDOWED);
+	}
 
-		//Run program loop
-		p = SG::Run<Game>(SGOptions::WIDTH, SGOptions::HEIGHT, SGOptions::WINDOWED);
-	} 
-	while (SGRoot::CheckShouldRestart());
-
-	return p;
+	return status;
 }
 

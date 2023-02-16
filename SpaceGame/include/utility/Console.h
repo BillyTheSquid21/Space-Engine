@@ -17,8 +17,8 @@ namespace SGRoot
 		void end();
 		void handleInput(int key, int scancode, int action, int mods);
 	private:
-		std::string m_ConsoleBuffer = ">Console Begin";
-		std::string m_ConsoleBufferWrapped = ">Console Begin";
+		std::string m_ConsoleBuffer = ">console Begin";
+		std::string m_ConsoleBufferWrapped = ">console begin";
 		std::string m_CurrentLineBuffer = "";
 		std::string m_LineBufferWrapped = "";
 		bool m_Typing = false;
