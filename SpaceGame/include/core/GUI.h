@@ -44,9 +44,6 @@ namespace SGGUI
 		static void setShowGUI(int32_t id, bool show);
 		static bool accessGUI(int32_t id, GUIBase** gui);
 
-		//Loads fonts that are always present
-		static void loadDefaultFonts();
-
 		static float xOffset() { return s_XOff; }
 		static float yOffset() { return s_YOff; }
 
@@ -54,10 +51,6 @@ namespace SGGUI
 		//Place a blank gui, all sub windows are children
 		static void start();
 		static void end();
-
-		//Styles to make changing look easier
-		static void pushDefault();
-		static void popDefault();
 
 	private:
 

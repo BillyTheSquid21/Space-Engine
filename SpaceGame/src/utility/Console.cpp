@@ -1,38 +1,39 @@
 #include "utility/Console.h"
 
+#define FONT_SIZE 13
+#define WINDOW_WIDTH 400
+#define INFO_WINDOW_WIDTH 128
+
 void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float screenH)
 {
 	ImGui::SetCursorPos(ImVec2(xOff, yOff));
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(PALETTE2_BLACK_CORAL, 0.45f));
 	if (m_ShowConsole)
 	{
-		ImGui::BeginChild("root_window", ImVec2(400, MIN_HEIGHT), false);
+		ImGui::BeginChild("root_window", ImVec2(WINDOW_WIDTH, MIN_HEIGHT), false);
 	}
 	else
 	{
-		ImGui::BeginChild("root_window", ImVec2(400, 128), false);
+		ImGui::BeginChild("root_window", ImVec2(WINDOW_WIDTH, INFO_WINDOW_WIDTH), false);
 	}
 
 	//Font
-	auto font = SGGUI::FontStorage::getFont("menu", 24);
-	ImGui::PushFont(font);
 	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(PALETTE2_GHOST_WHITE, 0.95f));
 
 	//Info window
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(PALETTE2_ORANGE_WEB, 0.75f));
-	ImGui::BeginChild("info_window", ImVec2(ImGui::GetContentRegionAvail().x, 128));
+	ImGui::BeginChild("info_window", ImVec2(ImGui::GetContentRegionAvail().x, INFO_WINDOW_WIDTH));
 	ImGui::Text(("FPS: " + std::to_string((int)SGRoot::FRAMERATE)).c_str());
 	if (ImGui::Button("Show Console", ImVec2(150, 40)))
 	{
 		m_ShowConsole = !m_ShowConsole;
 	}
 	ImGui::EndChild();
-	ImGui::PopStyleColor();
 
 	if (m_ShowConsole)
 	{
 		//Console window
 		const float textEntryHeight = 60.0f;
+
 		//Invisible child to hold text
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 		ImGui::BeginChild("console_output", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y - textEntryHeight));
@@ -49,7 +50,6 @@ void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float s
 	
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
-	ImGui::PopFont();
 }
 
 void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int mods)
@@ -65,7 +65,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 		if (action == GLFW_PRESS)
 		{
 			m_CurrentLineBuffer += character;
-			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, 400, 24);
+			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, WINDOW_WIDTH, FONT_SIZE);
 		}
 	}
 	else if (character >= 65 && character < 90)
@@ -73,7 +73,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 		if (action == GLFW_PRESS)
 		{
 			m_CurrentLineBuffer += (character + 32);
-			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, 400, 24);
+			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, WINDOW_WIDTH, FONT_SIZE);
 		}
 	}
 	else if (key == GLFW_KEY_BACKSPACE)
@@ -81,7 +81,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 		if (action == GLFW_PRESS && m_CurrentLineBuffer.length() > 0)
 		{
 			m_CurrentLineBuffer = m_CurrentLineBuffer.substr(0, m_CurrentLineBuffer.size() -1);
-			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, 400, 24);
+			m_LineBufferWrapped = WrapTextbox(m_CurrentLineBuffer, WINDOW_WIDTH, FONT_SIZE);
 		}
 	}
 	else if (key == GLFW_KEY_ENTER)
@@ -109,7 +109,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 
 			m_ConsoleBuffer += "\n>" + m_CurrentLineBuffer;
 			m_ConsoleBuffer += "\n>" + output;
-			m_ConsoleBufferWrapped = WrapTextbox(m_ConsoleBuffer, 400, 24);
+			m_ConsoleBufferWrapped = WrapTextbox(m_ConsoleBuffer, WINDOW_WIDTH, FONT_SIZE);
 			m_CurrentLineBuffer = "";
 			m_Typing = false;
 		}

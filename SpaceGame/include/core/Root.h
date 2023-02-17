@@ -37,24 +37,24 @@ namespace SGRoot
 
 	static std::string COMMANDS[]
 	{
-		"kill",			//0
-		"restart",		//1
-		"resolution",	//2
-		"save-options",	//3
-		"windowed",		//4
-		"vsync",		//5
-		"help",			//6
+		"help",			//0
+		"kill",			//1
+		"restart",		//2
+		"resolution",	//3
+		"save-options",	//4
+		"windowed",		//5
+		"vsync",		//6
 	};
 
 	static enum class COMMAND_CODE : int
 	{
-		KILL = 0,
-		RESTART = 1,
-		RESOLUTION = 2,
-		SAVE_OPTIONS = 3,
-		WINDOWED = 4,
-		VSYNC = 5,
-		HELP = 6,
+		HELP = 0,
+		KILL = 1,
+		RESTART = 2,
+		RESOLUTION = 3,
+		SAVE_OPTIONS = 4,
+		WINDOWED = 5,
+		VSYNC = 6,
 	};
 
 	//Allows converting text to commands

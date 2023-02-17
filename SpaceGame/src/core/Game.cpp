@@ -117,7 +117,6 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 
     //Init fonts
     SGGUI::FontStorage::init();
-    SGGUI::System::loadDefaultFonts();
 
     if (!success)
     {

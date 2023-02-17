@@ -114,8 +114,8 @@ void SGRoot::ChangeBool(bool& b, std::vector<std::string>& args, std::string& ou
 
 void SGRoot::Help(std::string& output)
 {
-	output += COMMANDS[0] + "\n";
-	for (int i = 1; i < COMMAND_COUNT; i++)
+	output += "List of commands:\n";
+	for (int i = 0; i < COMMAND_COUNT; i++)
 	{
 		output += " " + COMMANDS[i] + "\n";
 	}

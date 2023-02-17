@@ -124,24 +124,8 @@ void SGGUI::System::end()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void SGGUI::System::loadDefaultFonts()
-{
-	constexpr int sizeTotal = 8;
-	int sizes[sizeTotal] =
-	{
-		8, 12, 18, 24, 36, 48, 56, 72
-	};
-
-	const char* menuFont = "res/fonts/FiraCode/FiraCode-SemiBold.ttf";
-	for (int i = 0; i < sizeTotal; i++)
-	{
-		FontStorage::loadFont(menuFont, "menu", sizes[i]);
-	}
-}
-
 void SGGUI::System::render()
 {
-	pushDefault();
 	start();
 
 	for (auto& gui : s_GUIList)
@@ -155,37 +139,6 @@ void SGGUI::System::render()
 	}
 
 	end();
-	popDefault();
-}
-
-#define DEFAULT_STYLE_COUNT 3
-#define DEFAULT_COLOR_COUNT 5
-
-void SGGUI::System::pushDefault()
-{
-	//Style
-	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 2.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.0f);
-
-	//Color
-	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(PALETTE2_BLACK, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(PALETTE1_BLACK_CORAL, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(PALETTE1_LAUREL_GREEN, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(PALETTE1_CAMBRIDGE_BLUE, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(PALETTE1_GREEN_SHEEN, 1.0f));
-}
-
-void SGGUI::System::popDefault()
-{
-	for (int i = 0; i < DEFAULT_STYLE_COUNT; i++)
-	{
-		ImGui::PopStyleVar();
-	}
-	for (int i = 0; i < DEFAULT_COLOR_COUNT; i++)
-	{
-		ImGui::PopStyleColor();
-	}
 }
 
 void SGGUI::FontStorage::loadFont(const char* path, const char* fontName, unsigned char ptSize) {
