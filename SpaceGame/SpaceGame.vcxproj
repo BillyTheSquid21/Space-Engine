@@ -198,6 +198,8 @@
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Lighting.h" />
+    <ClInclude Include="include\renderer\Material.hpp" />
+    <ClInclude Include="include\renderer\MatModel.hpp" />
     <ClInclude Include="include\renderer\RenderSys.h" />
     <ClInclude Include="include\renderer\Instancer.hpp" />
     <ClInclude Include="include\renderer\Model.hpp" />

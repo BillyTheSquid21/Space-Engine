@@ -104,11 +104,15 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     success = SGSound::System::init();
     success = SGGUI::System::init(m_Width, m_Height);
 
-#if CONSOLE_ENABLE
+#if _CONSOLE_ENABLE
     SGGUI::System::set();
     std::shared_ptr<SGRoot::ConsoleWindow> console(new SGRoot::ConsoleWindow());
     m_ConsoleGUIID = SGGUI::System::addGUI(console);
 #endif
+
+    //TEST MAT MODEL
+    Model::MatModel model;
+    Model::LoadModel<SGRender::TNTVertex>("res/Sponza_Atrium_3.obj", model);
 
     //Init thread pool
     const auto process_count = std::thread::hardware_concurrency();

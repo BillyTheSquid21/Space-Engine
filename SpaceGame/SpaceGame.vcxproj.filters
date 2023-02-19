@@ -350,6 +350,12 @@
     <ClInclude Include="src\vendor\textflow\TextFlow.hpp">
       <Filter>Source Files\Vendor\textflow</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderer\MatModel.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer\Material.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vert\default.vert">
