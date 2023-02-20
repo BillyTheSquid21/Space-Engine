@@ -14,6 +14,7 @@
 #include "renderer/Texture.h"
 #include "renderer/TextureAtlas.h"
 #include "renderer/Lighting.h"
+#include "renderer/MatModel.hpp"
 #include "utility/SegArray.hpp"
 
 #define MAX_NAME_LENGTH 15
@@ -31,7 +32,7 @@ namespace SGRender
 	};
 
 	//Flags for draw behaviour - D prefix
-	enum DFlag
+	enum DFlags
 	{
 		D_DISABLE_DEPTH_TEST = 0b00000001
 	};
@@ -86,7 +87,7 @@ namespace SGRender
 
 		//TODO - make threaded
 		template<typename VertexType>
-		static void loadModel(std::string path, std::string name)
+		static void loadModel(std::string path, std::string name, int flags)
 		{
 			if (!s_Set)
 			{
@@ -96,11 +97,30 @@ namespace SGRender
 			if (s_Models->find(name) == s_Models->end())
 			{
 				(*s_Models)[name] = Geometry::Mesh();
-				Model::LoadModel<VertexType>(path.c_str(), s_Models->at(name));
+				Model::LoadModel<VertexType>(path.c_str(), s_Models->at(name), flags);
 				EngineLog("Model loaded: ", name);
 				return;
 			}
 			EngineLog("Model ", name, " was found");
+		}
+
+		//TODO - make threaded
+		template<typename VertexType>
+		static void loadMatModel(std::string path, std::string name, int flags)
+		{
+			if (!s_Set)
+			{
+				return;
+			}
+
+			if (s_MatModels->find(name) == s_MatModels->end())
+			{
+				(*s_MatModels)[name] = Model::MatModel();
+				Model::LoadModel<VertexType>(path.c_str(), s_MatModels->at(name), flags);
+				EngineLog("Material Model loaded: ", name);
+				return;
+			}
+			EngineLog("Material Model ", name, " was found");
 		}
 
 		static void unloadModel(std::string name);
@@ -242,6 +262,7 @@ namespace SGRender
 		static const glm::mat4* identity() { return &s_Identity; }
 
 		static bool accessModel(std::string name, Geometry::Mesh** model);
+		static bool accessMatModel(std::string name, Model::MatModel** model);
 		static bool doesPassExist(const char* passName);
 
 	private:
@@ -298,6 +319,7 @@ namespace SGRender
 		
 		//Data storage for non frequently accessed components
 		static std::unique_ptr<std::unordered_map<std::string, Geometry::Mesh>> s_Models;
+		static std::unique_ptr<std::unordered_map<std::string, Model::MatModel>> s_MatModels;
 		static std::unique_ptr<std::unordered_map<std::string, Tex::Texture>> s_Textures;
 		static std::unique_ptr<std::unordered_map<std::string, Tex::TextureAtlas>> s_TexAtlases; //TODO - implement
 

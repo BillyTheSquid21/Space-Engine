@@ -21,13 +21,32 @@
 
 namespace Model
 {
-    //TODO - optimise to avoid vertice duplicates
+    enum MFlag
+    {
+        M_TRIANGLES_ONLY = 0x100,
+        M_LINES_ONLY     = 0x200,
+        M_FILL_MISSING   = 0x400,
+        M_COMBINE_MESHES = 0x800,
+    };
+
     template<typename VertexType>
     bool LoadModel(const char* path, Geometry::Mesh& mesh)
     {
-        using namespace SGRender;
+        return LoadModelInternal<VertexType>(path, mesh, VertexType::properties());
+    }
 
-        int properties = VertexType::properties();
+    template<typename VertexType>
+    bool LoadModel(const char* path, Geometry::Mesh& mesh, int flags)
+    {
+        return LoadModelInternal<VertexType>(path, mesh, flags | VertexType::properties());
+    }
+
+    void ProcessMeshFaces(const aiMesh* aimesh, std::vector<float>& verts, Geometry::MeshData& mData, int flags);
+
+    template<typename VertexType>
+    static bool LoadModelInternal(const char* path, Geometry::Mesh& mesh, int flags)
+    {
+        using namespace SGRender;
 
         //Access mesh
         mesh.unload();
@@ -42,7 +61,7 @@ namespace Model
             aiProcess_Triangulate |
             aiProcess_JoinIdenticalVertices |
             aiProcess_SortByPType |
-            aiProcess_CalcTangentSpace * ((properties & SGRender::hasTangents) != 0) //Only bother if present
+            aiProcess_CalcTangentSpace * ((flags & SGRender::V_HAS_TANGENTS) != 0) //Only bother if present
         );
 
         if (tree == nullptr) {
@@ -57,71 +76,15 @@ namespace Model
         for (int m = 0; m < tree->mNumMeshes; m++) {
             
             const aiMesh* aimesh = tree->mMeshes[m];
-            //Iterate over all faces in this mesh
-            for (int j = 0; j < aimesh->mNumFaces; j++) {
-
-                auto const& face = aimesh->mFaces[j];
-                //Iterate face vertices
-                for (int k = 0; k < 3; ++k) {
-
-                    //Get indice
-                    unsigned int indice = face.mIndices[k];
-
-                    //Assume always has position
-                    auto const& vertex = aimesh->mVertices[indice];
-                    rawDataTemp.push_back(vertex.x);
-                    rawDataTemp.push_back(vertex.y);
-                    rawDataTemp.push_back(vertex.z);
-
-                    //Next do UV
-                    if (aimesh->HasTextureCoords(0) && (properties & SGRender::hasUVs)) {
-                        // The following line fixed the issue for me now:
-                        auto const& uv = aimesh->mTextureCoords[0][indice];
-                        rawDataTemp.push_back(uv.x);
-                        rawDataTemp.push_back(uv.y);
-                    }
-
-                    //Next Normal
-                    if (aimesh->HasNormals() && (properties & SGRender::hasNormals))
-                    {
-                        auto const& normal = aimesh->mNormals[indice];
-                        rawDataTemp.push_back(normal.x);
-                        rawDataTemp.push_back(normal.y);
-                        rawDataTemp.push_back(normal.z);
-                    }
-
-                    //Next Color
-                    if (aimesh->HasVertexColors(0) && (SGRender::hasColor))
-                    {
-                        auto const& color = aimesh->mColors[indice];
-                        rawDataTemp.push_back(color->r);
-                        rawDataTemp.push_back(color->g);
-                        rawDataTemp.push_back(color->b);
-                        rawDataTemp.push_back(color->a);
-                    }
-
-                    //Next Tangents
-                    if (aimesh->HasTangentsAndBitangents() && (SGRender::hasTangents))
-                    {
-                        auto const& tangent = aimesh->mTangents[indice];
-                        rawDataTemp.push_back(tangent.x);
-                        rawDataTemp.push_back(tangent.y);
-                        rawDataTemp.push_back(tangent.z);
-                    }
-
-                    //Now push back indice
-                    mData.indices.push_back(mData.indices.size());
-                }
-            }
+            ProcessMeshFaces(aimesh, rawDataTemp, mData, flags);
         }
 
         mData.vertices = rawDataTemp;
         mesh.setLoaded(true);
-        mesh.setProperties(properties);
+        mesh.setProperties(flags);
 
 #if _DEBUG
         auto time = EngineTimer::EndTimer(start);
-
         EngineLog("Model loaded: ", path, " ", mData.vertices.size() * sizeof(float), " bytes - currently not optimising for duplicates");
         EngineLog("Time elapsed: ", time);
 #endif

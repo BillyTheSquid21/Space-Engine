@@ -12,8 +12,9 @@
 #include "assimp/Importer.hpp"  
 #include "assimp/scene.h"
 #include "assimp/postprocess.h" 
+#include "map"
 
-#define _SHOW_MODEL_DEBUG 1
+#define _SHOW_MODEL_DEBUG 0
 
 namespace Model
 {
@@ -27,16 +28,28 @@ namespace Model
     struct MatModel
     {
         std::vector<MatMesh> meshes;
+        std::map<std::string, std::string> diffuseTextures; //Testing solution
+        std::map<std::string, std::string> normalTextures;
     };
 
     template<typename VertexType>
     bool LoadModel(const char* path, MatModel& model)
     {
+        return LoadModelInternal<VertexType>(path, model, VertexType::properties());
+    }
+
+    template<typename VertexType>
+    bool LoadModel(const char* path, MatModel& model, int flags)
+    {
+        return LoadModelInternal<VertexType>(path, model, flags | VertexType::properties());
+    }
+
+    template<typename VertexType>
+    static bool LoadModelInternal(const char* path, MatModel& model, int flags)
+    {
         using namespace SGRender;
         
         EngineLog("Loading material mesh: ", path);
-
-        int properties = VertexType::properties();
 
 #if _DEBUG
         auto start = EngineTimer::StartTimer();
@@ -47,7 +60,7 @@ namespace Model
             aiProcess_Triangulate |
             aiProcess_JoinIdenticalVertices |
             aiProcess_SortByPType |
-            aiProcess_CalcTangentSpace * ((properties & SGRender::hasTangents) != 0) //Only bother if present
+            aiProcess_CalcTangentSpace * ((flags & SGRender::V_HAS_TANGENTS) != 0) //Only bother if present
         );
 
         if (tree == nullptr) {
@@ -73,6 +86,12 @@ namespace Model
             mat->Get(AI_MATKEY_COLOR_AMBIENT, amb);
             mat->Get(AI_MATKEY_COLOR_SPECULAR, spec);
             mat->Get(AI_MATKEY_SHININESS, shin);
+
+            //If name is blank, assign m_ + number in array
+            if (name == aiString("") || name == aiString(" "))
+            {
+                name = "m_" + std::to_string(i);
+            }
             
             //Set properties and convert where appropriate
             MatMesh& mmesh = model.meshes[i];
@@ -81,11 +100,41 @@ namespace Model
             mmesh.mat.diffuse = {diff.r, diff.g, diff.b};
             mmesh.mat.specular = { spec.r, spec.g, spec.b };
             mmesh.mat.shininess = shin;
+
+            EngineLog("Material ", mmesh.matName, " loaded");
+
+            //Add texture file names if exist
+            //For now assume one texture per attribute
+            if (mat->GetTextureCount(aiTextureType_DIFFUSE))
+            {
+                aiString texName;
+                aiReturn ret;
+                ret = mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texName);
+                
+                if (ret == 0)
+                {
+                    model.diffuseTextures[mmesh.matName] = texName.C_Str();
+                    EngineLogOk("Diffuse Texture: ", texName.C_Str());
+                }
+            }
+            if (mat->GetTextureCount(aiTextureType_NORMALS))
+            {
+                aiString texName;
+                aiReturn ret;
+                ret = mat->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0), texName);
+
+                if (ret == 0)
+                {
+                    model.normalTextures[mmesh.matName] = texName.C_Str();
+                    EngineLogOk("Normal Texture: ", texName.C_Str());
+                }
+            }
         }
 
 #if _SHOW_MODEL_DEBUG
 
         //List all the important info about the model
+        EngineLog("Properties: ", flags);
         EngineLog("Material Count: ", tree->mNumMaterials);
         EngineLog("Mesh Count: ", tree->mNumMeshes);
         EngineLog("Texture Count: ", tree->mNumTextures);
@@ -113,64 +162,8 @@ namespace Model
 
             const aiMesh* aimesh = tree->mMeshes[m];
             int mIndex = aimesh->mMaterialIndex;
-           
-            //Iterate over all faces in this mesh
-            for (int j = 0; j < aimesh->mNumFaces; j++) {
-
-                auto const& face = aimesh->mFaces[j];
-                //Iterate face vertices
-                for (int k = 0; k < 3; ++k) {
-
-                    //Get indice
-                    unsigned int indice = face.mIndices[k];
-
-                    //Assume always has position
-                    auto const& vertex = aimesh->mVertices[indice];
-                    rawDataTemp[mIndex].push_back(vertex.x);
-                    rawDataTemp[mIndex].push_back(vertex.y);
-                    rawDataTemp[mIndex].push_back(vertex.z);
-
-                    //Next do UV
-                    if (aimesh->HasTextureCoords(0) && (properties & SGRender::hasUVs)) {
-                        // The following line fixed the issue for me now:
-                        auto const& uv = aimesh->mTextureCoords[0][indice];
-                        rawDataTemp[mIndex].push_back(uv.x);
-                        rawDataTemp[mIndex].push_back(uv.y);
-                    }
-
-                    //Next Normal
-                    if (aimesh->HasNormals() && (properties & SGRender::hasNormals))
-                    {
-                        auto const& normal = aimesh->mNormals[indice];
-                        rawDataTemp[mIndex].push_back(normal.x);
-                        rawDataTemp[mIndex].push_back(normal.y);
-                        rawDataTemp[mIndex].push_back(normal.z);
-                    }
-
-                    //Next Color
-                    if (aimesh->HasVertexColors(0) && (SGRender::hasColor))
-                    {
-                        auto const& color = aimesh->mColors[indice];
-                        rawDataTemp[mIndex].push_back(color->r);
-                        rawDataTemp[mIndex].push_back(color->g);
-                        rawDataTemp[mIndex].push_back(color->b);
-                        rawDataTemp[mIndex].push_back(color->a);
-                    }
-
-                    //Next Tangents
-                    if (aimesh->HasTangentsAndBitangents() && (SGRender::hasTangents))
-                    {
-                        auto const& tangent = aimesh->mTangents[indice];
-                        rawDataTemp[mIndex].push_back(tangent.x);
-                        rawDataTemp[mIndex].push_back(tangent.y);
-                        rawDataTemp[mIndex].push_back(tangent.z);
-                    }
-
-                    //Now push back indice
-                    Geometry::MeshData& mData = model.meshes[mIndex].mesh.getMesh();
-                    mData.indices.push_back(mData.indices.size());
-                }
-            }
+            auto& mesh = model.meshes[mIndex].mesh.getMesh();
+            ProcessMeshFaces(aimesh, rawDataTemp[mIndex], mesh, flags);
         }
 
         //Set each mesh data to rawDataTemp index
@@ -180,7 +173,7 @@ namespace Model
             Geometry::MeshData& mData = m.getMesh();
             mData.vertices = rawDataTemp[i];
             m.setLoaded(true);
-            m.setProperties(properties);
+            m.setProperties(flags);
         }
 
         //Check for any redundant material meshes
@@ -203,7 +196,6 @@ namespace Model
         EngineLog("Model loaded: ", path, " ", ((float)(s * sizeof(float)))/1000.f, " kB - currently not optimising for duplicates");
         EngineLog("Time elapsed: ", time);
 #endif
-
         return true;
     }
 }

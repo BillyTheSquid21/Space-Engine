@@ -5,6 +5,7 @@ SegArray<SGRender::System::Identifier<SGRender::Shader>, 16> SGRender::System::s
 SegArray<SGRender::System::IdCount<SGRender::Batcher>, 16> SGRender::System::s_Batchers;
 SegArray<SGRender::System::IdCount<SGRender::Instancer>, 16> SGRender::System::s_Instancers;
 std::unique_ptr<std::unordered_map<std::string, Geometry::Mesh>> SGRender::System::s_Models;
+std::unique_ptr<std::unordered_map<std::string, Model::MatModel>> SGRender::System::s_MatModels;
 std::unique_ptr<std::unordered_map<std::string, Tex::Texture>> SGRender::System::s_Textures;
 std::unique_ptr<std::unordered_map<std::string, Tex::TextureAtlas>> SGRender::System::s_TexAtlases;
 int32_t SGRender::System::s_Width = 640;
@@ -254,6 +255,12 @@ void SGRender::System::unloadModel(std::string name)
 	if (s_Models->find(name) != s_Models->end())
 	{
 		s_Models->erase(name);
+		return;
+	}
+
+	if (s_MatModels->find(name) != s_MatModels->end())
+	{
+		s_MatModels->erase(name);
 		return;
 	}
 	EngineLog("Model to be deleted not found!");
@@ -596,6 +603,17 @@ bool SGRender::System::accessModel(std::string name, Geometry::Mesh** model)
 	return false;
 }
 
+bool SGRender::System::accessMatModel(std::string name, Model::MatModel** model)
+{
+	if (s_MatModels->find(name) != s_MatModels->end())
+	{
+		*model = &s_MatModels->at(name);
+		return true;
+	}
+	EngineLog("Material Model wasn't found!");
+	return false;
+}
+
 bool SGRender::System::getShader(const char* shader, SGRender::Shader** shaderPtr)
 {
 	char id[MAX_NAME_LENGTH + 1];
@@ -631,6 +649,7 @@ void SGRender::System::set()
 
 	//Assign maps
 	s_Models = std::unique_ptr<std::unordered_map<std::string, Geometry::Mesh>>(new std::unordered_map<std::string, Geometry::Mesh>());
+	s_MatModels = std::unique_ptr<std::unordered_map<std::string, Model::MatModel>>(new std::unordered_map<std::string, Model::MatModel>());
 	s_Textures = std::unique_ptr<std::unordered_map<std::string, Tex::Texture>>(new std::unordered_map<std::string, Tex::Texture>());
 	s_TexAtlases = std::unique_ptr<std::unordered_map<std::string, Tex::TextureAtlas>>(new std::unordered_map<std::string, Tex::TextureAtlas>());
 

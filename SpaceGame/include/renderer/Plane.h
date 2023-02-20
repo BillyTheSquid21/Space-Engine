@@ -26,7 +26,7 @@ namespace Geometry
 
 		//Render
 		void render();
-		void setRenderer(const char* ren) { m_Linked = SGRender::System::linkToBatcher(ren, m_Renderer); if (m_Linked) { SGRender::System::commitToBatcher(m_Renderer, this, (float*)&m_Quads[0], GetFloatCount<SGRender::NTVertex>(Shape::QUAD) * m_Quads.size(), (unsigned int*)&m_Indices[0], m_Indices.size());} }
+		void setRenderer(const char* ren) { m_Linked = SGRender::System::linkToBatcher(ren, m_Renderer); if (m_Linked) { SGRender::System::commitToBatcher(m_Renderer, this, (float*)&m_Quads[0], GetFloatCount<SGRender::UNVertex>(Shape::QUAD) * m_Quads.size(), (unsigned int*)&m_Indices[0], m_Indices.size());} }
 
 		//Access specific tile
 		Norm_Tex_Quad* accessQuad(unsigned int x, unsigned int y);

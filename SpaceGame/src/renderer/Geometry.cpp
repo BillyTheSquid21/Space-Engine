@@ -116,19 +116,19 @@ Color_Quad Geometry::CreateColorQuad(float x, float y, float width, float height
 Tex_Quad Geometry::CreateTextureQuad(float x, float y, float width, float height, float uvX, float uvY, float uvWidth, float uvHeight) 
 {
 	using namespace SGRender;
-	TVertex v0{};
+	UVertex v0{};
 	v0.position = { x, y , 0.0f };
 	v0.uvCoords = { uvX, uvY + uvHeight };
 
-	TVertex v1{};
+	UVertex v1{};
 	v1.position = { x + width, y,  0.0f };
 	v1.uvCoords = { uvX + uvWidth, uvY + uvHeight };
 
-	TVertex v2{};
+	UVertex v2{};
 	v2.position = { x + width, y - height,  0.0f };
 	v2.uvCoords = { uvX + uvWidth, uvY };
 
-	TVertex v3{};
+	UVertex v3{};
 	v3.position = { x, y - height,  0.0f };
 	v3.uvCoords = { uvX, uvY };
 
@@ -140,25 +140,25 @@ Norm_Tex_Quad Geometry::CreateNormalTextureQuad(float x, float y, float width, f
 {
 	using namespace SGRender;
 	//Top left
-	NTVertex v0{};
+	UNVertex v0{};
 	v0.position = { x, y , 0.0f };
 	v0.uvCoords = { uvX, uvY + uvHeight };
 	v0.normals = {0.0f, 1.0f, 0.0f};
 
 	//Top right
-	NTVertex v1{};
+	UNVertex v1{};
 	v1.position = { x + width, y,  0.0f };
 	v1.uvCoords = { uvX + uvWidth, uvY + uvHeight };
 	v1.normals = { 0.0f, 1.0f, 0.0f };
 
 	//Bottom right
-	NTVertex v2{};
+	UNVertex v2{};
 	v2.position = { x + width, y - height,  0.0f };
 	v2.uvCoords = { uvX + uvWidth, uvY };
 	v2.normals = { 0.0f, 1.0f, 0.0f };
 
 	//Bottom left
-	NTVertex v3{};
+	UNVertex v3{};
 	v3.position = { x, y - height,  0.0f };
 	v3.uvCoords = { uvX, uvY };
 	v3.normals = { 0.0f, 1.0f, 0.0f };
@@ -180,7 +180,7 @@ unsigned short int Geometry::GetVerticesCount(Shape type) {
 }
 
 //Generate normals
-void Geometry::CalculateQuadNormals(SGRender::NTVertex* verticesArray)
+void Geometry::CalculateQuadNormals(SGRender::UNVertex* verticesArray)
 {
 	glm::vec3 vec0 = verticesArray[2].position - verticesArray[0].position;
 	glm::vec3 vec1 = verticesArray[1].position - verticesArray[0].position;

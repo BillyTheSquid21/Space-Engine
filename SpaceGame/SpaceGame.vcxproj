@@ -157,9 +157,11 @@
     <ClCompile Include="src\core\ObjManagement.cpp" />
     <ClCompile Include="src\core\Root.cpp" />
     <ClCompile Include="src\core\Sound.cpp" />
+    <ClCompile Include="src\example\ExampleScene.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\GLClasses.cpp" />
     <ClCompile Include="src\renderer\Lighting.cpp" />
+    <ClCompile Include="src\renderer\Model.cpp" />
     <ClCompile Include="src\renderer\RenderSys.cpp" />
     <ClCompile Include="src\renderer\Plane.cpp" />
     <ClCompile Include="src\renderer\ShadowMap.cpp" />
@@ -194,6 +196,7 @@
     <ClInclude Include="include\core\Run.h" />
     <ClInclude Include="include\core\Sound.h" />
     <ClInclude Include="include\core\State.hpp" />
+    <ClInclude Include="include\example\ExampleScene.h" />
     <ClInclude Include="include\renderer\Batcher.hpp" />
     <ClInclude Include="include\renderer\Camera.h" />
     <ClInclude Include="include\renderer\GLClasses.h" />
@@ -253,15 +256,8 @@
     <ClInclude Include="src\vendor\textflow\TextFlow.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\frag\cube.frag%40" />
-    <None Include="res\shaders\frag\cube.frag" />
-    <None Include="res\shaders\frag\default.frag" />
-    <None Include="res\shaders\frag\line.frag" />
-    <None Include="res\shaders\geo\line_to_tri.geom" />
-    <None Include="res\shaders\vert\cube.vert%40" />
-    <None Include="res\shaders\vert\cube.vert" />
-    <None Include="res\shaders\vert\default.vert" />
-    <None Include="res\shaders\vert\line.vert" />
+    <None Include="res\default.frag" />
+    <None Include="res\default.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

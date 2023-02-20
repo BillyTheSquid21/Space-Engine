@@ -42,9 +42,9 @@ namespace Primitive
 }
 
 #define Quad std::array<SGRender::Vertex, 4>
-#define Tex_Quad std::array<SGRender::TVertex, 4>
+#define Tex_Quad std::array<SGRender::UVertex, 4>
 #define Color_Quad std::array<SGRender::CVertex, 4>
-#define Norm_Tex_Quad std::array<SGRender::NTVertex, 4>
+#define Norm_Tex_Quad std::array<SGRender::UNVertex, 4>
 
 namespace Geometry
 {
@@ -133,7 +133,7 @@ namespace Geometry
 		}
 
 		glm::mat3 noTranslation = glm::mat3(tranform);
-		if (properties & SGRender::hasNormals)
+		if (properties & SGRender::V_HAS_NORMALS)
 		{
 			int normalOffset = VertexType::normalOffset();
 			for (int i = normalOffset; i < mesh.count; i += stride)
@@ -143,7 +143,7 @@ namespace Geometry
 			}
 		}
 
-		if (properties & SGRender::hasTangents)
+		if (properties & SGRender::V_HAS_TANGENTS)
 		{
 			int tangentOffset = VertexType::tangentOffset();
 			for (int i = tangentOffset; i < mesh.count; i += stride)
@@ -211,7 +211,7 @@ namespace Geometry
 		verticesArray[2].uvCoords.x = u + width; verticesArray[2].uvCoords.y = v;
 		verticesArray[3].uvCoords.x = u; verticesArray[3].uvCoords.y = v;
 	}
-	void CalculateQuadNormals(SGRender::NTVertex* verticesArray);
+	void CalculateQuadNormals(SGRender::UNVertex* verticesArray);
 
 	//Utility
 	unsigned short int GetVerticesCount(Shape type);

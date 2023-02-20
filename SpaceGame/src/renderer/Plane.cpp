@@ -31,7 +31,7 @@ void Geometry::Plane::genQuads(float xPos, float yPos, float width, float height
 			float tileXPos = ((float)x * tileSize) + xPos;
 			float tileYPos = ((float)y * tileSize) + yPos;
 			Norm_Tex_Quad quad = CreateNormalTextureQuad(tileXPos, tileYPos, tileSize, tileSize, 0.0f, 0.0f, 0.0f, 0.0f);
-			AxialRotate<SGRender::NTVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
+			AxialRotate<SGRender::UNVertex>(&quad, { 0.0f, 0.0f, 0.0f }, angle, Shape::QUAD, axis);
 			unsigned int quadIndex = (x * m_YCount) + y;
 			m_Quads.at(quadIndex) = quad;
 		}
@@ -137,7 +137,7 @@ Norm_Tex_Quad* Geometry::Plane::accessQuad(unsigned int x, unsigned int y) {
 
 void Geometry::Plane::texturePlane(float u, float v, float width, float height) {
 	for (int i = 0; i < m_XCount * m_YCount; i++) {
-		SetQuadUV((SGRender::NTVertex*)&m_Quads[i], u, v, width, height);
+		SetQuadUV((SGRender::UNVertex*)&m_Quads[i], u, v, width, height);
 	}
 }
 

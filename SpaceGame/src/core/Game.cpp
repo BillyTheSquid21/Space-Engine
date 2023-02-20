@@ -108,11 +108,8 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     SGGUI::System::set();
     std::shared_ptr<SGRoot::ConsoleWindow> console(new SGRoot::ConsoleWindow());
     m_ConsoleGUIID = SGGUI::System::addGUI(console);
+    EngineLogOk("Console Init");
 #endif
-
-    //TEST MAT MODEL
-    Model::MatModel model;
-    Model::LoadModel<SGRender::TNTVertex>("res/Sponza_Atrium_3.obj", model);
 
     //Init thread pool
     const auto process_count = std::thread::hardware_concurrency();

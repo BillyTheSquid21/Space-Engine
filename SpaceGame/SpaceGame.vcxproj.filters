@@ -49,17 +49,14 @@
     <Filter Include="Source Files\Vendor\spaceimage">
       <UniqueIdentifier>{2e5bdab6-8870-4de1-8fbb-c4b3b162988e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\vert">
-      <UniqueIdentifier>{928cefcf-c1c7-4a2e-ba5c-5e1a77b7e995}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\frag">
-      <UniqueIdentifier>{691c47af-a778-43e7-8f71-ee8e3beff29f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\geo">
-      <UniqueIdentifier>{89349d1c-b4dd-48d1-8fa0-4f7f5ff55479}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vendor\textflow">
       <UniqueIdentifier>{a31f0323-d523-4424-8296-002442bfcc1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Example Scene">
+      <UniqueIdentifier>{def4eab7-68e5-4a71-aac1-c70fc9521dc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Example Scene">
+      <UniqueIdentifier>{88bfaa13-0225-4925-be43-573a4baaba92}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +149,12 @@
     </ClCompile>
     <ClCompile Include="src\utility\Console.cpp">
       <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\example\ExampleScene.cpp">
+      <Filter>Source Files\Example Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\Model.cpp">
+      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -356,34 +359,16 @@
     <ClInclude Include="include\renderer\Material.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="include\example\ExampleScene.h">
+      <Filter>Header Files\Example Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\vert\default.vert">
-      <Filter>Resource Files\vert</Filter>
+    <None Include="res\default.frag">
+      <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\shaders\frag\default.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\frag\line.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\vert\line.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\geo\line_to_tri.geom">
-      <Filter>Resource Files\geo</Filter>
-    </None>
-    <None Include="res\shaders\frag\cube.frag">
-      <Filter>Resource Files\frag</Filter>
-    </None>
-    <None Include="res\shaders\vert\cube.vert">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\vert\cube.vert%40">
-      <Filter>Resource Files\vert</Filter>
-    </None>
-    <None Include="res\shaders\frag\cube.frag%40">
-      <Filter>Resource Files\frag</Filter>
+    <None Include="res\default.vert">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>
