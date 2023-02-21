@@ -37,7 +37,7 @@ namespace SGRender
 		float pointConstant = 1.0f;
 		float pointLinear = 0.025f;
 		float pointQuad = 0.005f;
-		float pointCutoff = 0.1f; //Where the influence stops
+		float pointCutoff = 0.01f; //Where the influence stops
 
 		//Directional Light (i.e. the sun)
 		DirectionalLight directionalLight;
@@ -57,15 +57,20 @@ namespace SGRender
 		
 		GLuint lightBindingPoint() const { return m_LightingSSBO.bindingPoint(); }
 		
+		void cullLights();
+
 		void linkShader(SGRender::Shader& shader);
 		void clean();
 
 	private:
 
 		void updateLightBuffer();
+		float lightRadius(PointLight& light);
 
 		//SSBO for GPU side lighting
 		SSBO m_LightingSSBO;
+
+		//SSBO that keeps track of clusters
 
 		//Keep track of which light is where in the array
 		struct LightID
@@ -81,6 +86,10 @@ namespace SGRender
 		BaseLightData m_BaseData;
 		std::vector<PointLight> m_LightList;
 		std::vector<LightID> m_LightIDs;
+
+		//Culled light list
+		std::vector<PointLight> m_CulledLightList;
+		std::vector<LightID> m_CulledLightIDs;
 
 		int32_t m_NextLightID = 0;
 		int32_t m_MaxLights = 5000; //current hard limit - no reason

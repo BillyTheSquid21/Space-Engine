@@ -125,6 +125,22 @@ void SGRender::SSBO::create()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
+void SGRender::SSBO::bufferFullData(void* data, GLsizeiptr size)
+{
+	bufferFullData(data, size, GL_STATIC_DRAW);
+}
+
+void SGRender::SSBO::bufferFullData(void* data, GLsizeiptr size, GLenum drawtype)
+{
+	if (size == m_Size)
+	{
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, data);
+		return;
+	}
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, drawtype);
+	m_Size = size; //Changes size if different
+}
+
 void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size)
 {
 	bufferData(data, offset, size, GL_STATIC_DRAW);
@@ -132,14 +148,14 @@ void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size)
 
 void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size, GLenum drawtype)
 {
-	if (size + offset < m_Size)
+	if (size + offset <= m_Size)
 	{
 		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 	}
 	else
 	{
 		glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, drawtype);
-		m_Size = size + offset; //Expand if overruns
+		m_Size = size + offset; //Expands if overrun
 	}
 }
 

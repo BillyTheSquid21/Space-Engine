@@ -5,7 +5,6 @@ SGRender::Camera::Camera(float width, float height, glm::vec3 position)
 	//Set width and height
 	m_CameraWidth = width; m_CameraHeight = height;
 	m_Position = position;
-
 }
 
 void SGRender::Camera::calcVP() {
@@ -17,47 +16,58 @@ void SGRender::Camera::calcVP() {
 
 void SGRender::Camera::moveInCurrentDirection(float speed) {
 	m_Position += speed * m_Direction;
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::moveUp(float speed) {
 	m_Position += speed * m_Up;
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::moveForwards(float speed) {
 	m_Position += speed * glm::vec3(m_Direction.x, 0.0f, m_Direction.z);
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::moveSideways(float speed) {
 	m_Position += speed * -glm::normalize(glm::cross(m_Direction, m_Up));
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::panSideways(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::panUp(float speed) {
 	m_Direction = glm::rotate(m_Direction, speed * glm::radians(100.0f), -glm::normalize(glm::cross(m_Direction, m_Up)));
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::panYDegrees(float angle) {
 	m_Direction = glm::rotate(m_Direction, glm::radians(angle), -glm::normalize(glm::cross(m_Direction, m_Up)));
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::moveX(float speed) {
 	m_Position += speed * glm::vec3(-1.0f, 0.0f, 0.0f);
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::moveY(float speed) {
 	m_Position += speed * glm::vec3(0.0f, -1.0f, 0.0f);
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::moveZ(float speed) {
 	m_Position += speed * glm::vec3(0.0f, 0.0f, -1.0f);
+	m_HasMoved = true;
 }
 
 void SGRender::Camera::setPos(float x, float y, float z)
 {
 	m_Position = { x,y,z };
+	m_HasMoved = true;
 }
 
 glm::vec3 SGRender::Camera::getWorldSpaceClick(float xPos, float yPos)
@@ -74,6 +84,11 @@ glm::vec3 SGRender::Camera::unprojectWindow(glm::vec3 pos)
 void SGRender::Camera::updateFrustum()
 {
 	using namespace glm;
+
+	if (!m_HasMoved)
+	{
+		return;
+	}
 
 	//Calc the vertical fov using distance to known near plane
 	float fovY = atan((m_CameraHeight / 2.0f) / m_NearPlane);
@@ -96,4 +111,17 @@ void SGRender::Camera::updateFrustum()
 							cross(right, frontMultFar - m_Up * halfVSide) };
 	m_Frustum.bottomFace = { m_Position,
 							cross(frontMultFar + m_Up * halfVSide, right) };
+
+	m_HasMoved = false; //Now returned
+}
+
+bool SGRender::Camera::inFrustum(glm::vec3& pos, float radius)
+{
+	float threshold = -radius * 1.05f;
+	return m_Frustum.bottomFace.getSignedDistanceToPlane(pos) > threshold
+		&& m_Frustum.topFace.getSignedDistanceToPlane(pos) > threshold
+		&& m_Frustum.nearFace.getSignedDistanceToPlane(pos) > threshold
+		&& m_Frustum.farFace.getSignedDistanceToPlane(pos) > threshold
+		&& m_Frustum.leftFace.getSignedDistanceToPlane(pos) > threshold
+		&& m_Frustum.rightFace.getSignedDistanceToPlane(pos) > threshold;
 }

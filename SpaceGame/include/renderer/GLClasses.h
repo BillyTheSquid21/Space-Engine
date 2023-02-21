@@ -111,8 +111,15 @@ namespace SGRender
 		~SSBO();
 
 		void create();
+
+		//Signals buffering whole data, allowing for shrinking
+		void bufferFullData(void* data, GLsizeiptr size);
+		void bufferFullData(void* data, GLsizeiptr size, GLenum drawtype);
+
+		//Buffers part of data
 		void bufferData(void* data, int offset, GLsizeiptr size);
 		void bufferData(void* data, int offset, GLsizeiptr size, GLenum drawtype);
+		
 		void bind() const;
 		void unbind() const;
 		GLuint bindingPoint() const { return m_BindingPoint; }

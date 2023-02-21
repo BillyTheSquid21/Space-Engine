@@ -521,6 +521,7 @@ void SGRender::System::render()
 	}
 
 	//Buffer camera data
+	bool camMoved = s_Camera.hasMoved();
 	s_Camera.calcVP();
 	s_Camera.updateFrustum();
 	glm::mat4 cam = s_Camera.getVP();
@@ -529,6 +530,12 @@ void SGRender::System::render()
 	s_CameraBuffer.bufferData(&cam, sizeof(glm::mat4));
 	s_CameraBuffer.bufferData(&camPos, sizeof(glm::mat4), sizeof(glm::vec3));
 	s_CameraBuffer.bufferData(&buffer, sizeof(glm::mat4) + sizeof(glm::vec3), sizeof(float));
+
+	//Cull lights if cam has moved - for now disable as move in frag shader
+	//if (camMoved)
+	{
+		s_Lighting.cullLights();
+	}
 
 	bool lastIndexCleared = false;
 	for (int i = 0; i < s_RenderPasses.size(); i++)
@@ -667,13 +674,18 @@ void SGRender::System::set()
 	//Set camera
 	s_CameraBuffer.create();
 	s_CameraBuffer.reserveData(sizeof(glm::mat4) + sizeof(glm::vec3) + sizeof(float));
-	
+	s_Camera.calcVP();
+	s_Camera.updateFrustum();
+
 	glm::mat4 cam = s_Camera.getVP();
 	glm::vec3 camPos = s_Camera.getPos();
 	float buffer = 0.0f;
 	s_CameraBuffer.bufferData(&cam, sizeof(glm::mat4));
 	s_CameraBuffer.bufferData(&camPos, sizeof(glm::mat4), sizeof(glm::vec3));
 	s_CameraBuffer.bufferData(&buffer, sizeof(glm::mat4) + sizeof(glm::vec3), sizeof(float));
+	
+	//Cull lighting to frustum and tiles
+	s_Lighting.cullLights();
 
 	s_Set = true;
 }

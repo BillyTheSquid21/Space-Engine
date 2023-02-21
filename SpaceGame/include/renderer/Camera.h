@@ -82,6 +82,11 @@ namespace SGRender
 		void updateFrustum();
 
 		/**
+		* Check if position and radius is in frustum
+		*/
+		bool inFrustum(glm::vec3& pos, float radius);
+
+		/**
 		* Get the world space position of a click on the screen
 		*/
 		glm::vec3 getWorldSpaceClick(float xPos, float yPos);
@@ -94,6 +99,7 @@ namespace SGRender
 		void calcVP();
 		glm::mat4 getVP() { return m_VP; }
 		glm::vec3 unprojectWindow(glm::vec3 pos);
+		bool hasMoved() { return m_HasMoved; }
 
 		//set camera
 		void panYDegrees(float degrees);
@@ -133,6 +139,7 @@ namespace SGRender
 
 		//frustum
 		Frustum m_Frustum;
+		bool m_HasMoved = false;
 	};
 }
 
