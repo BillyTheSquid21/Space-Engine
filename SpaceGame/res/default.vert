@@ -6,10 +6,14 @@ layout (location = 2) in vec3 norm;
 layout(std140) uniform SG_ViewProjection
 {
     mat4 Projection;
+    vec3 ViewPos;
+    float ViewPadding;
 };
 
 out vec3 v_Normal;
 out vec2 v_Tex;
+out vec3 v_ViewPos;
+out vec3 v_FragPos;
 
 void main()
 {
@@ -18,4 +22,6 @@ void main()
 
     v_Normal = norm;
     v_Tex = uv;
+    v_ViewPos = ViewPos;
+    v_FragPos = vec3(pos);
 }

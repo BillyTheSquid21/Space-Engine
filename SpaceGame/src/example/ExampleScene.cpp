@@ -14,7 +14,7 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 
 	//2.2 Create and set the camera
 	SGRender::Camera camtmp = SGRender::Camera(m_Width, m_Height, { 0.0f, 0.0f, 0.0f });
-	camtmp.setProjection(glm::perspective(glm::radians(45.0f), (float)m_Width / (float)m_Height, 0.01f, 5000.0f));
+	camtmp.setProjection(glm::perspective(glm::radians(45.0f), (float)m_Width / (float)m_Height, 0.2f, 5000.0f));
 	camtmp.setFOV(45.0f);
 	camtmp.moveUp(50.0f);
 	camtmp.panYDegrees(20.0f);
@@ -40,10 +40,34 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 				"u_Texture",
 				SGRender::UniformType::TEXTURE,
 				&diffName
-			}
+			},
+
+			//{
+			//	"u_Ambient",
+			//	SGRender::UniformType::VEC3,
+			//	&model->meshes[i].mat.ambient
+			//},
+
+			//{
+			//	"u_Diffuse",
+			//	SGRender::UniformType::VEC3,
+			//	&model->meshes[i].mat.diffuse
+			//},
+
+			{
+				"u_Specular",
+				SGRender::UniformType::VEC3,
+				&model->meshes[i].mat.specular
+			},
+
+			{
+				"u_Shininess",
+				SGRender::UniformType::FLOAT,
+				&model->meshes[i].mat.shininess
+			},
 		};
 		SGRender::System::createRenderPass(std::to_string(i).c_str(), u, "default", std::to_string(i).c_str(), 0, 0);
-		
+
 		//2.7 Link to batcher
 		uint32_t index; Geometry::Mesh& mesh = model->meshes[i].mesh;
 		SGRender::System::linkToBatcher(std::to_string(i).c_str(), index);

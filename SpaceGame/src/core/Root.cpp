@@ -112,6 +112,34 @@ void SGRoot::ChangeBool(bool& b, std::vector<std::string>& args, std::string& ou
 	}
 }
 
+bool SGRoot::AmbientBright(std::vector<std::string>& args, std::string& output)
+{
+	if (args.size() != 2)
+	{
+		output = "invalid parameters!";
+		return false;
+	}
+
+	//Try to convert to ints, if valid string
+	try
+	{
+		float b = std::stof(args[1], nullptr);
+		SGRender::System::lighting().setAmbient(b);
+		output = "set brightness: " + args[1];
+		return true;
+	}
+	catch (std::invalid_argument const& ex)
+	{
+		output = "invalid argument!" + std::string(ex.what());
+		return false;
+	}
+	catch (std::out_of_range const& ex)
+	{
+		output = "out of range!" + std::string(ex.what());
+		return false;
+	}
+}
+
 void SGRoot::Help(std::string& output)
 {
 	output += "List of commands:\n";
@@ -172,6 +200,9 @@ bool SGRoot::ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args
 		return true;
 	case COMMAND_CODE::HELP:
 		Help(output);
+		return true;
+	case COMMAND_CODE::AMBIENT_BRIGHT:
+		AmbientBright(args, output);
 		return true;
 	default:
 		EngineLog("Command not recognised!");

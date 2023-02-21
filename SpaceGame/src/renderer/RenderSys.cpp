@@ -520,10 +520,15 @@ void SGRender::System::render()
 		return;
 	}
 
+	//Buffer camera data
 	s_Camera.calcVP();
 	s_Camera.updateFrustum();
 	glm::mat4 cam = s_Camera.getVP();
+	glm::vec3 camPos = s_Camera.getPos();
+	float buffer = 0.0f;
 	s_CameraBuffer.bufferData(&cam, sizeof(glm::mat4));
+	s_CameraBuffer.bufferData(&camPos, sizeof(glm::mat4), sizeof(glm::vec3));
+	s_CameraBuffer.bufferData(&buffer, sizeof(glm::mat4) + sizeof(glm::vec3), sizeof(float));
 
 	bool lastIndexCleared = false;
 	for (int i = 0; i < s_RenderPasses.size(); i++)
@@ -661,9 +666,14 @@ void SGRender::System::set()
 
 	//Set camera
 	s_CameraBuffer.create();
-	s_CameraBuffer.reserveData(sizeof(glm::mat4));
+	s_CameraBuffer.reserveData(sizeof(glm::mat4) + sizeof(glm::vec3) + sizeof(float));
+	
 	glm::mat4 cam = s_Camera.getVP();
+	glm::vec3 camPos = s_Camera.getPos();
+	float buffer = 0.0f;
 	s_CameraBuffer.bufferData(&cam, sizeof(glm::mat4));
+	s_CameraBuffer.bufferData(&camPos, sizeof(glm::mat4), sizeof(glm::vec3));
+	s_CameraBuffer.bufferData(&buffer, sizeof(glm::mat4) + sizeof(glm::vec3), sizeof(float));
 
 	s_Set = true;
 }

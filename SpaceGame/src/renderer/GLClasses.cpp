@@ -95,9 +95,10 @@ void SGRender::UniformBuffer::bufferData(void* data, GLsizeiptr size)
 
 void SGRender::UniformBuffer::bufferData(void* data, int offset, GLsizeiptr size)
 {
-	if (offset + size != m_ReservedSize)
+	//If overruns, allocate more
+	if (offset + size > m_ReservedSize)
 	{
-		reserveData(size);
+		reserveData(offset + size);
 	}
 
 	bind();
@@ -131,13 +132,14 @@ void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size)
 
 void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size, GLenum drawtype)
 {
-	if (size + offset == m_Size)
+	if (size + offset < m_Size)
 	{
 		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 	}
 	else
 	{
 		glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, drawtype);
+		m_Size = size + offset; //Expand if overruns
 	}
 }
 

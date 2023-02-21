@@ -2,11 +2,12 @@
 #ifndef SG_ROOT
 #define SG_ROOT
 
-#include "utility/SGUtil.h"
 #include "string"
+#include "utility/SGUtil.h"
 #include "utility/Options.h"
+#include "renderer/RenderSys.h"
 
-#define COMMAND_COUNT 7
+#define COMMAND_COUNT 8
 #define MAX_RESTARTS 5 //Avoid potential loop
 
 namespace SGRoot
@@ -32,6 +33,9 @@ namespace SGRoot
 	//Changes vsync status for next restart
 	void ChangeBool(bool& b, std::vector<std::string>& args, std::string& output);
 
+	//Changes ambient brightness of global lighting
+	bool AmbientBright(std::vector<std::string>& args, std::string& output);
+
 	//Lists all commands
 	void Help(std::string& output);
 
@@ -44,6 +48,7 @@ namespace SGRoot
 		"save-options",	//4
 		"windowed",		//5
 		"vsync",		//6
+		"ambient-brightness" //7
 	};
 
 	static enum class COMMAND_CODE : int
@@ -55,6 +60,7 @@ namespace SGRoot
 		SAVE_OPTIONS = 4,
 		WINDOWED = 5,
 		VSYNC = 6,
+		AMBIENT_BRIGHT = 7,
 	};
 
 	//Allows converting text to commands

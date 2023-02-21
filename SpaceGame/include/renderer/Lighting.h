@@ -12,7 +12,7 @@ namespace SGRender
 	struct DirectionalLight
 	{
 		glm::vec3 direction = glm::vec3(0.0f, 0.5f, 0.5f);
-		float brightness = 1.0f;
+		float brightness = 1.3f;
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		float buffer;
 	};
@@ -30,7 +30,7 @@ namespace SGRender
 	struct BaseLightData
 	{
 		glm::vec3 ambientColor = glm::vec3(1.0f, 1.0f, 1.0f);
-		float ambient = 0.5f;
+		float ambient = 0.16f;
 
 		//Directional Light (i.e. the sun)
 		DirectionalLight directionalLight;
@@ -42,6 +42,7 @@ namespace SGRender
 		Lighting() = default;
 
 		void set(Camera* camera);
+		void setAmbient(float amb) { m_BaseData.ambient = amb; updateLightBuffer(); }
 		int32_t addLight(glm::vec3& pos, float brightness, glm::vec3& color, float radius);
 		bool removeLight(int32_t id);
 		GLuint lightBindingPoint() const { return m_LightingSSBO.bindingPoint(); }
