@@ -2,6 +2,7 @@
 layout (location = 0) in vec4 pos;
 layout (location = 1) in vec2 uv;
 layout (location = 2) in vec3 norm;
+layout (location = 3) in vec3 tangent;
 
 layout(std140) uniform SG_ViewProjection
 {
@@ -14,6 +15,7 @@ out vec3 v_Normal;
 out vec2 v_Tex;
 out vec3 v_ViewPos;
 out vec3 v_FragPos;
+out mat3 v_TBN;
 
 void main()
 {
@@ -24,4 +26,10 @@ void main()
     v_Tex = uv;
     v_ViewPos = ViewPos;
     v_FragPos = vec3(pos);
+
+    //TBN
+    vec3 T = normalize(tangent);
+    vec3 N = norm;
+    vec3 B = normalize(cross(N, T));
+    v_TBN = mat3(T, B, N);
 }

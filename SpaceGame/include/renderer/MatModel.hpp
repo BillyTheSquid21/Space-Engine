@@ -14,7 +14,7 @@
 #include "assimp/postprocess.h" 
 #include "map"
 
-#define _SHOW_MODEL_DEBUG 0
+#define _SHOW_MODEL_DEBUG 1
 
 namespace Model
 {
@@ -30,6 +30,7 @@ namespace Model
         std::vector<MatMesh> meshes;
         std::map<std::string, std::string> diffuseTextures; //Testing solution
         std::map<std::string, std::string> normalTextures;
+        std::map<std::string, std::string> specularTextures;
     };
 
     template<typename VertexType>
@@ -129,6 +130,18 @@ namespace Model
                     EngineLogOk("Normal Texture: ", texName.C_Str());
                 }
             }
+            if (mat->GetTextureCount(aiTextureType_SPECULAR))
+            {
+                aiString texName;
+                aiReturn ret;
+                ret = mat->Get(AI_MATKEY_TEXTURE(aiTextureType_SPECULAR, 0), texName);
+
+                if (ret == 0)
+                {
+                    model.specularTextures[mmesh.matName] = texName.C_Str();
+                    EngineLogOk("Specular Texture: ", texName.C_Str());
+                }
+            }
         }
 
 #if _SHOW_MODEL_DEBUG
@@ -148,6 +161,8 @@ namespace Model
             EngineLog(mname, " diffuse texture count: ", tree->mMaterials[i]->GetTextureCount(aiTextureType_DIFFUSE));
             EngineLog(mname, " ambient texture count: ", tree->mMaterials[i]->GetTextureCount(aiTextureType_AMBIENT));
             EngineLog(mname, " normal texture count: ", tree->mMaterials[i]->GetTextureCount(aiTextureType_NORMALS));
+            EngineLog(mname, " specular texture count: ", tree->mMaterials[i]->GetTextureCount(aiTextureType_SPECULAR));
+            EngineLog(mname, " shininess texture count: ", tree->mMaterials[i]->GetTextureCount(aiTextureType_SHININESS));
         }
 
 #endif

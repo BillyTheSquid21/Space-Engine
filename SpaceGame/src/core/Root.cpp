@@ -59,7 +59,6 @@ bool SGRoot::Resolution(std::vector<std::string>& args, std::string& output)
 		return false;
 	}
 
-	//Try to convert to ints, if valid string
 	try
 	{
 		int w = std::stoi(args[1], nullptr, 10);
@@ -120,12 +119,40 @@ bool SGRoot::AmbientBright(std::vector<std::string>& args, std::string& output)
 		return false;
 	}
 
-	//Try to convert to ints, if valid string
 	try
 	{
 		float b = std::stof(args[1], nullptr);
 		SGRender::System::lighting().setAmbient(b);
 		output = "set brightness: " + args[1];
+		return true;
+	}
+	catch (std::invalid_argument const& ex)
+	{
+		output = "invalid argument!" + std::string(ex.what());
+		return false;
+	}
+	catch (std::out_of_range const& ex)
+	{
+		output = "out of range!" + std::string(ex.what());
+		return false;
+	}
+}
+
+bool SGRoot::AmbientColor(std::vector<std::string>& args, std::string& output)
+{
+	if (args.size() != 4)
+	{
+		output = "invalid parameters!";
+		return false;
+	}
+
+	try
+	{
+		float r = std::stof(args[1], nullptr);
+		float g = std::stof(args[2], nullptr);
+		float b = std::stof(args[3], nullptr);
+		SGRender::System::lighting().setAmbientColor(r, g, b);
+		output = "set color: " + args[1] + " " + args[2] + " " + args[3];
 		return true;
 	}
 	catch (std::invalid_argument const& ex)
@@ -203,6 +230,9 @@ bool SGRoot::ExecuteCommand(COMMAND_CODE command, std::vector<std::string>& args
 		return true;
 	case COMMAND_CODE::AMBIENT_BRIGHT:
 		AmbientBright(args, output);
+		return true;
+	case COMMAND_CODE::AMBIENT_COLOR:
+		AmbientColor(args, output);
 		return true;
 	default:
 		EngineLog("Command not recognised!");

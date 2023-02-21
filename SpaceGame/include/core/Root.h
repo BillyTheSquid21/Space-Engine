@@ -7,7 +7,7 @@
 #include "utility/Options.h"
 #include "renderer/RenderSys.h"
 
-#define COMMAND_COUNT 8
+#define COMMAND_COUNT 9
 #define MAX_RESTARTS 5 //Avoid potential loop
 
 namespace SGRoot
@@ -36,19 +36,23 @@ namespace SGRoot
 	//Changes ambient brightness of global lighting
 	bool AmbientBright(std::vector<std::string>& args, std::string& output);
 
+	//CHanges ambient color of global lighting
+	bool AmbientColor(std::vector<std::string>& args, std::string& output);
+
 	//Lists all commands
 	void Help(std::string& output);
 
 	static std::string COMMANDS[]
 	{
-		"help",			//0
-		"kill",			//1
-		"restart",		//2
-		"resolution",	//3
-		"save-options",	//4
-		"windowed",		//5
-		"vsync",		//6
-		"ambient-brightness" //7
+		"help",				 //0
+		"kill",				 //1
+		"restart",			 //2
+		"resolution",		 //3
+		"save-options",		 //4
+		"windowed",			 //5
+		"vsync",			 //6
+		"ambient-brightness",//7
+		"ambient-color",	 //8
 	};
 
 	static enum class COMMAND_CODE : int
@@ -61,6 +65,7 @@ namespace SGRoot
 		WINDOWED = 5,
 		VSYNC = 6,
 		AMBIENT_BRIGHT = 7,
+		AMBIENT_COLOR = 8,
 	};
 
 	//Allows converting text to commands

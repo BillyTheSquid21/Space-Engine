@@ -1,13 +1,15 @@
 #include "example/ExampleScene.h"
 
+#include "cmath"
+
 bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback, MousePos_Callback mpCallback, bool windowed)
 {
 	bool succ = Game::init(name, kCallback, mCallback, sCallback, mpCallback, windowed);
 	SGRender::System::set();
 	//Setup all of the scene
 	//1. Load sponza atrium model
-	SGRender::System::loadMatModel<SGRender::UNVertex>("res/s/Sponza.gltf", "sponza", Model::M_FILL_MISSING);
-	
+	SGRender::System::loadMatModel<SGRender::UNTVertex>("res/s/Sponza.gltf", "sponza", Model::M_FILL_MISSING);
+
 	//2. Create a render pass for each material mesh
 	//2.1 Load the default shader
 	SGRender::System::loadShader("res/default.vert", "res/default.frag", "default");
@@ -25,16 +27,21 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 	SGRender::System::accessMatModel("sponza", &model);
 	for (int i = 0; i < model->meshes.size(); i++)
 	{
-		//2.4 Load diffuse texture
+		//2.4.a Load diffuse texture
 		std::string diffPath = "res/s/" + model->diffuseTextures[model->meshes[i].matName];
 		std::string diffName = "diff_" + std::to_string(i);
 		SGRender::System::loadTexture(diffPath, diffName, 0, 3, Tex::T_FILTER_LINEAR);
-		
+
+		//2.4.b Load normal texture
+		std::string normPath = "res/s/" + model->normalTextures[model->meshes[i].matName];
+		std::string normName = "norm_" + std::to_string(i);
+		SGRender::System::loadTexture(normPath, normName, 1, 3, Tex::T_FILTER_LINEAR);
+
 		//2.5 Add batcher for material
-		SGRender::System::addBatcher<float>(std::to_string(i).c_str(), GL_TRIANGLES, 3, 2, 3);
-		
+		SGRender::System::addBatcher<float>(std::to_string(i).c_str(), GL_TRIANGLES, 3, 2, 3, 3);
+
 		//2.6 Set tex as uniform
-		std::vector<SGRender::Uniform> u = 
+		std::vector<SGRender::Uniform> u =
 		{
 			{
 				"u_Texture",
@@ -42,17 +49,23 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 				&diffName
 			},
 
-			//{
-			//	"u_Ambient",
-			//	SGRender::UniformType::VEC3,
-			//	&model->meshes[i].mat.ambient
-			//},
+			{
+				"u_NormalMap",
+				SGRender::UniformType::TEXTURE,
+				&normName
+			},
 
-			//{
-			//	"u_Diffuse",
-			//	SGRender::UniformType::VEC3,
-			//	&model->meshes[i].mat.diffuse
-			//},
+			{
+				"u_Ambient",
+				SGRender::UniformType::VEC3,
+				&model->meshes[i].mat.ambient
+			},
+
+			{
+				"u_Diffuse",
+				SGRender::UniformType::VEC3,
+				&model->meshes[i].mat.diffuse
+			},
 
 			{
 				"u_Specular",
@@ -74,8 +87,33 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 		SGRender::System::commitToBatcher(index, &mesh, mesh.getVertices(), mesh.getVertSize(), mesh.getIndices(), mesh.getIndicesCount());
 	}
 
+	//3. Add point lights
+	constexpr int LIGHT_COUNT = 40;
+	constexpr double RADIUS = 300.0f;
+	constexpr double SEG_ANGLE = (double)LIGHT_COUNT / (2.0 * 3.14);
+	for (int i = 0; i < LIGHT_COUNT; i++)
+	{
+		double sin_x = sin((double)i / SEG_ANGLE);
+		double cos_z = cos((double)i / SEG_ANGLE);
+		glm::vec3 pos1 = { RADIUS * sin_x, 80.0f, RADIUS * cos_z };
+		glm::vec3 col1 = { sin_x, 0.2f, cos_z };
+		SGRender::System::lighting().addLight(pos1, 1.0f, col1, 20.0f);
+	}
+
 	EngineLogOk("Scene loaded");
 	return succ;
+}
+
+void ExampleScene::update(double deltaTime)
+{
+	Game::update(deltaTime);
+
+	//Get shader and update time
+	SGRender::Shader* shader = nullptr;
+	SGRender::System::getShader("default", &shader);
+	shader->setUniform("u_Time", m_ElapsedTime);
+
+	m_ElapsedTime += deltaTime;
 }
 
 void ExampleScene::clean()
