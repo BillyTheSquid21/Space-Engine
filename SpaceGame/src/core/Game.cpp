@@ -21,7 +21,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLogOk("GLFW");
 
     //Set version of openGl
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -112,7 +112,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 #endif
 
     //Init thread pool
-    const auto process_count = std::thread::hardware_concurrency();
+    const auto process_count = std::thread::hardware_concurrency() - 1;
     MtLib::ThreadPool::Init(process_count);
     EngineLogOk("Thread Pool:", process_count);
 

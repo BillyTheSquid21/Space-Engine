@@ -5,22 +5,23 @@
 bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallback, Scroll_Callback sCallback, MousePos_Callback mpCallback, bool windowed)
 {
 	bool succ = Game::init(name, kCallback, mCallback, sCallback, mpCallback, windowed);
-	SGRender::System::set();
-	//Setup all of the scene
-	//1. Load sponza atrium model
-	SGRender::System::loadMatModel<SGRender::UNTVertex>("res/s/Sponza.gltf", "sponza", Model::M_FILL_MISSING);
 
-	//2. Create a render pass for each material mesh
-	//2.1 Load the default shader
-	SGRender::System::loadShader("res/default.vert", "res/default.frag", "default");
-
-	//2.2 Create and set the camera
+	//1. Setup camera and renderer
 	SGRender::Camera camtmp = SGRender::Camera(m_Width, m_Height, { 0.0f, 0.0f, 0.0f });
 	camtmp.setProjection(glm::perspective(glm::radians(45.0f), (float)m_Width / (float)m_Height, 0.2f, 5000.0f));
+	camtmp.setNearAndFarPlane(0.2f, 5000.0f);
 	camtmp.setFOV(45.0f);
 	camtmp.moveUp(50.0f);
 	camtmp.panYDegrees(20.0f);
 	SGRender::System::setCamera(camtmp);
+	SGRender::System::set();
+
+	//2.2 Setup all of the scene
+	//2.1 Load sponza atrium model
+	SGRender::System::loadMatModel<SGRender::UNTVertex>("res/s/Sponza.gltf", "sponza", Model::M_FILL_MISSING);
+
+	//2.2 Load the default shader
+	SGRender::System::loadShader("res/default.vert", "res/default.frag", "default");
 
 	//2.3 Setup a renderer and pass per material
 	Model::MatModel* model;
@@ -78,6 +79,12 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 				SGRender::UniformType::FLOAT,
 				&model->meshes[i].mat.shininess
 			},
+
+			{
+				"u_ShowLights",
+				SGRender::UniformType::INT,
+				&m_ShowLights
+			},
 		};
 		SGRender::System::createRenderPass(std::to_string(i).c_str(), u, "default", std::to_string(i).c_str(), 0, 0);
 
@@ -88,16 +95,16 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 	}
 
 	//3. Add point lights
-	constexpr int LIGHT_COUNT = 40;
-	constexpr double RADIUS = 300.0f;
+	constexpr int LIGHT_COUNT = 50;
+	constexpr double RADIUS = 400.0f;
 	constexpr double SEG_ANGLE = (double)LIGHT_COUNT / (2.0 * 3.14);
 	for (int i = 0; i < LIGHT_COUNT; i++)
 	{
 		double sin_x = sin((double)i / SEG_ANGLE);
 		double cos_z = cos((double)i / SEG_ANGLE);
-		glm::vec3 pos1 = { RADIUS * sin_x, 80.0f, RADIUS * cos_z };
+		glm::vec3 pos1 = { RADIUS * sin_x, 25.0f, RADIUS * cos_z };
 		glm::vec3 col1 = { sin_x, 0.2f, cos_z };
-		SGRender::System::lighting().addLight(pos1, 1.0f, col1, 20.0f);
+		SGRender::System::lighting().addLight(pos1, 1.0f, col1, 25.0f);
 	}
 
 	EngineLogOk("Scene loaded");
@@ -107,11 +114,6 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 void ExampleScene::update(double deltaTime)
 {
 	Game::update(deltaTime);
-
-	//Get shader and update time
-	SGRender::Shader* shader = nullptr;
-	SGRender::System::getShader("default", &shader);
-	shader->setUniform("u_Time", m_ElapsedTime);
 
 	m_ElapsedTime += deltaTime;
 }
@@ -135,72 +137,49 @@ void ExampleScene::handleInput(int key, int scancode, int action, int mods)
 	const float speed = 10.0f;
 	if (key == GLFW_KEY_W)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveInCurrentDirection(speed);
-		}
+		cam.moveInCurrentDirection(speed);
 	}
 	if (key == GLFW_KEY_S)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveInCurrentDirection(-speed);
-		}
+		cam.moveInCurrentDirection(-speed);
 	}
 	if (key == GLFW_KEY_UP)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveForwards(speed);
-		}
+		cam.moveForwards(speed);
 	}
 	if (key == GLFW_KEY_DOWN)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveForwards(-speed);
-		}
+		cam.moveForwards(-speed);
 	}
 	if (key == GLFW_KEY_A)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveSideways(speed);
-		}
+		cam.moveSideways(speed);
 	}
 	if (key == GLFW_KEY_D)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveSideways(-speed);
-		}
+		cam.moveSideways(-speed);
 	}
 	if (key == GLFW_KEY_SPACE)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveUp(speed);
-		}
+		cam.moveUp(speed);
 	}
 	if (key == GLFW_KEY_LEFT_CONTROL)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.moveUp(-speed);
-		}
+		cam.moveUp(-speed);
 	}
 	if (key == GLFW_KEY_Q)
 	{
-		if (action == GLFW_PRESS)
-		{
-			cam.panSideways(speed/20.0f);
-		}
+		cam.panSideways(speed/20.0f);
 	}
 	if (key == GLFW_KEY_E)
 	{
+		cam.panSideways(-speed/20.0f);
+	}
+	if (key == GLFW_KEY_L)
+	{
 		if (action == GLFW_PRESS)
 		{
-			cam.panSideways(-speed/20.0f);
+			m_ShowLights = !m_ShowLights;
 		}
 	}
 }

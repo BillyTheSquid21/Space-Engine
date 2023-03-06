@@ -19,6 +19,7 @@ public:
 
 private:
 	float m_ElapsedTime = 0.0f;
+	int m_ShowLights = 0;
 };
 
 #endif

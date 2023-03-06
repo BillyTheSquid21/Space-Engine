@@ -87,9 +87,19 @@ namespace SGRender
 		bool inFrustum(glm::vec3& pos, float radius);
 
 		/**
+		* Passes the Uniform Buffer for the camera to write to
+		*/
+		void buffer(UniformBuffer& ub);
+
+		/**
 		* Get the world space position of a click on the screen
 		*/
 		glm::vec3 getWorldSpaceClick(float xPos, float yPos);
+
+		/**
+		* Signal camera movement to reset
+		*/
+		void resetMovementFlag() { m_HasMoved = false; };
 
 		void setPos(float x, float y, float z);
 		void setDir(glm::vec3& dir) { m_Direction = dir; }
@@ -97,7 +107,9 @@ namespace SGRender
 		glm::vec3 getDir() const { return m_Direction; }
 		glm::vec3 getRight() const { return m_Right; }
 		void calcVP();
-		glm::mat4 getVP() { return m_VP; }
+		glm::mat4& getVP() { return m_VP; }
+		glm::mat4& getProj() { return m_Proj; }
+		glm::mat4& getView() { return m_View; }
 		glm::vec3 unprojectWindow(glm::vec3 pos);
 		bool hasMoved() { return m_HasMoved; }
 
@@ -112,6 +124,8 @@ namespace SGRender
 		float height() const { return m_CameraHeight; }
 		float FOV() const { return m_FOV; }
 		float aspect() const { return m_CameraHeight / m_CameraWidth; }
+		float nearPlane() const { return m_NearPlane; }
+		float farPlane() const { return m_FarPlane; }
 
 		/**
 		* Get a reference to the camera frustum as it was when last updated
@@ -119,25 +133,26 @@ namespace SGRender
 		Frustum& getFrustum() { return m_Frustum; }
 
 	private:
-		float m_CameraWidth = 0.0f; float m_CameraHeight = 0.0f;
-
-		//properties
+		//buffered properties in order
+		glm::mat4 m_View = glm::mat4(1.0f);
+		glm::mat4 m_Proj = glm::mat4(1.0f);
 		glm::vec3 m_Position = {};
+		float m_CameraWidth = 0.0f; 
+		float m_CameraHeight = 0.0f;
+		float m_NearPlane = 0.1f; 
+		float m_FarPlane = 1000.0f;
+
+		//unbuffered properties
 		glm::vec3 m_Direction = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::vec3 m_Right = glm::vec3(1.0f, 0.0f, 0.0f);
 		float m_Speed = 0.1f;
 		float m_Sensitivity = 100.0f;
-		float m_NearPlane = 0.1f; float m_FarPlane = 1000.0f;
 		float m_FOV = 0.0f;
 
-		//mvp
-		glm::mat4 m_View = glm::mat4(1.0f);
-		glm::mat4 m_Proj = glm::mat4(1.0f);
 		glm::mat4 m_VP = glm::mat4(1.0f);
 		glm::mat4 m_InverseVP = glm::mat4(1.0f);
 
-		//frustum
 		Frustum m_Frustum;
 		bool m_HasMoved = false;
 	};

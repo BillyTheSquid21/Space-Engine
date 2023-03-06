@@ -5,6 +5,13 @@ SGRender::Camera::Camera(float width, float height, glm::vec3 position)
 	//Set width and height
 	m_CameraWidth = width; m_CameraHeight = height;
 	m_Position = position;
+	m_HasMoved = true;
+}
+
+void SGRender::Camera::buffer(UniformBuffer& ub)
+{
+	size_t size = (4 * sizeof(float)) + (2 * sizeof(glm::mat4)) + (sizeof(glm::vec3));
+	ub.bufferData(this, size);
 }
 
 void SGRender::Camera::calcVP() {
@@ -112,7 +119,6 @@ void SGRender::Camera::updateFrustum()
 	m_Frustum.bottomFace = { m_Position,
 							cross(frontMultFar + m_Up * halfVSide, right) };
 
-	m_HasMoved = false; //Now returned
 }
 
 bool SGRender::Camera::inFrustum(glm::vec3& pos, float radius)

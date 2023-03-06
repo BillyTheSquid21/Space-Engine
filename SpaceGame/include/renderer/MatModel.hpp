@@ -14,7 +14,7 @@
 #include "assimp/postprocess.h" 
 #include "map"
 
-#define _SHOW_MODEL_DEBUG 1
+#define _SHOW_MODEL_DEBUG 0 //Model info can be dense so allow easy switch off
 
 namespace Model
 {
@@ -102,7 +102,9 @@ namespace Model
             mmesh.mat.specular = { spec.r, spec.g, spec.b };
             mmesh.mat.shininess = shin;
 
+#if _SHOW_MODEL_DEBUG
             EngineLog("Material ", mmesh.matName, " loaded");
+#endif
 
             //Add texture file names if exist
             //For now assume one texture per attribute
@@ -115,7 +117,9 @@ namespace Model
                 if (ret == 0)
                 {
                     model.diffuseTextures[mmesh.matName] = texName.C_Str();
+#if _SHOW_MODEL_DEBUG
                     EngineLogOk("Diffuse Texture: ", texName.C_Str());
+#endif
                 }
             }
             if (mat->GetTextureCount(aiTextureType_NORMALS))
@@ -127,7 +131,9 @@ namespace Model
                 if (ret == 0)
                 {
                     model.normalTextures[mmesh.matName] = texName.C_Str();
+#if _SHOW_MODEL_DEBUG
                     EngineLogOk("Normal Texture: ", texName.C_Str());
+#endif
                 }
             }
             if (mat->GetTextureCount(aiTextureType_SPECULAR))
@@ -139,7 +145,9 @@ namespace Model
                 if (ret == 0)
                 {
                     model.specularTextures[mmesh.matName] = texName.C_Str();
+#if _SHOW_MODEL_DEBUG
                     EngineLogOk("Specular Texture: ", texName.C_Str());
+#endif
                 }
             }
         }
