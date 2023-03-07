@@ -81,10 +81,12 @@ void SGRender::UniformBuffer::unbind() const
 
 void SGRender::UniformBuffer::reserveData(GLsizeiptr size)
 {
-	bind();
-	glBufferData(GL_UNIFORM_BUFFER, size, NULL, GL_STATIC_DRAW);
-	unbind();
+	reserveData(size, GL_STATIC_DRAW);
+}
 
+void SGRender::UniformBuffer::reserveData(GLsizeiptr size, GLenum drawtype)
+{
+	glBufferData(GL_UNIFORM_BUFFER, size, NULL, drawtype);
 	m_ReservedSize = size;
 }
 
@@ -95,15 +97,14 @@ void SGRender::UniformBuffer::bufferData(void* data, GLsizeiptr size)
 
 void SGRender::UniformBuffer::bufferData(void* data, int offset, GLsizeiptr size)
 {
-	//If overruns, allocate more
+	//If overruns, send warning
 	if (offset + size > m_ReservedSize)
 	{
-		reserveData(offset + size);
+		EngineLogFail("Buffering data beyond UBO end!");
+		return;
 	}
 
-	bind();
 	glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
-	unbind();
 }
 
 SGRender::UniformBuffer::~UniformBuffer()
@@ -123,6 +124,35 @@ void SGRender::SSBO::create()
 	GL_Binding_Point++;
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+void SGRender::SSBO::reserveData(GLsizeiptr size)
+{
+	reserveData(size, GL_STATIC_DRAW);
+}
+
+void SGRender::SSBO::reserveData(GLsizeiptr size, GLenum drawtype)
+{
+	//If the buffer isn't used yet, just buffer data
+	if (!m_Size)
+	{
+		glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, drawtype);
+		m_Size = size;
+		return;
+	}
+
+	//If the buffer is already in use, generate a new buffer and copy
+	GLuint prev = m_ID;
+	
+	unbind();
+	glGenBuffers(1, &m_ID);
+	bind();
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, drawtype);
+
+	//Copy then delete old buffer
+	glCopyBufferSubData(prev, m_ID, 0, 0, m_Size);
+	glDeleteBuffers(1, &prev);
+	m_Size = size;
 }
 
 void SGRender::SSBO::bufferFullData(void* data, GLsizeiptr size)
@@ -152,10 +182,10 @@ void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size, GLenum 
 	{
 		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 	}
-	else
+	else //Expands if overrun
 	{
-		glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, drawtype);
-		m_Size = size + offset; //Expands if overrun
+		reserveData(size + offset);
+		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 	}
 }
 

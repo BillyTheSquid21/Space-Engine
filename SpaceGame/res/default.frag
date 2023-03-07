@@ -85,22 +85,30 @@ layout(std140) uniform SG_ViewProjection
 
 layout(std430, binding = 2) buffer SG_Cluster
 {
+    int clustersX;
+    int clustersY;
+    int clustersZ;
+    float xPixels;
+    float yPixels;
+    float cB1;
+    float cB2;
+    float cB3;
     Cluster clusters[];
 };
 
 uint GetZSlice(float z)
 {
-    return uint((log(-z)*(48/(log(FarPlane/NearPlane))) - ((48*log(NearPlane))/log(FarPlane/NearPlane))));
+    return uint((log(-z)*(clustersZ/(log(FarPlane/NearPlane))) - ((clustersZ*log(NearPlane))/log(FarPlane/NearPlane))));
 }
 
 uint getClusterIndex(float depth){
     uint clusterZVal  = GetZSlice(depth);
 
-    uvec3 clusters    = uvec3(gl_FragCoord.x / 120.0, gl_FragCoord.y / 120.0, clusterZVal);
+    uvec3 clusters    = uvec3(gl_FragCoord.x / xPixels, gl_FragCoord.y / yPixels, clusterZVal);
     
     uint clusterIndex = clusters.x +
-                        16 * clusters.y +
-                        (16 * 9) * clusters.z;
+                        clustersX * clusters.y +
+                        (clustersX * clustersY) * clusters.z;
     return clusterIndex;
 }
 

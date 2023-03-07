@@ -101,7 +101,7 @@ void SGRender::Lighting::updateLightBuffer()
 	}
 
 	m_LightingSSBO.bind();
-	m_LightingSSBO.bufferFullData(tmp_buffer, data_size);
+	m_LightingSSBO.bufferFullData(tmp_buffer, data_size, GL_DYNAMIC_DRAW);
 	m_LightingSSBO.unbind();
 
 	free(tmp_buffer);
@@ -255,7 +255,7 @@ void SGRender::Lighting::buildSupportLists()
 
 	//Buffer tile indices
 	m_TileLightIndex.bind();
-	m_TileLightIndex.bufferFullData(&m_TileLightIndexList[0], sizeof(int32_t) * m_TileLightIndexList.size());
+	m_TileLightIndex.bufferFullData(&m_TileLightIndexList[0], sizeof(int32_t) * m_TileLightIndexList.size(), GL_DYNAMIC_DRAW);
 	m_TileLightIndex.unbind();
 }
 
@@ -326,7 +326,7 @@ void SGRender::Lighting::buildClusters()
 	//Define split of clusters (assume 16x9x24 here for now)
 	const int xClusters = 16;
 	const int yClusters = 9;
-	const int zClusters = 48;
+	const int zClusters = 24;
 	const int total = xClusters * yClusters * zClusters;
 	EngineLog("Building Cluster, dimensions: ", xClusters, " ", yClusters, " ", zClusters, " ", total);
 
@@ -398,7 +398,13 @@ void SGRender::Lighting::buildClusters()
 	//Create SSBO and buffer
 	m_Clusters.create();
 	m_Clusters.bind();
-	m_Clusters.bufferFullData(&clusters[0], sizeof(Cluster) * clusters.size());
+	m_Clusters.reserveData((8 * sizeof(int32_t)) + (sizeof(Cluster) * clusters.size()));
+	m_Clusters.bufferData((void*)&xClusters, 0 * sizeof(int32_t), sizeof(int32_t));
+	m_Clusters.bufferData((void*)&yClusters, 1 * sizeof(int32_t), sizeof(int32_t));
+	m_Clusters.bufferData((void*)&zClusters, 2 * sizeof(int32_t), sizeof(int32_t));
+	m_Clusters.bufferData((void*)&tileSizeX, 3 * sizeof(int32_t), sizeof(int32_t));
+	m_Clusters.bufferData((void*)&tileSizeY, 4 * sizeof(int32_t), sizeof(int32_t));
+	m_Clusters.bufferData(&clusters[0], 8 * sizeof(int32_t), sizeof(Cluster) * clusters.size());
 	m_Clusters.unbind();
 
 	//Copy to vector to allow cpu culling

@@ -665,7 +665,9 @@ void SGRender::System::set()
 
 	//Set camera
 	s_CameraBuffer.create();
-	s_CameraBuffer.reserveData((2 * sizeof(glm::mat4)) + sizeof(glm::vec3) + sizeof(float));
+	s_CameraBuffer.bind();
+	s_CameraBuffer.reserveData((4 * sizeof(float)) + (2 * sizeof(glm::mat4)) + (sizeof(glm::vec3)));
+	s_CameraBuffer.unbind();
 	s_Camera.calcVP();
 	s_Camera.updateFrustum();
 

@@ -11,7 +11,9 @@ SGRender::Camera::Camera(float width, float height, glm::vec3 position)
 void SGRender::Camera::buffer(UniformBuffer& ub)
 {
 	size_t size = (4 * sizeof(float)) + (2 * sizeof(glm::mat4)) + (sizeof(glm::vec3));
+	ub.bind();
 	ub.bufferData(this, size);
+	ub.unbind();
 }
 
 void SGRender::Camera::calcVP() {

@@ -92,6 +92,7 @@ namespace SGRender
 
 		void create();
 		void reserveData(GLsizeiptr size);
+		void reserveData(GLsizeiptr size, GLenum drawtype);
 		void bufferData(void* data, GLsizeiptr size);
 		void bufferData(void* data, int offset, GLsizeiptr size);
 		void bind() const;
@@ -111,6 +112,8 @@ namespace SGRender
 		~SSBO();
 
 		void create();
+		void reserveData(GLsizeiptr size);
+		void reserveData(GLsizeiptr size, GLenum drawtype);
 
 		//Signals buffering whole data, allowing for shrinking
 		void bufferFullData(void* data, GLsizeiptr size);
