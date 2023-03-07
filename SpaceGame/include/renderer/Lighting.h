@@ -40,8 +40,8 @@ namespace SGRender
 		//Point light base properties
 		float pointConstant = 1.0f;
 		float pointLinear = 0.05f;
-		float pointQuad = 0.01f;
-		float pointCutoff = 0.1f; //Where the influence stops
+		float pointQuad = 0.008f;
+		float pointCutoff = 0.08f; //Where the influence stops
 
 		//Directional Light (i.e. the sun)
 		DirectionalLight directionalLight;
@@ -108,6 +108,9 @@ namespace SGRender
 
 		//Builds the light grid and Tile light index list
 		void buildSupportLists();
+
+		//Copy data into tile buffer
+		void copyTileLightData(void* lights, int offset, int size);
 
 		//SSBO for GPU side lighting
 		SSBO m_LightingSSBO;

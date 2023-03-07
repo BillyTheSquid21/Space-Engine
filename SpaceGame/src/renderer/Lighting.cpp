@@ -212,6 +212,11 @@ void SGRender::Lighting::buildCulledList()
 	updateLightBuffer();
 }
 
+void SGRender::Lighting::copyTileLightData(void* lights, int offset, int size)
+{
+	memcpy_s(&m_TileLightIndexList[offset], sizeof(int32_t) * MAX_CLUSTER_LIGHTS, lights, sizeof(int32_t) * size);
+}
+
 void SGRender::Lighting::buildSupportLists()
 {
 	//BUILD LIGHT GRID AND TILE LIGHT INDEX
@@ -237,6 +242,7 @@ void SGRender::Lighting::buildSupportLists()
 
 	//Resize array then copy everything
 	m_TileLightIndexList.resize(tile_index_size);
+	std::function<void(void*, int, int)> copy = std::bind(&Lighting::copyTileLightData, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 	for (int c = 0; c < m_LightGridList.size(); c++)
 	{
 		void* lights = (void*)&m_LightGridBuffer[c];
@@ -244,9 +250,10 @@ void SGRender::Lighting::buildSupportLists()
 		int size = m_LightGridList[c].size;
 		if (size)
 		{
-			memcpy_s(&m_TileLightIndexList[offset], sizeof(int32_t) * MAX_CLUSTER_LIGHTS, lights, sizeof(int32_t) * size);
+			tp->Run(copy, lights, offset, size);
 		}
 	}
+	tp->Wait();
 
 	//Buffer light grid
 	m_LightGrid.bind();
