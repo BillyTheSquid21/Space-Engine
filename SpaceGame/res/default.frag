@@ -80,7 +80,7 @@ layout(std140) uniform SG_ViewProjection
     float Height;
     float NearPlane;
     float FarPlane;
-    float ViewPadding;
+    float LogFN;
 };
 
 layout(std430, binding = 2) buffer SG_Cluster
@@ -98,7 +98,7 @@ layout(std430, binding = 2) buffer SG_Cluster
 
 uint GetZSlice(float z)
 {
-    return uint((log(-z)*(clustersZ/(log(FarPlane/NearPlane))) - ((clustersZ*log(NearPlane))/log(FarPlane/NearPlane))));
+    return uint((log(-z)*(clustersZ/(LogFN)) - ((clustersZ*log(NearPlane))/LogFN)));
 }
 
 uint getClusterIndex(float depth){

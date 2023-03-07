@@ -117,7 +117,7 @@ namespace SGRender
 		void panYDegrees(float degrees);
 
 		//getters and setters
-		void setNearAndFarPlane(float near, float far) { m_NearPlane = near; m_FarPlane = far; }
+		void setNearAndFarPlane(float near, float far) { m_NearPlane = near; m_FarPlane = far; m_LogFN = log(far/near); }
 		void setFOV(float deg) { m_FOV = glm::radians(deg); }
 		float speed() const { return m_Speed; }
 		float width() const { return m_CameraWidth; }
@@ -141,6 +141,7 @@ namespace SGRender
 		float m_CameraHeight = 0.0f;
 		float m_NearPlane = 0.1f; 
 		float m_FarPlane = 1000.0f;
+		float m_LogFN = 1.0f; //Precalculate log
 
 		//unbuffered properties
 		glm::vec3 m_Direction = glm::vec3(0.0f, 0.0f, -1.0f);

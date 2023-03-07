@@ -13,7 +13,7 @@ layout(std140) uniform SG_ViewProjection
     float Height;
     float NearPlane;
     float FarPlane;
-    float ViewPadding;
+    float LogFN;
 };
 
 out vec4 v_Position;
