@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "glm/glm.hpp"
 #include "thread"
+#include "atomic"
 #include "mtlib/ThreadPool.h"
 
 #define MAX_CLUSTER_LIGHTS 64
@@ -70,10 +71,10 @@ namespace SGRender
 		void setAmbient(float amb) { m_BaseData.ambient = amb; updateLightBuffer(); }
 		void setAmbientColor(float r, float g, float b) { m_BaseData.ambientColor = { r, g, b }; updateLightBuffer(); }
 
-		int32_t addLight(glm::vec3& pos, float brightness, glm::vec3& color, float radius);
+		int32_t addLight(const glm::vec3& pos, float brightness, const glm::vec3& color, float radius);
 		bool removeLight(int32_t id);
 
-		std::vector<PointLight>& lights() { return m_LightList; }
+		const std::vector<PointLight>& lights() { return m_LightList; }
 		
 		GLuint lightBindingPoint() const { return m_LightingSSBO.bindingPoint(); }
 		
@@ -88,11 +89,18 @@ namespace SGRender
 
 	private:
 
+		//Keep track of which light is where in the array
+		struct LightID
+		{
+			int32_t lightID;
+			int32_t lightIndex;
+		};
+
 		//Work out the radius of light plus attenuation
-		float lightRadius(PointLight& light);
+		float lightRadius(const PointLight& light);
 
 		//Test light sphere against cluster AABB
-		bool testSphereAABB(int light, int cluster, glm::mat4& view);
+		bool testSphereAABB(int light, int cluster, const glm::mat4& view);
 
 		//Get sqr dist from point and aabb
 		float sqDistPointAABB(glm::vec3 point, int cluster);
@@ -100,8 +108,11 @@ namespace SGRender
 		//Clusters are in view space
 		void buildClusters();
 
+		//Check if light is in frustum
+		void checkLightInFrustum(int light, LightID* idArray, std::atomic<int>& index);
+
 		//Check all lights for a given cluster
-		void checkClusterLights(int cluster, glm::mat4& view);
+		void checkClusterLights(int cluster, const glm::mat4& view);
 
 		//Builds the frustum culled list
 		void buildCulledList();
@@ -119,13 +130,6 @@ namespace SGRender
 		SSBO m_Clusters;
 		SSBO m_LightGrid;
 		SSBO m_TileLightIndex;
-
-		//Keep track of which light is where in the array
-		struct LightID
-		{
-			int32_t lightID;
-			int32_t lightIndex;
-		};
 
 		//Camera pointer for frustum culling
 		Camera* m_Camera = nullptr;

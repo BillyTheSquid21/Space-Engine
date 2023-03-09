@@ -259,7 +259,6 @@ namespace SGRender
 
 		static Tex::Texture* findTexture(std::string name);
 		static bool getShader(const char* shader, SGRender::Shader** shaderPtr);
-		static const glm::mat4* identity() { return &s_Identity; }
 		static Lighting& lighting() { return s_Lighting; }
 
 		static bool accessModel(std::string name, Geometry::Mesh** model);

@@ -370,5 +370,11 @@
     <None Include="res\default.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shader\Lighting.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shader\ViewProj.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

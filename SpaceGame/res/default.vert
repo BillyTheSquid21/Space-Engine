@@ -1,20 +1,10 @@
 #version 330 core
+#SGInclude shader/ViewProj.glsl
+
 layout (location = 0) in vec4 pos;
 layout (location = 1) in vec2 uv;
 layout (location = 2) in vec3 norm;
 layout (location = 3) in vec3 tangent;
-
-layout(std140) uniform SG_ViewProjection
-{
-    mat4 View;
-    mat4 Proj;
-    vec3 ViewPos;
-    float Width;
-    float Height;
-    float NearPlane;
-    float FarPlane;
-    float LogFN;
-};
 
 out vec4 v_Position;
 out vec3 v_Normal;

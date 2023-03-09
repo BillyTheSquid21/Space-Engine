@@ -39,7 +39,7 @@ void SGRender::Lighting::clean()
 	m_Set = false;
 }
 
-int32_t SGRender::Lighting::addLight(glm::vec3& pos, float brightness, glm::vec3& color, float radius)
+int32_t SGRender::Lighting::addLight(const glm::vec3& pos, float brightness, const glm::vec3& color, float radius)
 {
 	int32_t id = m_NextLightID;
 	m_LightList.emplace_back(pos, brightness, color, radius);
@@ -112,7 +112,7 @@ void SGRender::Lighting::linkShader(SGRender::Shader& shader)
 	shader.bindToUniformBlock("SG_Lighting", m_LightingSSBO.bindingPoint());
 }
 
-float SGRender::Lighting::lightRadius(PointLight& light)
+float SGRender::Lighting::lightRadius(const PointLight& light)
 {
 	float sizeFactor = light.radius * light.brightness;
 
@@ -149,7 +149,7 @@ float SGRender::Lighting::sqDistPointAABB(glm::vec3 point, int cluster)
 	return sqDist;
 }
 
-bool SGRender::Lighting::testSphereAABB(int light, int cluster, glm::mat4& view)
+bool SGRender::Lighting::testSphereAABB(int light, int cluster, const glm::mat4& view)
 {
 	assert(light < m_CulledLightList.size() && cluster < m_ClustersList.size());
 
@@ -166,7 +166,7 @@ bool SGRender::Lighting::testSphereAABB(int light, int cluster, glm::mat4& view)
 	return squaredDistance <= (radius * radius);
 }
 
-void SGRender::Lighting::checkClusterLights(int cluster, glm::mat4& view)
+void SGRender::Lighting::checkClusterLights(int cluster, const glm::mat4& view)
 {
 	//Each cluster affected by max lights
 	thread_local int32_t indices[MAX_CLUSTER_LIGHTS] = {};
@@ -189,24 +189,46 @@ void SGRender::Lighting::checkClusterLights(int cluster, glm::mat4& view)
 	memcpy_s(&m_LightGridBuffer[cluster], sizeof(int32_t) * size, &indices[0], sizeof(int32_t) * size);
 }
 
+void SGRender::Lighting::checkLightInFrustum(int light, LightID* idArray, std::atomic<int>& index)
+{
+	if (m_Camera->inFrustum(m_LightList[light].position, m_LightList[light].radius + lightRadius(m_LightList[light])))
+	{
+		idArray[index] = m_LightIDs[light];
+		index++;
+	}
+}
+
 void SGRender::Lighting::buildCulledList()
 {
 	//BUILD CULLED LIST
 	std::vector<PointLight> culledLights;
 	std::vector<LightID> culledIDs;
 
+	MtLib::ThreadPool* tp = MtLib::ThreadPool::Fetch();
+	std::function<void(int, LightID*, std::atomic<int>&)> check = std::bind(&Lighting::checkLightInFrustum, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+
+	//Reserve the space of max lights
+	culledIDs.resize(m_LightList.size());
+
+	std::atomic<int> nextIndex = 0;
 	for (int i = 0; i < m_LightList.size(); i++)
 	{
-		if (m_Camera->inFrustum(m_LightList[i].position, m_LightList[i].radius + lightRadius(m_LightList[i])))
-		{
-			culledIDs.push_back(m_LightIDs[i]);
-		}
+		tp->Run(check, i, &culledIDs[0], std::ref(nextIndex));
 	}
+	tp->Wait();
 
+	//Shrink list down and reset index
+	culledIDs.resize(nextIndex);
+	nextIndex = 0;
+
+	culledLights.resize(culledIDs.size());
 	for (int i = 0; i < culledIDs.size(); i++)
 	{
-		culledLights.push_back(m_LightList[culledIDs[i].lightIndex]);
+		culledLights[nextIndex] = m_LightList[culledIDs[i].lightIndex];
+		nextIndex++;
 	}
+
+	//Update the buffers
 	m_CulledLightList = std::move(culledLights);
 	m_CulledLightIDs = std::move(culledIDs);
 	updateLightBuffer();

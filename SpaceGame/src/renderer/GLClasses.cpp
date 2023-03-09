@@ -326,9 +326,25 @@ void SGRender::ShadowMapFBO::bindForReading(uint32_t slot)
 //Shader
 std::string SGRender::Shader::parseShader(const std::string& filePath) {
 	std::ifstream stream(filePath);
-	std::stringstream buff;
-	buff << stream.rdbuf();
-	return buff.str();
+	std::string shader;
+	if (stream.is_open()) {
+		std::string line;
+		while (std::getline(stream, line)) {
+			//Check for SGInclude
+			if (line.length() >= 11 && line.substr(0,11-1) == "#SGInclude")
+			{
+				//Paste in file past macro
+				std::string includepath = line.substr(11, line.length() - 11);
+				shader += parseShader(includepath);
+			}
+			else if (line != "#SGInclude")
+			{
+				shader += line + "\n";
+			}
+		}
+		stream.close();
+	}
+	return shader;
 }
 
 GLuint SGRender::Shader::createShader(const std::string& vertexShader, const std::string& fragmentShader) {
