@@ -40,15 +40,15 @@ struct Cluster
 
 layout(std430, binding = 2) buffer SG_Cluster
 {
-    int clustersX;
-    int clustersY;
-    int clustersZ;
-    float xPixels;
-    float yPixels;
-    float cB1;
-    float cB2;
-    float cB3;
-    Cluster clusters[];
+    int cluster_width;
+    int cluster_height;
+    int cluster_depth;
+    float cluster_xpix;
+    float cluster_ypix;
+    float cluster_B1;
+    float cluster_B2;
+    float cluster_B3;
+    Cluster cluster_clusters[];
 };
 
 //LIGHT GRID
@@ -60,13 +60,13 @@ struct LGridElement
 
 layout(std430, binding = 3) buffer SG_LightGrid
 {
-    LGridElement lightGrid[];
+    LGridElement light_grid[];
 };
 
 //TILE LIGHTS
 layout(std430, binding = 4) buffer SG_Tile_Light_Index
 {
-    int tileLightIndices[];
+    int tile_light_indices[];
 };
 
 //Functions that calculate lighting
@@ -74,21 +74,24 @@ layout(std430, binding = 4) buffer SG_Tile_Light_Index
 //Gets point light color
 vec3 GetPointLightColor(vec3 norm, vec3 fragPos, float depth);
 
+//Visualize the light levels
+vec4 GetVisualizedLight(vec3 col, float depth);
+
 //Get the Z aspect of the frustum
 uint GetZSlice(float z)
 {
-    return uint((log(-z)*(clustersZ/(LogFN)) - ((clustersZ*log(NearPlane))/LogFN)));
+    return uint((log(-z)*(cluster_depth/(LogFN)) - ((cluster_depth*log(NearPlane))/LogFN)));
 }
 
 //Gets the index within the cluster array from SS coords and depth
 uint GetClusterIndex(float depth){
     uint clusterZVal  = GetZSlice(depth);
 
-    uvec3 clusters    = uvec3(gl_FragCoord.x / xPixels, gl_FragCoord.y / yPixels, clusterZVal);
+    uvec3 cluster    = uvec3(gl_FragCoord.x / cluster_xpix, gl_FragCoord.y / cluster_ypix, clusterZVal);
     
-    uint clusterIndex = clusters.x +
-                        clustersX * clusters.y +
-                        (clustersX * clustersY) * clusters.z;
+    uint clusterIndex = cluster.x +
+                        cluster_width * cluster.y +
+                        (cluster_width * cluster_height) * cluster.z;
     return clusterIndex;
 }
 
@@ -98,13 +101,13 @@ vec3 GetPointLightColor(vec3 norm, vec3 fragPos, float depth)
     uint cluster = GetClusterIndex(depth);
 
     //Get light grid offset and size
-    uint offset = lightGrid[cluster].offset;
-    uint size = lightGrid[cluster].size;
+    uint offset = light_grid[cluster].offset;
+    uint size = light_grid[cluster].size;
 
     vec3 ptcol = vec3(0.0);
     for (uint i = offset; i < offset + size; i++)
     {
-        int ptindex = tileLightIndices[i];
+        int ptindex = tile_light_indices[i];
         
         //1. Get distance
         float ptdist = length(point_lights[ptindex].position - fragPos);
@@ -129,4 +132,18 @@ vec3 GetPointLightColor(vec3 norm, vec3 fragPos, float depth)
         }
     }
     return clamp(ptcol, 0.0, 1.0);
+}
+
+vec4 GetVisualizedLight(vec3 col, float depth)
+{
+    //Use size to get amount of lights in a tile 
+    uint index = GetClusterIndex(depth);
+    uint size = light_grid[index].size;
+    Cluster cluster = cluster_clusters[index];
+
+    //Work out color
+    vec4 frag_color = vec4(float(size*size)/(point_lights.length()*point_lights.length()*0.5), float(size)/(point_lights.length()), 0.0, 1.0);
+    frag_color = frag_color + (vec4(col,1.0)/2.0);
+
+    return frag_color;
 }

@@ -325,19 +325,23 @@ void SGRender::ShadowMapFBO::bindForReading(uint32_t slot)
 
 //Shader
 std::string SGRender::Shader::parseShader(const std::string& filePath) {
+	
+	const int INCLUDE_SIZE = 11; //Includes white space
+	const char* INCLUDE_TOKEN = "#SGInclude";
+
 	std::ifstream stream(filePath);
 	std::string shader;
 	if (stream.is_open()) {
 		std::string line;
 		while (std::getline(stream, line)) {
 			//Check for SGInclude
-			if (line.length() >= 11 && line.substr(0,11-1) == "#SGInclude")
+			if (line.length() >= INCLUDE_SIZE && line.substr(0, INCLUDE_SIZE -1) == INCLUDE_TOKEN)
 			{
 				//Paste in file past macro
-				std::string includepath = line.substr(11, line.length() - 11);
+				std::string includepath = line.substr(INCLUDE_SIZE, line.length() - INCLUDE_SIZE);
 				shader += parseShader(includepath);
 			}
-			else if (line != "#SGInclude")
+			else if (line != INCLUDE_TOKEN) //Continue if the line is not just the include text
 			{
 				shader += line + "\n";
 			}

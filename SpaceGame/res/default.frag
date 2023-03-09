@@ -47,10 +47,6 @@ void main()
     vec3 resultantCol = (ambientCol + diffuseCol + specularCol + ptcol) * baseCol;
 
     //Very shakey test
-    uint index = GetClusterIndex(v_ViewSpacePos.z);
-    uint size = lightGrid[index].size;
-    Cluster cluster = clusters[index];
-
     if (u_ShowLights == 0)
     {
         FragColor = vec4(resultantCol, 1.0);
@@ -58,7 +54,6 @@ void main()
 
     if (u_ShowLights == 1)
     {
-        FragColor = vec4(float(size*size)/2048.0, float(size)/50.0, 0.0, 1.0);
-        FragColor = FragColor + (vec4(resultantCol,1.0)/2.0);
+        FragColor = GetVisualizedLight(resultantCol, v_ViewSpacePos.z);
     }
 }
