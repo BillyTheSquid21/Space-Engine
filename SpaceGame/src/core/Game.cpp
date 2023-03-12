@@ -93,6 +93,7 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     //Init imgui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
@@ -174,6 +175,7 @@ void Game::clean()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    ImPlot::DestroyContext();
 
     EngineLogOk("System Cleaned!");
 }

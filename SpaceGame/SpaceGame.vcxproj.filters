@@ -156,6 +156,15 @@
     <ClCompile Include="src\renderer\Model.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\vendor\imgui\implot.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\implot_demo.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vendor\imgui\implot_items.cpp">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -361,6 +370,15 @@
     </ClInclude>
     <ClInclude Include="include\example\ExampleScene.h">
       <Filter>Header Files\Example Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utility\NPlot.hpp">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\implot.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vendor\imgui\implot_internal.h">
+      <Filter>Source Files\Vendor\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

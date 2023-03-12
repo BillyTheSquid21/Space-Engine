@@ -90,9 +90,6 @@ namespace SG
             //If a second has passed.
             if (currentTime - previousTime >= 1.0)
             {
-                EngineLog("FPS: ", framecount);
-                EngineLog(deltaTime);
-
                 SGRoot::FRAMERATE = framecount;
 
                 framecount = 0;

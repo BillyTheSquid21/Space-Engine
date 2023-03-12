@@ -27,7 +27,20 @@ void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float s
 	{
 		m_ShowConsole = !m_ShowConsole;
 	}
+
+	//Plot fps
+	if (m_FrameCount > 0 && ImPlot::BeginPlot("FPSPlot"))
+	{
+		//TODO - figure out this shitty plotting system
+		ImPlot::EndPlot();
+	}
+
 	ImGui::EndChild();
+
+	if (m_FrameCount % 60 == 0)
+	{
+		m_FPSPlot.addPoint(m_FrameCount/60, SGRoot::FRAMERATE);
+	}
 
 	if (m_ShowConsole)
 	{
@@ -119,4 +132,5 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 void SGRoot::ConsoleWindow::end()
 {
 	ImGui::EndChild();
+	m_FrameCount++;
 }

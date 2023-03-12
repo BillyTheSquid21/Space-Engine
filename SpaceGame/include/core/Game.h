@@ -17,13 +17,12 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "imgui/implot.h"
 #include "renderer/MatModel.hpp"
 #include "core/GUI.h"
 #include "core/Root.h"
 #include "utility/Options.h"
 #include "utility/Console.h"
-
-#define _CONSOLE_ENABLE 1
 
 class Game 
 {
