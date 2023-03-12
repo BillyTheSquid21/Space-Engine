@@ -14,6 +14,7 @@ namespace SGRoot
 {
 	//Written to in run function, should only be read
 	extern double FRAMERATE;
+	extern double FRAME_TIME;
 
 	//Polls whether program should continue running
 	bool CheckShouldRun();

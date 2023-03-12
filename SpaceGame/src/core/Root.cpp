@@ -5,6 +5,7 @@ bool shouldRun = true;
 bool restart = false;
 
 double SGRoot::FRAMERATE = 0.0;
+double SGRoot::FRAME_TIME = 0.0;
 
 bool SGRoot::CheckShouldRun()
 {

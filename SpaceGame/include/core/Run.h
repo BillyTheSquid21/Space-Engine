@@ -95,6 +95,7 @@ namespace SG
                 framecount = 0;
                 previousTime = currentTime;
             }
+            SGRoot::FRAME_TIME = deltaTime; //Update frametime variable
 
             //Takes time at start of loop
             startTime = system_clock::now();

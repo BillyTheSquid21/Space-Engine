@@ -2,7 +2,7 @@
 
 #define FONT_SIZE 13
 #define WINDOW_WIDTH 400
-#define INFO_WINDOW_WIDTH 128
+#define INFO_WINDOW_WIDTH 375
 
 void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float screenH)
 {
@@ -23,24 +23,40 @@ void SGRoot::ConsoleWindow::start(float xOff, float yOff, float screenW, float s
 	//Info window
 	ImGui::BeginChild("info_window", ImVec2(ImGui::GetContentRegionAvail().x, INFO_WINDOW_WIDTH));
 	ImGui::Text(("FPS: " + std::to_string((int)SGRoot::FRAMERATE)).c_str());
+
+	//Plot fps
+	const double fps_60 = 0.01666;
+	double fps_max_recorded = m_FPSPlot.MaxN(1);
+	double fps_min_recorded = m_FPSPlot.MinN(1);
+	double frame_max_recorded = m_FPSPlot.MaxN(0);
+	double frame_min_recorded = m_FPSPlot.MinN(0);
+	double fps_max = ((fps_60 + 0.01) * (fps_max_recorded < fps_60)) + (fps_max_recorded * (fps_max_recorded >= fps_60));
+
+	ImPlot::SetNextAxesLimits(frame_min_recorded, frame_max_recorded, 0, fps_max, ImPlotCond_Always);
+	if (m_FrameCount > 0 && ImPlot::BeginPlot("Frametime"))
+	{
+		ImPlot::PlotLine("Frametime", m_FPSPlot.NData(0), m_FPSPlot.NData(1), m_FPSPlot.size());
+		
+		//Plot target fps of 60, 30, 15
+		double xLine[2] = { frame_min_recorded, frame_max_recorded };
+		double yLine60[2] = { fps_60, fps_60 };
+		double yLine30[2] = { fps_60*2.0, fps_60*2.0 };
+		double yLine15[2] = { fps_60*4.0, fps_60*4.0 };
+		ImPlot::PlotLine("60 FPS", xLine, yLine60, 2);
+		ImPlot::PlotLine("30 FPS", xLine, yLine30, 2);
+		ImPlot::PlotLine("15 FPS", xLine, yLine15, 2);
+		
+		ImPlot::EndPlot();
+	}
+
 	if (ImGui::Button("Show Console", ImVec2(150, 40)))
 	{
 		m_ShowConsole = !m_ShowConsole;
 	}
 
-	//Plot fps
-	if (m_FrameCount > 0 && ImPlot::BeginPlot("FPSPlot"))
-	{
-		//TODO - figure out this shitty plotting system
-		ImPlot::EndPlot();
-	}
-
 	ImGui::EndChild();
 
-	if (m_FrameCount % 60 == 0)
-	{
-		m_FPSPlot.addPoint(m_FrameCount/60, SGRoot::FRAMERATE);
-	}
+	m_FPSPlot.addPoint(m_FrameCount, SGRoot::FRAME_TIME);
 
 	if (m_ShowConsole)
 	{
@@ -132,5 +148,7 @@ void SGRoot::ConsoleWindow::handleInput(int key, int scancode, int action, int m
 void SGRoot::ConsoleWindow::end()
 {
 	ImGui::EndChild();
+
+	//Track FPS
 	m_FrameCount++;
 }

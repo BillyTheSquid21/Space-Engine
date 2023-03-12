@@ -34,7 +34,7 @@ namespace SGRoot
 		bool m_Typing = false;
 		bool m_ShowConsole = false;
 
-		NPlot<double, 2> m_FPSPlot = NPlot<double, 2>::NPlot(1000); //Records 1000 back
+		NPlot<double, 2> m_FPSPlot = NPlot<double, 2>::NPlot(600); //Records 600 back
 		size_t m_FrameCount = 0; //X Axis of fps plot
 	};
 }

@@ -5,6 +5,7 @@
 #include "vector"
 #include "tuple"
 #include "algorithm"
+#include "SGUtil.h"
 
 template<typename T, size_t N>
 class NPlot
@@ -14,6 +15,7 @@ public:
 	//Pass in the dimension of the array in all N directions - size is max size before looping
 	NPlot(size_t size)
 	{
+		static_assert(std::is_arithmetic<T>::value, "Not an arithmetic type!");
 		static_assert(N > 0, "Dimension of plot must be > 0!");
 
 		//Allocate the space for each dimension
@@ -32,11 +34,11 @@ public:
 		auto t = std::make_tuple(args...);
 
 		//If about to overrun, shift back
-		if (m_Size >= m_MaxSize)
+		if (m_Size == m_MaxSize)
 		{
 			for (int i = 0; i < N; i++)
 			{
-				memmove_s(&(m_Data[0])[0], m_MaxSize, &(m_Data[0])[1], m_MaxSize - 1);
+				memmove_s(&(m_Data[i])[0], m_MaxSize * sizeof(T), &(m_Data[i])[1], (m_MaxSize - 1) * sizeof(T));
 			}
 			m_Size--;
 		}
@@ -52,6 +54,32 @@ public:
 		assert(dim < N && dim >= 0, "Nth data must be in bounds!");
 		return &(m_Data[dim])[0]; 
 	};
+
+	T MaxN(size_t dim) const
+	{
+		T maxValue = std::numeric_limits<T>::min();
+		for (int i = 0; i < m_Data[dim].size(); i++)
+		{
+			if ((m_Data[dim])[i] > maxValue)
+			{
+				maxValue = (m_Data[dim])[i];
+			}
+		}
+		return maxValue;
+	}
+
+	T MinN(size_t dim) const
+	{
+		T minValue = std::numeric_limits<T>::max();
+		for (int i = 0; i < m_Data[dim].size(); i++)
+		{
+			if ((m_Data[dim])[i] < minValue)
+			{
+				minValue = (m_Data[dim])[i];
+			}
+		}
+		return minValue;
+	}
 
 	size_t size() const { return m_Size; }
 	size_t maxSize() const { return m_MaxSize; }
