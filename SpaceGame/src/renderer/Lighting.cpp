@@ -6,11 +6,11 @@ void SGRender::Lighting::set(int width, int height, Camera* camera)
 	clean();
 
 	//Create SSBO and upload base lighting
-	m_LightingSSBO.create();
-	m_LightingSSBO.bind();
+	m_PointLightSSBO.create();
+	m_PointLightSSBO.bind();
 	updateLightBuffer();
-	m_LightingSSBO.unbind();
-	EngineLog("Lighting bound to: ", m_LightingSSBO.bindingPoint());
+	m_PointLightSSBO.unbind();
+	EngineLog("Lighting bound to: ", m_PointLightSSBO.bindingPoint());
 
 	m_Camera = camera;
 	m_Width = width; m_Height = height;
@@ -100,16 +100,16 @@ void SGRender::Lighting::updateLightBuffer()
 		memcpy_s(point_array, m_CulledLightList.size() * sizeof(PointLight), &m_CulledLightList[0], m_CulledLightList.size() * sizeof(PointLight));
 	}
 
-	m_LightingSSBO.bind();
-	m_LightingSSBO.bufferFullData(tmp_buffer, data_size, GL_DYNAMIC_DRAW);
-	m_LightingSSBO.unbind();
+	m_PointLightSSBO.bind();
+	m_PointLightSSBO.bufferFullData(tmp_buffer, data_size, GL_DYNAMIC_DRAW);
+	m_PointLightSSBO.unbind();
 
 	free(tmp_buffer);
 }
 
 void SGRender::Lighting::linkShader(SGRender::Shader& shader)
 {
-	shader.bindToUniformBlock("SG_Lighting", m_LightingSSBO.bindingPoint());
+	shader.bindToUniformBlock("SG_Lighting", m_PointLightSSBO.bindingPoint());
 }
 
 float SGRender::Lighting::lightRadius(const PointLight& light)
@@ -135,9 +135,8 @@ float SGRender::Lighting::lightRadius(const PointLight& light)
 	return (-adjustedLin + sqrt(disc))/(2.0f*adjustedQua);
 }
 
-float SGRender::Lighting::sqDistPointAABB(glm::vec3 point, int cluster)
+float SGRender::SqDistPointAABB(glm::vec3 point, Cluster c)
 {
-	Cluster c = m_ClustersList[cluster];
 	float sqDist = 0.0f;
 
 	for (int i = 0; i < 3; i++) {
@@ -149,44 +148,16 @@ float SGRender::Lighting::sqDistPointAABB(glm::vec3 point, int cluster)
 	return sqDist;
 }
 
-bool SGRender::Lighting::testSphereAABB(int light, int cluster, const glm::mat4& view)
+bool SGRender::TestSphereAABB(glm::vec3 vs_pos, float radius, Cluster& cluster)
 {
-	assert(light < m_CulledLightList.size() && cluster < m_ClustersList.size());
-
-	PointLight& l = m_CulledLightList[light];
-
-	//Get radius including attenuation
-	float radius = lightRadius(l);
-
-	//Get light position in viewspace coords
-	glm::vec3 centre = glm::vec3(view * glm::vec4(l.position, 1.0));
-
-	float squaredDistance = sqDistPointAABB(centre, cluster);
-
+	float squaredDistance = SqDistPointAABB(vs_pos, cluster);
 	return squaredDistance <= (radius * radius);
 }
 
-void SGRender::Lighting::checkClusterLights(int cluster, const glm::mat4& view)
+void SGRender::Lighting::checkClusterLightsOP(int light, const glm::mat4& view)
 {
-	//Each cluster affected by max lights
-	thread_local int32_t indices[MAX_CLUSTER_LIGHTS] = {};
-
-	//For each cluster, check how many lights are inside
-	int32_t size = 0;
-	for (int j = 0; j < m_CulledLightList.size() && size < MAX_CLUSTER_LIGHTS; j++)
-	{
-		if (testSphereAABB(j, cluster, view))
-		{
-			indices[size] = j;
-			size++;
-		}
-	}
-
-	//Write size to light grid
-	m_LightGridList[cluster].size = size;
-
-	//Copy to light grid buffer
-	memcpy_s(&m_LightGridBuffer[cluster], sizeof(int32_t) * size, &indices[0], sizeof(int32_t) * size);
+	PointLight& p = m_CulledLightList[light];
+	m_Octree->markLightGrid(light, p.position, lightRadius(p), view, m_LightGridList, m_LightGridBuffer, m_LightGridMutex);
 }
 
 void SGRender::Lighting::checkLightInFrustum(int light, LightID* idArray, std::atomic<int>& index)
@@ -236,19 +207,19 @@ void SGRender::Lighting::buildCulledList()
 
 void SGRender::Lighting::copyTileLightData(void* lights, int offset, int size)
 {
-	memcpy_s(&m_TileLightIndexList[offset], sizeof(int32_t) * MAX_CLUSTER_LIGHTS, lights, sizeof(int32_t) * size);
+	memcpy_s(&m_TileLightIndexList[offset], sizeof(int32_t) * MAX_LIGHTS_PER_CLUSTER, lights, sizeof(int32_t) * size);
 }
 
 void SGRender::Lighting::buildSupportLists()
 {
 	//BUILD LIGHT GRID AND TILE LIGHT INDEX
 	MtLib::ThreadPool* tp = MtLib::ThreadPool::Fetch();
-	std::function<void(int, glm::mat4&)> check = std::bind(&Lighting::checkClusterLights, this, std::placeholders::_1, std::placeholders::_2);
+	std::function<void(int, glm::mat4&)> check = std::bind(&Lighting::checkClusterLightsOP, this, std::placeholders::_1, std::placeholders::_2);
 
 	//Now build cluster list after culling
-	//Work out what lights belong to each cluster
+	//Work out what lights belong to each cluster by traversing tree
 	glm::mat4 v = m_Camera->getView();
-	for (int i = 0; i < m_ClustersList.size(); i++)
+	for (int i = 0; i < m_CulledLightList.size(); i++)
 	{
 		tp->Run(check, i, v);
 	}
@@ -277,10 +248,23 @@ void SGRender::Lighting::buildSupportLists()
 	}
 	tp->Wait();
 
+	//Prevent buffering data that is empty anyways
+	if (!tile_index_size)
+	{
+		return;
+	}
+
 	//Buffer light grid
 	m_LightGrid.bind();
 	m_LightGrid.bufferFullData(&m_LightGridList[0], sizeof(LGridElement) * m_LightGridList.size());
 	m_LightGrid.unbind();
+
+	//Clear light grid for next buffering
+	for (int i = 0; i < m_LightGridList.size(); i++)
+	{
+		m_LightGridList[i].offset = 0;
+		m_LightGridList[i].size = 0;
+	}
 
 	//Buffer tile indices
 	m_TileLightIndex.bind();
@@ -314,7 +298,7 @@ void SGRender::Lighting::cullLights()
 
 //Helper functions from Blog: http://www.aortiz.me/2018/12/21/CG.html#building-a-cluster-grid
 //Changes a points coordinate system from screen space to view space
-static glm::vec4 screen2View(glm::vec4 screen, glm::vec2 screenDimensions, glm::mat4& invproj) {
+static glm::vec4 screen2View(glm::vec4 screen, glm::vec2 screenDimensions, const glm::mat4& invproj) {
 	//Convert to NDC
 	glm::vec2 texCoord = glm::vec2(screen) / screenDimensions;
 
@@ -350,97 +334,102 @@ static float GetViewSpaceZ(int z, int zSlices, float n, float f)
 	return -n * pow(f / n, (float)z / (float)zSlices);
 }
 
-void SGRender::Lighting::buildClusters()
+SGRender::Cluster SGRender::CreateCluster(const glm::vec2& screenDim, const glm::mat4& invproj, int x, int y, int z, float tileX, float tileY, float sszNear, float sszFar)
 {
-	//Define split of clusters (assume 16x9x24 here for now)
-	const int xClusters = 16;
-	const int yClusters = 9;
-	const int zClusters = 24;
-	const int total = xClusters * yClusters * zClusters;
-	EngineLog("Building Cluster, dimensions: ", xClusters, " ", yClusters, " ", zClusters, " ", total);
+	//Init cluster with SS Values
+	Cluster cluster = {
+		glm::vec4(
+			(float)x * tileX,
+			(float)y * tileY,
+			-1.0f,
+			1.0f
+		), //Min
 
+		glm::vec4(
+			(float)(x + 1) * tileX,
+			(float)(y + 1) * tileY,
+			-1.0f,
+			1.0f
+		)  //Max
+	};
+
+	//Get in view space
+	glm::vec3 minPointVS = screen2View(cluster.minPoint, screenDim, invproj);
+	glm::vec3 maxPointVS = screen2View(cluster.maxPoint, screenDim, invproj);
+
+	//Finding the 4 intersection points made from each point to the cluster near/far plane
+	glm::vec3 minPointNear = lineIntersectionToZPlane({ 0, 0, 0 }, minPointVS, sszNear);
+	glm::vec3 minPointFar = lineIntersectionToZPlane({ 0, 0, 0 }, minPointVS, sszFar);
+	glm::vec3 maxPointNear = lineIntersectionToZPlane({ 0, 0, 0 }, maxPointVS, sszNear);
+	glm::vec3 maxPointFar = lineIntersectionToZPlane({ 0, 0, 0 }, maxPointVS, sszFar);
+
+	glm::vec3 minPointAABB = glm::min(glm::min(minPointNear, minPointFar), glm::min(maxPointNear, maxPointFar));
+	glm::vec3 maxPointAABB = glm::max(glm::max(minPointNear, minPointFar), glm::max(maxPointNear, maxPointFar));
+
+	cluster.minPoint = glm::vec4(minPointAABB, 0.0);
+	cluster.maxPoint = glm::vec4(maxPointAABB, 0.0);
+
+	return cluster;
+}
+
+void SGRender::CreateClusterList(std::vector<Cluster>& clusters, const Camera* camera, const glm::vec2& screenDim, int dim, float tileSizeX, float tileSizeY)
+{
 	//Reserve vector of clusters (are just AABB)
-	std::vector<Cluster> clusters;
-	clusters.resize(total);
+	int size = dim * dim * dim;
+	clusters.resize(size);
 
 	//Cam values
 	glm::vec3 eyePos = glm::vec3(0.0f);
-	float zNear = m_Camera->nearPlane();
-	float zFar = m_Camera->farPlane();
-	glm::mat4 invproj = glm::inverse(m_Camera->getProj());
-
-	//Get screen dimensions as vector
-	glm::vec2 screenDim = glm::vec2(m_Width, m_Height);
-	float tileSizeX = screenDim.x / (float)xClusters;
-	float tileSizeY = screenDim.y / (float)yClusters;
-	EngineLog("Tile sizes: ", tileSizeX, " ", tileSizeY);
+	float zNear = camera->nearPlane();
+	float zFar = camera->farPlane();
+	glm::mat4 invproj = glm::inverse(camera->getProj());
 
 	int clusterIndex = 0;
-	for (int z = 0; z < zClusters; z++)
+	for (int z = 0; z < dim; z++)
 	{
 		//1. Get Z Coordinate in SS (from near to far)
-		float sszNear = GetViewSpaceZ(z, zClusters, zNear, zFar);
-		float sszFar =  GetViewSpaceZ(z + 1, zClusters, zNear, zFar);
-		for (int y = 0; y < yClusters; y++)
+		float sszNear = GetViewSpaceZ(z, dim, zNear, zFar);
+		float sszFar = GetViewSpaceZ(z + 1, dim, zNear, zFar);
+		for (int y = 0; y < dim; y++)
 		{
-			for (int x = 0; x < xClusters; x++)
+			for (int x = 0; x < dim; x++)
 			{
-				//Init cluster with SS Values
-				Cluster cluster = {
-					glm::vec4(
-						(float)x * tileSizeX,
-						(float)y * tileSizeY,
-						-1.0f,
-						1.0f
-					), //Min
-
-					glm::vec4(
-						(float)(x + 1) * tileSizeX,
-						(float)(y + 1) * tileSizeY,
-						-1.0f,
-						1.0f
-					)  //Max
-				};
-
-				//Get in view space
-				glm::vec3 minPointVS = screen2View(cluster.minPoint, screenDim, invproj);
-				glm::vec3 maxPointVS = screen2View(cluster.maxPoint, screenDim, invproj);
-				
-				//Finding the 4 intersection points made from each point to the cluster near/far plane
-				glm::vec3 minPointNear = lineIntersectionToZPlane(eyePos, minPointVS, sszNear);
-				glm::vec3 minPointFar = lineIntersectionToZPlane(eyePos, minPointVS, sszFar);
-				glm::vec3 maxPointNear = lineIntersectionToZPlane(eyePos, maxPointVS, sszNear);
-				glm::vec3 maxPointFar = lineIntersectionToZPlane(eyePos, maxPointVS, sszFar);
-
-				glm::vec3 minPointAABB = glm::min(glm::min(minPointNear, minPointFar), glm::min(maxPointNear, maxPointFar));
-				glm::vec3 maxPointAABB = glm::max(glm::max(minPointNear, minPointFar), glm::max(maxPointNear, maxPointFar));
-
-				cluster.minPoint = glm::vec4(minPointAABB, 0.0);
-				cluster.maxPoint = glm::vec4(maxPointAABB, 0.0);
-
-				clusters[clusterIndex] = cluster;
+				clusters[clusterIndex] = CreateCluster(screenDim, invproj, x, y, z, tileSizeX, tileSizeY, sszNear, sszFar);
 				clusterIndex++;
 			}
 		}
 	}
+}
 
-	//Create SSBO and buffer
-	m_Clusters.create();
-	m_Clusters.bind();
-	m_Clusters.reserveData((8 * sizeof(int32_t)) + (sizeof(Cluster) * clusters.size()));
-	m_Clusters.bufferData((void*)&xClusters, 0 * sizeof(int32_t), sizeof(int32_t));
-	m_Clusters.bufferData((void*)&yClusters, 1 * sizeof(int32_t), sizeof(int32_t));
-	m_Clusters.bufferData((void*)&zClusters, 2 * sizeof(int32_t), sizeof(int32_t));
-	m_Clusters.bufferData((void*)&tileSizeX, 3 * sizeof(int32_t), sizeof(int32_t));
-	m_Clusters.bufferData((void*)&tileSizeY, 4 * sizeof(int32_t), sizeof(int32_t));
-	m_Clusters.bufferData(&clusters[0], 8 * sizeof(int32_t), sizeof(Cluster) * clusters.size());
-	m_Clusters.unbind();
+void SGRender::Lighting::buildClusters()
+{
+	//Define split of clusters (assume 16x9x24 here for now)
+	const int clusterDim = 16;
 
-	//Copy to vector to allow cpu culling
-	m_ClustersList = std::move(clusters);
+	//Get screen dimensions as vector
+	glm::vec2 screenDim = glm::vec2(m_Width, m_Height);
+	float tileSizeX = screenDim.x / (float)clusterDim;
+	float tileSizeY = screenDim.y / (float)clusterDim;
+
+	//Create Primary Cluster List
+	std::vector<Cluster> clusters;
+	CreateClusterList(clusters, m_Camera, screenDim, clusterDim, tileSizeX, tileSizeY);
+
+	//Create Octree
+	m_Octree = std::shared_ptr<ClusterOctree>(new ClusterOctree(m_Camera, screenDim, clusterDim, tileSizeX, tileSizeY));
+	int sizeAtDepth = m_Octree->getBottomCluster().size();
+
+	//Create Uniform buffer
+	m_ClusterInfo.create();
+	m_ClusterInfo.bind();
+	m_ClusterInfo.reserveData((8 * sizeof(int32_t)));
+	m_ClusterInfo.bufferData((void*)&clusterDim,0 * sizeof(int32_t), sizeof(int32_t));
+	m_ClusterInfo.bufferData((void*)&tileSizeX, 1 * sizeof(int32_t), sizeof(int32_t));
+	m_ClusterInfo.bufferData((void*)&tileSizeY, 2 * sizeof(int32_t), sizeof(int32_t));
+	m_ClusterInfo.unbind();
 
 	//Initialise light grid and bind to SSBO
-	m_LightGridList.resize(m_ClustersList.size());
+	m_LightGridList.resize(sizeAtDepth);
 	m_LightGrid.create();
 	m_LightGrid.bind();
 	m_LightGrid.bufferFullData(&m_LightGridList[0], sizeof(LGridElement) * m_LightGridList.size());
@@ -450,9 +439,13 @@ void SGRender::Lighting::buildClusters()
 	m_TileLightIndex.create();
 
 	//Initialize light grid CPU Buffer
-	m_LightGridBuffer.resize(m_ClustersList.size());
+	m_LightGridBuffer.resize(sizeAtDepth);
 
-	EngineLog("Clusters bound to: ", m_Clusters.bindingPoint());
+	//Init light grid mutexes
+	std::vector<std::shared_mutex> tmpmut(sizeAtDepth);
+	m_LightGridMutex.swap(tmpmut);
+
+	EngineLog("Clusters bound to: ", m_ClusterInfo.bindingPoint());
 	EngineLog("Light Grid bound to: ", m_LightGrid.bindingPoint());
 	EngineLog("Tile Light Index bound to: ", m_TileLightIndex.bindingPoint());
 }

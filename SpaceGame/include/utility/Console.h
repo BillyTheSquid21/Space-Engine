@@ -10,7 +10,7 @@
 #include "utility/NPlot.hpp"
 #include "imgui/implot.h"
 
-#define _CONSOLE_ENABLE 1
+#define CONSOLE_ENABLE 1
 
 namespace SGRoot
 {

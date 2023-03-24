@@ -8,8 +8,9 @@
 #include "thread"
 #include "atomic"
 #include "mtlib/ThreadPool.h"
+#include "mutex"
 
-#define MAX_CLUSTER_LIGHTS 64
+#define MAX_LIGHTS_PER_CLUSTER 128
 
 namespace SGRender
 {
@@ -62,6 +63,217 @@ namespace SGRender
 		uint32_t size;
 	};
 
+	//Buffer for lights
+	struct GridBuffer
+	{
+		int32_t buffer[MAX_LIGHTS_PER_CLUSTER];
+	};
+
+	//Create cluster list of x*y*z
+	void CreateClusterList(std::vector<Cluster>& clusters, const Camera* camera, const glm::vec2& screenDim, int dim, float tileSizeX, float tileSizeY);
+	Cluster CreateCluster(const glm::vec2& screenDim, const glm::mat4& invproj, int x, int y, int z, float tileX, float tileY, float sszNear, float sszFar);
+
+	//Get sqr dist from point and aabb
+	static float SqDistPointAABB(glm::vec3 point, Cluster c);
+	bool TestSphereAABB(glm::vec3 vs_pos, float radius, Cluster& cluster);
+
+	class ClusterOctree
+	{
+	public:
+
+		ClusterOctree(const Camera* camera, const glm::vec2& screenDim, int dim, float tileSizeX, float tileSizeY)
+		{
+			assert((dim > 0 && ((dim & (dim - 1)) == 0)), "Tree dim is not a power of two!");
+
+			//Find how many layers will need
+			m_MaxDepth = (log(dim) / log(2)) + 1;
+			m_Dim = dim;
+			EngineLog("Octree Depth: ", m_MaxDepth, " Octree Dim: ", m_Dim);
+
+			//Reserve that many layers
+			m_ClusterLayers.resize(m_MaxDepth);
+
+			//Create underlying data for each depth
+			for (int i = 0; i < m_ClusterLayers.size(); i++)
+			{
+				//Get depth
+				int curr_depth = i + 1;
+
+				//Get dim of layer
+				int layer_dim = pow(2, i);
+
+				//Get tilesize
+				float tileX = screenDim.x / (float)layer_dim;
+				float tileY = screenDim.y / (float)layer_dim;
+
+				//Create data for that layer
+				CreateClusterList(m_ClusterLayers[i], camera, screenDim, layer_dim, tileX, tileY);
+			}
+
+			m_Nodes.resize(1);
+
+			//Generate tree recursively
+			generateChildren(0, 1);
+		}
+
+		//Check light against light grid
+		void markLightGrid(int32_t light, glm::vec3 ws_pos, float radius, const glm::mat4& view, std::vector<LGridElement>& lightGrid, std::vector<GridBuffer>& buffer, std::vector<std::shared_mutex>& mutex)
+		{
+			//Get centre in viewspace
+			glm::vec3 position = glm::vec3(view * glm::vec4(ws_pos, 1.0));
+
+			//Recursively check down tree to bottom to mark clusters
+			//As frustum culled, assume all lights are in root node
+			for (int i = 0; i < 8; i++)
+			{
+				int32_t node = m_Nodes[0].children[i];
+				checkCluster(node, 2, light, position, radius, lightGrid, buffer, mutex);
+			}
+		}
+
+		//Get the cluster the shader sees
+		const std::vector<Cluster>& getBottomCluster() const { return m_ClusterLayers.back(); }
+
+	private:
+
+		struct Node
+		{
+			int32_t parent = -1;
+			int32_t children[8] = { -1 };
+
+			glm::ivec3 extent = glm::ivec3(1); //One more than indice
+
+			Cluster* data;
+		};
+
+		void checkCluster(int32_t n, int32_t depth, int32_t light, glm::vec3 position, float radius, std::vector<LGridElement>& lightGrid, std::vector<GridBuffer>& buffer, std::vector<std::shared_mutex>& mutex)
+		{
+			//Get index
+			if (depth == m_MaxDepth)
+			{
+				//Check final, then mark
+				Cluster* cluster = m_Nodes[n].data;
+
+				if (TestSphereAABB(position, radius, *cluster))
+				{
+					//Get index
+					int cluster_index = (m_Nodes[n].extent.x - 1) +
+						m_Dim * (m_Nodes[n].extent.y - 1) +
+						(m_Dim * m_Dim) * (m_Nodes[n].extent.z - 1);
+
+					//Lock grid buffer
+					std::lock_guard<std::shared_mutex> lock(mutex[cluster_index]);
+
+					if (lightGrid[cluster_index].size >= MAX_LIGHTS_PER_CLUSTER)
+					{
+						return;
+					}
+
+					//Add to buffer and update size
+					buffer[cluster_index].buffer[lightGrid[cluster_index].size] = light;
+
+					lightGrid[cluster_index].size++;
+				}
+				return;
+			}
+
+			//If in node, check each child, if not, go back
+			Node& node = m_Nodes[n];
+			Cluster* cluster = node.data;
+			if (TestSphereAABB(position, radius, *cluster))
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					checkCluster(m_Nodes[n].children[i], depth + 1, light, position, radius, lightGrid, buffer, mutex);
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		void generateChildren(int n, int depth)
+		{
+			if (depth >= m_MaxDepth)
+			{
+				return;
+			}
+
+			//Get extent
+			glm::ivec3 extent = m_Nodes[n].extent * 2;
+
+			//Get dim of layer below this depth (hence no -1)
+			int layer_dim = pow(2, depth);
+			
+			//Subdivide node
+			Node children[8];
+
+			for (int i = 0; i < 8; i++)
+			{
+				//Set parent and get extent
+				children[i].parent = n;
+				extentChild(children[i], i, extent);
+
+				//Attach to underlying data
+				int data_index = (children[i].extent.x-1) +
+					layer_dim * (children[i].extent.y - 1) +
+					(layer_dim * layer_dim) * (children[i].extent.z - 1);
+				children[i].data = &(m_ClusterLayers[depth])[data_index];
+				
+				//Append node and generate children
+				m_Nodes[n].children[i] = m_Nodes.size();
+				m_Nodes.push_back(children[i]);
+				generateChildren(m_Nodes.size() - 1, depth + 1);
+			}
+		}
+
+		//Gives the extent of the child
+		void extentChild(Node& child, int index, const glm::ivec3& ext_r)
+		{
+			switch (index)
+			{
+			case 0:
+				child.extent = { ext_r.x - 1, ext_r.y - 1, ext_r.z - 1 };
+				break;
+			case 1:
+				child.extent = { ext_r.x, ext_r.y - 1, ext_r.z - 1 };
+				break;
+			case 2:
+				child.extent = { ext_r.x - 1, ext_r.y, ext_r.z - 1 };
+				break;
+			case 3:
+				child.extent = { ext_r.x, ext_r.y, ext_r.z - 1 };
+				break;
+			case 4:
+				child.extent = { ext_r.x - 1, ext_r.y - 1, ext_r.z };
+				break;
+			case 5:
+				child.extent = { ext_r.x, ext_r.y - 1, ext_r.z };
+				break;
+			case 6:
+				child.extent = { ext_r.x - 1, ext_r.y, ext_r.z };
+				break;
+			case 7:
+				child.extent = ext_r;
+				break;
+			default:
+				break;
+			}
+		}
+
+		//Nodes within tree that index points to
+		//Note that the root node has no data attached
+		//this is due to the assumption all culled lights fit in the root of the camera frustum
+		std::vector<Node> m_Nodes;
+
+		//Cluster arrays ordered by depth
+		std::vector<std::vector<Cluster>> m_ClusterLayers;
+
+		int32_t m_Dim = 0;
+		int32_t m_MaxDepth = 0;
+	};
+
 	class Lighting
 	{
 	public:
@@ -76,8 +288,9 @@ namespace SGRender
 
 		const std::vector<PointLight>& lights() { return m_LightList; }
 		
-		GLuint lightBindingPoint() const { return m_LightingSSBO.bindingPoint(); }
-		
+		GLuint lightBindingPoint() const { return m_PointLightSSBO.bindingPoint(); }
+		GLuint clusterBindingPoint() const { return m_ClusterInfo.bindingPoint(); }
+
 		//Culls the lights
 		void cullLights();
 
@@ -98,21 +311,15 @@ namespace SGRender
 
 		//Work out the radius of light plus attenuation
 		float lightRadius(const PointLight& light);
-
-		//Test light sphere against cluster AABB
-		bool testSphereAABB(int light, int cluster, const glm::mat4& view);
-
-		//Get sqr dist from point and aabb
-		float sqDistPointAABB(glm::vec3 point, int cluster);
-
+		
 		//Clusters are in view space
 		void buildClusters();
 
 		//Check if light is in frustum
 		void checkLightInFrustum(int light, LightID* idArray, std::atomic<int>& index);
 
-		//Check all lights for a given cluster
-		void checkClusterLights(int cluster, const glm::mat4& view);
+		//Check all clusters for a given light (optimised)
+		void checkClusterLightsOP(int light, const glm::mat4& view);
 
 		//Builds the frustum culled list
 		void buildCulledList();
@@ -124,10 +331,10 @@ namespace SGRender
 		void copyTileLightData(void* lights, int offset, int size);
 
 		//SSBO for GPU side lighting
-		SSBO m_LightingSSBO;
+		SSBO m_PointLightSSBO;
 
 		//SSBOs for cluster AABBs and Light Grid
-		SSBO m_Clusters;
+		UniformBuffer m_ClusterInfo;
 		SSBO m_LightGrid;
 		SSBO m_TileLightIndex;
 
@@ -143,21 +350,19 @@ namespace SGRender
 		std::vector<PointLight> m_CulledLightList;
 		std::vector<LightID> m_CulledLightIDs;
 
+		//Cluster Octree
+		std::shared_ptr<ClusterOctree> m_Octree;
+
 		//Raw cluster list and light grid list
-		std::vector<Cluster> m_ClustersList;
 		std::vector<LGridElement> m_LightGridList;
 		std::vector<int32_t> m_TileLightIndexList;
 		bool m_ModifiedLights = false; //Tracks if need to rebuild culling list
 
-		struct GridBuffer
-		{
-			int32_t buffer[MAX_CLUSTER_LIGHTS];
-		};
-
+		//Buffers lights during the cluster checking phase
 		std::vector<GridBuffer> m_LightGridBuffer;
+		std::vector<std::shared_mutex> m_LightGridMutex;
 
 		int32_t m_NextLightID = 0;
-		int32_t m_MaxLights = 5000; //current hard limit - no reason
 		size_t m_LightCount = 0;
 		bool m_Set = false;
 

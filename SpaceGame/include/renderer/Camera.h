@@ -107,9 +107,9 @@ namespace SGRender
 		glm::vec3 getDir() const { return m_Direction; }
 		glm::vec3 getRight() const { return m_Right; }
 		void calcVP();
-		glm::mat4& getVP() { return m_VP; }
-		glm::mat4& getProj() { return m_Proj; }
-		glm::mat4& getView() { return m_View; }
+		const glm::mat4& getVP() const { return m_VP; }
+		const glm::mat4& getProj() const { return m_Proj; }
+		const glm::mat4& getView() const { return m_View; }
 		glm::vec3 unprojectWindow(glm::vec3 pos);
 		bool hasMoved() { return m_HasMoved; }
 

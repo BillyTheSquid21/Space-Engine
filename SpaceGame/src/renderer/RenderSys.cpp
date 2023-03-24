@@ -302,9 +302,10 @@ int SGRender::System::loadShader(const char* vertPath, const char* fragPath, con
 	strcpy_s(sha->id, MAX_NAME_LENGTH + 1, id);
 	s_Shaders.back().object.create(vertPath, fragPath); //Remember to create here as deleteprogram is called in destructor - TODO - make it not
 	
-	//Link to camera vp matrix
+	//Link to camera vp matrix and lighting
 	sha->object.bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
-	
+	sha->object.bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
+
 	return s_Shaders.size() - 1;
 }
 

@@ -96,15 +96,15 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 
 	//3. Add point lights
 	constexpr int LIGHT_COUNT = 50;
-	constexpr double RADIUS = 400.0f;
+	constexpr double RADIUS = 500.0f;
 	constexpr double SEG_ANGLE = (double)LIGHT_COUNT / (2.0 * 3.14);
 	for (int i = 0; i < LIGHT_COUNT; i++)
 	{
 		double sin_x = sin((double)i / SEG_ANGLE);
 		double cos_z = cos((double)i / SEG_ANGLE);
-		glm::vec3 pos1 = { RADIUS * sin_x, 25.0f, RADIUS * cos_z };
+		glm::vec3 pos1 = { RADIUS * sin_x, 20.0f, RADIUS * cos_z };
 		glm::vec3 col1 = { sin_x, 0.2f, cos_z };
-		SGRender::System::lighting().addLight(pos1, 1.0f, col1, 25.0f);
+		SGRender::System::lighting().addLight(pos1, 1.0f, col1, 10.0f);
 	}
 
 	EngineLogOk("Scene loaded");

@@ -32,23 +32,12 @@ layout(std430, binding = 1) buffer SG_Lighting
 };
 
 //CLUSTER
-struct Cluster
+layout(std140) uniform SG_Cluster
 {
-    vec4 minPoint;
-    vec4 maxPoint;
-};
-
-layout(std430, binding = 2) buffer SG_Cluster
-{
-    int cluster_width;
-    int cluster_height;
-    int cluster_depth;
+    int cluster_dim;
     float cluster_xpix;
     float cluster_ypix;
     float cluster_B1;
-    float cluster_B2;
-    float cluster_B3;
-    Cluster cluster_clusters[];
 };
 
 //LIGHT GRID
@@ -80,7 +69,7 @@ vec4 GetVisualizedLight(vec3 col, float depth);
 //Get the Z aspect of the frustum
 uint GetZSlice(float z)
 {
-    return uint((log(-z)*(cluster_depth/(LogFN)) - ((cluster_depth*log(NearPlane))/LogFN)));
+    return uint((log(-z)*(cluster_dim/(LogFN)) - ((cluster_dim*log(NearPlane))/LogFN)));
 }
 
 //Gets the index within the cluster array from SS coords and depth
@@ -90,8 +79,8 @@ uint GetClusterIndex(float depth){
     uvec3 cluster    = uvec3(gl_FragCoord.x / cluster_xpix, gl_FragCoord.y / cluster_ypix, clusterZVal);
     
     uint clusterIndex = cluster.x +
-                        cluster_width * cluster.y +
-                        (cluster_width * cluster_height) * cluster.z;
+                        cluster_dim * cluster.y +
+                        (cluster_dim * cluster_dim) * cluster.z;
     return clusterIndex;
 }
 
@@ -139,7 +128,6 @@ vec4 GetVisualizedLight(vec3 col, float depth)
     //Use size to get amount of lights in a tile 
     uint index = GetClusterIndex(depth);
     uint size = light_grid[index].size;
-    Cluster cluster = cluster_clusters[index];
 
     //Work out color
     vec4 frag_color = vec4(float(size*size)/(point_lights.length()*point_lights.length()*0.5), float(size)/(point_lights.length()), 0.0, 1.0);
