@@ -266,6 +266,7 @@ namespace SGRender
 				}
 			}
 			tmpMeshes.resize(meshcount);
+			tmpMeta.resize(meshcount);
 
 			//Copy each mesh in from link table, transforming if matrix != identity
 			size_t meshindex = 0;
