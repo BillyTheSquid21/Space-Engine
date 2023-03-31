@@ -58,6 +58,9 @@
     <Filter Include="Source Files\Example Scene">
       <UniqueIdentifier>{88bfaa13-0225-4925-be43-573a4baaba92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Services">
+      <UniqueIdentifier>{fea12cc5-dd3b-4221-88eb-d861e6673c8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -72,19 +75,13 @@
     <ClCompile Include="src\renderer\GLClasses.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\Geometry.cpp">
+    <ClCompile Include="src\renderer\Mesh.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\Texture.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\Plane.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\Game.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\ObjManagement.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\vendor\imgui\imgui.cpp">
@@ -132,9 +129,6 @@
     <ClCompile Include="src\renderer\RenderSys.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\TextureAtlas.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\Lighting.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
@@ -165,6 +159,15 @@
     <ClCompile Include="src\vendor\imgui\implot_items.cpp">
       <Filter>Source Files\Vendor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\SIBRender.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\Vertex.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\MatModel.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\renderer\Camera.h">
@@ -176,28 +179,19 @@
     <ClInclude Include="include\renderer\Renderer.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\Geometry.h">
+    <ClInclude Include="include\renderer\Mesh.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\renderer\Texture.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\Vertex.hpp">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\renderer\Plane.h">
+    <ClInclude Include="include\renderer\Vertex.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\core\Callbacks.hpp">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\core\Game.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\core\GameObject.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\core\ObjManagement.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\core\State.hpp">
@@ -293,9 +287,6 @@
     <ClInclude Include="src\vendor\rapidjson\writer.h">
       <Filter>Source Files\Vendor\rapidjson</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\Message.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\Model.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
@@ -341,9 +332,6 @@
     <ClInclude Include="include\renderer\Batcher.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\TextureAtlas.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\Lighting.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
@@ -380,6 +368,15 @@
     <ClInclude Include="src\vendor\imgui\implot_internal.h">
       <Filter>Source Files\Vendor\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="include\core\ECS.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\services\AudioService.hpp">
+      <Filter>Header Files\Services</Filter>
+    </ClInclude>
+    <ClInclude Include="include\services\RenderService.hpp">
+      <Filter>Header Files\Services</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\default.frag">
@@ -393,6 +390,9 @@
     </None>
     <None Include="shader\ViewProj.glsl">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="include\renderer\SIBRender.h">
+      <Filter>Header Files\Renderer</Filter>
     </None>
   </ItemGroup>
 </Project>

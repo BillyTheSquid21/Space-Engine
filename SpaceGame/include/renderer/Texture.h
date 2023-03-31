@@ -4,7 +4,7 @@
 #include "GLClasses.h"
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
-#include "renderer/Vertex.hpp"
+#include "renderer/Vertex.h"
 
 namespace Tex
 {

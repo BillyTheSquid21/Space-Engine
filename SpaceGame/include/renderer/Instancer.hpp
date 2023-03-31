@@ -21,7 +21,7 @@ namespace SGRender
 		/**
 		* Generates the parameters for the instancer, setting up the camera, buffers and binding.
 		*/
-		void generate(float width, float height, Geometry::Mesh* model, size_t bufferWidth)
+		void generate(float width, float height, Mesh* model, size_t bufferWidth)
 		{
 			//Init camera and model
 			m_Model = model;
@@ -113,7 +113,11 @@ namespace SGRender
 		*/
 		void bufferVideoData()
 		{
-			//Render model
+			if (!m_Model)
+			{
+				return;
+			}
+
 			if (m_InstanceCount <= 0 || !m_Model->isLoaded())
 			{
 				return;
@@ -148,7 +152,7 @@ namespace SGRender
 			m_InstanceSize = 0;
 		}
 
-		Geometry::Mesh* model() { return m_Model; }
+		Mesh* model() { return m_Model; }
 
 		void reset()
 		{
@@ -188,7 +192,7 @@ namespace SGRender
 		SegArray<InstanceInfo, 96> m_InstanceInstructions;
 
 		//Model to be instanced
-		Geometry::Mesh* m_Model = nullptr;
+		Mesh* m_Model = nullptr;
 	};
 }
 

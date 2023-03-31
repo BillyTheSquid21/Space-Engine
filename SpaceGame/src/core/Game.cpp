@@ -101,7 +101,6 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 
     //Init static engines
     success = SGRender::System::init(m_Width, m_Height);
-    success = SGObject::System::init();
     success = SGSound::System::init();
     success = SGGUI::System::init(m_Width, m_Height);
 
@@ -133,9 +132,6 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 //Render
 void Game::render() 
 {
-    //Call object render methods
-    SGObject::System::render();
-
     glfwSwapBuffers(window);
     SGRender::System::clearScreen();
 
@@ -155,7 +151,6 @@ void Game::handleEvents()
 //Update
 void Game::update(double deltaTime) {
     SGSound::System::update();
-    SGObject::System::update(deltaTime);
 }
 
 //Clean
@@ -166,7 +161,6 @@ void Game::clean()
 
     //Clean static systems
     SGSound::System::clean();
-    SGObject::System::clean();
     SGRender::System::clean();
     SGGUI::System::clean();
     SGGUI::FontStorage::clear();

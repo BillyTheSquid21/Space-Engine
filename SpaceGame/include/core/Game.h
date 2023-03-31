@@ -8,8 +8,6 @@
 #include "string"
 #include "sstream"
 #include "utility/SGUtil.h"
-#include "core/GameObject.hpp"
-#include "core/ObjManagement.h"
 #include "renderer/RenderSys.h"
 #include "Callbacks.hpp"
 #include "core/Sound.h"

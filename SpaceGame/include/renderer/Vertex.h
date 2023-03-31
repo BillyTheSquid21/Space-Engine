@@ -23,40 +23,60 @@ namespace SGRender
 		V_HAS_TANGENTS	= 0b00001000
 	};
 
+	//Get stride of specific property
+	int PropertyStride(VProperties properties);
+
+	//Contains the unique properties of each vertex
+	enum VertexType
+	{
+		V_Vertex		= 0, 
+		V_CVertex		= V_HAS_COLOR, 
+		V_UVertex		= V_HAS_UVS, 
+		V_NVertex		= V_HAS_NORMALS, 
+		V_UCVertex		= V_HAS_UVS | V_HAS_COLOR, 
+		V_UNVertex		= V_HAS_UVS | V_HAS_NORMALS, 
+		V_NTVertex		= V_HAS_NORMALS | V_HAS_TANGENTS, 
+		V_UNTVertex		= V_HAS_UVS | V_HAS_NORMALS | V_HAS_TANGENTS
+	};
+
+	int VertexStride(int vertex);
+	int VertexColorOffset(int vertex);
+	int vertexUVOffset(int vertex);
+	int VertexNormalOffset(int vertex);
+	int VertexTangentOffset(int vertex);
+
+	struct alignas(4) Vertex;
+	struct alignas(4) CVertex;
+	struct alignas(4) UVertex;
+	struct alignas(4) NVertex;
+	struct alignas(4) UCVertex;
+	struct alignas(4) UNVertex;
+	struct alignas(4) NTVertex;
+	struct alignas(4) UNTVertex;
+
 	//All vertices follow ordering position -> uvs -> normals -> color -> tangent
 	//Also all have a properties method to get what properties are required
 	struct alignas(4) Vertex
 	{
 		glm::vec3 position;
-		static int properties() { return 0; }
-		static int stride() { return 3; }
 	};
 
 	struct alignas(4) CVertex
 	{
 		glm::vec3 position;
 		glm::vec4 color;
-		static int properties() { return V_HAS_COLOR; }
-		static int stride() { return 7; }
-		static int colorOffset() { return 3; }
 	};
 
 	struct alignas(4) UVertex
 	{
 		glm::vec3 position;
 		glm::vec2 uvCoords;
-		static int properties() { return V_HAS_UVS; }
-		static int stride() { return 5; }
-		static int uvOffset() { return 3; }
 	};
 
 	struct alignas(4) NVertex
 	{
 		glm::vec3 position;
 		glm::vec3 normals;
-		static int properties() { return V_HAS_NORMALS; }
-		static int stride() { return 6; }
-		static int normalOffset() { return 3; }
 	};
 
 	struct alignas(4) UCVertex
@@ -64,10 +84,6 @@ namespace SGRender
 		glm::vec3 position;
 		glm::vec2 uvCoords;
 		glm::vec4 color;
-		static int properties() { return V_HAS_UVS | V_HAS_COLOR; }
-		static int stride() { return 9; }
-		static int colorOffset() { return 5; }
-		static int uvOffset() { return 3; }
 	};
 
 	struct alignas(4) UNVertex 
@@ -75,10 +91,6 @@ namespace SGRender
 		glm::vec3 position;
 		glm::vec2 uvCoords;
 		glm::vec3 normals;
-		static int properties() { return V_HAS_UVS | V_HAS_NORMALS; }
-		static int stride() { return 8; }
-		static int normalOffset() { return 5; }
-		static int uvOffset() { return 3; }
 	};
 
 	struct alignas(4) NTVertex
@@ -86,10 +98,6 @@ namespace SGRender
 		glm::vec3 position;
 		glm::vec3 normals;
 		glm::vec3 tangent;
-		static int properties() { return V_HAS_TANGENTS | V_HAS_NORMALS; }
-		static int stride() { return 9; }
-		static int normalOffset() { return 3; }
-		static int tangentOffset() { return 6; }
 	};
 
 	struct alignas(4) UNTVertex
@@ -98,11 +106,6 @@ namespace SGRender
 		glm::vec2 uvCoords;
 		glm::vec3 normals;
 		glm::vec3 tangent;
-		static int properties() { return V_HAS_UVS | V_HAS_NORMALS | V_HAS_TANGENTS; }
-		static int stride() { return 11; }
-		static int normalOffset() { return 5; }
-		static int uvOffset() { return 3; }
-		static int tangentOffset() { return 8; }
 	};
 }
 

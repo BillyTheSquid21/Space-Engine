@@ -2,12 +2,11 @@
 
 std::vector<SGRender::System::RenderPass> SGRender::System::s_RenderPasses;
 SegArray<SGRender::System::Identifier<SGRender::Shader>, 16> SGRender::System::s_Shaders;
-SegArray<SGRender::System::IdCount<SGRender::Batcher>, 16> SGRender::System::s_Batchers;
+SegArray<SGRender::System::IdCount<SGRender::Dep_Batcher>, 16> SGRender::System::s_Batchers;
 SegArray<SGRender::System::IdCount<SGRender::Instancer>, 16> SGRender::System::s_Instancers;
-std::unique_ptr<std::unordered_map<std::string, Geometry::Mesh>> SGRender::System::s_Models;
+std::unique_ptr<std::unordered_map<std::string, SGRender::Mesh>> SGRender::System::s_Models;
 std::unique_ptr<std::unordered_map<std::string, Model::MatModel>> SGRender::System::s_MatModels;
 std::unique_ptr<std::unordered_map<std::string, Tex::Texture>> SGRender::System::s_Textures;
-std::unique_ptr<std::unordered_map<std::string, Tex::TextureAtlas>> SGRender::System::s_TexAtlases;
 int32_t SGRender::System::s_Width = 640;
 int32_t SGRender::System::s_Height = 320;
 bool SGRender::System::s_Set = false;
@@ -157,29 +156,6 @@ void SGRender::System::loadTexture(std::string path, std::string name, int slot,
 	EngineLog("Texture ", name, " was found");
 }
 
-void SGRender::System::loadTexture(std::string atlasName, std::string path, std::string name)
-{
-	if (s_TexAtlases->find(atlasName) == s_TexAtlases->end())
-	{
-		EngineLog("Atlas doesn't exist!");
-		return;
-	}
-
-	s_TexAtlases->at(atlasName).undoTransforms();
-	s_TexAtlases->at(atlasName).addTexture(name, path);
-}
-
-void SGRender::System::unloadTexture(std::string atlasName, std::string name)
-{
-	if (s_TexAtlases->find(atlasName) == s_TexAtlases->end())
-	{
-		EngineLog("Atlas doesn't exist!");
-		return;
-	}
-
-	s_TexAtlases->at(atlasName).removeTexture(name);
-}
-
 void SGRender::System::unloadTexture(std::string name)
 {
 	if (!s_Set)
@@ -194,55 +170,6 @@ void SGRender::System::unloadTexture(std::string name)
 		return;
 	}
 	EngineLog("Texture to be deleted not found!");
-}
-
-void SGRender::System::linkModelToAtlas(std::string atlas, std::string texture, std::string model)
-{
-	if (s_TexAtlases->find(atlas) == s_TexAtlases->end())
-	{
-		EngineLog("Atlas doesn't exist!");
-		return;
-	}
-
-	if (s_Models->find(model) == s_Models->end())
-	{
-		EngineLog("Model doesn't exist!");
-		return;
-	}
-
-	s_TexAtlases->at(atlas).undoTransforms();
-	s_TexAtlases->at(atlas).linkModel(texture, s_Models->at(model).getVertices(), s_Models->at(model).getVertSize());
-}
-
-void SGRender::System::unlinkModelFromAtlas(std::string atlas, std::string texture, std::string model)
-{
-	if (s_TexAtlases->find(atlas) == s_TexAtlases->end())
-	{
-		EngineLog("Atlas doesn't exist!");
-		return;
-	}
-
-	if (s_Models->find(model) == s_Models->end())
-	{
-		EngineLog("Model doesn't exist!");
-		return;
-	}
-
-	s_TexAtlases->at(atlas).undoTransforms();
-	s_TexAtlases->at(atlas).unlinkModel(texture, s_Models->at(model).getVertices());
-}
-
-void SGRender::System::generateAndMapAtlas(std::string atlas, int slot, int bpp, int flag)
-{
-	if (s_TexAtlases->find(atlas) == s_TexAtlases->end())
-	{
-		EngineLog("Atlas doesn't exist!");
-		return;
-	}
-
-	s_TexAtlases->at(atlas).undoTransforms();
-	s_TexAtlases->at(atlas).generateTexture(slot, bpp, flag);
-	s_TexAtlases->at(atlas).applyTransforms();
 }
 
 void SGRender::System::unloadModel(std::string name)
@@ -588,16 +515,12 @@ Tex::Texture* SGRender::System::findTexture(std::string name)
 	{
 		return &s_Textures->at(name);
 	}
-	if (s_TexAtlases->find(name) != s_TexAtlases->end())
-	{
-		return s_TexAtlases->at(name).texture();
-	}
 
 	EngineLog("Texture not found!");
 	return &s_Textures->at("debug");
 }
 
-bool SGRender::System::accessModel(std::string name, Geometry::Mesh** model)
+bool SGRender::System::accessModel(std::string name, Mesh** model)
 {
 	if (s_Models->find(name) != s_Models->end())
 	{
@@ -653,10 +576,9 @@ void SGRender::System::set()
 	clean();
 
 	//Assign maps
-	s_Models = std::unique_ptr<std::unordered_map<std::string, Geometry::Mesh>>(new std::unordered_map<std::string, Geometry::Mesh>());
+	s_Models = std::unique_ptr<std::unordered_map<std::string, Mesh>>(new std::unordered_map<std::string, Mesh>());
 	s_MatModels = std::unique_ptr<std::unordered_map<std::string, Model::MatModel>>(new std::unordered_map<std::string, Model::MatModel>());
 	s_Textures = std::unique_ptr<std::unordered_map<std::string, Tex::Texture>>(new std::unordered_map<std::string, Tex::Texture>());
-	s_TexAtlases = std::unique_ptr<std::unordered_map<std::string, Tex::TextureAtlas>>(new std::unordered_map<std::string, Tex::TextureAtlas>());
 
 	//Create a debug texture
 	generateDebugTex();
@@ -693,8 +615,6 @@ void SGRender::System::clean()
 	s_Models.reset();
 	s_Textures->clear();
 	s_Textures.reset();
-	s_TexAtlases->clear();
-	s_TexAtlases.reset();
 	s_Lighting.clean();
 	s_Set = false;
 }

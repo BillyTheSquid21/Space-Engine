@@ -1,7 +1,37 @@
 #include "renderer/GLClasses.h"
-#include "renderer/Vertex.hpp"
 
-//count means number of, size is in bytes
+//Safe versions that checks address is set
+//Lets destructors call without worrying was generated
+void glDeleteBuffers_s(GLsizei n, const GLuint* buffers)
+{
+	if (!buffers)
+	{
+		return;
+	}
+	else if (!(*buffers) || !n)
+	{
+		return;
+	}
+	glDeleteBuffers(1, buffers);
+}
+
+void glDeleteShader_s(GLuint shader)
+{
+	if (!shader)
+	{
+		return;
+	}
+	glDeleteShader(shader);
+}
+
+void glDeleteProgram_s(GLuint program)
+{
+	if (!program)
+	{
+		return;
+	}
+	glDeleteProgram(program);
+}
 
 void SGRender::VertexBuffer::create(size_t dataSize) {
 	glGenBuffers(1, &m_ID);
@@ -11,7 +41,7 @@ void SGRender::VertexBuffer::create(size_t dataSize) {
 }
 
 SGRender::VertexBuffer::~VertexBuffer() {
-	glDeleteBuffers(1, &m_ID);
+	glDeleteBuffers_s(1, &m_ID);
 }
 
 void SGRender::VertexBuffer::bind() const {
@@ -44,7 +74,7 @@ void SGRender::IndexBuffer::bufferData(const void* data, int count) {
 }
 
 SGRender::IndexBuffer::~IndexBuffer() {
-	glDeleteBuffers(1, &m_ID);
+	glDeleteBuffers_s(1, &m_ID);
 }
 
 void SGRender::IndexBuffer::bind() const {
@@ -109,7 +139,7 @@ void SGRender::UniformBuffer::bufferData(void* data, int offset, GLsizeiptr size
 
 SGRender::UniformBuffer::~UniformBuffer()
 {
-	glDeleteBuffers(1, &m_ID);
+	glDeleteBuffers_s(1, &m_ID);
 }
 
 //SSBO
@@ -201,7 +231,7 @@ void SGRender::SSBO::unbind() const
 
 SGRender::SSBO::~SSBO()
 {
-	glDeleteBuffers(1, &m_ID);
+	glDeleteBuffers_s(1, &m_ID);
 }
 
 //Vertex Array
@@ -324,6 +354,11 @@ void SGRender::ShadowMapFBO::bindForReading(uint32_t slot)
 }
 
 //Shader
+void SGRender::Shader::deleteShader()
+{
+	glDeleteProgram_s(m_ID);
+}
+
 std::string SGRender::Shader::parseShader(const std::string& filePath) {
 	
 	const int INCLUDE_SIZE = 11; //Includes white space
@@ -362,8 +397,8 @@ GLuint SGRender::Shader::createShader(const std::string& vertexShader, const std
 	glLinkProgram(program);
 	glValidateProgram(program);
 
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+	glDeleteShader_s(vs);
+	glDeleteShader_s(fs);
 
 	return program;
 }
@@ -381,9 +416,9 @@ GLuint SGRender::Shader::createGeoShader(const std::string& vertexShader, const 
 	glLinkProgram(program);
 	glValidateProgram(program);
 
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-	glDeleteShader(gs);
+	glDeleteShader_s(vs);
+	glDeleteShader_s(fs);
+	glDeleteShader_s(gs);
 
 	return program;
 }
@@ -407,7 +442,7 @@ GLuint SGRender::Shader::compileShader(const std::string& source, unsigned int t
 		free(message);
 
 		//Handle
-		glDeleteShader(id);
+		glDeleteShader_s(id);
 		return 0;
 	}
 

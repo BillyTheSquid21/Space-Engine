@@ -18,7 +18,7 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 
 	//2.2 Setup all of the scene
 	//2.1 Load sponza atrium model
-	SGRender::System::loadMatModel<SGRender::UNTVertex>("res/s/Sponza.gltf", "sponza", Model::M_FILL_MISSING);
+	SGRender::System::loadMatModel("res/s/Sponza.gltf", "sponza", SGRender::V_UNTVertex, Model::M_FILL_MISSING);
 
 	//2.2 Load the default shader
 	SGRender::System::loadShader("res/default.vert", "res/default.frag", "default");
@@ -39,7 +39,7 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 		SGRender::System::loadTexture(normPath, normName, 1, 3, Tex::T_FILTER_LINEAR);
 
 		//2.5 Add batcher for material
-		SGRender::System::addBatcher<float>(std::to_string(i).c_str(), GL_TRIANGLES, 3, 2, 3, 3);
+		SGRender::System::addBatcher(std::to_string(i).c_str(), SGRender::V_UNTVertex, GL_TRIANGLES, 3, 2, 3, 3);
 
 		//2.6 Set tex as uniform
 		std::vector<SGRender::Uniform> u =
@@ -89,7 +89,7 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 		SGRender::System::createRenderPass(std::to_string(i).c_str(), u, "default", std::to_string(i).c_str(), 0, 0);
 
 		//2.7 Link to batcher
-		uint32_t index; Geometry::Mesh& mesh = model->meshes[i].mesh;
+		uint32_t index; SGRender::Mesh& mesh = model->meshes[i].mesh;
 		SGRender::System::linkToBatcher(std::to_string(i).c_str(), index);
 		SGRender::System::commitToBatcher(index, &mesh, mesh.getVertices(), mesh.getVertSize(), mesh.getIndices(), mesh.getIndicesCount());
 	}

@@ -253,7 +253,7 @@ namespace SGRender
 
 		void bind() const;
 		void unbind() const;
-		void deleteShader() { glDeleteProgram(m_ID); }
+		void deleteShader();
 
 		//set uniforms - overload for each data type
 		void setUniform(const std::string& name, void* uniform, UniformType type);

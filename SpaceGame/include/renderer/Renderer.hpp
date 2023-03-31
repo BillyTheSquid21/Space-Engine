@@ -3,13 +3,16 @@
 #define RENDERER_H
 
 #include "stdint.h"
-#include "renderer/Geometry.h"
 #include "renderer/GLClasses.h"
+#include "renderer/Mesh.h"
 #include "renderer/Camera.h"
+#include "renderer/Vertex.h"
 #include "utility/SegArray.hpp"
 
 namespace SGRender
 {
+	typedef int32_t RenderLinkID; //ID so object can reserve unique spot in renderer
+
 	/**
 	* Is the base class of derived renderer types (eg batcher, instancer)
 	* Has functionality for instancing
@@ -20,18 +23,29 @@ namespace SGRender
 		RendererBase() : m_VA() {};
 
 		/**
-		* Sets the vertex layout, pushing to the buffer layout object. Floats are recommended.
+		* Sets the vertex layout, pushing to the buffer layout object.
 		*
-		* @param stride Stride (width) of attribute (Eg for position - x, y, z is 3)
+		* @param vertexType The type of vertex, from the Vertex::properties() function
 		*/
-		template<typename Type>
-		void setLayout(unsigned char stride) { m_VBL.push<Type>(stride, false); }
-		template<typename Type>
-		void setLayout(unsigned char stride1, unsigned char stride2) { m_VBL.push<Type>(stride1, false); m_VBL.push<Type>(stride2, false); }
-		template<typename Type>
-		void setLayout(unsigned char stride1, unsigned char stride2, unsigned char stride3) { m_VBL.push<Type>(stride1, false); m_VBL.push<Type>(stride2, false); m_VBL.push<Type>(stride3, false); }
-		template<typename Type>
-		void setLayout(unsigned char stride1, unsigned char stride2, unsigned char stride3, unsigned char stride4) { m_VBL.push<Type>(stride1, false); m_VBL.push<Type>(stride2, false); m_VBL.push<Type>(stride3, false); m_VBL.push<Type>(stride4, false);}
+		void setLayout(VertexType vertexType)
+		{
+			//All Vertexes have position so add first
+			//If this isn't true, there are probably more problems
+			m_VBL.push<float>(3, false);
+
+			//Check each bit for property
+			for (int i = 0; i < 8; i++)
+			{
+				int curr_flag = vertexType & (1UL << i);
+				int flag_stride = PropertyStride((VProperties)curr_flag);
+				if (flag_stride != -1)
+				{
+					m_VBL.push<float>(flag_stride, false);
+				}
+			}
+
+			m_VertexType = vertexType;
+		}
 
 		/**
 		* Sets the drawing mode, defaulting to GLTriangles.
@@ -56,6 +70,9 @@ namespace SGRender
 
 		//type of primitive being drawn
 		GLenum m_PrimitiveType = GL_TRIANGLES;
+
+		//type of vertex
+		VertexType m_VertexType = V_Vertex;
 
 		//GL Objects for rendering - used once per draw call
 		VertexBuffer m_VB;

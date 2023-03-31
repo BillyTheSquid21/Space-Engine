@@ -12,7 +12,6 @@
 #include "renderer/Instancer.hpp"
 #include "renderer/GLClasses.h"
 #include "renderer/Texture.h"
-#include "renderer/TextureAtlas.h"
 #include "renderer/Lighting.h"
 #include "renderer/MatModel.hpp"
 #include "utility/SegArray.hpp"
@@ -61,33 +60,9 @@ namespace SGRender
 		static void unlinkModelFromAtlas(std::string atlas, std::string texture, std::string model);
 		static void generateAndMapAtlas(std::string atlas, int slot, int bpp, int flag);
 
-		template<typename VertexType>
-		static void addAtlas(std::string name)
-		{
-			//Check if exists
-			if (s_TexAtlases->find(name) == s_TexAtlases->end())
-			{
-				EngineLog("Atlas already exists!");
-				return;
-			}
-
-			s_TexAtlases->insert(name, Tex::TextureAtlas());
-		}
-
-		static void removeAtlas(std::string name)
-		{
-			if (s_TexAtlases->find(name) != s_TexAtlases->end())
-			{
-				s_TexAtlases->at(name).undoTransforms();
-				s_TexAtlases->erase(name);
-				return;
-			}
-			EngineLog("Atlas not found!");
-		}
 
 		//TODO - make threaded
-		template<typename VertexType>
-		static void loadModel(std::string path, std::string name, int flags)
+		static void loadModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
 		{
 			if (!s_Set)
 			{
@@ -96,8 +71,8 @@ namespace SGRender
 
 			if (s_Models->find(name) == s_Models->end())
 			{
-				(*s_Models)[name] = Geometry::Mesh();
-				Model::LoadModel<VertexType>(path.c_str(), s_Models->at(name), flags);
+				(*s_Models)[name] = Mesh();
+				Model::LoadModel(path.c_str(), s_Models->at(name), vertexType, modelFlags);
 				EngineLog("Model loaded: ", name);
 				return;
 			}
@@ -105,8 +80,7 @@ namespace SGRender
 		}
 
 		//TODO - make threaded
-		template<typename VertexType>
-		static void loadMatModel(std::string path, std::string name, int flags)
+		static void loadMatModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
 		{
 			if (!s_Set)
 			{
@@ -116,7 +90,7 @@ namespace SGRender
 			if (s_MatModels->find(name) == s_MatModels->end())
 			{
 				(*s_MatModels)[name] = Model::MatModel();
-				Model::LoadModel<VertexType>(path.c_str(), s_MatModels->at(name), flags);
+				Model::LoadModel(path.c_str(), s_MatModels->at(name), vertexType, modelFlags);
 				EngineLog("Material Model loaded: ", name);
 				return;
 			}
@@ -128,8 +102,8 @@ namespace SGRender
 		static int loadShader(const char* vertPath, const char* fragPath, const char* name);
 		static int loadShader(const char* vertPath, const char* fragPath, const char* geoPath, const char* name);
 		
-		template<typename T, typename... Args>
-		static int addBatcher(const char* name, GLenum drawMode, Args... args)
+		template<typename... Args>
+		static int addBatcher(const char* name, VertexType vertexType, GLenum drawMode, Args... args)
 		{
 			if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
 			{
@@ -150,7 +124,7 @@ namespace SGRender
 			}
 
 			//Otherwise create and generate
-			SGRender::Batcher batcher;
+			SGRender::Dep_Batcher batcher;
 
 			//First check for any spaces
 			for (int i = 0; i < s_Batchers.size(); i++)
@@ -159,9 +133,9 @@ namespace SGRender
 				{
 					memset(s_Batchers[i].id, 0, MAX_NAME_LENGTH + 1);
 					strcpy_s(s_Batchers[i].id, MAX_NAME_LENGTH + 1, id);
-					s_Batchers[i].object = Batcher();
+					s_Batchers[i].object = Dep_Batcher();
 					s_Batchers[i].count = 0;
-					s_Batchers[i].object.setLayout<T>(args...);
+					s_Batchers[i].object.setLayout(vertexType);
 					s_Batchers[i].object.setDrawingMode(drawMode);
 					s_Batchers[i].object.generate(s_Width, s_Height, 0);
 					return i;
@@ -172,17 +146,17 @@ namespace SGRender
 			auto bt = s_Batchers.emplace_back();
 			strcpy_s(bt->id, MAX_NAME_LENGTH + 1, id);
 			bt->count = 0;
-			bt->object.setLayout<T>(args...);
+			bt->object.setLayout(vertexType);
 			bt->object.setDrawingMode(drawMode);
 			bt->object.generate(s_Width, s_Height, 0);
 			return s_Batchers.size() - 1;
 		}
 		
-		static SGRender::Batcher& batcher(int index) { return s_Batchers[index].object; }
+		static SGRender::Dep_Batcher& batcher(int index) { return s_Batchers[index].object; }
 		static SGRender::Instancer& instancer(int index) { return s_Instancers[index].object; }
 
-		template<typename T, typename... Args>
-		static int addInstancer(const char* name, const char* modelName, GLenum drawMode, Args... args)
+		template<typename... Args>
+		static int addInstancer(const char* name, const char* modelName, VertexType vertexType, GLenum drawMode, Args... args)
 		{
 			if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
 			{
@@ -219,7 +193,7 @@ namespace SGRender
 							strcpy_s(s_Instancers[i].id, MAX_NAME_LENGTH + 1, id);
 							s_Instancers[i].object = Instancer();
 							s_Instancers[i].count = 0;
-							s_Instancers[i].object.setLayout<T>(args...);
+							s_Instancers[i].object.setLayout(vertexType);
 							s_Instancers[i].object.setDrawingMode(drawMode);
 							s_Instancers[i].object.generate(s_Width, s_Height, &s_Models->at(stdname), 0);
 							return i;
@@ -229,7 +203,7 @@ namespace SGRender
 					auto in = s_Instancers.emplace_back();
 					strcpy_s(in->id, MAX_NAME_LENGTH + 1, id);
 					in->count = 0;
-					in->object.setLayout<T>(args...);
+					in->object.setLayout(vertexType);
 					in->object.setDrawingMode(drawMode);
 					in->object.generate(s_Width, s_Height, &s_Models->at(stdname), 0);
 
@@ -261,7 +235,7 @@ namespace SGRender
 		static bool getShader(const char* shader, SGRender::Shader** shaderPtr);
 		static Lighting& lighting() { return s_Lighting; }
 
-		static bool accessModel(std::string name, Geometry::Mesh** model);
+		static bool accessModel(std::string name, Mesh** model);
 		static bool accessMatModel(std::string name, Model::MatModel** model);
 		static bool doesPassExist(const char* passName);
 
@@ -314,14 +288,13 @@ namespace SGRender
 		//Data storage - use segarray to keep pointers to consistent and allocations fast
 		//TODO - Optimise for a specific size, using 16 for all right now
 		static SegArray<Identifier<SGRender::Shader>, 16> s_Shaders;
-		static SegArray<IdCount<SGRender::Batcher>, 16> s_Batchers;
+		static SegArray<IdCount<SGRender::Dep_Batcher>, 16> s_Batchers;
 		static SegArray<IdCount<SGRender::Instancer>, 16> s_Instancers;
 		
 		//Data storage for non frequently accessed components
-		static std::unique_ptr<std::unordered_map<std::string, Geometry::Mesh>> s_Models;
+		static std::unique_ptr<std::unordered_map<std::string, Mesh>> s_Models;
 		static std::unique_ptr<std::unordered_map<std::string, Model::MatModel>> s_MatModels;
 		static std::unique_ptr<std::unordered_map<std::string, Tex::Texture>> s_Textures;
-		static std::unique_ptr<std::unordered_map<std::string, Tex::TextureAtlas>> s_TexAtlases; //TODO - implement
 
 		//Dimensions
 		static int32_t s_Width, s_Height;
