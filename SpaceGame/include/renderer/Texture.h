@@ -47,7 +47,7 @@ namespace Tex
         /**
         * Deletes the texture on the GPU
         */
-        void deleteTexture() const { glDeleteTextures(1, &m_ID); }
+        void deleteTexture() { if (m_ID) { glDeleteTextures(1, &m_ID); } m_ID = 0; }
 
         GLuint getID() const { return m_ID; }
         int32_t& getSlot() { return m_Slot; }

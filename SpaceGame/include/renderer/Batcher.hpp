@@ -234,7 +234,7 @@ namespace SGRender
 			{
 				isDirty = true;
 			}
-			else if (link.matrix == matrix)
+			else if (link.matrix != matrix)
 			{
 				isDirty = true;
 			}

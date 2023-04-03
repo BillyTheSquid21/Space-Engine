@@ -3,6 +3,7 @@
 #define SG_RENDER_SERVICE_HPP
 
 #include "string"
+#include "renderer/Renderer.hpp"
 #include "renderer/GLClasses.h"
 
 namespace SGRender
@@ -13,9 +14,32 @@ namespace SGRender
 	typedef int32_t TexID;
 	typedef int32_t ModelID;
 
-	enum class RenderInstruction
+	enum class InstrType
 	{
+		//Rendering
+		DRAW,
 
+		//Camera
+
+		//Lighting
+
+	};
+
+	struct RenderCall
+	{
+		RendererID renderer;
+		RenderLinkID link;
+		glm::mat4* transform;
+	};
+
+	struct RenderInstruction
+	{
+		InstrType instr;
+		union
+		{
+			RenderCall renderCall;
+			bool clear;
+		};
 	};
 
 	//Each uniform just requires a name and a location of the uniform

@@ -242,6 +242,7 @@ namespace SGRender
 		std::string FragmentSource;
 	};
 
+	//Will check if already bound
 	class Shader
 	{
 	public:
@@ -251,8 +252,8 @@ namespace SGRender
 		void create(const std::string& vert, const std::string& frag);
 		void create(const std::string& vert, const std::string& geo, const std::string& frag);
 
-		void bind() const;
-		void unbind() const;
+		void bind();
+		void unbind();
 		void deleteShader();
 
 		//set uniforms - overload for each data type
@@ -307,6 +308,7 @@ namespace SGRender
 
 	private:
 		GLuint m_ID = 0;
+		bool m_Bound = false;
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 		GLuint compileShader(const std::string& source, unsigned int type);
 		GLuint createShader(const std::string& vertexShader, const std::string& fragmentShader);

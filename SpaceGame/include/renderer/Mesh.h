@@ -29,6 +29,7 @@ namespace SGRender
 	//Struct to combine separate meshes
 	struct VertexMeta
 	{
+		VertexMeta() = default;
 		VertexMeta(float* v, int32_t f, VertexType t) { verts = v; count = f; type = t; }
 		float* verts = nullptr;
 		int32_t count = 0;
@@ -37,6 +38,7 @@ namespace SGRender
 
 	struct IndiceMeta
 	{
+		IndiceMeta() = default;
 		IndiceMeta(const uint32_t* i, int32_t c) { inds = i; count = c; }
 		const uint32_t* inds = nullptr;
 		int32_t count = 0;

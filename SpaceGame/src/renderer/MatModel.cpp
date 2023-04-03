@@ -1,4 +1,4 @@
-#include "renderer/MatModel.hpp"
+#include "renderer/MatModel.h"
 
 static bool LoadModelInternal(const char* path, Model::MatModel& model, SGRender::VertexType vertexType, int modelFlags)
 {
@@ -173,6 +173,7 @@ static bool LoadModelInternal(const char* path, Model::MatModel& model, SGRender
     EngineLog("Model loaded: ", path, " ", ((float)(s * sizeof(float))) / 1000.f, " kB - currently not optimising for duplicates");
     EngineLog("Time elapsed: ", time);
 #endif
+    model.vertexType = vertexType;
     return true;
 }
 
@@ -181,7 +182,7 @@ bool Model::LoadModel(const char* path, MatModel& model, SGRender::VertexType ve
     return LoadModelInternal(path, model, vertexType, 0);
 }
 
-bool Model::LoadModel(const char* path, Model::MatModel& model, SGRender::VertexType vertexType, int modelFlags)
+bool Model::LoadModel(const char* path, MatModel& model, SGRender::VertexType vertexType, int modelFlags)
 {
     return LoadModelInternal(path, model, vertexType, modelFlags);
 }

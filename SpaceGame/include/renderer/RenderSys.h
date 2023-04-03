@@ -13,7 +13,7 @@
 #include "renderer/GLClasses.h"
 #include "renderer/Texture.h"
 #include "renderer/Lighting.h"
-#include "renderer/MatModel.hpp"
+#include "renderer/MatModel.h"
 #include "utility/SegArray.hpp"
 
 #define MAX_NAME_LENGTH 15

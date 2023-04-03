@@ -475,11 +475,19 @@ void SGRender::Shader::create(const std::string& vert, const std::string& geo, c
 	EngineLog("Created shader: ", vert, " ", geo, " ", frag);
 }
 
-void SGRender::Shader::bind() const {
+void SGRender::Shader::bind() {
+	if (m_Bound)
+	{
+		return;
+	}
 	glUseProgram(m_ID);
 }
 
-void SGRender::Shader::unbind() const {
+void SGRender::Shader::unbind() {
+	if (!m_Bound)
+	{
+		return;
+	}
 	glUseProgram(0);
 }
 

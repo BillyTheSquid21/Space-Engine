@@ -3,7 +3,7 @@
 #define INSTANCER_HPP
 
 #include "renderer/Renderer.hpp"
-#include "renderer/Model.hpp"
+#include "renderer/Model.h"
 
 namespace SGRender
 {

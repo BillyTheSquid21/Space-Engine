@@ -297,6 +297,8 @@ namespace SGRender
 		//Update the lighting buffer
 		void updateLightBuffer();
 
+		size_t lightCount() const { return m_LightList.size(); }
+
 		void linkShader(SGRender::Shader& shader);
 		void clean();
 

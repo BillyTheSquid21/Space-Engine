@@ -203,10 +203,10 @@
     <ClInclude Include="include\renderer\GLClasses.h" />
     <ClInclude Include="include\renderer\Lighting.h" />
     <ClInclude Include="include\renderer\Material.hpp" />
-    <ClInclude Include="include\renderer\MatModel.hpp" />
+    <ClInclude Include="include\renderer\MatModel.h" />
     <ClInclude Include="include\renderer\RenderSys.h" />
     <ClInclude Include="include\renderer\Instancer.hpp" />
-    <ClInclude Include="include\renderer\Model.hpp" />
+    <ClInclude Include="include\renderer\Model.h" />
     <ClInclude Include="include\renderer\Renderer.hpp" />
     <ClInclude Include="include\renderer\ShadowMap.h" />
     <ClInclude Include="include\renderer\Mesh.h" />

@@ -287,7 +287,7 @@
     <ClInclude Include="src\vendor\rapidjson\writer.h">
       <Filter>Source Files\Vendor\rapidjson</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\Model.hpp">
+    <ClInclude Include="include\renderer\Model.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\utility\SGUtil.h">
@@ -350,7 +350,7 @@
     <ClInclude Include="src\vendor\textflow\TextFlow.hpp">
       <Filter>Source Files\Vendor\textflow</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\MatModel.hpp">
+    <ClInclude Include="include\renderer\MatModel.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\renderer\Material.hpp">

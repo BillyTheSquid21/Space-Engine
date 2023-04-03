@@ -16,7 +16,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/implot.h"
-#include "renderer/MatModel.hpp"
+#include "renderer/MatModel.h"
 #include "core/GUI.h"
 #include "core/Root.h"
 #include "utility/Options.h"

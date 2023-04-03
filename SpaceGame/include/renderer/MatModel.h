@@ -9,13 +9,11 @@
 #include "renderer/Mesh.h"
 #include "renderer/Texture.h"
 #include "renderer/Material.hpp"
-#include "renderer/Model.hpp"
+#include "renderer/Model.h"
 #include "assimp/Importer.hpp"  
 #include "assimp/scene.h"
 #include "assimp/postprocess.h" 
 #include "map"
-
-#define _SHOW_MODEL_DEBUG 0 //Model info can be dense so allow easy switch off
 
 namespace Model
 {
@@ -26,12 +24,15 @@ namespace Model
 		SGRender::Mesh mesh;
 	};
 
+    //TODO - make each material independant of mesh so can be shared
+    //Implementation will be internal to renderer
     struct MatModel
     {
         std::vector<MatMesh> meshes;
-        std::map<std::string, std::string> diffuseTextures; //Testing solution
+        std::map<std::string, std::string> diffuseTextures;
         std::map<std::string, std::string> normalTextures;
         std::map<std::string, std::string> specularTextures;
+        SGRender::VertexType vertexType;
     };
 
     bool LoadModel(const char* path, MatModel& model, SGRender::VertexType vertexType);

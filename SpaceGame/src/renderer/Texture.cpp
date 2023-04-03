@@ -10,7 +10,7 @@ inline void Tex::Texture::loadTexture(const std::string& path, int bpp, bool fli
     stbi_set_flip_vertically_on_load(flip);
     //if texture has been previously generated don't generate until buffer cleared
     if (m_LocalBuffer) {
-        EngineLog("Texture already generated!");
+        EngineLog("Texture already loaded!");
         return;
     }
     m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, bpp);
@@ -23,6 +23,18 @@ void Tex::Texture::generateTexture(int slot, int flag) {
 }
 
 void Tex::Texture::generateTexture(int slot, void* buffer, int flag) {
+
+    if (m_ID)
+    {
+        EngineLog("Texture already generated!");
+        return;
+    }
+
+    if (!buffer)
+    {
+        EngineLog("No texture loaded!");
+        return;
+    }
 
     //Generate texture
     glGenTextures(1, &m_ID);

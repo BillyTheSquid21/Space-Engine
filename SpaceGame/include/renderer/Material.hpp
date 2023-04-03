@@ -6,12 +6,13 @@
 
 namespace Material
 {
+	//-1 signals material attribute not used
 	struct Material
 	{
-		glm::vec3 ambient;
-		glm::vec3 diffuse;
-		glm::vec3 specular;
-		float shininess;
+		glm::vec3 ambient = glm::vec3(-1);
+		glm::vec3 diffuse = glm::vec3(-1);
+		glm::vec3 specular = glm::vec3(-1);
+		float shininess = -1;
 	};
 }
 

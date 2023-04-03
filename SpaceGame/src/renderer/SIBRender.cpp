@@ -1,23 +1,162 @@
 #include "renderer/SIBRender.h"
 
-SGRender::ShaderID SGRender::SIBRender::loadShader(std::string vertPath, std::string fragPath)
+//Default Texture slots
+constexpr int32_t SLOT_DIFF = 0;
+constexpr int32_t SLOT_SPEC = 1;
+constexpr int32_t SLOT_NORM = 2;
+constexpr int32_t SLOT_SHAD = 3;
+
+bool SGRender::SIBRender::init(float width, float height)
+{
+	m_Width = width; m_Height = height;
+	return true;
+}
+
+SGRender::ShaderID SGRender::SIBRender::loadShader(std::string vertPath, std::string fragPath, std::string name)
 {
 	ShaderID id = m_NextShaderID;
-	m_Shaders[id] = std::shared_ptr<Shader>(new Shader());
-	m_Shaders[id]->create(vertPath, fragPath);
-	m_Shaders[id]->bindToUniformBlock("ViewProjection", m_CameraBuffer.bindingPoint());
+	m_Shaders[id] = { name, std::shared_ptr<Shader>(new Shader()) };
+	m_Shaders[id].shader->create(vertPath, fragPath);
+	m_Shaders[id].shader->bindToUniformBlock("ViewProjection", m_CameraBuffer.bindingPoint());
 	m_NextShaderID++;
 	return id;
 }
 
-SGRender::ShaderID SGRender::SIBRender::loadShader(std::string vertPath, std::string geoPath, std::string fragPath)
+SGRender::ShaderID SGRender::SIBRender::loadShader(std::string vertPath, std::string geoPath, std::string fragPath, std::string name)
 {
 	ShaderID id = m_NextShaderID;
-	m_Shaders[id] = std::shared_ptr<Shader>(new Shader());
-	m_Shaders[id]->create(vertPath, geoPath, fragPath);
-	m_Shaders[id]->bindToUniformBlock("ViewProjection", m_CameraBuffer.bindingPoint()); //Assume all normal shaders use the MVP
+	m_Shaders[id] = { name, std::shared_ptr<Shader>(new Shader()) };
+	m_Shaders[id].shader->create(vertPath, geoPath, fragPath);
+	m_Shaders[id].shader->bindToUniformBlock("ViewProjection", m_CameraBuffer.bindingPoint()); //Assume all normal shaders use the MVP
 	m_NextShaderID++;
 	return id;
+}
+
+SGRender::ModelID SGRender::SIBRender::loadModel(std::string path, std::string name, VertexType vertexType)
+{
+	ModelID id = m_NextModelID;
+	m_Models[id] = { name };
+	Model::LoadModel(path.c_str(), *m_Models[id].model, vertexType);
+	m_NextModelID++;
+	return id;
+}
+
+SGRender::ModelID SGRender::SIBRender::loadMatModel(std::string path, std::string name, VertexType vertexType)
+{
+	ModelID id = m_NextModelID;
+	m_MatModels[id] = { name };
+	Model::LoadModel(path.c_str(), *m_MatModels[id].model, vertexType);
+	m_NextModelID++;
+	return id;
+}
+
+bool SGRender::SIBRender::modelExists(ModelID id)
+{
+	return modelExistsInternal(id) || matModelExistsInternal(id);
+}
+
+bool SGRender::SIBRender::modelExistsInternal(ModelID id)
+{
+	if (m_Models.count(id))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool SGRender::SIBRender::matModelExistsInternal(ModelID id)
+{
+	if (m_MatModels.count(id))
+	{
+		return true;
+	}
+	return false;
+}
+
+SGRender::ModelID SGRender::SIBRender::locateModel(std::string name)
+{
+	for (auto& m : m_Models)
+	{
+		if (m.second.name == name)
+		{
+			return m.first;
+		}
+	}
+	for (auto& m : m_MatModels)
+	{
+		if (m.second.name == name)
+		{
+			return m.first;
+		}
+	}
+	return -1;
+}
+
+void SGRender::SIBRender::unloadModel(ModelID id)
+{
+	//TODO - make exists function separate
+	if (modelExistsInternal(id))
+	{
+		m_Models.erase(id);
+		return;
+	}
+
+	if (matModelExistsInternal(id))
+	{
+		m_MatModels.erase(id);
+		return;
+	}
+}
+
+SGRender::TexID SGRender::SIBRender::loadTexture(std::string path, std::string name)
+{
+	TexID id = m_NextTexID;
+	m_Textures[id] = { name };
+	m_Textures[id].texture->loadTexture(path);
+	m_NextTexID++;
+	return id;
+}
+
+void SGRender::SIBRender::unloadTexture(TexID id)
+{
+	if (!textureExists(id))
+	{
+		return;
+	}
+	m_Textures[id].texture->clearBuffer();
+	m_Textures[id].texture->deleteTexture();
+	m_Textures.erase(id);
+}
+
+bool SGRender::SIBRender::textureExists(TexID id)
+{
+	if (m_Textures.count(id))
+	{
+		return true;
+	}
+	return false;
+}
+
+void SGRender::SIBRender::generateTexture(TexID id, int slot, Tex::TFlag flags)
+{
+	if (!textureExists(id))
+	{
+		return;
+	}
+
+	m_Textures[id].texture->generateTexture(slot, flags);
+}
+
+SGRender::TexID SGRender::SIBRender::locateTexture(std::string name)
+{
+	for (auto& t : m_Textures)
+	{
+		if (t.second.name == name)
+		{
+			return t.first;
+		}
+	}
+	return -1;
 }
 
 void SGRender::SIBRender::unloadShader(ShaderID id)
@@ -39,20 +178,49 @@ bool SGRender::SIBRender::shaderExists(ShaderID id)
 	return false;
 }
 
-bool SGRender::SIBRender::batchedRendererExists(RendererID id)
+SGRender::ShaderID SGRender::SIBRender::locateShader(std::string name)
 {
-	if (m_BatchedRenderers.count(id))
+	for (auto& s : m_Shaders)
+	{
+		if (s.second.name == name)
+		{
+			return s.first;
+		}
+	}
+	return -1;
+}
+
+bool SGRender::SIBRender::rendererExists(RendererID id)
+{
+	if (m_Renderers.count(id))
 	{
 		return true;
 	}
 	return false;
 }
 
+bool SGRender::SIBRender::batchedRendererExists(RendererID id)
+{
+	if (m_Renderers.count(id))
+	{
+		if (m_Renderers[id].type == 0)
+		{
+			return true;
+		}
+		return false;
+	}
+	return false;
+}
+
 bool SGRender::SIBRender::instancedRendererExists(RendererID id)
 {
-	if (m_InstancedRenderers.count(id))
+	if (m_Renderers.count(id))
 	{
-		return true;
+		if (m_Renderers[id].type == 1)
+		{
+			return true;
+		}
+		return false;
 	}
 	return false;
 }
@@ -69,7 +237,7 @@ bool SGRender::SIBRender::passExists(RenderPassID id)
 	return false;
 }
 
-SGRender::RenderPassID SGRender::SIBRender::createPass(RendererID renderer, ShaderID shader)
+SGRender::RenderPassID SGRender::SIBRender::createPass(std::string name, RendererID renderer, ShaderID shader)
 {
 	if (!instancedRendererExists(renderer) || !shaderExists(shader))
 	{
@@ -97,39 +265,35 @@ void SGRender::SIBRender::removePass(RenderPassID id)
 	return;
 }
 
-SGRender::RendererID SGRender::SIBRender::createBatchRenderer(VertexType vertexType, GLenum drawingmode)
+SGRender::RendererID SGRender::SIBRender::createBatchRenderer(std::string name, VertexType vertexType, GLenum drawingmode)
 {
 	RendererID id = m_NextRendererID;
-	Dep_Batcher batcher = Dep_Batcher::Dep_Batcher();
+	Batcher batcher = Batcher::Batcher();
 	batcher.setLayout(vertexType);
 	batcher.setDrawingMode(drawingmode);
 	batcher.generate(m_Width, m_Height, 0);
-	m_BatchedRenderers[id] = std::make_shared<Dep_Batcher>(batcher);
+	m_Renderers[id] = { name, 0, std::make_shared<RendererBase>(batcher) };
 	m_NextRendererID++;
 	return id;
 }
 
-SGRender::RendererID SGRender::SIBRender::createInstancedRenderer(VertexType vertexType, GLenum drawingmode)
+SGRender::RendererID SGRender::SIBRender::createInstancedRenderer(std::string name, VertexType vertexType, GLenum drawingmode)
 {
 	RendererID id = m_NextRendererID;
 	Instancer instancer = Instancer::Instancer();
 	instancer.setLayout(vertexType);
 	instancer.setDrawingMode(drawingmode);
 	instancer.generate(m_Width, m_Height, nullptr, 0);
-	m_InstancedRenderers[id] = std::make_shared<Instancer>(instancer);
+	m_Renderers[id] = { name, 1, std::make_shared<RendererBase>(instancer) };
 	m_NextRendererID++;
 	return id;
 }
 
 void SGRender::SIBRender::removeRenderer(RendererID id)
 {
-	if (batchedRendererExists(id))
+	if (rendererExists(id))
 	{
-		m_BatchedRenderers.erase(id);
-	}
-	else if (instancedRendererExists(id))
-	{
-		m_InstancedRenderers.erase(id);
+		m_Renderers.erase(id);
 	}
 }
 
@@ -141,8 +305,29 @@ void SGRender::SIBRender::linkPassUniform(RenderPassID id, const Uniform& unifor
 		return;
 	}
 
+	//Handle texture special case
+	if (uniform.type == UniformType::TEXTURE)
+	{
+		//Find texture from name
+		TexID tex = locateTexture(*((std::string*)uniform.uniform));
+		Tex::Texture* ptr = nullptr;
+		if (!textureExists(tex))
+		{
+			return;
+		}
+		ptr = m_Textures[tex].texture.get();
+
+		Uniform uni = { uniform.name, uniform.type, ptr };
+
+		ShaderID shader_id = m_RenderPasses[id].shader;
+		auto& shader_ptr = m_Shaders[shader_id].shader;
+		InternalUniform uni_int = InternalUniform::InternalUniform(shader_ptr.get(), uni);
+		m_RenderPasses[id].uniforms.push_back(uni_int);
+		return;
+	}
+
 	ShaderID shader_id = m_RenderPasses[id].shader;
-	auto& shader_ptr = m_Shaders[shader_id];
+	auto& shader_ptr = m_Shaders[shader_id].shader;
 	InternalUniform uni_int = InternalUniform::InternalUniform(shader_ptr.get(), uniform);
 	m_RenderPasses[id].uniforms.push_back(uni_int);
 }
@@ -153,11 +338,27 @@ void SGRender::SIBRender::setPassUniform(RenderPassID id, const Uniform& uniform
 	{
 		return;
 	}
-	
-	ShaderID shader_id = m_RenderPasses[id].shader;
-	auto& shader_ptr = m_Shaders[shader_id];
-	InternalUniform uni_int = InternalUniform::InternalUniform(shader_ptr.get(), uniform);
-	shader_ptr->setUniform(uni_int.location, uni_int.uniform, uni_int.type);
+
+	//Handle texture special case
+	if (uniform.type == UniformType::TEXTURE)
+	{
+		//Find texture from name
+		TexID tex = locateTexture(*((std::string*)uniform.uniform));
+		Tex::Texture* ptr = nullptr;
+		if (!textureExists(tex))
+		{
+			return;
+		}
+		ptr = m_Textures[tex].texture.get();
+
+		Uniform uni = { uniform.name, uniform.type, ptr };
+
+		ShaderID shader_id = m_RenderPasses[id].shader;
+		auto& shader_ptr = m_Shaders[shader_id].shader;
+		InternalUniform uni_int = InternalUniform::InternalUniform(shader_ptr.get(), uni);
+		shader_ptr->setUniform(uni_int.location, uni_int.uniform, uni_int.type);
+		return;
+	}
 }
 
 void SGRender::SIBRender::unlinkPassUniform(RenderPassID id, std::string name)
@@ -169,7 +370,7 @@ void SGRender::SIBRender::unlinkPassUniform(RenderPassID id, std::string name)
 
 	//Get with internal id
 	ShaderID shader_id = m_RenderPasses[id].shader;
-	auto& shader_ptr = m_Shaders[shader_id];
+	auto& shader_ptr = m_Shaders[shader_id].shader;
 	GLuint uni_loc = shader_ptr->getUniformLocation(name);
 	
 	auto& uni_vector = m_RenderPasses[id].uniforms;
@@ -207,4 +408,108 @@ bool SGRender::SIBRender::validatePass(RenderPassID id)
 		return false;
 	}
 	return true;
+}
+
+SGRender::RenderLinkID SGRender::SIBRender::linkToBatcher(RendererID renderer, ModelID model)
+{
+	bool modelExists = modelExistsInternal(model);
+	bool matModelExists = matModelExistsInternal(model);
+
+	if (batchedRendererExists(renderer))
+	{
+		if (m_Renderers[renderer].type != 0)
+		{
+			return -1;
+		}
+
+		Batcher* b = (Batcher*)m_Renderers[renderer].renderer.get();
+		
+		if (modelExists)
+		{
+			auto& m = m_Models[model];
+			return b->linkToBatcher(m.model->mesh);
+		}
+		else if (matModelExists)
+		{
+			//TODO make material system
+			return -1;
+		}
+	}
+	return -1;
+}
+
+void SGRender::SIBRender::render()
+{
+	if (m_RenderPasses.size() <= 0)
+	{
+		return;
+	}
+
+	//Set camera uniforms
+	m_Camera.calcVP();
+	m_Camera.updateFrustum();
+	m_Camera.buffer(m_CameraBuffer);
+
+	//Do lighting
+	m_Lighting.cullLights();
+
+	for (auto& p : m_RenderPasses)
+	{
+		auto& s = m_Shaders[p.shader].shader;
+		s->bind();
+		
+		//Set uniforms
+		for (int u = 0; u < p.uniforms.size(); u++)
+		{
+			InternalUniform uni = p.uniforms[u];
+			s->setUniform(uni.location, uni.uniform, uni.type);
+		}
+
+		auto& r = m_Renderers[p.renderer].renderer;
+		r->bufferVideoData();
+		r->drawPrimitives();
+	}
+	m_Camera.resetMovementFlag();
+}
+
+void SGRender::SIBRender::clean()
+{
+	//delete all textures and clean all buffers
+	for (auto& t : m_Textures)
+	{
+		t.second.texture->clearBuffer();
+		t.second.texture->deleteTexture();
+	}
+
+	//clear all maps
+	m_Renderers.clear();
+	m_Shaders.clear();
+	m_Models.clear();
+	m_MatModels.clear();
+	m_Textures.clear();
+}
+
+void SGRender::SIBRender::queueInstruction(RenderInstruction instr)
+{
+	m_Instructions.push(instr);
+}
+
+void SGRender::SIBRender::processInstructions()
+{
+	while (!m_Instructions.empty())
+	{
+		RenderInstruction instr = m_Instructions.front();
+		switch (instr.instr)
+		{
+		case InstrType::DRAW:
+			if (!rendererExists(instr.renderCall.renderer))
+			{
+				break;
+			}
+			((Batcher*)m_Renderers[instr.renderCall.renderer].renderer.get())->commit(instr.renderCall.link, *instr.renderCall.transform);
+			break;
+		default:
+			break;
+		}
+	}
 }
