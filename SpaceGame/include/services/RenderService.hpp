@@ -13,6 +13,7 @@ namespace SGRender
 	typedef int32_t ShaderID;
 	typedef int32_t TexID;
 	typedef int32_t ModelID;
+	typedef int32_t MatID;
 
 	enum class InstrType
 	{

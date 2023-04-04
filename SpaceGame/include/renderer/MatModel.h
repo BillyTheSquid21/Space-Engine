@@ -17,21 +17,17 @@
 
 namespace Model
 {
+    //Contains a mesh and a material
 	struct MatMesh
 	{
-		std::string matName;
 		Material::Material mat;
 		SGRender::Mesh mesh;
 	};
 
-    //TODO - make each material independant of mesh so can be shared
-    //Implementation will be internal to renderer
+    //Contains a series of meshes split by material, with material data included
     struct MatModel
     {
         std::vector<MatMesh> meshes;
-        std::map<std::string, std::string> diffuseTextures;
-        std::map<std::string, std::string> normalTextures;
-        std::map<std::string, std::string> specularTextures;
         SGRender::VertexType vertexType;
     };
 

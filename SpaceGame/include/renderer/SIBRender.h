@@ -17,6 +17,15 @@
 
 namespace SGRender
 {
+	//Decoupled Mat model that doesn't store materials directly
+	//Can later improve the implementation of the actual mat model
+	//Store here for now, need to test system
+	struct DecoMatModel
+	{
+		std::map<MatID, SGRender::Mesh> meshes;
+		VertexType vertexType;
+	};
+
 	//Stands for Simple Instance Batching Render
 	//Renderers are either instancers or static batchers
 	//Will plop this in game state (very bad and wrong) to test before finalising render service methods
@@ -41,6 +50,11 @@ namespace SGRender
 		void unloadModel(ModelID id);
 		bool modelExists(ModelID id);
 		ModelID locateModel(std::string name);
+
+		//TESTING WILL BE REMOVED
+		//Will allow to do stuff as before, then can make good
+		DecoMatModel& getMatModel_bad(ModelID id) { return *m_MatModels[id].model; }
+		Material::Material getMat_bad(MatID id) { return m_Materials[id]; }
 
 		//Manual Texture loading - into CPU memory
 		TexID loadTexture(std::string path, std::string name);
@@ -108,6 +122,8 @@ namespace SGRender
 			std::vector<InternalUniform> uniforms;
 		};
 
+		DecoMatModel processMatModel(const Model::MatModel& model);
+
 		//Storage
 		struct InternalRenderer
 		{
@@ -131,7 +147,7 @@ namespace SGRender
 		struct InternalMatModel
 		{
 			std::string name;
-			std::shared_ptr<Model::MatModel> model;
+			std::shared_ptr<DecoMatModel> model;
 		};
 
 		struct InternalTexture
@@ -150,12 +166,17 @@ namespace SGRender
 		std::map<ModelID, InternalMatModel> m_MatModels;
 		std::map<TexID, InternalTexture> m_Textures;
 
+		//Store materials and their properties for easy lookup
+		std::map<MatID, Material::Material> m_Materials;
+		std::map<RendererID, MatID> m_RendererMaterialMap; //Maps which renderers correspond to which mat
+
 		//ID's are just incremented assuming 32bits provides enough range for now
 		int32_t m_NextRendererID = 0;
 		int32_t m_NextShaderID = 0;
 		int32_t m_NextRenderPassID = 0;
 		int32_t m_NextModelID = 0;
 		int32_t m_NextTexID = 0;
+		int32_t m_NextMatID = 0;
 
 		Camera m_Camera;
 		UniformBuffer m_CameraBuffer;

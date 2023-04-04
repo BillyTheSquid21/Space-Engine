@@ -51,7 +51,7 @@ static bool LoadModelInternal(const char* path, Model::MatModel& model, SGRender
 
         //Set properties and convert where appropriate
         MatMesh& mmesh = model.meshes[i];
-        mmesh.matName = name.C_Str();
+        mmesh.mat.name = name.C_Str();
         mmesh.mat.ambient = { amb.r, amb.g, amb.b };
         mmesh.mat.diffuse = { diff.r, diff.g, diff.b };
         mmesh.mat.specular = { spec.r, spec.g, spec.b };
@@ -71,7 +71,7 @@ static bool LoadModelInternal(const char* path, Model::MatModel& model, SGRender
 
             if (ret == 0)
             {
-                model.diffuseTextures[mmesh.matName] = texName.C_Str();
+                model.meshes[i].mat.diffuseTexture = texName.C_Str();
 #if _SHOW_MODEL_DEBUG
                 EngineLogOk("Diffuse Texture: ", texName.C_Str());
 #endif
@@ -85,7 +85,7 @@ static bool LoadModelInternal(const char* path, Model::MatModel& model, SGRender
 
             if (ret == 0)
             {
-                model.normalTextures[mmesh.matName] = texName.C_Str();
+                model.meshes[i].mat.normalTexture = texName.C_Str();
 #if _SHOW_MODEL_DEBUG
                 EngineLogOk("Normal Texture: ", texName.C_Str());
 #endif
@@ -99,7 +99,7 @@ static bool LoadModelInternal(const char* path, Model::MatModel& model, SGRender
 
             if (ret == 0)
             {
-                model.specularTextures[mmesh.matName] = texName.C_Str();
+                model.meshes[i].mat.specularTexture = texName.C_Str();
 #if _SHOW_MODEL_DEBUG
                 EngineLogOk("Specular Texture: ", texName.C_Str());
 #endif

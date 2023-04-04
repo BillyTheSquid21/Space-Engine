@@ -29,12 +29,12 @@ bool ExampleScene::init(const char name[], Key_Callback kCallback, Mouse_Callbac
 	for (int i = 0; i < model->meshes.size(); i++)
 	{
 		//2.4.a Load diffuse texture
-		std::string diffPath = "res/s/" + model->diffuseTextures[model->meshes[i].matName];
+		std::string diffPath = "res/s/" + model->meshes[i].mat.diffuseTexture;
 		std::string diffName = "diff_" + std::to_string(i);
 		SGRender::System::loadTexture(diffPath, diffName, 0, 3, Tex::T_FILTER_LINEAR);
 
 		//2.4.b Load normal texture
-		std::string normPath = "res/s/" + model->normalTextures[model->meshes[i].matName];
+		std::string normPath = "res/s/" + model->meshes[i].mat.normalTexture;
 		std::string normName = "norm_" + std::to_string(i);
 		SGRender::System::loadTexture(normPath, normName, 1, 3, Tex::T_FILTER_LINEAR);
 

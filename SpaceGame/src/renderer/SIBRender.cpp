@@ -2,8 +2,10 @@
 
 //Default Texture slots
 constexpr int32_t SLOT_DIFF = 0;
+const std::string DIFF_UNI_NAME = "u_Texture";
 constexpr int32_t SLOT_SPEC = 1;
 constexpr int32_t SLOT_NORM = 2;
+const std::string NORM_UNI_NAME = "u_NormalMap";
 constexpr int32_t SLOT_SHAD = 3;
 
 bool SGRender::SIBRender::init(float width, float height)
@@ -32,6 +34,44 @@ SGRender::ShaderID SGRender::SIBRender::loadShader(std::string vertPath, std::st
 	return id;
 }
 
+SGRender::DecoMatModel SGRender::SIBRender::processMatModel(const Model::MatModel& model)
+{
+	//Check for if material exists already
+	//If so, get MatID and put mesh in map
+	//Otherwise generate new MatID and put mesh in map
+	DecoMatModel deco;
+	for (auto& m : model.meshes)
+	{
+		//Locate any material with that name
+		bool located = false;
+		for (auto& mat : m_Materials)
+		{
+			if (mat.second.name == m.mat.name)
+			{
+				deco.meshes[mat.first] = m.mesh;
+				located = true;
+				break;
+			}
+		}
+
+		//Create new Material
+		if (!located)
+		{
+			//Material
+			MatID matID = m_NextMatID;
+			m_Materials[matID] = m.mat;
+			deco.meshes[matID] = m.mesh;
+			m_NextMatID++;
+
+			//Load textures - HARD CODED PATHS FOR NOW
+			loadTexture("res/s/" + m_Materials[matID].diffuseTexture, "m_" + std::to_string(matID) + m_Materials[matID].diffuseTexture);
+			loadTexture("res/s/" + m_Materials[matID].normalTexture, "m_" + std::to_string(matID) + m_Materials[matID].normalTexture);
+			loadTexture("res/s/" + m_Materials[matID].specularTexture, "m_" + std::to_string(matID) + m_Materials[matID].specularTexture);
+		}
+	}
+	deco.vertexType = model.vertexType;
+}
+
 SGRender::ModelID SGRender::SIBRender::loadModel(std::string path, std::string name, VertexType vertexType)
 {
 	ModelID id = m_NextModelID;
@@ -45,8 +85,10 @@ SGRender::ModelID SGRender::SIBRender::loadMatModel(std::string path, std::strin
 {
 	ModelID id = m_NextModelID;
 	m_MatModels[id] = { name };
-	Model::LoadModel(path.c_str(), *m_MatModels[id].model, vertexType);
-	m_NextModelID++;
+	Model::MatModel model;
+	Model::LoadModel(path.c_str(), model, vertexType);
+	m_MatModels[id].model = std::make_shared<DecoMatModel>(processMatModel(model));
+	m_NextModelID++;	
 	return id;
 }
 
