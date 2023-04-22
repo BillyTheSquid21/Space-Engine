@@ -44,7 +44,7 @@ namespace SGRender
 	};
 
 	//Each uniform just requires a name and a location of the uniform
-	struct Uniform
+	struct Uni
 	{
 		std::string name;
 		SGRender::UniformType type;

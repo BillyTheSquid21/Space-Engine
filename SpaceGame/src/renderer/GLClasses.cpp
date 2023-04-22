@@ -2,7 +2,7 @@
 
 //Safe versions that checks address is set
 //Lets destructors call without worrying was generated
-void glDeleteBuffers_s(GLsizei n, const GLuint* buffers)
+void glDeleteBuffers_s(GLsizei n, GLuint* buffers)
 {
 	if (!buffers)
 	{
@@ -13,6 +13,7 @@ void glDeleteBuffers_s(GLsizei n, const GLuint* buffers)
 		return;
 	}
 	glDeleteBuffers(1, buffers);
+	*buffers = 0; //invalidate
 }
 
 void glDeleteShader_s(GLuint shader)

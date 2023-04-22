@@ -5,6 +5,7 @@
 #include "string"
 #include "cstring"
 #include "unordered_map"
+#include "map"
 #include "algorithm"
 #include "glm/glm.hpp"
 #include "renderer/Renderer.hpp"
@@ -14,13 +15,20 @@
 #include "renderer/Texture.h"
 #include "renderer/Lighting.h"
 #include "renderer/MatModel.h"
+#include "services/RenderService.hpp"
 #include "utility/SegArray.hpp"
-
-#define MAX_NAME_LENGTH 15
 
 //Keeps track of, stores and cycles various renderers for dynamic renderers
 namespace SGRender
 {
+	//LIST OF WHAT TO DO SO I DONT TEAR MY EYES OUT
+	//Y means completed, N means otherwise
+	//1. Remove the shitty string system - Y
+	//2. Rework model system to not use templates - Y
+	//3. Remove set parameter - Y
+	//4. Rework maps to be ID based not unordered - Y
+	//5. Remove referencing, decouple from user - N
+	//TODO - list more
 
 	//Each uniform just requires a name and a location of the uniform
 	struct Uniform
@@ -36,216 +44,80 @@ namespace SGRender
 		D_DISABLE_DEPTH_TEST = 0b00000001
 	};
 
-	//Const char is used to easier convert to static string (char str[16])
-	//std::string is used as key to unordered map
+	typedef std::map<MatID, std::vector<Mesh>> MaterialMeshMap; //Maps each mesh to a material
+
 	class System
 	{
 	public:
-		static bool init(int width, int height);
-		static void set();
-		static void setCamera(Camera& camera) { s_Camera = camera; }
-		static Camera& camera() { return s_Camera; }
+		bool init(int width, int height, Camera& camera);
+		void setCamera(Camera& camera) { s_Camera = camera; }
+		Camera& camera() { return s_Camera; }
 
-		static void clearScreen() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
-		static void setClearColor(float r, float g, float b) { glClearColor(r, g, b, 1.0f); }
+		void clearScreen() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+		void setClearColor(float r, float g, float b) { glClearColor(r, g, b, 1.0f); }
 
-		static void createRenderPass(const char* passName, std::vector<Uniform>& uniforms, const char* shaderName, const char* rendererName, int16_t priority, int flag);
-		static void removeRenderPass(const char* name);
+		void createRenderPass(std::string name, std::vector<Uniform>& uniforms, ShaderID shader, RendererID renderer, int16_t priority, int flag);
+		void removeRenderPass(std::string name);
 
-		static void loadTexture(std::string path, std::string name, int slot, int bpp, int flag);
-		static void loadTexture(std::string atlasName, std::string path, std::string name);
-		static void unloadTexture(std::string name);
-		static void unloadTexture(std::string atlasName, std::string name);
-		static void linkModelToAtlas(std::string atlas, std::string texture, std::string model);
-		static void unlinkModelFromAtlas(std::string atlas, std::string texture, std::string model);
-		static void generateAndMapAtlas(std::string atlas, int slot, int bpp, int flag);
+		//Texture Loading
+		TexID loadTexture(std::string path, std::string name, int slot, int bpp, int flag);
+		void unloadTexture(TexID id);
+		bool textureExists(TexID id);
+		TexID locateTexture(std::string name);
 
+		//Model Loading
+		ModelID loadModel(std::string path, std::string name, VertexType vertexType, int modelFlags);
+		ModelID loadMatModel(std::string path, std::string name, VertexType vertexType, int modelFlags);
+		void unloadModel(ModelID id);
+		bool modelExists(ModelID id);
+		ModelID locateModel(std::string name);
 
-		//TODO - make threaded
-		static void loadModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
-		{
-			if (!s_Set)
-			{
-				return;
-			}
+		//Shader Loading
+		ShaderID loadShader(std::string vertPath, std::string fragPath, std::string name);
+		ShaderID loadShader(std::string vertPath, std::string fragPath, std::string geoPath, std::string name);
+		void unloadShader(ShaderID id);
+		bool shaderExists(ShaderID id);
+		ShaderID locateShader(std::string name);
 
-			if (s_Models->find(name) == s_Models->end())
-			{
-				(*s_Models)[name] = Mesh();
-				Model::LoadModel(path.c_str(), s_Models->at(name), vertexType, modelFlags);
-				EngineLog("Model loaded: ", name);
-				return;
-			}
-			EngineLog("Model ", name, " was found");
-		}
+		//Material
+		bool materialExists(MatID material);
+		MatID locateMaterial(std::string name);
 
-		//TODO - make threaded
-		static void loadMatModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
-		{
-			if (!s_Set)
-			{
-				return;
-			}
-
-			if (s_MatModels->find(name) == s_MatModels->end())
-			{
-				(*s_MatModels)[name] = Model::MatModel();
-				Model::LoadModel(path.c_str(), s_MatModels->at(name), vertexType, modelFlags);
-				EngineLog("Material Model loaded: ", name);
-				return;
-			}
-			EngineLog("Material Model ", name, " was found");
-		}
-
-		static void unloadModel(std::string name);
-
-		static int loadShader(const char* vertPath, const char* fragPath, const char* name);
-		static int loadShader(const char* vertPath, const char* fragPath, const char* geoPath, const char* name);
+		//Batcher and Instancer addition
+		RendererID addBatcher(std::string name, VertexType vertexType, GLenum drawMode);
+		RendererID addInstancer(std::string name, std::string modelName, VertexType vertexType, GLenum drawMode);
+		void removeRenderer(RendererID id);
+		bool rendererExists(RendererID id);
+		RendererID locateRenderer(std::string name);
 		
-		template<typename... Args>
-		static int addBatcher(const char* name, VertexType vertexType, GLenum drawMode, Args... args)
-		{
-			if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
-			{
-				EngineLog("Invalid Batcher Name!");
-				return -1;
-			}
+		void commitToBatcher(RendererID id, void* src, float* vert, unsigned int vertSize, const unsigned int* ind, unsigned int indSize);
+		void commitToInstancer(RendererID id, void* data, unsigned int dataSize, unsigned int count);
+		void removeFromBatcher(RendererID id, void* src, void* vert);
+		void batch(RendererID id);
 
-			char id[MAX_NAME_LENGTH + 1] = "\0";
-			strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-			//Check if exists
-			for (int i = 0; i < s_Batchers.size(); i++)
-			{
-				if (!strcmp(id, s_Batchers[i].id))
-				{
-					EngineLog("Batcher found!");
-					return i;
-				}
-			}
+		void render();
+		void bufferVideoData();
 
-			//Otherwise create and generate
-			SGRender::Dep_Batcher batcher;
+		void setDim(int width, int height) { s_Width = width; s_Height = height; }
+		void clean();
 
-			//First check for any spaces
-			for (int i = 0; i < s_Batchers.size(); i++)
-			{
-				if (!strcmp(s_Batchers[i].id, ""))
-				{
-					memset(s_Batchers[i].id, 0, MAX_NAME_LENGTH + 1);
-					strcpy_s(s_Batchers[i].id, MAX_NAME_LENGTH + 1, id);
-					s_Batchers[i].object = Dep_Batcher();
-					s_Batchers[i].count = 0;
-					s_Batchers[i].object.setLayout(vertexType);
-					s_Batchers[i].object.setDrawingMode(drawMode);
-					s_Batchers[i].object.generate(s_Width, s_Height, 0);
-					return i;
-				}
-			}
+		bool getShader(std::string shader, SGRender::Shader** shaderPtr);
+		Lighting& lighting() { return s_Lighting; }
 
-			//Otherwise put at back
-			auto bt = s_Batchers.emplace_back();
-			strcpy_s(bt->id, MAX_NAME_LENGTH + 1, id);
-			bt->count = 0;
-			bt->object.setLayout(vertexType);
-			bt->object.setDrawingMode(drawMode);
-			bt->object.generate(s_Width, s_Height, 0);
-			return s_Batchers.size() - 1;
-		}
-		
-		static SGRender::Dep_Batcher& batcher(int index) { return s_Batchers[index].object; }
-		static SGRender::Instancer& instancer(int index) { return s_Instancers[index].object; }
-
-		template<typename... Args>
-		static int addInstancer(const char* name, const char* modelName, VertexType vertexType, GLenum drawMode, Args... args)
-		{
-			if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
-			{
-				EngineLog("Invalid Instancer name!");
-				return -1;
-			}
-
-			char id[MAX_NAME_LENGTH + 1] = "\0";
-			strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-			//Check if exists
-			for (int i = 0; i < s_Instancers.size(); i++)
-			{
-				if (!strcmp(id, s_Instancers[i].id))
-				{
-					EngineLog("Instancer found!");
-					return i;
-				}
-			}
-
-			//Otherwise create and generate
-			//Check if model is loaded, if not, don't allow
-			std::string stdname = std::string(modelName);
-			for (auto& mod : *s_Models)
-			{
-				if (mod.first == stdname)
-				{
-					SGRender::Instancer instancer;
-					//Check if any spare places
-					for (int i = 0; i < s_Instancers.size(); i++)
-					{
-						if (!strcmp(s_Instancers[i].id, ""))
-						{
-							memset(s_Instancers[i].id, 0, MAX_NAME_LENGTH + 1);
-							strcpy_s(s_Instancers[i].id, MAX_NAME_LENGTH + 1, id);
-							s_Instancers[i].object = Instancer();
-							s_Instancers[i].count = 0;
-							s_Instancers[i].object.setLayout(vertexType);
-							s_Instancers[i].object.setDrawingMode(drawMode);
-							s_Instancers[i].object.generate(s_Width, s_Height, &s_Models->at(stdname), 0);
-							return i;
-						}
-					}
-
-					auto in = s_Instancers.emplace_back();
-					strcpy_s(in->id, MAX_NAME_LENGTH + 1, id);
-					in->count = 0;
-					in->object.setLayout(vertexType);
-					in->object.setDrawingMode(drawMode);
-					in->object.generate(s_Width, s_Height, &s_Models->at(stdname), 0);
-
-					return s_Instancers.size() - 1;
-				}
-			}
-			EngineLog("Model not loaded!");
-			return -1;
-		}
-		
-		static void unloadShader(const char* name);
-		static bool linkToBatcher(const char* name, uint32_t& index);
-		static bool linkToInstancer(const char* name, uint32_t& index);
-		static void unlinkFromBatcher(uint32_t index);
-		static void unlinkFromInstancer(uint32_t index);
-		
-		static void commitToBatcher(int index, void* src, float* vert, unsigned int vertSize, const unsigned int* ind, unsigned int indSize);
-		static void commitToInstancer(int index, void* data, unsigned int dataSize, unsigned int count);
-		static void removeFromBatcher(int index, void* src, void* vert);
-		static void batch(int index);
-
-		static void render();
-		static void bufferVideoData();
-
-		static void setDim(int width, int height) { s_Width = width; s_Height = height; }
-		static void clean();
-
-		static Tex::Texture* findTexture(std::string name);
-		static bool getShader(const char* shader, SGRender::Shader** shaderPtr);
-		static Lighting& lighting() { return s_Lighting; }
-
-		static bool accessModel(std::string name, Mesh** model);
-		static bool accessMatModel(std::string name, Model::MatModel** model);
-		static bool doesPassExist(const char* passName);
+		bool accessModel(std::string name, Mesh** model);
+		bool accessMatModel(std::string name, MaterialMeshMap** model);
+		Material::Material& accessMaterial(MatID id) { return *m_Materials[id].material; }
+		bool doesPassExist(std::string name);
 
 	private:
-		static void removeRedundantPasses(void* addr); //Removes passes containing newly cleared renderers
+		//Internal Checks
+		bool modelExistsInternal(ModelID id);
+		bool matModelExistsInternal(ModelID id);
 
 		template<typename T>
 		struct Identifier
 		{
-			char id[MAX_NAME_LENGTH + 1] = "\0";
+			std::string id = "";
 			T object;
 		};
 
@@ -270,53 +142,93 @@ namespace SGRender
 			void* uniform;
 		};
 
-		struct RenderPass
+		struct InternalTexture
 		{
-			char id[MAX_NAME_LENGTH + 1] = "\0";
-			int16_t priority = 0; //Gives relative priority over another pass (higher number is done first)
-			int flag = 0;
-			SGRender::Shader* shader;
-			std::vector<InternalUniform> uniforms;
-			SGRender::RendererBase* renderer;
+			std::string name;
+			std::shared_ptr<Tex::Texture> texture;
 		};
 
-		static bool sortByPriority(SGRender::System::RenderPass& p1, SGRender::System::RenderPass& p2);
+		struct InternalModel
+		{
+			std::string name;
+			std::shared_ptr<Model::Model> model;
+		};
+
+		struct InternalMatModel
+		{
+			std::string name;
+			std::shared_ptr<MaterialMeshMap> meshes;
+		};
+
+		struct InternalShader
+		{
+			std::string name;
+			std::shared_ptr<Shader> shader;
+		};
+
+		struct InternalRenderer
+		{
+			std::string name;
+			int32_t type = 0;
+			std::shared_ptr<RendererBase> renderer;
+		};
+
+		struct InternalMaterial
+		{
+			std::shared_ptr<Material::Material> material;
+		};
+
+		struct RenderPass
+		{
+			std::string id = "";
+			int16_t priority = 0; //Gives relative priority over another pass (higher number is done first)
+			int flag = 0;
+			ShaderID shader;
+			std::vector<InternalUniform> uniforms;
+			RendererID renderer;
+		};
+
+		//Extract data from Mat Model and return a pointer
+		std::shared_ptr<MaterialMeshMap> extractMatModel(Model::MatModel& model);
 
 		//Render data
-		static std::vector<RenderPass> s_RenderPasses;
+		std::vector<RenderPass> s_RenderPasses;
 
-		//Data storage - use segarray to keep pointers to consistent and allocations fast
-		//TODO - Optimise for a specific size, using 16 for all right now
-		static SegArray<Identifier<SGRender::Shader>, 16> s_Shaders;
-		static SegArray<IdCount<SGRender::Dep_Batcher>, 16> s_Batchers;
-		static SegArray<IdCount<SGRender::Instancer>, 16> s_Instancers;
-		
-		//Data storage for non frequently accessed components
-		static std::unique_ptr<std::unordered_map<std::string, Mesh>> s_Models;
-		static std::unique_ptr<std::unordered_map<std::string, Model::MatModel>> s_MatModels;
-		static std::unique_ptr<std::unordered_map<std::string, Tex::Texture>> s_Textures;
+		//Data storage
+		std::map<ShaderID, InternalShader> s_Shaders;
+		std::map<RendererID, InternalRenderer> s_Renderers;
+		std::map<ModelID, InternalModel> s_Models;
+		std::map<ModelID, InternalMatModel> s_MatModels;
+		std::map<TexID, InternalTexture> s_Textures;
+		std::map<MatID, InternalMaterial> m_Materials;
+
+		//IDs
+		int32_t m_NextTexID = 0;
+		int32_t m_NextModelID = 0;
+		int32_t m_NextShaderID = 0;
+		int32_t m_NextRendererID = 0;
+		int32_t m_NextMaterialID = 0;
 
 		//Dimensions
-		static int32_t s_Width, s_Height;
-
-		static bool s_Set;
+		int32_t s_Width = 640; int32_t s_Height = 320;
 
 		//Debug Texture
-		static void generateDebugTex();
-		static const char* s_DebugName;
+		void generateDebugTex();
+		const char* s_DebugName = "debug";
+		const int m_DebugID = 0;
 
 		//Flags
-		static void flagStart(int flag);
-		static void flagEnd(int flag);
+		void flagStart(int flag);
+		void flagEnd(int flag);
 
 		//Lighting
-		static Lighting s_Lighting;
+		Lighting s_Lighting;
 
 		//Camera
-		static Camera s_Camera;
-		static UniformBuffer s_CameraBuffer;
+		Camera s_Camera;
+		UniformBuffer s_CameraBuffer;
 
-		static constexpr glm::mat4 s_Identity = glm::mat4(1.0f);
+		const glm::mat4 s_Identity = glm::mat4(1.0f);
 	};
 }
 

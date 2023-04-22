@@ -100,7 +100,6 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
     EngineLogOk("ImGui");
 
     //Init static engines
-    success = SGRender::System::init(m_Width, m_Height);
     success = SGSound::System::init();
     success = SGGUI::System::init(m_Width, m_Height);
 
@@ -132,13 +131,6 @@ bool Game::init(const char name[], Key_Callback kCallback, Mouse_Callback mCallb
 //Render
 void Game::render() 
 {
-    glfwSwapBuffers(window);
-    SGRender::System::clearScreen();
-
-    //Buffer rendersys data and draw
-    SGRender::System::bufferVideoData();
-    SGRender::System::render();
-
     //Draw Gui
     SGGUI::System::render();
 }
@@ -161,7 +153,6 @@ void Game::clean()
 
     //Clean static systems
     SGSound::System::clean();
-    SGRender::System::clean();
     SGGUI::System::clean();
     SGGUI::FontStorage::clear();
 

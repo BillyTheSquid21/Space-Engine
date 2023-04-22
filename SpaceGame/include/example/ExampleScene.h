@@ -3,6 +3,7 @@
 #define EXAMPLE_SCENE
 
 #include "core/Game.h"
+#include "renderer/SIBRender.h"
 
 class ExampleScene : public Game
 {
@@ -13,11 +14,28 @@ public:
 
 	void update(double deltaTime);
 
+	void render();
+
 	void clean();
 
 	void handleInput(int key, int scancode, int action, int mods);
 
 private:
+
+	void initRenderer1();
+	void renderRenderer1();
+	void cleanRenderer1();
+	void initRenderer2();
+	void renderRenderer2();
+	void cleanRenderer2();
+
+	SGRender::ModelID model;
+	SGRender::ShaderID shader;
+	std::vector<SGRender::RenderInstruction> instr;
+	glm::mat4 id = glm::identity<glm::mat4>();
+
+	SGRender::System renderer1;
+	SGRender::SIBRender renderer2;
 	float m_ElapsedTime = 0.0f;
 	int m_ShowLights = 0;
 };

@@ -1,133 +1,84 @@
 #include "renderer/RenderSys.h"
 
-std::vector<SGRender::System::RenderPass> SGRender::System::s_RenderPasses;
-SegArray<SGRender::System::Identifier<SGRender::Shader>, 16> SGRender::System::s_Shaders;
-SegArray<SGRender::System::IdCount<SGRender::Dep_Batcher>, 16> SGRender::System::s_Batchers;
-SegArray<SGRender::System::IdCount<SGRender::Instancer>, 16> SGRender::System::s_Instancers;
-std::unique_ptr<std::unordered_map<std::string, SGRender::Mesh>> SGRender::System::s_Models;
-std::unique_ptr<std::unordered_map<std::string, Model::MatModel>> SGRender::System::s_MatModels;
-std::unique_ptr<std::unordered_map<std::string, Tex::Texture>> SGRender::System::s_Textures;
-int32_t SGRender::System::s_Width = 640;
-int32_t SGRender::System::s_Height = 320;
-bool SGRender::System::s_Set = false;
-const char* SGRender::System::s_DebugName = "debug";
-SGRender::Lighting SGRender::System::s_Lighting;
-SGRender::Camera SGRender::System::s_Camera;
-SGRender::UniformBuffer SGRender::System::s_CameraBuffer;
+constexpr int32_t TYPE_BATCHER = 0;
+constexpr int32_t TYPE_INSTANCER = 1;
 
-bool SGRender::System::sortByPriority(SGRender::System::RenderPass& p1, SGRender::System::RenderPass& p2)
+std::shared_ptr<SGRender::MaterialMeshMap> SGRender::System::extractMatModel(Model::MatModel& model)
 {
-	return p1.priority > p2.priority;
-}
+	MaterialMeshMap materialsMap;
 
-void SGRender::System::createRenderPass(const char* passName, std::vector<Uniform>& uniforms, const char* shaderName, const char* rendererName, int16_t priority, int flag)
-{
-	if (!s_Set || strlen(passName) > MAX_NAME_LENGTH || strlen(shaderName) > MAX_NAME_LENGTH || strlen(rendererName) > MAX_NAME_LENGTH)
+	//Iterate each material in mesh, add if doesn't exist yet
+	//Add mesh to array mapped to material
+	for (auto& m : model.meshes)
 	{
-		EngineLog("Invalid render pass!");
-		return;
+		MatID materialID = locateMaterial(m.mat.name);
+		if (materialID == -1)
+		{
+			//Add material
+			materialID = m_NextMaterialID;
+			m_Materials[materialID] = { std::make_shared<Material::Material>(m.mat) };
+			m_NextMaterialID++;
+		}
+
+		materialsMap[materialID].push_back(m.mesh);
 	}
 
-	EngineLog("Building render pass : ", passName);
+	return std::make_shared<MaterialMeshMap>(materialsMap);
+}
 
-	char passId[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(passId, MAX_NAME_LENGTH + 1, passName);
+void SGRender::System::createRenderPass(std::string name, std::vector<Uniform>& uniforms, ShaderID shader, RendererID renderer, int16_t priority, int flag)
+{
+	EngineLog("Building render pass : ", name);
 
 	//Check if pass already exists
-	if (doesPassExist(passId))
+	if (doesPassExist(name))
 	{
 		EngineLog("Pass with that name already exists!");
 		return;
 	}
 
-	//Check shader exists
-	SGRender::Shader* shaderPtr = nullptr;
-	char shaderId[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(shaderId, MAX_NAME_LENGTH + 1, shaderName);
-	for (int i = 0; i < s_Shaders.size(); i++)
-	{
-		if (!strcmp(shaderId, s_Shaders[i].id))
-		{
-			shaderPtr = &s_Shaders[i].object;
-			break;
-		}
-	}
-	if (!shaderPtr)
+	if (!shaderExists(shader))
 	{
 		EngineLog("Shader not found!");
 		return;
 	}
 
-	//Check renderer exists (assumes instancers are more common)
-	SGRender::RendererBase* renderPtr = nullptr;
-	char renderId[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(renderId, MAX_NAME_LENGTH + 1, rendererName);
-	for (int i = 0; i < s_Instancers.size(); i++)
-	{
-		if (!strcmp(renderId, s_Instancers[i].id))
-		{
-			renderPtr = &s_Instancers[i].object;
-			break;
-		}
-	}
-	if (!renderPtr)
-	{
-		for (int i = 0; i < s_Batchers.size(); i++)
-		{
-			if (!strcmp(renderId, s_Batchers[i].id))
-			{
-				renderPtr = &s_Batchers[i].object;
-				break;
-			}
-		}
-	}
-
-	if (!renderPtr)
+	if (!rendererExists(renderer))
 	{
 		EngineLog("Renderer not found!");
 		return;
 	}
 
 	//If checks passed, get uniform locs and add pass to end of passes
-	shaderPtr->bind();
+	s_Shaders[shader].shader->bind();
 	std::vector<InternalUniform> unis;
 	for (int i = 0; i < uniforms.size(); i++)
 	{
 		if (uniforms[i].type == UniformType::TEXTURE)
 		{
 			std::string* resolvedTex = (std::string*)uniforms[i].uniform;
-			uniforms[i].uniform = findTexture(*resolvedTex);
+			uniforms[i].uniform = s_Textures[locateTexture(*resolvedTex)].texture.get();
 		}
-		unis.emplace_back(shaderPtr, uniforms[i]);
+		unis.emplace_back(s_Shaders[shader].shader.get(), uniforms[i]);
 	}
-	shaderPtr->unbind();
+	s_Shaders[shader].shader->unbind();
 
 	s_RenderPasses.emplace_back();
 	s_RenderPasses.back().priority = priority;
 	s_RenderPasses.back().flag = flag;
-	s_RenderPasses.back().shader = shaderPtr;
+	s_RenderPasses.back().shader = shader;
 	s_RenderPasses.back().uniforms = unis;
-	s_RenderPasses.back().renderer = renderPtr;
+	s_RenderPasses.back().renderer = renderer;
 
-	EngineLog("Created render pass: ", passName);
-	strcpy_s(s_RenderPasses.back().id, MAX_NAME_LENGTH + 1, passId);
-
-	//Sort render passes by priority
-	std::sort(s_RenderPasses.begin(), s_RenderPasses.end(), &sortByPriority);
+	EngineLog("Created render pass: ", name);
+	s_RenderPasses.back().id == name;
 }
 
-void SGRender::System::removeRenderPass(const char* name)
+void SGRender::System::removeRenderPass(std::string name)
 {
-	if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
-	{
-		return;
-	}
-
-	char id[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(id, MAX_NAME_LENGTH + 1, name);
 	for (int i = 0; i < s_RenderPasses.size(); i++)
 	{
-		if (!strcmp(s_RenderPasses[i].id, id))
+		if (s_RenderPasses[i].id == name)
 		{
 			s_RenderPasses.erase(s_RenderPasses.begin() + i);
 			return;
@@ -136,314 +87,261 @@ void SGRender::System::removeRenderPass(const char* name)
 	EngineLog("No matching render pass was found!");
 }
 
-void SGRender::System::loadTexture(std::string path, std::string name, int slot, int bpp, int flag)
+SGRender::TexID SGRender::System::loadTexture(std::string path, std::string name, int slot, int bpp, int flag)
 {
-	if (!s_Set)
-	{
-		return;
-	}
-
-	if (s_Textures->find(name) == s_Textures->end())
-	{
-		Tex::Texture texture;
-		s_Textures->insert(std::make_pair(name, texture));
-		s_Textures->at(name).loadTexture(path, bpp, true);
-		s_Textures->at(name).generateTexture(slot, flag);
-		s_Textures->at(name).clearBuffer();
-		EngineLog("Texture loaded: ", name);
-		return;
-	}
-	EngineLog("Texture ", name, " was found");
+	TexID id = m_NextTexID;
+	s_Textures[id] = { name, std::shared_ptr<Tex::Texture>(new Tex::Texture()) };
+	s_Textures[id].texture->loadTexture(path, bpp, true);
+	s_Textures[id].texture->generateTexture(slot, flag);
+	s_Textures[id].texture->clearBuffer();
+	m_NextTexID++;
+	return id;
 }
 
-void SGRender::System::unloadTexture(std::string name)
+void SGRender::System::unloadTexture(TexID id)
 {
-	if (!s_Set)
+	if (!textureExists(id))
 	{
+		EngineLog("Texture not found for unloading! ", id);
 		return;
 	}
-
-	if (s_Textures->find(name) != s_Textures->end())
-	{
-		s_Textures->at(name).deleteTexture();
-		s_Textures->erase(name);
-		return;
-	}
-	EngineLog("Texture to be deleted not found!");
+	s_Textures[id].texture->deleteTexture();
+	s_Textures.erase(id);
 }
 
-void SGRender::System::unloadModel(std::string name)
+bool SGRender::System::textureExists(TexID id)
 {
-	if (!s_Set)
-	{
-		return;
-	}
-
-	if (s_Models->find(name) != s_Models->end())
-	{
-		s_Models->erase(name);
-		return;
-	}
-
-	if (s_MatModels->find(name) != s_MatModels->end())
-	{
-		s_MatModels->erase(name);
-		return;
-	}
-	EngineLog("Model to be deleted not found!");
+	return s_Textures.count(id);
 }
 
-int SGRender::System::loadShader(const char* vertPath, const char* fragPath, const char* name)
+SGRender::TexID SGRender::System::locateTexture(std::string name)
 {
-	if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
+	for (auto& t : s_Textures)
 	{
-		EngineLog("Invalid Shader name!");
-		return -1;
-	}
-
-	char id[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-	for (int i = 0; i < s_Shaders.size(); i++)
-	{
-		if (!strcmp(s_Shaders[i].id, id))
+		if (t.second.name == name)
 		{
-			EngineLog("Shader already loaded!");
-			return i;
+			return t.first;
 		}
 	}
-	SGRender::Shader shader;
+	return m_DebugID;
+}
 
-	//Check spaces
-	for (int i = 0; i < s_Shaders.size(); i++)
+void SGRender::System::unloadModel(ModelID id)
+{
+	if (modelExistsInternal(id))
 	{
-		if (!strcmp(s_Shaders[i].id, ""))
+		s_Models.erase(id);
+		return;
+	}
+	else if (modelExistsInternal(id))
+	{
+		s_MatModels.erase(id);
+		return;
+	}
+	EngineLog("Model not found for unloading! ", id);
+}
+
+SGRender::ModelID SGRender::System::locateModel(std::string name)
+{
+	for (auto& m : s_Models)
+	{
+		if (m.second.name == name)
 		{
-			memset(s_Shaders[i].id, 0, MAX_NAME_LENGTH + 1);
-			strcpy_s(s_Shaders[i].id, MAX_NAME_LENGTH + 1, id);
-			s_Shaders[i].object.create(vertPath, fragPath);
-			return i;
+			return m.first;
 		}
 	}
+	for (auto& m : s_MatModels)
+	{
+		if (m.second.name == name)
+		{
+			return m.first;
+		}
+	}
+	return -1;
+}
 
-	auto sha = s_Shaders.emplace_back();
-	strcpy_s(sha->id, MAX_NAME_LENGTH + 1, id);
-	s_Shaders.back().object.create(vertPath, fragPath); //Remember to create here as deleteprogram is called in destructor - TODO - make it not
-	
+bool SGRender::System::modelExists(ModelID id)
+{
+	return modelExistsInternal(id) || matModelExistsInternal(id);
+}
+
+bool SGRender::System::modelExistsInternal(ModelID id)
+{
+	return s_Models.count(id);
+}
+
+bool SGRender::System::matModelExistsInternal(ModelID id)
+{
+	return s_MatModels.count(id);
+}
+
+SGRender::ShaderID SGRender::System::loadShader(std::string vertPath, std::string fragPath, std::string name)
+{
+	ShaderID id = m_NextShaderID;
+	std::shared_ptr<Shader> shader(new Shader());
+	shader->create(vertPath, fragPath);
+	s_Shaders[id] = { name, shader };
+
 	//Link to camera vp matrix and lighting
-	sha->object.bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
-	sha->object.bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
+	shader->bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
+	shader->bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
 
-	return s_Shaders.size() - 1;
+	return id;
 }
 
-int SGRender::System::loadShader(const char* vertPath, const char* fragPath, const char* geoPath, const char* name)
+SGRender::ShaderID SGRender::System::loadShader(std::string vertPath, std::string fragPath, std::string geoPath, std::string name)
 {
-	if (!s_Set || strlen(name) > MAX_NAME_LENGTH)
+	ShaderID id = m_NextShaderID;
+	std::shared_ptr<Shader> shader(new Shader());
+	shader->create(vertPath, geoPath, fragPath);
+	s_Shaders[id] = { name, shader };
+
+	//Link to camera vp matrix and lighting
+	shader->bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
+	shader->bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
+
+	return id;
+}
+
+void SGRender::System::unloadShader(ShaderID id)
+{
+	if (!shaderExists(id))
 	{
-		EngineLog("Invalid Shader name!");
+		EngineLog("Shader not found for unloading!");
+		return;
+	}
+	s_Shaders.erase(id);
+}
+
+bool SGRender::System::shaderExists(ShaderID id)
+{
+	return s_Shaders.count(id);
+}
+
+SGRender::ShaderID SGRender::System::locateShader(std::string name)
+{
+	for (auto& s : s_Shaders)
+	{
+		if (s.second.name == name)
+		{
+			return s.first;
+		}
+	}
+	return -1;
+}
+
+SGRender::ModelID SGRender::System::loadModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
+{
+	ModelID id = m_NextModelID;
+	std::shared_ptr<Model::Model> model(new Model::Model());
+	if (!Model::LoadModel(path.c_str(), model->mesh, vertexType, modelFlags))
+	{
+		EngineLog("Model failed to load!");
 		return -1;
 	}
 
-	char id[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-	for (int i = 0; i < s_Shaders.size(); i++)
+	s_Models[id] = { name, model };
+	m_NextModelID++;
+	return id;
+}
+
+SGRender::ModelID SGRender::System::loadMatModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
+{
+	ModelID id = m_NextModelID;
+	Model::MatModel model;
+	if (!Model::LoadModel(path.c_str(), model, vertexType, modelFlags))
 	{
-		if (!strcmp(s_Shaders[i].id, id))
+		EngineLog("Mat Model failed to load!");
+		return -1;
+	}
+
+	s_MatModels[id] = { name, extractMatModel(model) };
+	m_NextModelID++;
+	return id;
+}
+
+SGRender::RendererID SGRender::System::addBatcher(std::string name, VertexType vertexType, GLenum drawMode)
+{
+	RendererID id = m_NextRendererID;
+	std::shared_ptr<Dep_Batcher> batcher(new Dep_Batcher());
+	batcher->setLayout(vertexType);
+	batcher->setDrawingMode(drawMode);
+	batcher->generate(s_Width, s_Height, 0);
+	s_Renderers[id] = { name, TYPE_BATCHER, std::static_pointer_cast<RendererBase>(batcher) };
+	m_NextRendererID++;
+	return id;
+}
+
+int SGRender::System::addInstancer(std::string name, std::string modelName, VertexType vertexType, GLenum drawMode)
+{
+	RendererID id = m_NextRendererID;
+	std::shared_ptr<Instancer> instancer(new Instancer());
+	instancer->setLayout(vertexType);
+	instancer->setDrawingMode(drawMode);
+	instancer->generate(s_Width, s_Height, &s_Models[locateModel(modelName)].model->mesh,0);
+	s_Renderers[id] = { name, TYPE_INSTANCER, std::static_pointer_cast<RendererBase>(instancer) };
+	m_NextRendererID++;
+	return id;
+}
+
+bool SGRender::System::rendererExists(RendererID id)
+{
+	return s_Renderers.count(id);
+}
+
+void SGRender::System::removeRenderer(RendererID id)
+{
+	if (!rendererExists(id))
+	{
+		EngineLog("Renderer not found for removing!");
+		return;
+	}
+	s_Renderers.erase(id); //TODO - split batcher and instancer checks
+}
+
+SGRender::RendererID SGRender::System::locateRenderer(std::string name)
+{
+	for (auto& r : s_Renderers)
+	{
+		if (r.second.name == name)
 		{
-			EngineLog("Shader already loaded!");
-			return i;
+			return r.first;
 		}
 	}
-	SGRender::Shader shader;
-
-	//Check spaces
-	for (int i = 0; i < s_Shaders.size(); i++)
-	{
-		if (!strcmp(s_Shaders[i].id, ""))
-		{
-			memset(s_Shaders[i].id, 0, MAX_NAME_LENGTH + 1);
-			strcpy_s(s_Shaders[i].id, MAX_NAME_LENGTH + 1, id);
-			s_Shaders[i].object.create(vertPath, geoPath, fragPath);
-			return i;
-		}
-	}
-
-	auto sha = s_Shaders.emplace_back();
-	strcpy_s(sha->id, MAX_NAME_LENGTH + 1, id);
-	sha->object.create(vertPath, geoPath, fragPath);
-
-	//Link to camera vp matrix
-	sha->object.bindToUniformBlock("ViewProjection", s_CameraBuffer.bindingPoint());
-
-	return s_Shaders.size() - 1;
+	return -1;
 }
 
-void SGRender::System::unloadShader(const char* name)
+void SGRender::System::commitToBatcher(RendererID id, void* src, float* vert, unsigned int vertSize, const unsigned int* ind, unsigned int indSize)
 {
-	if (!s_Set)
-	{
-		return;
-	}
-
-	char id[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-	for (int i = 0; i < s_Shaders.size(); i++)
-	{
-		if (!strcmp(id, s_Shaders[i].id))
-		{
-			s_Shaders[i].object.deleteShader();
-			memset(s_Shaders[i].id, 0, MAX_NAME_LENGTH + 1);
-			removeRedundantPasses(&s_Shaders[i].object);
-			return;
-		}
-	}
-	EngineLog("Shader isn't loaded!");
+	((Dep_Batcher*)s_Renderers[id].renderer.get())->commitAndBatch(src, vert, vertSize, ind, indSize);
 }
 
-bool SGRender::System::linkToBatcher(const char* name, uint32_t& index)
+void SGRender::System::commitToInstancer(RendererID id, void* data, unsigned int dataSize, unsigned int count)
 {
-	if (!s_Set)
-	{
-		return false;
-	}
-
-	char id[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-	for (int i = 0; i < s_Batchers.size(); i++)
-	{
-		if (!strcmp(id, s_Batchers[i].id))
-		{
-			index = i;
-			s_Batchers[i].count++;
-			return true;
-		}
-	}
-	EngineLog("Batcher not found for linking!");
-	return false;
+	((Instancer*)s_Renderers[id].renderer.get())->commitInstance(data, dataSize, count);
 }
 
-bool SGRender::System::linkToInstancer(const char* name, uint32_t& index)
+void SGRender::System::removeFromBatcher(RendererID id, void* src, void* vert)
 {
-	if (!s_Set)
-	{
-		return false;
-	}
-
-	char id[MAX_NAME_LENGTH + 1] = "\0";
-	strcpy_s(id, MAX_NAME_LENGTH + 1, name);
-	for (int i = 0; i < s_Instancers.size(); i++)
-	{
-		if (!strcmp(id, s_Instancers[i].id))
-		{
-			index = i;
-			s_Instancers[i].count++;
-			return true;
-		}
-	}
-	EngineLog("Instancer not found for linking!");
-	return false;
+	((Dep_Batcher*)s_Renderers[id].renderer.get())->remove(src, vert);
 }
 
-void SGRender::System::removeRedundantPasses(void* addr)
+void SGRender::System::batch(RendererID id)
 {
-	for (int i = 0; i < s_RenderPasses.size(); i++)
-	{
-		if (s_RenderPasses[i].renderer == addr || s_RenderPasses[i].shader == addr)
-		{
-			EngineLog("Pass removed: ", s_RenderPasses[i].id);
-			s_RenderPasses.erase(s_RenderPasses.begin() + i);
-			i--;
-		}
-	}
-}
-
-void SGRender::System::unlinkFromBatcher(uint32_t index)
-{
-	if (!s_Set || index >= s_Batchers.size())
-	{
-		return;
-	}
-
-	s_Batchers[index].count--;
-	if (s_Batchers[index].count < 1)
-	{
-		memset(s_Batchers[index].id, 0, MAX_NAME_LENGTH + 1);
-		removeRedundantPasses(&s_Batchers[index].object);
-	}
-}
-
-void SGRender::System::unlinkFromInstancer(uint32_t index)
-{
-	if (!s_Set)
-	{
-		return;
-	}
-
-	s_Instancers[index].count--;
-	if (s_Instancers[index].count < 1)
-	{
-		memset(s_Instancers[index].id, 0, MAX_NAME_LENGTH + 1);
-		removeRedundantPasses(&s_Instancers[index].object);
-	}
-}
-
-void SGRender::System::commitToBatcher(int index, void* src, float* vert, unsigned int vertSize, const unsigned int* ind, unsigned int indSize)
-{
-	if (!s_Set)
-	{
-		return;
-	}
-
-	assert(index < s_Batchers.size() && "Index out of range!");
-	s_Batchers[index].object.commitAndBatch(src, vert, vertSize, ind, indSize);
-}
-
-void SGRender::System::commitToInstancer(int index, void* data, unsigned int dataSize, unsigned int count)
-{
-	if (!s_Set)
-	{
-		return;
-	}
-	assert(index < s_Instancers.size() && "Index out of range!");
-	s_Instancers[index].object.commitInstance(data, dataSize, count);
-}
-
-void SGRender::System::removeFromBatcher(int index, void* src, void* vert)
-{
-	if (!s_Set)
-	{
-		return;
-	}
-	assert(index < s_Batchers.size() && "Index out of range!");
-	s_Batchers[index].object.remove(src, vert);
-}
-
-void SGRender::System::batch(int index)
-{
-	if (!s_Set)
-	{
-		return;
-	}
-	assert(index < s_Batchers.size() && "Index out of range!");
-	s_Batchers[index].object.batch();
+	((Dep_Batcher*)s_Renderers[id].renderer.get())->batch();
 }
 
 void SGRender::System::bufferVideoData()
 {
-	if (!s_Set)
-	{
-		return;
-	}
-
 	for (int i = 0; i < s_RenderPasses.size(); i++)
 	{
-		s_RenderPasses[i].renderer->bufferVideoData();
+		s_Renderers[s_RenderPasses[i].renderer].renderer->bufferVideoData();
 	}
 }
 
 void SGRender::System::render()
 {
-	if (!s_Set || s_RenderPasses.size() <= 0)
+	if (s_RenderPasses.size() <= 0)
 	{
 		return;
 	}
@@ -459,34 +357,16 @@ void SGRender::System::render()
 	for (int i = 0; i < s_RenderPasses.size(); i++)
 	{
 		RenderPass pass = s_RenderPasses[i];
-		pass.shader->bind();
+		s_Shaders[pass.shader].shader->bind();
 		//Set uniforms
 		for (int u = 0; u < pass.uniforms.size(); u++)
 		{
 			InternalUniform uni = pass.uniforms[u];
-			pass.shader->setUniform(uni.location, uni.uniform, uni.type);
+			s_Shaders[pass.shader].shader->setUniform(uni.location, uni.uniform, uni.type);
 		}
 		flagStart(pass.flag);
-		pass.renderer->drawPrimitives();
+		s_Renderers[pass.renderer].renderer->drawPrimitives();
 		flagEnd(pass.flag);
-	}
-
-	//Check if last shader, batcher or instancer is cleared, then shrink that array
-	//Should avoid excess cleared spots
-	int shaderLast = s_Shaders.size() - 1;
-	if (s_Shaders.size() > 0 && s_Shaders[shaderLast].id == 0)
-	{
-		s_Shaders.resize(shaderLast);
-	}
-	int batchLast = s_Batchers.size() - 1;
-	if (s_Batchers.size() > 0 && s_Batchers[batchLast].id == 0)
-	{
-		s_Batchers.resize(batchLast);
-	}
-	int instanceLast = s_Instancers.size() - 1;
-	if (s_Instancers.size() > 0 && s_Instancers[instanceLast].id == 0)
-	{
-		s_Instancers.resize(instanceLast);
 	}
 
 	s_Camera.resetMovementFlag();
@@ -508,49 +388,54 @@ void SGRender::System::flagEnd(int flag)
 	}
 }
 
-Tex::Texture* SGRender::System::findTexture(std::string name)
-{
-	//Checks both textures and tex atlas
-	if (s_Textures->find(name) != s_Textures->end())
-	{
-		return &s_Textures->at(name);
-	}
-
-	EngineLog("Texture not found!");
-	return &s_Textures->at("debug");
-}
-
 bool SGRender::System::accessModel(std::string name, Mesh** model)
 {
-	if (s_Models->find(name) != s_Models->end())
+	ModelID id = locateModel(name);
+	if (id != -1)
 	{
-		*model = &s_Models->at(name);
+		*model = &s_Models[id].model->mesh;
 		return true;
 	}
 	EngineLog("Model wasn't found!");
 	return false;
 }
 
-bool SGRender::System::accessMatModel(std::string name, Model::MatModel** model)
+bool SGRender::System::accessMatModel(std::string name, MaterialMeshMap** model)
 {
-	if (s_MatModels->find(name) != s_MatModels->end())
+	ModelID id = locateModel(name);
+	if (id != -1)
 	{
-		*model = &s_MatModels->at(name);
+		*model = s_MatModels[id].meshes.get();
 		return true;
 	}
 	EngineLog("Material Model wasn't found!");
 	return false;
 }
 
-bool SGRender::System::getShader(const char* shader, SGRender::Shader** shaderPtr)
+bool SGRender::System::materialExists(MatID material)
 {
-	char id[MAX_NAME_LENGTH + 1];
-	strcpy_s(id, MAX_NAME_LENGTH + 1, shader);
-	for (int i = 0; i < s_Shaders.size(); i++)
+	return m_Materials.count(material);
+}
+
+SGRender::MatID SGRender::System::locateMaterial(std::string name)
+{
+	for (auto& m : m_Materials)
 	{
-		if (!strcmp(id, s_Shaders[i].id))
+		if (m.second.material->name == name)
 		{
-			*shaderPtr = &s_Shaders[i].object;
+			return m.first;
+		}
+	}
+	return -1;
+}
+
+bool SGRender::System::getShader(std::string shader, SGRender::Shader** shaderPtr)
+{
+	for (auto& s : s_Shaders)
+	{
+		if (s.second.name == shader)
+		{
+			*shaderPtr = s.second.shader.get();
 			return true;
 		}
 	}
@@ -558,27 +443,10 @@ bool SGRender::System::getShader(const char* shader, SGRender::Shader** shaderPt
 	return false;
 }
 
-bool SGRender::System::init(int width, int height)
+bool SGRender::System::init(int width, int height, Camera& camera)
 {
 	s_Width = width; s_Height = height;
-	EngineLogOk("Render System");
-	return true;
-}
-
-void SGRender::System::set()
-{
-	if (s_Set)
-	{
-		return;
-	}
-
-	//Resets to avoid spillover from previous use
-	clean();
-
-	//Assign maps
-	s_Models = std::unique_ptr<std::unordered_map<std::string, Mesh>>(new std::unordered_map<std::string, Mesh>());
-	s_MatModels = std::unique_ptr<std::unordered_map<std::string, Model::MatModel>>(new std::unordered_map<std::string, Model::MatModel>());
-	s_Textures = std::unique_ptr<std::unordered_map<std::string, Tex::Texture>>(new std::unordered_map<std::string, Tex::Texture>());
+	s_Camera = camera;
 
 	//Create a debug texture
 	generateDebugTex();
@@ -597,33 +465,25 @@ void SGRender::System::set()
 	//Cull lighting to frustum and tiles
 	s_Lighting.cullLights();
 
-	s_Set = true;
+	EngineLogOk("Render System");
+	return true;
 }
 
 void SGRender::System::clean()
 {
-	if (!s_Set)
-	{
-		return;
-	}
-
 	s_RenderPasses.clear();
 	s_Shaders.clear();
-	s_Batchers.clear();
-	s_Instancers.clear();
-	s_Models->clear();
-	s_Models.reset();
-	s_Textures->clear();
-	s_Textures.reset();
+	s_Renderers.clear();
+	s_Models.clear();
+	s_Textures.clear();
 	s_Lighting.clean();
-	s_Set = false;
 }
 
 void SGRender::System::generateDebugTex()
 {
 	//Create a default texture
 	std::vector<glm::i8vec3> debugRaw;
-	Tex::Texture debugTex;
+	std::shared_ptr<Tex::Texture> debugTex(new Tex::Texture());
 	constexpr int debugWidth = 8;
 	debugRaw.resize(debugWidth * debugWidth);
 	for (int i = 0; i < debugWidth * debugWidth; i++)
@@ -632,19 +492,22 @@ void SGRender::System::generateDebugTex()
 		uint8_t valB = 255 - (255 * (i % 2));
 		debugRaw[i] = { valR, 0, valB };
 	}
-	s_Textures->insert(std::make_pair(s_DebugName, debugTex));
-	s_Textures->at(s_DebugName).setWidth(debugWidth);
-	s_Textures->at(s_DebugName).setHeight(debugWidth);
-	s_Textures->at(s_DebugName).setBPP(3);
-	s_Textures->at(s_DebugName).generateTexture(0, &debugRaw[0], Tex::T_WRAP_TEXTURE);
+
+	debugTex->setWidth(debugWidth);
+	debugTex->setHeight(debugWidth);
+	debugTex->setBPP(3);
+	debugTex->generateTexture(0, &debugRaw[0], Tex::T_WRAP_TEXTURE);
+
+	TexID id = m_NextTexID;
+	s_Textures[id] = { s_DebugName, debugTex };
 }
 
-bool SGRender::System::doesPassExist(const char* name)
+bool SGRender::System::doesPassExist(std::string name)
 {
 	//Check if pass already exists
 	for (int i = 0; i < s_RenderPasses.size(); i++)
 	{
-		if (!strcmp(name, s_RenderPasses[i].id))
+		if (name == s_RenderPasses[i].id)
 		{
 			return true;
 		}

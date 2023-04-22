@@ -11,6 +11,24 @@ constexpr int32_t SLOT_SHAD = 3;
 bool SGRender::SIBRender::init(float width, float height)
 {
 	m_Width = width; m_Height = height;
+
+	//Set lighting
+	m_Lighting.set(m_Width, m_Height, &m_Camera);
+
+	//Set camera
+	m_CameraBuffer.create();
+	m_CameraBuffer.bind();
+	m_CameraBuffer.reserveData((5 * sizeof(float)) + (2 * sizeof(glm::mat4)) + (sizeof(glm::vec3)));
+	m_CameraBuffer.unbind();
+	m_Camera.calcVP();
+	m_Camera.updateFrustum();
+
+	//Cull lighting to frustum and tiles
+	m_Lighting.cullLights();
+
+	//Gen debug
+	generateDebugTex();
+
 	return true;
 }
 
@@ -34,60 +52,20 @@ SGRender::ShaderID SGRender::SIBRender::loadShader(std::string vertPath, std::st
 	return id;
 }
 
-SGRender::DecoMatModel SGRender::SIBRender::processMatModel(const Model::MatModel& model)
-{
-	//Check for if material exists already
-	//If so, get MatID and put mesh in map
-	//Otherwise generate new MatID and put mesh in map
-	DecoMatModel deco;
-	for (auto& m : model.meshes)
-	{
-		//Locate any material with that name
-		bool located = false;
-		for (auto& mat : m_Materials)
-		{
-			if (mat.second.name == m.mat.name)
-			{
-				deco.meshes[mat.first] = m.mesh;
-				located = true;
-				break;
-			}
-		}
-
-		//Create new Material
-		if (!located)
-		{
-			//Material
-			MatID matID = m_NextMatID;
-			m_Materials[matID] = m.mat;
-			deco.meshes[matID] = m.mesh;
-			m_NextMatID++;
-
-			//Load textures - HARD CODED PATHS FOR NOW
-			loadTexture("res/s/" + m_Materials[matID].diffuseTexture, "m_" + std::to_string(matID) + m_Materials[matID].diffuseTexture);
-			loadTexture("res/s/" + m_Materials[matID].normalTexture, "m_" + std::to_string(matID) + m_Materials[matID].normalTexture);
-			loadTexture("res/s/" + m_Materials[matID].specularTexture, "m_" + std::to_string(matID) + m_Materials[matID].specularTexture);
-		}
-	}
-	deco.vertexType = model.vertexType;
-}
-
-SGRender::ModelID SGRender::SIBRender::loadModel(std::string path, std::string name, VertexType vertexType)
+SGRender::ModelID SGRender::SIBRender::loadModel(std::string path, std::string name, VertexType vertexType, Model::MFlag flags)
 {
 	ModelID id = m_NextModelID;
 	m_Models[id] = { name };
-	Model::LoadModel(path.c_str(), *m_Models[id].model, vertexType);
+	Model::LoadModel(path.c_str(), *m_Models[id].model, vertexType, flags);
 	m_NextModelID++;
 	return id;
 }
 
-SGRender::ModelID SGRender::SIBRender::loadMatModel(std::string path, std::string name, VertexType vertexType)
+SGRender::ModelID SGRender::SIBRender::loadMatModel(std::string path, std::string name, VertexType vertexType, Model::MFlag flags)
 {
 	ModelID id = m_NextModelID;
-	m_MatModels[id] = { name };
-	Model::MatModel model;
-	Model::LoadModel(path.c_str(), model, vertexType);
-	m_MatModels[id].model = std::make_shared<DecoMatModel>(processMatModel(model));
+	m_MatModels[id] = { name, std::shared_ptr<Model::MatModel>(new Model::MatModel()) };
+	Model::LoadModel(path.c_str(), *m_MatModels[id].model, vertexType, flags);
 	m_NextModelID++;	
 	return id;
 }
@@ -136,7 +114,6 @@ SGRender::ModelID SGRender::SIBRender::locateModel(std::string name)
 
 void SGRender::SIBRender::unloadModel(ModelID id)
 {
-	//TODO - make exists function separate
 	if (modelExistsInternal(id))
 	{
 		m_Models.erase(id);
@@ -153,15 +130,23 @@ void SGRender::SIBRender::unloadModel(ModelID id)
 SGRender::TexID SGRender::SIBRender::loadTexture(std::string path, std::string name)
 {
 	TexID id = m_NextTexID;
-	m_Textures[id] = { name };
-	m_Textures[id].texture->loadTexture(path);
+	auto texture = std::shared_ptr<Tex::Texture>(new Tex::Texture());
+	texture->loadTexture(path);
+
+	if (texture->buffer() == nullptr)
+	{
+		EngineLog("Texture not able to be loaded! ", name, " Using debug");
+		return 0; //Debug texture
+	}
+
+	m_Textures[id] = { name, texture };
 	m_NextTexID++;
 	return id;
 }
 
 void SGRender::SIBRender::unloadTexture(TexID id)
 {
-	if (!textureExists(id))
+	if (!textureExists(id) || id == 0)
 	{
 		return;
 	}
@@ -181,7 +166,7 @@ bool SGRender::SIBRender::textureExists(TexID id)
 
 void SGRender::SIBRender::generateTexture(TexID id, int slot, Tex::TFlag flags)
 {
-	if (!textureExists(id))
+	if (!textureExists(id) || id == 0)
 	{
 		return;
 	}
@@ -198,7 +183,8 @@ SGRender::TexID SGRender::SIBRender::locateTexture(std::string name)
 			return t.first;
 		}
 	}
-	return -1;
+	EngineLog("Texture not able to be located: ", name, " using debug!");
+	return 0; //Use debug otherwise
 }
 
 void SGRender::SIBRender::unloadShader(ShaderID id)
@@ -281,7 +267,7 @@ bool SGRender::SIBRender::passExists(RenderPassID id)
 
 SGRender::RenderPassID SGRender::SIBRender::createPass(std::string name, RendererID renderer, ShaderID shader)
 {
-	if (!instancedRendererExists(renderer) || !shaderExists(shader))
+	if (!batchedRendererExists(renderer) || !shaderExists(shader))
 	{
 		EngineLog("Renderer or Shader not found for pass!");
 		return -1;
@@ -310,11 +296,11 @@ void SGRender::SIBRender::removePass(RenderPassID id)
 SGRender::RendererID SGRender::SIBRender::createBatchRenderer(std::string name, VertexType vertexType, GLenum drawingmode)
 {
 	RendererID id = m_NextRendererID;
-	Batcher batcher = Batcher::Batcher();
-	batcher.setLayout(vertexType);
-	batcher.setDrawingMode(drawingmode);
-	batcher.generate(m_Width, m_Height, 0);
-	m_Renderers[id] = { name, 0, std::make_shared<RendererBase>(batcher) };
+	std::shared_ptr<Dep_Batcher> batcher = std::shared_ptr<Dep_Batcher>(new Dep_Batcher());
+	batcher->setLayout(vertexType);
+	batcher->setDrawingMode(drawingmode);
+	batcher->generate(m_Width, m_Height, 0);
+	m_Renderers[id] = { name, 0, std::static_pointer_cast<RendererBase>(batcher) };
 	m_NextRendererID++;
 	return id;
 }
@@ -322,11 +308,11 @@ SGRender::RendererID SGRender::SIBRender::createBatchRenderer(std::string name, 
 SGRender::RendererID SGRender::SIBRender::createInstancedRenderer(std::string name, VertexType vertexType, GLenum drawingmode)
 {
 	RendererID id = m_NextRendererID;
-	Instancer instancer = Instancer::Instancer();
-	instancer.setLayout(vertexType);
-	instancer.setDrawingMode(drawingmode);
-	instancer.generate(m_Width, m_Height, nullptr, 0);
-	m_Renderers[id] = { name, 1, std::make_shared<RendererBase>(instancer) };
+	std::shared_ptr<Instancer> instancer = std::shared_ptr<Instancer>(new Instancer());
+	instancer->setLayout(vertexType);
+	instancer->setDrawingMode(drawingmode);
+	instancer->generate(m_Width, m_Height, nullptr, 0);
+	m_Renderers[id] = { name, 1, std::static_pointer_cast<RendererBase>(instancer) };
 	m_NextRendererID++;
 	return id;
 }
@@ -339,7 +325,7 @@ void SGRender::SIBRender::removeRenderer(RendererID id)
 	}
 }
 
-void SGRender::SIBRender::linkPassUniform(RenderPassID id, const Uniform& uniform)
+void SGRender::SIBRender::linkPassUniform(RenderPassID id, const Uni& uniform)
 {
 	if (!validatePass(id))
 	{
@@ -359,7 +345,7 @@ void SGRender::SIBRender::linkPassUniform(RenderPassID id, const Uniform& unifor
 		}
 		ptr = m_Textures[tex].texture.get();
 
-		Uniform uni = { uniform.name, uniform.type, ptr };
+		Uni uni = { uniform.name, uniform.type, ptr };
 
 		ShaderID shader_id = m_RenderPasses[id].shader;
 		auto& shader_ptr = m_Shaders[shader_id].shader;
@@ -374,7 +360,7 @@ void SGRender::SIBRender::linkPassUniform(RenderPassID id, const Uniform& unifor
 	m_RenderPasses[id].uniforms.push_back(uni_int);
 }
 
-void SGRender::SIBRender::setPassUniform(RenderPassID id, const Uniform& uniform)
+void SGRender::SIBRender::setPassUniform(RenderPassID id, const Uni& uniform)
 {
 	if (!validatePass(id))
 	{
@@ -387,13 +373,9 @@ void SGRender::SIBRender::setPassUniform(RenderPassID id, const Uniform& uniform
 		//Find texture from name
 		TexID tex = locateTexture(*((std::string*)uniform.uniform));
 		Tex::Texture* ptr = nullptr;
-		if (!textureExists(tex))
-		{
-			return;
-		}
 		ptr = m_Textures[tex].texture.get();
 
-		Uniform uni = { uniform.name, uniform.type, ptr };
+		Uni uni = { uniform.name, uniform.type, ptr };
 
 		ShaderID shader_id = m_RenderPasses[id].shader;
 		auto& shader_ptr = m_Shaders[shader_id].shader;
@@ -455,7 +437,6 @@ bool SGRender::SIBRender::validatePass(RenderPassID id)
 SGRender::RenderLinkID SGRender::SIBRender::linkToBatcher(RendererID renderer, ModelID model)
 {
 	bool modelExists = modelExistsInternal(model);
-	bool matModelExists = matModelExistsInternal(model);
 
 	if (batchedRendererExists(renderer))
 	{
@@ -470,11 +451,6 @@ SGRender::RenderLinkID SGRender::SIBRender::linkToBatcher(RendererID renderer, M
 		{
 			auto& m = m_Models[model];
 			return b->linkToBatcher(m.model->mesh);
-		}
-		else if (matModelExists)
-		{
-			//TODO make material system
-			return -1;
 		}
 	}
 	return -1;
@@ -510,6 +486,7 @@ void SGRender::SIBRender::render()
 		auto& r = m_Renderers[p.renderer].renderer;
 		r->bufferVideoData();
 		r->drawPrimitives();
+		s->unbind();
 	}
 	m_Camera.resetMovementFlag();
 }
@@ -553,5 +530,30 @@ void SGRender::SIBRender::processInstructions()
 		default:
 			break;
 		}
+		m_Instructions.pop();
 	}
+}
+
+void SGRender::SIBRender::generateDebugTex()
+{
+	m_Textures[0].texture = std::shared_ptr<Tex::Texture>(new Tex::Texture());
+	m_Textures[0].name = m_DebugName;
+	m_NextTexID++;
+
+	//Create a default texture
+	std::vector<glm::i8vec3> debugRaw;
+	Tex::Texture debugTex;
+	constexpr int debugWidth = 8;
+	debugRaw.resize(debugWidth * debugWidth);
+	for (int i = 0; i < debugWidth * debugWidth; i++)
+	{
+		uint8_t valR = 255 * (i % 2);
+		uint8_t valB = 255 - (255 * (i % 2));
+		debugRaw[i] = { valR, 0, valB };
+	}
+
+	m_Textures[0].texture->setWidth(debugWidth);
+	m_Textures[0].texture->setHeight(debugWidth);
+	m_Textures[0].texture->setBPP(3);
+	m_Textures[0].texture->generateTexture(0, &debugRaw[0], Tex::T_WRAP_TEXTURE);
 }

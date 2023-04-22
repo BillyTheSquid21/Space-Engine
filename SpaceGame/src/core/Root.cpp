@@ -123,7 +123,7 @@ bool SGRoot::AmbientBright(std::vector<std::string>& args, std::string& output)
 	try
 	{
 		float b = std::stof(args[1], nullptr);
-		SGRender::System::lighting().setAmbient(b);
+		//SGRender::System::lighting().setAmbient(b);
 		output = "set brightness: " + args[1];
 		return true;
 	}
@@ -152,7 +152,7 @@ bool SGRoot::AmbientColor(std::vector<std::string>& args, std::string& output)
 		float r = std::stof(args[1], nullptr);
 		float g = std::stof(args[2], nullptr);
 		float b = std::stof(args[3], nullptr);
-		SGRender::System::lighting().setAmbientColor(r, g, b);
+		//SGRender::System::lighting().setAmbientColor(r, g, b);
 		output = "set color: " + args[1] + " " + args[2] + " " + args[3];
 		return true;
 	}

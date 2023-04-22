@@ -109,6 +109,12 @@ namespace SGRender
 				return;
 			}
 
+			if (m_MeshBuffer.getVertSize() == 0 || m_MeshBuffer.getIndicesCount() == 0)
+			{
+				EngineLogFail("Error buffering batcher");
+				return;
+			}
+
 			m_VB.bufferData(m_MeshBuffer.getVertices(), m_MeshBuffer.getVertSize());
 			m_IB.bufferData(m_MeshBuffer.getIndices(), m_MeshBuffer.getIndicesCount());
 			
@@ -226,7 +232,7 @@ namespace SGRender
 				return;
 			}
 
-			Link link = m_LinkTable[id];
+			Link& link = m_LinkTable[id];
 			bool isDirty = false;
 
 			//Check conditions 1. and 3.
@@ -244,7 +250,6 @@ namespace SGRender
 				link.matrix = matrix;
 				link.isRendering = true;
 			}
-
 			link.isDirty = isDirty;
 		}
 
@@ -352,8 +357,15 @@ namespace SGRender
 		//Buffers vertice data, internal so only called once mesh batched
 		void bufferVideoData()
 		{
-			if (m_Batch.size() <= 0)
+			if (m_Batch.size() == 0)
 			{
+				return;
+			}
+
+			//Must be something wrong
+			if (m_MeshBuffer.getVertSize() == 0)
+			{
+				EngineLogFail("Something went wrong buffering batcher data!");
 				return;
 			}
 
@@ -368,6 +380,11 @@ namespace SGRender
 		//Draw
 		void drawBatched()
 		{
+			if (m_MeshBuffer.getVertSize() == 0)
+			{
+				return;
+			}
+
 			glDrawElements(m_PrimitiveType, m_IB.GetCount(), GL_UNSIGNED_INT, nullptr);
 			glBindVertexArray(0);
 		}

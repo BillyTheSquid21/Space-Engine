@@ -17,14 +17,6 @@
 
 namespace SGRender
 {
-	//Decoupled Mat model that doesn't store materials directly
-	//Can later improve the implementation of the actual mat model
-	//Store here for now, need to test system
-	struct DecoMatModel
-	{
-		std::map<MatID, SGRender::Mesh> meshes;
-		VertexType vertexType;
-	};
 
 	//Stands for Simple Instance Batching Render
 	//Renderers are either instancers or static batchers
@@ -45,16 +37,19 @@ namespace SGRender
 		ShaderID locateShader(std::string name);
 
 		//Model loading
-		ModelID loadModel(std::string path, std::string name, VertexType vertexType);
-		ModelID loadMatModel(std::string path, std::string name, VertexType vertexType);
+		ModelID loadModel(std::string path, std::string name, VertexType vertexType, Model::MFlag flags);
+		ModelID loadMatModel(std::string path, std::string name, VertexType vertexType, Model::MFlag flags);
 		void unloadModel(ModelID id);
 		bool modelExists(ModelID id);
 		ModelID locateModel(std::string name);
 
 		//TESTING WILL BE REMOVED
 		//Will allow to do stuff as before, then can make good
-		DecoMatModel& getMatModel_bad(ModelID id) { return *m_MatModels[id].model; }
+		Model::MatModel& getMatModel_bad(ModelID id) { return *m_MatModels[id].model; }
 		Material::Material getMat_bad(MatID id) { return m_Materials[id]; }
+		Lighting& lighting() { return m_Lighting; }
+		SGRender::Camera& camera() { return m_Camera; }
+		Dep_Batcher* batcher(RendererID id) { return (Dep_Batcher*)m_Renderers[id].renderer.get(); }
 
 		//Manual Texture loading - into CPU memory
 		TexID loadTexture(std::string path, std::string name);
@@ -80,8 +75,8 @@ namespace SGRender
 		bool passExists(RenderPassID id);
 
 		//Uniforms
-		void linkPassUniform(RenderPassID id, const Uniform& uniform); //Links so sets each frame
-		void setPassUniform(RenderPassID id, const Uniform& uniform); //Sets as a once off
+		void linkPassUniform(RenderPassID id, const Uni& uniform); //Links so sets each frame
+		void setPassUniform(RenderPassID id, const Uni& uniform); //Sets as a once off
 		void unlinkPassUniform(RenderPassID id, std::string name);
 
 		//Main new change - instructions queued
@@ -102,7 +97,7 @@ namespace SGRender
 		//keeps the uniform as an address not a string
 		struct InternalUniform
 		{
-			InternalUniform(SGRender::Shader* sha, Uniform uni)
+			InternalUniform(SGRender::Shader* sha, Uni uni)
 			{
 				location = sha->getUniformLocation(uni.name);
 				type = uni.type;
@@ -121,8 +116,6 @@ namespace SGRender
 			ShaderID shader;
 			std::vector<InternalUniform> uniforms;
 		};
-
-		DecoMatModel processMatModel(const Model::MatModel& model);
 
 		//Storage
 		struct InternalRenderer
@@ -147,7 +140,7 @@ namespace SGRender
 		struct InternalMatModel
 		{
 			std::string name;
-			std::shared_ptr<DecoMatModel> model;
+			std::shared_ptr<Model::MatModel> model;
 		};
 
 		struct InternalTexture
@@ -180,6 +173,10 @@ namespace SGRender
 
 		Camera m_Camera;
 		UniformBuffer m_CameraBuffer;
+
+		//Debug Texture
+		void generateDebugTex();
+		const char* m_DebugName = "debug";
 
 		Lighting m_Lighting;
 
