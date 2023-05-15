@@ -21,7 +21,6 @@ namespace Tex
     {
     public:
         Texture() : m_Width(0), m_Height(0), m_BPP(0) {};
-        ~Texture();
 
         /**
         * Load texture from path
@@ -39,17 +38,18 @@ namespace Tex
         * Generate texture in a given slot from an external buffer
         */
         void generateTexture(int slot, void* buffer, int flag);
+
         /**
-        * Clear the local buffer - should do after has been generated as a glTexture
+        * Clear the texture on the cpu
         */
         void clearBuffer();
 
         /**
         * Deletes the texture on the GPU
         */
-        void deleteTexture() { if (m_ID) { glDeleteTextures(1, &m_ID); } m_ID = 0; }
+        void deleteTexture() { m_Resource = SGRender::TXResource::TXResource(0, 0); }
 
-        GLuint getID() const { return m_ID; }
+        GLuint id() const { return m_Resource.id(); }
         int32_t& getSlot() { return m_Slot; }
         void setWidth(int width) { m_Width = width; }
         void setHeight(int height) { m_Height = height; }

@@ -8,15 +8,14 @@
 #include "map"
 #include "algorithm"
 #include "glm/glm.hpp"
-#include "renderer/Renderer.hpp"
-#include "renderer/Batcher.hpp"
-#include "renderer/Instancer.hpp"
 #include "renderer/GLClasses.h"
 #include "renderer/Texture.h"
 #include "renderer/Lighting.h"
 #include "renderer/MatModel.h"
+#include "renderer/Renderer.h"
 #include "services/RenderService.hpp"
 #include "utility/SegArray.hpp"
+#include "queue"
 
 //Keeps track of, stores and cycles various renderers for dynamic renderers
 namespace SGRender
@@ -38,12 +37,6 @@ namespace SGRender
 		void* uniform;
 	};
 
-	//Flags for draw behaviour - D prefix
-	enum DFlags
-	{
-		D_DISABLE_DEPTH_TEST = 0b00000001
-	};
-
 	typedef std::map<MatID, std::vector<Mesh>> MaterialMeshMap; //Maps each mesh to a material
 
 	class System
@@ -51,13 +44,13 @@ namespace SGRender
 	public:
 		bool init(int width, int height, Camera& camera);
 		void setCamera(Camera& camera) { s_Camera = camera; }
-		Camera& camera() { return s_Camera; }
 
 		void clearScreen() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 		void setClearColor(float r, float g, float b) { glClearColor(r, g, b, 1.0f); }
 
 		void createRenderPass(std::string name, std::vector<Uniform>& uniforms, ShaderID shader, RendererID renderer, int16_t priority, int flag);
 		void removeRenderPass(std::string name);
+		void generateModelRenderPass(ModelID model, ShaderID shader);
 
 		//Texture Loading
 		TexID loadTexture(std::string path, std::string name, int slot, int bpp, int flag);
@@ -83,36 +76,33 @@ namespace SGRender
 		bool materialExists(MatID material);
 		MatID locateMaterial(std::string name);
 
-		//Batcher and Instancer addition
-		RendererID addBatcher(std::string name, VertexType vertexType, GLenum drawMode);
-		RendererID addInstancer(std::string name, std::string modelName, VertexType vertexType, GLenum drawMode);
+		//Renderer
+		RendererID addRenderer(std::string name, VertexType vertexType, GLenum drawMode);
 		void removeRenderer(RendererID id);
 		bool rendererExists(RendererID id);
 		RendererID locateRenderer(std::string name);
 		
-		void commitToBatcher(RendererID id, void* src, float* vert, unsigned int vertSize, const unsigned int* ind, unsigned int indSize);
-		void commitToInstancer(RendererID id, void* data, unsigned int dataSize, unsigned int count);
-		void removeFromBatcher(RendererID id, void* src, void* vert);
-		void batch(RendererID id);
 
+		void queueInstruction(RenderInstruction instr) { m_Instructions.push(instr); }
+		void processInstructions();
 		void render();
-		void bufferVideoData();
 
-		void setDim(int width, int height) { s_Width = width; s_Height = height; }
 		void clean();
-
-		bool getShader(std::string shader, SGRender::Shader** shaderPtr);
-		Lighting& lighting() { return s_Lighting; }
-
-		bool accessModel(std::string name, Mesh** model);
-		bool accessMatModel(std::string name, MaterialMeshMap** model);
-		Material::Material& accessMaterial(MatID id) { return *m_Materials[id].material; }
-		bool doesPassExist(std::string name);
 
 	private:
 		//Internal Checks
 		bool modelExistsInternal(ModelID id);
 		bool matModelExistsInternal(ModelID id);
+
+		//Instructions
+		void drawInstr(RenderCallInstr instr);
+		void addLightInstr(AddLightInstr instr);
+		void moveCamInstr(MoveCameraInstr instr);
+
+		//Debug Texture
+		void generateDebugTex();
+
+	private:
 
 		template<typename T>
 		struct Identifier
@@ -145,37 +135,37 @@ namespace SGRender
 		struct InternalTexture
 		{
 			std::string name;
-			std::shared_ptr<Tex::Texture> texture;
+			Tex::Texture texture;
 		};
 
 		struct InternalModel
 		{
 			std::string name;
-			std::shared_ptr<Model::Model> model;
+			Model::Model model;
 		};
 
 		struct InternalMatModel
 		{
 			std::string name;
-			std::shared_ptr<MaterialMeshMap> meshes;
+			MaterialMeshMap meshes;
 		};
 
 		struct InternalShader
 		{
 			std::string name;
-			std::shared_ptr<Shader> shader;
+			Shader shader;
 		};
 
 		struct InternalRenderer
 		{
 			std::string name;
 			int32_t type = 0;
-			std::shared_ptr<RendererBase> renderer;
+			Renderer renderer;
 		};
 
 		struct InternalMaterial
 		{
-			std::shared_ptr<Material::Material> material;
+			Material::Material material;
 		};
 
 		struct RenderPass
@@ -187,6 +177,8 @@ namespace SGRender
 			std::vector<InternalUniform> uniforms;
 			RendererID renderer;
 		};
+
+	private:
 
 		//Extract data from Mat Model and return a pointer
 		std::shared_ptr<MaterialMeshMap> extractMatModel(Model::MatModel& model);
@@ -202,24 +194,20 @@ namespace SGRender
 		std::map<TexID, InternalTexture> s_Textures;
 		std::map<MatID, InternalMaterial> m_Materials;
 
+		//Instruction queue
+		std::queue<RenderInstruction> m_Instructions;
+
 		//IDs
-		int32_t m_NextTexID = 0;
-		int32_t m_NextModelID = 0;
-		int32_t m_NextShaderID = 0;
-		int32_t m_NextRendererID = 0;
-		int32_t m_NextMaterialID = 0;
+		TexID m_NextTexID = 0;
+		ModelID m_NextModelID = 0;
+		ShaderID m_NextShaderID = 0;
+		RendererID m_NextRendererID = 0;
+		MatID m_NextMaterialID = 0;
 
 		//Dimensions
 		int32_t s_Width = 640; int32_t s_Height = 320;
 
-		//Debug Texture
-		void generateDebugTex();
-		const char* s_DebugName = "debug";
 		const int m_DebugID = 0;
-
-		//Flags
-		void flagStart(int flag);
-		void flagEnd(int flag);
 
 		//Lighting
 		Lighting s_Lighting;

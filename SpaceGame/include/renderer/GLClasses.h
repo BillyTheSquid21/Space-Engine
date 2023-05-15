@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <stdint.h>
 #include "utility/SGUtil.h"
+#include "renderer/GLResource.hpp"
 
 namespace SGRender
 {
@@ -19,118 +20,108 @@ namespace SGRender
 		INT, FLOAT, VEC2, VEC3, MAT4, TEXTURE
 	};
 
-	/**
-	* Classes that are sampled as texture 2D textures can derive this
-	*/
-	class TextureBase
+	template<GLenum buffertype>
+	class GLBuffer
 	{
 	public:
-		/**
-		* Generate texture in a given slot from an external buffer that is wrapped instead of clamped to edge
-		*/
+		GLBuffer() = default;
+
+		void create(GLsizeiptr count)
+		{
+			GLuint id = 0;
+			glGenBuffers(1, &id);
+			glBindBuffer(buffertype, id);
+			m_Resource = GLResource::GLResource(1, id);
+		}
+
+		void resize(GLsizeiptr size)
+		{
+			//If the buffer isn't used yet, just buffer data
+			if (!m_Size)
+			{
+				glBufferData(buffertype, size, nullptr, GL_STATIC_DRAW);
+				m_Size = size;
+				return;
+			}
+
+			//If the buffer is already in use, generate a new buffer and copy
+			GLResource prev = m_Resource; //Copy ptr to preserve
+			unbind();
+
+			//Create new pointer
+			GLuint newID = 0;
+			glGenBuffers(1, &newID);
+			m_Resource = GLResource::GLResource(1, newID);
+
+			bind();
+			glBufferData(buffertype, size, nullptr, GL_STATIC_DRAW);
+
+			//Copy then delete old buffer
+			glCopyBufferSubData(prev.id(), m_Resource.id(), 0, 0, size);
+			m_Size = size;
+		}
+
+		void bufferData(const void* data, GLsizeiptr size)
+		{
+			if (size == m_Size)
+			{
+				glBufferSubData(buffertype, 0, size, data);
+				return;
+			}
+			glBufferData(buffertype, size, data, GL_STATIC_DRAW);
+			m_Size = size; //Changes size if different
+		}
+
+		void bufferData(const void* data, GLsizeiptr offset, GLsizeiptr size)
+		{
+			if (offset + size <= m_Size)
+			{
+				glBufferSubData(buffertype, offset, size, data);
+			}
+			else
+			{
+				resize(offset + size);
+				glBufferSubData(buffertype, offset, size, data);
+				m_Size = offset + size;
+			}
+		}
+
 		void bind() const
 		{
-			glActiveTexture(GL_TEXTURE0 + m_Slot);
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-		};
+			glBindBuffer(buffertype, m_Resource.id());
+		}
 
 		void unbind() const
 		{
-			glActiveTexture(GL_TEXTURE0 + m_Slot);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		};
-
-		int32_t& getSlot() { return m_Slot; };
+			glBindBuffer(buffertype, 0);
+		}
 
 	protected:
-		int32_t m_Slot = 0;
-		GLuint m_ID = 0;
-	};
-
-	class VertexBuffer
-	{
-	public:
-		VertexBuffer() = default;
-		~VertexBuffer();
-
-		void create(size_t dataSize);
-		void bufferData(const void* data, int count);
-		void bind() const;
-		void unbind() const;
-
-	private:
-		GLuint m_ID = 0;
-	};
-
-	class IndexBuffer
-	{
-	public:
-		IndexBuffer() = default;
-		~IndexBuffer();
-
-		void create(int count);
-		void bufferData(const void* data, int count);
-		void bind() const;
-		void unbind() const;
-
-		//return count
-		inline unsigned int GetCount() const { return m_IndicesCount; }
-
-	private:
-		GLuint m_ID = 0;
-		int32_t m_IndicesCount = 0;
-	};
-
-	//Binding point for either uniform buffer or SSBO
-	static GLuint GL_Binding_Point = 1;
-
-	class UniformBuffer
-	{
-	public:
-		UniformBuffer() = default;
-		~UniformBuffer();
-
-		void create();
-		void reserveData(GLsizeiptr size);
-		void reserveData(GLsizeiptr size, GLenum drawtype);
-		void bufferData(void* data, GLsizeiptr size);
-		void bufferData(void* data, int offset, GLsizeiptr size);
-		void bind() const;
-		void unbind() const;
-		GLuint bindingPoint() const { return m_BindingPoint; }
-
-	private:
-		GLuint m_ID = 0;
-		GLuint m_BindingPoint = 0;
-		GLsizeiptr m_ReservedSize = 0;
-	};
-
-	class SSBO
-	{
-	public:
-		SSBO() = default;
-		~SSBO();
-
-		void create();
-		void reserveData(GLsizeiptr size);
-		void reserveData(GLsizeiptr size, GLenum drawtype);
-
-		//Signals buffering whole data, allowing for shrinking
-		void bufferFullData(void* data, GLsizeiptr size);
-		void bufferFullData(void* data, GLsizeiptr size, GLenum drawtype);
-
-		//Buffers part of data
-		void bufferData(void* data, int offset, GLsizeiptr size);
-		void bufferData(void* data, int offset, GLsizeiptr size, GLenum drawtype);
-		
-		void bind() const;
-		void unbind() const;
-		GLuint bindingPoint() const { return m_BindingPoint; }
-
-	private:
-		GLuint m_ID = 0;
-		GLuint m_BindingPoint = 0;
 		GLsizeiptr m_Size = 0;
+		GLResource m_Resource;
+	};
+
+	class VertexBuffer : public GLBuffer<GL_ARRAY_BUFFER> {};
+	class IndexBuffer : public GLBuffer<GL_ELEMENT_ARRAY_BUFFER> {};
+
+	class SSBO : public GLBuffer<GL_SHADER_STORAGE_BUFFER>
+	{
+	public:
+		void create(GLsizeiptr count);
+		GLuint bindingPoint() const { return m_BindingPoint; }
+
+	private:
+		GLuint m_BindingPoint = 0;
+	};
+
+	class UniformBuffer : public GLBuffer<GL_UNIFORM_BUFFER>
+	{
+	public:
+		void create();
+		GLuint bindingPoint() const { return m_BindingPoint; }
+
+	private:
+		GLuint m_BindingPoint = 0;
 	};
 
 	//Credit OGLDev for ShadowMapFBO layout
@@ -218,7 +209,6 @@ namespace SGRender
 	{
 	public:
 		VertexArray() = default;
-		~VertexArray();
 
 		void create();
 		void bind() const;
@@ -228,7 +218,7 @@ namespace SGRender
 		void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout, int start);
 
 	private:
-		GLuint m_ID;
+		VAResource m_Resource;
 	};
 
 	struct ShaderProgramSource {
@@ -242,19 +232,51 @@ namespace SGRender
 		std::string FragmentSource;
 	};
 
-	//Will check if already bound
+	/**
+	* Classes that are sampled as texture 2D textures can derive this
+	*/
+	class TextureBase
+	{
+	public:
+
+		/**
+		* Generate texture in a given slot from an external buffer that is wrapped instead of clamped to edge
+		*/
+		void bind() const
+		{
+			glActiveTexture(GL_TEXTURE0 + m_Slot);
+
+			if (!m_Resource.id())
+			{
+				glBindTexture(GL_TEXTURE_2D, 0);
+				return;
+			}
+			glBindTexture(GL_TEXTURE_2D, m_Resource.id());
+		};
+
+		void unbind() const
+		{
+			glActiveTexture(GL_TEXTURE0 + m_Slot);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		};
+
+		int32_t& getSlot() { return m_Slot; };
+
+	protected:
+		int32_t m_Slot = 0;
+		TXResource m_Resource;
+	};
+
 	class Shader
 	{
 	public:
 		Shader() = default;
-		~Shader();
 
 		void create(const std::string& vert, const std::string& frag);
 		void create(const std::string& vert, const std::string& geo, const std::string& frag);
 
 		void bind();
 		void unbind();
-		void deleteShader();
 
 		//set uniforms - overload for each data type
 		void setUniform(const std::string& name, void* uniform, UniformType type);
@@ -307,7 +329,7 @@ namespace SGRender
 		GLint getUniformLocation(const std::string& name);
 
 	private:
-		GLuint m_ID = 0;
+		SHResource m_Resource;
 		bool m_Bound = false;
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 		GLuint compileShader(const std::string& source, unsigned int type);

@@ -24,7 +24,7 @@ void Tex::Texture::generateTexture(int slot, int flag) {
 
 void Tex::Texture::generateTexture(int slot, void* buffer, int flag) {
 
-    if (m_ID)
+    if (m_Resource.id())
     {
         EngineLog("Texture already generated!");
         return;
@@ -37,11 +37,12 @@ void Tex::Texture::generateTexture(int slot, void* buffer, int flag) {
     }
 
     //Generate texture
-    glGenTextures(1, &m_ID);
+    GLuint id = 0;
+    glGenTextures(1, &id);
 
     //Set active slot and bind
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_ID);
+    glBindTexture(GL_TEXTURE_2D, id);
 
     //Set params from flags
 
@@ -90,6 +91,7 @@ void Tex::Texture::generateTexture(int slot, void* buffer, int flag) {
     }
 
     m_Slot = slot;
+    m_Resource = SGRender::TXResource::TXResource(1, id);
 }
 
 void Tex::Texture::clearBuffer() {
@@ -98,9 +100,4 @@ void Tex::Texture::clearBuffer() {
         m_LocalBuffer = nullptr;
         return;
     }
-}
-
-Tex::Texture::~Texture()
-{
-    deleteTexture();
 }

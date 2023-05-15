@@ -10,6 +10,11 @@
 
 namespace SGRender
 {
+	enum class CamMotion
+	{
+		Move_Forward, Move_Sideways, Move_Up, Move_CurrentDir, Pan_Sideways, //TODO Fill out later
+	};
+
 	/**
 	* Mathmatical definition of a plane (Normal and distance)
 	* Not to be confused with the geometric plane

@@ -1,252 +1,51 @@
 #include "renderer/GLClasses.h"
 
-//Safe versions that checks address is set
-//Lets destructors call without worrying was generated
-void glDeleteBuffers_s(GLsizei n, GLuint* buffers)
-{
-	if (!buffers)
-	{
-		return;
-	}
-	else if (!(*buffers) || !n)
-	{
-		return;
-	}
-	glDeleteBuffers(1, buffers);
-	*buffers = 0; //invalidate
-}
-
-void glDeleteShader_s(GLuint shader)
-{
-	if (!shader)
-	{
-		return;
-	}
-	glDeleteShader(shader);
-}
-
-void glDeleteProgram_s(GLuint program)
-{
-	if (!program)
-	{
-		return;
-	}
-	glDeleteProgram(program);
-}
-
-void SGRender::VertexBuffer::create(size_t dataSize) {
-	glGenBuffers(1, &m_ID);
-	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-	//tells how much data to set aside - size in bytes
-	glBufferData(GL_ARRAY_BUFFER, dataSize, nullptr, GL_STATIC_DRAW);
-}
-
-SGRender::VertexBuffer::~VertexBuffer() {
-	glDeleteBuffers_s(1, &m_ID);
-}
-
-void SGRender::VertexBuffer::bind() const {
-	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-}
-
-void SGRender::VertexBuffer::unbind() const {
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void SGRender::VertexBuffer::bufferData(const void* data, int count) {
-	glBindBuffer(GL_ARRAY_BUFFER, m_ID);
-	glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), nullptr, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, count * sizeof(float), data);
-}
-
-void SGRender::IndexBuffer::create(int count)
-{
-	m_IndicesCount = count;
-	glGenBuffers(1, &m_ID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), nullptr, GL_STATIC_DRAW);
-}
-
-void SGRender::IndexBuffer::bufferData(const void* data, int count) {
-	m_IndicesCount = count;
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), nullptr, GL_STATIC_DRAW);
-	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, count * sizeof(unsigned int), data);
-}
-
-SGRender::IndexBuffer::~IndexBuffer() {
-	glDeleteBuffers_s(1, &m_ID);
-}
-
-void SGRender::IndexBuffer::bind() const {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
-}
-
-void SGRender::IndexBuffer::unbind() const {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
+//Binding point for either uniform buffer or SSBO
+static GLuint GL_Binding_Point = 1;
 
 //Uniform Buffer
 void SGRender::UniformBuffer::create()
 {
-	glGenBuffers(1, &m_ID);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_ID);
+	GLuint id = 0;
+	glGenBuffers(1, &id);
+	glBindBuffer(GL_UNIFORM_BUFFER, id);
 
 	//Set binding point
-	glBindBufferBase(GL_UNIFORM_BUFFER, GL_Binding_Point, m_ID);
+	glBindBufferBase(GL_UNIFORM_BUFFER, GL_Binding_Point, id);
 	m_BindingPoint = GL_Binding_Point;
 	GL_Binding_Point++;
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-}
-
-void SGRender::UniformBuffer::bind() const
-{
-	glBindBuffer(GL_UNIFORM_BUFFER, m_ID);
-}
-
-void SGRender::UniformBuffer::unbind() const
-{
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-}
-
-void SGRender::UniformBuffer::reserveData(GLsizeiptr size)
-{
-	reserveData(size, GL_STATIC_DRAW);
-}
-
-void SGRender::UniformBuffer::reserveData(GLsizeiptr size, GLenum drawtype)
-{
-	glBufferData(GL_UNIFORM_BUFFER, size, NULL, drawtype);
-	m_ReservedSize = size;
-}
-
-void SGRender::UniformBuffer::bufferData(void* data, GLsizeiptr size)
-{
-	bufferData(data, 0, size);
-}
-
-void SGRender::UniformBuffer::bufferData(void* data, int offset, GLsizeiptr size)
-{
-	//If overruns, send warning
-	if (offset + size > m_ReservedSize)
-	{
-		EngineLogFail("Buffering data beyond UBO end!");
-		return;
-	}
-
-	glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
-}
-
-SGRender::UniformBuffer::~UniformBuffer()
-{
-	glDeleteBuffers_s(1, &m_ID);
+	m_Resource = GLResource::GLResource(1, id);
 }
 
 //SSBO
-void SGRender::SSBO::create()
+void SGRender::SSBO::create(GLsizeiptr count)
 {
-	glGenBuffers(1, &m_ID);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ID);
+	GLuint id = 0;
+	glGenBuffers(1, &id);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, id);
 
 	//Set binding point
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, GL_Binding_Point, m_ID);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, GL_Binding_Point, id);
 	m_BindingPoint = GL_Binding_Point;
 	GL_Binding_Point++;
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-}
 
-void SGRender::SSBO::reserveData(GLsizeiptr size)
-{
-	reserveData(size, GL_STATIC_DRAW);
-}
-
-void SGRender::SSBO::reserveData(GLsizeiptr size, GLenum drawtype)
-{
-	//If the buffer isn't used yet, just buffer data
-	if (!m_Size)
-	{
-		glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, drawtype);
-		m_Size = size;
-		return;
-	}
-
-	//If the buffer is already in use, generate a new buffer and copy
-	GLuint prev = m_ID;
-	
-	unbind();
-	glGenBuffers(1, &m_ID);
-	bind();
-	glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, drawtype);
-
-	//Copy then delete old buffer
-	glCopyBufferSubData(prev, m_ID, 0, 0, m_Size);
-	glDeleteBuffers(1, &prev);
-	m_Size = size;
-}
-
-void SGRender::SSBO::bufferFullData(void* data, GLsizeiptr size)
-{
-	bufferFullData(data, size, GL_STATIC_DRAW);
-}
-
-void SGRender::SSBO::bufferFullData(void* data, GLsizeiptr size, GLenum drawtype)
-{
-	if (size == m_Size)
-	{
-		glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, data);
-		return;
-	}
-	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, drawtype);
-	m_Size = size; //Changes size if different
-}
-
-void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size)
-{
-	bufferData(data, offset, size, GL_STATIC_DRAW);
-}
-
-void SGRender::SSBO::bufferData(void* data, int offset, GLsizeiptr size, GLenum drawtype)
-{
-	if (size + offset <= m_Size)
-	{
-		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
-	}
-	else //Expands if overrun
-	{
-		reserveData(size + offset);
-		glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
-	}
-}
-
-void SGRender::SSBO::bind() const
-{
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ID);
-}
-
-void SGRender::SSBO::unbind() const
-{
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-}
-
-SGRender::SSBO::~SSBO()
-{
-	glDeleteBuffers_s(1, &m_ID);
+	m_Resource = GLResource::GLResource(1, id);
 }
 
 //Vertex Array
-SGRender::VertexArray::~VertexArray() {
-	glDeleteVertexArrays(1, &m_ID);
-}
-
 void SGRender::VertexArray::create() {
-	glGenVertexArrays(1, &m_ID);
-	glBindVertexArray(m_ID);
+	GLuint id = 0;
+	glGenVertexArrays(1, &id);
+	glBindVertexArray(id);
+	m_Resource = VAResource::VAResource(1, id);
 }
 
 void SGRender::VertexArray::bind() const {
-	glBindVertexArray(m_ID);
+	glBindVertexArray(m_Resource.id());
 }
 
 void SGRender::VertexArray::unbind() const {
@@ -355,11 +154,6 @@ void SGRender::ShadowMapFBO::bindForReading(uint32_t slot)
 }
 
 //Shader
-void SGRender::Shader::deleteShader()
-{
-	glDeleteProgram_s(m_ID);
-}
-
 std::string SGRender::Shader::parseShader(const std::string& filePath) {
 	
 	const int INCLUDE_SIZE = 11; //Includes white space
@@ -398,8 +192,8 @@ GLuint SGRender::Shader::createShader(const std::string& vertexShader, const std
 	glLinkProgram(program);
 	glValidateProgram(program);
 
-	glDeleteShader_s(vs);
-	glDeleteShader_s(fs);
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 
 	return program;
 }
@@ -417,9 +211,9 @@ GLuint SGRender::Shader::createGeoShader(const std::string& vertexShader, const 
 	glLinkProgram(program);
 	glValidateProgram(program);
 
-	glDeleteShader_s(vs);
-	glDeleteShader_s(fs);
-	glDeleteShader_s(gs);
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+	glDeleteShader(gs);
 
 	return program;
 }
@@ -443,16 +237,11 @@ GLuint SGRender::Shader::compileShader(const std::string& source, unsigned int t
 		free(message);
 
 		//Handle
-		glDeleteShader_s(id);
+		glDeleteShader(id);
 		return 0;
 	}
 
 	return id;
-}
-
-
-SGRender::Shader::~Shader() {
-	deleteShader();
 }
 
 void SGRender::Shader::create(const std::string& vert, const std::string& frag) {
@@ -461,7 +250,8 @@ void SGRender::Shader::create(const std::string& vert, const std::string& frag) 
 		parseShader(vert), 
 		parseShader(frag)
 	};
-	m_ID = createShader(source.VertexSource, source.FragmentSource);
+	GLuint id = createShader(source.VertexSource, source.FragmentSource);
+	m_Resource = SHResource::SHResource(1, id);
 	EngineLog("Created shader: ", vert, " ", frag);
 }
 
@@ -472,7 +262,8 @@ void SGRender::Shader::create(const std::string& vert, const std::string& geo, c
 		parseShader(geo),
 		parseShader(frag)
 	};
-	m_ID = createGeoShader(source.VertexSource, source.FragmentSource, source.GeometrySource);
+	GLuint id = createGeoShader(source.VertexSource, source.FragmentSource, source.GeometrySource);
+	m_Resource = SHResource::SHResource(1, id);
 	EngineLog("Created shader: ", vert, " ", geo, " ", frag);
 }
 
@@ -481,7 +272,7 @@ void SGRender::Shader::bind() {
 	{
 		return;
 	}
-	glUseProgram(m_ID);
+	glUseProgram(m_Resource.id());
 }
 
 void SGRender::Shader::unbind() {
@@ -558,8 +349,8 @@ void SGRender::Shader::setUniform(const GLint location, const glm::vec3* uniform
 
 void SGRender::Shader::bindToUniformBlock(const std::string& name, GLuint binding)
 {
-	GLuint uniform_index = glGetUniformBlockIndex(m_ID, name.c_str());
-	glUniformBlockBinding(m_ID, uniform_index, binding);
+	GLuint uniform_index = glGetUniformBlockIndex(m_Resource.id(), name.c_str());
+	glUniformBlockBinding(m_Resource.id(), uniform_index, binding);
 }
 
 GLint SGRender::Shader::getUniformLocation(const std::string& name) {
@@ -568,7 +359,7 @@ GLint SGRender::Shader::getUniformLocation(const std::string& name) {
 		return m_UniformLocationCache[name];
 	}
 
-	GLint location = glGetUniformLocation(m_ID, name.c_str());
+	GLint location = glGetUniformLocation(m_Resource.id(), name.c_str());
 	if (location == -1) {
 		EngineLog("Uniform doesn't exist: ", name);
 		return -1;

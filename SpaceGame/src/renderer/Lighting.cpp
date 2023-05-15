@@ -6,10 +6,8 @@ void SGRender::Lighting::set(int width, int height, Camera* camera)
 	clean();
 
 	//Create SSBO and upload base lighting
-	m_PointLightSSBO.create();
-	m_PointLightSSBO.bind();
+	m_PointLightSSBO.create(1);
 	updateLightBuffer();
-	m_PointLightSSBO.unbind();
 	EngineLog("Lighting bound to: ", m_PointLightSSBO.bindingPoint());
 
 	m_Camera = camera;
@@ -39,9 +37,9 @@ void SGRender::Lighting::clean()
 	m_Set = false;
 }
 
-int32_t SGRender::Lighting::addLight(const glm::vec3& pos, float brightness, const glm::vec3& color, float radius)
+SGRender::LightID SGRender::Lighting::addLight(const glm::vec3& pos, float brightness, const glm::vec3& color, float radius)
 {
-	int32_t id = m_NextLightID;
+	LightID id = m_NextLightID;
 	m_LightList.emplace_back(pos, brightness, color, radius);
 	m_LightIDs.emplace_back(id, m_LightCount);
 
@@ -52,15 +50,15 @@ int32_t SGRender::Lighting::addLight(const glm::vec3& pos, float brightness, con
 	return id;
 }
 
-bool SGRender::Lighting::removeLight(int32_t id)
+bool SGRender::Lighting::removeLight(LightID id)
 {
 	int32_t light_index = -1;
 	int32_t id_index = -1;
 	for (int i = 0; i < m_LightIDs.size(); i++)
 	{
-		if (m_LightIDs[i].lightID == id)
+		if (m_LightIDs[i].id == id)
 		{
-			light_index = m_LightIDs[i].lightIndex;
+			light_index = m_LightIDs[i].index;
 			m_LightIDs.erase(m_LightIDs.begin() + i);
 			id_index = i; 
 			break;
@@ -77,7 +75,7 @@ bool SGRender::Lighting::removeLight(int32_t id)
 	//Update ids above position
 	for (int i = id_index; i < m_LightIDs.size(); i++)
 	{
-		m_LightIDs[i].lightIndex--;
+		m_LightIDs[i].index--;
 	}
 
 	m_LightCount--;
@@ -101,7 +99,7 @@ void SGRender::Lighting::updateLightBuffer()
 	}
 
 	m_PointLightSSBO.bind();
-	m_PointLightSSBO.bufferFullData(tmp_buffer, data_size, GL_DYNAMIC_DRAW);
+	m_PointLightSSBO.bufferData(tmp_buffer, data_size);
 	m_PointLightSSBO.unbind();
 
 	free(tmp_buffer);
@@ -160,7 +158,7 @@ void SGRender::Lighting::checkClusterLightsOP(int light, const glm::mat4& view)
 	m_Octree->markLightGrid(light, p.position, lightRadius(p), view, m_LightGridList, m_LightGridBuffer, m_LightGridMutex);
 }
 
-void SGRender::Lighting::checkLightInFrustum(int light, LightID* idArray, std::atomic<int>& index)
+void SGRender::Lighting::checkLightInFrustum(int light, LightTrackID* idArray, std::atomic<int>& index)
 {
 	if (m_Camera->inFrustum(m_LightList[light].position, m_LightList[light].radius + lightRadius(m_LightList[light])))
 	{
@@ -173,10 +171,10 @@ void SGRender::Lighting::buildCulledList()
 {
 	//BUILD CULLED LIST
 	std::vector<PointLight> culledLights;
-	std::vector<LightID> culledIDs;
+	std::vector<LightTrackID> culledIDs;
 
 	MtLib::ThreadPool* tp = MtLib::ThreadPool::Fetch();
-	std::function<void(int, LightID*, std::atomic<int>&)> check = std::bind(&Lighting::checkLightInFrustum, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+	std::function<void(int, LightTrackID*, std::atomic<int>&)> check = std::bind(&Lighting::checkLightInFrustum, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
 
 	//Reserve the space of max lights
 	culledIDs.resize(m_LightList.size());
@@ -195,7 +193,7 @@ void SGRender::Lighting::buildCulledList()
 	culledLights.resize(culledIDs.size());
 	for (int i = 0; i < culledIDs.size(); i++)
 	{
-		culledLights[nextIndex] = m_LightList[culledIDs[i].lightIndex];
+		culledLights[nextIndex] = m_LightList[culledIDs[i].index];
 		nextIndex++;
 	}
 
@@ -256,7 +254,7 @@ void SGRender::Lighting::buildSupportLists()
 
 	//Buffer light grid
 	m_LightGrid.bind();
-	m_LightGrid.bufferFullData(&m_LightGridList[0], sizeof(LGridElement) * m_LightGridList.size());
+	m_LightGrid.bufferData(&m_LightGridList[0], sizeof(LGridElement) * m_LightGridList.size());
 	m_LightGrid.unbind();
 
 	//Clear light grid for next buffering
@@ -268,7 +266,7 @@ void SGRender::Lighting::buildSupportLists()
 
 	//Buffer tile indices
 	m_TileLightIndex.bind();
-	m_TileLightIndex.bufferFullData(&m_TileLightIndexList[0], sizeof(int32_t) * m_TileLightIndexList.size(), GL_DYNAMIC_DRAW);
+	m_TileLightIndex.bufferData(&m_TileLightIndexList[0], sizeof(int32_t) * m_TileLightIndexList.size());
 	m_TileLightIndex.unbind();
 }
 
@@ -422,7 +420,7 @@ void SGRender::Lighting::buildClusters()
 	//Create Uniform buffer
 	m_ClusterInfo.create();
 	m_ClusterInfo.bind();
-	m_ClusterInfo.reserveData((8 * sizeof(int32_t)));
+	m_ClusterInfo.resize((8 * sizeof(int32_t)));
 	m_ClusterInfo.bufferData((void*)&clusterDim,0 * sizeof(int32_t), sizeof(int32_t));
 	m_ClusterInfo.bufferData((void*)&tileSizeX, 1 * sizeof(int32_t), sizeof(int32_t));
 	m_ClusterInfo.bufferData((void*)&tileSizeY, 2 * sizeof(int32_t), sizeof(int32_t));
@@ -430,13 +428,13 @@ void SGRender::Lighting::buildClusters()
 
 	//Initialise light grid and bind to SSBO
 	m_LightGridList.resize(sizeAtDepth);
-	m_LightGrid.create();
+	m_LightGrid.create(1);
 	m_LightGrid.bind();
-	m_LightGrid.bufferFullData(&m_LightGridList[0], sizeof(LGridElement) * m_LightGridList.size());
+	m_LightGrid.bufferData(&m_LightGridList[0], sizeof(LGridElement) * m_LightGridList.size());
 	m_LightGrid.unbind();
 
 	//Init tile light index list
-	m_TileLightIndex.create();
+	m_TileLightIndex.create(1);
 
 	//Initialize light grid CPU Buffer
 	m_LightGridBuffer.resize(sizeAtDepth);

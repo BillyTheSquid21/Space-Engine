@@ -10,10 +10,12 @@
 #include "mtlib/ThreadPool.h"
 #include "mutex"
 
-#define MAX_LIGHTS_PER_CLUSTER 128
+#define MAX_LIGHTS_PER_CLUSTER 64
 
 namespace SGRender
 {
+	typedef int32_t LightID;
+
 	//Directional lighting
 	struct DirectionalLight
 	{
@@ -283,8 +285,8 @@ namespace SGRender
 		void setAmbient(float amb) { m_BaseData.ambient = amb; updateLightBuffer(); }
 		void setAmbientColor(float r, float g, float b) { m_BaseData.ambientColor = { r, g, b }; updateLightBuffer(); }
 
-		int32_t addLight(const glm::vec3& pos, float brightness, const glm::vec3& color, float radius);
-		bool removeLight(int32_t id);
+		LightID addLight(const glm::vec3& pos, float brightness, const glm::vec3& color, float radius);
+		bool removeLight(LightID id);
 
 		const std::vector<PointLight>& lights() { return m_LightList; }
 		
@@ -305,10 +307,10 @@ namespace SGRender
 	private:
 
 		//Keep track of which light is where in the array
-		struct LightID
+		struct LightTrackID
 		{
-			int32_t lightID;
-			int32_t lightIndex;
+			LightID id;
+			int32_t index;
 		};
 
 		//Work out the radius of light plus attenuation
@@ -318,7 +320,7 @@ namespace SGRender
 		void buildClusters();
 
 		//Check if light is in frustum
-		void checkLightInFrustum(int light, LightID* idArray, std::atomic<int>& index);
+		void checkLightInFrustum(int light, LightTrackID* idArray, std::atomic<int>& index);
 
 		//Check all clusters for a given light (optimised)
 		void checkClusterLightsOP(int light, const glm::mat4& view);
@@ -346,11 +348,11 @@ namespace SGRender
 		//Unculled light list
 		BaseLightData m_BaseData;
 		std::vector<PointLight> m_LightList;
-		std::vector<LightID> m_LightIDs;
+		std::vector<LightTrackID> m_LightIDs;
 
 		//Culled light list
 		std::vector<PointLight> m_CulledLightList;
-		std::vector<LightID> m_CulledLightIDs;
+		std::vector<LightTrackID> m_CulledLightIDs;
 
 		//Cluster Octree
 		std::shared_ptr<ClusterOctree> m_Octree;

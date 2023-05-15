@@ -57,6 +57,7 @@ namespace SGRender
 	class Mesh
 	{
 	public:
+		Mesh() = default;
 		void load(std::vector<float>& verts, std::vector<uint32_t>& inds, VertexType type) { if (m_DataLoaded) { EngineLog("Data already loaded!"); return; } m_Mesh = { verts, inds }; m_DataLoaded = true; m_VertexType = type; }
 		void unload() { if (!m_DataLoaded) { return; } m_Mesh.clear(); m_DataLoaded = false; m_VertexType = VertexType::V_Vertex; }
 		void copyInto(MeshData& mesh)
@@ -65,6 +66,7 @@ namespace SGRender
 			std::copy(mesh.vertices.begin(), mesh.vertices.end(), m_Mesh.vertices.begin());
 			m_Mesh.indices.resize(mesh.indices.size());
 			std::copy(mesh.indices.begin(), mesh.indices.end(), m_Mesh.indices.begin());
+			m_DataLoaded = true;
 		};
 
 		float* getVertices() { return &m_Mesh.vertices[0]; };
@@ -73,7 +75,9 @@ namespace SGRender
 		MeshData& getMesh() { return m_Mesh; }
 		MeshMeta getMeta() { return { this, getVertices(), getVertSize(), m_VertexType, getIndices(), getIndicesCount() }; }
 
-		int32_t getVertSize() const { return m_Mesh.vertices.size(); };
+		int32_t getVertSize() const { return m_Mesh.vertices.size() * sizeof(float); };
+		int32_t getVertCount() const { return m_Mesh.vertices.size(); };
+		int32_t getIndicesSize() const { return m_Mesh.indices.size() * sizeof(uint32_t); };
 		int32_t getIndicesCount() const { return m_Mesh.indices.size(); };
 		bool isLoaded() const { return m_DataLoaded; }
 		void setLoaded(bool loaded) { m_DataLoaded = loaded; }
@@ -87,7 +91,7 @@ namespace SGRender
 
 	void BatchMeshes(std::vector<float>& destVerts, std::vector<uint32_t>& destInds, std::vector<MeshMeta>& meshes);
 	void BatchMeshes(MeshData& destMesh, std::vector<MeshMeta>& meshes);
-	void ApplyTransform(VertexMeta mesh, glm::mat4 tranform, VertexType type);
+	void ApplyTransform(VertexMeta mesh, glm::mat4 tranform);
 }
 
 #endif

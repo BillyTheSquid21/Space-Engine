@@ -3,17 +3,18 @@
 #define SG_RENDER_SERVICE_HPP
 
 #include "string"
-#include "renderer/Renderer.hpp"
 #include "renderer/GLClasses.h"
+#include "renderer/Camera.h"
 
 namespace SGRender
 {
-	typedef int32_t RendererID;
-	typedef int32_t RenderPassID;
-	typedef int32_t ShaderID;
-	typedef int32_t TexID;
-	typedef int32_t ModelID;
-	typedef int32_t MatID;
+	typedef int32_t RendererID;		//ID for a given renderer
+	typedef int32_t RenderPassID;	//ID for a given render pass
+	typedef int32_t ShaderID;		//ID for a given shader
+	typedef int32_t TexID;			//ID for a given texture
+	typedef int32_t ModelID;		//ID for a given model, made up of meshes
+	typedef int32_t MeshID;			//ID for a given mesh inside a material of a model
+	typedef int32_t MatID;			//ID for a given material
 
 	enum class InstrType
 	{
@@ -21,24 +22,45 @@ namespace SGRender
 		DRAW,
 
 		//Camera
+		MOVE_CAMERA,
 
 		//Lighting
-
+		ADD_LIGHT, REMOVE_LIGHT, SET_LIGHT_POS, MOVE_LIGHT
 	};
 
-	struct RenderCall
+	//Instruction structs
+
+	struct RenderCallInstr
 	{
 		RendererID renderer;
-		RenderLinkID link;
-		glm::mat4* transform;
+		ModelID model;
+		MatID material = -1;
+		glm::mat4* transform = nullptr; //If nullptr, use identity
 	};
 
+	struct AddLightInstr
+	{
+		glm::vec3 pos;
+		glm::vec3 col;
+		float radius;
+		float brightness;
+	};
+
+	struct MoveCameraInstr
+	{
+		CamMotion motionType;
+		float speed;
+	};
+
+	//Union of all instructions
 	struct RenderInstruction
 	{
 		InstrType instr;
 		union
 		{
-			RenderCall renderCall;
+			RenderCallInstr renderCall;
+			AddLightInstr lightAdd;
+			MoveCameraInstr camMove;
 			bool clear;
 		};
 	};

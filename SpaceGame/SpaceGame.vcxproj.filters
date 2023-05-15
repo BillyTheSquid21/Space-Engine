@@ -159,13 +159,13 @@
     <ClCompile Include="src\vendor\imgui\implot_items.cpp">
       <Filter>Source Files\Vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\SIBRender.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\Vertex.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\MatModel.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -174,9 +174,6 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\renderer\GLClasses.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\renderer\Renderer.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\renderer\Mesh.h">
@@ -323,13 +320,7 @@
     <ClInclude Include="include\core\Run.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderer\Instancer.hpp">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="include\renderer\RenderSys.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\renderer\Batcher.hpp">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\renderer\Lighting.h">
@@ -377,6 +368,12 @@
     <ClInclude Include="include\services\RenderService.hpp">
       <Filter>Header Files\Services</Filter>
     </ClInclude>
+    <ClInclude Include="include\renderer\Renderer.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer\GLResource.hpp">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\default.frag">
@@ -390,9 +387,6 @@
     </None>
     <None Include="shader\ViewProj.glsl">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="include\renderer\SIBRender.h">
-      <Filter>Header Files\Renderer</Filter>
     </None>
   </ItemGroup>
 </Project>

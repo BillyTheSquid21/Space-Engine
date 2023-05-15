@@ -68,8 +68,9 @@ void SGRender::BatchMeshes(std::vector<float>& destVerts, std::vector<uint32_t>&
 	destVerts = vertices; destInds = indices;
 }
 
-void SGRender::ApplyTransform(VertexMeta mesh, glm::mat4 tranform, VertexType type)
+void SGRender::ApplyTransform(VertexMeta mesh, glm::mat4 tranform)
 {
+	VertexType type = mesh.type;
 	int stride = VertexStride(type);
 	for (int i = 0; i < mesh.count; i += stride)
 	{

@@ -16,7 +16,7 @@ std::shared_ptr<SGRender::MaterialMeshMap> SGRender::System::extractMatModel(Mod
 		{
 			//Add material
 			materialID = m_NextMaterialID;
-			m_Materials[materialID] = { std::make_shared<Material::Material>(m.mat) };
+			m_Materials[materialID] = { m.mat };
 			m_NextMaterialID++;
 		}
 
@@ -29,13 +29,6 @@ std::shared_ptr<SGRender::MaterialMeshMap> SGRender::System::extractMatModel(Mod
 void SGRender::System::createRenderPass(std::string name, std::vector<Uniform>& uniforms, ShaderID shader, RendererID renderer, int16_t priority, int flag)
 {
 	EngineLog("Building render pass : ", name);
-
-	//Check if pass already exists
-	if (doesPassExist(name))
-	{
-		EngineLog("Pass with that name already exists!");
-		return;
-	}
 
 	if (!shaderExists(shader))
 	{
@@ -50,18 +43,18 @@ void SGRender::System::createRenderPass(std::string name, std::vector<Uniform>& 
 	}
 
 	//If checks passed, get uniform locs and add pass to end of passes
-	s_Shaders[shader].shader->bind();
+	s_Shaders[shader].shader.bind();
 	std::vector<InternalUniform> unis;
 	for (int i = 0; i < uniforms.size(); i++)
 	{
 		if (uniforms[i].type == UniformType::TEXTURE)
 		{
 			std::string* resolvedTex = (std::string*)uniforms[i].uniform;
-			uniforms[i].uniform = s_Textures[locateTexture(*resolvedTex)].texture.get();
+			uniforms[i].uniform = &s_Textures[locateTexture(*resolvedTex)].texture;
 		}
-		unis.emplace_back(s_Shaders[shader].shader.get(), uniforms[i]);
+		unis.emplace_back(&s_Shaders[shader].shader, uniforms[i]);
 	}
-	s_Shaders[shader].shader->unbind();
+	s_Shaders[shader].shader.unbind();
 
 	s_RenderPasses.emplace_back();
 	s_RenderPasses.back().priority = priority;
@@ -87,13 +80,86 @@ void SGRender::System::removeRenderPass(std::string name)
 	EngineLog("No matching render pass was found!");
 }
 
+void SGRender::System::generateModelRenderPass(ModelID model, ShaderID shader)
+{
+	if (s_MatModels.count(model))
+	{
+		//2.3 Setup a renderer and pass per material
+		MaterialMeshMap meshMap = s_MatModels[model].meshes;
+		for (auto& m : meshMap)
+		{
+			//2.4.a Load diffuse texture
+			Material::Material& material = m_Materials[m.first].material;
+			std::string diffPath = "res/s/" + material.diffuseTexture;
+			std::string diffName = "diff_" + std::to_string(m.first);
+			loadTexture(diffPath, diffName, 0, 3, Tex::T_FILTER_LINEAR);
+
+			//2.4.b Load normal texture
+			std::string normPath = "res/s/" + material.normalTexture;
+			std::string normName = "norm_" + std::to_string(m.first);
+			loadTexture(normPath, normName, 1, 3, Tex::T_FILTER_LINEAR);
+
+			//2.5 Add batcher for material
+			SGRender::RendererID renderer = addRenderer(std::to_string(m.first).c_str(), SGRender::V_UNTVertex, GL_TRIANGLES);
+
+			//2.6 Set tex as uniform
+			std::vector<SGRender::Uniform> u =
+			{
+				{
+					"u_Texture",
+					SGRender::UniformType::TEXTURE,
+					&diffName
+				},
+
+				{
+					"u_NormalMap",
+					SGRender::UniformType::TEXTURE,
+					&normName
+				},
+
+				{
+					"u_Ambient",
+					SGRender::UniformType::VEC3,
+					&material.ambient
+				},
+
+				{
+					"u_Diffuse",
+					SGRender::UniformType::VEC3,
+					&material.diffuse
+				},
+
+				{
+					"u_Specular",
+					SGRender::UniformType::VEC3,
+					&material.specular
+				},
+
+				{
+					"u_Shininess",
+					SGRender::UniformType::FLOAT,
+					&material.shininess
+				}
+			};
+			createRenderPass(std::to_string(m.first).c_str(), u, shader, renderer, 0, 0);
+
+			//2.7 Link to batcher
+			SGRender::RenderInstruction instr = { SGRender::InstrType::DRAW };
+			instr.renderCall.material = m.first;
+			instr.renderCall.model = model;
+			instr.renderCall.renderer = renderer;
+			queueInstruction(instr);
+		}
+	}
+}
+
 SGRender::TexID SGRender::System::loadTexture(std::string path, std::string name, int slot, int bpp, int flag)
 {
 	TexID id = m_NextTexID;
-	s_Textures[id] = { name, std::shared_ptr<Tex::Texture>(new Tex::Texture()) };
-	s_Textures[id].texture->loadTexture(path, bpp, true);
-	s_Textures[id].texture->generateTexture(slot, flag);
-	s_Textures[id].texture->clearBuffer();
+	s_Textures[id] = { name, Tex::Texture() };
+	s_Textures[id].texture.loadTexture(path, bpp, true);
+	s_Textures[id].texture.generateTexture(slot, flag);
+	s_Textures[id].texture.clearBuffer();
 	m_NextTexID++;
 	return id;
 }
@@ -105,7 +171,7 @@ void SGRender::System::unloadTexture(TexID id)
 		EngineLog("Texture not found for unloading! ", id);
 		return;
 	}
-	s_Textures[id].texture->deleteTexture();
+	s_Textures[id].texture.deleteTexture();
 	s_Textures.erase(id);
 }
 
@@ -178,13 +244,13 @@ bool SGRender::System::matModelExistsInternal(ModelID id)
 SGRender::ShaderID SGRender::System::loadShader(std::string vertPath, std::string fragPath, std::string name)
 {
 	ShaderID id = m_NextShaderID;
-	std::shared_ptr<Shader> shader(new Shader());
-	shader->create(vertPath, fragPath);
+	Shader shader = Shader::Shader();
+	shader.create(vertPath, fragPath);
 	s_Shaders[id] = { name, shader };
 
 	//Link to camera vp matrix and lighting
-	shader->bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
-	shader->bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
+	shader.bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
+	shader.bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
 
 	return id;
 }
@@ -192,13 +258,13 @@ SGRender::ShaderID SGRender::System::loadShader(std::string vertPath, std::strin
 SGRender::ShaderID SGRender::System::loadShader(std::string vertPath, std::string fragPath, std::string geoPath, std::string name)
 {
 	ShaderID id = m_NextShaderID;
-	std::shared_ptr<Shader> shader(new Shader());
-	shader->create(vertPath, geoPath, fragPath);
+	Shader shader = Shader::Shader();
+	shader.create(vertPath, geoPath, fragPath);
 	s_Shaders[id] = { name, shader };
 
 	//Link to camera vp matrix and lighting
-	shader->bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
-	shader->bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
+	shader.bindToUniformBlock("SG_ViewProjection", s_CameraBuffer.bindingPoint());
+	shader.bindToUniformBlock("SG_Cluster", s_Lighting.clusterBindingPoint());
 
 	return id;
 }
@@ -233,8 +299,8 @@ SGRender::ShaderID SGRender::System::locateShader(std::string name)
 SGRender::ModelID SGRender::System::loadModel(std::string path, std::string name, VertexType vertexType, int modelFlags)
 {
 	ModelID id = m_NextModelID;
-	std::shared_ptr<Model::Model> model(new Model::Model());
-	if (!Model::LoadModel(path.c_str(), model->mesh, vertexType, modelFlags))
+	Model::Model model = Model::Model();
+	if (!Model::LoadModel(path.c_str(), model.mesh, vertexType, modelFlags))
 	{
 		EngineLog("Model failed to load!");
 		return -1;
@@ -255,31 +321,19 @@ SGRender::ModelID SGRender::System::loadMatModel(std::string path, std::string n
 		return -1;
 	}
 
-	s_MatModels[id] = { name, extractMatModel(model) };
+	s_MatModels[id] = { name, *extractMatModel(model) };
 	m_NextModelID++;
 	return id;
 }
 
-SGRender::RendererID SGRender::System::addBatcher(std::string name, VertexType vertexType, GLenum drawMode)
+SGRender::RendererID SGRender::System::addRenderer(std::string name, VertexType vertexType, GLenum drawMode)
 {
 	RendererID id = m_NextRendererID;
-	std::shared_ptr<Dep_Batcher> batcher(new Dep_Batcher());
-	batcher->setLayout(vertexType);
-	batcher->setDrawingMode(drawMode);
-	batcher->generate(s_Width, s_Height, 0);
-	s_Renderers[id] = { name, TYPE_BATCHER, std::static_pointer_cast<RendererBase>(batcher) };
-	m_NextRendererID++;
-	return id;
-}
-
-int SGRender::System::addInstancer(std::string name, std::string modelName, VertexType vertexType, GLenum drawMode)
-{
-	RendererID id = m_NextRendererID;
-	std::shared_ptr<Instancer> instancer(new Instancer());
-	instancer->setLayout(vertexType);
-	instancer->setDrawingMode(drawMode);
-	instancer->generate(s_Width, s_Height, &s_Models[locateModel(modelName)].model->mesh,0);
-	s_Renderers[id] = { name, TYPE_INSTANCER, std::static_pointer_cast<RendererBase>(instancer) };
+	Renderer renderer;
+	renderer.setLayout(vertexType);
+	renderer.setDrawingMode(drawMode);
+	renderer.generate();
+	s_Renderers[id] = { name, TYPE_BATCHER, renderer };
 	m_NextRendererID++;
 	return id;
 }
@@ -311,31 +365,81 @@ SGRender::RendererID SGRender::System::locateRenderer(std::string name)
 	return -1;
 }
 
-void SGRender::System::commitToBatcher(RendererID id, void* src, float* vert, unsigned int vertSize, const unsigned int* ind, unsigned int indSize)
+void SGRender::System::drawInstr(RenderCallInstr instr)
 {
-	((Dep_Batcher*)s_Renderers[id].renderer.get())->commitAndBatch(src, vert, vertSize, ind, indSize);
-}
-
-void SGRender::System::commitToInstancer(RendererID id, void* data, unsigned int dataSize, unsigned int count)
-{
-	((Instancer*)s_Renderers[id].renderer.get())->commitInstance(data, dataSize, count);
-}
-
-void SGRender::System::removeFromBatcher(RendererID id, void* src, void* vert)
-{
-	((Dep_Batcher*)s_Renderers[id].renderer.get())->remove(src, vert);
-}
-
-void SGRender::System::batch(RendererID id)
-{
-	((Dep_Batcher*)s_Renderers[id].renderer.get())->batch();
-}
-
-void SGRender::System::bufferVideoData()
-{
-	for (int i = 0; i < s_RenderPasses.size(); i++)
+	if (instr.material == -1)
 	{
-		s_Renderers[s_RenderPasses[i].renderer].renderer->bufferVideoData();
+		auto& model = s_Models[instr.model];
+		auto& renderer = s_Renderers[instr.renderer];
+		if (renderer.type == TYPE_BATCHER)
+		{
+			renderer.renderer.commit(model.model.mesh, instr.model, 0);
+		}
+	}
+	else
+	{
+		auto& model = s_MatModels[instr.model].meshes.at(instr.material);
+		auto& renderer = s_Renderers[instr.renderer];
+		if (renderer.type == TYPE_BATCHER)
+		{
+			for (auto& m : model)
+			{
+				renderer.renderer.commit(m, instr.model, instr.material);
+			}
+		}
+	}
+}
+
+void SGRender::System::addLightInstr(AddLightInstr instr)
+{
+	s_Lighting.addLight(instr.pos, instr.brightness, instr.col, instr.radius);
+}
+
+void SGRender::System::moveCamInstr(MoveCameraInstr instr)
+{
+	switch (instr.motionType)
+	{
+	case CamMotion::Move_Forward:
+		s_Camera.moveForwards(instr.speed);
+		break;
+	case CamMotion::Move_Sideways:
+		s_Camera.moveSideways(instr.speed);
+		break;
+	case CamMotion::Move_Up:
+		s_Camera.moveUp(instr.speed);
+		break;
+	case CamMotion::Move_CurrentDir:
+		s_Camera.moveInCurrentDirection(instr.speed);
+		break;
+	case CamMotion::Pan_Sideways:
+		s_Camera.panSideways(instr.speed);
+		break;
+	default:
+		break;
+	}
+}
+
+void SGRender::System::processInstructions()
+{
+	while (!m_Instructions.empty())
+	{
+		RenderInstruction instr = m_Instructions.front();
+		switch (instr.instr)
+		{
+		case InstrType::DRAW:
+			drawInstr(instr.renderCall);
+			break;
+		case InstrType::ADD_LIGHT:
+			addLightInstr(instr.lightAdd);
+			break;
+		case InstrType::MOVE_CAMERA:
+			moveCamInstr(instr.camMove);
+			break;
+		default:
+			break;
+		}
+
+		m_Instructions.pop();
 	}
 }
 
@@ -357,59 +461,17 @@ void SGRender::System::render()
 	for (int i = 0; i < s_RenderPasses.size(); i++)
 	{
 		RenderPass pass = s_RenderPasses[i];
-		s_Shaders[pass.shader].shader->bind();
+		s_Shaders[pass.shader].shader.bind();
 		//Set uniforms
 		for (int u = 0; u < pass.uniforms.size(); u++)
 		{
 			InternalUniform uni = pass.uniforms[u];
-			s_Shaders[pass.shader].shader->setUniform(uni.location, uni.uniform, uni.type);
+			s_Shaders[pass.shader].shader.setUniform(uni.location, uni.uniform, uni.type);
 		}
-		flagStart(pass.flag);
-		s_Renderers[pass.renderer].renderer->drawPrimitives();
-		flagEnd(pass.flag);
+		s_Renderers[pass.renderer].renderer.drawPrimitives();
 	}
 
 	s_Camera.resetMovementFlag();
-}
-
-void SGRender::System::flagStart(int flag)
-{
-	if (flag & D_DISABLE_DEPTH_TEST)
-	{
-		glDisable(GL_DEPTH_TEST);
-	}
-}
-
-void SGRender::System::flagEnd(int flag)
-{
-	if (flag & D_DISABLE_DEPTH_TEST)
-	{
-		glEnable(GL_DEPTH_TEST);
-	}
-}
-
-bool SGRender::System::accessModel(std::string name, Mesh** model)
-{
-	ModelID id = locateModel(name);
-	if (id != -1)
-	{
-		*model = &s_Models[id].model->mesh;
-		return true;
-	}
-	EngineLog("Model wasn't found!");
-	return false;
-}
-
-bool SGRender::System::accessMatModel(std::string name, MaterialMeshMap** model)
-{
-	ModelID id = locateModel(name);
-	if (id != -1)
-	{
-		*model = s_MatModels[id].meshes.get();
-		return true;
-	}
-	EngineLog("Material Model wasn't found!");
-	return false;
 }
 
 bool SGRender::System::materialExists(MatID material)
@@ -421,26 +483,12 @@ SGRender::MatID SGRender::System::locateMaterial(std::string name)
 {
 	for (auto& m : m_Materials)
 	{
-		if (m.second.material->name == name)
+		if (m.second.material.name == name)
 		{
 			return m.first;
 		}
 	}
 	return -1;
-}
-
-bool SGRender::System::getShader(std::string shader, SGRender::Shader** shaderPtr)
-{
-	for (auto& s : s_Shaders)
-	{
-		if (s.second.name == shader)
-		{
-			*shaderPtr = s.second.shader.get();
-			return true;
-		}
-	}
-	EngineLog("Shader not found! ", shader);
-	return false;
 }
 
 bool SGRender::System::init(int width, int height, Camera& camera)
@@ -457,7 +505,7 @@ bool SGRender::System::init(int width, int height, Camera& camera)
 	//Set camera
 	s_CameraBuffer.create();
 	s_CameraBuffer.bind();
-	s_CameraBuffer.reserveData((5 * sizeof(float)) + (2 * sizeof(glm::mat4)) + (sizeof(glm::vec3)));
+	s_CameraBuffer.resize((5 * sizeof(float)) + (2 * sizeof(glm::mat4)) + (sizeof(glm::vec3)));
 	s_CameraBuffer.unbind();
 	s_Camera.calcVP();
 	s_Camera.updateFrustum();
@@ -483,7 +531,7 @@ void SGRender::System::generateDebugTex()
 {
 	//Create a default texture
 	std::vector<glm::i8vec3> debugRaw;
-	std::shared_ptr<Tex::Texture> debugTex(new Tex::Texture());
+	Tex::Texture debugTex = Tex::Texture();
 	constexpr int debugWidth = 8;
 	debugRaw.resize(debugWidth * debugWidth);
 	for (int i = 0; i < debugWidth * debugWidth; i++)
@@ -493,24 +541,11 @@ void SGRender::System::generateDebugTex()
 		debugRaw[i] = { valR, 0, valB };
 	}
 
-	debugTex->setWidth(debugWidth);
-	debugTex->setHeight(debugWidth);
-	debugTex->setBPP(3);
-	debugTex->generateTexture(0, &debugRaw[0], Tex::T_WRAP_TEXTURE);
+	debugTex.setWidth(debugWidth);
+	debugTex.setHeight(debugWidth);
+	debugTex.setBPP(3);
+	debugTex.generateTexture(0, &debugRaw[0], Tex::T_WRAP_TEXTURE);
 
 	TexID id = m_NextTexID;
-	s_Textures[id] = { s_DebugName, debugTex };
-}
-
-bool SGRender::System::doesPassExist(std::string name)
-{
-	//Check if pass already exists
-	for (int i = 0; i < s_RenderPasses.size(); i++)
-	{
-		if (name == s_RenderPasses[i].id)
-		{
-			return true;
-		}
-	}
-	return false;
+	s_Textures[id] = { "debug", debugTex };
 }
