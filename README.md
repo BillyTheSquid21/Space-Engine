@@ -1,6 +1,3 @@
 # Space Engine
 
-A simple framework to easily build games utilizing 2D/3D rendering and object management, among other features.
-Not intended for commercial use at this time, and is purely for educational purposes.
-
-Currently undergoing major reworking on rendering engine and conversion to ECS 
+Was a sandbox project to learn C++ and OpenGL and so is not intended to be used for anything. Contains a lot of strange and redundant code as a result.
